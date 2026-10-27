@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-bit-bool"
+category = "function"
+signature = "(pi ((explicit y (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.wittBitBool"
+
+[[form]]
+id = "witt-bit-bool"
+channel = "math"
+surface = "wittbitbool"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittbitbool) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

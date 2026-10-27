@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "wittrespbool-periodic-of-sector-winwittagree"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit U (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat))) (pi ((explicit hU (app (const lexlean.std.nat::le) (nat 2) (local U))) (explicit hsec (app (const r30.witt::sector-winwitt-agree) (local k) (local d) (local U) (local Q))) (explicit t (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (local U) (app (const r30.scale::twopow) (local k)))) (local t)))) (app (const lexlean.core::eq) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local t) (local Q)) (local k)) (app (const r30.witt::witt-resp) (local t) (local k)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.wittRespBool_periodic_of_sector_winWittAgree"
+
+[[form]]
+id = "wittrespbool-periodic-of-sector-winwittagree"
+channel = "math"
+surface = "wittrespboolperiodicofsectorwinwittagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittrespboolperiodicofsectorwinwittagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

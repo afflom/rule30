@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rowagree-step"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit h (app (const r30.witt::row-agree) (local t) (local Q) (local a) (app (const lexlean.std.nat::add) (local L) (nat 2))))) (app (const r30.witt::row-agree) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local Q) (app (const lexlean.std.nat::add) (local a) (nat 2)) (local L))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rowAgree_step"
+
+[[form]]
+id = "rowagree-step"
+channel = "math"
+surface = "rowagreestep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rowagreestep) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

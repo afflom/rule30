@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "deep-hole"
+category = "proof-constant"
+signature = "(pi ((explicit u0 (const lexlean.std.bool::bool)) (explicit u1 (const lexlean.std.bool::bool)) (explicit u2 (const lexlean.std.bool::bool)) (explicit u3 (const lexlean.std.bool::bool))) (app (const lexlean.std.nat::le) (nat 2) (app (const r30.known::dist-thirty) (local u0) (local u1) (local u2) (local u3))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.deep_hole"
+
+[[form]]
+id = "deep-hole"
+channel = "math"
+surface = "deephole"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name deephole) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

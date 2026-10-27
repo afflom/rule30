@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-scale-same-col-cone"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hp (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local t) (local p)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (local p)) (app (const r30.local::bxor) (app (const r30.witt::rh-center) (local t) (local p)) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-win) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (local p)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_scale_same_col_cone_prop"
+
+[[form]]
+id = "rhcenter-scale-same-col-cone"
+channel = "math"
+surface = "rhcenterscalesamecolcone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenterscalesamecolcone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

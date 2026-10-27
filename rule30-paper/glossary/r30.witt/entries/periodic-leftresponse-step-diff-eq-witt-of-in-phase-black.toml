@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-leftresponse-step-diff-eq-witt-of-in-phase-black"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local s) (nat 1)))) (explicit hcone (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local s) (nat 2)) (app (const r30.scale::twopow) (local k)))) (explicit hblk (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local s) (nat 1))) (const lexlean.std.bool::true))) (explicit hw (app (const lexlean.core::eq) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local s) (nat 1)) (local k)) (const lexlean.std.bool::false)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local s) (nat 2)) (local k)) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local s) (nat 1)) (local k))) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local s) (nat 2)) (local k)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_leftresponse_step_diff_eq_witt_of_in_phase_black"
+
+[[form]]
+id = "periodic-leftresponse-step-diff-eq-witt-of-in-phase-black"
+channel = "math"
+surface = "periodicleftresponsestepdiffeqwittofinphaseblack"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicleftresponsestepdiffeqwittofinphaseblack) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "mask-unfold"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.right::mask-obligation)) (explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hc (app (const r30.right::center-per) (local T) (local P)))) (app (const r30.right::masked-per) (local T) (local P)))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Right"
+name = "Rule30UOR.Right.maskPos_unfold"
+
+[[form]]
+id = "mask-unfold"
+channel = "math"
+surface = "maskunfold"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskunfold) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

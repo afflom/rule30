@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "frobdefect-row-testbit-outside-cone"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit hr (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (local k)) (local r)))) (app (const r30.witt::bit-frobdefect-eq) (local k) (app (const r30.witt::witt-row) (local t0)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local r) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local r) (nat 1)) (app (const r30.scale::twopow) (local k))) (local t0)) (app (const r30.local::bxor) (app (const r30.right::rdiag) (local r) (local t0)) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (local r) (app (const r30.scale::twopow) (local k))) (local t0)))) (app (const lexlean.std.bool::and) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local r) (nat 1)) (local t0)) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local r) (app (const r30.scale::twopow) (local k))) (local t0)) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (local r) (app (const r30.scale::twopow) (local k))) (local t0))))) (app (const lexlean.std.bool::and) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local r) (nat 1)) (app (const r30.scale::twopow) (local k))) (local t0)) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local r) (app (const r30.scale::twopow) (local k))) (local t0)) (app (const r30.right::rdiag) (local r) (local t0))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.frobDefect_row_testBit_outside_cone_prop"
+
+[[form]]
+id = "frobdefect-row-testbit-outside-cone"
+channel = "math"
+surface = "frobdefectrowtestbitoutsidecone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name frobdefectrowtestbitoutsidecone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

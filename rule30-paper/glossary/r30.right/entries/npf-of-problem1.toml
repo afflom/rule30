@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "npf-of-problem1"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.joint::problem-one))) (const r30.right::no-periodic-fixed))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Fixed"
+name = "Rule30UOR.Fixed.noPeriodicFixed_of_problem1"
+
+[[form]]
+id = "npf-of-problem1"
+channel = "math"
+surface = "npfofproblemone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name npfofproblemone) (paren (slot 0)))"

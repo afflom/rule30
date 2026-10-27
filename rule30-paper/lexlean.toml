@@ -1,0 +1,80 @@
+spec = "lexlean/project/1"
+name = "rule30-paper"
+language = "1.2"
+module_prefix = "Rule30Paper"
+source_roots = ["src"]
+entrypoints = ["src/Paper.lex.tex"]
+build_root = ".lexlean"
+lockfile = "lexlean.lock"
+lean_workspace = "."
+lean_toolchain = "leanprover/lean4:v4.32.1"
+
+[[lexicon_source]]
+package = "lexlean.std.bool"
+kind = "builtin"
+
+[[lexicon_source]]
+package = "lexlean.std.int"
+kind = "builtin"
+
+[[lexicon_source]]
+package = "lexlean.std.nat"
+kind = "builtin"
+
+[[lexicon_source]]
+package = "r30.doc"
+kind = "path"
+path = "glossary/r30.doc"
+
+[[lexicon_source]]
+package = "r30.joint"
+kind = "path"
+path = "glossary/r30.joint"
+
+[[lexicon_source]]
+package = "r30.known"
+kind = "path"
+path = "glossary/r30.known"
+
+[[lexicon_source]]
+package = "r30.local"
+kind = "path"
+path = "glossary/r30.local"
+
+[[lexicon_source]]
+package = "r30.real"
+kind = "path"
+path = "glossary/r30.real"
+
+[[lexicon_source]]
+package = "r30.right"
+kind = "path"
+path = "glossary/r30.right"
+
+[[lexicon_source]]
+package = "r30.scale"
+kind = "path"
+path = "glossary/r30.scale"
+
+[[lexicon_source]]
+package = "r30.time"
+kind = "path"
+path = "glossary/r30.time"
+
+[[lexicon_source]]
+package = "r30.witt"
+kind = "path"
+path = "glossary/r30.witt"
+
+[limits]
+max_file_bytes = 4194304
+max_total_source_bytes = 67108864
+max_primitive_atoms = 2000000
+max_token_lattice_edges = 4000000
+max_parse_states = 4000000
+max_ir_nodes = 2000000
+max_scope_depth = 1024
+max_import_depth = 128
+max_diagnostics = 256
+max_child_output_bytes = 16777216
+child_timeout_ms = 600000

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "p1-of-irr"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.known::irrational-thirty))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Rational"
+name = "Rule30UOR.Rational.problem1_of_irrational"
+
+[[form]]
+id = "p1-of-irr"
+channel = "math"
+surface = "poneofirr"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name poneofirr) (paren (slot 0)))"

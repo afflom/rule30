@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-rowagree-center"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t)))) (app (const r30.witt::row-agree) (local t) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t) (nat 0))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_rowAgree_center"
+
+[[form]]
+id = "periodic-rowagree-center"
+channel = "math"
+surface = "periodicrowagreecenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicrowagreecenter) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

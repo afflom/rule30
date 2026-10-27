@@ -1,0 +1,22 @@
+spec = "lexlean/entry/1"
+id = "antiperiodic-diagonal"
+category = "function"
+signature = "(pi ((explicit P (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CompilePoints"
+name = "Rule30UOR.CompilePoints.IsAntiperiodicDiag"
+
+[[form]]
+id = "antiperiodic-diagonal"
+channel = "math"
+surface = "antiperiodicdiagonal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name antiperiodicdiagonal) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
+

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "settled-at"
+category = "function"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.SettledAt"
+
+[[form]]
+id = "settled-at"
+channel = "math"
+surface = "settledat"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name settledat) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

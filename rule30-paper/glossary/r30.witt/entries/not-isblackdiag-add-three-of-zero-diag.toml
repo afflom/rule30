@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-isblackdiag-add-three-of-zero-diag"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat))) (pi ((explicit hz (app (const r30.joint::zero-diagonal) (local z)))) (app (const lexlean.core::lnot) (app (const r30.joint::black-diagonal) (app (const lexlean.std.nat::add) (local z) (nat 3))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_isBlackDiag_add_three_of_zero_diag_prop"
+
+[[form]]
+id = "not-isblackdiag-add-three-of-zero-diag"
+channel = "math"
+surface = "notisblackdiagaddthreeofzerodiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notisblackdiagaddthreeofzerodiag) (paren (slot 0)))"

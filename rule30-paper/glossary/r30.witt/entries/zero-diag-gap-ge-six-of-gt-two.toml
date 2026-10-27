@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-diag-gap-ge-six-of-gt-two"
+category = "proof-constant"
+signature = "(pi ((explicit z1 (const lexlean.std.nat::nat)) (explicit z2 (const lexlean.std.nat::nat))) (pi ((explicit hgt (app (const lexlean.std.nat::lt) (nat 2) (local z1))) (explicit hz1 (app (const r30.joint::zero-diagonal) (local z1))) (explicit hz2 (app (const r30.joint::zero-diagonal) (local z2))) (explicit hlt (app (const lexlean.std.nat::lt) (local z1) (local z2)))) (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local z1) (nat 6)) (local z2))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.zero_diag_gap_ge_six_of_gt_two_prop"
+
+[[form]]
+id = "zero-diag-gap-ge-six-of-gt-two"
+channel = "math"
+surface = "zerodiaggapgesixofgttwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zerodiaggapgesixofgttwo) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

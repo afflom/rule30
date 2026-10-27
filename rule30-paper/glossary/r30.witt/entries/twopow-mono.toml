@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "twopow-mono"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.std.nat::le) (local a) (local b)))) (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (local a)) (app (const r30.scale::twopow) (local b)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.twopow_mono"
+
+[[form]]
+id = "twopow-mono"
+channel = "math"
+surface = "twopowmono"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name twopowmono) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

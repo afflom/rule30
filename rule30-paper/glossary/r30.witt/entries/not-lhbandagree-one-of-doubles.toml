@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-lhbandagree-one-of-doubles"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit p0 (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))))) (explicit hd (app (const r30.joint::doubles-at) (nat 1) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))))) (explicit hset0 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))) (local t))) (explicit hset1 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))) (nat 1)) (local t))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))) (nat 2)) (local t))) (explicit hp0 (app (const lexlean.std.nat::le) (local p0) (app (const lexlean.std.nat::add) (local p) (nat 1)))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local p) (nat 3)) (app (const lexlean.std.nat::add) (local p0) (local L))))) (app (const lexlean.core::lnot) (app (const r30.witt::lh-band-agree) (local t) (nat 1) (local p0) (local L)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_lhBandAgree_one_of_doubles_prop"
+
+[[form]]
+id = "not-lhbandagree-one-of-doubles"
+channel = "math"
+surface = "notlhbandagreeoneofdoubles"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notlhbandagreeoneofdoubles) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

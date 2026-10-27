@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rule-black-black"
+category = "proof-constant"
+signature = "(pi ((explicit c (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.local::rule) (const lexlean.std.bool::true) (const lexlean.std.bool::true) (local c)) (const lexlean.std.bool::false)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rule_black_black"
+
+[[form]]
+id = "rule-black-black"
+channel = "math"
+surface = "ruleblackblack"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ruleblackblack) (paren (slot 0)))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-damage-step-of-settled"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hk (app (const lexlean.std.nat::le) (local d) (local k))) (explicit hset (app (const r30.witt::settled-by) (local d) (local s)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const lexlean.std.nat::add) (local s) (nat 1)))) (app (const r30.local::bxor) (app (const lexlean.std.bool::or) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const lexlean.std.nat::add) (local s) (app (const r30.scale::twopow) (local k)))) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const lexlean.std.nat::add) (local s) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.std.bool::or) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local s)) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (nat 2)) (local s))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.ldiag_damage_step_of_settled"
+
+[[form]]
+id = "ldiag-damage-step-of-settled"
+channel = "math"
+surface = "ldiagdamagestepofsettled"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagdamagestepofsettled) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "winwitt-testbit-sector-two-center-slot-of-zero-diag"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (local z) (local k))) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hset (app (const r30.witt::settled-at) (local z) (local k)))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-win) (local z) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local z) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1))))) (app (const r30.scale::center) (local z)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.winWitt_testBit_sector_two_center_slot_of_zero_diag_prop"
+
+[[form]]
+id = "winwitt-testbit-sector-two-center-slot-of-zero-diag"
+channel = "math"
+surface = "winwitttestbitsectortwocenterslotofzerodiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name winwitttestbitsectortwocenterslotofzerodiag) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

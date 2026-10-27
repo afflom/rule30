@@ -1,0 +1,10 @@
+name = "rule30_paper_host"
+version = "0.1.0"
+defaultTargets = ["Rule30PaperHost"]
+
+[[lean_lib]]
+name = "Rule30PaperHost"
+
+[[require]]
+name = "rule30core"
+path = "../rule30-core-lean"

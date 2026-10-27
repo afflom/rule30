@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-subdiag-succ-two-step"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local u) (nat 1)) (app (const lexlean.std.nat::add) (local c) (nat 2))) (app (const lexlean.std.nat::add) (local u) (nat 1))) (app (const r30.local::bxor) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local u) (app (const lexlean.std.nat::add) (local c) (nat 2))) (local u)) (app (const lexlean.std.bool::or) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local u) (nat 1)) (app (const lexlean.std.nat::add) (local c) (nat 1))) (app (const lexlean.std.nat::add) (local u) (nat 1))) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local u) (nat 2)) (local c)) (app (const lexlean.std.nat::add) (local u) (nat 2)))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_subdiag_succ_two_step"
+
+[[form]]
+id = "rdrv-subdiag-succ-two-step"
+channel = "math"
+surface = "rdrvsubdiagsucctwostep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvsubdiagsucctwostep) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

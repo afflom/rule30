@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-winwitt-sector-one-gap-ldiag"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit hm (app (const lexlean.std.nat::le) (nat 1) (local m))) (explicit hcone (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local t0)) (local m)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local t0)) (local m)) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::bton) (app (const r30.time::ldiag) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (local m)) (app (const lexlean.std.nat::add) (local t0) (app (const r30.scale::twopow) (local k)))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.bit_winWitt_sector_one_gap_ldiag"
+
+[[form]]
+id = "bit-winwitt-sector-one-gap-ldiag"
+channel = "math"
+surface = "bitwinwittsectonegapldiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitwinwittsectonegapldiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

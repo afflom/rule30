@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "crosscarry-row-scale-at-threshold-eq-rdiag"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit J (const lexlean.std.nat::nat)) (explicit hJ (app (const r30.witt::right-threshold) (local k) (local J))) (explicit hJlt (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local J) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const r30.witt::bit-crosscarry-eq) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-row) (local t0))) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local J) (nat 1)) (app (const r30.right::rdiag) (local J) (local t0))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.crossCarry_row_scale_at_threshold_eq_rdiag_prop"
+
+[[form]]
+id = "crosscarry-row-scale-at-threshold-eq-rdiag"
+channel = "math"
+surface = "crosscarryrowscaleatthresholdeqrdiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name crosscarryrowscaleatthresholdeqrdiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

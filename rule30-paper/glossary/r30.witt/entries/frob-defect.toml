@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "frob-defect"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.frobDefect"
+
+[[form]]
+id = "frob-defect"
+channel = "math"
+surface = "frobdefect"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name frobdefect) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

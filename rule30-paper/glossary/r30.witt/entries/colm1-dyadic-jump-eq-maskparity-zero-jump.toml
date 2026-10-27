@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "colm1-dyadic-jump-eq-maskparity-zero-jump"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k))))) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (nat 0)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (nat 0))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (nat 1))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))))) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (nat 1))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.colm1_dyadic_jump_eq_maskparity_zero_jump"
+
+[[form]]
+id = "colm1-dyadic-jump-eq-maskparity-zero-jump"
+channel = "math"
+surface = "colm1dyadicjumpeqmaskparityzerojump"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name colm1dyadicjumpeqmaskparityzerojump) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

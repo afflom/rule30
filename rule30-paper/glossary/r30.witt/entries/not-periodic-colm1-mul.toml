@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-periodic-colm1-mul"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P))) (explicit T1 (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m)))) (app (const lexlean.core::lnot) (app (const r30.witt::col-neg-one-periodic) (local T1) (app (const lexlean.std.nat::mul) (local m) (local P)))))"
+surface_arity = 7
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_periodic_colm1_mul_prop"
+
+[[form]]
+id = "not-periodic-colm1-mul"
+channel = "math"
+surface = "notperiodiccolm1mul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notperiodiccolm1mul) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6))))"

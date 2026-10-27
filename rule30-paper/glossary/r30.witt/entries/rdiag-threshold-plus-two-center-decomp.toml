@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-threshold-plus-two-center-decomp"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit J (const lexlean.std.nat::nat)) (explicit hJ (app (const r30.witt::right-threshold) (local k) (local J)))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local J) (nat 2)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local J) (nat 2)) (app (const r30.scale::twopow) (local k)))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local J) (nat 2))) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local J) (nat 2)) (app (const lexlean.std.nat::add) (local J) (app (const r30.scale::twopow) (local k)))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local J) (nat 2)) (local J)))) (app (const r30.local::bxor) (app (const r30.scale::center) (local J)) (app (const r30.right::rdiag) (local J) (app (const lexlean.std.nat::add) (local J) (nat 1)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdiag_threshold_plus_two_center_decomp"
+
+[[form]]
+id = "rdiag-threshold-plus-two-center-decomp"
+channel = "math"
+surface = "rdiagthresholdplustwocenterdecomp"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagthresholdplustwocenterdecomp) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-outward-determine-step"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit p0 (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit h0 (app (const r30.witt::lh-col-agree) (local t) (local Q) (local p0) (app (const lexlean.std.nat::add) (local S) (nat 1)))) (explicit h1 (app (const r30.witt::lh-col-agree) (local t) (local Q) (app (const lexlean.std.nat::add) (local p0) (nat 1)) (app (const lexlean.std.nat::add) (local S) (nat 1))))) (app (const r30.witt::lh-col-agree) (local t) (local Q) (app (const lexlean.std.nat::add) (local p0) (nat 2)) (local S))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_outward_determine_step"
+
+[[form]]
+id = "lhcenter-outward-determine-step"
+channel = "math"
+surface = "lhcenteroutwarddeterminestep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenteroutwarddeterminestep) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

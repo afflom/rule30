@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exists-zero-diag-doublesat-mul"
+category = "proof-constant"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P)))) (app (const lexlean.core::exists-op) (lam ((explicit z (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const r30.joint::zero-diagonal) (local z)) (app (const r30.joint::doubles-at) (app (const lexlean.std.nat::mul) (local m) (local P)) (local z)))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.exists_zero_diag_doublesAt_mul"
+
+[[form]]
+id = "exists-zero-diag-doublesat-mul"
+channel = "math"
+surface = "existszerodiagdoublesatmul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name existszerodiagdoublesatmul) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

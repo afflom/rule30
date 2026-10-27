@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-rhbandagree-late-and-winwittagree-cone"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local t) (local Q)) (local L))) (explicit htk (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local Q)) (local L)) (app (const r30.scale::twopow) (local k)))) (explicit hlate (app (const r30.witt::rh-band-agree) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (local Q) (nat 0) (local L)))) (app (const lexlean.core::lnot) (app (const r30.witt::winwitt-agree) (local t) (local k) (local Q) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (local L)) (local L)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_rhBandAgree_late_and_winWittAgree_cone"
+
+[[form]]
+id = "not-rhbandagree-late-and-winwittagree-cone"
+channel = "math"
+surface = "notrhbandagreelateandwinwittagreecone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notrhbandagreelateandwinwittagreecone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-left-step-inv-sub"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit U (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (pi ((explicit hdU (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local U)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::sub) (local U) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const r30.local::bxor) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::sub) (local U) (local d))) (app (const lexlean.std.bool::or) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::sub) (local U) (local d))) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (local U) (local d)) (nat 1))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_left_step_inv_sub"
+
+[[form]]
+id = "rhcenter-left-step-inv-sub"
+channel = "math"
+surface = "rhcenterleftstepinvsub"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenterleftstepinvsub) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

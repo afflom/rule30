@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "maskparity-coboundary"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::mask-parity) (local d) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.scale::mask-parity) (local d) (local k))) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (local k))) (const lexlean.std.bool::false)))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.maskparity_coboundary"
+
+[[form]]
+id = "maskparity-coboundary"
+channel = "math"
+surface = "maskparitycoboundary"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskparitycoboundary) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

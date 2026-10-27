@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "pow2"
+category = "function"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Right"
+name = "Rule30UOR.Right.pow2"
+
+[[form]]
+id = "pow2"
+channel = "math"
+surface = "rpow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rpow) (paren (slot 0)))"

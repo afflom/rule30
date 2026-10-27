@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-centerperiodic-of-rhbandagree-at-zero-diag-doubles"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit B (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local z) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hd (app (const r30.joint::doubles-at) (app (const lexlean.std.nat::mul) (local m) (local P)) (local z))) (explicit hset1 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (local z) (nat 1)) (app (const lexlean.std.nat::add) (local z) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local z) (nat 1)) (app (const lexlean.std.nat::mul) (local m) (local P))) (app (const lexlean.std.nat::add) (local z) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hB (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local p) (app (const lexlean.std.nat::mul) (nat 3) (app (const lexlean.std.nat::mul) (local m) (local P)))) (app (const lexlean.std.nat::add) (local B) (nat 1)))) (explicit hband (app (const r30.witt::rh-band-agree) (app (const lexlean.std.nat::add) (local z) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const lexlean.std.nat::mul) (local m) (local P)) (nat 1) (local B)))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_centerPeriodic_of_rhBandAgree_at_zero_diag_doubles_prop"
+
+[[form]]
+id = "not-centerperiodic-of-rhbandagree-at-zero-diag-doubles"
+channel = "math"
+surface = "notcenterperiodicofrhbandagreeatzerodiagdoubles"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notcenterperiodicofrhbandagreeatzerodiagdoubles) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

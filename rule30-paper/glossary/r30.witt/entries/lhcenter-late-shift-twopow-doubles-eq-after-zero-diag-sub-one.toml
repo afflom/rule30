@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-late-shift-twopow-doubles-eq-after-zero-diag-sub-one"
+category = "proof-constant"
+signature = "(pi ((explicit P (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local z) (nat 2)) (local k))) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hd (app (const r30.joint::doubles-at) (local P) (local z))) (explicit hset1 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (local z) (nat 1)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 1)) (app (const r30.scale::twopow) (local k))))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (local z) (nat 2)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 1)) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 1)) (local P)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local P) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 2)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (nat 1))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_late_shift_twopow_doubles_eq_after_zero_diag_sub_one_prop"
+
+[[form]]
+id = "lhcenter-late-shift-twopow-doubles-eq-after-zero-diag-sub-one"
+channel = "math"
+surface = "lhcenterlateshifttwopowdoubleseqafterzerodiagsubone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterlateshifttwopowdoubleseqafterzerodiagsubone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

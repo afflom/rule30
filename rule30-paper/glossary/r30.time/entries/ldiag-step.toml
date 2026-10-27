@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-step"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (app (const lexlean.std.nat::succ) (app (const lexlean.std.nat::succ) (local k))) (app (const lexlean.std.nat::succ) (local s))) (app (const r30.local::bxor) (app (const r30.time::ldiag) (local k) (local s)) (app (const lexlean.std.bool::or) (app (const r30.time::ldiag) (app (const lexlean.std.nat::succ) (local k)) (local s)) (app (const r30.time::ldiag) (app (const lexlean.std.nat::succ) (app (const lexlean.std.nat::succ) (local k))) (local s))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.ldiag_step"
+
+[[form]]
+id = "ldiag-step"
+channel = "math"
+surface = "ldiagstep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagstep) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

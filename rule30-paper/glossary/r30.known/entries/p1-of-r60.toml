@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "p1-of-r60"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.known::resp-sixty-aperiodic))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Project"
+name = "Rule30UOR.Project.problem1_of_resp60"
+
+[[form]]
+id = "p1-of-r60"
+channel = "math"
+surface = "poneofrsixty"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name poneofrsixty) (paren (slot 0)))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-col"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Ruliology.CellularAutomata.Rule30Prize"
+name = "Ruliology.CellularAutomata.Rule30Prize.center"
+
+[[form]]
+id = "center-col"
+channel = "math"
+surface = "centercol"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centercol) (paren (slot 0)))"

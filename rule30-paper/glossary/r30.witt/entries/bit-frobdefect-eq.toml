@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-frobdefect-eq"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.bool::bool))) (sort prop))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.BitFrobDefectEq"
+
+[[form]]
+id = "bit-frobdefect-eq"
+channel = "math"
+surface = "bitfrobdefecteq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitfrobdefecteq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

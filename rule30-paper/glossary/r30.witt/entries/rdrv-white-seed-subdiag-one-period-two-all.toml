@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-white-seed-subdiag-one-period-two-all"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (nat 0) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local u) (nat 2)) (nat 1)) (app (const lexlean.std.nat::add) (local u) (nat 2))) (app (const r30.witt::r-drv) (local td) (nat 0) (app (const lexlean.std.nat::add) (local u) (nat 1)) (local u))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_white_seed_subdiag_one_period_two_all"
+
+[[form]]
+id = "rdrv-white-seed-subdiag-one-period-two-all"
+channel = "math"
+surface = "rdrvwhiteseedsubdiagoneperiodtwoall"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvwhiteseedsubdiagoneperiodtwoall) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

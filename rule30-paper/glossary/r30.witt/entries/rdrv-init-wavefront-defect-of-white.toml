@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-init-wavefront-defect-of-white"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hband (app (const r30.witt::rh-band-agree) (local tx) (local Q) (nat 1) (local L))) (explicit hdk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (local k)) (local L))) (explicit hw (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (local k) (app (const lexlean.std.nat::add) (local d) (nat 1))) (const lexlean.std.bool::false)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.witt::r-drv) (local td) (app (const lexlean.std.nat::add) (local tx) (local Q)) (app (const lexlean.std.nat::add) (local k) (nat 1)) (app (const lexlean.std.nat::add) (local d) (nat 1))) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local k) (nat 1)) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const r30.local::bxor) (app (const r30.witt::r-drv) (local td) (app (const lexlean.std.nat::add) (local tx) (local Q)) (local k) (app (const lexlean.std.nat::add) (local d) (nat 2))) (app (const r30.witt::r-drv) (local td) (local tx) (local k) (app (const lexlean.std.nat::add) (local d) (nat 2)))))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_init_wavefront_defect_of_white"
+
+[[form]]
+id = "rdrv-init-wavefront-defect-of-white"
+channel = "math"
+surface = "rdrvinitwavefrontdefectofwhite"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvinitwavefrontdefectofwhite) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

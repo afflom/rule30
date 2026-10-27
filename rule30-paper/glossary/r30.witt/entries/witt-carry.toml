@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-carry"
+category = "function"
+signature = "(pi ((explicit y (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.carry"
+
+[[form]]
+id = "witt-carry"
+channel = "math"
+surface = "wittcarry"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittcarry) (paren (slot 0)))"

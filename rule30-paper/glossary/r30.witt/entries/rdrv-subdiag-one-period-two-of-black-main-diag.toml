@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-subdiag-one-period-two-of-black-main-diag"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (pi ((explicit hb1 (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local u) (nat 1)) (app (const lexlean.std.nat::add) (local u) (nat 1))) (const lexlean.std.bool::true))) (explicit hb2 (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local u) (nat 2)) (app (const lexlean.std.nat::add) (local u) (nat 2))) (const lexlean.std.bool::true)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local u) (nat 2)) (nat 1)) (app (const lexlean.std.nat::add) (local u) (nat 2))) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local u) (nat 1)) (local u)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_subdiag_one_period_two_of_black_main_diag"
+
+[[form]]
+id = "rdrv-subdiag-one-period-two-of-black-main-diag"
+channel = "math"
+surface = "rdrvsubdiagoneperiodtwoofblackmaindiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvsubdiagoneperiodtwoofblackmaindiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

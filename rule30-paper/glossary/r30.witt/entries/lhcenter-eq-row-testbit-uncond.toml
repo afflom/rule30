@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-eq-row-testbit-uncond"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (local t) (local p)) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-row) (local t)) (app (const lexlean.std.nat::add) (local t) (local p)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_eq_row_testBit_uncond_prop"
+
+[[form]]
+id = "lhcenter-eq-row-testbit-uncond"
+channel = "math"
+surface = "lhcentereqrowtestbituncond"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcentereqrowtestbituncond) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

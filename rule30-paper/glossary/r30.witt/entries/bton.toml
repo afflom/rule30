@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bton"
+category = "function"
+signature = "(pi ((explicit b (const lexlean.std.bool::bool))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.bton"
+
+[[form]]
+id = "bton"
+channel = "math"
+surface = "bton"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bton) (paren (slot 0)))"

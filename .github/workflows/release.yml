@@ -1,0 +1,77 @@
+name: Build and Release Rule 30 LexLean Artifacts
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build Lean 4 + LexLean PDFs & Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install TeX Live for LexLean PDF compilation
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-fonts-recommended \
+            texlive-latex-extra
+
+      - name: Install Elan and Lean 4.32.1 toolchain
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:v4.32.1
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Build rule30-core-lean (24 modules)
+        run: |
+          cd rule30-core-lean
+          lake build
+
+      - name: Build Rule30PrizeKit/lean and rule30-bridge (54 modules)
+        run: |
+          cd Rule30PrizeKit/lean
+          lake build
+          cd ../../rule30-bridge
+          lake build
+
+      - name: Build PDFs and package LexLean verified artifacts
+        run: |
+          chmod +x scripts/build_release.sh
+          ./scripts/build_release.sh --package-only
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rule30-lexlean-artifacts
+          path: dist/*
+
+      - name: Publish GitHub Release assets
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/Rule30-Paper.pdf
+            dist/Paper.pdf
+            dist/Rule30-Core.pdf
+            dist/Core.pdf
+            dist/Paper.lean
+            dist/Paper.tex
+            dist/Core.lean
+            dist/Core.tex
+            dist/paper-attestation-*.json
+            dist/core-attestation-*.json
+            dist/paper-lexlean.lock
+            dist/core-lexlean.lock
+            dist/lexlean-paper-verified-*.tar.gz
+            dist/lexlean-core-verified-*.tar.gz
+            dist/SHA256SUMS
+          generate_release_notes: true

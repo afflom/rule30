@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "winwitt-sector-one-xor-sector-two-rhcenter-after-zero-diag"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local r)) (nat 2)) (local k))) (explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (local t) (local r)))) (explicit hset (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local r)) (nat 2)) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-win) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local r) (nat 2)))) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-win) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (local r) (nat 2))))) (app (const lexlean.std.bool::not) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local r) (nat 2)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.winWitt_sector_one_xor_sector_two_rhCenter_after_zero_diag_prop"
+
+[[form]]
+id = "winwitt-sector-one-xor-sector-two-rhcenter-after-zero-diag"
+channel = "math"
+surface = "winwittsectoronexorsectortworhcenterafterzerodiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name winwittsectoronexorsectortworhcenterafterzerodiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

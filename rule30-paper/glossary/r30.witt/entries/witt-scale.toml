@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-scale"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.phiScale"
+
+[[form]]
+id = "witt-scale"
+channel = "math"
+surface = "wittscale"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittscale) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

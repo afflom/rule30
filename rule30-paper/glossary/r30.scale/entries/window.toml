@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "window"
+category = "function"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.int::int))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.window60"
+
+[[form]]
+id = "window"
+channel = "math"
+surface = "window"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name window) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

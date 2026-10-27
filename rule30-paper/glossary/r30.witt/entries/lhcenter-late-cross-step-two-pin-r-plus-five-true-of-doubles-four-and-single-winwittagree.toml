@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-late-cross-step-two-pin-r-plus-five-true-of-doubles-four-and-single-winwittagree"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hr (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local t) (nat 4)) (local r))) (explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 4)) (local r)) (nat 2)) (local k))) (explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 4)) (local r)))) (explicit hd (app (const r30.joint::doubles-at) (nat 4) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 4)) (local r)))) (explicit hset0 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 4)) (local r)) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))))) (explicit hset1 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 4)) (local r)) (nat 1)) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 4)) (local r)) (nat 2)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const r30.scale::twopow) (local k))))) (explicit ha (app (const lexlean.std.nat::le) (local a) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (local r) (nat 2))))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (local r)) (app (const lexlean.std.nat::add) (local a) (local L)))) (explicit hw (app (const r30.witt::winwitt-agree) (local t) (local k) (nat 4) (local a) (local L)))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 2)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (local r) (nat 5)))) (const lexlean.std.bool::true))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_late_cross_step_two_pin_r_plus_five_true_of_doubles_four_and_single_winWittAgree_prop"
+
+[[form]]
+id = "lhcenter-late-cross-step-two-pin-r-plus-five-true-of-doubles-four-and-single-winwittagree"
+channel = "math"
+surface = "lhcenterlatecrosssteptwopinrplusfivetrueofdoublesfourandsinglewinwittagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterlatecrosssteptwopinrplusfivetrueofdoublesfourandsinglewinwittagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

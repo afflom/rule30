@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lh-center"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter"
+
+[[form]]
+id = "lh-center"
+channel = "math"
+surface = "lhcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenter) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

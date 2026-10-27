@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-periodic-finite-sector-rhbandagree-mul"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit k (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit U (const lexlean.std.nat::nat)) (explicit M (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit hM (app (const lexlean.std.nat::le) (nat 1) (local M))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (local U) (app (const r30.scale::twopow) (local k)))))) (explicit hS (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (local U) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.nat::mul) (local m) (local P))) (app (const lexlean.std.nat::mul) (local M) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::lnot) (pi ((explicit j (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::lt) (local j) (local M)))) (app (const r30.witt::rh-band-agree) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (app (const lexlean.std.nat::add) (local U) (local j)) (app (const r30.scale::twopow) (local k)))) (nat 1)) (app (const lexlean.std.nat::mul) (local m) (local P)) (nat 0) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local k)) (nat 1))))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_periodic_finite_sector_rhBandAgree_mul"
+
+[[form]]
+id = "not-periodic-finite-sector-rhbandagree-mul"
+channel = "math"
+surface = "notperiodicfinitesectorrhbandagreemul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notperiodicfinitesectorrhbandagreemul) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

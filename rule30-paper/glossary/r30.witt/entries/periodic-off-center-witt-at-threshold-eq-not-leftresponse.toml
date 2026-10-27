@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-off-center-witt-at-threshold-eq-not-leftresponse"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P))) (explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit J (const lexlean.std.nat::nat)) (explicit hJ (app (const r30.witt::right-threshold) (local k) (local J))) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 2)) (local k))) (explicit hdJ (app (const lexlean.core::eq) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const lexlean.std.nat::add) (local J) (nat 1)))) (explicit hJlt (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local J) (nat 1)) (app (const r30.scale::twopow) (local k)))) (explicit hset (app (const r30.witt::settled-by) (local d) (app (const lexlean.std.nat::add) (local d) (nat 1))))) (app (const r30.witt::bit-winwitt-eq) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local J) (nat 1)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const lexlean.std.bool::not) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 2)) (local k))) (app (const r30.local::bxor) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k)))))))"
+surface_arity = 13
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_off_center_witt_at_threshold_eq_not_leftresponse_prop"
+
+[[form]]
+id = "periodic-off-center-witt-at-threshold-eq-not-leftresponse"
+channel = "math"
+surface = "periodicoffcenterwittatthresholdeqnotleftresponse"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicoffcenterwittatthresholdeqnotleftresponse) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6) (token comma) (space) (slot 7) (token comma) (space) (slot 8) (token comma) (space) (slot 9) (token comma) (space) (slot 10) (token comma) (space) (slot 11) (token comma) (space) (slot 12))))"

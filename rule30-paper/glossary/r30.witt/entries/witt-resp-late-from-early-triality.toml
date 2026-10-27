@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-resp-late-from-early-triality"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hk (app (const lexlean.std.nat::le) (local d) (local k)))) (app (const r30.witt::bit-winwitt-eq) (local d) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const r30.local::bxor) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (local k)) (app (const r30.local::bxor) (app (const r30.witt::witt-resp) (local d) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.witt::witt-resp) (local d) (local k))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.wittRespBool_late_from_early_triality_prop"
+
+[[form]]
+id = "witt-resp-late-from-early-triality"
+channel = "math"
+surface = "wittresplatefromearlytriality"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittresplatefromearlytriality) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "gate"
+category = "proof-constant"
+signature = "(pi ((explicit hf (const r30.joint::front-obligation)) (explicit hz (const r30.joint::zero-obligation))) (const r30.joint::problem-one))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Intent"
+name = "Rule30UOR.Intent.gate"
+
+[[form]]
+id = "gate"
+channel = "math"
+surface = "gate"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name gate) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

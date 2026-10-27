@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rule-white-white"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.local::rule) (local a) (const lexlean.std.bool::false) (const lexlean.std.bool::false)) (local a)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rule_white_white"
+
+[[form]]
+id = "rule-white-white"
+channel = "math"
+surface = "rulewhitewhite"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rulewhitewhite) (paren (slot 0)))"

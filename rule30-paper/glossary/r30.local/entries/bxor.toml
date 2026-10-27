@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bxor"
+category = "function"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit b (const lexlean.std.bool::bool))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.bxor"
+
+[[form]]
+id = "bxor"
+channel = "math"
+surface = "bxor"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bxor) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

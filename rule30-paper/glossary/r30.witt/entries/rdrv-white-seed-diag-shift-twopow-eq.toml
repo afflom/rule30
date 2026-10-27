@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-white-seed-diag-shift-twopow-eq"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (pi ((explicit hpk (app (const lexlean.std.nat::le) (local p) (local k))) (explicit hkd (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (local k) (local p)) (local d)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (nat 0) (app (const lexlean.std.nat::add) (local k) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local d)))) (app (const lexlean.std.nat::add) (local p) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local d))))) (app (const r30.witt::r-drv) (local td) (nat 0) (local k) (local p)))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_white_seed_diag_shift_twopow_eq"
+
+[[form]]
+id = "rdrv-white-seed-diag-shift-twopow-eq"
+channel = "math"
+surface = "rdrvwhiteseeddiagshifttwopoweq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvwhiteseeddiagshifttwopoweq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

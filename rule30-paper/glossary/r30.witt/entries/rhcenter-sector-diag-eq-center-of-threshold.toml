@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-sector-diag-eq-center-of-threshold"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit J (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (pi ((explicit hJ (app (const r30.witt::right-threshold) (local k) (local J))) (explicit hs (app (const lexlean.std.nat::le) (local s) (local J)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local s) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local k)))) (app (const r30.scale::center) (local s)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_sector_diag_eq_center_of_threshold"
+
+[[form]]
+id = "rhcenter-sector-diag-eq-center-of-threshold"
+channel = "math"
+surface = "rhcentersectordiageqcenterofthreshold"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcentersectordiageqcenterofthreshold) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-superdiag-eq-rdiag"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (pi ((explicit hct (app (const lexlean.std.nat::le) (local c) (local t)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local u)) (app (const lexlean.std.nat::add) (local u) (local c))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (local t) (local c)) (app (const lexlean.std.nat::add) (local t) (local u))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_superdiag_eq_rdiag"
+
+[[form]]
+id = "rhcenter-superdiag-eq-rdiag"
+channel = "math"
+surface = "rhcentersuperdiageqrdiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcentersuperdiageqrdiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

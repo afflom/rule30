@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "p1-of-no-row-center-period"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.witt::no-row-center-period))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.problem1_of_noRowCenterPeriod"
+
+[[form]]
+id = "p1-of-no-row-center-period"
+channel = "math"
+surface = "poneofnorowcenterperiod"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name poneofnorowcenterperiod) (paren (slot 0)))"

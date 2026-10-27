@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-coboundary-zero"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hk (app (const lexlean.std.nat::le) (local z) (local k))) (explicit hset (app (const r30.witt::settled-at) (local z) (local k)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.witt::witt-resp) (local z) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.witt::witt-resp) (local z) (local k))) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local z) (app (const r30.scale::twopow) (local k))) (local k))) (app (const r30.scale::center) (local z))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.witt_coboundary_at_zero_diag"
+
+[[form]]
+id = "witt-coboundary-zero"
+channel = "math"
+surface = "wittcoboundaryzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittcoboundaryzero) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

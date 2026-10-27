@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exists-maskparity-zero-flip-sub-twopow-ge-of-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local T) (app (const lexlean.std.nat::mul) (local m) (local P))) (local k)))) (app (const lexlean.core::exists-op) (lam ((explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::lt) (local s) (app (const r30.scale::twopow) (local k))) (app (const lexlean.core::eq) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::mul) (local m) (local P))) (local s)) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 0)) (app (const lexlean.std.bool::not) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::mul) (local m) (local P))) (local s)) (nat 0)))))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.exists_maskparity_zero_flip_sub_twopow_ge_of_periodic"
+
+[[form]]
+id = "exists-maskparity-zero-flip-sub-twopow-ge-of-periodic"
+channel = "math"
+surface = "existsmaskparityzeroflipsubtwopowgeofperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name existsmaskparityzeroflipsubtwopowgeofperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

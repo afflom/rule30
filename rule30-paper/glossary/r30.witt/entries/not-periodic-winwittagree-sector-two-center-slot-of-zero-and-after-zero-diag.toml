@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-periodic-winwittagree-sector-two-center-slot-of-zero-and-after-zero-diag"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit z1 (const lexlean.std.nat::nat)) (explicit z2 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (local T) (local z1))) (explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local z1) (app (const lexlean.std.nat::mul) (local m) (local P))) (local k))) (explicit hz1 (app (const r30.joint::zero-diagonal) (local z1))) (explicit hz2 (app (const r30.joint::zero-diagonal) (local z2))) (explicit hrel (app (const lexlean.core::eq) (app (const lexlean.std.nat::add) (local z1) (app (const lexlean.std.nat::mul) (local m) (local P))) (app (const lexlean.std.nat::add) (local z2) (nat 2)))) (explicit hset1 (app (const r30.witt::settled-by) (local z1) (app (const lexlean.std.nat::add) (local z1) (app (const r30.scale::twopow) (local k))))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (local z2) (nat 2)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z2) (nat 2)) (app (const r30.scale::twopow) (local k))))) (explicit ha (app (const lexlean.std.nat::le) (local a) (app (const lexlean.std.nat::add) (local z1) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local z1) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (local a) (local L))))) (app (const lexlean.core::lnot) (app (const r30.witt::winwitt-agree) (local z1) (local k) (app (const lexlean.std.nat::mul) (local m) (local P)) (local a) (local L))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_periodic_winWittAgree_sector_two_center_slot_of_zero_and_after_zero_diag_prop"
+
+[[form]]
+id = "not-periodic-winwittagree-sector-two-center-slot-of-zero-and-after-zero-diag"
+channel = "math"
+surface = "notperiodicwinwittagreesectortwocenterslotofzeroandafterzerodiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notperiodicwinwittagreesectortwocenterslotofzeroandafterzerodiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

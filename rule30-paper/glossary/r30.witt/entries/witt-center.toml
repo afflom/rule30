@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-center"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rowCenter"
+
+[[form]]
+id = "witt-center"
+channel = "math"
+surface = "wittcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittcenter) (paren (slot 0)))"

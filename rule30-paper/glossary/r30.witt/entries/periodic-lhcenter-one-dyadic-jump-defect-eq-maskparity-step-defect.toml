@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-lhcenter-one-dyadic-jump-defect-eq-maskparity-step-defect"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 1)) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (nat 1))) (app (const r30.local::bxor) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 1)) (app (const r30.witt::lh-center) (local t) (nat 1)))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::mul) (local m) (local P))) (local k)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local k))) (app (const r30.local::bxor) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (local k)) (app (const r30.scale::mask-parity) (local t) (local k)))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_lhCenter_one_dyadic_jump_defect_eq_maskparity_step_defect"
+
+[[form]]
+id = "periodic-lhcenter-one-dyadic-jump-defect-eq-maskparity-step-defect"
+channel = "math"
+surface = "periodiclhcenteronedyadicjumpdefecteqmaskparitystepdefect"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiclhcenteronedyadicjumpdefecteqmaskparitystepdefect) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

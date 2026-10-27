@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "damage-eq"
+category = "function"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.bool::bool))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.DamageEq"
+
+[[form]]
+id = "damage-eq"
+channel = "math"
+surface = "damageeq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name damageeq) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

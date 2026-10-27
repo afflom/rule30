@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "leftresponse-coboundary-at-zero-diag-cone"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hcone (app (const lexlean.std.nat::lt) (local z) (app (const r30.scale::twopow) (local k)))) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hset (app (const r30.witt::settled-by) (local z) (app (const lexlean.std.nat::add) (local z) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::left-response) (local z) (app (const lexlean.std.nat::add) (local k) (nat 1))) (app (const r30.scale::left-response) (local z) (local k))) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local z) (app (const r30.scale::twopow) (local k))) (local k))) (const lexlean.std.bool::false))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.leftresponse_coboundary_at_zero_diag_cone_prop"
+
+[[form]]
+id = "leftresponse-coboundary-at-zero-diag-cone"
+channel = "math"
+surface = "leftresponsecoboundaryatzerodiagcone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftresponsecoboundaryatzerodiagcone) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

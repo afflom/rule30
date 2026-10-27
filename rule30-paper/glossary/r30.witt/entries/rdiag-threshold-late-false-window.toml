@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-threshold-late-false-window"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit J (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit hJ (app (const r30.witt::right-threshold) (local k) (local J))) (explicit hgt (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::mul) (nat 2) (local t0)) (local j))) (explicit hjJ (app (const lexlean.std.nat::le) (local j) (local J)))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (local j) (app (const lexlean.std.nat::add) (local t0) (app (const r30.scale::twopow) (local k)))) (const lexlean.std.bool::false)))"
+surface_arity = 7
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdiag_threshold_late_false_window"
+
+[[form]]
+id = "rdiag-threshold-late-false-window"
+channel = "math"
+surface = "rdiagthreshlatefalsewin"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagthreshlatefalsewin) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6))))"

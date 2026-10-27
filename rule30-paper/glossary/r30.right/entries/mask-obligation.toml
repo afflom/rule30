@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "mask-obligation"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Right"
+name = "Rule30UOR.Right.MaskPos"
+
+[[form]]
+id = "mask-obligation"
+channel = "math"
+surface = "maskobligation"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name maskobligation)"

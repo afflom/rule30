@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-late-twopow-of-zero-diag"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (local z) (local k))) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hset (app (const r30.witt::settled-at) (local z) (local k)))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local z) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::twopow) (local k))) (const lexlean.std.bool::false))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_late_twopow_of_zero_diag_prop"
+
+[[form]]
+id = "lhcenter-late-twopow-of-zero-diag"
+channel = "math"
+surface = "lhcenterlatetwopowofzerodiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterlatetwopowofzerodiag) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

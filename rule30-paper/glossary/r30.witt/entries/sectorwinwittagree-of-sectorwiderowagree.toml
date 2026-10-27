@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "sectorwinwittagree-of-sectorwiderowagree"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit U (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat))) (pi ((explicit hU (app (const lexlean.std.nat::le) (nat 2) (local U))) (explicit hsec (app (const r30.witt::sector-wide-row-agree) (local k) (local d) (local U) (local Q)))) (app (const r30.witt::sector-winwitt-agree) (local k) (local d) (local U) (local Q))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.sectorWinWittAgree_of_sectorWideRowAgree"
+
+[[form]]
+id = "sectorwinwittagree-of-sectorwiderowagree"
+channel = "math"
+surface = "sectorwinwittagreeofsectorwiderowagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name sectorwinwittagreeofsectorwiderowagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

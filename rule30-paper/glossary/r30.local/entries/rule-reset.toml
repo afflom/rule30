@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rule-reset"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit c (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.local::rule) (local a) (const lexlean.std.bool::true) (local c)) (app (const lexlean.std.bool::not) (local a))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rule_reset"
+
+[[form]]
+id = "rule-reset"
+channel = "math"
+surface = "rulereset"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rulereset) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

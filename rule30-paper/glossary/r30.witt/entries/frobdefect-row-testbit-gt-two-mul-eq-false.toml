@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "frobdefect-row-testbit-gt-two-mul-eq-false"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (pi ((explicit hb0 (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local t)) (nat 1)) (local b))) (explicit hb1 (app (const lexlean.std.nat::lt) (local b) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local k)) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::frob-defect) (local k) (app (const r30.witt::witt-row) (local t))) (local b)) (const lexlean.std.bool::false))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.frobDefect_row_testBit_gt_two_mul_eq_false_prop"
+
+[[form]]
+id = "frobdefect-row-testbit-gt-two-mul-eq-false"
+channel = "math"
+surface = "frobdefectrowtestbitgttwomuleqfalse"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name frobdefectrowtestbitgttwomuleqfalse) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "carry-row-scale-cone"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hcone (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local t0)) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-carry) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (local t0) (app (const r30.scale::twopow) (local k))))) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-carry) (app (const r30.witt::witt-row) (local t0)))) (app (const r30.witt::witt-carry) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (local k))))) (app (const r30.witt::cross-carry) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-row) (local t0))) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (local k)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.carry_row_scale_cone"
+
+[[form]]
+id = "carry-row-scale-cone"
+channel = "math"
+surface = "carryrowscalecone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name carryrowscalecone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

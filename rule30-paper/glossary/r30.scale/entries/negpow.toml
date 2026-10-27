@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "negpow"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (const lexlean.std.int::int))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.negpow"
+
+[[form]]
+id = "negpow"
+channel = "math"
+surface = "negpow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name negpow) (paren (slot 0)))"

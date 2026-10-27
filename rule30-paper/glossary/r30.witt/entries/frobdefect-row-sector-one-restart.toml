@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "frobdefect-row-sector-one-restart"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k)))) (app (const r30.witt::bit-frobdefect-eq) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local k))))) (app (const r30.right::rdiag) (local d) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const lexlean.std.bool::and) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (nat 1))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local k))))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.bit_frobDefect_row_sector_one_restart_prop"
+
+[[form]]
+id = "frobdefect-row-sector-one-restart"
+channel = "math"
+surface = "frobdefectrowsectorerestart"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name frobdefectrowsectorerestart) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

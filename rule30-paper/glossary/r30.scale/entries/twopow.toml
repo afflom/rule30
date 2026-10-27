@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "twopow"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.twopow"
+
+[[form]]
+id = "twopow"
+channel = "math"
+surface = "twopow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name twopow) (paren (slot 0)))"

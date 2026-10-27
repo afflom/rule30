@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-centerperiodic-of-maskparity-zero-agree-sub-twopow"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local T) (app (const lexlean.std.nat::mul) (local m) (local P))) (app (const r30.scale::twopow) (local k)))) (explicit hS (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (local S) (nat 1)))) (explicit hmp (pi ((explicit s (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::le) (local s) (local S)))) (app (const lexlean.core::eq) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::mul) (local m) (local P))) (local s)) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 0)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::mul) (local m) (local P))) (local s)) (nat 0))))))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_centerPeriodic_of_maskparity_zero_agree_sub_twopow"
+
+[[form]]
+id = "not-centerperiodic-of-maskparity-zero-agree-sub-twopow"
+channel = "math"
+surface = "notcenterperiodicofmaskparityzeroagreesubtwopow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notcenterperiodicofmaskparityzeroagreesubtwopow) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

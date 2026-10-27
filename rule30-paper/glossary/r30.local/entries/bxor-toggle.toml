@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bxor-toggle"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit c (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (local a) (app (const lexlean.std.bool::or) (const lexlean.std.bool::false) (local c))) (app (const r30.local::bxor) (local a) (local c))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.bxor_toggle"
+
+[[form]]
+id = "bxor-toggle"
+channel = "math"
+surface = "bxortoggle"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bxortoggle) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

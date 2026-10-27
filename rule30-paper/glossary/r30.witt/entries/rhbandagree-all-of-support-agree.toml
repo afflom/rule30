@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhbandagree-all-of-support-agree"
+category = "proof-constant"
+signature = "(pi ((explicit tx (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit B (const lexlean.std.nat::nat))) (pi ((explicit hband (app (const r30.witt::rh-band-agree) (local tx) (local Q) (nat 1) (app (const lexlean.std.nat::add) (local tx) (local Q))))) (app (const r30.witt::rh-band-agree) (local tx) (local Q) (nat 1) (local B))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhBandAgree_all_of_support_agree"
+
+[[form]]
+id = "rhbandagree-all-of-support-agree"
+channel = "math"
+surface = "rhbandagreeallofsupportagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhbandagreeallofsupportagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

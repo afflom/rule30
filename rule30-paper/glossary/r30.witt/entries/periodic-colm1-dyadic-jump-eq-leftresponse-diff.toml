@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-colm1-dyadic-jump-eq-leftresponse-diff"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P))) (explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 2)) (local k)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k))))) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 2)) (local k))) (app (const r30.local::bxor) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k))))))"
+surface_arity = 8
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_colm1_dyadic_jump_eq_leftresponse_diff"
+
+[[form]]
+id = "periodic-colm1-dyadic-jump-eq-leftresponse-diff"
+channel = "math"
+surface = "periodiccolm1dyadicjumpeqleftresponsediff"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiccolm1dyadicjumpeqleftresponsediff) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6) (token comma) (space) (slot 7))))"

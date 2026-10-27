@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "resp-fifteen"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Project"
+name = "Rule30UOR.Project.resp15"
+
+[[form]]
+id = "resp-fifteen"
+channel = "math"
+surface = "respfifteen"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name respfifteen) (paren (slot 0)))"

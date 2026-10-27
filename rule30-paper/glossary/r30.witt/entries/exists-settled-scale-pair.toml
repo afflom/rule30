@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exists-settled-scale-pair"
+category = "proof-constant"
+signature = "(pi ((explicit d1 (const lexlean.std.nat::nat)) (explicit d2 (const lexlean.std.nat::nat))) (app (const lexlean.core::exists-op) (lam ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.core::land) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local d1) (local k)) (app (const lexlean.std.nat::le) (local d2) (local k))) (app (const r30.witt::settled-at) (local d1) (local k))) (app (const r30.witt::settled-at) (local d2) (local k))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.exists_settled_scale_pair_prop"
+
+[[form]]
+id = "exists-settled-scale-pair"
+channel = "math"
+surface = "existssettledscalepair"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name existssettledscalepair) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

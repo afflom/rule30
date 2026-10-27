@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "maskparity-eq-of-maskparity-zero-agree"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit hS (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (local S) (nat 1)))) (explicit hm (pi ((explicit s (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::le) (local s) (local S)))) (app (const lexlean.core::eq) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local s)) (local Q)) (nat 0)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local t) (local s)) (nat 0))))))) (app (const lexlean.core::eq) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local t) (local Q)) (local k)) (app (const r30.scale::mask-parity) (local t) (local k)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.maskparity_eq_of_maskparity_zero_agree"
+
+[[form]]
+id = "maskparity-eq-of-maskparity-zero-agree"
+channel = "math"
+surface = "maskparityeqofmaskparityzeroagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskparityeqofmaskparityzeroagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

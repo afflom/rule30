@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "maskparity-step-diff"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local k)) (app (const r30.scale::mask-parity) (local t) (local k))) (app (const r30.local::bxor) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (nat 0)) (app (const r30.scale::mask-parity) (local t) (nat 0)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.maskparity_step_diff_zero"
+
+[[form]]
+id = "maskparity-step-diff"
+channel = "math"
+surface = "maskparitystepdiff"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskparitystepdiff) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

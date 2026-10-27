@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "winwitt-step-lhcenter-zero-gap-eq-phi"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit htp (app (const lexlean.std.nat::lt) (local t) (local p))) (explicit hp (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local p)) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-phi) (app (const r30.witt::witt-win) (local t) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.scale::twopow) (local k)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.winWitt_step_lhCenter_zero_gap_eq_phi_prop"
+
+[[form]]
+id = "winwitt-step-lhcenter-zero-gap-eq-phi"
+channel = "math"
+surface = "winwittsteplhcenterzerogapeqphi"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name winwittsteplhcenterzerogapeqphi) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

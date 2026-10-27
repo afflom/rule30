@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-trapezoid-eq-white-seed-of-white-band-and-corridor"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit B (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hwb (pi ((explicit i (const lexlean.std.nat::nat))) (pi ((explicit hi (app (const lexlean.std.nat::le) (local i) (local B)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::add) (nat 1) (local i))) (const lexlean.std.bool::false))))) (explicit hwc (pi ((explicit u (const lexlean.std.nat::nat))) (pi ((explicit hu (app (const lexlean.std.nat::le) (local u) (local k)))) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local u)) (app (const lexlean.std.nat::add) (local u) (app (const lexlean.std.nat::add) (local B) (nat 1)))) (const lexlean.std.bool::false)) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local u)) (app (const lexlean.std.nat::add) (local u) (app (const lexlean.std.nat::add) (local B) (nat 2)))) (const lexlean.std.bool::false)))))) (explicit hpk (app (const lexlean.std.nat::le) (local p) (app (const lexlean.std.nat::add) (local k) (app (const lexlean.std.nat::add) (local B) (nat 1)))))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local k)) (local p)) (app (const r30.witt::r-drv) (local t) (nat 0) (local k) (local p)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_trapezoid_eq_white_seed_of_white_band_and_corridor"
+
+[[form]]
+id = "rhcenter-trapezoid-eq-white-seed-of-white-band-and-corridor"
+channel = "math"
+surface = "rhcentertrapezoideqwhiteseedofwhitebandandcorridor"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcentertrapezoideqwhiteseedofwhitebandandcorridor) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

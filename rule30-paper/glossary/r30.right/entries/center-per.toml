@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-per"
+category = "function"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Right"
+name = "Rule30UOR.Right.CenterPer"
+
+[[form]]
+id = "center-per"
+channel = "math"
+surface = "readoutperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name readoutperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

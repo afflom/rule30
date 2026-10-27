@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "resp-relation"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit h (app (const lexlean.std.nat::le) (nat 1) (local t)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.known::resp-sixty) (local t)) (app (const r30.known::resp-fifteen) (local t))) (app (const r30.known::even-time) (local t))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Project"
+name = "Rule30UOR.Project.resp_relation_bxor"
+
+[[form]]
+id = "resp-relation"
+channel = "math"
+surface = "resprelation"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name resprelation) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

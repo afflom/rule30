@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-late-maskparity-zero-dyadic-jump"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P))) (explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local d))) (explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (nat 0)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (nat 0))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k))) (app (const r30.local::bxor) (app (const r30.scale::left-response) (local d) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.scale::left-response) (local d) (local k)))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::lag) (local P) (app (const lexlean.std.nat::succ) (local k))))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::lag) (local P) (local k))))) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::lag) (local P) (app (const lexlean.std.nat::succ) (local k))))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::lag) (local P) (local k)))))))))"
+surface_arity = 8
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_late_maskparity_zero_dyadic_jump"
+
+[[form]]
+id = "periodic-late-maskparity-zero-dyadic-jump"
+channel = "math"
+surface = "periodiclatesmaskparityzerodyadicjump"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiclatesmaskparityzerodyadicjump) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6) (token comma) (space) (slot 7))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "winwitt-scale-cocycle"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local t0) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::twopow) (local k))) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (local k)))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.winWitt_scale_cocycle"
+
+[[form]]
+id = "winwitt-scale-cocycle"
+channel = "math"
+surface = "winwittscalecocycle"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name winwittscalecocycle) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

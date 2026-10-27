@@ -1,0 +1,29 @@
+# Lake / Lean build caches
+.lake/
+**/.lake/
+.olean/
+**/.olean/
+
+# LexLean working cache (verified-latest/ IS tracked)
+.lexlean/
+**/.lexlean/
+
+# Release staging directory
+dist/
+
+# LaTeX intermediate files (PDFs and .tex files ARE tracked)
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+texput.log
+deep.log
+
+# Python / scratch data
+__pycache__/
+*.pyc
+*.npy
+*.npz

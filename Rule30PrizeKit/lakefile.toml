@@ -1,0 +1,27 @@
+name = "rule30prizekit"
+version = "1.0.0"
+defaultTargets = ["Rule30PrizeKit"]
+
+# The official statements `Problem1` and `Problem2`, and the catalog of partial results
+# (namespace `Ruliology.CellularAutomata`). Core Lean only.
+[[require]]
+name = "rule30prize"
+path = "lean"
+
+# The 96 `problem1_iff_*` equivalences. Brings Mathlib, pinned at its v4.35.0 tag.
+[[require]]
+name = "rule30equivalents"
+path = "equivalents"
+
+[[lean_lib]]
+name = "Rule30PrizeKit"
+
+# Your submission, as a single module. Build it with `lake build Rule30Submission`, then
+# check it the way the verifier does with `lake env lean --run Check.lean Rule30Submission`.
+[[lean_lib]]
+name = "Rule30Submission"
+
+# The official targets with `sorry`, for maintainers running Lean's comparator. Never import it.
+[[lean_lib]]
+name = "Rule30Challenge"
+srcDir = "comparator"

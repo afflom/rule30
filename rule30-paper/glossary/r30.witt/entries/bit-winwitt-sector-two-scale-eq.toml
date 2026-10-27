@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-winwitt-sector-two-scale-eq"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit k1 (const lexlean.std.nat::nat)) (explicit k2 (const lexlean.std.nat::nat)) (explicit hk1 (app (const lexlean.std.nat::le) (local d) (local k1))) (explicit hk2 (app (const lexlean.std.nat::le) (local d) (local k2))) (explicit hds1 (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k1)))) (explicit hds2 (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k2)))) (explicit hset1 (app (const r30.witt::settled-by) (local d) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k1))))) (explicit hset2 (app (const r30.witt::settled-by) (local d) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k2)))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k1))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k1))))) (app (const r30.witt::witt-bit) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k2))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k2)))))))"
+surface_arity = 10
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.bit_winWitt_sector_two_scale_eq"
+
+[[form]]
+id = "bit-winwitt-sector-two-scale-eq"
+channel = "math"
+surface = "bitwinwittsectortwoscaleeq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitwinwittsectortwoscaleeq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6) (token comma) (space) (slot 7) (token comma) (space) (slot 8) (token comma) (space) (slot 9))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-mask"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P))) (explicit k (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hk (app (const lexlean.std.nat::lt) (local t) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.scale::mask-parity) (local t) (local k)) (app (const r30.local::bxor) (app (const r30.scale::left-response) (local t) (local k)) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::lag) (local P) (local k)))) (app (const r30.scale::center) (local t))))))"
+surface_arity = 8
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.periodic_mask_paper"
+
+[[form]]
+id = "periodic-mask"
+channel = "math"
+surface = "periodicmask"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicmask) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6) (token comma) (space) (slot 7))))"

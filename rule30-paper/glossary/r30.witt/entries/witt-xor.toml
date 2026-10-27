@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-xor"
+category = "function"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Init"
+name = "Nat.xor"
+
+[[form]]
+id = "witt-xor"
+channel = "math"
+surface = "wittxor"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittxor) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

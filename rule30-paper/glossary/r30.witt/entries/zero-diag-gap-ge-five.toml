@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-diag-gap-ge-five"
+category = "proof-constant"
+signature = "(pi ((explicit z1 (const lexlean.std.nat::nat)) (explicit z2 (const lexlean.std.nat::nat))) (pi ((explicit h1 (app (const r30.joint::zero-diagonal) (local z1))) (explicit h2 (app (const r30.joint::zero-diagonal) (local z2))) (explicit hlt (app (const lexlean.std.nat::lt) (local z1) (local z2)))) (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local z1) (nat 5)) (local z2))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.zero_diag_gap_ge_five_prop"
+
+[[form]]
+id = "zero-diag-gap-ge-five"
+channel = "math"
+surface = "zerodiaggapgefive"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zerodiaggapgefive) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

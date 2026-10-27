@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-diagonal"
+category = "function"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ZeroDiagonals"
+name = "Rule30UOR.ZeroDiagonals.IsZeroDiag"
+
+[[form]]
+id = "zero-diagonal"
+channel = "math"
+surface = "zerodiagonal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zerodiagonal) (paren (slot 0)))"

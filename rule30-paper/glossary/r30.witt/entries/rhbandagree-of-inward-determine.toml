@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhbandagree-of-inward-determine"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit p0 (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hcol (app (const r30.witt::rh-col-agree) (local t) (local Q) (app (const lexlean.std.nat::add) (local p0) (local L)) (local L))) (explicit hor (app (const r30.witt::rh-or-agree) (local t) (local Q) (app (const lexlean.std.nat::add) (local p0) (local L)) (local L)))) (app (const r30.witt::rh-band-agree) (local t) (local Q) (local p0) (local L))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhBandAgree_of_inward_determine"
+
+[[form]]
+id = "rhbandagree-of-inward-determine"
+channel = "math"
+surface = "rhbandagreeofinwarddetermine"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhbandagreeofinwarddetermine) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

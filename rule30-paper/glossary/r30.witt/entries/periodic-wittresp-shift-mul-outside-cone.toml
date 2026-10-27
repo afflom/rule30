@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-wittresp-shift-mul-outside-cone"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hk (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (local k)) (local t)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (local k)) (app (const r30.witt::witt-resp) (local t) (local k))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P)))) (app (const r30.time::ldiag) (app (const lexlean.std.nat::sub) (local t) (app (const r30.scale::twopow) (local k))) (local t))) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P)))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (local t) (app (const r30.scale::twopow) (local k))) (local t)))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_wittRespBool_shift_mul_outside_cone"
+
+[[form]]
+id = "periodic-wittresp-shift-mul-outside-cone"
+channel = "math"
+surface = "periodicwittrespshiftmuloutsidecone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicwittrespshiftmuloutsidecone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

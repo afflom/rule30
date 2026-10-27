@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-diag-le-two-of-add-five"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat))) (pi ((explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hz5 (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (local z) (nat 5))))) (app (const lexlean.std.nat::le) (local z) (nat 2))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.zero_diag_le_two_of_add_five_prop"
+
+[[form]]
+id = "zero-diag-le-two-of-add-five"
+channel = "math"
+surface = "zerodiagletwoofaddfive"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zerodiagletwoofaddfive) (paren (seq (slot 0))))"

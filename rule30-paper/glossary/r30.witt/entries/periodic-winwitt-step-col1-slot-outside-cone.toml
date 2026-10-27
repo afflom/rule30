@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-winwitt-step-col1-slot-outside-cone"
+category = "proof-constant"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (local k)) (local s)))) (app (const r30.witt::bit-winwitt-eq) (app (const lexlean.std.nat::add) (local s) (nat 3)) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 2)) (app (const r30.scale::twopow) (local k))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-phi) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local s) (nat 2)) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 2)) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::cross-carry) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (local s) (nat 2)))) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local s) (nat 2)) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.time::ldiag) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local s) (nat 3)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local s) (nat 2))) (app (const r30.local::bxor) (app (const r30.right::rdiag) (local s) (app (const lexlean.std.nat::add) (local s) (nat 2))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (local s) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local s) (nat 2))))) (app (const lexlean.std.bool::and) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const lexlean.std.nat::add) (local s) (nat 2))) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local s) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local s) (nat 2))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (local s) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local s) (nat 2)))))) (app (const lexlean.std.bool::and) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local s) (nat 2))) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local s) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local s) (nat 2))) (app (const r30.right::rdiag) (local s) (app (const lexlean.std.nat::add) (local s) (nat 2))))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_winWitt_step_col1_slot_outside_cone_prop"
+
+[[form]]
+id = "periodic-winwitt-step-col1-slot-outside-cone"
+channel = "math"
+surface = "periodicwinwittstepcol1slotoutsidecone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicwinwittstepcol1slotoutsidecone) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

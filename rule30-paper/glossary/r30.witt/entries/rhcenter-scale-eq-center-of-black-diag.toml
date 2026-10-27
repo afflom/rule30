@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-scale-eq-center-of-black-diag"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (const lexlean.std.bool::true))) (explicit hdk (app (const lexlean.std.nat::le) (local d) (local k))) (explicit hb (pi ((explicit u (const lexlean.std.nat::nat))) (pi ((explicit hu1 (app (const lexlean.std.nat::le) (nat 1) (local u))) (explicit hu2 (app (const lexlean.std.nat::le) (local u) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local u)) (local u)) (const lexlean.std.bool::true)))))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k)))) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (local d))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_scale_eq_center_of_black_diag"
+
+[[form]]
+id = "rhcenter-scale-eq-center-of-black-diag"
+channel = "math"
+surface = "rhcenterscaleeqcenterofblackdiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenterscaleeqcenterofblackdiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

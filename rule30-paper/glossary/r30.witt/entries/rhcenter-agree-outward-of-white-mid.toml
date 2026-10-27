@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-agree-outward-of-white-mid"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hw (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))) (const lexlean.std.bool::false))) (explicit hp (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (local p)) (app (const r30.witt::rh-center) (local t) (local p)))) (explicit hp1 (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hnext (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local Q)) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::add) (local p) (nat 1)))))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::add) (local p) (nat 2))) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::add) (local p) (nat 2))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_agree_outward_of_white_mid"
+
+[[form]]
+id = "rhcenter-agree-outward-of-white-mid"
+channel = "math"
+surface = "rhcenteragreeoutwardofwhitemid"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenteragreeoutwardofwhitemid) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-late-shift-eq-of-winwittagree-outer-left-strip"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hcone (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local Q)) (local p)) (app (const r30.scale::twopow) (local k)))) (explicit ha (app (const lexlean.std.nat::le) (local a) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local p)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local p)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (local a) (local L)))) (explicit hp (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (local p)) (app (const r30.witt::lh-center) (local t) (local p)))) (explicit hw (app (const r30.witt::winwitt-agree) (local t) (local k) (local Q) (local a) (local L)))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local p) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local p) (app (const r30.scale::twopow) (local k)))))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_late_shift_eq_of_winWittAgree_outer_left_strip_prop"
+
+[[form]]
+id = "lhcenter-late-shift-eq-of-winwittagree-outer-left-strip"
+channel = "math"
+surface = "lhcenterlateshifteqofwinwittagreeouterleftstrip"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterlateshifteqofwinwittagreeouterleftstrip) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

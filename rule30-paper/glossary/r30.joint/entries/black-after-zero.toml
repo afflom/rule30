@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "black-after-zero"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat)) (explicit h (app (const r30.joint::zero-diagonal) (local z)))) (app (const r30.joint::black-diagonal) (app (const lexlean.std.nat::add) (local z) (nat 2))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CompilePoints"
+name = "Rule30UOR.CompilePoints.black_after_zero_diag"
+
+[[form]]
+id = "black-after-zero"
+channel = "math"
+surface = "blackafterzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name blackafterzero) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

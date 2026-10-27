@@ -1,0 +1,16 @@
+spec = "lexlean/entry/1"
+id = "left-system"
+category = "label-word"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "defined"
+value = "(const lexlean.std.nat::nat)"
+
+[[form]]
+id = "left-system"
+channel = "text"
+surface = "The left system"
+canonical_source = true
+features = ["sentence-case", "singular"]

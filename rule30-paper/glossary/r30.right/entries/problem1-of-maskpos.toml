@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-of-maskpos"
+category = "proof-constant"
+signature = "(pi ((explicit hm (const r30.right::mask-obligation))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Right"
+name = "Rule30UOR.Right.problem1_of_maskPos"
+
+[[form]]
+id = "problem1-of-maskpos"
+channel = "math"
+surface = "problemoneofmaskpos"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problemoneofmaskpos) (paren (slot 0)))"

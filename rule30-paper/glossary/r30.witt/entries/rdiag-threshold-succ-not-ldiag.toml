@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-threshold-succ-not-ldiag"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit J (const lexlean.std.nat::nat)) (explicit hJ (app (const r30.witt::right-threshold) (local k) (local J))) (explicit hdsJ (app (const lexlean.core::eq) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const lexlean.std.nat::add) (local J) (nat 1)))) (explicit hJlt (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local J) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local J) (nat 1)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.bool::not) (app (const r30.time::ldiag) (local d) (app (const lexlean.std.nat::add) (local d) (local s))))))"
+surface_arity = 7
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdiag_threshold_succ_eq_not_ldiag"
+
+[[form]]
+id = "rdiag-threshold-succ-not-ldiag"
+channel = "math"
+surface = "rdiagthreshsuccnotldiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagthreshsuccnotldiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-winwittagree-two-sector-two-center-slot-of-zero-diag"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local z) (nat 2)) (local k))) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hset0 (app (const r30.witt::settled-by) (local z) (app (const lexlean.std.nat::add) (local z) (app (const r30.scale::twopow) (local k))))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (local z) (nat 2)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 2)) (app (const r30.scale::twopow) (local k))))) (explicit ha (app (const lexlean.std.nat::le) (local a) (app (const lexlean.std.nat::add) (local z) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local z) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (local a) (local L)))) (explicit hc (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local z) (nat 2))) (app (const r30.scale::center) (local z))))) (app (const lexlean.core::lnot) (app (const r30.witt::winwitt-agree) (local z) (local k) (nat 2) (local a) (local L)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_winWittAgree_two_sector_two_center_slot_of_zero_diag_prop"
+
+[[form]]
+id = "not-winwittagree-two-sector-two-center-slot-of-zero-diag"
+channel = "math"
+surface = "notwinwittagreetwosectortwocenterslotofzerodiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notwinwittagreetwosectortwocenterslotofzerodiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

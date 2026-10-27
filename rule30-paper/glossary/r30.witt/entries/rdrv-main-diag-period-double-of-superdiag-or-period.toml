@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-main-diag-period-double-of-superdiag-or-period"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit H (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (pi ((explicit hor (pi ((explicit u (const lexlean.std.nat::nat))) (pi ((explicit hu (app (const lexlean.std.nat::lt) (local u) (app (const lexlean.std.nat::add) (local H) (local n))))) (app (const lexlean.core::eq) (app (const lexlean.std.bool::or) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local tx) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local H)) (local u))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local H)) (local u)) (nat 1))) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local tx) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local H)) (local u))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local H)) (local u)) (nat 2)))) (app (const lexlean.std.bool::or) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local tx) (app (const lexlean.std.nat::add) (local a) (local u))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local u)) (nat 1))) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local tx) (app (const lexlean.std.nat::add) (local a) (local u))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local u)) (nat 2))))))))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (app (const lexlean.std.nat::mul) (nat 2) (local H))) (local n)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (app (const lexlean.std.nat::mul) (nat 2) (local H))) (local n))) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local a) (local n)) (app (const lexlean.std.nat::add) (local a) (local n))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_main_diag_period_double_of_superdiag_or_period"
+
+[[form]]
+id = "rdrv-main-diag-period-double-of-superdiag-or-period"
+channel = "math"
+surface = "rdrvmaindiagperioddoubleofsuperdiagorperiod"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvmaindiagperioddoubleofsuperdiagorperiod) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

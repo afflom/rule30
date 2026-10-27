@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-bit"
+category = "function"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.bit"
+
+[[form]]
+id = "witt-bit"
+channel = "math"
+surface = "wittbit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittbit) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

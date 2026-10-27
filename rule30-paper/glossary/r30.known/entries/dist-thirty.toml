@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dist-thirty"
+category = "function"
+signature = "(pi ((explicit u0 (const lexlean.std.bool::bool)) (explicit u1 (const lexlean.std.bool::bool)) (explicit u2 (const lexlean.std.bool::bool)) (explicit u3 (const lexlean.std.bool::bool))) (const lexlean.std.nat::nat))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.dist30"
+
+[[form]]
+id = "dist-thirty"
+channel = "math"
+surface = "distthirty"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name distthirty) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhbandagree-outside-cone"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit p0 (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local t) (local Q)) (local p0)))) (app (const r30.witt::rh-band-agree) (local t) (local Q) (local p0) (local L))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhBandAgree_outside_cone"
+
+[[form]]
+id = "rhbandagree-outside-cone"
+channel = "math"
+surface = "rhbandagreeoutsidecone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhbandagreeoutsidecone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

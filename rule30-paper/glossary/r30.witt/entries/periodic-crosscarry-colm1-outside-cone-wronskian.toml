@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-crosscarry-colm1-outside-cone-wronskian"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (explicit hd (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (local k)) (local d)))) (app (const r30.witt::bit-crosscarry-eq) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const r30.scale::twopow) (local k))) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::sub) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local d) (nat 1))) (app (const r30.time::ldiag) (local d) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::lag) (local P) (local k))))) (app (const lexlean.std.bool::and) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local d) (nat 1))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local d) (nat 1)))))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_crossCarry_colm1_outside_cone_wronskian_prop"
+
+[[form]]
+id = "periodic-crosscarry-colm1-outside-cone-wronskian"
+channel = "math"
+surface = "periodiccrosscarrycolm1outsideconewronskian"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiccrosscarrycolm1outsideconewronskian) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

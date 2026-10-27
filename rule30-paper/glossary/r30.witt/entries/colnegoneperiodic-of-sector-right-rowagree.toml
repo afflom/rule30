@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "colnegoneperiodic-of-sector-right-rowagree"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit k (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit U (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit hU (app (const lexlean.std.nat::le) (nat 1) (local U))) (explicit hd (app (const lexlean.std.nat::le) (nat 1) (local d))) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (local U) (app (const r30.scale::twopow) (local k)))))) (explicit hsec (app (const r30.witt::sector-right-row-agree) (local k) (local d) (local U) (app (const lexlean.std.nat::mul) (local m) (local P))))) (app (const r30.witt::col-neg-one-periodic) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (local U) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.nat::mul) (local m) (local P)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.colNegOnePeriodic_of_sector_right_rowAgree"
+
+[[form]]
+id = "colnegoneperiodic-of-sector-right-rowagree"
+channel = "math"
+surface = "colnegoneperiodicofsectorrightrowagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name colnegoneperiodicofsectorrightrowagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

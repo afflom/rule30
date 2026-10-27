@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-late-twopow-sub-one-eq-zcenter-before-zero-diag"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local t) (nat 2)) (local k))) (explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (local t) (nat 2)))) (explicit hset0 (app (const r30.witt::settled-by) (local t) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (local t) (nat 2)) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k)))))) (app (const r30.witt::zcenter-eq) (local t) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (nat 1))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_late_twopow_sub_one_eq_zcenter_before_zero_diag_prop"
+
+[[form]]
+id = "lhcenter-late-twopow-sub-one-eq-zcenter-before-zero-diag"
+channel = "math"
+surface = "lhcenterlatetwopowsuboneeqzcenterbeforezerodiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterlatetwopowsuboneeqzcenterbeforezerodiag) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "off-center-witt-scale-settled-below-threshold"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit J (const lexlean.std.nat::nat)) (explicit hJ (app (const r30.witt::right-threshold) (local k) (local J))) (explicit hk (app (const lexlean.std.nat::le) (local d) (local k))) (explicit hdJ (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (local J))) (explicit hds (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const r30.scale::twopow) (local k)))) (explicit hset (app (const r30.witt::settled-by) (local d) (app (const lexlean.std.nat::add) (local d) (local s))))) (app (const r30.witt::bit-winwitt-eq) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k))))) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k)))))))"
+surface_arity = 9
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.off_center_witt_scale_settled_below_threshold_prop"
+
+[[form]]
+id = "off-center-witt-scale-settled-below-threshold"
+channel = "math"
+surface = "offcenterwittscalesettledbelowthreshold"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name offcenterwittscalesettledbelowthreshold) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6) (token comma) (space) (slot 7) (token comma) (space) (slot 8))))"

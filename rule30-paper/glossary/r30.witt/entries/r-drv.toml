@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "r-drv"
+category = "function"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv"
+
+[[form]]
+id = "r-drv"
+channel = "math"
+surface = "rdrv"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrv) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

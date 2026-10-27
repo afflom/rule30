@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zcenter-xor-eq"
+category = "function"
+signature = "(pi ((explicit d1 (const lexlean.std.nat::nat)) (explicit d2 (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.bool::bool))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.ZCenterXorEq"
+
+[[form]]
+id = "zcenter-xor-eq"
+channel = "math"
+surface = "zcenterxoreq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zcenterxoreq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

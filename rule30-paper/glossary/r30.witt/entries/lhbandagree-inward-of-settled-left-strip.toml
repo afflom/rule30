@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhbandagree-inward-of-settled-left-strip"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit p0 (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (local Q)) (local p0)) (local k))) (explicit hset (pi ((explicit d (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const lexlean.std.nat::le) (local d) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (local Q)) (local p0))))) (app (const r30.witt::settled-by) (local d) (local t))))) (explicit hlate (app (const r30.witt::lh-band-agree) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (local Q) (app (const lexlean.std.nat::add) (local p0) (app (const r30.scale::twopow) (local k))) (local L)))) (app (const r30.witt::lh-band-agree) (local t) (local Q) (local p0) (local L))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhBandAgree_inward_of_settled_left_strip_prop"
+
+[[form]]
+id = "lhbandagree-inward-of-settled-left-strip"
+channel = "math"
+surface = "lhbandagreeinwardofsettledleftstrip"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhbandagreeinwardofsettledleftstrip) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

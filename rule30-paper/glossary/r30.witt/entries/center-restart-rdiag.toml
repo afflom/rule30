@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-restart-rdiag"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::le) (local s) (local k)))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (local s) (app (const lexlean.std.nat::add) (local s) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local k))))) (app (const r30.scale::center) (local s)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.center_restart_rdiag"
+
+[[form]]
+id = "center-restart-rdiag"
+channel = "math"
+surface = "centerrestartrdiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerrestartrdiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

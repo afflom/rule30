@@ -1,0 +1,22 @@
+spec = "lexlean/entry/1"
+id = "antiperiodic-after-doubles"
+category = "proof-constant"
+signature = "(pi ((explicit P (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hd (app (const r30.joint::doubles-at) (local P) (local z)))) (app (const r30.joint::antiperiodic-diagonal) (local P) (app (const lexlean.std.nat::add) (local z) (nat 1))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CompilePoints"
+name = "Rule30UOR.CompilePoints.antiperiodic_after_doubles"
+
+[[form]]
+id = "antiperiodic-after-doubles"
+channel = "math"
+surface = "antiperiodicafterdoubles"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name antiperiodicafterdoubles) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"
+

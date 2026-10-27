@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "maskparity-zero-dyadic-jump-eq-witt-carry-crosscarry"
+category = "proof-constant"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hcone (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local s) (nat 2)) (app (const r30.scale::twopow) (local k))))) (app (const r30.witt::bit-winwitt-eq) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (local s) (app (const r30.scale::twopow) (local k))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k))) (nat 0)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local s) (nat 1)) (nat 0))) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local s) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.right::rdiag) (local s) (app (const lexlean.std.nat::add) (local s) (nat 1)))) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local s) (nat 1)) (local k))) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local s) (nat 1))) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local s) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.right::rdiag) (local s) (app (const lexlean.std.nat::add) (local s) (nat 1))))) (app (const lexlean.std.bool::and) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local s) (nat 1)) (local k)) (app (const r30.right::rdiag) (local s) (app (const lexlean.std.nat::add) (local s) (nat 1)))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.maskparity_zero_dyadic_jump_eq_witt_carry_crossCarry_prop"
+
+[[form]]
+id = "maskparity-zero-dyadic-jump-eq-witt-carry-crosscarry"
+channel = "math"
+surface = "maskparityzerodyadicjumpeqwittcarrycrosscarry"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskparityzerodyadicjumpeqwittcarrycrosscarry) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

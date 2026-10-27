@@ -1,0 +1,16 @@
+name = "rule30equivalents"
+version = "0.1.0"
+defaultTargets = ["Rule30Equivalents"]
+
+# The Rule 30 definitions (Problem1, center, cell) come from the core-Lean snapshot next door.
+[[require]]
+name = "rule30prize"
+path = "../lean"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "56a005855ea17e0b0958f73ec801ae140b0a1679"
+
+[[lean_lib]]
+name = "Rule30Equivalents"

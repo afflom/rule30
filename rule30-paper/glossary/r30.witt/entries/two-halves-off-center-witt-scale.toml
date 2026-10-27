@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "two-halves-off-center-witt-scale"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hds (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const r30.scale::twopow) (local k))))) (app (const r30.witt::bit-winwitt-eq) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k)))) (app (const r30.time::ldiag) (local d) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k))))) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k))))) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k))))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.two_halves_off_center_witt_scale_prop"
+
+[[form]]
+id = "two-halves-off-center-witt-scale"
+channel = "math"
+surface = "twohalvesoffcenterwittscale"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name twohalvesoffcenterwittscale) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

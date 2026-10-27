@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "carry-xor"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::witt-carry) (app (const r30.witt::witt-xor) (local a) (local b))) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-carry) (local a)) (app (const r30.witt::witt-carry) (local b))) (app (const r30.witt::cross-carry) (local a) (local b)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.carry_xor"
+
+[[form]]
+id = "carry-xor"
+channel = "math"
+surface = "carryxor"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name carryxor) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

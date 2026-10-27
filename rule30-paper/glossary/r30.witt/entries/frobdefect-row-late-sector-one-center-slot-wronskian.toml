@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "frobdefect-row-late-sector-one-center-slot-wronskian"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k)))) (app (const r30.witt::bit-frobdefect-eq) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.right::rdiag) (local d) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const lexlean.std.bool::and) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (nat 1))) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.bit_frobDefect_row_late_sector_one_center_slot_wronskian_prop"
+
+[[form]]
+id = "frobdefect-row-late-sector-one-center-slot-wronskian"
+channel = "math"
+surface = "frobdefectrowlatesectoronecenterslotwronskian"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name frobdefectrowlatesectoronecenterslotwronskian) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

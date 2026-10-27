@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-diag-ge-two"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat))) (pi ((explicit hz (app (const r30.joint::zero-diagonal) (local z)))) (app (const lexlean.std.nat::le) (nat 2) (local z))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.zero_diag_ge_two_prop"
+
+[[form]]
+id = "zero-diag-ge-two"
+channel = "math"
+surface = "zerodiaggetwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zerodiaggetwo) (paren (slot 0)))"

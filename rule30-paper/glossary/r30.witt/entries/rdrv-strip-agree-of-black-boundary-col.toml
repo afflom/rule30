@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-strip-agree-of-black-boundary-col"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit B (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hband (app (const r30.witt::rh-band-agree) (local tx) (local Q) (nat 1) (local B))) (explicit hb (pi ((explicit u (const lexlean.std.nat::nat))) (pi ((explicit hu (app (const lexlean.std.nat::lt) (local u) (local S)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (local u) (app (const lexlean.std.nat::add) (local B) (nat 1))) (const lexlean.std.bool::true))))) (explicit hs (app (const lexlean.std.nat::le) (local s) (local S))) (explicit hp (app (const lexlean.std.nat::le) (local p) (app (const lexlean.std.nat::add) (local B) (nat 1))))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (app (const lexlean.std.nat::add) (local tx) (local Q)) (local s) (local p)) (app (const r30.witt::r-drv) (local td) (local tx) (local s) (local p)))))"
+surface_arity = 7
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_strip_agree_of_black_boundary_col"
+
+[[form]]
+id = "rdrv-strip-agree-of-black-boundary-col"
+channel = "math"
+surface = "rdrvstripagreeofblackboundarycol"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvstripagreeofblackboundarycol) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6))))"

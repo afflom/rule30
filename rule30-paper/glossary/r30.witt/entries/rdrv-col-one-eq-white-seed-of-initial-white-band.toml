@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-col-one-eq-white-seed-of-initial-white-band"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (pi ((explicit hw (pi ((explicit i (const lexlean.std.nat::nat))) (pi ((explicit hi (app (const lexlean.std.nat::le) (local i) (local S)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (local tx) (app (const lexlean.std.nat::add) (nat 1) (local i))) (const lexlean.std.bool::false))))) (explicit hs (app (const lexlean.std.nat::le) (local s) (local S)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (local s) (nat 1)) (app (const r30.witt::r-drv) (local td) (nat 0) (local s) (nat 1)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_col_one_eq_white_seed_of_initial_white_band"
+
+[[form]]
+id = "rdrv-col-one-eq-white-seed-of-initial-white-band"
+channel = "math"
+surface = "rdrvcoloneeqwhiteseedofinitialwhiteband"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvcoloneeqwhiteseedofinitialwhiteband) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

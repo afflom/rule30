@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (app (const lexlean.core::exists-op) (lam ((explicit P (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::lt) (nat 0) (local P)) (app (const lexlean.core::exists-op) (lam ((explicit T (const lexlean.std.nat::nat))) (pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.std.nat::le) (local T) (local t)))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (local j) (app (const lexlean.std.nat::add) (local t) (local P))) (app (const r30.time::ldiag) (local j) (local t)))))))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Kit"
+name = "Rule30UOR.Kit.ldiag_eventually_periodic"
+
+[[form]]
+id = "ldiag-periodic"
+channel = "math"
+surface = "ldiagperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagperiodic) (paren (slot 0)))"

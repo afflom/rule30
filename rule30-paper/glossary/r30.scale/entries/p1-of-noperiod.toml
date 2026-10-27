@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "p1-of-noperiod"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.scale::no-period))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.problem1_of_noPeriod"
+
+[[form]]
+id = "p1-of-noperiod"
+channel = "math"
+surface = "poneofnoperiod"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name poneofnoperiod) (paren (slot 0)))"

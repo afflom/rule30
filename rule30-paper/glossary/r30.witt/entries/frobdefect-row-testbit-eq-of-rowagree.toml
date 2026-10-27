@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "frobdefect-row-testbit-eq-of-rowagree"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat))) (pi ((explicit ha (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k))) (local a))) (explicit hi (app (const lexlean.std.nat::le) (local i) (local L))) (explicit h0 (app (const r30.witt::row-agree) (local t) (local Q) (app (const lexlean.std.nat::sub) (local a) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k)))) (app (const lexlean.std.nat::add) (local L) (nat 1)))) (explicit h1 (app (const r30.witt::row-agree) (local t) (local Q) (app (const lexlean.std.nat::sub) (local a) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local L) (nat 1)))) (explicit h2 (app (const r30.witt::row-agree) (local t) (local Q) (local a) (app (const lexlean.std.nat::add) (local L) (nat 1))))) (app (const r30.witt::bit-frobdefect-eq) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (local t) (local Q))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local i)) (nat 1)) (local Q)) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::frob-defect) (local k) (app (const r30.witt::witt-row) (local t))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local i)) (nat 1))))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.frobDefect_row_testBit_eq_of_rowAgree_prop"
+
+[[form]]
+id = "frobdefect-row-testbit-eq-of-rowagree"
+channel = "math"
+surface = "frobdefectrowtestbiteqofrowagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name frobdefectrowtestbiteqofrowagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

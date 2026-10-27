@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-fixed"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::center-col) (app (const lexlean.std.nat::add) (local t) (nat 1))) (app (const r30.right::phi-center) (local t))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Fixed"
+name = "Rule30UOR.Fixed.center_fixed_readout"
+
+[[form]]
+id = "center-fixed"
+channel = "math"
+surface = "centerfixed"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerfixed) (paren (slot 0)))"

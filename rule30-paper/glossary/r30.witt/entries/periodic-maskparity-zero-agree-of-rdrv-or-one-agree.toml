@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-maskparity-zero-agree-of-rdrv-or-one-agree"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit h0 (pi ((explicit hc0 (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (const lexlean.std.bool::false)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local t) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 0) (nat 1)) (app (const r30.witt::r-drv) (local t) (local t) (nat 0) (nat 1))))) (explicit hor (pi ((explicit u (const lexlean.std.nat::nat))) (pi ((explicit hu (app (const lexlean.std.nat::lt) (local u) (local S))) (explicit hcu (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::add) (local u) (nat 1)))) (const lexlean.std.bool::false)))) (app (const lexlean.core::eq) (app (const lexlean.std.bool::or) (app (const r30.witt::r-drv) (local t) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (local u) (nat 1)) (app (const r30.witt::r-drv) (local t) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (local u) (nat 2))) (app (const lexlean.std.bool::or) (app (const r30.witt::r-drv) (local t) (local t) (local u) (nat 1)) (app (const r30.witt::r-drv) (local t) (local t) (local u) (nat 2))))))) (explicit hs (app (const lexlean.std.nat::le) (local s) (local S)))) (app (const lexlean.core::eq) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local s)) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 0)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local t) (local s)) (nat 0)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_maskparity_zero_agree_of_rdrv_or_one_agree"
+
+[[form]]
+id = "periodic-maskparity-zero-agree-of-rdrv-or-one-agree"
+channel = "math"
+surface = "periodicmaskparityzeroagreeofrdrvoroneagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicmaskparityzeroagreeofrdrvoroneagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

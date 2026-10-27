@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "black-diagonal"
+category = "function"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CompilePoints"
+name = "Rule30UOR.CompilePoints.IsBlackDiag"
+
+[[form]]
+id = "black-diagonal"
+channel = "math"
+surface = "blackdiagonal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name blackdiagonal) (paren (slot 0)))"

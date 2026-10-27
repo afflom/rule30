@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-white-center-run-black-one-agree"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx2 (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit W (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (pi ((explicit hb2 (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx2) (local k) (nat 1)) (const lexlean.std.bool::true))) (explicit hb0 (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (local k) (nat 1)) (const lexlean.std.bool::true))) (explicit hrun (pi ((explicit u (const lexlean.std.nat::nat))) (pi ((explicit hu (app (const lexlean.std.nat::lt) (local u) (local W)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local td) (app (const lexlean.std.nat::add) (local k) (local u)))) (const lexlean.std.bool::false))))) (explicit hj (app (const lexlean.std.nat::le) (local j) (app (const lexlean.std.nat::add) (local W) (nat 1))))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx2) (app (const lexlean.std.nat::add) (local k) (local j)) (nat 1)) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local k) (local j)) (nat 1)))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_white_center_run_black_one_agree"
+
+[[form]]
+id = "rdrv-white-center-run-black-one-agree"
+channel = "math"
+surface = "rdrvwhitecenterrunblackoneagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvwhitecenterrunblackoneagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

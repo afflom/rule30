@@ -1,0 +1,7 @@
+{
+  "challenge_module": "Rule30Challenge",
+  "solution_module": "Rule30Submission",
+  "theorem_names": ["Rule30Submission.problem1"],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": false
+}

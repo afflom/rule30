@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-add-eq-lhcenter-uncond"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local t) (local p)) (local t)) (app (const r30.witt::lh-center) (local t) (local p))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdiag_add_eq_lhCenter_uncond_prop"
+
+[[form]]
+id = "rdiag-add-eq-lhcenter-uncond"
+channel = "math"
+surface = "rdiagaddeqlhcenteruncond"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagaddeqlhcenteruncond) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

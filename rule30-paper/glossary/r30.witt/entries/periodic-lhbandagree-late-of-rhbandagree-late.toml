@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-lhbandagree-late-of-rhbandagree-late"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit R (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hR (app (const lexlean.std.nat::le) (local R) (app (const r30.scale::twopow) (local k)))) (explicit hrh (app (const r30.witt::rh-band-agree) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::mul) (local m) (local P)) (nat 0) (local R)))) (app (const r30.witt::lh-band-agree) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::mul) (local m) (local P)) (nat 0) (local R))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_lhBandAgree_late_of_rhBandAgree_late"
+
+[[form]]
+id = "periodic-lhbandagree-late-of-rhbandagree-late"
+channel = "math"
+surface = "periodiclhbandagreelateofrhbandagreelate"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiclhbandagreelateofrhbandagreelate) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

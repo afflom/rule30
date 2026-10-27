@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "r15-of-p1"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.joint::problem-one))) (const r30.known::resp-fifteen-aperiodic))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Project"
+name = "Rule30UOR.Project.resp15_of_problem1"
+
+[[form]]
+id = "r15-of-p1"
+channel = "math"
+surface = "rfifteenofpone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rfifteenofpone) (paren (slot 0)))"

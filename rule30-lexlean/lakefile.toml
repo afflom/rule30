@@ -1,0 +1,6 @@
+name = "rule30_uor_host"
+version = "0.1.0"
+defaultTargets = ["Rule30UORHost"]
+
+[[lean_lib]]
+name = "Rule30UORHost"

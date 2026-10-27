@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-common-period"
+category = "proof-constant"
+signature = "(pi ((explicit P (const lexlean.std.nat::nat)) (explicit h (app (const lexlean.std.nat::lt) (nat 0) (local P)))) (app (const lexlean.core::lnot) (app (const r30.joint::common-period) (local P))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ZeroDiagonals"
+name = "Rule30UOR.ZeroDiagonals.no_common_period"
+
+[[form]]
+id = "no-common-period"
+channel = "math"
+surface = "nocommonperiod"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name nocommonperiod) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "damage-witt-coboundary"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hk (app (const lexlean.std.nat::le) (local d) (local k))) (explicit hset (app (const r30.witt::settled-at) (local d) (local k)))) (app (const r30.witt::damage-eq) (local d) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.witt::witt-resp) (local d) (app (const lexlean.std.nat::succ) (local k))) (app (const r30.witt::witt-resp) (local d) (local k))) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (local k)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.damage_witt_coboundary_prop"
+
+[[form]]
+id = "damage-witt-coboundary"
+channel = "math"
+surface = "damagewittcoboundary"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name damagewittcoboundary) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

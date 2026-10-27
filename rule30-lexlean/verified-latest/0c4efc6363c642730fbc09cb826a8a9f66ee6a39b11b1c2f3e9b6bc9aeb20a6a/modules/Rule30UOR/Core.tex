@@ -1,0 +1,428 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\begin{document}
+\section*{Semantic declarations}
+\subsection*{\texttt{bxor}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{(if a then (!b) else b)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{bxor (a) ((b || c))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule90}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{bxor (a) (c)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule150}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{bxor (bxor (a) (b)) (c)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule210}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{bxor (a) (((!b) \&\& c))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{barrier\_plane}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (rule (a) (b) (c) = bxor (bxor (rule90 (a) (b) (c)) (rule150 (a) (b) (c))) (rule210 (a) (b) (c))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{left\_permutive}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (b : Bool), (forall (c : Bool), (rule (true) (b) (c) = (!rule (false) (b) (c)))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{cell}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t : Nat) (p : Int)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{(match t with | Nat.zero => ((!(LexLeanCollections.lessThan (p) ((0 : Int)) : Bool)) \&\& (!(LexLeanCollections.lessThan ((0 : Int)) (p) : Bool))) | Nat.succ s => rule (cell (s) ((LexLeanRuntime.subtract (p) ((1 : Int)) : Int))) (cell (s) (p)) (cell (s) ((LexLeanRuntime.subtract (p) ((-1 : Int)) : Int))))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{center}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t : Nat)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{cell (t) ((0 : Int))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{center\_prefix}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{((center (0) = true) /\textbackslash{} ((center (1) = true) /\textbackslash{} ((center (2) = false) /\textbackslash{} (center (3) = true))))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{leftOf}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(p : Int)}.\par
+\noindent Type: \texttt{Int}.\par
+\noindent Definition: \texttt{(LexLeanRuntime.subtract (p) ((1 : Int)) : Int)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rightOf}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(p : Int)}.\par
+\noindent Type: \texttt{Int}.\par
+\noindent Definition: \texttt{(LexLeanRuntime.subtract (p) ((-1 : Int)) : Int)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{cell\_succ}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(t : Nat) (p : Int)}.\par
+\noindent Statement: \texttt{(cell (Nat.succ (t)) (p) = rule (cell (t) (leftOf (p))) (cell (t) (p)) (cell (t) (rightOf (p))))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{rule\_black\_black}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (c : Bool), (rule (true) (true) (c) = false))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule\_white\_white}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (rule (a) (false) (false) = a))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule\_left\_edge\_of\_white\_pair}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (c : Bool), (rule (false) (false) (c) = c))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule\_reset}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (c : Bool), (rule (a) (true) (c) = (!a))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{ldiag}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(j : Nat) (t : Nat)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{(match t with | Nat.zero => (match j with | Nat.zero => true | Nat.succ \_ => false) | Nat.succ s => (match j with | Nat.zero => true | Nat.succ i => (match i with | Nat.zero => true | Nat.succ k => bxor (ldiag (k) (s)) ((ldiag (Nat.succ (k)) (s) || ldiag (Nat.succ (Nat.succ (k))) (s))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{lcenter}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t : Nat)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{ldiag (t) (t)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{ldiag\_step}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(k : Nat) (s : Nat)}.\par
+\noindent Statement: \texttt{(ldiag (Nat.succ (Nat.succ (k))) (Nat.succ (s)) = bxor (ldiag (k) (s)) ((ldiag (Nat.succ (k)) (s) || ldiag (Nat.succ (Nat.succ (k))) (s))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{ldiag\_zero}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(s : Nat)}.\par
+\noindent Statement: \texttt{(ldiag (0) (Nat.succ (s)) = true)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{ldiag\_one}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(s : Nat)}.\par
+\noindent Statement: \texttt{(ldiag (1) (Nat.succ (s)) = true)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rdiag}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(j : Nat) (t : Nat)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{(match t with | Nat.zero => (match j with | Nat.zero => true | Nat.succ \_ => false) | Nat.succ s => (match j with | Nat.zero => true | Nat.succ i => (match i with | Nat.zero => (!rdiag (Nat.succ (i)) (s)) | Nat.succ k => bxor (rdiag (Nat.succ (Nat.succ (k))) (s)) ((rdiag (Nat.succ (k)) (s) || rdiag (k) (s))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rcenter}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t : Nat)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{rdiag (t) (t)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rdiag\_step}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(k : Nat) (s : Nat)}.\par
+\noindent Statement: \texttt{(rdiag (Nat.succ (Nat.succ (k))) (Nat.succ (s)) = bxor (rdiag (Nat.succ (Nat.succ (k))) (s)) ((rdiag (Nat.succ (k)) (s) || rdiag (k) (s))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rdiag\_zero}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(s : Nat)}.\par
+\noindent Statement: \texttt{(rdiag (0) (Nat.succ (s)) = true)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rdiag\_one}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(s : Nat)}.\par
+\noindent Statement: \texttt{(rdiag (1) (Nat.succ (s)) = (!rdiag (1) (s)))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule60}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{bxor (a) (b)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule15}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{(!a)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{split150}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (rule (a) (b) (c) = bxor (rule150 (a) (b) (c)) ((b \&\& c))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{split90}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (rule (a) (b) (c) = bxor (rule90 (a) (b) (c)) ((b \&\& (!c)))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{split60}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (rule (a) (b) (c) = bxor (rule60 (a) (b) (c)) (((!b) \&\& c))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{split15}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (rule (a) (b) (c) = bxor (rule15 (a) (b) (c)) (((!b) \&\& (!c)))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{carries\_cover}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (b : Bool), (forall (c : Bool), ((((b \&\& c) || (b \&\& (!c))) || (((!b) \&\& c) || ((!b) \&\& (!c)))) = true)))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{carries\_orthogonal}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (b : Bool), (forall (c : Bool), (((((b \&\& c) \&\& (b \&\& (!c))) = false) /\textbackslash{} ((((b \&\& c) \&\& ((!b) \&\& c)) = false) /\textbackslash{} (((b \&\& c) \&\& ((!b) \&\& (!c))) = false))) /\textbackslash{} (((((b \&\& (!c)) \&\& ((!b) \&\& c)) = false) /\textbackslash{} (((b \&\& (!c)) \&\& ((!b) \&\& (!c))) = false)) /\textbackslash{} ((((!b) \&\& c) \&\& ((!b) \&\& (!c))) = false)))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{aff}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(u0 : Bool) (u1 : Bool) (u2 : Bool) (u3 : Bool) (a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{bxor (u0) (bxor ((u1 \&\& a)) (bxor ((u2 \&\& b)) ((u3 \&\& c))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{miss}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(u0 : Bool) (u1 : Bool) (u2 : Bool) (u3 : Bool) (a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(if bxor (rule (a) (b) (c)) (aff (u0) (u1) (u2) (u3) (a) (b) (c)) then 1 else 0)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{dist30}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(u0 : Bool) (u1 : Bool) (u2 : Bool) (u3 : Bool)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(((miss (u0) (u1) (u2) (u3) (false) (false) (false) + miss (u0) (u1) (u2) (u3) (false) (false) (true)) + (miss (u0) (u1) (u2) (u3) (false) (true) (false) + miss (u0) (u1) (u2) (u3) (false) (true) (true))) + ((miss (u0) (u1) (u2) (u3) (true) (false) (false) + miss (u0) (u1) (u2) (u3) (true) (false) (true)) + (miss (u0) (u1) (u2) (u3) (true) (true) (false) + miss (u0) (u1) (u2) (u3) (true) (true) (true))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{deep\_hole}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (u0 : Bool), (forall (u1 : Bool), (forall (u2 : Bool), (forall (u3 : Bool), (2 <= dist30 (u0) (u1) (u2) (u3))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{nearest\_affine}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(((dist30 (false) (true) (true) (true) = 2) /\textbackslash{} (dist30 (false) (true) (false) (true) = 2)) /\textbackslash{} ((dist30 (false) (true) (true) (false) = 2) /\textbackslash{} (dist30 (true) (true) (false) (false) = 2)))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{carry60}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(s : Nat) (p : Int)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{((!cell (s) (p)) \&\& cell (s) ((LexLeanRuntime.subtract (p) ((-1 : Int)) : Int)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{window60}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t0 : Nat) (n : Nat) (p : Int)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{(match n with | Nat.zero => false | Nat.succ m => bxor (bxor (window60 (t0) (m) ((LexLeanRuntime.subtract (p) ((1 : Int)) : Int))) (window60 (t0) (m) (p))) (carry60 ((t0 + m)) (p)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{twopow}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(k : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(match k with | Nat.zero => 1 | Nat.succ j => (twopow (j) + twopow (j)))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{window60\_step}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(t0 : Nat) (m : Nat) (p : Int)}.\par
+\noindent Statement: \texttt{(window60 (t0) (Nat.succ (m)) (p) = bxor (bxor (window60 (t0) (m) ((LexLeanRuntime.subtract (p) ((1 : Int)) : Int))) (window60 (t0) (m) (p))) (carry60 ((t0 + m)) (p)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{twopow\_succ}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(j : Nat)}.\par
+\noindent Statement: \texttt{(twopow (Nat.succ (j)) = (twopow (j) + twopow (j)))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{displacement}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{bxor (rule (a) (b) (c)) (rule150 (a) (b) (c))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{displacement\_is\_carry}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (displacement (a) (b) (c) = (b \&\& c)))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{frame\_direction}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (displacement ((!a)) (b) (c) = displacement (a) (b) (c)))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{affine\_left\_linear}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (rule150 ((!a)) (b) (c) = (!rule150 (a) (b) (c))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{nearest\_exactly}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (u0 : Bool), (forall (u1 : Bool), (forall (u2 : Bool), (forall (u3 : Bool), ((dist30 (u0) (u1) (u2) (u3) = 2) -> (((((!u0) \&\& (u1 \&\& (u2 \&\& u3))) || ((!u0) \&\& (u1 \&\& ((!u2) \&\& u3)))) || (((!u0) \&\& (u1 \&\& (u2 \&\& (!u3)))) || (u0 \&\& (u1 \&\& ((!u2) \&\& (!u3)))))) = true))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{ldrem}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(b : Nat) (r : Nat) (t : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(match t with | Nat.zero => r | Nat.succ s => (if (LexLeanCollections.lessThan ((ldrem (b) (r) (s) + ldrem (b) (r) (s))) (b) : Bool) then (ldrem (b) (r) (s) + ldrem (b) (r) (s)) else (LexLeanRuntime.subtract ((ldrem (b) (r) (s) + ldrem (b) (r) (s))) (b) : Nat)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{lddig}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(b : Nat) (r : Nat) (t : Nat)}.\par
+\noindent Type: \texttt{Bool}.\par
+\noindent Definition: \texttt{(!(LexLeanCollections.lessThan ((ldrem (b) (r) (t) + ldrem (b) (r) (t))) (b) : Bool))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{sgn}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(x : Bool)}.\par
+\noindent Type: \texttt{Int}.\par
+\noindent Definition: \texttt{(if x then (-1 : Int) else (1 : Int))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{iadd}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(x : Int) (y : Int)}.\par
+\noindent Type: \texttt{Int}.\par
+\noindent Definition: \texttt{(LexLeanRuntime.subtract (x) ((LexLeanRuntime.negate (y) : Int)) : Int)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{frame\_projection}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (iadd (sgn (rule (a) (b) (c))) (sgn (rule (a) (b) (c))) = iadd (iadd (sgn (rule150 (a) (b) (c))) (sgn (rule90 (a) (b) (c)))) (iadd (sgn (rule60 (a) (b) (c))) (sgn (rule15 (a) (b) (c))))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{dissent}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(a : Bool) (b : Bool) (c : Bool)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(((if bxor (rule (a) (b) (c)) (rule150 (a) (b) (c)) then 1 else 0) + (if bxor (rule (a) (b) (c)) (rule90 (a) (b) (c)) then 1 else 0)) + ((if bxor (rule (a) (b) (c)) (rule60 (a) (b) (c)) then 1 else 0) + (if bxor (rule (a) (b) (c)) (rule15 (a) (b) (c)) then 1 else 0)))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{one\_dissent}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (b : Bool), (forall (c : Bool), (dissent (a) (b) (c) = 1))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{corr}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(u0 : Bool) (u1 : Bool) (u2 : Bool) (u3 : Bool) (v0 : Bool) (v1 : Bool) (v2 : Bool) (v3 : Bool)}.\par
+\noindent Type: \texttt{Int}.\par
+\noindent Definition: \texttt{iadd (iadd (iadd ((LexLeanRuntime.multiply (sgn (aff (u0) (u1) (u2) (u3) (false) (false) (false))) (sgn (aff (v0) (v1) (v2) (v3) (false) (false) (false))) : Int)) ((LexLeanRuntime.multiply (sgn (aff (u0) (u1) (u2) (u3) (false) (false) (true))) (sgn (aff (v0) (v1) (v2) (v3) (false) (false) (true))) : Int))) (iadd ((LexLeanRuntime.multiply (sgn (aff (u0) (u1) (u2) (u3) (false) (true) (false))) (sgn (aff (v0) (v1) (v2) (v3) (false) (true) (false))) : Int)) ((LexLeanRuntime.multiply (sgn (aff (u0) (u1) (u2) (u3) (false) (true) (true))) (sgn (aff (v0) (v1) (v2) (v3) (false) (true) (true))) : Int)))) (iadd (iadd ((LexLeanRuntime.multiply (sgn (aff (u0) (u1) (u2) (u3) (true) (false) (false))) (sgn (aff (v0) (v1) (v2) (v3) (true) (false) (false))) : Int)) ((LexLeanRuntime.multiply (sgn (aff (u0) (u1) (u2) (u3) (true) (false) (true))) (sgn (aff (v0) (v1) (v2) (v3) (true) (false) (true))) : Int))) (iadd ((LexLeanRuntime.multiply (sgn (aff (u0) (u1) (u2) (u3) (true) (true) (false))) (sgn (aff (v0) (v1) (v2) (v3) (true) (true) (false))) : Int)) ((LexLeanRuntime.multiply (sgn (aff (u0) (u1) (u2) (u3) (true) (true) (true))) (sgn (aff (v0) (v1) (v2) (v3) (true) (true) (true))) : Int))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{frame\_orthogonal}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (u0 : Bool), (forall (u1 : Bool), (forall (u2 : Bool), (forall (u3 : Bool), (forall (v0 : Bool), (forall (v1 : Bool), (forall (v2 : Bool), (forall (v3 : Bool), (((bxor (u1) (v1) || (bxor (u2) (v2) || bxor (u3) (v3))) = true) -> (corr (u0) (u1) (u2) (u3) (v0) (v1) (v2) (v3) = (0 : Int)))))))))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{bxor\_reset}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (c : Bool), (bxor (a) ((true || c)) = (!a))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{bxor\_toggle}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (c : Bool), (bxor (a) ((false || c)) = bxor (a) (c))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{rule\_toggle}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{(forall (a : Bool), (forall (c : Bool), (rule (a) (false) (c) = bxor (a) (c))))}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{phi}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(y : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(Nat.xor (y) ((Nat.lor ((Nat.shiftLeft (y) (1) : Nat)) ((Nat.shiftLeft (y) (2) : Nat)) : Nat)) : Nat)}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{carry}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(y : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(Nat.land (y) ((Nat.shiftLeft (y) (1) : Nat)) : Nat)}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{phiLinear}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(y : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(Nat.xor ((Nat.xor (y) ((Nat.shiftLeft (y) (1) : Nat)) : Nat)) ((Nat.shiftLeft (y) (2) : Nat)) : Nat)}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{phi\_split}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(y : Nat)}.\par
+\noindent Statement: \texttt{(phi (y) = (Nat.xor (phiLinear (y)) ((Nat.shiftLeft (carry (y)) (1) : Nat)) : Nat))}.\par
+\noindent Axiom policy: \texttt{exact [Quot.sound, propext]}.\par
+\subsection*{\texttt{or\_witt\_split}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(a : Nat) (b : Nat)}.\par
+\noindent Statement: \texttt{((Nat.lor (a) (b) : Nat) = (Nat.xor ((Nat.xor (a) (b) : Nat)) ((Nat.land (a) (b) : Nat)) : Nat))}.\par
+\noindent Axiom policy: \texttt{exact [Quot.sound, propext]}.\par
+\subsection*{\texttt{bit}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(n : Nat) (k : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(LexLeanRuntime.remainder ((Nat.shiftRight (n) (k) : Nat)) (2) (0) : Nat)}.\par
+\noindent Axiom policy: \texttt{none}.\par
+\subsection*{\texttt{bit\_and\_law}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(a : Nat) (b : Nat) (k : Nat)}.\par
+\noindent Statement: \texttt{(bit ((Nat.land (a) (b) : Nat)) (k) = (Nat.land (bit (a) (k)) (bit (b) (k)) : Nat))}.\par
+\noindent Axiom policy: \texttt{exact [Quot.sound, propext]}.\par
+\subsection*{\texttt{bit\_or\_law}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(a : Nat) (b : Nat) (k : Nat)}.\par
+\noindent Statement: \texttt{(bit ((Nat.lor (a) (b) : Nat)) (k) = (Nat.lor (bit (a) (k)) (bit (b) (k)) : Nat))}.\par
+\noindent Axiom policy: \texttt{exact [Quot.sound, propext]}.\par
+\subsection*{\texttt{bit\_xor\_law}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(a : Nat) (b : Nat) (k : Nat)}.\par
+\noindent Statement: \texttt{(bit ((Nat.xor (a) (b) : Nat)) (k) = (Nat.xor (bit (a) (k)) (bit (b) (k)) : Nat))}.\par
+\noindent Axiom policy: \texttt{exact [Quot.sound, propext]}.\par
+\subsection*{\texttt{bit\_shift\_right\_law}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(a : Nat) (m : Nat) (k : Nat)}.\par
+\noindent Statement: \texttt{(bit ((Nat.shiftRight (a) (m) : Nat)) (k) = bit (a) ((m + k)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{bit\_shift\_left\_law}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(a : Nat) (m : Nat) (k : Nat)}.\par
+\noindent Statement: \texttt{(bit ((Nat.shiftLeft (a) (m) : Nat)) ((m + k)) = bit (a) (k))}.\par
+\noindent Axiom policy: \texttt{exact [Quot.sound, propext]}.\par
+\subsection*{\texttt{row}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(match t with | Nat.zero => 1 | Nat.succ s => phi (row (s)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{rowCenter}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{bit (row (t)) (t)}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{row\_center\_prefix}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Statement: \texttt{((rowCenter (0) = 1) /\textbackslash{} ((rowCenter (1) = 1) /\textbackslash{} ((rowCenter (2) = 0) /\textbackslash{} (rowCenter (3) = 1))))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{phiLinearPow}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(n : Nat) (y : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(match n with | Nat.zero => y | Nat.succ m => phiLinear (phiLinearPow (m) (y)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{phiLinearPow\_step}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(m : Nat) (y : Nat)}.\par
+\noindent Statement: \texttt{(phiLinearPow (Nat.succ (m)) (y) = phiLinear (phiLinearPow (m) (y)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{phiScale}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(k : Nat) (y : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(Nat.xor ((Nat.xor (y) ((Nat.shiftLeft (y) (twopow (k)) : Nat)) : Nat)) ((Nat.shiftLeft (y) ((twopow (k) + twopow (k))) : Nat)) : Nat)}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{winWitt}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t0 : Nat) (n : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{(match n with | Nat.zero => 0 | Nat.succ m => (Nat.xor (phiLinear (winWitt (t0) (m))) ((Nat.shiftLeft (carry (row ((t0 + m)))) (1) : Nat)) : Nat))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{winWitt\_step}}
+\noindent Kind: \texttt{theorem}.\par
+\noindent Parameters: \texttt{(t0 : Nat) (m : Nat)}.\par
+\noindent Statement: \texttt{(winWitt (t0) (Nat.succ (m)) = (Nat.xor (phiLinear (winWitt (t0) (m))) ((Nat.shiftLeft (carry (row ((t0 + m)))) (1) : Nat)) : Nat))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\subsection*{\texttt{wittResponse}}
+\noindent Kind: \texttt{definition}.\par
+\noindent Parameters: \texttt{(t : Nat) (k : Nat)}.\par
+\noindent Type: \texttt{Nat}.\par
+\noindent Definition: \texttt{bit (winWitt (t) (twopow (k))) ((t + twopow (k)))}.\par
+\noindent Axiom policy: \texttt{exact [propext]}.\par
+\end{document}

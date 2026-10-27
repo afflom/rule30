@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "le-left-of"
+category = "proof-constant"
+signature = "(pi ((implicit a (const lexlean.std.int::int)) (implicit b (const lexlean.std.int::int)) (explicit h (app (const lexlean.std.int::le) (app (const r30.real::right-of) (local a)) (local b)))) (app (const lexlean.std.int::le) (local a) (app (const r30.real::left-of) (local b))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Init"
+name = "Int.le_sub_one_of_lt"
+
+[[form]]
+id = "le-left-of"
+channel = "math"
+surface = "leleftof"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leleftof) (paren (slot 0)))"

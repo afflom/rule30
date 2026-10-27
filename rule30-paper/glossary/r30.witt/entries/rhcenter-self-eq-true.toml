@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-self-eq-true"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (local t) (local t)) (const lexlean.std.bool::true)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_self_eq_true"
+
+[[form]]
+id = "rhcenter-self-eq-true"
+channel = "math"
+surface = "rhcenterselfeqtrue"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenterselfeqtrue) (paren (slot 0)))"

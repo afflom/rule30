@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "window-step"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.int::int))) (app (const lexlean.core::eq) (app (const r30.scale::window) (local t0) (app (const lexlean.std.nat::succ) (local m)) (local p)) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::window) (local t0) (local m) (app (const r30.real::left-of) (local p))) (app (const r30.scale::window) (local t0) (local m) (local p))) (app (const r30.scale::carry) (app (const lexlean.std.nat::add) (local t0) (local m)) (local p)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.window_step_paper"
+
+[[form]]
+id = "window-step"
+channel = "math"
+surface = "windowstep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name windowstep) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

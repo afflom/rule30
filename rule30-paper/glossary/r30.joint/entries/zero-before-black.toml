@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-before-black"
+category = "proof-constant"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat)) (explicit h (app (const r30.joint::black-diagonal) (app (const lexlean.std.nat::add) (local b) (nat 2))))) (app (const r30.joint::zero-diagonal) (local b)))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CompilePoints"
+name = "Rule30UOR.CompilePoints.zero_before_black_diag"
+
+[[form]]
+id = "zero-before-black"
+channel = "math"
+surface = "zerobeforeblack"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zerobeforeblack) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

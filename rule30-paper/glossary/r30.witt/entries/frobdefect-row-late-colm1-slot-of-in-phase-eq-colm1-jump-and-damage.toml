@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "frobdefect-row-late-colm1-slot-of-in-phase-eq-colm1-jump-and-damage"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 2)) (local k))) (explicit hset (app (const r30.witt::settled-at) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k))) (explicit hphase (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (nat 1)))))) (app (const r30.witt::zcenter-and-eq) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.time::ldiag) (local d) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const r30.local::bxor) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::frob-defect) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.bool::and) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (nat 1))) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.time::ldiag) (local d) (app (const lexlean.std.nat::add) (local d) (nat 1)))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.frobDefect_row_late_colm1_slot_of_in_phase_eq_colm1_jump_and_damage_prop"
+
+[[form]]
+id = "frobdefect-row-late-colm1-slot-of-in-phase-eq-colm1-jump-and-damage"
+channel = "math"
+surface = "frobdefectrowlatecolm1slotofinphaseeqcolm1jumpanddamage"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name frobdefectrowlatecolm1slotofinphaseeqcolm1jumpanddamage) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

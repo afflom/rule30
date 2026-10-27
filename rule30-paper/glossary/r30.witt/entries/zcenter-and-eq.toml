@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zcenter-and-eq"
+category = "function"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.bool::bool)) (explicit c (const lexlean.std.bool::bool))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.ZCenterAndEq"
+
+[[form]]
+id = "zcenter-and-eq"
+channel = "math"
+surface = "zcenterandeq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zcenterandeq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

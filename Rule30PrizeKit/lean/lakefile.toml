@@ -1,0 +1,6 @@
+name = "rule30prize"
+version = "0.1.0"
+defaultTargets = ["Ruliology"]
+
+[[lean_lib]]
+name = "Ruliology"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-response-eq-of-two-zero-diags"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit z1 (const lexlean.std.nat::nat)) (explicit z2 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local z1) (app (const r30.scale::twopow) (local k))))) (explicit hshift (app (const lexlean.core::eq) (app (const lexlean.std.nat::add) (local z1) (app (const lexlean.std.nat::mul) (local m) (local P))) (local z2))) (explicit hz1 (app (const r30.joint::zero-diagonal) (local z1))) (explicit hz2 (app (const r30.joint::zero-diagonal) (local z2))) (explicit hset1 (app (const r30.witt::settled-by) (local z1) (app (const lexlean.std.nat::add) (local z1) (app (const r30.scale::twopow) (local k))))) (explicit hset2 (app (const r30.witt::settled-by) (local z2) (app (const lexlean.std.nat::add) (local z2) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::eq) (app (const r30.scale::response) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z1) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::mul) (local m) (local P))) (local k)) (app (const r30.scale::response) (app (const lexlean.std.nat::add) (local z1) (app (const r30.scale::twopow) (local k))) (local k)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_response_eq_of_two_zero_diags_prop"
+
+[[form]]
+id = "periodic-response-eq-of-two-zero-diags"
+channel = "math"
+surface = "periodicresponseeqoftwozerodiags"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicresponseeqoftwozerodiags) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

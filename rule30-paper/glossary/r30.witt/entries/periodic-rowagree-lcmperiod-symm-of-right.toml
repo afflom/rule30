@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-rowagree-lcmperiod-symm-of-right"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit k (const lexlean.std.nat::nat)) (explicit R (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hR (app (const lexlean.std.nat::le) (local R) (local t))) (explicit hright (app (const r30.witt::row-agree) (local t) (app (const r30.witt::lcm-period) (local P) (local k)) (app (const lexlean.std.nat::sub) (local t) (local R)) (local R)))) (app (const r30.witt::row-agree) (local t) (app (const r30.witt::lcm-period) (local P) (local k)) (app (const lexlean.std.nat::sub) (local t) (local R)) (app (const lexlean.std.nat::mul) (nat 2) (local R)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_rowAgree_lcmPeriod_symm_of_right"
+
+[[form]]
+id = "periodic-rowagree-lcmperiod-symm-of-right"
+channel = "math"
+surface = "periodicrowagreelcmperiodsymmofright"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicrowagreelcmperiodsymmofright) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

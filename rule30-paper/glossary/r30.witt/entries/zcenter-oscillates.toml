@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zcenter-oscillates"
+category = "proof-constant"
+signature = "(pi ((explicit N (const lexlean.std.nat::nat))) (app (const lexlean.core::exists-op) (lam ((explicit z (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local N) (local z)) (app (const r30.witt::zcenter-eq) (local z) (const lexlean.std.bool::false))) (app (const r30.witt::zcenter-eq) (app (const lexlean.std.nat::add) (local z) (nat 2)) (const lexlean.std.bool::true))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.zcenter_oscillates_prop"
+
+[[form]]
+id = "zcenter-oscillates"
+channel = "math"
+surface = "zcenteroscillates"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zcenteroscillates) (paren (slot 0)))"

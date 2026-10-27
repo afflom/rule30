@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "maskparity-zero-eq-of-rowagree-steps"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit t0 (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t0) (local s)) (nat 1)))) (explicit hs (app (const lexlean.std.nat::le) (local s) (app (const lexlean.std.nat::add) (local t0) (nat 2)))) (explicit h (app (const r30.witt::row-agree) (app (const lexlean.std.nat::add) (local t0) (nat 1)) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t0) (nat 2)) (local s)) (app (const lexlean.std.nat::mul) (nat 2) (local s))))) (app (const lexlean.core::eq) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t0) (local s)) (nat 1)) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 0)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t0) (local s)) (nat 1)) (nat 0)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.maskparity_zero_eq_of_rowAgree_steps"
+
+[[form]]
+id = "maskparity-zero-eq-of-rowagree-steps"
+channel = "math"
+surface = "maskparityzeroeqofrowagreesteps"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskparityzeroeqofrowagreesteps) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

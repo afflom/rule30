@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "twopow-succ"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local j))) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local j)) (app (const r30.scale::twopow) (local j)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.twopow_succ"
+
+[[form]]
+id = "twopow-succ"
+channel = "math"
+surface = "twopowsucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name twopowsucc) (paren (slot 0)))"

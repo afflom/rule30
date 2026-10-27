@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "winwitt-step-frobdefect-testbit-succ"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (app (const r30.witt::bit-winwitt-eq) (app (const lexlean.std.nat::add) (local t0) (nat 1)) (app (const r30.scale::twopow) (local k)) (app (const lexlean.std.nat::add) (local j) (nat 1)) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-phi) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (local k)))) (app (const lexlean.std.nat::add) (local j) (nat 1))) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::cross-carry) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-row) (local t0))) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (local k)))) (local j))) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::frob-defect) (local k) (app (const r30.witt::witt-row) (local t0))) (local j)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.winWitt_step_frobDefect_testBit_succ_prop"
+
+[[form]]
+id = "winwitt-step-frobdefect-testbit-succ"
+channel = "math"
+surface = "winwittstepfrobdefecttestbitsucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name winwittstepfrobdefecttestbitsucc) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

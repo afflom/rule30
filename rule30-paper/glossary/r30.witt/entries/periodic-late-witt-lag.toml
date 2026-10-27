@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-late-witt-lag"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (app (const r30.scale::center-periodic) (local T) (local P))) (explicit d (const lexlean.std.nat::nat)) (explicit k1 (const lexlean.std.nat::nat)) (explicit k2 (const lexlean.std.nat::nat)) (explicit hlag (app (const lexlean.core::eq) (app (const r30.scale::lag) (local P) (local k1)) (app (const r30.scale::lag) (local P) (local k2)))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local d))) (explicit hk1 (app (const lexlean.std.nat::le) (local d) (local k1))) (explicit hk2 (app (const lexlean.std.nat::le) (local d) (local k2))) (explicit hset1 (app (const r30.witt::settled-at) (local d) (local k1))) (explicit hset2 (app (const r30.witt::settled-at) (local d) (local k2)))) (app (const lexlean.core::eq) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k1))) (local k1)) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k2))) (local k2))))"
+surface_arity = 13
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_late_witt_eq_of_lag_eq"
+
+[[form]]
+id = "periodic-late-witt-lag"
+channel = "math"
+surface = "periodiclatescalelag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiclatescalelag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6) (token comma) (space) (slot 7) (token comma) (space) (slot 8) (token comma) (space) (slot 9) (token comma) (space) (slot 10) (token comma) (space) (slot 11) (token comma) (space) (slot 12))))"

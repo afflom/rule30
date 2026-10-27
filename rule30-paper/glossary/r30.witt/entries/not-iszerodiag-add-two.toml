@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-iszerodiag-add-two"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat))) (pi ((explicit hz (app (const r30.joint::zero-diagonal) (local z)))) (app (const lexlean.core::lnot) (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (local z) (nat 2))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_isZeroDiag_add_two_prop"
+
+[[form]]
+id = "not-iszerodiag-add-two"
+channel = "math"
+surface = "notiszerodiagaddtwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notiszerodiagaddtwo) (paren (slot 0)))"

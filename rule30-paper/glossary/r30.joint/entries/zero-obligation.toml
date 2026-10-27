@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-obligation"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Intent"
+name = "Rule30UOR.Intent.ObZero"
+
+[[form]]
+id = "zero-obligation"
+channel = "math"
+surface = "zeroobligation"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name zeroobligation)"

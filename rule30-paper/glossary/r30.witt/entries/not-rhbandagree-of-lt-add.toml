@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-rhbandagree-of-lt-add"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local t) (local Q)) (local L)))) (app (const lexlean.core::lnot) (app (const r30.witt::rh-band-agree) (local t) (local Q) (nat 0) (local L)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_rhBandAgree_of_lt_add"
+
+[[form]]
+id = "not-rhbandagree-of-lt-add"
+channel = "math"
+surface = "notrhbandagreeofltadd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notrhbandagreeofltadd) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -1,0 +1,3 @@
+# Text files keep LF line endings on every platform, as the verifier sees them: git on Windows
+# would otherwise check out the .lean files with CRLF.
+* text=auto eol=lf

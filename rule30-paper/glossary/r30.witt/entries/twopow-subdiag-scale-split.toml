@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "twopow-subdiag-scale-split"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.nat::nat)) (explicit C (const lexlean.std.nat::nat)) (explicit v (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const lexlean.std.nat::le) (local c) (local C)))) (app (const lexlean.core::eq) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local k) (nat 1)) (local C)))) (app (const lexlean.std.nat::mul) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (app (const lexlean.std.nat::sub) (local C) (local c)))) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local k) (nat 1)) (local c)))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.twopow_subdiag_scale_split"
+
+[[form]]
+id = "twopow-subdiag-scale-split"
+channel = "math"
+surface = "twopowsubdiagscalesplit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name twopowsubdiagscalesplit) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

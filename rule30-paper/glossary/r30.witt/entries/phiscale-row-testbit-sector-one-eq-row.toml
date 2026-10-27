@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "phiscale-row-testbit-sector-one-eq-row"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (pi ((explicit htk (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::mul) (nat 2) (local t)) (app (const r30.scale::twopow) (local k)))) (explicit hd (app (const lexlean.std.nat::lt) (local d) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-row) (local t))) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-row) (local t)) (local d)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.phiScale_row_testBit_sector_one_eq_row_prop"
+
+[[form]]
+id = "phiscale-row-testbit-sector-one-eq-row"
+channel = "math"
+surface = "phiscalerowtestbitsectoroneeqrow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name phiscalerowtestbitsectoroneeqrow) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

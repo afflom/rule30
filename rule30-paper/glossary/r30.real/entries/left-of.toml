@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-of"
+category = "function"
+signature = "(pi ((explicit p (const lexlean.std.int::int))) (const lexlean.std.int::int))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.leftOf"
+
+[[form]]
+id = "left-of"
+channel = "math"
+surface = "leftof"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftof) (paren (slot 0)))"

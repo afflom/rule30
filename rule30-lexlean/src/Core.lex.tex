@@ -1,0 +1,621 @@
+\begin{lexlean}{Core}
+\useglossary{lexlean.std.nat@1.2.0}
+\useglossary{rule30.words@1.0.0}
+\title{Rule thirty: the local rule and the barrier plane}
+\begin{semanticmodule}
+definition{
+  name: bxor,
+  parameters: [a : Bool, b : Bool],
+  result: Bool,
+  body: (if a then (not b) else b)
+}
+
+definition{
+  name: rule,
+  parameters: [a : Bool, b : Bool, c : Bool],
+  result: Bool,
+  body: (bxor a (b || c))
+}
+
+definition{name: rule90, parameters: [a : Bool, b : Bool, c : Bool], result: Bool, body: (bxor a c)}
+
+definition{
+  name: rule150,
+  parameters: [a : Bool, b : Bool, c : Bool],
+  result: Bool,
+  body: (bxor (bxor a b) c)
+}
+
+definition{
+  name: rule210,
+  parameters: [a : Bool, b : Bool, c : Bool],
+  result: Bool,
+  body: (bxor a ((not b) && c))
+}
+
+theorem{
+  name: barrier_plane,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((rule a b c) = (bxor (bxor (rule90 a b c) (rule150 a b c)) (rule210 a b c)))))),
+  proof: decide{}
+}
+
+theorem{
+  name: left_permutive,
+  parameters: [],
+  statement: (forall (b : Bool), (forall (c : Bool), ((rule true b c) = (not (rule false b c))))),
+  proof: decide{}
+}
+
+definition{
+  name: cell,
+  parameters: [t : Nat, p : Int],
+  result: Bool,
+  body: (match t
+    | Nat.zero => ((not (prim less_than p (0 : Int) : Bool)) && (not (prim less_than (0 : Int) p : Bool)))
+    | Nat.succ s => (rule (cell s (prim subtract p (1 : Int) : Int)) (cell s p) (cell s (prim subtract p (-1 : Int) : Int)))),
+  axioms: [propext],
+  recursive_argument: t
+}
+
+definition{
+  name: center,
+  parameters: [t : Nat],
+  result: Bool,
+  body: (cell t (0 : Int)),
+  axioms: [propext]
+}
+
+theorem{
+  name: center_prefix,
+  parameters: [],
+  statement: (((center 0) = true) /\ (((center 1) = true) /\ (((center 2) = false) /\ ((center 3) = true)))),
+  proof: decide{},
+  axioms: [propext]
+}
+
+definition{
+  name: leftOf,
+  parameters: [p : Int],
+  result: Int,
+  body: (prim subtract p (1 : Int) : Int)
+}
+
+definition{
+  name: rightOf,
+  parameters: [p : Int],
+  result: Int,
+  body: (prim subtract p (-1 : Int) : Int)
+}
+
+theorem{
+  name: cell_succ,
+  parameters: [t : Nat, p : Int],
+  statement: ((cell (ctor Nat.succ t) p) = (rule (cell t (leftOf p)) (cell t p) (cell t (rightOf p)))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: rule_black_black,
+  parameters: [],
+  statement: (forall (c : Bool), ((rule true true c) = false)),
+  proof: decide{}
+}
+
+theorem{
+  name: rule_white_white,
+  parameters: [],
+  statement: (forall (a : Bool), ((rule a false false) = a)),
+  proof: decide{}
+}
+
+theorem{
+  name: rule_left_edge_of_white_pair,
+  parameters: [],
+  statement: (forall (c : Bool), ((rule false false c) = c)),
+  proof: decide{}
+}
+
+theorem{
+  name: rule_reset,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (c : Bool), ((rule a true c) = (not a)))),
+  proof: decide{}
+}
+
+definition{
+  name: ldiag,
+  parameters: [j : Nat, t : Nat],
+  result: Bool,
+  body: (match t
+    | Nat.zero => (match j | Nat.zero => true | Nat.succ i => false)
+    | Nat.succ s => (match j
+      | Nat.zero => true
+      | Nat.succ i => (match i
+        | Nat.zero => true
+        | Nat.succ k => (bxor (ldiag k s) ((ldiag (ctor Nat.succ k) s) || (ldiag (ctor Nat.succ (ctor Nat.succ k)) s)))))),
+  recursive_argument: t
+}
+
+definition{name: lcenter, parameters: [t : Nat], result: Bool, body: (ldiag t t)}
+
+theorem{
+  name: ldiag_step,
+  parameters: [k : Nat, s : Nat],
+  statement: ((ldiag (ctor Nat.succ (ctor Nat.succ k)) (ctor Nat.succ s)) = (bxor (ldiag k s) ((ldiag (ctor Nat.succ k) s) || (ldiag (ctor Nat.succ (ctor Nat.succ k)) s)))),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: ldiag_zero,
+  parameters: [s : Nat],
+  statement: ((ldiag 0 (ctor Nat.succ s)) = true),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: ldiag_one,
+  parameters: [s : Nat],
+  statement: ((ldiag 1 (ctor Nat.succ s)) = true),
+  proof: reflexivity{}
+}
+
+definition{
+  name: rdiag,
+  parameters: [j : Nat, t : Nat],
+  result: Bool,
+  body: (match t
+    | Nat.zero => (match j | Nat.zero => true | Nat.succ i => false)
+    | Nat.succ s => (match j
+      | Nat.zero => true
+      | Nat.succ i => (match i
+        | Nat.zero => (not (rdiag (ctor Nat.succ i) s))
+        | Nat.succ k => (bxor (rdiag (ctor Nat.succ (ctor Nat.succ k)) s) ((rdiag (ctor Nat.succ k) s) || (rdiag k s)))))),
+  recursive_argument: t
+}
+
+definition{name: rcenter, parameters: [t : Nat], result: Bool, body: (rdiag t t)}
+
+theorem{
+  name: rdiag_step,
+  parameters: [k : Nat, s : Nat],
+  statement: ((rdiag (ctor Nat.succ (ctor Nat.succ k)) (ctor Nat.succ s)) = (bxor (rdiag (ctor Nat.succ (ctor Nat.succ k)) s) ((rdiag (ctor Nat.succ k) s) || (rdiag k s)))),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: rdiag_zero,
+  parameters: [s : Nat],
+  statement: ((rdiag 0 (ctor Nat.succ s)) = true),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: rdiag_one,
+  parameters: [s : Nat],
+  statement: ((rdiag 1 (ctor Nat.succ s)) = (not (rdiag 1 s))),
+  proof: reflexivity{}
+}
+
+definition{name: rule60, parameters: [a : Bool, b : Bool, c : Bool], result: Bool, body: (bxor a b)}
+
+definition{name: rule15, parameters: [a : Bool, b : Bool, c : Bool], result: Bool, body: (not a)}
+
+theorem{
+  name: split150,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((rule a b c) = (bxor (rule150 a b c) (b && c)))))),
+  proof: decide{}
+}
+
+theorem{
+  name: split90,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((rule a b c) = (bxor (rule90 a b c) (b && (not c))))))),
+  proof: decide{}
+}
+
+theorem{
+  name: split60,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((rule a b c) = (bxor (rule60 a b c) ((not b) && c)))))),
+  proof: decide{}
+}
+
+theorem{
+  name: split15,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((rule a b c) = (bxor (rule15 a b c) ((not b) && (not c))))))),
+  proof: decide{}
+}
+
+theorem{
+  name: carries_cover,
+  parameters: [],
+  statement: (forall (b : Bool), (forall (c : Bool), ((((b && c) || (b && (not c))) || (((not b) && c) || ((not b) && (not c)))) = true))),
+  proof: decide{}
+}
+
+theorem{
+  name: carries_orthogonal,
+  parameters: [],
+  statement: (forall (b : Bool), (forall (c : Bool), (((((b && c) && (b && (not c))) = false) /\ ((((b && c) && ((not b) && c)) = false) /\ (((b && c) && ((not b) && (not c))) = false))) /\ (((((b && (not c)) && ((not b) && c)) = false) /\ (((b && (not c)) && ((not b) && (not c))) = false)) /\ ((((not b) && c) && ((not b) && (not c))) = false))))),
+  proof: decide{}
+}
+
+definition{
+  name: aff,
+  parameters: [u0 : Bool, u1 : Bool, u2 : Bool, u3 : Bool, a : Bool, b : Bool, c : Bool],
+  result: Bool,
+  body: (bxor u0 (bxor (u1 && a) (bxor (u2 && b) (u3 && c))))
+}
+
+definition{
+  name: miss,
+  parameters: [u0 : Bool, u1 : Bool, u2 : Bool, u3 : Bool, a : Bool, b : Bool, c : Bool],
+  result: Nat,
+  body: (if (bxor (rule a b c) (aff u0 u1 u2 u3 a b c)) then 1 else 0)
+}
+
+definition{
+  name: dist30,
+  parameters: [u0 : Bool, u1 : Bool, u2 : Bool, u3 : Bool],
+  result: Nat,
+  body: ((((miss u0 u1 u2 u3 false false false) + (miss u0 u1 u2 u3 false false true)) + ((miss u0 u1 u2 u3 false true false) + (miss u0 u1 u2 u3 false true true))) + (((miss u0 u1 u2 u3 true false false) + (miss u0 u1 u2 u3 true false true)) + ((miss u0 u1 u2 u3 true true false) + (miss u0 u1 u2 u3 true true true))))
+}
+
+theorem{
+  name: deep_hole,
+  parameters: [],
+  statement: (forall (u0 : Bool), (forall (u1 : Bool), (forall (u2 : Bool), (forall (u3 : Bool), (2 <= (dist30 u0 u1 u2 u3)))))),
+  proof: decide{}
+}
+
+theorem{
+  name: nearest_affine,
+  parameters: [],
+  statement: ((((dist30 false true true true) = 2) /\ ((dist30 false true false true) = 2)) /\ (((dist30 false true true false) = 2) /\ ((dist30 true true false false) = 2))),
+  proof: decide{}
+}
+
+definition{
+  name: carry60,
+  parameters: [s : Nat, p : Int],
+  result: Bool,
+  body: ((not (cell s p)) && (cell s (prim subtract p (-1 : Int) : Int))),
+  axioms: [propext]
+}
+
+definition{
+  name: window60,
+  parameters: [t0 : Nat, n : Nat, p : Int],
+  result: Bool,
+  body: (match n
+    | Nat.zero => false
+    | Nat.succ m => (bxor (bxor (window60 t0 m (prim subtract p (1 : Int) : Int)) (window60 t0 m p)) (carry60 (t0 + m) p))),
+  axioms: [propext],
+  recursive_argument: n
+}
+
+definition{
+  name: twopow,
+  parameters: [k : Nat],
+  result: Nat,
+  body: (match k | Nat.zero => 1 | Nat.succ j => ((twopow j) + (twopow j))),
+  recursive_argument: k
+}
+
+theorem{
+  name: window60_step,
+  parameters: [t0 : Nat, m : Nat, p : Int],
+  statement: ((window60 t0 (ctor Nat.succ m) p) = (bxor (bxor (window60 t0 m (prim subtract p (1 : Int) : Int)) (window60 t0 m p)) (carry60 (t0 + m) p))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: twopow_succ,
+  parameters: [j : Nat],
+  statement: ((twopow (ctor Nat.succ j)) = ((twopow j) + (twopow j))),
+  proof: reflexivity{}
+}
+
+definition{
+  name: displacement,
+  parameters: [a : Bool, b : Bool, c : Bool],
+  result: Bool,
+  body: (bxor (rule a b c) (rule150 a b c))
+}
+
+theorem{
+  name: displacement_is_carry,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((displacement a b c) = (b && c))))),
+  proof: decide{}
+}
+
+theorem{
+  name: frame_direction,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((displacement (not a) b c) = (displacement a b c))))),
+  proof: decide{}
+}
+
+theorem{
+  name: affine_left_linear,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((rule150 (not a) b c) = (not (rule150 a b c)))))),
+  proof: decide{}
+}
+
+theorem{
+  name: nearest_exactly,
+  parameters: [],
+  statement: (forall (u0 : Bool), (forall (u1 : Bool), (forall (u2 : Bool), (forall (u3 : Bool), (((dist30 u0 u1 u2 u3) = 2) -> (((((not u0) && (u1 && (u2 && u3))) || ((not u0) && (u1 && ((not u2) && u3)))) || (((not u0) && (u1 && (u2 && (not u3)))) || (u0 && (u1 && ((not u2) && (not u3)))))) = true)))))),
+  proof: decide{}
+}
+
+definition{
+  name: ldrem,
+  parameters: [b : Nat, r : Nat, t : Nat],
+  result: Nat,
+  body: (match t
+    | Nat.zero => r
+    | Nat.succ s => (if (prim less_than ((ldrem b r s) + (ldrem b r s)) b : Bool) then ((ldrem b r s) + (ldrem b r s)) else (prim subtract ((ldrem b r s) + (ldrem b r s)) b : Nat))),
+  axioms: [propext],
+  recursive_argument: t
+}
+
+definition{
+  name: lddig,
+  parameters: [b : Nat, r : Nat, t : Nat],
+  result: Bool,
+  body: (not (prim less_than ((ldrem b r t) + (ldrem b r t)) b : Bool)),
+  axioms: [propext]
+}
+
+definition{
+  name: sgn,
+  parameters: [x : Bool],
+  result: Int,
+  body: (if x then (-1 : Int) else (1 : Int))
+}
+
+definition{
+  name: iadd,
+  parameters: [x : Int, y : Int],
+  result: Int,
+  body: (prim subtract x (prim negate y : Int) : Int)
+}
+
+theorem{
+  name: frame_projection,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((iadd (sgn (rule a b c)) (sgn (rule a b c))) = (iadd (iadd (sgn (rule150 a b c)) (sgn (rule90 a b c))) (iadd (sgn (rule60 a b c)) (sgn (rule15 a b c)))))))),
+  proof: decide{}
+}
+
+definition{
+  name: dissent,
+  parameters: [a : Bool, b : Bool, c : Bool],
+  result: Nat,
+  body: (((if (bxor (rule a b c) (rule150 a b c)) then 1 else 0) + (if (bxor (rule a b c) (rule90 a b c)) then 1 else 0)) + ((if (bxor (rule a b c) (rule60 a b c)) then 1 else 0) + (if (bxor (rule a b c) (rule15 a b c)) then 1 else 0)))
+}
+
+theorem{
+  name: one_dissent,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (b : Bool), (forall (c : Bool), ((dissent a b c) = 1)))),
+  proof: decide{}
+}
+
+definition{
+  name: corr,
+  parameters: [
+    u0 : Bool,
+    u1 : Bool,
+    u2 : Bool,
+    u3 : Bool,
+    v0 : Bool,
+    v1 : Bool,
+    v2 : Bool,
+    v3 : Bool
+  ],
+  result: Int,
+  body: (iadd (iadd (iadd (prim multiply (sgn (aff u0 u1 u2 u3 false false false)) (sgn (aff v0 v1 v2 v3 false false false)) : Int) (prim multiply (sgn (aff u0 u1 u2 u3 false false true)) (sgn (aff v0 v1 v2 v3 false false true)) : Int)) (iadd (prim multiply (sgn (aff u0 u1 u2 u3 false true false)) (sgn (aff v0 v1 v2 v3 false true false)) : Int) (prim multiply (sgn (aff u0 u1 u2 u3 false true true)) (sgn (aff v0 v1 v2 v3 false true true)) : Int))) (iadd (iadd (prim multiply (sgn (aff u0 u1 u2 u3 true false false)) (sgn (aff v0 v1 v2 v3 true false false)) : Int) (prim multiply (sgn (aff u0 u1 u2 u3 true false true)) (sgn (aff v0 v1 v2 v3 true false true)) : Int)) (iadd (prim multiply (sgn (aff u0 u1 u2 u3 true true false)) (sgn (aff v0 v1 v2 v3 true true false)) : Int) (prim multiply (sgn (aff u0 u1 u2 u3 true true true)) (sgn (aff v0 v1 v2 v3 true true true)) : Int))))
+}
+
+theorem{
+  name: frame_orthogonal,
+  parameters: [],
+  statement: (forall (u0 : Bool), (forall (u1 : Bool), (forall (u2 : Bool), (forall (u3 : Bool), (forall (v0 : Bool), (forall (v1 : Bool), (forall (v2 : Bool), (forall (v3 : Bool), ((((bxor u1 v1) || ((bxor u2 v2) || (bxor u3 v3))) = true) -> ((corr u0 u1 u2 u3 v0 v1 v2 v3) = (0 : Int))))))))))),
+  proof: decide{}
+}
+
+theorem{
+  name: bxor_reset,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (c : Bool), ((bxor a (true || c)) = (not a)))),
+  proof: decide{}
+}
+
+theorem{
+  name: bxor_toggle,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (c : Bool), ((bxor a (false || c)) = (bxor a c)))),
+  proof: decide{}
+}
+
+theorem{
+  name: rule_toggle,
+  parameters: [],
+  statement: (forall (a : Bool), (forall (c : Bool), ((rule a false c) = (bxor a c)))),
+  proof: decide{}
+}
+
+definition{
+  name: phi,
+  parameters: [y : Nat],
+  result: Nat,
+  body: (prim bit_xor y (prim bit_or (prim shift_left y 1 : Nat) (prim shift_left y 2 : Nat) : Nat) : Nat),
+  axioms: [propext]
+}
+
+definition{
+  name: carry,
+  parameters: [y : Nat],
+  result: Nat,
+  body: (prim bit_and y (prim shift_left y 1 : Nat) : Nat),
+  axioms: [propext]
+}
+
+definition{
+  name: phiLinear,
+  parameters: [y : Nat],
+  result: Nat,
+  body: (prim bit_xor (prim bit_xor y (prim shift_left y 1 : Nat) : Nat) (prim shift_left y 2 : Nat) : Nat),
+  axioms: [propext]
+}
+
+theorem{
+  name: phi_split,
+  parameters: [y : Nat],
+  statement: ((phi y) = (prim bit_xor (phiLinear y) (prim shift_left (carry y) 1 : Nat) : Nat)),
+  proof: law{name: nat_witt_step, arguments: [y]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: or_witt_split,
+  parameters: [a : Nat, b : Nat],
+  statement: ((prim bit_or a b : Nat) = (prim bit_xor (prim bit_xor a b : Nat) (prim bit_and a b : Nat) : Nat)),
+  proof: law{name: nat_or_xor_and, arguments: [a, b]},
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: bit,
+  parameters: [n : Nat, k : Nat],
+  result: Nat,
+  body: (prim remainder (prim shift_right n k : Nat) 2 0 : Nat)
+}
+
+theorem{
+  name: bit_and_law,
+  parameters: [a : Nat, b : Nat, k : Nat],
+  statement: ((bit (prim bit_and a b : Nat) k) = (prim bit_and (bit a k) (bit b k) : Nat)),
+  proof: law{name: nat_bit_and, arguments: [a, b, k]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: bit_or_law,
+  parameters: [a : Nat, b : Nat, k : Nat],
+  statement: ((bit (prim bit_or a b : Nat) k) = (prim bit_or (bit a k) (bit b k) : Nat)),
+  proof: law{name: nat_bit_or, arguments: [a, b, k]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: bit_xor_law,
+  parameters: [a : Nat, b : Nat, k : Nat],
+  statement: ((bit (prim bit_xor a b : Nat) k) = (prim bit_xor (bit a k) (bit b k) : Nat)),
+  proof: law{name: nat_bit_xor, arguments: [a, b, k]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: bit_shift_right_law,
+  parameters: [a : Nat, m : Nat, k : Nat],
+  statement: ((bit (prim shift_right a m : Nat) k) = (bit a (m + k))),
+  proof: law{name: nat_bit_shift_right, arguments: [a, m, k]},
+  axioms: [propext]
+}
+
+theorem{
+  name: bit_shift_left_law,
+  parameters: [a : Nat, m : Nat, k : Nat],
+  statement: ((bit (prim shift_left a m : Nat) (m + k)) = (bit a k)),
+  proof: law{name: nat_bit_shift_left, arguments: [a, m, k]},
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: row,
+  parameters: [t : Nat],
+  result: Nat,
+  body: (match t | Nat.zero => 1 | Nat.succ s => (phi (row s))),
+  axioms: [propext],
+  recursive_argument: t
+}
+
+definition{
+  name: rowCenter,
+  parameters: [t : Nat],
+  result: Nat,
+  body: (bit (row t) t),
+  axioms: [propext]
+}
+
+theorem{
+  name: row_center_prefix,
+  parameters: [],
+  statement: (((rowCenter 0) = 1) /\ (((rowCenter 1) = 1) /\ (((rowCenter 2) = 0) /\ ((rowCenter 3) = 1)))),
+  proof: decide{},
+  axioms: [propext]
+}
+
+definition{
+  name: phiLinearPow,
+  parameters: [n : Nat, y : Nat],
+  result: Nat,
+  body: (match n | Nat.zero => y | Nat.succ m => (phiLinear (phiLinearPow m y))),
+  axioms: [propext],
+  recursive_argument: n
+}
+
+theorem{
+  name: phiLinearPow_step,
+  parameters: [m : Nat, y : Nat],
+  statement: ((phiLinearPow (ctor Nat.succ m) y) = (phiLinear (phiLinearPow m y))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+definition{
+  name: phiScale,
+  parameters: [k : Nat, y : Nat],
+  result: Nat,
+  body: (prim bit_xor (prim bit_xor y (prim shift_left y (twopow k) : Nat) : Nat) (prim shift_left y ((twopow k) + (twopow k)) : Nat) : Nat),
+  axioms: [propext]
+}
+
+definition{
+  name: winWitt,
+  parameters: [t0 : Nat, n : Nat],
+  result: Nat,
+  body: (match n
+    | Nat.zero => 0
+    | Nat.succ m => (prim bit_xor (phiLinear (winWitt t0 m)) (prim shift_left (carry (row (t0 + m))) 1 : Nat) : Nat)),
+  axioms: [propext],
+  recursive_argument: n
+}
+
+theorem{
+  name: winWitt_step,
+  parameters: [t0 : Nat, m : Nat],
+  statement: ((winWitt t0 (ctor Nat.succ m)) = (prim bit_xor (phiLinear (winWitt t0 m)) (prim shift_left (carry (row (t0 + m))) 1 : Nat) : Nat)),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+definition{
+  name: wittResponse,
+  parameters: [t : Nat, k : Nat],
+  result: Nat,
+  body: (bit (winWitt t (twopow k)) (t + (twopow k))),
+  axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

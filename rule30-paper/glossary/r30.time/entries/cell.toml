@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cell"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.int::int))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.cell"
+
+[[form]]
+id = "cell"
+channel = "math"
+surface = "cell"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name cell) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

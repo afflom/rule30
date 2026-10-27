@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-defect-outward-of-black"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hbQ (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (local p)) (const lexlean.std.bool::true))) (explicit hb0 (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (local t) (local p)) (const lexlean.std.bool::true)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::add) (local p) (nat 2))) (app (const r30.witt::lh-center) (local t) (app (const lexlean.std.nat::add) (local p) (nat 2)))) (app (const r30.local::bxor) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local Q)) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::add) (local p) (nat 1)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_defect_outward_of_black"
+
+[[form]]
+id = "lhcenter-defect-outward-of-black"
+channel = "math"
+surface = "lhcenterdefectoutwardofblack"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterdefectoutwardofblack) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

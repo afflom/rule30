@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-row-center-period"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.NoRowCenterPeriod"
+
+[[form]]
+id = "no-row-center-period"
+channel = "math"
+surface = "norowcenterperiod"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name norowcenterperiod)"

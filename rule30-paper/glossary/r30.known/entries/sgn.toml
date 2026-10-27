@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "sgn"
+category = "function"
+signature = "(pi ((explicit x (const lexlean.std.bool::bool))) (const lexlean.std.int::int))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.sgn"
+
+[[form]]
+id = "sgn"
+channel = "math"
+surface = "sgn"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name sgn) (paren (slot 0)))"

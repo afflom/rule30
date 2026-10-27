@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-then-nonzero"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat)) (explicit h (app (const r30.joint::zero-diagonal) (local z)))) (app (const lexlean.core::lnot) (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (local z) (nat 1)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CompilePoints"
+name = "Rule30UOR.CompilePoints.zero_then_nonzero"
+
+[[form]]
+id = "zero-then-nonzero"
+channel = "math"
+surface = "zerothennonzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zerothennonzero) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

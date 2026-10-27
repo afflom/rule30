@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "compile-bit-law"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CompilePoints"
+name = "Rule30UOR.CompilePoints.CompileBitLaw"
+
+[[form]]
+id = "compile-bit-law"
+channel = "math"
+surface = "compilebitlaw"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name compilebitlaw)"

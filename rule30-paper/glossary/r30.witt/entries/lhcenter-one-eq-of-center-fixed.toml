@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-one-eq-of-center-fixed"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (local t) (nat 1)) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (nat 1))) (app (const lexlean.std.bool::or) (app (const r30.scale::center) (local t)) (app (const r30.witt::rh-center) (local t) (nat 1))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_one_eq_of_center_fixed"
+
+[[form]]
+id = "lhcenter-one-eq-of-center-fixed"
+channel = "math"
+surface = "lhcenteroneeqofcenterfixed"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenteroneeqofcenterfixed) (paren (slot 0)))"

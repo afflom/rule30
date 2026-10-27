@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhbandagree-zero-of-edge-and-succ"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit h (app (const r30.witt::rh-band-agree) (local t) (local Q) (local S) (app (const lexlean.std.nat::add) (local L) (nat 1)))) (explicit hstep (app (const r30.witt::rh-band-agree) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local Q) (nat 1) (local S)))) (app (const r30.witt::rh-band-agree) (local t) (local Q) (nat 0) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local L) (nat 1)) (local S)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhBandAgree_zero_of_edge_and_succ"
+
+[[form]]
+id = "rhbandagree-zero-of-edge-and-succ"
+channel = "math"
+surface = "rhbandagreezeroofedgeandsucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhbandagreezeroofedgeandsucc) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

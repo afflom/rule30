@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-defect-inward-step"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx2 (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.witt::r-drv) (local td) (local tx2) (local k) (local p)) (app (const r30.witt::r-drv) (local td) (local tx) (local k) (local p))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.witt::r-drv) (local td) (local tx2) (app (const lexlean.std.nat::add) (local k) (nat 1)) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local k) (nat 1)) (app (const lexlean.std.nat::add) (local p) (nat 1)))) (app (const r30.local::bxor) (app (const lexlean.std.bool::or) (app (const r30.witt::r-drv) (local td) (local tx2) (local k) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.witt::r-drv) (local td) (local tx2) (local k) (app (const lexlean.std.nat::add) (local p) (nat 2)))) (app (const lexlean.std.bool::or) (app (const r30.witt::r-drv) (local td) (local tx) (local k) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.witt::r-drv) (local td) (local tx) (local k) (app (const lexlean.std.nat::add) (local p) (nat 2))))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_defect_inward_step"
+
+[[form]]
+id = "rdrv-defect-inward-step"
+channel = "math"
+surface = "rdrvdefectinwardstep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvdefectinwardstep) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-lhbandagree-step-q-of-doubles"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit p0 (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat)) (explicit p1 (const lexlean.std.nat::nat)) (explicit L1 (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::le) (nat 1) (local Q))) (explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hd (app (const r30.joint::doubles-at) (local Q) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hset1 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))) (nat 1)) (local t))) (explicit hsetQ (app (const r30.witt::settled-by) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (local Q))) (local t))) (explicit hp0 (app (const lexlean.std.nat::le) (local p0) (app (const lexlean.std.nat::add) (local p) (local Q)))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local p) (local Q)) (app (const lexlean.std.nat::add) (local p0) (local L)))) (explicit hp1 (app (const lexlean.std.nat::le) (local p1) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local p) (local Q)) (local Q)))) (explicit hL1 (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local p) (local Q)) (local Q)) (app (const lexlean.std.nat::add) (local p1) (local L1)))) (explicit hband0 (app (const r30.witt::lh-band-agree) (local t) (local Q) (local p0) (local L)))) (app (const lexlean.core::lnot) (app (const r30.witt::lh-band-agree) (app (const lexlean.std.nat::add) (local t) (local Q)) (local Q) (local p1) (local L1)))))"
+surface_arity = 7
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_lhBandAgree_step_Q_of_doubles_prop"
+
+[[form]]
+id = "not-lhbandagree-step-q-of-doubles"
+channel = "math"
+surface = "notlhbandagreestepqofdoubles"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notlhbandagreestepqofdoubles) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6))))"

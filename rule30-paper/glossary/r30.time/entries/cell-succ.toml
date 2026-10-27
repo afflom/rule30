@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cell-succ"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.int::int))) (app (const lexlean.core::eq) (app (const r30.time::cell) (app (const lexlean.std.nat::succ) (local t)) (local p)) (app (const r30.local::rule) (app (const r30.time::cell) (local t) (app (const r30.real::left-of) (local p))) (app (const r30.time::cell) (local t) (local p)) (app (const r30.time::cell) (local t) (app (const r30.real::right-of) (local p))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.cell_succ"
+
+[[form]]
+id = "cell-succ"
+channel = "math"
+surface = "cellsucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name cellsucc) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

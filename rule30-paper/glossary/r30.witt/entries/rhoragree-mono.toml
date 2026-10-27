@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhoragree-mono"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit p0 (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat)) (explicit s0 (const lexlean.std.nat::nat)) (explicit Sp (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local s0) (local Sp)) (local S))) (explicit h (app (const r30.witt::rh-or-agree) (local t) (local Q) (local p0) (local S)))) (app (const r30.witt::rh-or-agree) (app (const lexlean.std.nat::add) (local t) (local s0)) (local Q) (local p0) (local Sp))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhOrAgree_mono"
+
+[[form]]
+id = "rhoragree-mono"
+channel = "math"
+surface = "rhoragreemono"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhoragreemono) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

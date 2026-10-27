@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "phi-xor"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::witt-phi) (app (const r30.witt::witt-xor) (local a) (local b))) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-phi) (local a)) (app (const r30.witt::witt-phi) (local b))) (app (const r30.witt::witt-shl) (app (const r30.witt::cross-carry) (local a) (local b)) (nat 1)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.phi_xor"
+
+[[form]]
+id = "phi-xor"
+channel = "math"
+surface = "phixor"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name phixor) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

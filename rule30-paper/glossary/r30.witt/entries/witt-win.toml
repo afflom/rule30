@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-win"
+category = "function"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.winWitt"
+
+[[form]]
+id = "witt-win"
+channel = "math"
+surface = "wittwin"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittwin) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

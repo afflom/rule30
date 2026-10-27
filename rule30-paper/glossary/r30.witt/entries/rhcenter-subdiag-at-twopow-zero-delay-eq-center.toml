@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-subdiag-at-twopow-zero-delay-eq-center"
+category = "proof-constant"
+signature = "(pi ((explicit c (const lexlean.std.nat::nat)) (explicit v (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (local c))) (local c)) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (local c)))) (app (const r30.scale::center) (local c))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_subdiag_at_twopow_zero_delay_eq_center"
+
+[[form]]
+id = "rhcenter-subdiag-at-twopow-zero-delay-eq-center"
+channel = "math"
+surface = "rhcentersubdiagattwopowzerodelayeqcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcentersubdiagattwopowzerodelayeqcenter) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

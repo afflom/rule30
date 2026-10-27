@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag"
+category = "function"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.ldiag"
+
+[[form]]
+id = "ldiag"
+channel = "math"
+surface = "ldiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiag) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "iadd"
+category = "function"
+signature = "(pi ((explicit x (const lexlean.std.int::int)) (explicit y (const lexlean.std.int::int))) (const lexlean.std.int::int))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.iadd"
+
+[[form]]
+id = "iadd"
+channel = "math"
+surface = "iadd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name iadd) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

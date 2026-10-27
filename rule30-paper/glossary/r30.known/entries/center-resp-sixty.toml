@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-resp-sixty"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::center-col) (local t)) (app (const lexlean.std.bool::not) (app (const r30.known::resp-sixty) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Project"
+name = "Rule30UOR.Project.center_resp60"
+
+[[form]]
+id = "center-resp-sixty"
+channel = "math"
+surface = "centerrespsixty"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerrespsixty) (paren (slot 0)))"

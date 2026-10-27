@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "scale-center"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k)))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::center) (local t)) (app (const r30.time::cell) (local t) (app (const r30.scale::negpow) (local k)))) (app (const r30.scale::response) (local t) (local k)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.scale_center_paper"
+
+[[form]]
+id = "scale-center"
+channel = "math"
+surface = "scalecenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name scalecenter) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

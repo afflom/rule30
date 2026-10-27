@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "winwitt-testbit-scale-cross-cone"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit htr (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local t) (local r)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-win) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (local r))) (app (const r30.local::bxor) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local k)) (local r))) (app (const r30.witt::rh-center) (local t) (local r))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.winWitt_testBit_scale_cross_cone_prop"
+
+[[form]]
+id = "winwitt-testbit-scale-cross-cone"
+channel = "math"
+surface = "winwitttestbitscalecrosscone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name winwitttestbitscalecrosscone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

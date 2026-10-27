@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-rhcenter-step-one-eq-of-black-one"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hbQ (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 1)) (const lexlean.std.bool::true))) (explicit hb0 (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (local t) (nat 1)) (const lexlean.std.bool::true)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 1)) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (nat 1)) (nat 1)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_rhCenter_step_one_eq_of_black_one"
+
+[[form]]
+id = "periodic-rhcenter-step-one-eq-of-black-one"
+channel = "math"
+surface = "periodicrhcentersteponeeqofblackone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicrhcentersteponeeqofblackone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

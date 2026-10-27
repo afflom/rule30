@@ -1,0 +1,119 @@
+module
+
+public import Ruliology.CellularAutomata.Rule30Predecessors
+public import Ruliology.CellularAutomata.Rule30PredecessorCounts
+public import Ruliology.CellularAutomata.Rule30Blocks
+public import Ruliology.CellularAutomata.Rule30Jen
+public import Ruliology.CellularAutomata.Rule30Prize
+public import Ruliology.CellularAutomata.Rule30Window
+public import Ruliology.CellularAutomata.Rule30MaskedJen
+public import Ruliology.CellularAutomata.Rule30BlackRuns
+public import Ruliology.CellularAutomata.Rule30BlackRunBlocks
+public import Ruliology.CellularAutomata.Rule30StripCertificates
+public import Ruliology.CellularAutomata.Rule30StripCertificateTable
+public import Ruliology.CellularAutomata.Rule30DrivenLeft
+public import Ruliology.CellularAutomata.Rule30RightPeriods
+public import Ruliology.CellularAutomata.Rule30WhiteSeed
+public import Ruliology.CellularAutomata.Rule30Realization
+public import Ruliology.CellularAutomata.Rule30FactorWindow
+public import Ruliology.CellularAutomata.Rule30PeriodTwo
+public import Ruliology.CellularAutomata.Rule30ZeroBoundary
+public import Ruliology.CellularAutomata.Rule30ZeroBoundaryStripe
+public import Ruliology.CellularAutomata.Rule30ZeroBoundarySmall
+public import Ruliology.CellularAutomata.Rule30ZeroBoundaryBarriers
+public import Ruliology.CellularAutomata.Rule30Ether
+public import Ruliology.CellularAutomata.Rule30PeriodTwoCoupled
+public import Ruliology.CellularAutomata.Rule30PeriodFourSkeleton
+public import Ruliology.CellularAutomata.Rule30Diagonals
+public import Ruliology.CellularAutomata.Rule30ZeroBoundaryLanes
+public import Ruliology.CellularAutomata.Rule30ZeroBoundaryWidth52
+public import Ruliology.CellularAutomata.Rule30ZeroBoundaryStripeFront
+public import Ruliology.CellularAutomata.Rule30ZeroBoundaryStripeFamily
+public import Ruliology.CellularAutomata.Rule30EtherTrap
+public import Ruliology.CellularAutomata.Rule30EtherTrapWidth20
+public import Ruliology.CellularAutomata.Rule30PeriodTwoLanguage
+public import Ruliology.CellularAutomata.Rule30PeriodTwoWidth5
+public import Ruliology.CellularAutomata.Rule30PeriodTwoWidth6
+public import Ruliology.CellularAutomata.Rule30EtherThree
+public import Ruliology.CellularAutomata.Rule30EtherThreeNoWall
+public import Ruliology.CellularAutomata.Rule30EtherThreeTrap
+public import Ruliology.CellularAutomata.Rule30EtherThreeReach
+public import Ruliology.CellularAutomata.Rule30EtherThreeLeft
+public import Ruliology.CellularAutomata.Rule30EtherThreeSkeleton
+public import Ruliology.CellularAutomata.Rule30WhiteRunEight
+public import Ruliology.CellularAutomata.Rule30PeriodTwoSideways
+public import Ruliology.CellularAutomata.Rule30LightCone
+public import Ruliology.CellularAutomata.Rule30FiniteConfigs
+public import Ruliology.CellularAutomata.Rule30FiniteMaskedJen
+public import Ruliology.CellularAutomata.Rule30Coupled
+public import Ruliology.CellularAutomata.Rule30FiniteBlackRuns
+public import Ruliology.CellularAutomata.Rule30FiniteBlackRunBlocks
+public import Ruliology.CellularAutomata.Rule30FiniteDiagonals
+public import Ruliology.CellularAutomata.Rule30FiniteWhiteRuns
+public import Ruliology.CellularAutomata.Rule30ZeroBoundaryStripeFour
+public import Ruliology.CellularAutomata.Rule30WhiteEnd
+public import Ruliology.CellularAutomata.Rule30FiveTail
+public import Ruliology.CellularAutomata.Rule30SuffixFamilies
+public import Ruliology.CellularAutomata.Rule30BackwardVacuum
+public import Ruliology.CellularAutomata.Rule30Problem3
+public import Ruliology.CellularAutomata.Rule30WhitePadding
+public import Ruliology.CellularAutomata.Rule30FiniteStrips
+public import Ruliology.CellularAutomata.Rule30WhitePulse
+public import Ruliology.CellularAutomata.Rule30ZeroPredecessor
+public import Ruliology.CellularAutomata.Rule30BackwardTube
+public import Ruliology.CellularAutomata.Rule30WhitePaddingVacuumCriterion
+public import Ruliology.CellularAutomata.Rule30SparsePreimage
+public import Ruliology.CellularAutomata.Rule30RestrictedBackwardTube
+public import Ruliology.CellularAutomata.Rule30UniformWhitePadding
+public import Ruliology.CellularAutomata.Rule30WordRotation
+public import Ruliology.CellularAutomata.Rule30ShortTail
+public import Ruliology.CellularAutomata.Rule30FiveTailReduction
+public import Ruliology.CellularAutomata.Rule30VacuumExample
+public import Ruliology.CellularAutomata.Rule30WhitePadding10101
+public import Ruliology.CellularAutomata.Rule30ForbiddenSuffix
+public import Ruliology.CellularAutomata.Rule30SixTailReduction
+public import Ruliology.CellularAutomata.Rule30SixTail
+public import Ruliology.CellularAutomata.Rule30SixTailSharpened
+public import Ruliology.CellularAutomata.Rule30WhitePad10111
+public import Ruliology.CellularAutomata.Rule30TraceEdge
+public import Ruliology.CellularAutomata.Rule30TraceMerge
+public import Ruliology.CellularAutomata.Rule30TraceAmbiguity
+public import Ruliology.CellularAutomata.Rule30ColumnSeparation
+public import Ruliology.CellularAutomata.Rule30SpacingRenormalization
+public import Ruliology.CellularAutomata.Rule30PackedReconstruction
+public import Ruliology.CellularAutomata.Rule30SpacingGapCounterexample
+public import Ruliology.CellularAutomata.Rule30DrivenPrefix
+public import Ruliology.CellularAutomata.Rule30ExactReturn
+public import Ruliology.CellularAutomata.Rule30ControlledResponse
+public import Ruliology.CellularAutomata.Rule30PeriodicProfileCounter
+public import Ruliology.CellularAutomata.Rule30FeedbackErasure
+public import Ruliology.CellularAutomata.Rule30ClockMask
+public import Ruliology.CellularAutomata.Rule30FiniteClockCertificate
+public import Ruliology.CellularAutomata.Rule30FiniteClockSixteen
+public import Ruliology.CellularAutomata.Rule30TerminalClock
+public import Ruliology.CellularAutomata.Rule30CenterRuns
+public import Ruliology.CellularAutomata.Rule30EtherThreeErosion
+public import Ruliology.CellularAutomata.Rule30WhiteTailErosion
+public import Ruliology.CellularAutomata.Rule30XorRigidity
+public import Ruliology.CellularAutomata.Rule30StripeMeeting
+public import Ruliology.CellularAutomata.Rule30PaddedWords
+
+/-!
+# Rule 30 Prize: Lean snapshot
+
+This is a snapshot of the `ruliology-lean` catalog taken on 2026-10-15.
+
+It imports the catalog's 40 `Rule30*` modules, in the order of the catalog root. Their import
+closure is 54 modules: these 40, the 13 data modules in `Rule30Certificates/`, and
+`BusyBeaverLifetimes`, which `Rule30Blocks` imports. All 54 are copied from the catalog, byte for
+byte except one docstring sentence in `Rule30ZeroBoundaryWidth52`, and `SHA256SUMS` holds their
+SHA-256 hashes.
+
+It then imports the modules added in the kit since; `README.md` lists them under "Added in the
+kit".
+
+Core Lean 4.35.0, no dependencies. `README.md` maps the modules, names the headline theorems and
+says how to build.
+-/
+
+@[expose] public section

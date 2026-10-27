@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "zero-diagonals"
+category = "proof-constant"
+signature = "(pi ((explicit N (const lexlean.std.nat::nat))) (app (const lexlean.core::exists-op) (lam ((explicit z (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local N) (local z)) (app (const r30.joint::zero-diagonal) (local z))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ZeroDiagonals"
+name = "Rule30UOR.ZeroDiagonals.zero_diagonals_unbounded"
+
+[[form]]
+id = "zero-diagonals"
+channel = "math"
+surface = "zerodiagonals"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name zerodiagonals) (paren (slot 0)))"

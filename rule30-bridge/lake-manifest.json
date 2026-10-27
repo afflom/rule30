@@ -1,0 +1,14 @@
+{"version": "1.3.0",
+ "packagesDir": ".lake/packages",
+ "packages":
+ [{"type": "path",
+   "scope": "",
+   "name": "rule30prize",
+   "manifestFile": "lake-manifest.json",
+   "inherited": false,
+   "dir": "/home/alex/Desktop/rule30-uor-work/Rule30PrizeKit/lean",
+   "copy": false,
+   "configFile": "lakefile.toml"}],
+ "name": "rule30bridge",
+ "lakeDir": ".lake",
+ "fixedToolchain": false}

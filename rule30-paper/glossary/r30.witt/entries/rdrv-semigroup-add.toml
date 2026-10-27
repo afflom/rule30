@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-semigroup-add"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local t) (local t) (app (const lexlean.std.nat::add) (local a) (local k)) (local p)) (app (const r30.witt::r-drv) (app (const lexlean.std.nat::add) (local t) (local a)) (app (const lexlean.std.nat::add) (local t) (local a)) (local k) (local p))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_semigroup_add"
+
+[[form]]
+id = "rdrv-semigroup-add"
+channel = "math"
+surface = "rdrvsemigroupadd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvsemigroupadd) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

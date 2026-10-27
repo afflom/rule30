@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rule-left-edge"
+category = "proof-constant"
+signature = "(pi ((explicit c (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.local::rule) (const lexlean.std.bool::false) (const lexlean.std.bool::false) (local c)) (local c)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rule_left_edge_of_white_pair"
+
+[[form]]
+id = "rule-left-edge"
+channel = "math"
+surface = "ruleleftedge"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ruleleftedge) (paren (slot 0)))"

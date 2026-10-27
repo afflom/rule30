@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "compile-bit"
+category = "proof-constant"
+signature = "(const r30.joint::compile-bit-law)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CompilePoints"
+name = "Rule30UOR.CompilePoints.compile_bit_law"
+
+[[form]]
+id = "compile-bit"
+channel = "math"
+surface = "compilebit"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name compilebit)"

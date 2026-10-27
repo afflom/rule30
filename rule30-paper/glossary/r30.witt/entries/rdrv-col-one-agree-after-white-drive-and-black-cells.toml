@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-col-one-agree-after-white-drive-and-black-cells"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx2 (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit n2 (const lexlean.std.nat::nat)) (explicit n1 (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit hw (pi ((explicit s (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::lt) (local s) (local r)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local td) (app (const lexlean.std.nat::add) (local a) (local s)))) (const lexlean.std.bool::false))))) (explicit hb2 (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx2) (local a) (app (const lexlean.std.nat::add) (local n2) (nat 1))) (const lexlean.std.bool::true))) (explicit hb1 (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (local a) (app (const lexlean.std.nat::add) (local n1) (nat 1))) (const lexlean.std.bool::true))) (explicit hn2 (app (const lexlean.std.nat::le) (local n2) (local r))) (explicit hn1 (app (const lexlean.std.nat::le) (local n1) (local r)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx2) (app (const lexlean.std.nat::add) (local a) (app (const lexlean.std.nat::add) (local r) (nat 1))) (nat 1)) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local a) (app (const lexlean.std.nat::add) (local r) (nat 1))) (nat 1)))))"
+surface_arity = 7
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_col_one_agree_after_white_drive_and_black_cells"
+
+[[form]]
+id = "rdrv-col-one-agree-after-white-drive-and-black-cells"
+channel = "math"
+surface = "rdrvcoloneagreeafterwhitedriveandblackcells"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvcoloneagreeafterwhitedriveandblackcells) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6))))"

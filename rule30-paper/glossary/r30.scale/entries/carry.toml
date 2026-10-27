@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "carry"
+category = "function"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.int::int))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.carry60"
+
+[[form]]
+id = "carry"
+channel = "math"
+surface = "carry"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name carry) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

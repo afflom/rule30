@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-doubles-eq-step-one-reset"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))))) (explicit hd (app (const r30.joint::doubles-at) (local Q) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))))) (explicit hset1 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))) (nat 1)) (local t))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 3))) (nat 2)) (local t)))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local p) (nat 2)) (local Q))) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::add) (local p) (nat 1))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_doubles_eq_step_one_reset_prop"
+
+[[form]]
+id = "lhcenter-doubles-eq-step-one-reset"
+channel = "math"
+surface = "lhcenterdoubleseqsteponereset"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterdoubleseqsteponereset) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

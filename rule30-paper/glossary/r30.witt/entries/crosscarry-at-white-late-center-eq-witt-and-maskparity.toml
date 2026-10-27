@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "crosscarry-at-white-late-center-eq-witt-and-maskparity"
+category = "proof-constant"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hw (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k)))) (const lexlean.std.bool::false)))) (app (const r30.witt::bit-crosscarry-eq) (app (const r30.witt::witt-scale) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (local s) (nat 1)))) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.bool::and) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local s) (nat 1)) (local k)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k))) (nat 0))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.crossCarry_at_white_late_center_eq_witt_and_maskparity_prop"
+
+[[form]]
+id = "crosscarry-at-white-late-center-eq-witt-and-maskparity"
+channel = "math"
+surface = "crosscarryatwhitelatecentereqwittandmaskparity"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name crosscarryatwhitelatecentereqwittandmaskparity) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rule-sixty"
+category = "function"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit b (const lexlean.std.bool::bool)) (explicit c (const lexlean.std.bool::bool))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rule60"
+
+[[form]]
+id = "rule-sixty"
+channel = "math"
+surface = "rulesixty"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rulesixty) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

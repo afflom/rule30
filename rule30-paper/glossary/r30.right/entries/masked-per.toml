@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "masked-per"
+category = "function"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Right"
+name = "Rule30UOR.Right.MaskedPer"
+
+[[form]]
+id = "masked-per"
+channel = "math"
+surface = "maskedperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskedperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

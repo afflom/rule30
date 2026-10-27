@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rcenter"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rcenter"
+
+[[form]]
+id = "rcenter"
+channel = "math"
+surface = "rcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rcenter) (paren (slot 0)))"

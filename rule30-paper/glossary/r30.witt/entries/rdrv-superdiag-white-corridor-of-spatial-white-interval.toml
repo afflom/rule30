@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-superdiag-white-corridor-of-spatial-white-interval"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (pi ((explicit hsp (pi ((explicit j (const lexlean.std.nat::nat))) (pi ((explicit hj1 (app (const lexlean.std.nat::le) (nat 1) (local j))) (explicit hj2 (app (const lexlean.std.nat::le) (local j) (local L)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (local a) (app (const lexlean.std.nat::add) (local p) (local j))) (const lexlean.std.bool::false))))) (explicit huL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local u)) (nat 2)) (local L)))) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local a) (local u)) (app (const lexlean.std.nat::add) (local p) (app (const lexlean.std.nat::add) (local u) (nat 1)))) (const lexlean.std.bool::false)) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (app (const lexlean.std.nat::add) (local a) (local u)) (app (const lexlean.std.nat::add) (local p) (app (const lexlean.std.nat::add) (local u) (nat 2)))) (const lexlean.std.bool::false)))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_superdiag_white_corridor_of_spatial_white_interval"
+
+[[form]]
+id = "rdrv-superdiag-white-corridor-of-spatial-white-interval"
+channel = "math"
+surface = "rdrvsuperdiagwhitecorridorofspatialwhiteinterval"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvsuperdiagwhitecorridorofspatialwhiteinterval) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

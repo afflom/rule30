@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "wittresp-late-eq-zcenter-xor-center-triality"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k))) (explicit hset (app (const r30.witt::settled-at) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k)))) (app (const r30.witt::zcenter-eq) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.local::bxor) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (local k)) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k))))) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (nat 1)))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.wittRespBool_late_eq_zcenter_xor_center_triality_prop"
+
+[[form]]
+id = "wittresp-late-eq-zcenter-xor-center-triality"
+channel = "math"
+surface = "wittresplateeqzcenterxorcentertriality"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittresplateeqzcenterxorcentertriality) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem-one"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Ruliology.CellularAutomata.Rule30Prize"
+name = "Ruliology.CellularAutomata.Rule30Prize.Problem1"
+
+[[form]]
+id = "problem-one"
+channel = "math"
+surface = "problemone"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name problemone)"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "witt-shl"
+category = "function"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Init"
+name = "Nat.shiftLeft"
+
+[[form]]
+id = "witt-shl"
+channel = "math"
+surface = "wittshl"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wittshl) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,147 @@
+spec = "lexlean/lock/2"
+language = "1.2"
+compiler_semantics = "59a0761efeb36415bdf17179be9f86476b5621cd2dc0c8e3ff8d46b81c5b7ea3"
+project_config_sha256 = "1010b40811302a58bcf932ced10cea1aa248191bbff8ad8c0a0af33dee475d2a"
+lean_toolchain = "leanprover/lean4:v4.32.1"
+
+[[workspace_file]]
+path = "lake-manifest.json"
+sha256 = "e9ee1df9c8edac1efdf8be8f40b184f61fa8d8461693bb12211978fce0b93a2c"
+
+[[workspace_file]]
+path = "lakefile.toml"
+sha256 = "c04aa0b9e7fd617560c419c4a94d236553b8385136159e63d6a74539f002476c"
+
+[[workspace_file]]
+path = "lean-toolchain"
+sha256 = "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af"
+
+[[package]]
+id = "lexlean.core"
+version = "1.2.0"
+kind = "builtin"
+source = "embedded"
+revision = "compiler-semantics"
+tree_sha256 = "827317cae68c162f3a96c8a8de4e53ab348e7d3724fd2b834fa85ecde1a1b392"
+manifest_sha256 = "271079763d269cc873531f515e56da960cd6321393b9460ff0e617666fa01d71"
+imports = []
+
+[[package]]
+id = "lexlean.std.bool"
+version = "1.2.0"
+kind = "builtin"
+source = "embedded"
+revision = "compiler-semantics"
+tree_sha256 = "3bc0fb09d706ffa7d5a1363302ea87c049acc7c7dcafde63c62682620c11be9b"
+manifest_sha256 = "de58de2cf18a7a5a62d8c20649139d6dfe1f7b16b3130c75f150fbac5440a71e"
+imports = ["lexlean.core@1.2.0"]
+
+[[package]]
+id = "lexlean.std.int"
+version = "1.2.0"
+kind = "builtin"
+source = "embedded"
+revision = "compiler-semantics"
+tree_sha256 = "fa815e73e1fa65b15e479489b3400b662beb539bfa4068d2dbd7c6923663ec6b"
+manifest_sha256 = "cab21322a05a2d773e00d025aeb471bc231d523985332a01ac26ad45b7e98958"
+imports = ["lexlean.core@1.2.0"]
+
+[[package]]
+id = "lexlean.std.nat"
+version = "1.2.0"
+kind = "builtin"
+source = "embedded"
+revision = "compiler-semantics"
+tree_sha256 = "e0db021e01b91d651c43921d66f6b0023c8efbf17cac2ec53192ce5305e4e1ac"
+manifest_sha256 = "6fb446b39e3c1c18a5f10cfa1f7aa2bd431837719eb0eb7489aadf452c9420a7"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0"]
+
+[[package]]
+id = "r30.doc"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.doc"
+revision = "none"
+tree_sha256 = "080edcf4a3378184d45675d998d0de7a71168331ad4aa88b45daf909ec8cbbf8"
+manifest_sha256 = "710ae70a43f0d0806f8beca11245adef7d4a316b89c37f7fed94ee6608ccb048"
+imports = ["lexlean.core@1.2.0", "lexlean.std.nat@1.2.0"]
+
+[[package]]
+id = "r30.joint"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.joint"
+revision = "none"
+tree_sha256 = "b06985e769b3c62594297b79c4e4bc3ee92f8908d8ca7b9aae01c7bf1520f490"
+manifest_sha256 = "fcd206216d060c6e8e273f24c1b1f465d77b8d8477e6454a0c223525e0ed5aee"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.nat@1.2.0"]
+
+[[package]]
+id = "r30.known"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.known"
+revision = "none"
+tree_sha256 = "8cc317f9be582cdd19a58fa570e618eb09e4c3b0ac7b13e42e2dc4f2bead9234"
+manifest_sha256 = "4fa849258f70c7fd03f9978dfa1e93ff9beb227a668ebe4bff793dd28f441a26"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.int@1.2.0", "lexlean.std.nat@1.2.0", "r30.joint@1.0.0", "r30.local@1.0.0", "r30.right@1.0.0"]
+
+[[package]]
+id = "r30.local"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.local"
+revision = "none"
+tree_sha256 = "b20d50019f7b61cc51a934f249e409cb95c5363dc7393cf3ebd6525b2bfd314d"
+manifest_sha256 = "53772bd387071cad2c587fd099af3879ca7ca4a3a653fb8bc911ba52ed731c19"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.nat@1.2.0"]
+
+[[package]]
+id = "r30.real"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.real"
+revision = "none"
+tree_sha256 = "848d7d1f6bd1ed0dc28031d75baba9719a95ae94ab592198d5b76c39fe5b6e4c"
+manifest_sha256 = "8254f43455c6487d8c545487f5e08b730fdd457866ccd3fc9bf07b3252be13b7"
+imports = ["lexlean.core@1.2.0", "lexlean.std.int@1.2.0", "lexlean.std.nat@1.2.0"]
+
+[[package]]
+id = "r30.right"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.right"
+revision = "none"
+tree_sha256 = "c58d708ec9d43e679a63b7a86f8a60ba21b8a46001d73e1d6a2b8a9ebb76932e"
+manifest_sha256 = "7abeb9374ccf521d7cebb1451c29871db149d1c2b0db8a904ae5c9a1e54c894a"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.nat@1.2.0", "r30.joint@1.0.0", "r30.local@1.0.0"]
+
+[[package]]
+id = "r30.scale"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.scale"
+revision = "none"
+tree_sha256 = "95c29eb0e6cb9b3fe546732a8abcdeafe88952a4371598f683b58f8fc652aa00"
+manifest_sha256 = "f0e9100078c353744e3de5c1fdb349cd725376a875a581dd79b973c5ed69fa01"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.int@1.2.0", "lexlean.std.nat@1.2.0", "r30.joint@1.0.0", "r30.local@1.0.0", "r30.time@1.0.0"]
+
+[[package]]
+id = "r30.time"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.time"
+revision = "none"
+tree_sha256 = "5a76b775a8264d041e468098004cf7b469ddc43e3ad10e2530f42f2a77959715"
+manifest_sha256 = "66e2275c09d6345a27e77327d4f3e21e218139e3fc133696bdc2fb901a64e935"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.int@1.2.0", "lexlean.std.nat@1.2.0", "r30.local@1.0.0", "r30.real@1.0.0"]
+
+[[package]]
+id = "r30.witt"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.witt"
+revision = "none"
+tree_sha256 = "8a3347d0f9a6ac8bee015b183d630a5ba9fb6d0924a58b33bede83c2295601c0"
+manifest_sha256 = "0a356e89bf9e7e8cb0c3edb2981ca2ba9a27aa06a685dab4cd4497f2dfb84446"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.nat@1.2.0", "r30.joint@1.0.0", "r30.local@1.0.0", "r30.right@1.0.0", "r30.scale@1.0.0", "r30.time@1.0.0"]

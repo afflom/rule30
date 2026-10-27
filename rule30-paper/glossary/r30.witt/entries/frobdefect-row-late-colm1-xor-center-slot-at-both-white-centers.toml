@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "frobdefect-row-late-colm1-xor-center-slot-at-both-white-centers"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (nat 2)) (local k))) (explicit hset (app (const r30.witt::settled-at) (app (const lexlean.std.nat::add) (local d) (nat 1)) (local k))) (explicit hw1 (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (nat 1))) (const lexlean.std.bool::false))) (explicit hw2 (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k)))) (const lexlean.std.bool::false)))) (app (const r30.witt::zcenter-and-eq) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const r30.scale::twopow) (local k)))) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local d) (nat 2)))) (app (const r30.local::bxor) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::frob-defect) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 2)) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::frob-defect) (local k) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const r30.scale::twopow) (local k))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.frobDefect_row_late_colm1_xor_center_slot_at_both_white_centers_prop"
+
+[[form]]
+id = "frobdefect-row-late-colm1-xor-center-slot-at-both-white-centers"
+channel = "math"
+surface = "frobdefectrowlatecolm1xorcenterslotatbothwhitecenters"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name frobdefectrowlatecolm1xorcenterslotatbothwhitecenters) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

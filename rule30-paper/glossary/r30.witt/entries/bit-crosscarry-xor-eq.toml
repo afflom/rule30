@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-crosscarry-xor-eq"
+category = "function"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit j1 (const lexlean.std.nat::nat)) (explicit j2 (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.bool::bool))) (sort prop))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.BitCrossCarryXorEq"
+
+[[form]]
+id = "bit-crosscarry-xor-eq"
+channel = "math"
+surface = "bitcrosscarryxoreq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitcrosscarryxoreq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

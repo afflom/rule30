@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-centerperiodic-of-lhcolagree-one-three-twopow-doubles"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hd (app (const r30.joint::doubles-at) (app (const r30.scale::twopow) (local k)) (local z))) (explicit hdz (app (const lexlean.std.nat::le) (local d) (local z))) (explicit hdm (app (const lexlean.core::eq) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (local m) (local P))) (app (const lexlean.std.nat::add) (local z) (nat 1)))) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))))) (explicit hset0 (app (const r30.witt::settled-by) (local d) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))))) (explicit hset1 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (local z) (nat 1)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 1)) (app (const r30.scale::twopow) (local k))))) (explicit hS (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local k)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (local S) (nat 1)))) (explicit hlh (app (const r30.witt::lh-col-agree) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::mul) (local m) (local P)) (nat 1) (local S)))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 7
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_centerPeriodic_of_lhColAgree_one_three_twopow_doubles_prop"
+
+[[form]]
+id = "not-centerperiodic-of-lhcolagree-one-three-twopow-doubles"
+channel = "math"
+surface = "notcenterperiodicoflhcolagreeonethreetwopowdoubles"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notcenterperiodicoflhcolagreeonethreetwopowdoubles) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6))))"

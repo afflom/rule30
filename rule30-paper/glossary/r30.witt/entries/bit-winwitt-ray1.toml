@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-winwitt-ray1"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat)) (explicit hi (app (const lexlean.std.nat::lt) (local i) (app (const r30.scale::twopow) (local k)))) (explicit hcone (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::mul) (nat 2) (local t0)) (app (const lexlean.std.nat::add) (local i) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit) (app (const r30.witt::witt-win) (local t0) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local i) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::bton) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::add) (local i) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local t0) (app (const r30.scale::twopow) (local k)))) (app (const r30.right::rdiag) (local i) (local t0))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.bit_winWitt_middle_ray"
+
+[[form]]
+id = "bit-winwitt-ray1"
+channel = "math"
+surface = "bitwinwittrayone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitwinwittrayone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

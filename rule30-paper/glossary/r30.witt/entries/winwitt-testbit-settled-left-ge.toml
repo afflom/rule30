@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "winwitt-testbit-settled-left-ge"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (local t) (local p)) (local k))) (explicit hset (app (const r30.witt::settled-by) (app (const lexlean.std.nat::sub) (local t) (local p)) (local t)))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-win) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local p)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1))))) (const lexlean.std.bool::false))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.winWitt_testBit_settled_left_ge_prop"
+
+[[form]]
+id = "winwitt-testbit-settled-left-ge"
+channel = "math"
+surface = "winwitttestbitsettledleftge"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name winwitttestbitsettledleftge) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

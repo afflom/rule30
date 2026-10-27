@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-below-threshold-eq-center"
+category = "proof-constant"
+signature = "(pi ((explicit r (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit J (const lexlean.std.nat::nat)) (explicit hJ (app (const r30.witt::right-threshold) (local k) (local J))) (explicit hrJ (app (const lexlean.std.nat::le) (local r) (local J))) (explicit hr (app (const lexlean.std.nat::lt) (local r) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (local r) (app (const lexlean.std.nat::add) (local r) (app (const r30.scale::twopow) (local k)))) (app (const r30.scale::center) (local r))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdiag_below_threshold_eq_center"
+
+[[form]]
+id = "rdiag-below-threshold-eq-center"
+channel = "math"
+surface = "rdiagbelowthresholdeqcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagbelowthresholdeqcenter) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

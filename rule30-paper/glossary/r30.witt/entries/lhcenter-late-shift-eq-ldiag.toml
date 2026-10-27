@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-late-shift-eq-ldiag"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hp (app (const lexlean.std.nat::le) (local p) (local t)))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local p) (app (const r30.scale::twopow) (local k)))) (app (const r30.time::ldiag) (app (const lexlean.std.nat::sub) (local t) (local p)) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_late_shift_eq_ldiag"
+
+[[form]]
+id = "lhcenter-late-shift-eq-ldiag"
+channel = "math"
+surface = "lhcenterlateshifteqldiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterlateshifteqldiag) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

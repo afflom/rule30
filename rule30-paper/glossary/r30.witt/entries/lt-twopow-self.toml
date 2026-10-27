@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lt-twopow-self"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat))) (app (const lexlean.std.nat::lt) (local n) (app (const r30.scale::twopow) (local n))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lt_twopow_self"
+
+[[form]]
+id = "lt-twopow-self"
+channel = "math"
+surface = "lttwopowself"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lttwopowself) (paren (seq (slot 0))))"

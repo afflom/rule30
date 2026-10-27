@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-winwitt-sector-one-settled"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit hk (app (const lexlean.std.nat::le) (local d) (local k))) (explicit hds (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const r30.scale::twopow) (local k)))) (explicit hset (app (const r30.witt::settled-by) (local d) (app (const lexlean.std.nat::add) (local d) (local s))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local s))) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::bton) (app (const r30.local::bxor) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local d) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k)))) (app (const r30.time::ldiag) (local d) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local d) (local s)) (app (const r30.scale::twopow) (local k))))))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.bit_winWitt_sector_one_settled"
+
+[[form]]
+id = "bit-winwitt-sector-one-settled"
+channel = "math"
+surface = "bitwinwittsectoronesettled"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitwinwittsectoronesettled) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

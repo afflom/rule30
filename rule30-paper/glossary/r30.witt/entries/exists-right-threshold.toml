@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exists-right-threshold"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::exists-op) (lam ((explicit J (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local k) (local J)) (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local J) (nat 2)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::succ) (local k))))) (app (const r30.witt::right-threshold) (local k) (local J))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.exists_right_threshold_prop"
+
+[[form]]
+id = "exists-right-threshold"
+channel = "math"
+surface = "existsrightthreshold"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name existsrightthreshold) (paren (slot 0)))"

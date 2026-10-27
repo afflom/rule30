@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "winwitt-scale-cross-zero-gap-late-eq-true-at-shift-after-zero-diag-and-winwittagree"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hr (app (const lexlean.std.nat::le) (local t) (app (const lexlean.std.nat::add) (local r) (nat 1)))) (explicit hk (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local Q)) (local r)) (nat 2)) (local k))) (explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local Q)) (local r)))) (explicit hset2 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local Q)) (local r)) (nat 2)) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))))) (explicit ha (app (const lexlean.std.nat::le) (local a) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local r) (local Q)) (nat 2))))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local r) (local Q)) (nat 2))) (app (const lexlean.std.nat::add) (local a) (local L)))) (explicit hw (app (const r30.witt::winwitt-agree) (local t) (local k) (local Q) (local a) (local L)))) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit-bool) (app (const r30.witt::witt-win) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const lexlean.std.nat::add) (local r) (nat 2)))) (const lexlean.std.bool::true))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.winWitt_scale_cross_zero_gap_late_eq_true_at_shift_after_zero_diag_and_winWittAgree_prop"
+
+[[form]]
+id = "winwitt-scale-cross-zero-gap-late-eq-true-at-shift-after-zero-diag-and-winwittagree"
+channel = "math"
+surface = "winwittscalecrosszerogaplateeqtrueatshiftafterzerodiagandwinwittagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name winwittscalecrosszerogaplateeqtrueatshiftafterzerodiagandwinwittagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

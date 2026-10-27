@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-init-gt-eq-false"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit tx (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat))) (pi ((explicit hq (app (const lexlean.std.nat::lt) (local tx) (local q)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (local tx) (nat 0) (local q)) (const lexlean.std.bool::false))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_init_gt_eq_false"
+
+[[form]]
+id = "rdrv-init-gt-eq-false"
+channel = "math"
+surface = "rdrvinitgteqfalse"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvinitgteqfalse) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

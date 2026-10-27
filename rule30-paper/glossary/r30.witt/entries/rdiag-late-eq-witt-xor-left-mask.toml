@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-late-eq-witt-xor-left-mask"
+category = "proof-constant"
+signature = "(pi ((explicit r (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (local r) (app (const lexlean.std.nat::add) (local r) (app (const r30.scale::twopow) (local k)))) (app (const r30.local::bxor) (app (const r30.witt::witt-resp) (app (const lexlean.std.nat::add) (local r) (app (const r30.scale::twopow) (local k))) (local k)) (app (const r30.local::bxor) (app (const r30.scale::left-response) (app (const lexlean.std.nat::add) (local r) (app (const r30.scale::twopow) (local k))) (local k)) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local r) (app (const r30.scale::twopow) (local k))) (local k))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdiag_late_eq_witt_xor_left_mask"
+
+[[form]]
+id = "rdiag-late-eq-witt-xor-left-mask"
+channel = "math"
+surface = "rdiaglateeqwittxorleftmask"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiaglateeqwittxorleftmask) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

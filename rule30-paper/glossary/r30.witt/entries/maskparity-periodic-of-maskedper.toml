@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "maskparity-periodic-of-maskedper"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit h (app (const r30.scale::center-periodic) (local T) (local P))) (explicit hm (app (const r30.right::masked-per) (local T) (local P))) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit ht (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local T) (nat 1)) (local t)))) (app (const lexlean.core::eq) (app (const r30.scale::mask-parity) (app (const lexlean.std.nat::add) (local t) (local P)) (local k)) (app (const r30.scale::mask-parity) (local t) (local k))))"
+surface_arity = 7
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.maskparity_periodic_of_maskedPer"
+
+[[form]]
+id = "maskparity-periodic-of-maskedper"
+channel = "math"
+surface = "maskparityperiodicofmaskedper"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskparityperiodicofmaskedper) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5) (token comma) (space) (slot 6))))"

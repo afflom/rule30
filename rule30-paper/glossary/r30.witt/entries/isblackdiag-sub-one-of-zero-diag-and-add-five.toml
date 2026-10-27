@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "isblackdiag-sub-one-of-zero-diag-and-add-five"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat))) (pi ((explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hz5 (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (local z) (nat 5))))) (app (const r30.joint::black-diagonal) (app (const lexlean.std.nat::sub) (local z) (nat 1)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.isBlackDiag_sub_one_of_zero_diag_and_add_five_prop"
+
+[[form]]
+id = "isblackdiag-sub-one-of-zero-diag-and-add-five"
+channel = "math"
+surface = "isblackdiagsuboneofzerodiagandaddfive"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name isblackdiagsuboneofzerodiagandaddfive) (paren (seq (slot 0))))"

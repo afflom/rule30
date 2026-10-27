@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-iszerodiag-add-five-of-gt-two"
+category = "proof-constant"
+signature = "(pi ((explicit z (const lexlean.std.nat::nat))) (pi ((explicit hgt (app (const lexlean.std.nat::lt) (nat 2) (local z))) (explicit hz (app (const r30.joint::zero-diagonal) (local z)))) (app (const lexlean.core::lnot) (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::add) (local z) (nat 5))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_isZeroDiag_add_five_of_gt_two_prop"
+
+[[form]]
+id = "not-iszerodiag-add-five-of-gt-two"
+channel = "math"
+surface = "notiszerodiagaddfiveofgttwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notiszerodiagaddfiveofgttwo) (paren (seq (slot 0))))"

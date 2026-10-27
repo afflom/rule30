@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-centerperiodic-of-white-center-rhcenter-one-doubles"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hd (app (const r30.joint::doubles-at) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hset1 (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))) (nat 1)) (local t))) (explicit hsetQ (app (const r30.witt::settled-by) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (app (const lexlean.std.nat::mul) (local m) (local P)))) (local t))) (explicit hS (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local p) (app (const lexlean.std.nat::mul) (nat 3) (app (const lexlean.std.nat::mul) (local m) (local P)))) (app (const lexlean.std.nat::add) (local S) (nat 1)))) (explicit hw (pi ((explicit s (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::le) (local s) (local S))) (explicit hc (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (local s))) (const lexlean.std.bool::false)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local s)) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 1)) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local s)) (nat 1))))))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhCenter_one_doubles_prop"
+
+[[form]]
+id = "not-centerperiodic-of-white-center-rhcenter-one-doubles"
+channel = "math"
+surface = "notcenterperiodicofwhitecenterrhcenteronedoubles"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notcenterperiodicofwhitecenterrhcenteronedoubles) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

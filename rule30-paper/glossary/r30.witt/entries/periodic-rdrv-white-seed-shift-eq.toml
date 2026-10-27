@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-rdrv-white-seed-shift-eq"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hper (app (const r30.scale::center-periodic) (local T) (local P)))) (pi ((explicit m (const lexlean.std.nat::nat)) (explicit td (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit htd (app (const lexlean.std.nat::le) (local T) (local td)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (app (const lexlean.std.nat::add) (local td) (app (const lexlean.std.nat::mul) (local m) (local P))) (nat 0) (local k) (local p)) (app (const r30.witt::r-drv) (local td) (nat 0) (local k) (local p)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.periodic_rdrv_white_seed_shift_eq"
+
+[[form]]
+id = "periodic-rdrv-white-seed-shift-eq"
+channel = "math"
+surface = "periodicrdrvwhiteseedshifteq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicrdrvwhiteseedshifteq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"
