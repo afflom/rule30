@@ -87,6 +87,10 @@ The current submission-facing shape of the open obligation is explicit in this m
 bridge hypotheses (`ZeroDiagDoublesLeftHeavyRecurrence` or the finer-grained
 `ZeroDiagDoublesLeftHeavyAssembly`) from single-seed dynamics, using the existing
 zero-diagonal/doubling machinery only as contextual witnesses rather than as a full defect proof.
+The route is now further reduced to primitive periods (`m = 1`) by
+`submission_problem1_of_primitive_doubles_leftHeavy`: it is enough to produce left-heavy
+defect witnesses at the canonical `DoublesAt P z` points supplied by the existing doubling
+theory, without adding a separate multiple-selection argument.
 
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
