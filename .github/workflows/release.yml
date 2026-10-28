@@ -29,8 +29,17 @@ jobs:
 
       - name: Install Elan and Lean 4.32.1 toolchain
         run: |
-          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:v4.32.1
+          for i in 1 2 3 4 5; do
+            curl --retry 5 --retry-all-errors https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none && break
+            sleep 3
+          done
+          export PATH="$HOME/.elan/bin:$PATH"
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          for i in 1 2 3 4 5; do
+            elan toolchain install leanprover/lean4:v4.32.1 && elan default leanprover/lean4:v4.32.1 && break
+            echo "Retrying Lean 4.32.1 toolchain download (attempt $i)..."
+            sleep 5
+          done
 
       - name: Build rule30-core-lean (24 modules)
         run: |
