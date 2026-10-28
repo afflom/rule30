@@ -52,6 +52,25 @@ This implementation provides an exact system for the non-cancellation question; 
 prove that the required center witnesses exist. The new modules remain host Lean results,
 separate from the release's attested LexLean paper.
 
+`Rule30UOR.Collision` proves finite-horizon carry collisions: incompatible paired colors at
+distance `d` force a nonzero adjacent determinant `collision Q t x` between rows `t` and `t+Q`
+within an explicit `d`-step rectangle. The two distinct left edges force one every `Q+1`
+slices (`left_edge_collision`), but near the moving left edge, not necessarily near the center.
+
+`Rule30UOR.DefectSource` connects the two modules exactly. `defect_source_law` proves
+`defect Q (t+1) p = rule (defect Q t (p-1)) (defect Q t p) (defect Q t (p+1)) XOR collision Q t p`:
+the temporal defect is an ordinary Rule 30 history except at collision sites, which act as
+sources. Under center agreement at `t` the center collision is `center t && defect Q t 1`
+(`collision_center_of_agree`), and at `t, t+1` there is no collision at column `-1`
+(`collision_neg_one_of_agree`).
+
+Audit result (negative): under center agreement, defect column `-2` is the first difference
+of column `-1` (`defect_neg_two_of_agree`), but `left_triple_eq_center_pair` proves
+unconditionally that the underlying single-column quantity equals `center t && center (t+1)`.
+The center-adjacent layer therefore carries no information beyond the center column. A
+contradiction from a periodic center cannot come from columns `-2..1`; it must use deeper
+columns, the global edge data, or the collision sources away from the center.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

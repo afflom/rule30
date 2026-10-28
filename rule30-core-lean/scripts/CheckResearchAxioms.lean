@@ -1,6 +1,8 @@
 import Rule30UOR.Interfaces
 import Rule30UOR.TemporalDefect
 import Rule30UOR.WittDefect
+import Rule30UOR.Collision
+import Rule30UOR.DefectSource
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -23,7 +25,8 @@ elab "#check_research_axioms" : command => do
   let mut checked := 0
   for (name, info) in env.constants.toList do
     if audits.contains name || (`Rule30UOR.TemporalDefect).isPrefixOf name ||
-        (`Rule30UOR.WittDefect).isPrefixOf name then
+        (`Rule30UOR.WittDefect).isPrefixOf name ||
+        (`Rule30UOR.Collision).isPrefixOf name || (`Rule30UOR.DefectSource).isPrefixOf name then
       if let .thmInfo _ := info then
         let axioms ← collectAxioms name
         for axiomName in axioms do
