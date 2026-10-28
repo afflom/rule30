@@ -200,6 +200,18 @@ def PrimitiveDoublesLeftDefect : Prop :=
       0 < k ∧ defect P t (-(k : Int)) = true
 
 /--
+Component B' at primitive period: any witness from `PrimitiveDoublesLeftDefect` can be upgraded
+to a clean window on `(-k, k]`.
+-/
+def PrimitiveDoublesCleanWindowFromWitness : Prop :=
+  ∀ T P z t k : Nat,
+    0 < P → T ≤ t →
+    Rule30UOR.ZeroDiagonals.IsZeroDiag z →
+    Rule30UOR.CompilePoints.DoublesAt P z →
+    0 < k → defect P t (-(k : Int)) = true →
+    (∀ p : Int, -(k : Int) < p → p ≤ (k : Int) → defect P t p = false)
+
+/--
 Component B at primitive period: for the same witness data, provide the clean window `(-k, k]`.
 -/
 def PrimitiveDoublesCleanWindow : Prop :=
@@ -222,6 +234,28 @@ theorem primitive_doubles_leftHeavy_of_cleanWindow
   intro T P hP
   obtain ⟨z, t, k, ht, hz, hd, hk, hdef, hclean⟩ := h T P hP
   exact ⟨z, t, k, ht, hz, hd, ⟨hk, hdef, hclean⟩⟩
+
+/--
+Compositional assembly: witness production (component A) plus witness-to-window upgrade
+(component B') imply `PrimitiveDoublesCleanWindow`.
+-/
+theorem primitive_doubles_cleanWindow_of_components
+    (hA : PrimitiveDoublesLeftDefect)
+    (hB : PrimitiveDoublesCleanWindowFromWitness) :
+    PrimitiveDoublesCleanWindow := by
+  intro T P hP
+  obtain ⟨z, t, k, ht, hz, hd, hk, hdef⟩ := hA T P hP
+  exact ⟨z, t, k, ht, hz, hd, hk, hdef, hB T P z t k hP ht hz hd hk hdef⟩
+
+/--
+Submission-facing reduction through the compositional component split.
+-/
+theorem submission_problem1_of_primitive_doubles_components
+    (hA : PrimitiveDoublesLeftDefect)
+    (hB : PrimitiveDoublesCleanWindowFromWitness) :
+    Problem1 :=
+  submission_problem1_of_primitive_doubles_cleanWindow
+    (primitive_doubles_cleanWindow_of_components hA hB)
 
 /--
 Submission-facing reduction through the split components. This isolates the remaining work to
