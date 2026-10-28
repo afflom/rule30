@@ -91,6 +91,13 @@ The route is now further reduced to primitive periods (`m = 1`) by
 `submission_problem1_of_primitive_doubles_leftHeavy`: it is enough to produce left-heavy
 defect witnesses at the canonical `DoublesAt P z` points supplied by the existing doubling
 theory, without adding a separate multiple-selection argument.
+This primitive route is now explicitly compositional in `DefectFront`:
+`submission_problem1_of_primitive_doubles_components` reduces Problem 1 to two obligations,
+`PrimitiveDoublesLeftDefect` (produce a primitive-period left defect witness at a doubling point)
+and `PrimitiveDoublesCleanWindowFromWitness` (upgrade any such witness to a clean window on
+`(-k, k]`). Their composition theorem `primitive_doubles_cleanWindow_of_components` isolates the
+next technical target to proving the witness-to-window upgrade from existing transport/shielding
+machinery.
 
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
