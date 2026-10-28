@@ -24,7 +24,8 @@ jobs:
             texlive-latex-base \
             texlive-latex-recommended \
             texlive-fonts-recommended \
-            texlive-latex-extra
+            texlive-latex-extra \
+            cm-super
 
       - name: Install Elan and Lean 4.32.1 toolchain
         run: |
@@ -34,13 +35,15 @@ jobs:
       - name: Build rule30-core-lean (24 modules)
         run: |
           cd rule30-core-lean
+          mkdir -p .lake/build/lib/lean/LexLeanRuntime
+          lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean
           lake build
 
-      - name: Build Rule30PrizeKit/lean and rule30-bridge (54 modules)
+      - name: Build rule30-bridge (54 modules)
         run: |
-          cd Rule30PrizeKit/lean
-          lake build
-          cd ../../rule30-bridge
+          cd rule30-bridge
+          mkdir -p .lake/build/lib/lean/LexLeanRuntime
+          lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean
           lake build
 
       - name: Build PDFs and package LexLean verified artifacts
@@ -75,3 +78,4 @@ jobs:
             dist/lexlean-core-verified-*.tar.gz
             dist/SHA256SUMS
           generate_release_notes: true
+
