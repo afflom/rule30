@@ -229,10 +229,13 @@ proving `PrimitiveDoublesCleanWindow`.
 -/
 theorem submission_problem1_of_primitive_doubles_cleanWindow
     (h : PrimitiveDoublesCleanWindow) :
-    Problem1 :=
-  submission_problem1_of_zeroDiag_doubles_leftHeavy
-    (zeroDiag_doubles_leftHeavyRecurrence_of_primitive
-      (primitive_doubles_leftHeavy_of_cleanWindow h))
+    Problem1 := by
+  have hprim : PrimitiveDoublesLeftHeavyRecurrence :=
+    primitive_doubles_leftHeavy_of_cleanWindow h
+  apply submission_problem1_of_zeroDiag_doubles_leftHeavy
+  intro T P hP
+  obtain ⟨z, t, k, ht, hz, hd, hl⟩ := hprim T P hP
+  exact ⟨1, z, t, k, ht, hz, by simpa using hd, by simpa using hl⟩
 
 /-- Primitive-period recurrence implies the zero-diagonal/doubling recurrence schema (`m = 1`). -/
 theorem zeroDiag_doubles_leftHeavyRecurrence_of_primitive
