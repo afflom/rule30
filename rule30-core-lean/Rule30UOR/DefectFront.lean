@@ -122,6 +122,32 @@ def ZeroDiagDoublesLeftHeavyRecurrence : Prop :=
       LeftHeavy (m * P) t k
 
 /--
+Finer-grained bridge obligation for the same route. It keeps the zero-diagonal/doubling witness,
+and spells the left-heavy profile in component form: distance positivity, a left defect at `-k`,
+and a clean window `(-k, k]`.
+-/
+def ZeroDiagDoublesLeftHeavyAssembly : Prop :=
+  ∀ T P : Nat, 0 < P →
+    ∃ m z t k : Nat,
+      T ≤ t ∧
+      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
+      Rule30UOR.CompilePoints.DoublesAt (m * P) z ∧
+      0 < k ∧
+      defect (m * P) t (-(k : Int)) = true ∧
+      (∀ p : Int, -(k : Int) < p → p ≤ (k : Int) → defect (m * P) t p = false)
+
+/--
+The assembly form implies `ZeroDiagDoublesLeftHeavyRecurrence` by repackaging the component
+conditions as `LeftHeavy`.
+-/
+theorem zeroDiag_doubles_leftHeavyRecurrence_of_assembly
+    (h : ZeroDiagDoublesLeftHeavyAssembly) :
+    ZeroDiagDoublesLeftHeavyRecurrence := by
+  intro T P hP
+  obtain ⟨m, z, t, k, ht, hz, hd, hk, hdef, hclean⟩ := h T P hP
+  exact ⟨m, z, t, k, ht, hz, hd, ⟨hk, hdef, hclean⟩⟩
+
+/--
 Concrete bridge theorem: the zero-diagonal/doubling witness schema implies the left-heavy
 recurrence hypothesis used by `problem1_of_leftHeavy_recurrence`.
 -/
@@ -140,6 +166,15 @@ theorem submission_problem1_of_zeroDiag_doubles_leftHeavy
     (h : ZeroDiagDoublesLeftHeavyRecurrence) :
     Problem1 :=
   problem1_of_leftHeavy_recurrence (leftHeavy_recurrence_of_zeroDiag_doubles h)
+
+/--
+Submission-facing reduction in the finer-grained assembly form.
+-/
+theorem submission_problem1_of_zeroDiag_doubles_assembly
+    (h : ZeroDiagDoublesLeftHeavyAssembly) :
+    Problem1 :=
+  submission_problem1_of_zeroDiag_doubles_leftHeavy
+    (zeroDiag_doubles_leftHeavyRecurrence_of_assembly h)
 
 /-- Under a periodic center, every left defect is shielded inside `(-k, k]`. -/
 theorem shield_of_periodic {T P : Nat} (hc : ∀ t, T ≤ t → center (t + P) = center t)
