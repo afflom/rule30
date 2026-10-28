@@ -71,6 +71,16 @@ The center-adjacent layer therefore carries no information beyond the center col
 contradiction from a periodic center cannot come from columns `-2..1`; it must use deeper
 columns, the global edge data, or the collision sources away from the center.
 
+`Rule30UOR.DefectFront` now formalizes exact front transport in this sourced defect field.
+`defect_front_propagates` gives unconditional rightward transport through clean windows,
+`defect_center_of_leftHeavy` turns a left-heavy profile into a forced center disagreement, and
+`problem1_of_leftHeavy_recurrence` proves Problem 1 from a recurring left-heavy witness at
+period multiples. Under a hypothetical periodic center, `right_shield_of_periodic` and
+`exists_unit_defect_and_white_center_of_left_defect` force right-half shielding and unit-pair
+events near the center from any left-half defect. These are structural constraints and a
+sufficient route to Problem 1; they do not yet provide an unconditional recurrence theorem for
+left-heavy witnesses in the single-seed orbit.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,
