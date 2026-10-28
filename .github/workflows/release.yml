@@ -35,14 +35,14 @@ jobs:
       - name: Build rule30-core-lean (24 modules)
         run: |
           cd rule30-core-lean
-          mkdir -p .lake/build/lib/lean/LexLeanRuntime
+          lake build LexLeanRuntime
           lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean
           lake build
 
       - name: Build rule30-bridge (54 modules)
         run: |
           cd rule30-bridge
-          mkdir -p .lake/build/lib/lean/LexLeanRuntime
+          lake build LexLeanRuntime
           lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean
           lake build
 

@@ -25,7 +25,7 @@ compile_tex() {
 
 if [[ "$PACKAGE_ONLY" == "0" ]] && [[ -x "$LEXLEAN_BIN" ]]; then
   echo "==> [1/4] Building rule30-core-lean..."
-  (cd "${ROOT_DIR}/rule30-core-lean" && mkdir -p .lake/build/lib/lean/LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build)
+  (cd "${ROOT_DIR}/rule30-core-lean" && lake build LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build)
 
   echo "==> [2/4] Verifying rule30-lexlean (Core.lex.tex)..."
   (cd "${ROOT_DIR}/rule30-lexlean" && "$LEXLEAN_BIN" lock && "$LEXLEAN_BIN" verify)
@@ -34,7 +34,7 @@ if [[ "$PACKAGE_ONLY" == "0" ]] && [[ -x "$LEXLEAN_BIN" ]]; then
   (cd "${ROOT_DIR}/rule30-paper" && "$LEXLEAN_BIN" lock && "$LEXLEAN_BIN" verify)
 
   echo "==> [4/4] Building rule30-bridge..."
-  (cd "${ROOT_DIR}/rule30-bridge" && mkdir -p .lake/build/lib/lean/LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build)
+  (cd "${ROOT_DIR}/rule30-bridge" && lake build LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build)
 fi
 
 CORE_ATTEST_DIR="$(find "${ROOT_DIR}/rule30-lexlean/verified-latest" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"
