@@ -142,6 +142,6 @@ version = "1.0.0"
 kind = "path"
 source = "glossary/r30.witt"
 revision = "none"
-tree_sha256 = "3decd48068cf5ee12ce8baf4141430069a9eec52c23d30999dafcce14002c158"
+tree_sha256 = "6bb793290d717346353c0021df0f3d39bb02653cb9b27c936540d57826ffb7a5"
 manifest_sha256 = "0a356e89bf9e7e8cb0c3edb2981ca2ba9a27aa06a685dab4cd4497f2dfb84446"
 imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.nat@1.2.0", "r30.joint@1.0.0", "r30.local@1.0.0", "r30.right@1.0.0", "r30.scale@1.0.0", "r30.time@1.0.0"]

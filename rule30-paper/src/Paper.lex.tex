@@ -13391,5 +13391,125 @@
   \end{proof}
   \end{theorem}
 
+  \begin{theorem}{settledupto-mono}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(D\) and natural number \(Dp\) and natural number \(t\), if \(D ≤ Dp\), then if \(settledupto(Dp, t)\), then \(settledupto(D, t)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::settledupto-mono}(D, Dp, t)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{exists-settledupto}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(D\), there exists a natural number \(t\) such that \(settledupto(D, t)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::exists-settledupto}(D)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-lhbandagree-of-doubles-single}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(t\) and natural number \(p\) and natural number \(p0\) and natural number \(L\), if \(1 ≤ Q\), then if \(zerodiagonal(t - (p + 1))\), then if \(doublesat(Q, t - (p + 1))\), then if \(settledby((t - (p + 1)) + 1, t)\), then if \(settledby(t - (p + Q), t)\), then if \(p0 ≤ p + Q\), then if \((p + Q) + 2 * Q ≤ p0 + L\), then \(¬ lhbandagree(t, Q, p0, L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-lhbandagree-of-doubles-single}(Q, t, p, p0, L)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-lhbandagree-of-doubles-settledupto}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(t\) and natural number \(p\) and natural number \(p0\) and natural number \(L\), if \(1 ≤ Q\), then if \(zerodiagonal(t - (p + 1))\), then if \(doublesat(Q, t - (p + 1))\), then if \(settledupto((t - (p + 1)) + 1, t)\), then if \(p0 ≤ p + Q\), then if \((p + Q) + 2 * Q ≤ p0 + L\), then \(¬ lhbandagree(t, Q, p0, L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-lhbandagree-of-doubles-settledupto}(Q, t, p, p0, L)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-lhbandagree-one-at-zero-diag-of-doubles-settledupto}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(1 ≤ Q\), then if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(p + 3 * Q ≤ S + 1\), then \(¬ lhbandagree(z + (p + 1), Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-lhbandagree-one-at-zero-diag-of-doubles-settledupto}(Q, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{exists-lh-row-spatial-disagree-of-doubles-settledupto}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(p\), if \(1 ≤ Q\), then if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then there exists a natural number \(i\) such that \(i ≤ 2 * Q ∧ lhcenter((z + (p + 1)) + Q, (p + Q) + i) = not(lhcenter((z + (p + 1)) + Q, ((p + Q) + i) + Q))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::exists-lh-row-spatial-disagree-of-doubles-settledupto}(Q, z, p)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{exists-lh-row-spatial-disagree-ge}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(N\), if \(1 ≤ Q\), then there exists a natural number \(r\) such that there exists a natural number \(c\) such that there exists a natural number \(i\) such that \(N ≤ r ∧ i ≤ 2 * Q ∧ lhcenter(r, c + i) = not(lhcenter(r, (c + i) + Q))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::exists-lh-row-spatial-disagree-ge}(Q, N)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-shift-agree-iff-spatial-antiagree-of-diag-flip}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(t\) and natural number \(x\), if \(lhcenter(t + Q, x + Q) = not(lhcenter(t, x))\), then \(lhcenter(t + Q, x) = lhcenter(t, x) ↔ lhcenter(t + Q, x) = not(lhcenter(t + Q, x + Q))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-shift-agree-iff-spatial-antiagree-of-diag-flip}(Q, t, x)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-shift-agree-iff-spatial-agree-of-diag-eq}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(t\) and natural number \(x\), if \(lhcenter(t + Q, x + Q) = lhcenter(t, x)\), then \(lhcenter(t + Q, x) = lhcenter(t, x) ↔ lhcenter(t + Q, x) = lhcenter(t + Q, x + Q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-shift-agree-iff-spatial-agree-of-diag-eq}(Q, t, x)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-shift-agree-iff-spatial-antiagree-on-doubling-diag}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(c\), if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(settledupto(z + 1, (z + 1) + c)\), then \(lhcenter(((z + 1) + c) + Q, c) = lhcenter((z + 1) + c, c) ↔ lhcenter(((z + 1) + c) + Q, c) = not(lhcenter(((z + 1) + c) + Q, c + Q))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-shift-agree-iff-spatial-antiagree-on-doubling-diag}(Q, z, c)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-shift-agree-iff-spatial-agree-on-black-diag}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(c\), if \(zerodiagonal(z)\), then if \(settledupto(z + 2, (z + 2) + c)\), then \(lhcenter(((z + 2) + c) + Q, c) = lhcenter((z + 2) + c, c) ↔ lhcenter(((z + 2) + c) + Q, c) = lhcenter(((z + 2) + c) + Q, c + Q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-shift-agree-iff-spatial-agree-on-black-diag}(Q, z, c)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-shift-agree-iff-spatial-antiagree-on-reset-diag}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(c\), if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(settledupto(z + 3, (z + 3) + c)\), then \(lhcenter(((z + 3) + c) + Q, c) = lhcenter((z + 3) + c, c) ↔ lhcenter(((z + 3) + c) + Q, c) = not(lhcenter(((z + 3) + c) + Q, c + Q))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-shift-agree-iff-spatial-antiagree-on-reset-diag}(Q, z, c)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-shift-agree-iff-spatial-agree-below-doubling}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(c\), if \(doublesat(Q, z)\), then if \(t - c ≤ z\), then if \(settledupto(z, t)\), then \(lhcenter(t + Q, c) = lhcenter(t, c) ↔ lhcenter(t + Q, c) = lhcenter(t + Q, c + Q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-shift-agree-iff-spatial-agree-below-doubling}(Q, z, t, c)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-diag-shift-two-mul-periodic-le-add-three-of-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(c\), if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(c ≤ t\), then if \(t - c ≤ z + 3\), then if \(settledupto(z + 3, t)\), then \(lhcenter(t + (Q + Q), c + (Q + Q)) = lhcenter(t, c)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-diag-shift-two-mul-periodic-le-add-three-of-doubles}(Q, z, t, c)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-two-mul-of-doubles-and-single-lh-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p0\) and natural number \(L\), if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(t - p0 ≤ z + 3\), then if \(p0 + L ≤ t\), then if \(settledupto(z + 3, t)\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter(t + (Q + Q), p0 + i) = lhcenter(t + (Q + Q), (p0 + i) + (Q + Q))\), then \(lhbandagree(t, Q + Q, p0, L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-two-mul-of-doubles-and-single-lh-row-spatial-agree}(Q, z, t, p0, L)\).
+  \end{proof}
+  \end{theorem}
+
 \end{section}
 \end{lexlean}

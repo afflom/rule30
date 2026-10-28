@@ -11736,4 +11736,109 @@ For every natural number \(T\) and natural number \(P\) and natural number \(m\)
 \begin{proof}
 The goal follows from \(\operatorname{notcenterperiodicoflatescaledoublessettleboundprefixandsinglelhrowtail}(T, P, m, z, L, k)\).
 \end{proof}
+\begin{theorem}
+\label{ll:paper:settledupto-mono}
+For every natural number \(D\) and natural number \(Dp\) and natural number \(t\), if \(D \le Dp\), then if \(\operatorname{settledupto}(Dp, t)\), then \(\operatorname{settledupto}(D, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{settleduptomono}(D, Dp, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:exists-settledupto}
+For every natural number \(D\), there exists a natural number \(t\) such that \(\operatorname{settledupto}(D, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{existssettledupto}(D)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:not-lhbandagree-of-doubles-single}
+For every natural number \(Q\) and natural number \(t\) and natural number \(p\) and natural number \(p0\) and natural number \(L\), if \(1 \le Q\), then if \(\operatorname{zerodiagonal}(t - (p + 1))\), then if \(\operatorname{doublesat}(Q, t - (p + 1))\), then if \(\operatorname{settledby}(t - (p + 1) + 1, t)\), then if \(\operatorname{settledby}(t - (p + Q), t)\), then if \(p0 \le p + Q\), then if \(p + Q + 2 \cdot Q \le p0 + L\), then not \(\operatorname{lhbandagree}(t, Q, p0, L)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{notlhbandagreeofdoublessingle}(Q, t, p, p0, L)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:not-lhbandagree-of-doubles-settledupto}
+For every natural number \(Q\) and natural number \(t\) and natural number \(p\) and natural number \(p0\) and natural number \(L\), if \(1 \le Q\), then if \(\operatorname{zerodiagonal}(t - (p + 1))\), then if \(\operatorname{doublesat}(Q, t - (p + 1))\), then if \(\operatorname{settledupto}(t - (p + 1) + 1, t)\), then if \(p0 \le p + Q\), then if \(p + Q + 2 \cdot Q \le p0 + L\), then not \(\operatorname{lhbandagree}(t, Q, p0, L)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{notlhbandagreeofdoublessettledupto}(Q, t, p, p0, L)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:not-lhbandagree-one-at-zero-diag-of-doubles-settledupto}
+For every natural number \(Q\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(1 \le Q\), then if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{doublesat}(Q, z)\), then if \(\operatorname{settledupto}(z + 1, z + (p + 1))\), then if \(p + 3 \cdot Q \le S + 1\), then not \(\operatorname{lhbandagree}(z + (p + 1), Q, 1, S)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{notlhbandagreeoneatzerodiagofdoublessettledupto}(Q, z, p, S)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:exists-lh-row-spatial-disagree-of-doubles-settledupto}
+For every natural number \(Q\) and natural number \(z\) and natural number \(p\), if \(1 \le Q\), then if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{doublesat}(Q, z)\), then if \(\operatorname{settledupto}(z + 1, z + (p + 1))\), then there exists a natural number \(i\) such that \(i \le 2 \cdot Q\) and \(\operatorname{lhcenter}(z + (p + 1) + Q, p + Q + i) = \operatorname{not}(\operatorname{lhcenter}(z + (p + 1) + Q, p + Q + i + Q))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{existslhrowspatialdisagreeofdoublessettledupto}(Q, z, p)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:exists-lh-row-spatial-disagree-ge}
+For every natural number \(Q\) and natural number \(N\), if \(1 \le Q\), then there exists a natural number \(r\) such that there exists a natural number \(c\) such that there exists a natural number \(i\) such that \(N \le r\) and \(i \le 2 \cdot Q \land \operatorname{lhcenter}(r, c + i) = \operatorname{not}(\operatorname{lhcenter}(r, c + i + Q))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{existslhrowspatialdisagreege}(Q, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:lhcenter-shift-agree-iff-spatial-antiagree-of-diag-flip}
+For every natural number \(Q\) and natural number \(t\) and natural number \(x\), if \(\operatorname{lhcenter}(t + Q, x + Q) = \operatorname{not}(\operatorname{lhcenter}(t, x))\), then \(\operatorname{lhcenter}(t + Q, x) = \operatorname{lhcenter}(t, x)\) if and only if \(\operatorname{lhcenter}(t + Q, x) = \operatorname{not}(\operatorname{lhcenter}(t + Q, x + Q))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lhcentershiftagreeiffspatialantiagreeofdiagflip}(Q, t, x)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:lhcenter-shift-agree-iff-spatial-agree-of-diag-eq}
+For every natural number \(Q\) and natural number \(t\) and natural number \(x\), if \(\operatorname{lhcenter}(t + Q, x + Q) = \operatorname{lhcenter}(t, x)\), then \(\operatorname{lhcenter}(t + Q, x) = \operatorname{lhcenter}(t, x)\) if and only if \(\operatorname{lhcenter}(t + Q, x) = \operatorname{lhcenter}(t + Q, x + Q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lhcentershiftagreeiffspatialagreeofdiageq}(Q, t, x)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:lhcenter-shift-agree-iff-spatial-antiagree-on-doubling-diag}
+For every natural number \(Q\) and natural number \(z\) and natural number \(c\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{doublesat}(Q, z)\), then if \(\operatorname{settledupto}(z + 1, z + 1 + c)\), then \(\operatorname{lhcenter}(z + 1 + c + Q, c) = \operatorname{lhcenter}(z + 1 + c, c)\) if and only if \(\operatorname{lhcenter}(z + 1 + c + Q, c) = \operatorname{not}(\operatorname{lhcenter}(z + 1 + c + Q, c + Q))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lhcentershiftagreeiffspatialantiagreeondoublingdiag}(Q, z, c)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:lhcenter-shift-agree-iff-spatial-agree-on-black-diag}
+For every natural number \(Q\) and natural number \(z\) and natural number \(c\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{settledupto}(z + 2, z + 2 + c)\), then \(\operatorname{lhcenter}(z + 2 + c + Q, c) = \operatorname{lhcenter}(z + 2 + c, c)\) if and only if \(\operatorname{lhcenter}(z + 2 + c + Q, c) = \operatorname{lhcenter}(z + 2 + c + Q, c + Q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lhcentershiftagreeiffspatialagreeonblackdiag}(Q, z, c)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:lhcenter-shift-agree-iff-spatial-antiagree-on-reset-diag}
+For every natural number \(Q\) and natural number \(z\) and natural number \(c\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{doublesat}(Q, z)\), then if \(\operatorname{settledupto}(z + 3, z + 3 + c)\), then \(\operatorname{lhcenter}(z + 3 + c + Q, c) = \operatorname{lhcenter}(z + 3 + c, c)\) if and only if \(\operatorname{lhcenter}(z + 3 + c + Q, c) = \operatorname{not}(\operatorname{lhcenter}(z + 3 + c + Q, c + Q))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lhcentershiftagreeiffspatialantiagreeonresetdiag}(Q, z, c)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:lhcenter-shift-agree-iff-spatial-agree-below-doubling}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(c\), if \(\operatorname{doublesat}(Q, z)\), then if \(t - c \le z\), then if \(\operatorname{settledupto}(z, t)\), then \(\operatorname{lhcenter}(t + Q, c) = \operatorname{lhcenter}(t, c)\) if and only if \(\operatorname{lhcenter}(t + Q, c) = \operatorname{lhcenter}(t + Q, c + Q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lhcentershiftagreeiffspatialagreebelowdoubling}(Q, z, t, c)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:lhcenter-diag-shift-two-mul-periodic-le-add-three-of-doubles}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(c\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{doublesat}(Q, z)\), then if \(c \le t\), then if \(t - c \le z + 3\), then if \(\operatorname{settledupto}(z + 3, t)\), then \(\operatorname{lhcenter}(t + (Q + Q), c + (Q + Q)) = \operatorname{lhcenter}(t, c)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lhcenterdiagshifttwomulperiodicleaddthreeofdoubles}(Q, z, t, c)\).
+\end{proof}
+\begin{theorem}
+\label{ll:paper:lhbandagree-two-mul-of-doubles-and-single-lh-row-spatial-agree}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p0\) and natural number \(L\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{doublesat}(Q, z)\), then if \(t - p0 \le z + 3\), then if \(p0 + L \le t\), then if \(\operatorname{settledupto}(z + 3, t)\), then if for every natural number \(i\), if \(i \le L\), then \(\operatorname{lhcenter}(t + (Q + Q), p0 + i) = \operatorname{lhcenter}(t + (Q + Q), p0 + i + (Q + Q))\), then \(\operatorname{lhbandagree}(t, Q + Q, p0, L)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lhbandagreetwomulofdoublesandsinglelhrowspatialagree}(Q, z, t, p0, L)\).
+\end{proof}
 \end{document}

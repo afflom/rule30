@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-shift-agree-iff-spatial-agree-of-diag-eq"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit x (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::add) (local x) (local Q))) (app (const r30.witt::lh-center) (local t) (local x))))) (app (const lexlean.core::iff) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (local x)) (app (const r30.witt::lh-center) (local t) (local x))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (local x)) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::add) (local x) (local Q)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_shift_agree_iff_spatial_agree_of_diag_eq"
+
+[[form]]
+id = "lhcenter-shift-agree-iff-spatial-agree-of-diag-eq"
+channel = "math"
+surface = "lhcentershiftagreeiffspatialagreeofdiageq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcentershiftagreeiffspatialagreeofdiageq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

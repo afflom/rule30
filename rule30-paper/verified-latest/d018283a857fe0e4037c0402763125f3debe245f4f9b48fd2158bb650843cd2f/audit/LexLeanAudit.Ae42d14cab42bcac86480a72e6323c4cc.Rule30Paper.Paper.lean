@@ -53,6 +53,8 @@ import Rule30Paper.Paper
 #print axioms Rule30Paper.Paper.doublesat_twopow_le
 #print axioms Rule30Paper.Paper.doubling_points
 #print axioms Rule30Paper.Paper.edge_black
+#print axioms Rule30Paper.Paper.exists_lh_row_spatial_disagree_ge
+#print axioms Rule30Paper.Paper.exists_lh_row_spatial_disagree_of_doubles_settledupto
 #print axioms Rule30Paper.Paper.exists_lhcenter_one_flip_at_twopow_of_periodic
 #print axioms Rule30Paper.Paper.exists_lhcenter_one_flip_at_zero_diag_step_two_of_periodic
 #print axioms Rule30Paper.Paper.exists_lhcenter_one_flip_of_two_zero_diags_and_periodic
@@ -66,6 +68,7 @@ import Rule30Paper.Paper
 #print axioms Rule30Paper.Paper.exists_maskparity_zero_flip_sub_twopow_of_periodic
 #print axioms Rule30Paper.Paper.exists_maskparity_zero_flip_sub_twopow_p_of_periodic
 #print axioms Rule30Paper.Paper.exists_settled_scale_pair
+#print axioms Rule30Paper.Paper.exists_settledupto
 #print axioms Rule30Paper.Paper.exists_white_center_rhcenter_one_flip_at_twopow_of_periodic
 #print axioms Rule30Paper.Paper.exists_white_center_rhcenter_one_flip_at_zero_diag_step_two_of_periodic
 #print axioms Rule30Paper.Paper.exists_white_center_rhcenter_one_flip_of_two_zero_diags_and_periodic
@@ -204,6 +207,7 @@ import Rule30Paper.Paper
 #print axioms Rule30Paper.Paper.lhbandagree_step
 #print axioms Rule30Paper.Paper.lhbandagree_step_of_settled_left_strip
 #print axioms Rule30Paper.Paper.lhbandagree_steps
+#print axioms Rule30Paper.Paper.lhbandagree_two_mul_of_doubles_and_single_lh_row_spatial_agree
 #print axioms Rule30Paper.Paper.lhbandagree_zero_of_lhbandagree_one_and_rhbandagree_zero
 #print axioms Rule30Paper.Paper.lhcenter_after_zero_diag
 #print axioms Rule30Paper.Paper.lhcenter_at_t_after_zero_diag
@@ -217,6 +221,7 @@ import Rule30Paper.Paper
 #print axioms Rule30Paper.Paper.lhcenter_diag_shift_mul_twopow_periodic_le_settlebound
 #print axioms Rule30Paper.Paper.lhcenter_diag_shift_periodic_of_doubles_le
 #print axioms Rule30Paper.Paper.lhcenter_diag_shift_periodic_of_doubles_le_settlebound
+#print axioms Rule30Paper.Paper.lhcenter_diag_shift_two_mul_periodic_le_add_three_of_doubles
 #print axioms Rule30Paper.Paper.lhcenter_doubles_eq_step_one_reset
 #print axioms Rule30Paper.Paper.lhcenter_eq_false_at_shift_of_zero_diag_and_lhbandagree
 #print axioms Rule30Paper.Paper.lhcenter_eq_ldiag
@@ -369,6 +374,12 @@ import Rule30Paper.Paper
 #print axioms Rule30Paper.Paper.lhcenter_scale_step_settled_left_ge
 #print axioms Rule30Paper.Paper.lhcenter_scale_step_uncond
 #print axioms Rule30Paper.Paper.lhcenter_self_eq_true
+#print axioms Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_agree_below_doubling
+#print axioms Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_agree_of_diag_eq
+#print axioms Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_agree_on_black_diag
+#print axioms Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_antiagree_of_diag_flip
+#print axioms Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_antiagree_on_doubling_diag
+#print axioms Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_antiagree_on_reset_diag
 #print axioms Rule30Paper.Paper.lhcenter_shift_agree_of_rhcenter_dyadic_sub_agree
 #print axioms Rule30Paper.Paper.lhcenter_shift_two_q_flip_of_doubles_and_lhbandagree
 #print axioms Rule30Paper.Paper.lhcenter_spatial_antiperiodic_at_t_of_doubles_and_lhbandagree
@@ -577,9 +588,12 @@ import Rule30Paper.Paper
 #print axioms Rule30Paper.Paper.not_iszerodiag_add_two
 #print axioms Rule30Paper.Paper.not_lhbandagree_and_winwittagree_of_lt_twopow
 #print axioms Rule30Paper.Paper.not_lhbandagree_late_and_winwittagree_sector_one
+#print axioms Rule30Paper.Paper.not_lhbandagree_of_doubles_settledupto
+#print axioms Rule30Paper.Paper.not_lhbandagree_of_doubles_single
 #print axioms Rule30Paper.Paper.not_lhbandagree_of_lt_add
 #print axioms Rule30Paper.Paper.not_lhbandagree_of_zero_and_after_zero_diag
 #print axioms Rule30Paper.Paper.not_lhbandagree_of_zero_diag_two_and_shift_zero_diag
+#print axioms Rule30Paper.Paper.not_lhbandagree_one_at_zero_diag_of_doubles_settledupto
 #print axioms Rule30Paper.Paper.not_lhbandagree_one_of_doubles
 #print axioms Rule30Paper.Paper.not_lhbandagree_step_q_of_doubles
 #print axioms Rule30Paper.Paper.not_lhbandagree_three_of_doubles
@@ -1321,6 +1335,7 @@ import Rule30Paper.Paper
 #print axioms Rule30Paper.Paper.sectorwinwittagree_of_sectorwiderightrowagree
 #print axioms Rule30Paper.Paper.sectorwinwittagree_of_sectorwiderowagree
 #print axioms Rule30Paper.Paper.settledby_of_le_and_settlebound_le
+#print axioms Rule30Paper.Paper.settledupto_mono
 #print axioms Rule30Paper.Paper.split_fifteen
 #print axioms Rule30Paper.Paper.split_ninety
 #print axioms Rule30Paper.Paper.split_onefifty

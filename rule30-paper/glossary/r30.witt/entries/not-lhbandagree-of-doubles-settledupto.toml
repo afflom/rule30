@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-lhbandagree-of-doubles-settledupto"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit p0 (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::le) (nat 1) (local Q))) (explicit hz (app (const r30.joint::zero-diagonal) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hd (app (const r30.joint::doubles-at) (local Q) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))))) (explicit hbt (app (const r30.witt::settled-up-to) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))) (nat 1)) (local t))) (explicit hp0 (app (const lexlean.std.nat::le) (local p0) (app (const lexlean.std.nat::add) (local p) (local Q)))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local p) (local Q)) (app (const lexlean.std.nat::mul) (nat 2) (local Q))) (app (const lexlean.std.nat::add) (local p0) (local L))))) (app (const lexlean.core::lnot) (app (const r30.witt::lh-band-agree) (local t) (local Q) (local p0) (local L)))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_lhBandAgree_of_doubles_settledUpTo"
+
+[[form]]
+id = "not-lhbandagree-of-doubles-settledupto"
+channel = "math"
+surface = "notlhbandagreeofdoublessettledupto"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notlhbandagreeofdoublessettledupto) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

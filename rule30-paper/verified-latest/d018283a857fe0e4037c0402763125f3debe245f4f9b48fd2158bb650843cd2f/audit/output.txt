@@ -60,6 +60,10 @@
 'Rule30Paper.Paper.doublesat_twopow_le' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.doubling_points' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.edge_black' does not depend on any axioms
+'Rule30Paper.Paper.exists_lh_row_spatial_disagree_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Rule30Paper.Paper.exists_lh_row_spatial_disagree_of_doubles_settledupto' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 'Rule30Paper.Paper.exists_lhcenter_one_flip_at_twopow_of_periodic' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
@@ -97,6 +101,7 @@
  Classical.choice,
  Quot.sound]
 'Rule30Paper.Paper.exists_settled_scale_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Rule30Paper.Paper.exists_settledupto' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.exists_white_center_rhcenter_one_flip_at_twopow_of_periodic' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
@@ -321,6 +326,9 @@
 'Rule30Paper.Paper.lhbandagree_step' depends on axioms: [propext, Quot.sound]
 'Rule30Paper.Paper.lhbandagree_step_of_settled_left_strip' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.lhbandagree_steps' depends on axioms: [propext, Quot.sound]
+'Rule30Paper.Paper.lhbandagree_two_mul_of_doubles_and_single_lh_row_spatial_agree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 'Rule30Paper.Paper.lhbandagree_zero_of_lhbandagree_one_and_rhbandagree_zero' depends on axioms: [propext, Quot.sound]
 'Rule30Paper.Paper.lhcenter_after_zero_diag' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.lhcenter_at_t_after_zero_diag' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -344,6 +352,9 @@
  Classical.choice,
  Quot.sound]
 'Rule30Paper.Paper.lhcenter_diag_shift_periodic_of_doubles_le_settlebound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Rule30Paper.Paper.lhcenter_diag_shift_two_mul_periodic_le_add_three_of_doubles' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 'Rule30Paper.Paper.lhcenter_doubles_eq_step_one_reset' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -713,6 +724,20 @@
 'Rule30Paper.Paper.lhcenter_scale_step_settled_left_ge' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.lhcenter_scale_step_uncond' depends on axioms: [propext, Quot.sound]
 'Rule30Paper.Paper.lhcenter_self_eq_true' depends on axioms: [propext, Quot.sound]
+'Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_agree_below_doubling' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_agree_of_diag_eq' does not depend on any axioms
+'Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_agree_on_black_diag' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_antiagree_of_diag_flip' does not depend on any axioms
+'Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_antiagree_on_doubling_diag' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Rule30Paper.Paper.lhcenter_shift_agree_iff_spatial_antiagree_on_reset_diag' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 'Rule30Paper.Paper.lhcenter_shift_agree_of_rhcenter_dyadic_sub_agree' depends on axioms: [propext, Quot.sound]
 'Rule30Paper.Paper.lhcenter_shift_two_q_flip_of_doubles_and_lhbandagree' depends on axioms: [propext,
  Classical.choice,
@@ -1154,11 +1179,16 @@
 'Rule30Paper.Paper.not_iszerodiag_add_two' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.not_lhbandagree_and_winwittagree_of_lt_twopow' depends on axioms: [propext, Quot.sound]
 'Rule30Paper.Paper.not_lhbandagree_late_and_winwittagree_sector_one' depends on axioms: [propext, Quot.sound]
+'Rule30Paper.Paper.not_lhbandagree_of_doubles_settledupto' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Rule30Paper.Paper.not_lhbandagree_of_doubles_single' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.not_lhbandagree_of_lt_add' depends on axioms: [propext, Quot.sound]
 'Rule30Paper.Paper.not_lhbandagree_of_zero_and_after_zero_diag' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 'Rule30Paper.Paper.not_lhbandagree_of_zero_diag_two_and_shift_zero_diag' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Rule30Paper.Paper.not_lhbandagree_one_at_zero_diag_of_doubles_settledupto' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 'Rule30Paper.Paper.not_lhbandagree_one_of_doubles' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -2079,6 +2109,7 @@
 'Rule30Paper.Paper.sectorwinwittagree_of_sectorwiderightrowagree' depends on axioms: [propext, Quot.sound]
 'Rule30Paper.Paper.sectorwinwittagree_of_sectorwiderowagree' depends on axioms: [propext, Quot.sound]
 'Rule30Paper.Paper.settledby_of_le_and_settlebound_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Rule30Paper.Paper.settledupto_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Rule30Paper.Paper.split_fifteen' does not depend on any axioms
 'Rule30Paper.Paper.split_ninety' does not depend on any axioms
 'Rule30Paper.Paper.split_onefifty' does not depend on any axioms

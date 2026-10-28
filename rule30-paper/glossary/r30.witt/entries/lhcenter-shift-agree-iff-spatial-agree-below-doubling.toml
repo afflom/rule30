@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-shift-agree-iff-spatial-agree-below-doubling"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const r30.joint::doubles-at) (local Q) (local z))) (explicit hdz (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (local t) (local c)) (local z))) (explicit hbt (app (const r30.witt::settled-up-to) (local z) (local t)))) (app (const lexlean.core::iff) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (local c)) (app (const r30.witt::lh-center) (local t) (local c))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (local c)) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::add) (local c) (local Q)))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_shift_agree_iff_spatial_agree_below_doubling"
+
+[[form]]
+id = "lhcenter-shift-agree-iff-spatial-agree-below-doubling"
+channel = "math"
+surface = "lhcentershiftagreeiffspatialagreebelowdoubling"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcentershiftagreeiffspatialagreebelowdoubling) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

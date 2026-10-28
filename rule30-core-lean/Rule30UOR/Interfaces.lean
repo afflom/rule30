@@ -37352,4 +37352,197 @@ theorem not_centerPeriodic_of_late_scale_doubles_settleBound_prefix_and_single_l
     (fun i _ => settledBy_of_le_and_settleBound_le (z + 1) ((z + 1) - (1 + i)) ((z + 1) + twopow k) (by omega) hbt)
     hspat
 
+/-! ### Batch 85: Single-Time Left-Band Refutation at Doubling Zero Diagonals, Unconditional Single-Row Spatial Non-Periodicity, and Signed Single-Row Characterizations on `z + 1`, `z + 2`, `z + 3` (9.1567–9.1581) -/
+
+/-- **9.1567**: `SettledUpTo` is antitone in the diagonal bound: `D ≤ D'` and `SettledUpTo D' t` give `SettledUpTo D t`. -/
+theorem settledUpTo_mono (D D' t : Nat) (hD : D ≤ D') (h : SettledUpTo D' t) :
+    SettledUpTo D t :=
+  Nat.le_trans (Rule30UOR.Intent.bound_mono D D' hD) h
+
+/-- **9.1568**: For every diagonal bound `D` there is a time `t` with `SettledUpTo D t`. -/
+theorem exists_settledUpTo (D : Nat) : ∃ t : Nat, SettledUpTo D t :=
+  ⟨settleBound D, Nat.le_refl _⟩
+
+/-- **9.1569**: Single-time refutation of `LhBandAgree t Q p0 L` at a doubling zero diagonal
+    `z = t - (p + 1)` for every shift `Q ≥ 1`, whenever `p0 ≤ p + Q` and `(p + Q) + 2 * Q ≤ p0 + L`.
+    No periodicity hypothesis and no second time slice: the band at time `t` propagates to
+    `t + Q` by `lhBandAgree_steps`, contradicting `9.904`. -/
+theorem not_lhBandAgree_of_doubles_single (Q t p p0 L : Nat)
+    (hQ : 1 ≤ Q)
+    (hz : IsZeroDiag (t - (p + 1))) (hd : DoublesAt Q (t - (p + 1)))
+    (hset1 : SettledBy ((t - (p + 1)) + 1) t)
+    (hsetQ : SettledBy (t - (p + Q)) t)
+    (hp0 : p0 ≤ p + Q) (hL : (p + Q) + 2 * Q ≤ p0 + L) :
+    ¬ LhBandAgree t Q p0 L := by
+  intro hband
+  have hL' : LhBandAgree t Q p0 ((L - 2 * Q) + 2 * Q) := by
+    intro i hi
+    exact hband i (by omega)
+  have h1 := lhBandAgree_steps t Q p0 (L - 2 * Q) Q hL'
+  exact not_lhBandAgree_step_Q_of_doubles Q t p p0 L (p0 + Q) (L - 2 * Q) hQ hz hd hset1 hsetQ
+    hp0 (by omega) (by omega) (by omega) hband h1
+
+/-- **9.1570**: `9.1569` with both settlement hypotheses replaced by `SettledUpTo ((t - (p + 1)) + 1) t`. -/
+theorem not_lhBandAgree_of_doubles_settledUpTo (Q t p p0 L : Nat)
+    (hQ : 1 ≤ Q)
+    (hz : IsZeroDiag (t - (p + 1))) (hd : DoublesAt Q (t - (p + 1)))
+    (hbt : SettledUpTo ((t - (p + 1)) + 1) t)
+    (hp0 : p0 ≤ p + Q) (hL : (p + Q) + 2 * Q ≤ p0 + L) :
+    ¬ LhBandAgree t Q p0 L :=
+  not_lhBandAgree_of_doubles_single Q t p p0 L hQ hz hd
+    (settledBy_of_le_and_settleBound_le ((t - (p + 1)) + 1) ((t - (p + 1)) + 1) t (Nat.le_refl _) hbt)
+    (settledBy_of_le_and_settleBound_le ((t - (p + 1)) + 1) (t - (p + Q)) t (by omega) hbt)
+    hp0 hL
+
+/-- **9.1571**: Column-`1` specialization: at `t = z + (p + 1)` with `IsZeroDiag z`, `DoublesAt Q z`,
+    `1 ≤ Q`, `SettledUpTo (z + 1) (z + (p + 1))` and `p + 3 * Q ≤ S + 1`, `¬ LhBandAgree (z + (p + 1)) Q 1 S`.
+    This is exactly the band (with exactly the horizon) consumed by the zero-diagonal engines `9.905`ff,
+    so those engines refute it with no use of `CenterPeriodic`. -/
+theorem not_lhBandAgree_one_at_zero_diag_of_doubles_settledUpTo (Q z p S : Nat)
+    (hQ : 1 ≤ Q) (hz : IsZeroDiag z) (hd : DoublesAt Q z)
+    (hbt : SettledUpTo (z + 1) (z + (p + 1)))
+    (hS : p + 3 * Q ≤ S + 1) :
+    ¬ LhBandAgree (z + (p + 1)) Q 1 S :=
+  not_lhBandAgree_of_doubles_settledUpTo Q (z + (p + 1)) p 1 S hQ
+    (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+    (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+    (by rw [show (z + (p + 1)) - (p + 1) = z by omega]; exact hbt)
+    (by omega) (by omega)
+
+/-- **9.1572**: Unconditional single-row spatial non-periodicity: at a doubling zero diagonal `z`
+    (`IsZeroDiag z`, `DoublesAt Q z`, `1 ≤ Q`) and `SettledUpTo (z + 1) (z + (p + 1))`, row
+    `(z + (p + 1)) + Q` of the left half has a cell `(p + Q) + i` (`i ≤ 2 * Q`) whose `Q`-shift disagrees. -/
+theorem exists_lh_row_spatial_disagree_of_doubles_settledUpTo (Q z p : Nat)
+    (hQ : 1 ≤ Q) (hz : IsZeroDiag z) (hd : DoublesAt Q z)
+    (hbt : SettledUpTo (z + 1) (z + (p + 1))) :
+    ∃ i : Nat, i ≤ 2 * Q ∧
+      lhCenter ((z + (p + 1)) + Q) ((p + Q) + i) =
+        !lhCenter ((z + (p + 1)) + Q) (((p + Q) + i) + Q) := by
+  refine Classical.byContradiction (fun hne => ?_)
+  have hspat : ∀ i : Nat, i ≤ 2 * Q →
+      lhCenter ((z + (p + 1)) + Q) ((p + Q) + i) =
+        lhCenter ((z + (p + 1)) + Q) (((p + Q) + i) + Q) := by
+    intro i hi
+    cases ha : lhCenter ((z + (p + 1)) + Q) ((p + Q) + i) <;>
+      cases hb : lhCenter ((z + (p + 1)) + Q) (((p + Q) + i) + Q)
+    · rfl
+    · exact (hne ⟨i, hi, by rw [ha, hb]; rfl⟩).elim
+    · exact (hne ⟨i, hi, by rw [ha, hb]; rfl⟩).elim
+    · rfl
+  have hband := lhBandAgree_of_doubles_le_settleBound_and_single_lh_row_spatial_agree
+    Q z (z + (p + 1)) (p + Q) (2 * Q) hd (by omega)
+    (settledUpTo_mono z (z + 1) (z + (p + 1)) (by omega) hbt) hspat
+  exact not_lhBandAgree_of_doubles_settledUpTo Q (z + (p + 1)) p (p + Q) (2 * Q) hQ
+    (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+    (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+    (by rw [show (z + (p + 1)) - (p + 1) = z by omega]; exact hbt)
+    (Nat.le_refl _) (by omega) hband
+
+/-- **9.1573**: For every shift `Q ≥ 1` and every time bound `N`, some row `r ≥ N` of the left half
+    has a cell whose spatial `Q`-shift disagrees, inside a window of `2 * Q + 1` cells. -/
+theorem exists_lh_row_spatial_disagree_ge (Q N : Nat) (hQ : 1 ≤ Q) :
+    ∃ r : Nat, ∃ c : Nat, ∃ i : Nat, N ≤ r ∧ i ≤ 2 * Q ∧
+      lhCenter r (c + i) = !lhCenter r ((c + i) + Q) := by
+  obtain ⟨z, hz, hd⟩ := Rule30UOR.CompilePoints.doubling_points Q (by omega)
+  obtain ⟨t0, ht0⟩ := exists_settledUpTo (z + 1)
+  have h0 : settleBound (z + 1) ≤ t0 := ht0
+  obtain ⟨i, hi, hdis⟩ := exists_lh_row_spatial_disagree_of_doubles_settledUpTo Q z (t0 + N) hQ hz hd
+    (Nat.le_trans h0 (by omega))
+  exact ⟨(z + ((t0 + N) + 1)) + Q, (t0 + N) + Q, i, by omega, hi, hdis⟩
+
+/-- **9.1574**: If the diagonal shift by `Q` flips the cell `(t, x)`, then vertical `Q`-agreement at
+    column `x` is equivalent to single-row spatial `Q`-antiagreement in row `t + Q`. -/
+theorem lhCenter_shift_agree_iff_spatial_antiagree_of_diag_flip (Q t x : Nat)
+    (h : lhCenter (t + Q) (x + Q) = !lhCenter t x) :
+    lhCenter (t + Q) x = lhCenter t x ↔
+      lhCenter (t + Q) x = !lhCenter (t + Q) (x + Q) := by
+  rw [h, Bool.not_not]
+
+/-- **9.1575**: If the diagonal shift by `Q` preserves the cell `(t, x)`, then vertical `Q`-agreement at
+    column `x` is equivalent to single-row spatial `Q`-agreement in row `t + Q`. -/
+theorem lhCenter_shift_agree_iff_spatial_agree_of_diag_eq (Q t x : Nat)
+    (h : lhCenter (t + Q) (x + Q) = lhCenter t x) :
+    lhCenter (t + Q) x = lhCenter t x ↔
+      lhCenter (t + Q) x = lhCenter (t + Q) (x + Q) := by
+  rw [h]
+
+/-- **9.1576**: Signed single-row characterization on the doubling diagonal `z + 1`. -/
+theorem lhCenter_shift_agree_iff_spatial_antiagree_on_doubling_diag (Q z c : Nat)
+    (hz : IsZeroDiag z) (hd : DoublesAt Q z)
+    (hbt : SettledUpTo (z + 1) ((z + 1) + c)) :
+    lhCenter (((z + 1) + c) + Q) c = lhCenter ((z + 1) + c) c ↔
+      lhCenter (((z + 1) + c) + Q) c = !lhCenter (((z + 1) + c) + Q) (c + Q) :=
+  lhCenter_shift_agree_iff_spatial_antiagree_of_diag_flip Q ((z + 1) + c) c
+    (lhCenter_diag_shift_antiperiodic_at_t_of_doubles Q ((z + 1) + c) c
+      (by rwa [show ((z + 1) + c) - (c + 1) = z by omega])
+      (by rwa [show ((z + 1) + c) - (c + 1) = z by omega])
+      (by
+        rw [show ((z + 1) + c) - (c + 1) = z by omega]
+        exact settledBy_of_le_and_settleBound_le (z + 1) (z + 1) ((z + 1) + c) (Nat.le_refl _) hbt))
+
+/-- **9.1577**: Signed single-row characterization on the post-zero black diagonal `z + 2`. -/
+theorem lhCenter_shift_agree_iff_spatial_agree_on_black_diag (Q z c : Nat)
+    (hz : IsZeroDiag z)
+    (hbt : SettledUpTo (z + 2) ((z + 2) + c)) :
+    lhCenter (((z + 2) + c) + Q) c = lhCenter ((z + 2) + c) c ↔
+      lhCenter (((z + 2) + c) + Q) c = lhCenter (((z + 2) + c) + Q) (c + Q) := by
+  have hs0 : settle (z + 2) ≤ (z + 2) + c :=
+    settledBy_of_le_and_settleBound_le (z + 2) (z + 2) ((z + 2) + c) (Nat.le_refl _) hbt
+  have hs1 : settle (z + 2) ≤ ((z + 2) + c) + Q := by omega
+  refine lhCenter_shift_agree_iff_spatial_agree_of_diag_eq Q ((z + 2) + c) c ?_
+  rw [lhCenter_eq_ldiag (((z + 2) + c) + Q) (c + Q) (by omega),
+    lhCenter_eq_ldiag ((z + 2) + c) c (by omega),
+    show (((z + 2) + c) + Q) - (c + Q) = z + 2 by omega,
+    show ((z + 2) + c) - c = z + 2 by omega,
+    ldiag_after_zero_diag z (((z + 2) + c) + Q) hz hs1,
+    ldiag_after_zero_diag z ((z + 2) + c) hz hs0]
+
+/-- **9.1578**: Signed single-row characterization on the post-black reset diagonal `z + 3`. -/
+theorem lhCenter_shift_agree_iff_spatial_antiagree_on_reset_diag (Q z c : Nat)
+    (hz : IsZeroDiag z) (hd : DoublesAt Q z)
+    (hbt : SettledUpTo (z + 3) ((z + 3) + c)) :
+    lhCenter (((z + 3) + c) + Q) c = lhCenter ((z + 3) + c) c ↔
+      lhCenter (((z + 3) + c) + Q) c = !lhCenter (((z + 3) + c) + Q) (c + Q) := by
+  have hs0 : settle (z + 3) ≤ (z + 3) + c :=
+    settledBy_of_le_and_settleBound_le (z + 3) (z + 3) ((z + 3) + c) (Nat.le_refl _) hbt
+  refine lhCenter_shift_agree_iff_spatial_antiagree_of_diag_flip Q ((z + 3) + c) c ?_
+  rw [lhCenter_eq_ldiag (((z + 3) + c) + Q) (c + Q) (by omega),
+    lhCenter_eq_ldiag ((z + 3) + c) c (by omega),
+    show (((z + 3) + c) + Q) - (c + Q) = z + 3 by omega,
+    show ((z + 3) + c) - c = z + 3 by omega]
+  exact ldiag_settled_reset_antiperiodic_of_doubles Q z ((z + 3) + c) hz hd hs0
+
+/-- **9.1579**: Signed single-row characterization below a doubling point: on every diagonal `t - c ≤ z`. -/
+theorem lhCenter_shift_agree_iff_spatial_agree_below_doubling (Q z t c : Nat)
+    (hd : DoublesAt Q z) (hdz : t - c ≤ z) (hbt : SettledUpTo z t) :
+    lhCenter (t + Q) c = lhCenter t c ↔
+      lhCenter (t + Q) c = lhCenter (t + Q) (c + Q) :=
+  lhCenter_shift_agree_iff_spatial_agree_of_diag_eq Q t c
+    (lhCenter_diag_shift_periodic_of_doubles_le_settleBound Q z t c hd hdz hbt)
+
+/-- **9.1580**: Doubled diagonal-shift periodicity through `z + 3`: for `c ≤ t`, `t - c ≤ z + 3`,
+    `lhCenter (t + (Q + Q)) (c + (Q + Q)) = lhCenter t c`. -/
+theorem lhCenter_diag_shift_two_mul_periodic_le_add_three_of_doubles (Q z t c : Nat)
+    (hz : IsZeroDiag z) (hd : DoublesAt Q z)
+    (hct : c ≤ t) (hdz : t - c ≤ z + 3) (hbt : SettledUpTo (z + 3) t) :
+    lhCenter (t + (Q + Q)) (c + (Q + Q)) = lhCenter t c := by
+  rw [lhCenter_eq_ldiag (t + (Q + Q)) (c + (Q + Q)) (by omega),
+    lhCenter_eq_ldiag t c hct,
+    show (t + (Q + Q)) - (c + (Q + Q)) = t - c by omega]
+  exact ldiag_settled_two_mul_periodic_le_add_three_of_doubles Q z (t - c) t hz hd hdz
+    (settledBy_of_le_and_settleBound_le (z + 3) (t - c) t hdz hbt)
+
+/-- **9.1581**: `LhBandAgree t (Q + Q) p0 L` from single-row spatial `(Q + Q)`-agreement of row
+    `t + (Q + Q)` on `[p0, p0 + L]`, whenever the window lies in `t - (p0 + i) ≤ z + 3` with `p0 + L ≤ t`. -/
+theorem lhBandAgree_two_mul_of_doubles_and_single_lh_row_spatial_agree (Q z t p0 L : Nat)
+    (hz : IsZeroDiag z) (hd : DoublesAt Q z)
+    (hdz : t - p0 ≤ z + 3) (hpL : p0 + L ≤ t) (hbt : SettledUpTo (z + 3) t)
+    (hspat : ∀ i : Nat, i ≤ L →
+      lhCenter (t + (Q + Q)) (p0 + i) = lhCenter (t + (Q + Q)) ((p0 + i) + (Q + Q))) :
+    LhBandAgree t (Q + Q) p0 L := by
+  intro i hi
+  rw [hspat i hi]
+  exact lhCenter_diag_shift_two_mul_periodic_le_add_three_of_doubles Q z t (p0 + i) hz hd
+    (by omega) (by omega) hbt
+
 end Rule30UOR.Interfaces

@@ -16129,4 +16129,26 @@ theorem kit_not_centerPeriodic_of_late_scale_doubles_settleBound_prefix_and_sing
   Rule30Paper.Paper.not_centerperiodic_of_late_scale_doubles_settlebound_prefix_and_single_lh_row_tail
     T P m z L k hP hm ht hz hd hbt hL hpref hspat
 
+-- ============================================================================
+-- Batch 85 Bridge: Single-Time Left-Band Refutation and Unconditional
+-- Single-Row Spatial Non-Periodicity (`9.1567`–`9.1581`)
+-- ============================================================================
+
+/-- Kit-side wrapper for `9.1571`: the column-`1` band consumed by the zero-diagonal
+    engines is refuted at every doubling zero diagonal with no periodicity hypothesis. -/
+theorem kit_not_lhBandAgree_one_at_zero_diag_of_doubles_settledUpTo
+    (Q z p S : Nat) (hQ : 1 ≤ Q) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt Q z)
+    (hbt : Rule30UOR.Interfaces.SettledUpTo (z + 1) (z + (p + 1)))
+    (hS : p + 3 * Q ≤ S + 1) :
+    ¬ Rule30UOR.Interfaces.LhBandAgree (z + (p + 1)) Q 1 S :=
+  Rule30Paper.Paper.not_lhbandagree_one_at_zero_diag_of_doubles_settledupto Q z p S hQ hz hd hbt hS
+
+/-- Kit-side wrapper for `9.1573`: for every `Q ≥ 1` and `N`, some row `r ≥ N` of the left half
+    has a cell whose spatial `Q`-shift disagrees within a window of `2 * Q + 1` cells. -/
+theorem kit_exists_lh_row_spatial_disagree_ge (Q N : Nat) (hQ : 1 ≤ Q) :
+    ∃ r : Nat, ∃ c : Nat, ∃ i : Nat, N ≤ r ∧ i ≤ 2 * Q ∧
+      Rule30UOR.Interfaces.lhCenter r (c + i) = !Rule30UOR.Interfaces.lhCenter r ((c + i) + Q) :=
+  Rule30Paper.Paper.exists_lh_row_spatial_disagree_ge Q N hQ
+
 end Rule30Bridge

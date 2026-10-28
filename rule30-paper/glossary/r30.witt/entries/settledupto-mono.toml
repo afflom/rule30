@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "settledupto-mono"
+category = "proof-constant"
+signature = "(pi ((explicit D (const lexlean.std.nat::nat)) (explicit Dp (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hD (app (const lexlean.std.nat::le) (local D) (local Dp))) (explicit h (app (const r30.witt::settled-up-to) (local Dp) (local t)))) (app (const r30.witt::settled-up-to) (local D) (local t))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.settledUpTo_mono"
+
+[[form]]
+id = "settledupto-mono"
+channel = "math"
+surface = "settleduptomono"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name settleduptomono) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"
