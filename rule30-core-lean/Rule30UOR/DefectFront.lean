@@ -253,11 +253,14 @@ Submission-facing reduction through the compositional component split.
 theorem submission_problem1_of_primitive_doubles_components
     (hA : PrimitiveDoublesLeftDefect)
     (hB : PrimitiveDoublesCleanWindowFromWitness) :
-    Problem1 :=
-  submission_problem1_of_zeroDiag_doubles_leftHeavy (by
-    apply zeroDiag_doubles_leftHeavyRecurrence_of_primitive
-    exact primitive_doubles_leftHeavy_of_cleanWindow
-      (primitive_doubles_cleanWindow_of_components hA hB))
+    Problem1 := by
+  have hprim : PrimitiveDoublesLeftHeavyRecurrence :=
+    primitive_doubles_leftHeavy_of_cleanWindow
+      (primitive_doubles_cleanWindow_of_components hA hB)
+  apply submission_problem1_of_zeroDiag_doubles_leftHeavy
+  intro T P hP
+  obtain ⟨z, t, k, ht, hz, hd, hl⟩ := hprim T P hP
+  exact ⟨1, z, t, k, ht, hz, by simpa using hd, by simpa using hl⟩
 
 /--
 Submission-facing reduction through the split components. This isolates the remaining work to
