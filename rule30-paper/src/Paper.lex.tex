@@ -11925,5 +11925,981 @@
   \end{proof}
   \end{theorem}
 
+  \begin{theorem}{rhcenter-dyadic-sub-eq-lhcenter-of-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(K\) and natural number \(v\) and natural number \(d\) and natural number \(j\), if \(1 ≤ v\), then if \(j + d ≤ K\), then \(rhcenter((v * twopow(K)) + j, (v * twopow(K)) - d) = lhcenter(j, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-sub-eq-lhcenter-of-le}(K, v, d, j)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-sub-shift-eq-lhcenter}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(d\) and natural number \(s\), if \(1 ≤ v\), then if \((t + s) + d ≤ K\), then \(rhcenter((t + v * twopow(K)) + s, (v * twopow(K)) - d) = lhcenter(t + s, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-sub-shift-eq-lhcenter}(t, K, v, d, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-sub-period-shift-eq-lhcenter}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(d\) and natural number \(s\), if \(1 ≤ v\), then if \(((t + s) + Q) + d ≤ K\), then \(rhcenter(((t + v * twopow(K)) + s) + Q, (v * twopow(K)) - d) = lhcenter((t + s) + Q, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-sub-period-shift-eq-lhcenter}(t, Q, K, v, d, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-pred-col-shift-eq-lhcenter-one}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(s\), if \(1 ≤ v\), then if \((t + s) + 1 ≤ K\), then \(rhcenter((t + v * twopow(K)) + s, (v * twopow(K)) - 1) = lhcenter(t + s, 1)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-pred-col-shift-eq-lhcenter-one}(t, K, v, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-shift-agree-of-rhcenter-dyadic-sub-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(d\) and natural number \(s\), if \(1 ≤ v\), then if \(((t + s) + Q) + d ≤ K\), then if \(rhcenter(((t + v * twopow(K)) + s) + Q, (v * twopow(K)) - d) = rhcenter((t + v * twopow(K)) + s, (v * twopow(K)) - d)\), then \(lhcenter((t + s) + Q, d) = lhcenter(t + s, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-shift-agree-of-rhcenter-dyadic-sub-agree}(t, Q, K, v, d, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-of-rhcolagree-dyadic-sub}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(d\) and natural number \(S\), if \(1 ≤ v\), then if \(((t + S) + Q) + d ≤ K\), then if \(rhcolagree(t + v * twopow(K), Q, (v * twopow(K)) - d, S)\), then \(lhcolagree(t, Q, d, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-of-rhcolagree-dyadic-sub}(t, Q, K, v, d, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-rhcolagree-dyadic-pred-col}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \(((t + S) + Q) + 1 ≤ K\), then if \(rhcolagree(t + v * twopow(K), Q, (v * twopow(K)) - 1, S)\), then \(lhcolagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-rhcolagree-dyadic-pred-col}(t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-rhcolagree-dyadic-pred-col}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(1 ≤ v\), then if \(((t + S) + m * P) + 1 ≤ K\), then if \(rhcolagree(t + v * twopow(K), m * P, (v * twopow(K)) - 1, S)\), then if \(s ≤ S\), then \(maskparity((t + s) + m * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(K\), \(v\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-rhcolagree-dyadic-pred-col}(T, P, hP, hper, m, t, K, v, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhcolagree-dyadic-pred-col-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(1 ≤ v\), then if \((((z + (p + 1)) + S) + m * P) + 1 ≤ K\), then if \(rhcolagree((z + (p + 1)) + v * twopow(K), m * P, (v * twopow(K)) - 1, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhcolagree-dyadic-pred-col-at-zero-diag-doubles}(T, P, m, z, p, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhcolagree-dyadic-pred-col-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ v\), then if \(((t + S) + m * P) + 1 ≤ K\), then if \(rhcolagree(t + v * twopow(K), m * P, (v * twopow(K)) - 1, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhcolagree-dyadic-pred-col-twopow}(T, P, m, t, k, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhcolagree-dyadic-pred-col-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(k\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + m * P\), then if \(zerodiagonal((z + m * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + m * P, (z + m * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ v\), then if \((((z + twopow(k)) + S) + m * P) + 1 ≤ K\), then if \(rhcolagree((z + twopow(k)) + v * twopow(K), m * P, (v * twopow(K)) - 1, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhcolagree-dyadic-pred-col-at-zero-diag-pair}(T, P, m, z, k, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-sub-eq-ldiag-of-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(K\) and natural number \(v\) and natural number \(d\) and natural number \(j\), if \(1 ≤ v\), then if \(j + d ≤ K\), then if \(d ≤ j\), then \(rhcenter((v * twopow(K)) + j, (v * twopow(K)) - d) = ldiag(j - d, j)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-sub-eq-ldiag-of-le}(K, v, d, j)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-sub-zero-diag-eq-false}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(K\) and natural number \(v\) and natural number \(z\) and natural number \(d\), if \(1 ≤ v\), then if \(zerodiagonal(z)\), then if \(settledby(z, z + d)\), then if \((z + d) + d ≤ K\), then \(rhcenter((v * twopow(K)) + (z + d), (v * twopow(K)) - d) = false\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-sub-zero-diag-eq-false}(K, v, z, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-sub-after-zero-diag-eq-true}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(K\) and natural number \(v\) and natural number \(z\) and natural number \(d\), if \(1 ≤ v\), then if \(zerodiagonal(z)\), then if \(settledby(z + 2, (z + 2) + d)\), then if \(((z + 2) + d) + d ≤ K\), then \(rhcenter((v * twopow(K)) + ((z + 2) + d), (v * twopow(K)) - d) = true\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-sub-after-zero-diag-eq-true}(K, v, z, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-sub-doubling-diag-antiperiodic}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(K\) and natural number \(v\) and natural number \(Q\) and natural number \(z\) and natural number \(d\), if \(1 ≤ v\), then if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(settledby(z + 1, (z + 1) + d)\), then if \((((z + 1) + d) + Q) + (d + Q) ≤ K\), then \(rhcenter((v * twopow(K)) + (((z + 1) + d) + Q), (v * twopow(K)) - (d + Q)) = not(rhcenter((v * twopow(K)) + ((z + 1) + d), (v * twopow(K)) - d))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-sub-doubling-diag-antiperiodic}(K, v, Q, z, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-step-succ-interior}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(p\), \(rhcenter(t + 1, p + 1) = bxor(rhcenter(t, p), rhcenter(t, p + 1) bor rhcenter(t, p + 2))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-step-succ-interior}(t, p)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-bilateral-cone-agree-step}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t2\) and natural number \(t1\) and natural number \(a\) and natural number \(L\) and natural number \(i\), if for every natural number \(q\), if \(q ≤ L + 2\), then \(rhcenter(t2, a + q) = rhcenter(t1, a + q)\), then if \(i ≤ L\), then \(rhcenter(t2 + 1, (a + 1) + i) = rhcenter(t1 + 1, (a + 1) + i)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-bilateral-cone-agree-step}(t2, t1, a, L, i)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-bilateral-cone-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t2\) and natural number \(t1\) and natural number \(a\) and natural number \(L\) and natural number \(s\) and natural number \(i\), if for every natural number \(q\), if \(q ≤ L + 2 * s\), then \(rhcenter(t2, a + q) = rhcenter(t1, a + q)\), then if \(i ≤ L\), then \(rhcenter(t2 + s, (a + s) + i) = rhcenter(t1 + s, (a + s) + i)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-bilateral-cone-agree}(t2, t1, a, L, s, i)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-bilateral-cone-point-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t2\) and natural number \(t1\) and natural number \(P0\) and natural number \(s\), if \(s ≤ P0\), then if for every natural number \(q\), if \(q ≤ 2 * s\), then \(rhcenter(t2, (P0 - s) + q) = rhcenter(t1, (P0 - s) + q)\), then \(rhcenter(t2 + s, P0) = rhcenter(t1 + s, P0)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-bilateral-cone-point-agree}(t2, t1, P0, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcolagree-of-rhbandagree-bilateral-cone}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T0\) and natural number \(Q\) and natural number \(P0\) and natural number \(S\), if \(S ≤ P0\), then if \(rhbandagree(T0, Q, P0 - S, 2 * S)\), then \(rhcolagree(T0, Q, P0, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcolagree-of-rhbandagree-bilateral-cone}(T0, Q, P0, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-of-rhbandagree-dyadic-sub-cone}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(d\) and natural number \(S\), if \(1 ≤ v\), then if \(((t + S) + Q) + d ≤ K\), then if \(rhbandagree(t + v * twopow(K), Q, ((v * twopow(K)) - d) - S, 2 * S)\), then \(lhcolagree(t, Q, d, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-of-rhbandagree-dyadic-sub-cone}(t, Q, K, v, d, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-rhbandagree-dyadic-pred-col-cone}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \(((t + S) + Q) + 1 ≤ K\), then if \(rhbandagree(t + v * twopow(K), Q, ((v * twopow(K)) - 1) - S, 2 * S)\), then \(lhcolagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-rhbandagree-dyadic-pred-col-cone}(t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-rhbandagree-dyadic-pred-col-cone}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(1 ≤ v\), then if \(((t + S) + m * P) + 1 ≤ K\), then if \(rhbandagree(t + v * twopow(K), m * P, ((v * twopow(K)) - 1) - S, 2 * S)\), then if \(s ≤ S\), then \(maskparity((t + s) + m * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(K\), \(v\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-rhbandagree-dyadic-pred-col-cone}(T, P, hP, hper, m, t, K, v, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-pred-col-cone-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(1 ≤ v\), then if \((((z + (p + 1)) + S) + m * P) + 1 ≤ K\), then if \(rhbandagree((z + (p + 1)) + v * twopow(K), m * P, ((v * twopow(K)) - 1) - S, 2 * S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-pred-col-cone-at-zero-diag-doubles}(T, P, m, z, p, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-pred-col-cone-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ v\), then if \(((t + S) + m * P) + 1 ≤ K\), then if \(rhbandagree(t + v * twopow(K), m * P, ((v * twopow(K)) - 1) - S, 2 * S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-pred-col-cone-twopow}(T, P, m, t, k, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-pred-col-cone-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(k\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + m * P\), then if \(zerodiagonal((z + m * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + m * P, (z + m * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ v\), then if \((((z + twopow(k)) + S) + m * P) + 1 ≤ K\), then if \(rhbandagree((z + twopow(k)) + v * twopow(K), m * P, ((v * twopow(K)) - 1) - S, 2 * S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-pred-col-cone-at-zero-diag-pair}(T, P, m, z, k, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-row-left-white-corridor-of-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(d\), if \(1 ≤ v\), then if \(t + d ≤ K\), then if \(t < d\), then \(rhcenter(t + v * twopow(K), (v * twopow(K)) - d) = false\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-row-left-white-corridor-of-le}(t, K, v, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-row-left-white-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(d\), if \(1 ≤ v\), then if \((t + Q) + d ≤ K\), then if \(t + Q < d\), then \(rhcenter((t + v * twopow(K)) + Q, (v * twopow(K)) - d) = rhcenter(t + v * twopow(K), (v * twopow(K)) - d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-row-left-white-agree}(t, Q, K, v, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-row-right-white-of-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(r\), if \(t ≤ K\), then if \(t < r\), then \(rhcenter(t + v * twopow(K), (v * twopow(K)) + r) = false\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-row-right-white-of-le}(t, K, v, r)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-row-right-white-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(r\), if \(t + Q ≤ K\), then if \(t + Q < r\), then \(rhcenter((t + v * twopow(K)) + Q, (v * twopow(K)) + r) = rhcenter(t + v * twopow(K), (v * twopow(K)) + r)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-row-right-white-agree}(t, Q, K, v, r)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhbandagree-dyadic-core-expand-to-cone}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \((((t + S) + Q) + (t + Q)) + 1 ≤ K\), then if \(rhbandagree(t + v * twopow(K), Q, (v * twopow(K)) - (t + Q), 2 * (t + Q))\), then \(rhbandagree(t + v * twopow(K), Q, ((v * twopow(K)) - 1) - S, 2 * S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhbandagree-dyadic-core-expand-to-cone}(t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-rhbandagree-dyadic-core}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \((((t + S) + Q) + (t + Q)) + 1 ≤ K\), then if \(rhbandagree(t + v * twopow(K), Q, (v * twopow(K)) - (t + Q), 2 * (t + Q))\), then \(lhcolagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-rhbandagree-dyadic-core}(t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-rhbandagree-dyadic-core}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(1 ≤ v\), then if \((((t + S) + m * P) + (t + m * P)) + 1 ≤ K\), then if \(rhbandagree(t + v * twopow(K), m * P, (v * twopow(K)) - (t + m * P), 2 * (t + m * P))\), then if \(s ≤ S\), then \(maskparity((t + s) + m * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(K\), \(v\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-rhbandagree-dyadic-core}(T, P, hP, hper, m, t, K, v, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-core-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(1 ≤ v\), then if \((((((z + (p + 1)) + (p + 3 * (m * P))) + m * P) + ((z + (p + 1)) + m * P)) + 1) ≤ K\), then if \(rhbandagree((z + (p + 1)) + v * twopow(K), m * P, (v * twopow(K)) - ((z + (p + 1)) + m * P), 2 * ((z + (p + 1)) + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-core-at-zero-diag-doubles}(T, P, m, z, p, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-core-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(1 ≤ v\), then if \((((t + twopow(k)) + m * P) + (t + m * P)) + 1 ≤ K\), then if \(rhbandagree(t + v * twopow(K), m * P, (v * twopow(K)) - (t + m * P), 2 * (t + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-core-twopow}(T, P, m, t, k, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-core-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(k\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + m * P\), then if \(zerodiagonal((z + m * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + m * P, (z + m * P) + twopow(k))\), then if \(1 ≤ v\), then if \((((((z + twopow(k)) + twopow(k)) + m * P) + ((z + twopow(k)) + m * P)) + 1) ≤ K\), then if \(rhbandagree((z + twopow(k)) + v * twopow(K), m * P, (v * twopow(K)) - ((z + twopow(k)) + m * P), 2 * ((z + twopow(k)) + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-core-at-zero-diag-pair}(T, P, m, z, k, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhbandagree-dyadic-left-half-of-lhbandagree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\), if \(1 ≤ v\), then if \(2 * (t + Q) ≤ K\), then if \(lhbandagree(t, Q, 0, t + Q)\), then \(rhbandagree(t + v * twopow(K), Q, (v * twopow(K)) - (t + Q), t + Q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhbandagree-dyadic-left-half-of-lhbandagree}(t, Q, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhbandagree-dyadic-right-half-of-rhbandagree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\), if \(t + Q ≤ K\), then if \(rhbandagree(t, Q, 0, t + Q)\), then \(rhbandagree(t + v * twopow(K), Q, v * twopow(K), t + Q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhbandagree-dyadic-right-half-of-rhbandagree}(t, Q, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhbandagree-dyadic-core-of-lhbandagree-and-rhbandagree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\), if \(1 ≤ v\), then if \(2 * (t + Q) ≤ K\), then if \(lhbandagree(t, Q, 0, t + Q)\), then if \(rhbandagree(t, Q, 0, t + Q)\), then \(rhbandagree(t + v * twopow(K), Q, (v * twopow(K)) - (t + Q), 2 * (t + Q))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhbandagree-dyadic-core-of-lhbandagree-and-rhbandagree}(t, Q, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-full-row-bandagree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(S\), if \(lhbandagree(t, Q, 0, t + Q)\), then if \(rhbandagree(t, Q, 0, t + Q)\), then \(lhcolagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-full-row-bandagree}(t, Q, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-zero-eq-rhcenter-zero}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\), \(lhcenter(t, 0) = rhcenter(t, 0)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-zero-eq-rhcenter-zero}(t)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-zero-of-lhbandagree-one-and-rhbandagree-zero}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(B\), if \(lhbandagree(t, Q, 1, B)\), then if \(rhbandagree(t, Q, 0, B)\), then \(lhbandagree(t, Q, 0, B)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-zero-of-lhbandagree-one-and-rhbandagree-zero}(t, Q, B)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-lhbandagree-one-and-rhbandagree-zero}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(S\), if \(lhbandagree(t, Q, 1, t + Q)\), then if \(rhbandagree(t, Q, 0, t + Q)\), then \(lhcolagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-lhbandagree-one-and-rhbandagree-zero}(t, Q, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(lhbandagree(z + (p + 1), m * P, 1, (z + (p + 1)) + m * P)\), then if \(rhbandagree(z + (p + 1), m * P, 0, (z + (p + 1)) + m * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-at-zero-diag-doubles}(T, P, m, z, p)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(lhbandagree(t, m * P, 1, t + m * P)\), then if \(rhbandagree(t, m * P, 0, t + m * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-twopow}(T, P, m, t, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhbandagree-dyadic-left-cone-of-lhbandagree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \(((t + S) + Q) + 1 ≤ K\), then if \(lhbandagree(t, Q, 1, S)\), then \(rhbandagree(t + v * twopow(K), Q, ((v * twopow(K)) - 1) - S, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhbandagree-dyadic-left-cone-of-lhbandagree}(t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhbandagree-dyadic-right-cone-of-rhbandagree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(B\), if \(t + Q ≤ K\), then if \(rhbandagree(t, Q, 0, B)\), then \(rhbandagree(t + v * twopow(K), Q, v * twopow(K), B)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhbandagree-dyadic-right-cone-of-rhbandagree}(t, Q, K, v, B)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhbandagree-dyadic-pred-col-cone-of-lhbandagree-and-rhbandagree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \(((t + S) + Q) + 1 ≤ K\), then if \(lhbandagree(t, Q, 1, S)\), then if \(rhbandagree(t, Q, 0, S)\), then \(rhbandagree(t + v * twopow(K), Q, ((v * twopow(K)) - 1) - S, 2 * S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhbandagree-dyadic-pred-col-cone-of-lhbandagree-and-rhbandagree}(t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-lhbandagree-one-and-rhbandagree-zero-cone}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(S\), if \(lhbandagree(t, Q, 1, S)\), then if \(rhbandagree(t, Q, 0, S)\), then \(lhcolagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-lhbandagree-one-and-rhbandagree-zero-cone}(t, Q, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-lhbandagree-one-and-rhbandagree-zero-cone}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(lhbandagree(t, m * P, 1, S)\), then if \(rhbandagree(t, m * P, 0, S)\), then if \(s ≤ S\), then \(maskparity((t + s) + m * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-lhbandagree-one-and-rhbandagree-zero-cone}(T, P, hP, hper, m, t, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-cone-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(lhbandagree(z + (p + 1), m * P, 1, S)\), then if \(rhbandagree(z + (p + 1), m * P, 0, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-cone-at-zero-diag-doubles}(T, P, m, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-cone-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(lhbandagree(t, m * P, 1, S)\), then if \(rhbandagree(t, m * P, 0, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-cone-twopow}(T, P, m, t, k, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-cone-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(k\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + m * P\), then if \(zerodiagonal((z + m * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + m * P, (z + m * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(lhbandagree(z + twopow(k), m * P, 1, S)\), then if \(rhbandagree(z + twopow(k), m * P, 0, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-cone-at-zero-diag-pair}(T, P, m, z, k, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-diag-shift-left-eq}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(w\) and natural number \(d\), if \(1 ≤ v\), then if \(t + d ≤ K\), then \(rhcenter((t + v * twopow(K)) + w * twopow(K), ((v * twopow(K)) + w * twopow(K)) - d) = rhcenter(t + v * twopow(K), (v * twopow(K)) - d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-diag-shift-left-eq}(t, K, v, w, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-diag-shift-right-eq}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(w\) and natural number \(q\), if \(t ≤ K\), then \(rhcenter((t + v * twopow(K)) + w * twopow(K), ((v * twopow(K)) + w * twopow(K)) + q) = rhcenter(t + v * twopow(K), (v * twopow(K)) + q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-diag-shift-right-eq}(t, K, v, w, q)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-diag-shift-band-eq}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(w\) and natural number \(W\) and natural number \(i\), if \(1 ≤ v\), then if \(t + W ≤ K\), then \(rhcenter((t + v * twopow(K)) + w * twopow(K), (((v * twopow(K)) + w * twopow(K)) - W) + i) = rhcenter(t + v * twopow(K), ((v * twopow(K)) - W) + i)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-diag-shift-band-eq}(t, K, v, w, W, i)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhbandagree-dyadic-of-spatial-period-shift-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(w\) and natural number \(W\) and natural number \(B\), if \(1 ≤ v\), then if \(t + W ≤ K\), then if for every natural number \(i\), if \(i ≤ B\), then \(rhcenter((t + v * twopow(K)) + w * twopow(K), ((v * twopow(K)) - W) + i) = rhcenter((t + v * twopow(K)) + w * twopow(K), (((v * twopow(K)) + w * twopow(K)) - W) + i)\), then \(rhbandagree(t + v * twopow(K), w * twopow(K), (v * twopow(K)) - W, B)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhbandagree-dyadic-of-spatial-period-shift-agree}(t, K, v, w, W, B)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-two-scale-row-left-eq-lhcenter}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\) and natural number \(d\), if \(1 ≤ u\), then if \(K ≤ L\), then if \(t + d ≤ K\), then \(rhcenter((t + u * twopow(L)) + w * twopow(K), ((u * twopow(L)) + w * twopow(K)) - d) = lhcenter(t, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-two-scale-row-left-eq-lhcenter}(t, K, L, u, w, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-two-scale-row-right-eq-rhcenter}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\) and natural number \(q\), if \(K ≤ L\), then if \(t ≤ K\), then \(rhcenter((t + u * twopow(L)) + w * twopow(K), ((u * twopow(L)) + w * twopow(K)) + q) = rhcenter(t, q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-two-scale-row-right-eq-rhcenter}(t, K, L, u, w, q)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-two-scale-single-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\) and natural number \(S\), if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + w * twopow(K)) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ 2 * S\), then \(rhcenter((t + u * twopow(L)) + w * twopow(K), (((u * twopow(L)) - 1) - S) + i) = rhcenter((t + u * twopow(L)) + w * twopow(K), ((((u * twopow(L)) + w * twopow(K)) - 1) - S) + i)\), then \(lhcolagree(t, w * twopow(K), 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-two-scale-single-row-spatial-agree}(t, K, L, u, w, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-two-scale-single-row-mul-period-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(P\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(c\) and natural number \(S\), if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ 2 * S\), then \(rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, (((u * twopow(L)) - 1) - S) + i) = rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, ((((u * twopow(L)) + (c * twopow(K)) * P) - 1) - S) + i)\), then \(lhcolagree(t, (c * twopow(K)) * P, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-two-scale-single-row-mul-period-agree}(t, P, K, L, u, c, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-two-scale-single-row-mul-period-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(c\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ 2 * S\), then \(rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, (((u * twopow(L)) - 1) - S) + i) = rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, ((((u * twopow(L)) + (c * twopow(K)) * P) - 1) - S) + i)\), then if \(s ≤ S\), then \(maskparity((t + s) + (c * twopow(K)) * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(t\), \(K\), \(L\), \(u\), \(c\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-two-scale-single-row-mul-period-agree}(T, P, hP, hper, t, K, L, u, c, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-two-scale-single-row-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(z\) and natural number \(p\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat((c * twopow(K)) * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - (c * twopow(K)) * P, z + (p + 1))\), then if \(p + 3 * ((c * twopow(K)) * P) ≤ S + 1\), then if \(1 ≤ u\), then if \(((z + (p + 1)) + S) + 1 ≤ K\), then if \((((z + (p + 1)) + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ 2 * S\), then \(rhcenter(((z + (p + 1)) + u * twopow(L)) + (c * twopow(K)) * P, (((u * twopow(L)) - 1) - S) + i) = rhcenter(((z + (p + 1)) + u * twopow(L)) + (c * twopow(K)) * P, ((((u * twopow(L)) + (c * twopow(K)) * P) - 1) - S) + i)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-two-scale-single-row-at-zero-diag-doubles}(T, P, c, z, p, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-two-scale-single-row-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(t\) and natural number \(k\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ t\), then if \(t + (c * twopow(K)) * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ 2 * S\), then \(rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, (((u * twopow(L)) - 1) - S) + i) = rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, ((((u * twopow(L)) + (c * twopow(K)) * P) - 1) - S) + i)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-two-scale-single-row-twopow}(T, P, c, t, k, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-two-scale-single-row-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(z\) and natural number \(k\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + (c * twopow(K)) * P\), then if \(zerodiagonal((z + (c * twopow(K)) * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + (c * twopow(K)) * P, (z + (c * twopow(K)) * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \(((z + twopow(k)) + S) + 1 ≤ K\), then if \((((z + twopow(k)) + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ 2 * S\), then \(rhcenter(((z + twopow(k)) + u * twopow(L)) + (c * twopow(K)) * P, (((u * twopow(L)) - 1) - S) + i) = rhcenter(((z + twopow(k)) + u * twopow(L)) + (c * twopow(K)) * P, ((((u * twopow(L)) + (c * twopow(K)) * P) - 1) - S) + i)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-two-scale-single-row-at-zero-diag-pair}(T, P, c, z, k, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-exact-row-left-eq-false}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(L\) and natural number \(u\) and natural number \(d\), if \(1 ≤ u\), then if \(d ≤ L\), then if \(0 < d\), then \(rhcenter(u * twopow(L), (u * twopow(L)) - d) = false\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-exact-row-left-eq-false}(L, u, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-exact-row-self-eq-true}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(L\) and natural number \(u\), \(rhcenter(u * twopow(L), u * twopow(L)) = true\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-exact-row-self-eq-true}(L, u)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-exact-row-right-eq-false}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(L\) and natural number \(u\) and natural number \(r\), if \(0 < r\), then \(rhcenter(u * twopow(L), (u * twopow(L)) + r) = false\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-exact-row-right-eq-false}(L, u, r)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-exact-row-translate-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(L\) and natural number \(u\) and natural number \(v\) and natural number \(W\) and natural number \(i\), if \(1 ≤ u\), then if \(1 ≤ v\), then if \(W ≤ L\), then \(rhcenter(v * twopow(L), ((v * twopow(L)) - W) + i) = rhcenter(u * twopow(L), ((u * twopow(L)) - W) + i)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-exact-row-translate-agree}(L, u, v, W, i)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-exact-row-evolve-translate-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(L\) and natural number \(u\) and natural number \(v\) and natural number \(W\) and natural number \(s\) and natural number \(i\), if \(1 ≤ u\), then if \(1 ≤ v\), then if \(s + W ≤ L\), then \(rhcenter((v * twopow(L)) + s, ((v * twopow(L)) - W) + i) = rhcenter((u * twopow(L)) + s, ((u * twopow(L)) - W) + i)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-exact-row-evolve-translate-agree}(L, u, v, W, s, i)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-exact-row-left-eq-false}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(L\) and natural number \(u\) and natural number \(d\), if \(1 ≤ u\), then if \(d ≤ L\), then if \(0 < d\), then \(rdrv(td, u * twopow(L), 0, (u * twopow(L)) - d) = false\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-exact-row-left-eq-false}(td, L, u, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-exact-row-self-eq-true}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(L\) and natural number \(u\), if \(1 ≤ u\), then \(rdrv(td, u * twopow(L), 0, u * twopow(L)) = true\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-exact-row-self-eq-true}(td, L, u)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-exact-row-right-eq-false}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(L\) and natural number \(u\) and natural number \(r\), if \(0 < r\), then \(rdrv(td, u * twopow(L), 0, (u * twopow(L)) + r) = false\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-exact-row-right-eq-false}(td, L, u, r)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-exact-row-shift-left-eq}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(L\) and natural number \(u\) and natural number \(d\) and natural number \(s\), if \(1 ≤ u\), then if \(s + d ≤ L\), then \(rdrv(td, u * twopow(L), s, (u * twopow(L)) - d) = lhcenter(s, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-exact-row-shift-left-eq}(td, L, u, d, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-exact-row-shift-right-eq}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(L\) and natural number \(u\) and natural number \(q\) and natural number \(s\), if \(1 ≤ u\), then if \(s ≤ L\), then \(rdrv(td, u * twopow(L), s, (u * twopow(L)) + q) = rhcenter(s, q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-exact-row-shift-right-eq}(td, L, u, q, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-exact-row-time-shift-left-eq}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(L\) and natural number \(u\) and natural number \(d\) and natural number \(s\), if \(1 ≤ u\), then if \((t + s) + d ≤ L\), then \(rdrv(td, u * twopow(L), t + s, (u * twopow(L)) - d) = lhcenter(t + s, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-exact-row-time-shift-left-eq}(td, t, L, u, d, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-exact-row-time-shift-right-eq}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(L\) and natural number \(u\) and natural number \(q\) and natural number \(s\), if \(1 ≤ u\), then if \(t + s ≤ L\), then \(rdrv(td, u * twopow(L), t + s, (u * twopow(L)) + q) = rhcenter(t + s, q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-exact-row-time-shift-right-eq}(td, t, L, u, q, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-of-rdrv-dyadic-exact-row-step-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(Q\) and natural number \(L\) and natural number \(u\) and natural number \(d\) and natural number \(S\), if \(1 ≤ u\), then if \(((t + S) + Q) + d ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, u * twopow(L), (t + s) + Q, (u * twopow(L)) - d) = rdrv(td, u * twopow(L), t + s, (u * twopow(L)) - d)\), then \(lhcolagree(t, Q, d, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-of-rdrv-dyadic-exact-row-step-agree}(td, t, Q, L, u, d, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-rdrv-dyadic-exact-row-step-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(Q\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(1 ≤ u\), then if \(((t + S) + Q) + 1 ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, u * twopow(L), (t + s) + Q, (u * twopow(L)) - 1) = rdrv(td, u * twopow(L), t + s, (u * twopow(L)) - 1)\), then \(lhcolagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-rdrv-dyadic-exact-row-step-agree}(td, t, Q, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-rdrv-dyadic-exact-row-step-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(td\) and natural number \(m\) and natural number \(t\) and natural number \(L\) and natural number \(u\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(1 ≤ u\), then if \(((t + S) + m * P) + 1 ≤ L\), then if for every natural number \(j\), if \(j ≤ S\), then \(rdrv(td, u * twopow(L), (t + j) + m * P, (u * twopow(L)) - 1) = rdrv(td, u * twopow(L), t + j, (u * twopow(L)) - 1)\), then if \(s ≤ S\), then \(maskparity((t + s) + m * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(td\), \(m\), \(t\), \(L\), \(u\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-rdrv-dyadic-exact-row-step-agree}(T, P, hP, hper, td, m, t, L, u, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-exact-row-step-agree-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(1 ≤ u\), then if \((((z + (p + 1)) + S) + m * P) + 1 ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, u * twopow(L), ((z + (p + 1)) + s) + m * P, (u * twopow(L)) - 1) = rdrv(td, u * twopow(L), (z + (p + 1)) + s, (u * twopow(L)) - 1)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-exact-row-step-agree-at-zero-diag-doubles}(T, P, td, m, z, p, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-exact-row-step-agree-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(t\) and natural number \(k\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \(((t + S) + m * P) + 1 ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, u * twopow(L), (t + s) + m * P, (u * twopow(L)) - 1) = rdrv(td, u * twopow(L), t + s, (u * twopow(L)) - 1)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-exact-row-step-agree-twopow}(T, P, td, m, t, k, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-exact-row-step-agree-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(k\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + m * P\), then if \(zerodiagonal((z + m * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + m * P, (z + m * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \((((z + twopow(k)) + S) + m * P) + 1 ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, u * twopow(L), ((z + twopow(k)) + s) + m * P, (u * twopow(L)) - 1) = rdrv(td, u * twopow(L), (z + twopow(k)) + s, (u * twopow(L)) - 1)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-exact-row-step-agree-at-zero-diag-pair}(T, P, td, m, z, k, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-shifted-init-left-eq-lhcenter}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(L\) and natural number \(u\) and natural number \(d\) and natural number \(s\), if \(1 ≤ u\), then if \((t + s) + d ≤ L\), then \(rdrv(td, t + u * twopow(L), s, (u * twopow(L)) - d) = lhcenter(t + s, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-shifted-init-left-eq-lhcenter}(td, t, L, u, d, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-shifted-init-right-eq-rhcenter}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(L\) and natural number \(u\) and natural number \(q\) and natural number \(s\), if \(1 ≤ u\), then if \(t + s ≤ L\), then \(rdrv(td, t + u * twopow(L), s, (u * twopow(L)) + q) = rhcenter(t + s, q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-shifted-init-right-eq-rhcenter}(td, t, L, u, q, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-of-rdrv-dyadic-shifted-init-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(Q\) and natural number \(L\) and natural number \(u\) and natural number \(d\) and natural number \(S\), if \(1 ≤ u\), then if \(((t + S) + Q) + d ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, (t + u * twopow(L)) + Q, s, (u * twopow(L)) - d) = rdrv(td, t + u * twopow(L), s, (u * twopow(L)) - d)\), then \(lhcolagree(t, Q, d, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-of-rdrv-dyadic-shifted-init-agree}(td, t, Q, L, u, d, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcolagree-one-of-rdrv-dyadic-shifted-init-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(Q\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(1 ≤ u\), then if \(((t + S) + Q) + 1 ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, (t + u * twopow(L)) + Q, s, (u * twopow(L)) - 1) = rdrv(td, t + u * twopow(L), s, (u * twopow(L)) - 1)\), then \(lhcolagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcolagree-one-of-rdrv-dyadic-shifted-init-agree}(td, t, Q, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-shifted-init-agree-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(1 ≤ u\), then if \((((z + (p + 1)) + S) + m * P) + 1 ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, ((z + (p + 1)) + u * twopow(L)) + m * P, s, (u * twopow(L)) - 1) = rdrv(td, (z + (p + 1)) + u * twopow(L), s, (u * twopow(L)) - 1)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-shifted-init-agree-at-zero-diag-doubles}(T, P, td, m, z, p, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-shifted-init-agree-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(t\) and natural number \(k\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \(((t + S) + m * P) + 1 ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, (t + u * twopow(L)) + m * P, s, (u * twopow(L)) - 1) = rdrv(td, t + u * twopow(L), s, (u * twopow(L)) - 1)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-shifted-init-agree-twopow}(T, P, td, m, t, k, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-shifted-init-agree-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(k\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + m * P\), then if \(zerodiagonal((z + m * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + m * P, (z + m * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \((((z + twopow(k)) + S) + m * P) + 1 ≤ L\), then if for every natural number \(s\), if \(s ≤ S\), then \(rdrv(td, ((z + twopow(k)) + u * twopow(L)) + m * P, s, (u * twopow(L)) - 1) = rdrv(td, (z + twopow(k)) + u * twopow(L), s, (u * twopow(L)) - 1)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-shifted-init-agree-at-zero-diag-pair}(T, P, td, m, z, k, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhbandagree-one-step}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(L\), if \(T ≤ t\), then if \(lhbandagree(t, m * P, 1, L + 1)\), then \(lhbandagree(t + 1, m * P, 1, L)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(L\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhbandagree-one-step}(T, P, hP, hper, m, t, L)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhbandagree-one-steps}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(L\) and natural number \(s\), if \(T ≤ t\), then if \(lhbandagree(t, m * P, 1, L + s)\), then \(lhbandagree(t + s, m * P, 1, L)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(L\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhbandagree-one-steps}(T, P, hP, hper, m, t, L, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcenter-one-agree-of-lhbandagree-one}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(lhbandagree(t, m * P, 1, S)\), then if \(s ≤ S\), then \(lhcenter((t + s) + m * P, 1) = lhcenter(t + s, 1)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcenter-one-agree-of-lhbandagree-one}(T, P, hP, hper, m, t, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-of-lhbandagree-one}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(S\), if \(T ≤ t\), then if \(lhbandagree(t, m * P, 1, S)\), then \(lhcolagree(t, m * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(S\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-of-lhbandagree-one}(T, P, hP, hper, m, t, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-lhbandagree-one}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(lhbandagree(t, m * P, 1, S)\), then if \(s ≤ S\), then \(maskparity((t + s) + m * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-lhbandagree-one}(T, P, hP, hper, m, t, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(lhbandagree(z + (p + 1), m * P, 1, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-at-zero-diag-doubles}(T, P, m, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(lhbandagree(t, m * P, 1, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-twopow}(T, P, m, t, k, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(k\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + m * P\), then if \(zerodiagonal((z + m * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + m * P, (z + m * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(lhbandagree(z + twopow(k), m * P, 1, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-at-zero-diag-pair}(T, P, m, z, k, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-rhcenter-dyadic-left-corridor-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \((t + Q) + (S + 1) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter((t + v * twopow(K)) + Q, (v * twopow(K)) - (1 + i)) = rhcenter(t + v * twopow(K), (v * twopow(K)) - (1 + i))\), then \(lhbandagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-rhcenter-dyadic-left-corridor-agree}(t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-rhbandagree-dyadic-left-corridor}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \((t + Q) + (S + 1) ≤ K\), then if \(rhbandagree(t + v * twopow(K), Q, (v * twopow(K)) - (S + 1), S)\), then \(lhbandagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-rhbandagree-dyadic-left-corridor}(t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-of-rhbandagree-dyadic-left-corridor}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(t\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(T ≤ t\), then if \(1 ≤ v\), then if \((t + m * P) + (S + 1) ≤ K\), then if \(rhbandagree(t + v * twopow(K), m * P, (v * twopow(K)) - (S + 1), S)\), then \(lhcolagree(t, m * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(t\), \(K\), \(v\), \(S\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-of-rhbandagree-dyadic-left-corridor}(T, P, hP, hper, m, t, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-left-corridor-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(1 ≤ v\), then if \(((z + (p + 1)) + m * P) + (S + 1) ≤ K\), then if \(rhbandagree((z + (p + 1)) + v * twopow(K), m * P, (v * twopow(K)) - (S + 1), S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-left-corridor-at-zero-diag-doubles}(T, P, m, z, p, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-left-corridor-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ t\), then if \(t + m * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ v\), then if \((t + m * P) + (S + 1) ≤ K\), then if \(rhbandagree(t + v * twopow(K), m * P, (v * twopow(K)) - (S + 1), S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-left-corridor-twopow}(T, P, m, t, k, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rhbandagree-dyadic-left-corridor-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(k\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + m * P\), then if \(zerodiagonal((z + m * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + m * P, (z + m * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ v\), then if \(((z + twopow(k)) + m * P) + (S + 1) ≤ K\), then if \(rhbandagree((z + twopow(k)) + v * twopow(K), m * P, (v * twopow(K)) - (S + 1), S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rhbandagree-dyadic-left-corridor-at-zero-diag-pair}(T, P, m, z, k, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-rdrv-dyadic-exact-row-left-corridor-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(S\), if \(1 ≤ v\), then if \((t + Q) + (S + 1) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, v * twopow(K), t + Q, (v * twopow(K)) - (1 + i)) = rdrv(td, v * twopow(K), t, (v * twopow(K)) - (1 + i))\), then \(lhbandagree(t, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-rdrv-dyadic-exact-row-left-corridor-agree}(td, t, Q, K, v, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-two-scale-single-row-left-corridor-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\) and natural number \(S\), if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + w * twopow(K)) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter((t + u * twopow(L)) + w * twopow(K), (u * twopow(L)) - (1 + i)) = rhcenter((t + u * twopow(L)) + w * twopow(K), ((u * twopow(L)) + w * twopow(K)) - (1 + i))\), then \(lhbandagree(t, w * twopow(K), 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-two-scale-single-row-left-corridor-spatial-agree}(t, K, L, u, w, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-dyadic-mul-period-single-row-left-corridor-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(P\) and natural number \(c\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(lhbandagree(t, (c * twopow(K)) * P, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-dyadic-mul-period-single-row-left-corridor-spatial-agree}(t, P, c, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-of-dyadic-mul-period-single-row-left-corridor-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(c\) and natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(T ≤ t\), then if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(lhcolagree(t, (c * twopow(K)) * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(c\), \(t\), \(K\), \(L\), \(u\), \(S\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-of-dyadic-mul-period-single-row-left-corridor-spatial-agree}(T, P, hP, hper, c, t, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-dyadic-mul-period-single-row-left-corridor-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(c\) and natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then if \(s ≤ S\), then \(maskparity((t + s) + (c * twopow(K)) * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(c\), \(t\), \(K\), \(L\), \(u\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-dyadic-mul-period-single-row-left-corridor-spatial-agree}(T, P, hP, hper, c, t, K, L, u, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-dyadic-mul-period-single-row-left-corridor-spatial-agree-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(z\) and natural number \(p\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat((c * twopow(K)) * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - (c * twopow(K)) * P, z + (p + 1))\), then if \(p + 3 * ((c * twopow(K)) * P) ≤ S + 1\), then if \(1 ≤ u\), then if \(((z + (p + 1)) + S) + 1 ≤ K\), then if \((((z + (p + 1)) + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter(((z + (p + 1)) + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rhcenter(((z + (p + 1)) + u * twopow(L)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-dyadic-mul-period-single-row-left-corridor-spatial-agree-at-zero-diag-doubles}(T, P, c, z, p, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-dyadic-mul-period-single-row-left-corridor-spatial-agree-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(t\) and natural number \(k\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ t\), then if \(t + (c * twopow(K)) * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rhcenter((t + u * twopow(L)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-dyadic-mul-period-single-row-left-corridor-spatial-agree-twopow}(T, P, c, t, k, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-dyadic-mul-period-single-row-left-corridor-spatial-agree-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(z\) and natural number \(k\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + (c * twopow(K)) * P\), then if \(zerodiagonal((z + (c * twopow(K)) * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + (c * twopow(K)) * P, (z + (c * twopow(K)) * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \(((z + twopow(k)) + S) + 1 ≤ K\), then if \((((z + twopow(k)) + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter(((z + twopow(k)) + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rhcenter(((z + twopow(k)) + u * twopow(L)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-dyadic-mul-period-single-row-left-corridor-spatial-agree-at-zero-diag-pair}(T, P, c, z, k, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-two-scale-row-left-eq-lhcenter}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\) and natural number \(d\), if \(1 ≤ u\), then if \(K ≤ L\), then if \(t + d ≤ K\), then if \((t + w * twopow(K)) + d ≤ L\), then \(rdrv(td, u * twopow(L), t + w * twopow(K), ((u * twopow(L)) + w * twopow(K)) - d) = lhcenter(t, d)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-two-scale-row-left-eq-lhcenter}(td, t, K, L, u, w, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-two-scale-row-right-eq-rhcenter}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\) and natural number \(q\), if \(1 ≤ u\), then if \(K ≤ L\), then if \(t ≤ K\), then if \(t + w * twopow(K) ≤ L\), then \(rdrv(td, u * twopow(L), t + w * twopow(K), ((u * twopow(L)) + w * twopow(K)) + q) = rhcenter(t, q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-two-scale-row-right-eq-rhcenter}(td, t, K, L, u, w, q)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-rdrv-two-scale-single-row-left-corridor-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\) and natural number \(S\), if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + w * twopow(K)) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, u * twopow(L), t + w * twopow(K), (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), t + w * twopow(K), ((u * twopow(L)) + w * twopow(K)) - (1 + i))\), then \(lhbandagree(t, w * twopow(K), 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-rdrv-two-scale-single-row-left-corridor-spatial-agree}(td, t, K, L, u, w, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(td\) and natural number \(c\) and natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(T ≤ t\), then if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, u * twopow(L), t + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), t + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(lhcolagree(t, (c * twopow(K)) * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(td\), \(c\), \(t\), \(K\), \(L\), \(u\), \(S\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree}(T, P, hP, hper, td, c, t, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(td\) and natural number \(c\) and natural number \(t\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, u * twopow(L), t + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), t + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then if \(s ≤ S\), then \(maskparity((t + s) + (c * twopow(K)) * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(td\), \(c\), \(t\), \(K\), \(L\), \(u\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree}(T, P, hP, hper, td, c, t, K, L, u, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(c\) and natural number \(z\) and natural number \(p\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat((c * twopow(K)) * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - (c * twopow(K)) * P, z + (p + 1))\), then if \(p + 3 * ((c * twopow(K)) * P) ≤ S + 1\), then if \(1 ≤ u\), then if \(((z + (p + 1)) + S) + 1 ≤ K\), then if \((((z + (p + 1)) + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, u * twopow(L), (z + (p + 1)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), (z + (p + 1)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree-at-zero-diag-doubles}(T, P, td, c, z, p, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(c\) and natural number \(t\) and natural number \(k\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ t\), then if \(t + (c * twopow(K)) * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \((t + S) + 1 ≤ K\), then if \(((t + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, u * twopow(L), t + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), t + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree-twopow}(T, P, td, c, t, k, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree-at-zero-diag-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(c\) and natural number \(z\) and natural number \(k\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(S\), if \(0 < P\), then if \(zerodiagonal(z)\), then if \(2 ≤ z + (c * twopow(K)) * P\), then if \(zerodiagonal((z + (c * twopow(K)) * P) - 2)\), then if \(T ≤ z + twopow(k)\), then if \(settledby(z, z + twopow(k))\), then if \(settledby(z + (c * twopow(K)) * P, (z + (c * twopow(K)) * P) + twopow(k))\), then if \(twopow(k) ≤ S + 1\), then if \(1 ≤ u\), then if \(((z + twopow(k)) + S) + 1 ≤ K\), then if \((((z + twopow(k)) + S) + (c * twopow(K)) * P) + 1 ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, u * twopow(L), (z + twopow(k)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), (z + twopow(k)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-rdrv-dyadic-mul-period-single-row-left-corridor-spatial-agree-at-zero-diag-pair}(T, P, td, c, z, k, K, L, u, S)\).
+  \end{proof}
+  \end{theorem}
+
 \end{section}
 \end{lexlean}

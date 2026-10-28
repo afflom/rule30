@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdrv-dyadic-shifted-init-right-eq-rhcenter"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (pi ((explicit hu (app (const lexlean.std.nat::le) (nat 1) (local u))) (explicit htsL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local t) (local s)) (local L)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L)))) (local s) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L))) (local q))) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (local s)) (local q)))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rdrv_dyadic_shifted_init_right_eq_rhCenter"
+
+[[form]]
+id = "rdrv-dyadic-shifted-init-right-eq-rhcenter"
+channel = "math"
+surface = "rdrvdyadicshiftedinitrighteqrhcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdrvdyadicshiftedinitrighteqrhcenter) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

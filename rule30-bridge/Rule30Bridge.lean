@@ -14924,4 +14924,951 @@ theorem rhcenter_dyadic_sub_eq_ldiag_t_add_kit (t C v d j : Nat)
       Rule30UOR.Core.ldiag ((t + j) - d) (t + j) :=
   Rule30Paper.Paper.rhcenter_dyadic_sub_eq_ldiag_t_add t C v d j hv hdU hjd hdt
 
+/-- **Automatic-Width Delay-Free Embedding of `lhCenter j d` at Right-Half Column `v * 2^K - d` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_sub_eq_lhcenter_of_le_kit (K v d j : Nat)
+    (hv : 1 ≤ v) (hjd : j + d ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((v * Rule30UOR.Core.twopow K) + j) ((v * Rule30UOR.Core.twopow K) - d) =
+      Rule30UOR.Interfaces.lhCenter j d :=
+  Rule30Paper.Paper.rhcenter_dyadic_sub_eq_lhcenter_of_le K v d j hv hjd
+
+/-- **Time-Shifted Embedding of `lhCenter (t + s) d` at Right-Half Column `v * 2^K - d` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_sub_shift_eq_lhcenter_kit (t K v d s : Nat)
+    (hv : 1 ≤ v) (hts : (t + s) + d ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + s) ((v * Rule30UOR.Core.twopow K) - d) =
+      Rule30UOR.Interfaces.lhCenter (t + s) d :=
+  Rule30Paper.Paper.rhcenter_dyadic_sub_shift_eq_lhcenter t K v d s hv hts
+
+/-- **Period-Shifted Embedding of `lhCenter ((t + s) + Q) d` at Right-Half Column `v * 2^K - d` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_sub_period_shift_eq_lhcenter_kit (t Q K v d s : Nat)
+    (hv : 1 ≤ v) (hts : ((t + s) + Q) + d ≤ K) :
+    Rule30UOR.Interfaces.rhCenter (((t + v * Rule30UOR.Core.twopow K) + s) + Q) ((v * Rule30UOR.Core.twopow K) - d) =
+      Rule30UOR.Interfaces.lhCenter ((t + s) + Q) d :=
+  Rule30Paper.Paper.rhcenter_dyadic_sub_period_shift_eq_lhcenter t Q K v d s hv hts
+
+/-- **Time-Shifted Embedding of Left-Half Column `-1` (`lhCenter (t + s) 1`) at Right-Half Column `v * 2^K - 1` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_pred_col_shift_eq_lhcenter_one_kit (t K v s : Nat)
+    (hv : 1 ≤ v) (hts : (t + s) + 1 ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + s) ((v * Rule30UOR.Core.twopow K) - 1) =
+      Rule30UOR.Interfaces.lhCenter (t + s) 1 :=
+  Rule30Paper.Paper.rhcenter_dyadic_pred_col_shift_eq_lhcenter_one t K v s hv hts
+
+/-- **Pointwise Pullback of `lhCenter ((t + s) + Q) d = lhCenter (t + s) d` from Right-Half Column `v * 2^K - d` Agreement (`kit [33]`) from the verified paper**. -/
+theorem lhcenter_shift_agree_of_rhcenter_dyadic_sub_agree_kit (t Q K v d s : Nat)
+    (hv : 1 ≤ v) (hts : ((t + s) + Q) + d ≤ K)
+    (h : Rule30UOR.Interfaces.rhCenter (((t + v * Rule30UOR.Core.twopow K) + s) + Q) ((v * Rule30UOR.Core.twopow K) - d) =
+         Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + s) ((v * Rule30UOR.Core.twopow K) - d)) :
+    Rule30UOR.Interfaces.lhCenter ((t + s) + Q) d = Rule30UOR.Interfaces.lhCenter (t + s) d :=
+  Rule30Paper.Paper.lhcenter_shift_agree_of_rhcenter_dyadic_sub_agree t Q K v d s hv hts h
+
+/-- **Pullback of `LhColAgree t Q d S` from Right-Half Column Agreement `RhColAgree (t + v * 2^K) Q (v * 2^K - d) S` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_of_rhcolagree_dyadic_sub_kit (t Q K v d S : Nat)
+    (hv : 1 ≤ v) (hK : ((t + S) + Q) + d ≤ K)
+    (hcol : Rule30UOR.Interfaces.RhColAgree (t + v * Rule30UOR.Core.twopow K) Q ((v * Rule30UOR.Core.twopow K) - d) S) :
+    Rule30UOR.Interfaces.LhColAgree t Q d S :=
+  Rule30Paper.Paper.lhcolagree_of_rhcolagree_dyadic_sub t Q K v d S hv hK hcol
+
+/-- **Pullback of Left-Half Column-`-1` Agreement `LhColAgree t Q 1 S` from Right-Half Column `v * 2^K - 1` Agreement (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_rhcolagree_dyadic_pred_col_kit (t Q K v S : Nat)
+    (hv : 1 ≤ v) (hK : ((t + S) + Q) + 1 ≤ K)
+    (hcol : Rule30UOR.Interfaces.RhColAgree (t + v * Rule30UOR.Core.twopow K) Q ((v * Rule30UOR.Core.twopow K) - 1) S) :
+    Rule30UOR.Interfaces.LhColAgree t Q 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_rhcolagree_dyadic_pred_col t Q K v S hv hK hcol
+
+/-- **Producing `maskparity · 0` Agreement from Right-Half Column `v * 2^K - 1` Agreement (`kit [33]`) from the verified paper**. -/
+theorem periodic_maskparity_zero_agree_of_rhcolagree_dyadic_pred_col_kit
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (m t K v S s : Nat) (ht : T ≤ t) (hv : 1 ≤ v)
+    (hK : ((t + S) + m * P) + 1 ≤ K)
+    (hcol : Rule30UOR.Interfaces.RhColAgree (t + v * Rule30UOR.Core.twopow K) (m * P) ((v * Rule30UOR.Core.twopow K) - 1) S)
+    (hs : s ≤ S) :
+    Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
+      Rule30UOR.Scale.maskparity (t + s) 0 :=
+  Rule30Paper.Paper.periodic_maskparity_zero_agree_of_rhcolagree_dyadic_pred_col T P hP hper m t K v S s ht hv hK hcol hs
+
+/-- **Refutation of `CenterPeriodic` from Right-Half Column `v * 2^K - 1` Agreement at a Doubling Zero Diagonal (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhcolagree_dyadic_pred_col_at_zero_diag_doubles_kit
+    (T P m z p K v S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hv : 1 ≤ v) (hK : (((z + (p + 1)) + S) + m * P) + 1 ≤ K)
+    (hcol : Rule30UOR.Interfaces.RhColAgree ((z + (p + 1)) + v * Rule30UOR.Core.twopow K) (m * P) ((v * Rule30UOR.Core.twopow K) - 1) S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhcolagree_dyadic_pred_col_at_zero_diag_doubles T P m z p K v S hP hm ht hz hd hset1 hset2 hS hv hK hcol
+
+/-- **Dyadic-Window Refutation of `CenterPeriodic` from Right-Half Column `v * 2^K - 1` Agreement (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhcolagree_dyadic_pred_col_twopow_kit
+    (T P m t k K v S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ t) (htm : t + m * P = Rule30UOR.Core.twopow k)
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hv : 1 ≤ v) (hK : ((t + S) + m * P) + 1 ≤ K)
+    (hcol : Rule30UOR.Interfaces.RhColAgree (t + v * Rule30UOR.Core.twopow K) (m * P) ((v * Rule30UOR.Core.twopow K) - 1) S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhcolagree_dyadic_pred_col_twopow T P m t k K v S hP hm ht htm hS hv hK hcol
+
+/-- **Zero-Diagonal Pair Refutation of `CenterPeriodic` from Right-Half Column `v * 2^K - 1` Agreement (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhcolagree_dyadic_pred_col_at_zero_diag_pair_kit
+    (T P m z k K v S : Nat) (hP : 0 < P)
+    (hz0 : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (h2 : 2 ≤ z + m * P)
+    (hz1 : Rule30UOR.ZeroDiagonals.IsZeroDiag ((z + m * P) - 2))
+    (ht : T ≤ z + Rule30UOR.Core.twopow k)
+    (hset0 : Rule30UOR.Interfaces.SettledBy z (z + Rule30UOR.Core.twopow k))
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + m * P) ((z + m * P) + Rule30UOR.Core.twopow k))
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hv : 1 ≤ v) (hK : (((z + Rule30UOR.Core.twopow k) + S) + m * P) + 1 ≤ K)
+    (hcol : Rule30UOR.Interfaces.RhColAgree ((z + Rule30UOR.Core.twopow k) + v * Rule30UOR.Core.twopow K) (m * P) ((v * Rule30UOR.Core.twopow K) - 1) S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhcolagree_dyadic_pred_col_at_zero_diag_pair T P m z k K v S hP hz0 h2 hz1 ht hset0 hset1 hS hv hK hcol
+
+/-- **Automatic-Width Delay-Free Embedding of Left Diagonals `ldiag (j - d) j` at Right-Half Column `v * 2^K - d` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_sub_eq_ldiag_of_le_kit (K v d j : Nat)
+    (hv : 1 ≤ v) (hjd : j + d ≤ K) (hdj : d ≤ j) :
+    Rule30UOR.Interfaces.rhCenter ((v * Rule30UOR.Core.twopow K) + j) ((v * Rule30UOR.Core.twopow K) - d) =
+      Rule30UOR.Core.ldiag (j - d) j :=
+  Rule30Paper.Paper.rhcenter_dyadic_sub_eq_ldiag_of_le K v d j hv hjd hdj
+
+/-- **Embedded Zero-Diagonal White Anti-Diagonal in the Right Half `rhCenter` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_sub_zero_diag_eq_false_kit (K v z d : Nat)
+    (hv : 1 ≤ v) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hset : Rule30UOR.Interfaces.SettledBy z (z + d)) (hK : (z + d) + d ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((v * Rule30UOR.Core.twopow K) + (z + d)) ((v * Rule30UOR.Core.twopow K) - d) = false :=
+  Rule30Paper.Paper.rhcenter_dyadic_sub_zero_diag_eq_false K v z d hv hz hset hK
+
+/-- **Embedded Post-Zero-Diagonal (`z + 2`) Black Anti-Diagonal in the Right Half `rhCenter` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_sub_after_zero_diag_eq_true_kit (K v z d : Nat)
+    (hv : 1 ≤ v) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hset : Rule30UOR.Interfaces.SettledBy (z + 2) ((z + 2) + d)) (hK : ((z + 2) + d) + d ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((v * Rule30UOR.Core.twopow K) + ((z + 2) + d)) ((v * Rule30UOR.Core.twopow K) - d) = true :=
+  Rule30Paper.Paper.rhcenter_dyadic_sub_after_zero_diag_eq_true K v z d hv hz hset hK
+
+/-- **Embedded Doubling-Diagonal (`z + 1`) `Q`-Shift Antiperiodicity in the Right Half `rhCenter` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_sub_doubling_diag_antiperiodic_kit (K v Q z d : Nat)
+    (hv : 1 ≤ v) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt Q z)
+    (hset : Rule30UOR.Interfaces.SettledBy (z + 1) ((z + 1) + d))
+    (hK : (((z + 1) + d) + Q) + (d + Q) ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((v * Rule30UOR.Core.twopow K) + (((z + 1) + d) + Q)) ((v * Rule30UOR.Core.twopow K) - (d + Q)) =
+      !Rule30UOR.Interfaces.rhCenter ((v * Rule30UOR.Core.twopow K) + ((z + 1) + d)) ((v * Rule30UOR.Core.twopow K) - d) :=
+  Rule30Paper.Paper.rhcenter_dyadic_sub_doubling_diag_antiperiodic K v Q z d hv hz hd hset hK
+
+/-- **Interior Step Recurrence of `rhCenter` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_step_succ_interior_kit (t p : Nat) :
+    Rule30UOR.Interfaces.rhCenter (t + 1) (p + 1) =
+      Rule30UOR.Core.bxor (Rule30UOR.Interfaces.rhCenter t p) (Rule30UOR.Interfaces.rhCenter t (p + 1) || Rule30UOR.Interfaces.rhCenter t (p + 2)) :=
+  Rule30Paper.Paper.rhcenter_step_succ_interior t p
+
+/-- **Single-Step Bilateral Light-Cone Contraction of `rhCenter` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_bilateral_cone_agree_step_kit (t2 t1 a L i : Nat)
+    (h : ∀ q : Nat, q ≤ L + 2 → Rule30UOR.Interfaces.rhCenter t2 (a + q) = Rule30UOR.Interfaces.rhCenter t1 (a + q))
+    (hi : i ≤ L) :
+    Rule30UOR.Interfaces.rhCenter (t2 + 1) ((a + 1) + i) = Rule30UOR.Interfaces.rhCenter (t1 + 1) ((a + 1) + i) :=
+  Rule30Paper.Paper.rhcenter_bilateral_cone_agree_step t2 t1 a L i h hi
+
+/-- **Bilateral Interior Light-Cone Determination Theorem for `rhCenter` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_bilateral_cone_agree_kit (t2 t1 a L s i : Nat)
+    (h : ∀ q : Nat, q ≤ L + 2 * s → Rule30UOR.Interfaces.rhCenter t2 (a + q) = Rule30UOR.Interfaces.rhCenter t1 (a + q))
+    (hi : i ≤ L) :
+    Rule30UOR.Interfaces.rhCenter (t2 + s) ((a + s) + i) = Rule30UOR.Interfaces.rhCenter (t1 + s) ((a + s) + i) :=
+  Rule30Paper.Paper.rhcenter_bilateral_cone_agree t2 t1 a L s i h hi
+
+/-- **Pointwise Bilateral Light-Cone Determination at Column `P0` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_bilateral_cone_point_agree_kit (t2 t1 P0 s : Nat)
+    (hs : s ≤ P0)
+    (h : ∀ q : Nat, q ≤ 2 * s → Rule30UOR.Interfaces.rhCenter t2 ((P0 - s) + q) = Rule30UOR.Interfaces.rhCenter t1 ((P0 - s) + q)) :
+    Rule30UOR.Interfaces.rhCenter (t2 + s) P0 = Rule30UOR.Interfaces.rhCenter (t1 + s) P0 :=
+  Rule30Paper.Paper.rhcenter_bilateral_cone_point_agree t2 t1 P0 s hs h
+
+/-- **Producing `RhColAgree T0 Q P0 S` from Single-Slice Bilateral Band Agreement `RhBandAgree T0 Q (P0 - S) (2 * S)` (`kit [33]`) from the verified paper**. -/
+theorem rhcolagree_of_rhbandagree_bilateral_cone_kit (T0 Q P0 S : Nat)
+    (hS : S ≤ P0)
+    (hband : Rule30UOR.Interfaces.RhBandAgree T0 Q (P0 - S) (2 * S)) :
+    Rule30UOR.Interfaces.RhColAgree T0 Q P0 S :=
+  Rule30Paper.Paper.rhcolagree_of_rhbandagree_bilateral_cone T0 Q P0 S hS hband
+
+/-- **Pullback of `LhColAgree t Q d S` from Single-Slice Bilateral Band Agreement Around `v * 2^K - d` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_of_rhbandagree_dyadic_sub_cone_kit (t Q K v d S : Nat)
+    (hv : 1 ≤ v) (hK : ((t + S) + Q) + d ≤ K)
+    (hband : Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q (((v * Rule30UOR.Core.twopow K) - d) - S) (2 * S)) :
+    Rule30UOR.Interfaces.LhColAgree t Q d S :=
+  Rule30Paper.Paper.lhcolagree_of_rhbandagree_dyadic_sub_cone t Q K v d S hv hK hband
+
+/-- **Pullback of `LhColAgree t Q 1 S` from Single-Slice Bilateral Band Agreement Around `v * 2^K - 1` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_rhbandagree_dyadic_pred_col_cone_kit (t Q K v S : Nat)
+    (hv : 1 ≤ v) (hK : ((t + S) + Q) + 1 ≤ K)
+    (hband : Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q (((v * Rule30UOR.Core.twopow K) - 1) - S) (2 * S)) :
+    Rule30UOR.Interfaces.LhColAgree t Q 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_rhbandagree_dyadic_pred_col_cone t Q K v S hv hK hband
+
+/-- **Producing `maskparity · 0` Agreement from Single-Slice Bilateral Band Agreement Around `v * 2^K - 1` (`kit [33]`) from the verified paper**. -/
+theorem periodic_maskparity_zero_agree_of_rhbandagree_dyadic_pred_col_cone_kit
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (m t K v S s : Nat) (ht : T ≤ t) (hv : 1 ≤ v)
+    (hK : ((t + S) + m * P) + 1 ≤ K)
+    (hband : Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) (m * P) (((v * Rule30UOR.Core.twopow K) - 1) - S) (2 * S))
+    (hs : s ≤ S) :
+    Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
+      Rule30UOR.Scale.maskparity (t + s) 0 :=
+  Rule30Paper.Paper.periodic_maskparity_zero_agree_of_rhbandagree_dyadic_pred_col_cone T P hP hper m t K v S s ht hv hK hband hs
+
+/-- **Single-Slice Bilateral Cone Refutation of `CenterPeriodic` Around `v * 2^K - 1` at a Doubling Zero Diagonal (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhbandagree_dyadic_pred_col_cone_at_zero_diag_doubles_kit
+    (T P m z p K v S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hv : 1 ≤ v) (hK : (((z + (p + 1)) + S) + m * P) + 1 ≤ K)
+    (hband : Rule30UOR.Interfaces.RhBandAgree ((z + (p + 1)) + v * Rule30UOR.Core.twopow K) (m * P) (((v * Rule30UOR.Core.twopow K) - 1) - S) (2 * S)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhbandagree_dyadic_pred_col_cone_at_zero_diag_doubles T P m z p K v S hP hm ht hz hd hset1 hset2 hS hv hK hband
+
+/-- **Single-Slice Bilateral Cone Dyadic-Window Refutation of `CenterPeriodic` Around `v * 2^K - 1` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhbandagree_dyadic_pred_col_cone_twopow_kit
+    (T P m t k K v S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ t) (htm : t + m * P = Rule30UOR.Core.twopow k)
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hv : 1 ≤ v) (hK : ((t + S) + m * P) + 1 ≤ K)
+    (hband : Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) (m * P) (((v * Rule30UOR.Core.twopow K) - 1) - S) (2 * S)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhbandagree_dyadic_pred_col_cone_twopow T P m t k K v S hP hm ht htm hS hv hK hband
+
+/-- **Single-Slice Bilateral Cone Zero-Diagonal Pair Refutation of `CenterPeriodic` Around `v * 2^K - 1` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhbandagree_dyadic_pred_col_cone_at_zero_diag_pair_kit
+    (T P m z k K v S : Nat) (hP : 0 < P)
+    (hz0 : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (h2 : 2 ≤ z + m * P)
+    (hz1 : Rule30UOR.ZeroDiagonals.IsZeroDiag ((z + m * P) - 2))
+    (ht : T ≤ z + Rule30UOR.Core.twopow k)
+    (hset0 : Rule30UOR.Interfaces.SettledBy z (z + Rule30UOR.Core.twopow k))
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + m * P) ((z + m * P) + Rule30UOR.Core.twopow k))
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hv : 1 ≤ v) (hK : (((z + Rule30UOR.Core.twopow k) + S) + m * P) + 1 ≤ K)
+    (hband : Rule30UOR.Interfaces.RhBandAgree ((z + Rule30UOR.Core.twopow k) + v * Rule30UOR.Core.twopow K) (m * P) (((v * Rule30UOR.Core.twopow K) - 1) - S) (2 * S)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhbandagree_dyadic_pred_col_cone_at_zero_diag_pair T P m z k K v S hP hz0 h2 hz1 ht hset0 hset1 hS hv hK hband
+
+/-- **Common-Scale Left-Side White Corridor at Row `t + v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_row_left_white_corridor_of_le_kit (t K v d : Nat)
+    (hv : 1 ≤ v) (htdK : t + d ≤ K) (htd : t < d) :
+    Rule30UOR.Interfaces.rhCenter (t + v * Rule30UOR.Core.twopow K) ((v * Rule30UOR.Core.twopow K) - d) = false :=
+  Rule30Paper.Paper.rhcenter_dyadic_row_left_white_corridor_of_le t K v d hv htdK htd
+
+/-- **Automatic Agreement in the Left-Side White Corridor of `v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_row_left_white_agree_kit (t Q K v d : Nat)
+    (hv : 1 ≤ v) (hK : (t + Q) + d ≤ K) (htd : t + Q < d) :
+    Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + Q) ((v * Rule30UOR.Core.twopow K) - d) =
+      Rule30UOR.Interfaces.rhCenter (t + v * Rule30UOR.Core.twopow K) ((v * Rule30UOR.Core.twopow K) - d) :=
+  Rule30Paper.Paper.rhcenter_dyadic_row_left_white_agree t Q K v d hv hK htd
+
+/-- **Common-Scale Right-Side White Tail at Row `t + v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_row_right_white_of_le_kit (t K v r : Nat)
+    (htK : t ≤ K) (htr : t < r) :
+    Rule30UOR.Interfaces.rhCenter (t + v * Rule30UOR.Core.twopow K) ((v * Rule30UOR.Core.twopow K) + r) = false :=
+  Rule30Paper.Paper.rhcenter_dyadic_row_right_white_of_le t K v r htK htr
+
+/-- **Automatic Agreement in the Right-Side White Tail of `v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_row_right_white_agree_kit (t Q K v r : Nat)
+    (htK : t + Q ≤ K) (htr : t + Q < r) :
+    Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + Q) ((v * Rule30UOR.Core.twopow K) + r) =
+      Rule30UOR.Interfaces.rhCenter (t + v * Rule30UOR.Core.twopow K) ((v * Rule30UOR.Core.twopow K) + r) :=
+  Rule30Paper.Paper.rhcenter_dyadic_row_right_white_agree t Q K v r htK htr
+
+/-- **All-Horizon Expansion of Fixed-Width Active Core Agreement Around `v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhbandagree_dyadic_core_expand_to_cone_kit (t Q K v S : Nat)
+    (hv : 1 ≤ v) (hK : (((t + S) + Q) + (t + Q)) + 1 ≤ K)
+    (hcore : Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q ((v * Rule30UOR.Core.twopow K) - (t + Q)) (2 * (t + Q))) :
+    Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q (((v * Rule30UOR.Core.twopow K) - 1) - S) (2 * S) :=
+  Rule30Paper.Paper.rhbandagree_dyadic_core_expand_to_cone t Q K v S hv hK hcore
+
+/-- **Pullback of `LhColAgree t Q 1 S` for Any Horizon `S` from Fixed-Width Active Core Agreement Around `v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_rhbandagree_dyadic_core_kit (t Q K v S : Nat)
+    (hv : 1 ≤ v) (hK : (((t + S) + Q) + (t + Q)) + 1 ≤ K)
+    (hcore : Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q ((v * Rule30UOR.Core.twopow K) - (t + Q)) (2 * (t + Q))) :
+    Rule30UOR.Interfaces.LhColAgree t Q 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_rhbandagree_dyadic_core t Q K v S hv hK hcore
+
+/-- **Producing `maskparity · 0` Agreement for Any Horizon `S` from Fixed-Width Active Core Agreement Around `v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem periodic_maskparity_zero_agree_of_rhbandagree_dyadic_core_kit
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (m t K v S s : Nat) (ht : T ≤ t) (hv : 1 ≤ v)
+    (hK : (((t + S) + m * P) + (t + m * P)) + 1 ≤ K)
+    (hcore : Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) (m * P) ((v * Rule30UOR.Core.twopow K) - (t + m * P)) (2 * (t + m * P)))
+    (hs : s ≤ S) :
+    Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
+      Rule30UOR.Scale.maskparity (t + s) 0 :=
+  Rule30Paper.Paper.periodic_maskparity_zero_agree_of_rhbandagree_dyadic_core T P hP hper m t K v S s ht hv hK hcore hs
+
+/-- **Horizon-Free Fixed-Width Active Core Refutation of `CenterPeriodic` at a Doubling Zero Diagonal (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhbandagree_dyadic_core_at_zero_diag_doubles_kit
+    (T P m z p K v : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hv : 1 ≤ v)
+    (hK : ((((z + (p + 1)) + (p + 3 * (m * P))) + m * P) + ((z + (p + 1)) + m * P)) + 1 ≤ K)
+    (hcore : Rule30UOR.Interfaces.RhBandAgree ((z + (p + 1)) + v * Rule30UOR.Core.twopow K) (m * P) ((v * Rule30UOR.Core.twopow K) - ((z + (p + 1)) + m * P)) (2 * ((z + (p + 1)) + m * P))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhbandagree_dyadic_core_at_zero_diag_doubles T P m z p K v hP hm ht hz hd hset1 hset2 hv hK hcore
+
+/-- **Horizon-Free Fixed-Width Active Core Dyadic-Window Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhbandagree_dyadic_core_twopow_kit
+    (T P m t k K v : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ t) (htm : t + m * P = Rule30UOR.Core.twopow k)
+    (hv : 1 ≤ v)
+    (hK : (((t + Rule30UOR.Core.twopow k) + m * P) + (t + m * P)) + 1 ≤ K)
+    (hcore : Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) (m * P) ((v * Rule30UOR.Core.twopow K) - (t + m * P)) (2 * (t + m * P))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhbandagree_dyadic_core_twopow T P m t k K v hP hm ht htm hv hK hcore
+
+/-- **Horizon-Free Fixed-Width Active Core Zero-Diagonal Pair Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rhbandagree_dyadic_core_at_zero_diag_pair_kit
+    (T P m z k K v : Nat) (hP : 0 < P)
+    (hz0 : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (h2 : 2 ≤ z + m * P)
+    (hz1 : Rule30UOR.ZeroDiagonals.IsZeroDiag ((z + m * P) - 2))
+    (ht : T ≤ z + Rule30UOR.Core.twopow k)
+    (hset0 : Rule30UOR.Interfaces.SettledBy z (z + Rule30UOR.Core.twopow k))
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + m * P) ((z + m * P) + Rule30UOR.Core.twopow k))
+    (hv : 1 ≤ v)
+    (hK : ((((z + Rule30UOR.Core.twopow k) + Rule30UOR.Core.twopow k) + m * P) + ((z + Rule30UOR.Core.twopow k) + m * P)) + 1 ≤ K)
+    (hcore : Rule30UOR.Interfaces.RhBandAgree ((z + Rule30UOR.Core.twopow k) + v * Rule30UOR.Core.twopow K) (m * P) ((v * Rule30UOR.Core.twopow K) - ((z + Rule30UOR.Core.twopow k) + m * P)) (2 * ((z + Rule30UOR.Core.twopow k) + m * P))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhbandagree_dyadic_core_at_zero_diag_pair T P m z k K v hP hz0 h2 hz1 ht hset0 hset1 hv hK hcore
+
+/-- **Pushforward of `LhBandAgree t Q 0 (t + Q)` to the Left Half `[v * 2^K - (t + Q), v * 2^K]` of the Active Core (`kit [33]`) from the verified paper**. -/
+theorem rhbandagree_dyadic_left_half_of_lhbandagree_kit (t Q K v : Nat)
+    (hv : 1 ≤ v) (hK : 2 * (t + Q) ≤ K)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t Q 0 (t + Q)) :
+    Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q ((v * Rule30UOR.Core.twopow K) - (t + Q)) (t + Q) :=
+  Rule30Paper.Paper.rhbandagree_dyadic_left_half_of_lhbandagree t Q K v hv hK hlh
+
+/-- **Pushforward of `RhBandAgree t Q 0 (t + Q)` to the Right Half `[v * 2^K, v * 2^K + (t + Q)]` of the Active Core (`kit [33]`) from the verified paper**. -/
+theorem rhbandagree_dyadic_right_half_of_rhbandagree_kit (t Q K v : Nat)
+    (htK : t + Q ≤ K)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t Q 0 (t + Q)) :
+    Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q (v * Rule30UOR.Core.twopow K) (t + Q) :=
+  Rule30Paper.Paper.rhbandagree_dyadic_right_half_of_rhbandagree t Q K v htK hrh
+
+/-- **Assembly of Fixed-Width Active Core Agreement Around `v * 2^K` from `LhBandAgree t Q 0 (t + Q)` and `RhBandAgree t Q 0 (t + Q)` (`kit [33]`) from the verified paper**. -/
+theorem rhbandagree_dyadic_core_of_lhbandagree_and_rhbandagree_kit (t Q K v : Nat)
+    (hv : 1 ≤ v) (hK : 2 * (t + Q) ≤ K)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t Q 0 (t + Q))
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t Q 0 (t + Q)) :
+    Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q ((v * Rule30UOR.Core.twopow K) - (t + Q)) (2 * (t + Q)) :=
+  Rule30Paper.Paper.rhbandagree_dyadic_core_of_lhbandagree_and_rhbandagree t Q K v hv hK hlh hrh
+
+/-- **Full-Row Termination Theorem for `LhColAgree t Q 1 S` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_full_row_bandagree_kit (t Q S : Nat)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t Q 0 (t + Q))
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t Q 0 (t + Q)) :
+    Rule30UOR.Interfaces.LhColAgree t Q 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_full_row_bandagree t Q S hlh hrh
+
+/-- **Origin Equality of `lhCenter` and `rhCenter` (`kit [33]`) from the verified paper**. -/
+theorem lhcenter_zero_eq_rhcenter_zero_kit (t : Nat) :
+    Rule30UOR.Interfaces.lhCenter t 0 = Rule30UOR.Interfaces.rhCenter t 0 :=
+  Rule30Paper.Paper.lhcenter_zero_eq_rhcenter_zero t
+
+/-- **Extending `LhBandAgree t Q 1 B` to `LhBandAgree t Q 0 B` via `RhBandAgree t Q 0 B` (`kit [33]`) from the verified paper**. -/
+theorem lhbandagree_zero_of_lhbandagree_one_and_rhbandagree_zero_kit (t Q B : Nat)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t Q 1 B)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t Q 0 B) :
+    Rule30UOR.Interfaces.LhBandAgree t Q 0 B :=
+  Rule30Paper.Paper.lhbandagree_zero_of_lhbandagree_one_and_rhbandagree_zero t Q B hlh hrh
+
+/-- **Full-Row Termination Theorem for `LhColAgree t Q 1 S` from `LhBandAgree t Q 1 (t + Q)` and `RhBandAgree t Q 0 (t + Q)` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_lhbandagree_one_and_rhbandagree_zero_kit (t Q S : Nat)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t Q 1 (t + Q))
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t Q 0 (t + Q)) :
+    Rule30UOR.Interfaces.LhColAgree t Q 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_lhbandagree_one_and_rhbandagree_zero t Q S hlh hrh
+
+/-- **Horizon-Free Refutation of `CenterPeriodic` from Single-Slice `LhBandAgree` and `RhBandAgree` at a Doubling Zero Diagonal (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_at_zero_diag_doubles_kit
+    (T P m z p : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hlh : Rule30UOR.Interfaces.LhBandAgree (z + (p + 1)) (m * P) 1 ((z + (p + 1)) + m * P))
+    (hrh : Rule30UOR.Interfaces.RhBandAgree (z + (p + 1)) (m * P) 0 ((z + (p + 1)) + m * P)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_at_zero_diag_doubles T P m z p hP hm ht hz hd hset1 hset2 hlh hrh
+
+/-- **Horizon-Free Dyadic-Window Refutation of `CenterPeriodic` from Single-Slice `LhBandAgree` and `RhBandAgree` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_twopow_kit
+    (T P m t k : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ t) (htm : t + m * P = Rule30UOR.Core.twopow k)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t (m * P) 1 (t + m * P))
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t (m * P) 0 (t + m * P)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_twopow T P m t k hP hm ht htm hlh hrh
+
+/-- **Pushforward of Horizon-Width `LhBandAgree t Q 1 S` to the Left Cone Half `[(v * 2^K - 1) - S, v * 2^K - 1]` (`kit [33]`) from the verified paper**. -/
+theorem rhbandagree_dyadic_left_cone_of_lhbandagree_kit (t Q K v S : Nat)
+    (hv : 1 ≤ v) (hK : ((t + S) + Q) + 1 ≤ K)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t Q 1 S) :
+    Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q (((v * Rule30UOR.Core.twopow K) - 1) - S) S :=
+  Rule30Paper.Paper.rhbandagree_dyadic_left_cone_of_lhbandagree t Q K v S hv hK hlh
+
+/-- **Pushforward of Arbitrary-Width `RhBandAgree t Q 0 B` to the Right Cone Half `[v * 2^K, v * 2^K + B]` (`kit [33]`) from the verified paper**. -/
+theorem rhbandagree_dyadic_right_cone_of_rhbandagree_kit (t Q K v B : Nat)
+    (htK : t + Q ≤ K)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t Q 0 B) :
+    Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q (v * Rule30UOR.Core.twopow K) B :=
+  Rule30Paper.Paper.rhbandagree_dyadic_right_cone_of_rhbandagree t Q K v B htK hrh
+
+/-- **Assembly of Bilateral Cone Agreement `RhBandAgree (t + v * 2^K) Q ((v * 2^K - 1) - S) (2 * S)` from Horizon-Width `LhBandAgree t Q 1 S` and `RhBandAgree t Q 0 S` (`kit [33]`) from the verified paper**. -/
+theorem rhbandagree_dyadic_pred_col_cone_of_lhbandagree_and_rhbandagree_kit (t Q K v S : Nat)
+    (hv : 1 ≤ v) (hK : ((t + S) + Q) + 1 ≤ K)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t Q 1 S)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t Q 0 S) :
+    Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) Q (((v * Rule30UOR.Core.twopow K) - 1) - S) (2 * S) :=
+  Rule30Paper.Paper.rhbandagree_dyadic_pred_col_cone_of_lhbandagree_and_rhbandagree t Q K v S hv hK hlh hrh
+
+/-- **Drive-Free Bilateral Cone Theorem for `LhColAgree t Q 1 S` from Horizon-Width `LhBandAgree t Q 1 S` and `RhBandAgree t Q 0 S` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_lhbandagree_one_and_rhbandagree_zero_cone_kit (t Q S : Nat)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t Q 1 S)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t Q 0 S) :
+    Rule30UOR.Interfaces.LhColAgree t Q 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_lhbandagree_one_and_rhbandagree_zero_cone t Q S hlh hrh
+
+/-- **Producing `maskparity · 0` Agreement from Horizon-Width `LhBandAgree t (m * P) 1 S` and `RhBandAgree t (m * P) 0 S` (`kit [33]`) from the verified paper**. -/
+theorem periodic_maskparity_zero_agree_of_lhbandagree_one_and_rhbandagree_zero_cone_kit
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (m t S s : Nat) (ht : T ≤ t)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t (m * P) 1 S)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t (m * P) 0 S)
+    (hs : s ≤ S) :
+    Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
+      Rule30UOR.Scale.maskparity (t + s) 0 :=
+  Rule30Paper.Paper.periodic_maskparity_zero_agree_of_lhbandagree_one_and_rhbandagree_zero_cone T P hP hper m t S s ht hlh hrh hs
+
+/-- **Horizon-Width Bilateral Cone Refutation of `CenterPeriodic` at a Doubling Zero Diagonal (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_cone_at_zero_diag_doubles_kit
+    (T P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree (z + (p + 1)) (m * P) 1 S)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree (z + (p + 1)) (m * P) 0 S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_cone_at_zero_diag_doubles T P m z p S hP hm ht hz hd hset1 hset2 hS hlh hrh
+
+/-- **Horizon-Width Bilateral Cone Dyadic-Window Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_cone_twopow_kit
+    (T P m t k S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ t) (htm : t + m * P = Rule30UOR.Core.twopow k)
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree t (m * P) 1 S)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree t (m * P) 0 S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_cone_twopow T P m t k S hP hm ht htm hS hlh hrh
+
+/-- **Horizon-Width Bilateral Cone Zero-Diagonal Pair Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_cone_at_zero_diag_pair_kit
+    (T P m z k S : Nat) (hP : 0 < P)
+    (hz0 : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (h2 : 2 ≤ z + m * P)
+    (hz1 : Rule30UOR.ZeroDiagonals.IsZeroDiag ((z + m * P) - 2))
+    (ht : T ≤ z + Rule30UOR.Core.twopow k)
+    (hset0 : Rule30UOR.Interfaces.SettledBy z (z + Rule30UOR.Core.twopow k))
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + m * P) ((z + m * P) + Rule30UOR.Core.twopow k))
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hlh : Rule30UOR.Interfaces.LhBandAgree (z + Rule30UOR.Core.twopow k) (m * P) 1 S)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree (z + Rule30UOR.Core.twopow k) (m * P) 0 S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_lhbandagree_one_and_rhbandagree_zero_cone_at_zero_diag_pair T P m z k S hP hz0 h2 hz1 ht hset0 hset1 hS hlh hrh
+
+/-- **45-Degree Dyadic Diagonal Shift Invariance `(v * 2^K ↦ (v + w) * 2^K)` on the Left of `v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_diag_shift_left_eq_kit (t K v w d : Nat)
+    (hv : 1 ≤ v) (htdK : t + d ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) (((v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) - d) =
+      Rule30UOR.Interfaces.rhCenter (t + v * Rule30UOR.Core.twopow K) ((v * Rule30UOR.Core.twopow K) - d) :=
+  Rule30Paper.Paper.rhcenter_dyadic_diag_shift_left_eq t K v w d hv htdK
+
+/-- **45-Degree Dyadic Diagonal Shift Invariance `(v * 2^K ↦ (v + w) * 2^K)` on the Right of `v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_diag_shift_right_eq_kit (t K v w q : Nat)
+    (htK : t ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) (((v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) + q) =
+      Rule30UOR.Interfaces.rhCenter (t + v * Rule30UOR.Core.twopow K) ((v * Rule30UOR.Core.twopow K) + q) :=
+  Rule30Paper.Paper.rhcenter_dyadic_diag_shift_right_eq t K v w q htK
+
+/-- **45-Degree Dyadic Diagonal Shift Invariance Across Any Two-Sided Band Around `v * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_diag_shift_band_eq_kit (t K v w W i : Nat)
+    (hv : 1 ≤ v) (htWK : t + W ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) ((((v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) - W) + i) =
+      Rule30UOR.Interfaces.rhCenter (t + v * Rule30UOR.Core.twopow K) (((v * Rule30UOR.Core.twopow K) - W) + i) :=
+  Rule30Paper.Paper.rhcenter_dyadic_diag_shift_band_eq t K v w W i hv htWK
+
+/-- **Reduction of Time-Shift `RhBandAgree (t + v * 2^K) (w * 2^K)` to Purely Spatial Period-Shift Agreement at a Single Row `(t + v * 2^K) + w * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhbandagree_dyadic_of_spatial_period_shift_agree_kit (t K v w W B : Nat)
+    (hv : 1 ≤ v) (htWK : t + W ≤ K)
+    (hspat : ∀ i : Nat, i ≤ B →
+      Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) (((v * Rule30UOR.Core.twopow K) - W) + i) =
+        Rule30UOR.Interfaces.rhCenter ((t + v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) ((((v * Rule30UOR.Core.twopow K) + w * Rule30UOR.Core.twopow K) - W) + i)) :
+    Rule30UOR.Interfaces.RhBandAgree (t + v * Rule30UOR.Core.twopow K) (w * Rule30UOR.Core.twopow K) ((v * Rule30UOR.Core.twopow K) - W) B :=
+  Rule30Paper.Paper.rhbandagree_dyadic_of_spatial_period_shift_agree t K v w W B hv htWK hspat
+
+/-- **Two-Scale Single-Row Embedding of `lhCenter t d` at Column `(u * 2^L + w * 2^K) - d` of Row `(t + u * 2^L) + w * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_two_scale_row_left_eq_lhcenter_kit (t K L u w d : Nat)
+    (hu : 1 ≤ u) (hKL : K ≤ L) (htdK : t + d ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + w * Rule30UOR.Core.twopow K) (((u * Rule30UOR.Core.twopow L) + w * Rule30UOR.Core.twopow K) - d) =
+      Rule30UOR.Interfaces.lhCenter t d :=
+  Rule30Paper.Paper.rhcenter_two_scale_row_left_eq_lhcenter t K L u w d hu hKL htdK
+
+/-- **Two-Scale Single-Row Embedding of `rhCenter t q` at Column `(u * 2^L + w * 2^K) + q` of Row `(t + u * 2^L) + w * 2^K` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_two_scale_row_right_eq_rhcenter_kit (t K L u w q : Nat)
+    (hKL : K ≤ L) (htK : t ≤ K) :
+    Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + w * Rule30UOR.Core.twopow K) (((u * Rule30UOR.Core.twopow L) + w * Rule30UOR.Core.twopow K) + q) =
+      Rule30UOR.Interfaces.rhCenter t q :=
+  Rule30Paper.Paper.rhcenter_two_scale_row_right_eq_rhcenter t K L u w q hKL htK
+
+/-- **Two-Scale Single-Row Spatial Shift Theorem for `LhColAgree t (w * 2^K) 1 S` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_two_scale_single_row_spatial_agree_kit (t K L u w S : Nat)
+    (hu : 1 ≤ u) (hK : (t + S) + 1 ≤ K)
+    (hL : ((t + S) + w * Rule30UOR.Core.twopow K) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ 2 * S →
+      Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + w * Rule30UOR.Core.twopow K) ((((u * Rule30UOR.Core.twopow L) - 1) - S) + i) =
+        Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + w * Rule30UOR.Core.twopow K) (((((u * Rule30UOR.Core.twopow L) + w * Rule30UOR.Core.twopow K) - 1) - S) + i)) :
+    Rule30UOR.Interfaces.LhColAgree t (w * Rule30UOR.Core.twopow K) 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_two_scale_single_row_spatial_agree t K L u w S hu hK hL hKL hspat
+
+/-- **Two-Scale Single-Row Spatial Shift Theorem for `LhColAgree t ((c * 2^K) * P) 1 S` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_two_scale_single_row_mul_period_agree_kit (t P K L u c S : Nat)
+    (hu : 1 ≤ u) (hK : (t + S) + 1 ≤ K)
+    (hL : ((t + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ 2 * S →
+      Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) ((((u * Rule30UOR.Core.twopow L) - 1) - S) + i) =
+        Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) (((((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - 1) - S) + i)) :
+    Rule30UOR.Interfaces.LhColAgree t ((c * Rule30UOR.Core.twopow K) * P) 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_two_scale_single_row_mul_period_agree t P K L u c S hu hK hL hKL hspat
+
+/-- **Producing `maskparity · 0` Agreement from Two-Scale Single-Row Spatial Shift Agreement by `(c * 2^K) * P` (`kit [33]`) from the verified paper**. -/
+theorem periodic_maskparity_zero_agree_of_two_scale_single_row_mul_period_agree_kit
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (t K L u c S s : Nat) (ht : T ≤ t) (hu : 1 ≤ u)
+    (hK : (t + S) + 1 ≤ K)
+    (hL : ((t + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ 2 * S →
+      Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) ((((u * Rule30UOR.Core.twopow L) - 1) - S) + i) =
+        Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) (((((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - 1) - S) + i))
+    (hs : s ≤ S) :
+    Rule30UOR.Scale.maskparity ((t + s) + (c * Rule30UOR.Core.twopow K) * P) 0 =
+      Rule30UOR.Scale.maskparity (t + s) 0 :=
+  Rule30Paper.Paper.periodic_maskparity_zero_agree_of_two_scale_single_row_mul_period_agree T P hP hper t K L u c S s ht hu hK hL hKL hspat hs
+
+/-- **Two-Scale Single-Row Spatial Shift Refutation of `CenterPeriodic` at a Doubling Zero Diagonal for `(c * 2^K) * P` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_two_scale_single_row_at_zero_diag_doubles_kit
+    (T P c z p K L u S : Nat) (hP : 0 < P) (hc : 0 < c)
+    (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt ((c * Rule30UOR.Core.twopow K) * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - (c * Rule30UOR.Core.twopow K) * P) (z + (p + 1)))
+    (hS : p + 3 * ((c * Rule30UOR.Core.twopow K) * P) ≤ S + 1)
+    (hu : 1 ≤ u) (hK : ((z + (p + 1)) + S) + 1 ≤ K)
+    (hL : (((z + (p + 1)) + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ 2 * S →
+      Rule30UOR.Interfaces.rhCenter (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) ((((u * Rule30UOR.Core.twopow L) - 1) - S) + i) =
+        Rule30UOR.Interfaces.rhCenter (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) (((((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - 1) - S) + i)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_two_scale_single_row_at_zero_diag_doubles T P c z p K L u S hP hc ht hz hd hset1 hset2 hS hu hK hL hKL hspat
+
+/-- **Two-Scale Single-Row Spatial Shift Dyadic-Window Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_two_scale_single_row_twopow_kit
+    (T P c t k K L u S : Nat) (hP : 0 < P) (hc : 0 < c)
+    (ht : T ≤ t) (htm : t + (c * Rule30UOR.Core.twopow K) * P = Rule30UOR.Core.twopow k)
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hu : 1 ≤ u) (hK : (t + S) + 1 ≤ K)
+    (hL : ((t + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ 2 * S →
+      Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) ((((u * Rule30UOR.Core.twopow L) - 1) - S) + i) =
+        Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) (((((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - 1) - S) + i)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_two_scale_single_row_twopow T P c t k K L u S hP hc ht htm hS hu hK hL hKL hspat
+
+/-- **Two-Scale Single-Row Spatial Shift Zero-Diagonal Pair Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_two_scale_single_row_at_zero_diag_pair_kit
+    (T P c z k K L u S : Nat) (hP : 0 < P)
+    (hz0 : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (h2 : 2 ≤ z + (c * Rule30UOR.Core.twopow K) * P)
+    (hz1 : Rule30UOR.ZeroDiagonals.IsZeroDiag ((z + (c * Rule30UOR.Core.twopow K) * P) - 2))
+    (ht : T ≤ z + Rule30UOR.Core.twopow k)
+    (hset0 : Rule30UOR.Interfaces.SettledBy z (z + Rule30UOR.Core.twopow k))
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + (c * Rule30UOR.Core.twopow K) * P) ((z + (c * Rule30UOR.Core.twopow K) * P) + Rule30UOR.Core.twopow k))
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hu : 1 ≤ u) (hK : ((z + Rule30UOR.Core.twopow k) + S) + 1 ≤ K)
+    (hL : (((z + Rule30UOR.Core.twopow k) + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ 2 * S →
+      Rule30UOR.Interfaces.rhCenter (((z + Rule30UOR.Core.twopow k) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) ((((u * Rule30UOR.Core.twopow L) - 1) - S) + i) =
+        Rule30UOR.Interfaces.rhCenter (((z + Rule30UOR.Core.twopow k) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) (((((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - 1) - S) + i)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_two_scale_single_row_at_zero_diag_pair T P c z k K L u S hP hz0 h2 hz1 ht hset0 hset1 hS hu hK hL hKL hspat
+
+/-- **Exact Left White Corridor at a Pure Dyadic Row `u * 2^L` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_exact_row_left_eq_false_kit (L u d : Nat)
+    (hu : 1 ≤ u) (hdL : d ≤ L) (h0d : 0 < d) :
+    Rule30UOR.Interfaces.rhCenter (u * Rule30UOR.Core.twopow L) ((u * Rule30UOR.Core.twopow L) - d) = false :=
+  Rule30Paper.Paper.rhcenter_dyadic_exact_row_left_eq_false L u d hu hdL h0d
+
+/-- **Exact Black Diagonal Impulse at `(u * 2^L, u * 2^L)` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_exact_row_self_eq_true_kit (L u : Nat) :
+    Rule30UOR.Interfaces.rhCenter (u * Rule30UOR.Core.twopow L) (u * Rule30UOR.Core.twopow L) = true :=
+  Rule30Paper.Paper.rhcenter_dyadic_exact_row_self_eq_true L u
+
+/-- **Exact Right White Tail at a Pure Dyadic Row `u * 2^L` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_exact_row_right_eq_false_kit (L u r : Nat)
+    (h0r : 0 < r) :
+    Rule30UOR.Interfaces.rhCenter (u * Rule30UOR.Core.twopow L) ((u * Rule30UOR.Core.twopow L) + r) = false :=
+  Rule30Paper.Paper.rhcenter_dyadic_exact_row_right_eq_false L u r h0r
+
+/-- **Exact Two-Sided Band Translation Invariance Between Any Two Pure Dyadic Rows `u * 2^L` and `v * 2^L` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_exact_row_translate_agree_kit (L u v W i : Nat)
+    (hu : 1 ≤ u) (hv : 1 ≤ v) (hWL : W ≤ L) :
+    Rule30UOR.Interfaces.rhCenter (v * Rule30UOR.Core.twopow L) (((v * Rule30UOR.Core.twopow L) - W) + i) =
+      Rule30UOR.Interfaces.rhCenter (u * Rule30UOR.Core.twopow L) (((u * Rule30UOR.Core.twopow L) - W) + i) :=
+  Rule30Paper.Paper.rhcenter_dyadic_exact_row_translate_agree L u v W i hu hv hWL
+
+/-- **Multi-Step Evolved Translation Invariance Between Any Two Dyadic Multiples `u * 2^L` and `v * 2^L` (`kit [33]`) from the verified paper**. -/
+theorem rhcenter_dyadic_exact_row_evolve_translate_agree_kit (L u v W s i : Nat)
+    (hu : 1 ≤ u) (hv : 1 ≤ v) (hsWL : s + W ≤ L) :
+    Rule30UOR.Interfaces.rhCenter ((v * Rule30UOR.Core.twopow L) + s) (((v * Rule30UOR.Core.twopow L) - W) + i) =
+      Rule30UOR.Interfaces.rhCenter ((u * Rule30UOR.Core.twopow L) + s) (((u * Rule30UOR.Core.twopow L) - W) + i) :=
+  Rule30Paper.Paper.rhcenter_dyadic_exact_row_evolve_translate_agree L u v W s i hu hv hsWL
+
+/-- **Pure Drive Operator `rdrv td (u * 2^L) 0` Left White Corridor (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_exact_row_left_eq_false_kit (td L u d : Nat)
+    (hu : 1 ≤ u) (hdL : d ≤ L) (h0d : 0 < d) :
+    Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) 0 ((u * Rule30UOR.Core.twopow L) - d) = false :=
+  Rule30Paper.Paper.rdrv_dyadic_exact_row_left_eq_false td L u d hu hdL h0d
+
+/-- **Pure Drive Operator `rdrv td (u * 2^L) 0` Black Impulse at `u * 2^L` (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_exact_row_self_eq_true_kit (td L u : Nat)
+    (hu : 1 ≤ u) :
+    Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) 0 (u * Rule30UOR.Core.twopow L) = true :=
+  Rule30Paper.Paper.rdrv_dyadic_exact_row_self_eq_true td L u hu
+
+/-- **Pure Drive Operator `rdrv td (u * 2^L) 0` Right White Tail (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_exact_row_right_eq_false_kit (td L u r : Nat)
+    (h0r : 0 < r) :
+    Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) 0 ((u * Rule30UOR.Core.twopow L) + r) = false :=
+  Rule30Paper.Paper.rdrv_dyadic_exact_row_right_eq_false td L u r h0r
+
+/-- **Drive-Independent Evolution of `rdrv td (u * 2^L) s` to `lhCenter s d` on the Left of `u * 2^L` (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_exact_row_shift_left_eq_kit (td L u d s : Nat)
+    (hu : 1 ≤ u) (hsdL : s + d ≤ L) :
+    Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) - d) =
+      Rule30UOR.Interfaces.lhCenter s d :=
+  Rule30Paper.Paper.rdrv_dyadic_exact_row_shift_left_eq td L u d s hu hsdL
+
+/-- **Drive-Independent Evolution of `rdrv td (u * 2^L) s` to `rhCenter s q` on the Right of `u * 2^L` (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_exact_row_shift_right_eq_kit (td L u q s : Nat)
+    (hu : 1 ≤ u) (hsL : s ≤ L) :
+    Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) + q) =
+      Rule30UOR.Interfaces.rhCenter s q :=
+  Rule30Paper.Paper.rdrv_dyadic_exact_row_shift_right_eq td L u q s hu hsL
+
+/-- **Time-Shifted Drive-Independent Evolution of `rdrv td (u * 2^L) (t + s)` to `lhCenter (t + s) d` (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_exact_row_time_shift_left_eq_kit (td t L u d s : Nat)
+    (hu : 1 ≤ u) (htsdL : (t + s) + d ≤ L) :
+    Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (t + s) ((u * Rule30UOR.Core.twopow L) - d) =
+      Rule30UOR.Interfaces.lhCenter (t + s) d :=
+  Rule30Paper.Paper.rdrv_dyadic_exact_row_time_shift_left_eq td t L u d s hu htsdL
+
+/-- **Time-Shifted Drive-Independent Evolution of `rdrv td (u * 2^L) (t + s)` to `rhCenter (t + s) q` (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_exact_row_time_shift_right_eq_kit (td t L u q s : Nat)
+    (hu : 1 ≤ u) (htsL : t + s ≤ L) :
+    Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (t + s) ((u * Rule30UOR.Core.twopow L) + q) =
+      Rule30UOR.Interfaces.rhCenter (t + s) q :=
+  Rule30Paper.Paper.rdrv_dyadic_exact_row_time_shift_right_eq td t L u q s hu htsL
+
+/-- **Pullback of `LhColAgree t Q d S` from Same-Row, Same-Drive `rdrv td (u * 2^L)` Step-Shift Agreement (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_of_rdrv_dyadic_exact_row_step_agree_kit (td t Q L u d S : Nat)
+    (hu : 1 ≤ u) (hL : ((t + S) + Q) + d ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) ((t + s) + Q) ((u * Rule30UOR.Core.twopow L) - d) =
+        Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (t + s) ((u * Rule30UOR.Core.twopow L) - d)) :
+    Rule30UOR.Interfaces.LhColAgree t Q d S :=
+  Rule30Paper.Paper.lhcolagree_of_rdrv_dyadic_exact_row_step_agree td t Q L u d S hu hL hag
+
+/-- **Pullback of `LhColAgree t Q 1 S` from Same-Row, Same-Drive `rdrv td (u * 2^L)` Step-Shift Agreement at `(u * 2^L) - 1` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_rdrv_dyadic_exact_row_step_agree_kit (td t Q L u S : Nat)
+    (hu : 1 ≤ u) (hL : ((t + S) + Q) + 1 ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) ((t + s) + Q) ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (t + s) ((u * Rule30UOR.Core.twopow L) - 1)) :
+    Rule30UOR.Interfaces.LhColAgree t Q 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_rdrv_dyadic_exact_row_step_agree td t Q L u S hu hL hag
+
+/-- **Producing `maskparity · 0` Agreement from Same-Row, Same-Drive `rdrv td (u * 2^L)` Step-Shift Agreement (`kit [33]`) from the verified paper**. -/
+theorem periodic_maskparity_zero_agree_of_rdrv_dyadic_exact_row_step_agree_kit
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (td m t L u S s : Nat) (ht : T ≤ t) (hu : 1 ≤ u)
+    (hL : ((t + S) + m * P) + 1 ≤ L)
+    (hag : ∀ j : Nat, j ≤ S →
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) ((t + j) + m * P) ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (t + j) ((u * Rule30UOR.Core.twopow L) - 1))
+    (hs : s ≤ S) :
+    Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
+      Rule30UOR.Scale.maskparity (t + s) 0 :=
+  Rule30Paper.Paper.periodic_maskparity_zero_agree_of_rdrv_dyadic_exact_row_step_agree T P hP hper td m t L u S s ht hu hL hag hs
+
+/-- **Same-Row, Same-Drive `rdrv td (u * 2^L)` Step-Shift Refutation of `CenterPeriodic` at a Doubling Zero Diagonal (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rdrv_dyadic_exact_row_step_agree_at_zero_diag_doubles_kit
+    (T P td m z p L u S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hu : 1 ≤ u) (hL : (((z + (p + 1)) + S) + m * P) + 1 ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (((z + (p + 1)) + s) + m * P) ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) ((z + (p + 1)) + s) ((u * Rule30UOR.Core.twopow L) - 1)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rdrv_dyadic_exact_row_step_agree_at_zero_diag_doubles T P td m z p L u S hP hm ht hz hd hset1 hset2 hS hu hL hag
+
+/-- **Same-Row, Same-Drive `rdrv td (u * 2^L)` Step-Shift Dyadic-Window Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rdrv_dyadic_exact_row_step_agree_twopow_kit
+    (T P td m t k L u S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ t) (htm : t + m * P = Rule30UOR.Core.twopow k)
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hu : 1 ≤ u) (hL : ((t + S) + m * P) + 1 ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) ((t + s) + m * P) ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (t + s) ((u * Rule30UOR.Core.twopow L) - 1)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rdrv_dyadic_exact_row_step_agree_twopow T P td m t k L u S hP hm ht htm hS hu hL hag
+
+/-- **Same-Row, Same-Drive `rdrv td (u * 2^L)` Step-Shift Zero-Diagonal Pair Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rdrv_dyadic_exact_row_step_agree_at_zero_diag_pair_kit
+    (T P td m z k L u S : Nat) (hP : 0 < P)
+    (hz0 : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (h2 : 2 ≤ z + m * P)
+    (hz1 : Rule30UOR.ZeroDiagonals.IsZeroDiag ((z + m * P) - 2))
+    (ht : T ≤ z + Rule30UOR.Core.twopow k)
+    (hset0 : Rule30UOR.Interfaces.SettledBy z (z + Rule30UOR.Core.twopow k))
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + m * P) ((z + m * P) + Rule30UOR.Core.twopow k))
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hu : 1 ≤ u) (hL : (((z + Rule30UOR.Core.twopow k) + S) + m * P) + 1 ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (((z + Rule30UOR.Core.twopow k) + s) + m * P) ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) ((z + Rule30UOR.Core.twopow k) + s) ((u * Rule30UOR.Core.twopow L) - 1)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rdrv_dyadic_exact_row_step_agree_at_zero_diag_pair T P td m z k L u S hP hz0 h2 hz1 ht hset0 hset1 hS hu hL hag
+
+/-- **Restarted `rdrv td (t + u * 2^L) s` Left Evolution to `lhCenter (t + s) d` (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_shifted_init_left_eq_lhcenter_kit (td t L u d s : Nat)
+    (hu : 1 ≤ u) (htsdL : (t + s) + d ≤ L) :
+    Rule30UOR.Interfaces.rdrv td (t + u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) - d) =
+      Rule30UOR.Interfaces.lhCenter (t + s) d :=
+  Rule30Paper.Paper.rdrv_dyadic_shifted_init_left_eq_lhcenter td t L u d s hu htsdL
+
+/-- **Restarted `rdrv td (t + u * 2^L) s` Right Evolution to `rhCenter (t + s) q` (`kit [33]`) from the verified paper**. -/
+theorem rdrv_dyadic_shifted_init_right_eq_rhcenter_kit (td t L u q s : Nat)
+    (hu : 1 ≤ u) (htsL : t + s ≤ L) :
+    Rule30UOR.Interfaces.rdrv td (t + u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) + q) =
+      Rule30UOR.Interfaces.rhCenter (t + s) q :=
+  Rule30Paper.Paper.rdrv_dyadic_shifted_init_right_eq_rhcenter td t L u q s hu htsL
+
+/-- **Pullback of `LhColAgree t Q d S` from Shifted-Initial-Row `rdrv` Agreement at `(u * 2^L) - d` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_of_rdrv_dyadic_shifted_init_agree_kit (td t Q L u d S : Nat)
+    (hu : 1 ≤ u) (hL : ((t + S) + Q) + d ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td ((t + u * Rule30UOR.Core.twopow L) + Q) s ((u * Rule30UOR.Core.twopow L) - d) =
+        Rule30UOR.Interfaces.rdrv td (t + u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) - d)) :
+    Rule30UOR.Interfaces.LhColAgree t Q d S :=
+  Rule30Paper.Paper.lhcolagree_of_rdrv_dyadic_shifted_init_agree td t Q L u d S hu hL hag
+
+/-- **Pullback of `LhColAgree t Q 1 S` from Shifted-Initial-Row `rdrv` Agreement at `(u * 2^L) - 1` (`kit [33]`) from the verified paper**. -/
+theorem lhcolagree_one_of_rdrv_dyadic_shifted_init_agree_kit (td t Q L u S : Nat)
+    (hu : 1 ≤ u) (hL : ((t + S) + Q) + 1 ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td ((t + u * Rule30UOR.Core.twopow L) + Q) s ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td (t + u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) - 1)) :
+    Rule30UOR.Interfaces.LhColAgree t Q 1 S :=
+  Rule30Paper.Paper.lhcolagree_one_of_rdrv_dyadic_shifted_init_agree td t Q L u S hu hL hag
+
+/-- **Shifted-Initial-Row `rdrv` Refutation of `CenterPeriodic` at a Doubling Zero Diagonal (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rdrv_dyadic_shifted_init_agree_at_zero_diag_doubles_kit
+    (T P td m z p L u S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hu : 1 ≤ u) (hL : (((z + (p + 1)) + S) + m * P) + 1 ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + m * P) s ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td ((z + (p + 1)) + u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) - 1)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rdrv_dyadic_shifted_init_agree_at_zero_diag_doubles T P td m z p L u S hP hm ht hz hd hset1 hset2 hS hu hL hag
+
+/-- **Shifted-Initial-Row `rdrv` Dyadic-Window Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rdrv_dyadic_shifted_init_agree_twopow_kit
+    (T P td m t k L u S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ t) (htm : t + m * P = Rule30UOR.Core.twopow k)
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hu : 1 ≤ u) (hL : ((t + S) + m * P) + 1 ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td ((t + u * Rule30UOR.Core.twopow L) + m * P) s ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td (t + u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) - 1)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rdrv_dyadic_shifted_init_agree_twopow T P td m t k L u S hP hm ht htm hS hu hL hag
+
+/-- **Shifted-Initial-Row `rdrv` Zero-Diagonal Pair Refutation of `CenterPeriodic` (`kit [33]`) from the verified paper**. -/
+theorem not_centerperiodic_of_rdrv_dyadic_shifted_init_agree_at_zero_diag_pair_kit
+    (T P td m z k L u S : Nat) (hP : 0 < P)
+    (hz0 : Rule30UOR.ZeroDiagonals.IsZeroDiag z) (h2 : 2 ≤ z + m * P)
+    (hz1 : Rule30UOR.ZeroDiagonals.IsZeroDiag ((z + m * P) - 2))
+    (ht : T ≤ z + Rule30UOR.Core.twopow k)
+    (hset0 : Rule30UOR.Interfaces.SettledBy z (z + Rule30UOR.Core.twopow k))
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + m * P) ((z + m * P) + Rule30UOR.Core.twopow k))
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (hu : 1 ≤ u) (hL : (((z + Rule30UOR.Core.twopow k) + S) + m * P) + 1 ≤ L)
+    (hag : ∀ s : Nat, s ≤ S →
+      Rule30UOR.Interfaces.rdrv td (((z + Rule30UOR.Core.twopow k) + u * Rule30UOR.Core.twopow L) + m * P) s ((u * Rule30UOR.Core.twopow L) - 1) =
+        Rule30UOR.Interfaces.rdrv td ((z + Rule30UOR.Core.twopow k) + u * Rule30UOR.Core.twopow L) s ((u * Rule30UOR.Core.twopow L) - 1)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rdrv_dyadic_shifted_init_agree_at_zero_diag_pair T P td m z k L u S hP hz0 h2 hz1 ht hset0 hset1 hS hu hL hag
+
+
+-- ============================================================================
+-- Batch 79 Bridge: Anchored Left-Half Step Contraction & Unilateral
+-- Left-Corridor Pullbacks (`9.1477`–`9.1491`)
+-- ============================================================================
+
+/-- Kit-side wrapper for `9.1480` (`periodic_lhColAgree_one_of_lhBandAgree_one`):
+    under `CenterPeriodic T P`, `LhBandAgree t (m * P) 1 S` alone implies `LhColAgree t (m * P) 1 S`. -/
+theorem kit_periodic_lhColAgree_one_of_lhBandAgree_one
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (m t S : Nat) (ht : T ≤ t)
+    (h : Rule30UOR.Interfaces.LhBandAgree t (m * P) 1 S) :
+    Rule30UOR.Interfaces.LhColAgree t (m * P) 1 S :=
+  Rule30Paper.Paper.periodic_lhcolagree_one_of_lhbandagree_one T P hP hper m t S ht h
+
+/-- Kit-side wrapper for `9.1482` (`not_centerPeriodic_of_lhBandAgree_one_at_zero_diag_doubles`):
+    `LhBandAgree (z + (p + 1)) (m * P) 1 S` alone at a doubling zero diagonal refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_lhBandAgree_one_at_zero_diag_doubles
+    (T P m z p S : Nat)
+    (hP : 0 < P) (hm : 0 < m) (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (h : Rule30UOR.Interfaces.LhBandAgree (z + (p + 1)) (m * P) 1 S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_lhbandagree_one_at_zero_diag_doubles
+    T P m z p S hP hm ht hz hd hset1 hset2 hS h
+
+/-- Kit-side wrapper for `9.1483` (`not_centerPeriodic_of_lhBandAgree_one_twopow`):
+    `LhBandAgree t (m * P) 1 S` alone at `t + m * P = 2^k` refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_lhBandAgree_one_twopow
+    (T P m t k S : Nat)
+    (hP : 0 < P) (hm : 0 < m) (ht : T ≤ t)
+    (htm : t + m * P = Rule30UOR.Core.twopow k)
+    (hS : Rule30UOR.Core.twopow k ≤ S + 1)
+    (h : Rule30UOR.Interfaces.LhBandAgree t (m * P) 1 S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_lhbandagree_one_twopow
+    T P m t k S hP hm ht htm hS h
+
+/-- Kit-side wrapper for `9.1488` (`not_centerPeriodic_of_rhBandAgree_dyadic_left_corridor_at_zero_diag_doubles`):
+    left-corridor `RhBandAgree` of width `S` at a doubling zero diagonal refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_rhBandAgree_dyadic_left_corridor_at_zero_diag_doubles
+    (T P m z p K v S : Nat)
+    (hP : 0 < P) (hm : 0 < m) (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hv : 1 ≤ v) (hK : ((z + (p + 1)) + m * P) + (S + 1) ≤ K)
+    (hrh : Rule30UOR.Interfaces.RhBandAgree ((z + (p + 1)) + v * Rule30UOR.Core.twopow K) (m * P)
+      (v * Rule30UOR.Core.twopow K - (S + 1)) S) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rhbandagree_dyadic_left_corridor_at_zero_diag_doubles
+    T P m z p K v S hP hm ht hz hd hset1 hset2 hS hv hK hrh
+
+
+-- ============================================================================
+-- Batch 80 Bridge: Unilateral Left-Corridor Two-Scale Single-Row Spatial Shift
+-- & Pure-Drive `rdrv td (u * 2^L)` Left-Corridor Refutations (`9.1492`–`9.1506`)
+-- ============================================================================
+
+/-- Kit-side wrapper for `9.1494` (`periodic_lhColAgree_one_of_dyadic_mul_period_single_row_left_corridor_spatial_agree`):
+    under `CenterPeriodic T P`, spatial shift agreement by `(c * 2^K) * P` on the left corridor of width `S` at the single row `(t + u * 2^L) + (c * 2^K) * P` implies `LhColAgree t ((c * 2^K) * P) 1 S`. -/
+theorem kit_periodic_lhColAgree_one_of_dyadic_mul_period_single_row_left_corridor_spatial_agree
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (c t K L u S : Nat) (ht : T ≤ t)
+    (hu : 1 ≤ u) (hK : (t + S) + 1 ≤ K)
+    (hL : ((t + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P)
+        ((u * Rule30UOR.Core.twopow L) - (1 + i)) =
+      Rule30UOR.Interfaces.rhCenter ((t + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P)
+        (((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - (1 + i))) :
+    Rule30UOR.Interfaces.LhColAgree t ((c * Rule30UOR.Core.twopow K) * P) 1 S :=
+  Rule30Paper.Paper.periodic_lhcolagree_one_of_dyadic_mul_period_single_row_left_corridor_spatial_agree
+    T P hP hper c t K L u S ht hu hK hL hKL hspat
+
+/-- Kit-side wrapper for `9.1496` (`not_centerPeriodic_of_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles`):
+    single-row left-corridor spatial shift agreement by `(c * 2^K) * P` of width `S` at a doubling zero diagonal refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles
+    (T P c z p K L u S : Nat)
+    (hP : 0 < P) (hc : 0 < c) (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt ((c * Rule30UOR.Core.twopow K) * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - (c * Rule30UOR.Core.twopow K) * P) (z + (p + 1)))
+    (hS : p + 3 * ((c * Rule30UOR.Core.twopow K) * P) ≤ S + 1)
+    (hu : 1 ≤ u) (hK : ((z + (p + 1)) + S) + 1 ≤ K)
+    (hL : (((z + (p + 1)) + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.rhCenter (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P)
+        ((u * Rule30UOR.Core.twopow L) - (1 + i)) =
+      Rule30UOR.Interfaces.rhCenter (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P)
+        (((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - (1 + i))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles
+    T P c z p K L u S hP hc ht hz hd hset1 hset2 hS hu hK hL hKL hspat
+
+/-- Kit-side wrapper for `9.1502` (`periodic_lhColAgree_one_of_rdrv_dyadic_mul_period_single_row_left_corridor_spatial_agree`):
+    under `CenterPeriodic T P`, single-step `rdrv td (u * 2^L)` left-corridor spatial shift agreement by `(c * 2^K) * P` of width `S` implies `LhColAgree t ((c * 2^K) * P) 1 S`. -/
+theorem kit_periodic_lhColAgree_one_of_rdrv_dyadic_mul_period_single_row_left_corridor_spatial_agree
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (td c t K L u S : Nat) (ht : T ≤ t)
+    (hu : 1 ≤ u) (hK : (t + S) + 1 ≤ K)
+    (hL : ((t + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (t + (c * Rule30UOR.Core.twopow K) * P)
+        ((u * Rule30UOR.Core.twopow L) - (1 + i)) =
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) (t + (c * Rule30UOR.Core.twopow K) * P)
+        (((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - (1 + i))) :
+    Rule30UOR.Interfaces.LhColAgree t ((c * Rule30UOR.Core.twopow K) * P) 1 S :=
+  Rule30Paper.Paper.periodic_lhcolagree_one_of_rdrv_dyadic_mul_period_single_row_left_corridor_spatial_agree
+    T P hP hper td c t K L u S ht hu hK hL hKL hspat
+
+/-- Kit-side wrapper for `9.1504` (`not_centerPeriodic_of_rdrv_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles`):
+    single-step `rdrv td (u * 2^L)` left-corridor spatial shift agreement by `(c * 2^K) * P` of width `S` at a doubling zero diagonal refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_rdrv_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles
+    (T P td c z p K L u S : Nat)
+    (hP : 0 < P) (hc : 0 < c) (ht : T ≤ z + (p + 1))
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt ((c * Rule30UOR.Core.twopow K) * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - (c * Rule30UOR.Core.twopow K) * P) (z + (p + 1)))
+    (hS : p + 3 * ((c * Rule30UOR.Core.twopow K) * P) ≤ S + 1)
+    (hu : 1 ≤ u) (hK : ((z + (p + 1)) + S) + 1 ≤ K)
+    (hL : (((z + (p + 1)) + S) + (c * Rule30UOR.Core.twopow K) * P) + 1 ≤ L) (hKL : K ≤ L)
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) ((z + (p + 1)) + (c * Rule30UOR.Core.twopow K) * P)
+        ((u * Rule30UOR.Core.twopow L) - (1 + i)) =
+      Rule30UOR.Interfaces.rdrv td (u * Rule30UOR.Core.twopow L) ((z + (p + 1)) + (c * Rule30UOR.Core.twopow K) * P)
+        (((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - (1 + i))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_rdrv_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles
+    T P td c z p K L u S hP hc ht hz hd hset1 hset2 hS hu hK hL hKL hspat
+
 end Rule30Bridge

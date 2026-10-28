@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcolagree-one-of-rhbandagree-dyadic-core"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit K (const lexlean.std.nat::nat)) (explicit v (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit hv (app (const lexlean.std.nat::le) (nat 1) (local v))) (explicit hK (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local S)) (local Q)) (app (const lexlean.std.nat::add) (local t) (local Q))) (nat 1)) (local K))) (explicit hcore (app (const r30.witt::rh-band-agree) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (local K)))) (local Q) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (local K))) (app (const lexlean.std.nat::add) (local t) (local Q))) (app (const lexlean.std.nat::mul) (nat 2) (app (const lexlean.std.nat::add) (local t) (local Q)))))) (app (const r30.witt::lh-col-agree) (local t) (local Q) (nat 1) (local S))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhColAgree_one_of_rhBandAgree_dyadic_core"
+
+[[form]]
+id = "lhcolagree-one-of-rhbandagree-dyadic-core"
+channel = "math"
+surface = "lhcolagreeoneofrhbandagreedyadiccore"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcolagreeoneofrhbandagreedyadiccore) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

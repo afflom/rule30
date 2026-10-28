@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-bilateral-cone-agree"
+category = "proof-constant"
+signature = "(pi ((explicit t2 (const lexlean.std.nat::nat)) (explicit t1 (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat))) (pi ((explicit h (pi ((explicit q (const lexlean.std.nat::nat))) (pi ((explicit hq (app (const lexlean.std.nat::le) (local q) (app (const lexlean.std.nat::add) (local L) (app (const lexlean.std.nat::mul) (nat 2) (local s)))))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (local t2) (app (const lexlean.std.nat::add) (local a) (local q))) (app (const r30.witt::rh-center) (local t1) (app (const lexlean.std.nat::add) (local a) (local q))))))) (explicit hi (app (const lexlean.std.nat::le) (local i) (local L)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t2) (local s)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local s)) (local i))) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t1) (local s)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local a) (local s)) (local i))))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_bilateral_cone_agree"
+
+[[form]]
+id = "rhcenter-bilateral-cone-agree"
+channel = "math"
+surface = "rhcenterbilateralconeagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenterbilateralconeagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

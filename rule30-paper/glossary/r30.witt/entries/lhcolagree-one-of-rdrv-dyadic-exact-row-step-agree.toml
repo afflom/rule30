@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcolagree-one-of-rdrv-dyadic-exact-row-step-agree"
+category = "proof-constant"
+signature = "(pi ((explicit td (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit hu (app (const lexlean.std.nat::le) (nat 1) (local u))) (explicit hL (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local S)) (local Q)) (nat 1)) (local L))) (explicit hag (pi ((explicit s (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::le) (local s) (local S)))) (app (const lexlean.core::eq) (app (const r30.witt::r-drv) (local td) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local s)) (local Q)) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L))) (nat 1))) (app (const r30.witt::r-drv) (local td) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L))) (app (const lexlean.std.nat::add) (local t) (local s)) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L))) (nat 1)))))))) (app (const r30.witt::lh-col-agree) (local t) (local Q) (nat 1) (local S))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhColAgree_one_of_rdrv_dyadic_exact_row_step_agree"
+
+[[form]]
+id = "lhcolagree-one-of-rdrv-dyadic-exact-row-step-agree"
+channel = "math"
+surface = "lhcolagreeoneofrdrvdyadicexactrowstepagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcolagreeoneofrdrvdyadicexactrowstepagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

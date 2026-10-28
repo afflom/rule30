@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-twopow"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit htm (app (const lexlean.core::eq) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))) (app (const r30.scale::twopow) (local k)))) (explicit hlh (app (const r30.witt::lh-band-agree) (local t) (app (const lexlean.std.nat::mul) (local m) (local P)) (nat 1) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P))))) (explicit hrh (app (const r30.witt::rh-band-agree) (local t) (app (const lexlean.std.nat::mul) (local m) (local P)) (nat 0) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P)))))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.not_centerPeriodic_of_lhBandAgree_one_and_rhBandAgree_zero_twopow"
+
+[[form]]
+id = "not-centerperiodic-of-lhbandagree-one-and-rhbandagree-zero-twopow"
+channel = "math"
+surface = "notcenterperiodicoflhbandagreeoneandrhbandagreezerotwopow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notcenterperiodicoflhbandagreeoneandrhbandagreezerotwopow) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

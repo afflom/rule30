@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-two-scale-row-right-eq-rhcenter"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit K (const lexlean.std.nat::nat)) (explicit L (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat)) (explicit w (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat))) (pi ((explicit hKL (app (const lexlean.std.nat::le) (local K) (local L))) (explicit htK (app (const lexlean.std.nat::le) (local t) (local K)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L)))) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local K)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L))) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local K)))) (local q))) (app (const r30.witt::rh-center) (local t) (local q)))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_two_scale_row_right_eq_rhCenter"
+
+[[form]]
+id = "rhcenter-two-scale-row-right-eq-rhcenter"
+channel = "math"
+surface = "rhcentertwoscalerowrighteqrhcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcentertwoscalerowrighteqrhcenter) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

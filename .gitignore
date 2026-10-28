@@ -28,3 +28,7 @@ __pycache__/
 *.npy
 *.npz
 
+
+# Large LexLean source-map and coverage dumps inside verified-latest
+**/verified-latest/*/coverage/
+**/verified-latest/*/maps/

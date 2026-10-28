@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-dyadic-sub-doubling-diag-antiperiodic"
+category = "proof-constant"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat)) (explicit v (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (pi ((explicit hv (app (const lexlean.std.nat::le) (nat 1) (local v))) (explicit hz (app (const r30.joint::zero-diagonal) (local z))) (explicit hd (app (const r30.joint::doubles-at) (local Q) (local z))) (explicit hset (app (const r30.witt::settled-by) (app (const lexlean.std.nat::add) (local z) (nat 1)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 1)) (local d)))) (explicit hK (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 1)) (local d)) (local Q)) (app (const lexlean.std.nat::add) (local d) (local Q))) (local K)))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (local K))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 1)) (local d)) (local Q))) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (local K))) (app (const lexlean.std.nat::add) (local d) (local Q)))) (app (const lexlean.std.bool::not) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (local K))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local z) (nat 1)) (local d))) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::mul) (local v) (app (const r30.scale::twopow) (local K))) (local d)))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_dyadic_sub_doubling_diag_antiperiodic"
+
+[[form]]
+id = "rhcenter-dyadic-sub-doubling-diag-antiperiodic"
+channel = "math"
+surface = "rhcenterdyadicsubdoublingdiagantiperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenterdyadicsubdoublingdiagantiperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

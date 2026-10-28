@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-step-succ-interior"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.local::bxor) (app (const r30.witt::rh-center) (local t) (local p)) (app (const lexlean.std.bool::or) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::add) (local p) (nat 1))) (app (const r30.witt::rh-center) (local t) (app (const lexlean.std.nat::add) (local p) (nat 2)))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_step_succ_interior"
+
+[[form]]
+id = "rhcenter-step-succ-interior"
+channel = "math"
+surface = "rhcenterstepsuccinterior"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenterstepsuccinterior) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

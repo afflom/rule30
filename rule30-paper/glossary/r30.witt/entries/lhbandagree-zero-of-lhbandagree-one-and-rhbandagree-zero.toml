@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhbandagree-zero-of-lhbandagree-one-and-rhbandagree-zero"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit B (const lexlean.std.nat::nat))) (pi ((explicit hlh (app (const r30.witt::lh-band-agree) (local t) (local Q) (nat 1) (local B))) (explicit hrh (app (const r30.witt::rh-band-agree) (local t) (local Q) (nat 0) (local B)))) (app (const r30.witt::lh-band-agree) (local t) (local Q) (nat 0) (local B))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhBandAgree_zero_of_lhBandAgree_one_and_rhBandAgree_zero"
+
+[[form]]
+id = "lhbandagree-zero-of-lhbandagree-one-and-rhbandagree-zero"
+channel = "math"
+surface = "lhbandagreezerooflhbandagreeoneandrhbandagreezero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhbandagreezerooflhbandagreeoneandrhbandagreezero) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

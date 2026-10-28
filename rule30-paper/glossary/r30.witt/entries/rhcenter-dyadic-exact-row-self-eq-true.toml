@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rhcenter-dyadic-exact-row-self-eq-true"
+category = "proof-constant"
+signature = "(pi ((explicit L (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::rh-center) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L))) (app (const lexlean.std.nat::mul) (local u) (app (const r30.scale::twopow) (local L)))) (const lexlean.std.bool::true)))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.rhCenter_dyadic_exact_row_self_eq_true"
+
+[[form]]
+id = "rhcenter-dyadic-exact-row-self-eq-true"
+channel = "math"
+surface = "rhcenterdyadicexactrowselfeqtrue"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rhcenterdyadicexactrowselfeqtrue) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
