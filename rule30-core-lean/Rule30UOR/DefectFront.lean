@@ -248,18 +248,6 @@ theorem primitive_doubles_leftDefect_of_any_doubling_point
   exact ⟨z, t, k, ht, hz, hd, hk, hdef⟩
 
 /--
-From the stronger local clean-window form and `CompilePoints.doubling_points`, obtain
-`PrimitiveDoublesCleanWindow`.
--/
-theorem primitive_doubles_cleanWindow_of_any_doubling_point
-    (h : PrimitiveCleanWindowAtAnyDoublesPoint) :
-    PrimitiveDoublesCleanWindow := by
-  intro T P hP
-  obtain ⟨z, hz, hd⟩ := Rule30UOR.CompilePoints.doubling_points P hP
-  obtain ⟨t, k, ht, hk, hdef, hclean⟩ := h T P z hP hz hd
-  exact ⟨z, t, k, ht, hz, hd, hk, hdef, hclean⟩
-
-/--
 Component B at primitive period: for the same witness data, provide the clean window `(-k, k]`.
 -/
 def PrimitiveDoublesCleanWindow : Prop :=
@@ -271,6 +259,18 @@ def PrimitiveDoublesCleanWindow : Prop :=
       0 < k ∧
       defect P t (-(k : Int)) = true ∧
       (∀ p : Int, -(k : Int) < p → p ≤ (k : Int) → defect P t p = false)
+
+/--
+From the stronger local clean-window form and `CompilePoints.doubling_points`, obtain
+`PrimitiveDoublesCleanWindow`.
+-/
+theorem primitive_doubles_cleanWindow_of_any_doubling_point
+    (h : PrimitiveCleanWindowAtAnyDoublesPoint) :
+    PrimitiveDoublesCleanWindow := by
+  intro T P hP
+  obtain ⟨z, hz, hd⟩ := Rule30UOR.CompilePoints.doubling_points P hP
+  obtain ⟨t, k, ht, hk, hdef, hclean⟩ := h T P z hP hz hd
+  exact ⟨z, t, k, ht, hz, hd, hk, hdef, hclean⟩
 
 /--
 Component composition: the clean-window component already packages component A and yields
