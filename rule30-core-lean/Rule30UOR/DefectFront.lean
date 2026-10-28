@@ -188,6 +188,51 @@ def PrimitiveDoublesLeftHeavyRecurrence : Prop :=
       Rule30UOR.CompilePoints.DoublesAt P z ∧
       LeftHeavy P t k
 
+/--
+Component A at primitive period: at a doubling point of `P`, produce a left defect at `-k`.
+-/
+def PrimitiveDoublesLeftDefect : Prop :=
+  ∀ T P : Nat, 0 < P →
+    ∃ z t k : Nat,
+      T ≤ t ∧
+      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
+      Rule30UOR.CompilePoints.DoublesAt P z ∧
+      0 < k ∧ defect P t (-(k : Int)) = true
+
+/--
+Component B at primitive period: for the same witness data, provide the clean window `(-k, k]`.
+-/
+def PrimitiveDoublesCleanWindow : Prop :=
+  ∀ T P : Nat, 0 < P →
+    ∃ z t k : Nat,
+      T ≤ t ∧
+      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
+      Rule30UOR.CompilePoints.DoublesAt P z ∧
+      0 < k ∧
+      defect P t (-(k : Int)) = true ∧
+      (∀ p : Int, -(k : Int) < p → p ≤ (k : Int) → defect P t p = false)
+
+/--
+Component composition: the clean-window component already packages component A and yields
+primitive-period left-heavy recurrence.
+-/
+theorem primitive_doubles_leftHeavy_of_cleanWindow
+    (h : PrimitiveDoublesCleanWindow) :
+    PrimitiveDoublesLeftHeavyRecurrence := by
+  intro T P hP
+  obtain ⟨z, t, k, ht, hz, hd, hk, hdef, hclean⟩ := h T P hP
+  exact ⟨z, t, k, ht, hz, hd, ⟨hk, hdef, hclean⟩⟩
+
+/--
+Submission-facing reduction through the split components. This isolates the remaining work to
+proving `PrimitiveDoublesCleanWindow`.
+-/
+theorem submission_problem1_of_primitive_doubles_cleanWindow
+    (h : PrimitiveDoublesCleanWindow) :
+    Problem1 :=
+  submission_problem1_of_primitive_doubles_leftHeavy
+    (primitive_doubles_leftHeavy_of_cleanWindow h)
+
 /-- Primitive-period recurrence implies the zero-diagonal/doubling recurrence schema (`m = 1`). -/
 theorem zeroDiag_doubles_leftHeavyRecurrence_of_primitive
     (h : PrimitiveDoublesLeftHeavyRecurrence) :
