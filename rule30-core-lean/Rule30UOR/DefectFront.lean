@@ -230,8 +230,9 @@ proving `PrimitiveDoublesCleanWindow`.
 theorem submission_problem1_of_primitive_doubles_cleanWindow
     (h : PrimitiveDoublesCleanWindow) :
     Problem1 :=
-  submission_problem1_of_primitive_doubles_leftHeavy
-    (primitive_doubles_leftHeavy_of_cleanWindow h)
+  submission_problem1_of_zeroDiag_doubles_leftHeavy
+    (zeroDiag_doubles_leftHeavyRecurrence_of_primitive
+      (primitive_doubles_leftHeavy_of_cleanWindow h))
 
 /-- Primitive-period recurrence implies the zero-diagonal/doubling recurrence schema (`m = 1`). -/
 theorem zeroDiag_doubles_leftHeavyRecurrence_of_primitive
