@@ -254,8 +254,10 @@ theorem submission_problem1_of_primitive_doubles_components
     (hA : PrimitiveDoublesLeftDefect)
     (hB : PrimitiveDoublesCleanWindowFromWitness) :
     Problem1 :=
-  submission_problem1_of_primitive_doubles_cleanWindow
-    (primitive_doubles_cleanWindow_of_components hA hB)
+  submission_problem1_of_zeroDiag_doubles_leftHeavy (by
+    apply zeroDiag_doubles_leftHeavyRecurrence_of_primitive
+    exact primitive_doubles_leftHeavy_of_cleanWindow
+      (primitive_doubles_cleanWindow_of_components hA hB))
 
 /--
 Submission-facing reduction through the split components. This isolates the remaining work to
