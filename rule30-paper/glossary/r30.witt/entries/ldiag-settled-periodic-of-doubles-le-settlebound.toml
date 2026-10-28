@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-settled-periodic-of-doubles-le-settlebound"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const r30.joint::doubles-at) (local Q) (local z))) (explicit hdz (app (const lexlean.std.nat::le) (local d) (local z))) (explicit hbt (app (const r30.witt::settled-up-to) (local z) (local t)))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (local d) (app (const lexlean.std.nat::add) (local t) (local Q))) (app (const r30.time::ldiag) (local d) (local t)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.ldiag_settled_periodic_of_doubles_le_settleBound"
+
+[[form]]
+id = "ldiag-settled-periodic-of-doubles-le-settlebound"
+channel = "math"
+surface = "ldiagsettledperiodicofdoubleslesettlebound"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagsettledperiodicofdoubleslesettlebound) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

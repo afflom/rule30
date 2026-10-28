@@ -15871,4 +15871,262 @@ theorem kit_not_centerPeriodic_of_rdrv_dyadic_mul_period_single_row_left_corrido
   Rule30Paper.Paper.not_centerperiodic_of_rdrv_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles
     T P td c z p K L u S hP hc ht hz hd hset1 hset2 hS hu hK hL hKL hspat
 
+
+-- ============================================================================
+-- Batch 81 Bridge: Unconditional Dyadic-Multiple Diagonal-Shift Periodicity &
+-- Direct Left-Half Single-Row Spatial Shift Reduction (`9.1507`–`9.1521`)
+-- ============================================================================
+
+/-- Kit-side wrapper for `9.1508` (`lhCenter_diag_shift_mul_twopow_periodic_le`):
+    for all `e, w, t, p` with `t - p ≤ e` and `SettledBy (t - p) t`, `lhCenter (t + w * 2^e) (p + w * 2^e) = lhCenter t p`. -/
+theorem kit_lhCenter_diag_shift_mul_twopow_periodic_le
+    (e w t p : Nat) (hde : t - p ≤ e)
+    (hset : Rule30UOR.Interfaces.SettledBy (t - p) t) :
+    Rule30UOR.Interfaces.lhCenter (t + w * Rule30UOR.Core.twopow e) (p + w * Rule30UOR.Core.twopow e) =
+      Rule30UOR.Interfaces.lhCenter t p :=
+  Rule30Paper.Paper.lhcenter_diag_shift_mul_twopow_periodic_le e w t p hde hset
+
+/-- Kit-side wrapper for `9.1518` (`lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree`):
+    at `t = z + 1`, spatial `Q`-periodicity inside the single left-half row `(z + 1) + Q` on `[1, 1 + S]` implies `LhBandAgree (z + 1) Q 1 S` for any `Q` with `DoublesAt Q z`. -/
+theorem kit_lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
+    (Q z S : Nat) (hd : Rule30UOR.CompilePoints.DoublesAt Q z)
+    (hset : ∀ i : Nat, i ≤ S → Rule30UOR.Interfaces.SettledBy ((z + 1) - (1 + i)) (z + 1))
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + Q) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + Q) ((1 + i) + Q)) :
+    Rule30UOR.Interfaces.LhBandAgree (z + 1) Q 1 S :=
+  Rule30Paper.Paper.lhbandagree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
+    Q z S hd hset hspat
+
+/-- Kit-side wrapper for `9.1519` (`periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree`):
+    under `CenterPeriodic T P` (`T ≤ z + 1`) and `DoublesAt (m * P) z`, spatial `(m * P)`-periodicity of the single left-half row `(z + 1) + m * P` on `[1, 1 + S]` implies `LhColAgree (z + 1) (m * P) 1 S`. -/
+theorem kit_periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
+    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
+    (m z S : Nat) (ht : T ≤ z + 1) (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset : ∀ i : Nat, i ≤ S → Rule30UOR.Interfaces.SettledBy ((z + 1) - (1 + i)) (z + 1))
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + m * P) ((1 + i) + m * P)) :
+    Rule30UOR.Interfaces.LhColAgree (z + 1) (m * P) 1 S :=
+  Rule30Paper.Paper.periodic_lhcolagree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
+    T P hP hper m z S ht hd hset hspat
+
+/-- Kit-side wrapper for `9.1521` (`not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles`):
+    spatial `(m * P)`-periodicity of the single left-half row `(z + 1) + m * P` on `[1, 1 + S]` (`3 * (m * P) ≤ S + 1`) refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles
+    (T P m z S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + 1) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + 1))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + 1))
+    (hS : 3 * (m * P) ≤ S + 1)
+    (hset : ∀ i : Nat, i ≤ S → Rule30UOR.Interfaces.SettledBy ((z + 1) - (1 + i)) (z + 1))
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + m * P) ((1 + i) + m * P)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles
+    T P m z S hP hm ht hz hd hset1 hset2 hS hset hspat
+
+
+-- ============================================================================
+-- Batch 82 Bridge: General-`p` Prefix/Tail Decomposition & Single-Scale Dyadic
+-- Embedding in `rhCenter` and `rdrv` (`9.1522`–`9.1536`)
+-- ============================================================================
+
+/-- Kit-side wrapper for `9.1524` (`not_centerPeriodic_of_doubles_prefix_and_single_lh_row_tail_at_zero_diag`):
+    at `t = z + (p + 1)`, the `p`-cell prefix + single-row tail spatial agreement refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_doubles_prefix_and_single_lh_row_tail_at_zero_diag
+    (T P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1)) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hpref : ∀ i : Nat, i < p →
+      Rule30UOR.Interfaces.lhCenter ((z + (p + 1)) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter (z + (p + 1)) (1 + i))
+    (hset : ∀ i : Nat, p ≤ i → i ≤ S → Rule30UOR.Interfaces.SettledBy ((z + (p + 1)) - (1 + i)) (z + (p + 1)))
+    (htail : ∀ i : Nat, p ≤ i → i ≤ S →
+      Rule30UOR.Interfaces.lhCenter ((z + (p + 1)) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter ((z + (p + 1)) + m * P) ((1 + i) + m * P)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_doubles_prefix_and_single_lh_row_tail_at_zero_diag
+    T P m z p S hP hm ht hz hd hset1 hset2 hS hpref hset htail
+
+/-- Kit-side wrapper for `9.1530` (`not_centerPeriodic_of_single_rh_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles`):
+    single-scale (`K`), arbitrary-`m` (`0 < m`), single-row `rhCenter (((z + 1) + m * P) + v * 2^K)` leftward `(m * P)`-shift agreement on `[1, 1 + S]` (`3 * (m * P) ≤ S + 1`) refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_single_rh_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles
+    (T P m z S K v : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + 1) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + 1))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + 1))
+    (hS : 3 * (m * P) ≤ S + 1)
+    (hv : 1 ≤ v) (hK : ((z + 1) + m * P) + ((1 + S) + m * P) ≤ K)
+    (hset : ∀ i : Nat, i ≤ S → Rule30UOR.Interfaces.SettledBy ((z + 1) - (1 + i)) (z + 1))
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.rhCenter (((z + 1) + m * P) + v * Rule30UOR.Core.twopow K)
+        ((v * Rule30UOR.Core.twopow K) - (1 + i)) =
+      Rule30UOR.Interfaces.rhCenter (((z + 1) + m * P) + v * Rule30UOR.Core.twopow K)
+        ((v * Rule30UOR.Core.twopow K) - ((1 + i) + m * P))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_single_rh_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles
+    T P m z S K v hP hm ht hz hd hset1 hset2 hS hv hK hset hspat
+
+/-- Kit-side wrapper for `9.1536` (`not_centerPeriodic_of_single_rdrv_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles`):
+    single-scale (`K`), arbitrary-`m` (`0 < m`), single-step `rdrv td (v * 2^K) ((z + 1) + m * P)` leftward `(m * P)`-shift agreement on `[1, 1 + S]` (`3 * (m * P) ≤ S + 1`) refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_single_rdrv_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles
+    (T P td m z S K v : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + 1) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) (z + 1))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) (z + 1))
+    (hS : 3 * (m * P) ≤ S + 1)
+    (hv : 1 ≤ v) (hK : ((z + 1) + m * P) + ((1 + S) + m * P) ≤ K)
+    (hset : ∀ i : Nat, i ≤ S → Rule30UOR.Interfaces.SettledBy ((z + 1) - (1 + i)) (z + 1))
+    (hspat : ∀ i : Nat, i ≤ S →
+      Rule30UOR.Interfaces.rdrv td (v * Rule30UOR.Core.twopow K) ((z + 1) + m * P)
+        ((v * Rule30UOR.Core.twopow K) - (1 + i)) =
+      Rule30UOR.Interfaces.rdrv td (v * Rule30UOR.Core.twopow K) ((z + 1) + m * P)
+        ((v * Rule30UOR.Core.twopow K) - ((1 + i) + m * P))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_single_rdrv_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles
+    T P td m z S K v hP hm ht hz hd hset1 hset2 hS hv hK hset hspat
+
+
+-- ============================================================================
+-- Batch 83 Bridge: Late-Scale (`t + 2^k, p + 2^k`) Diagonal-Shift Periodicity
+-- & Scale-Independent Tail Horizon `3mP` Refutations (`9.1537`–`9.1551`)
+-- ============================================================================
+
+/-- Kit-side wrapper for `9.1537` (`lhCenter_late_scale_diag_shift_periodic_of_doubles_le`):
+    late-scale diagonal-shift `Q`-periodicity of `lhCenter` below a doubling point `z`, requiring ONLY late settlement `SettledBy (t - p) (t + 2^k)`. -/
+theorem kit_lhCenter_late_scale_diag_shift_periodic_of_doubles_le
+    (Q z t p k : Nat) (hd : Rule30UOR.CompilePoints.DoublesAt Q z) (hdz : t - p ≤ z)
+    (hset : Rule30UOR.Interfaces.SettledBy (t - p) (t + Rule30UOR.Core.twopow k)) :
+    Rule30UOR.Interfaces.lhCenter ((t + Q) + Rule30UOR.Core.twopow k) ((p + Q) + Rule30UOR.Core.twopow k) =
+      Rule30UOR.Interfaces.lhCenter (t + Rule30UOR.Core.twopow k) (p + Rule30UOR.Core.twopow k) :=
+  Rule30Paper.Paper.lhcenter_late_scale_diag_shift_periodic_of_doubles_le Q z t p k hd hdz hset
+
+/-- Kit-side wrapper for `9.1546` (`not_centerPeriodic_of_late_scale_doubles_prefix_and_single_lh_row_tail`):
+    at `t = (z + 1) + 2^k`, the `2^k`-prefix + single-row tail of scale-independent width `3 * (m * P) ≤ L + 1` refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_late_scale_doubles_prefix_and_single_lh_row_tail
+    (T P m z L k : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ (z + 1) + Rule30UOR.Core.twopow k)
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) ((z + 1) + Rule30UOR.Core.twopow k))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) ((z + 1) + Rule30UOR.Core.twopow k))
+    (hL : 3 * (m * P) ≤ L + 1)
+    (hpref : ∀ i : Nat, i < Rule30UOR.Core.twopow k →
+      Rule30UOR.Interfaces.lhCenter (((z + 1) + Rule30UOR.Core.twopow k) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + Rule30UOR.Core.twopow k) (1 + i))
+    (hset : ∀ i : Nat, i ≤ L → Rule30UOR.Interfaces.SettledBy ((z + 1) - (1 + i)) ((z + 1) + Rule30UOR.Core.twopow k))
+    (hspat : ∀ i : Nat, i ≤ L →
+      Rule30UOR.Interfaces.lhCenter (((z + 1) + m * P) + Rule30UOR.Core.twopow k) ((1 + Rule30UOR.Core.twopow k) + i) =
+      Rule30UOR.Interfaces.lhCenter (((z + 1) + m * P) + Rule30UOR.Core.twopow k) (((1 + Rule30UOR.Core.twopow k) + i) + m * P)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_late_scale_doubles_prefix_and_single_lh_row_tail
+    T P m z L k hP hm ht hz hd hset1 hset2 hL hpref hset hspat
+
+/-- Kit-side wrapper for `9.1551` (`not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rdrv_row_tail`):
+    at `t = (z + 1) + 2^k`, the `2^k`-prefix + `rdrv`-embedded late single-row tail of scale-independent width `3 * (m * P) ≤ L + 1` refutes `CenterPeriodic T P`. -/
+theorem kit_not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rdrv_row_tail
+    (T P td m z L k K v : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ (z + 1) + Rule30UOR.Core.twopow k)
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hset1 : Rule30UOR.Interfaces.SettledBy (z + 1) ((z + 1) + Rule30UOR.Core.twopow k))
+    (hset2 : Rule30UOR.Interfaces.SettledBy ((z + 1) - m * P) ((z + 1) + Rule30UOR.Core.twopow k))
+    (hL : 3 * (m * P) ≤ L + 1) (hv : 1 ≤ v)
+    (hK : (((z + 1) + m * P) + Rule30UOR.Core.twopow k) + (((1 + Rule30UOR.Core.twopow k) + L) + m * P) ≤ K)
+    (hpref : ∀ i : Nat, i < Rule30UOR.Core.twopow k →
+      Rule30UOR.Interfaces.lhCenter (((z + 1) + Rule30UOR.Core.twopow k) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + Rule30UOR.Core.twopow k) (1 + i))
+    (hset : ∀ i : Nat, i ≤ L → Rule30UOR.Interfaces.SettledBy ((z + 1) - (1 + i)) ((z + 1) + Rule30UOR.Core.twopow k))
+    (hspat : ∀ i : Nat, i ≤ L →
+      Rule30UOR.Interfaces.rdrv td (v * Rule30UOR.Core.twopow K) (((z + 1) + m * P) + Rule30UOR.Core.twopow k)
+        ((v * Rule30UOR.Core.twopow K) - ((1 + Rule30UOR.Core.twopow k) + i)) =
+      Rule30UOR.Interfaces.rdrv td (v * Rule30UOR.Core.twopow K) (((z + 1) + m * P) + Rule30UOR.Core.twopow k)
+        ((v * Rule30UOR.Core.twopow K) - (((1 + Rule30UOR.Core.twopow k) + i) + m * P))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_late_scale_doubles_prefix_and_single_rdrv_row_tail
+    T P td m z L k K v hP hm ht hz hd hset1 hset2 hL hv hK hpref hset hspat
+
+
+-- ============================================================================
+-- Batch 84 Bridge: Monotone Settlement Bound (`settleBound`) & Single-Row
+-- Prefix+Tail Refutations of `CenterPeriodic` (`9.1552`–`9.1566`)
+-- ============================================================================
+
+/-- Kit-side wrapper for `9.1552` (`settledBy_of_le_and_settleBound_le`):
+    uniform settlement of every diagonal `d ≤ D` once `settleBound D ≤ t`. -/
+theorem kit_settledBy_of_le_and_settleBound_le
+    (D d t : Nat) (hdD : d ≤ D) (hbt : Rule30UOR.Interfaces.settleBound D ≤ t) :
+    Rule30UOR.Interfaces.SettledBy d t :=
+  Rule30Paper.Paper.settledby_of_le_and_settlebound_le D d t hdD hbt
+
+/-- Kit-side wrapper for `9.1559` (`not_centerPeriodic_of_doubles_settleBound_prefix_and_single_lh_row_tail_at_zero_diag`):
+    refutation of `CenterPeriodic T P` from the `p`-cell prefix and single-row tail spatial agreement under `settleBound (z + 1) ≤ z + (p + 1)` (with zero `SettledBy` hypotheses). -/
+theorem kit_not_centerPeriodic_of_doubles_settleBound_prefix_and_single_lh_row_tail_at_zero_diag
+    (T P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ z + (p + 1)) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hbt : Rule30UOR.Interfaces.settleBound (z + 1) ≤ z + (p + 1))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hpref : ∀ i : Nat, i < p →
+      Rule30UOR.Interfaces.lhCenter ((z + (p + 1)) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter (z + (p + 1)) (1 + i))
+    (htail : ∀ i : Nat, p ≤ i → i ≤ S →
+      Rule30UOR.Interfaces.lhCenter ((z + (p + 1)) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter ((z + (p + 1)) + m * P) ((1 + i) + m * P)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_doubles_settlebound_prefix_and_single_lh_row_tail_at_zero_diag
+    T P m z p S hP hm ht hz hd hbt hS hpref htail
+
+/-- Kit-side wrapper for `9.1563` (`not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound`):
+    single-row `rhCenter` prefix + tail refutation of `CenterPeriodic T P` with `(z + (p + 1)) + p ≤ K` (independent of `S` and `2^K`!) and zero `SettledBy` hypotheses. -/
+theorem kit_not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound
+    (T P c z p S K L u : Nat) (hP : 0 < P) (hc : 0 < c)
+    (ht : T ≤ z + (p + 1)) (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt ((c * Rule30UOR.Core.twopow K) * P) z)
+    (hbt : Rule30UOR.Interfaces.settleBound (z + 1) ≤ z + (p + 1))
+    (hS : p + 3 * ((c * Rule30UOR.Core.twopow K) * P) ≤ S + 1)
+    (hu : 1 ≤ u) (hK : (z + (p + 1)) + p ≤ K)
+    (hL : ((z + (p + 1)) + (c * Rule30UOR.Core.twopow K) * P) + ((1 + S) + (c * Rule30UOR.Core.twopow K) * P) ≤ L)
+    (hKL : K ≤ L)
+    (hpref : ∀ i : Nat, i < p →
+      Rule30UOR.Interfaces.rhCenter (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P)
+        ((u * Rule30UOR.Core.twopow L) - (1 + i)) =
+      Rule30UOR.Interfaces.rhCenter (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P)
+        (((u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P) - (1 + i)))
+    (htail : ∀ i : Nat, p ≤ i → i ≤ S →
+      Rule30UOR.Interfaces.rhCenter (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P)
+        ((u * Rule30UOR.Core.twopow L) - (1 + i)) =
+      Rule30UOR.Interfaces.rhCenter (((z + (p + 1)) + u * Rule30UOR.Core.twopow L) + (c * Rule30UOR.Core.twopow K) * P)
+        ((u * Rule30UOR.Core.twopow L) - ((1 + i) + (c * Rule30UOR.Core.twopow K) * P))) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_two_scale_single_rh_row_prefix_and_tail_settlebound
+    T P c z p S K L u hP hc ht hz hd hbt hS hu hK hL hKL hpref htail
+
+/-- Kit-side wrapper for `9.1566` (`not_centerPeriodic_of_late_scale_doubles_settleBound_prefix_and_single_lh_row_tail`):
+    late-scale `t = (z + 1) + 2^k` refutation of `CenterPeriodic T P` under `settleBound (z + 1) ≤ (z + 1) + 2^k` with scale-independent tail width `3 * (m * P) ≤ L + 1` and zero `SettledBy` hypotheses. -/
+theorem kit_not_centerPeriodic_of_late_scale_doubles_settleBound_prefix_and_single_lh_row_tail
+    (T P m z L k : Nat) (hP : 0 < P) (hm : 0 < m)
+    (ht : T ≤ (z + 1) + Rule30UOR.Core.twopow k)
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt (m * P) z)
+    (hbt : Rule30UOR.Interfaces.settleBound (z + 1) ≤ (z + 1) + Rule30UOR.Core.twopow k)
+    (hL : 3 * (m * P) ≤ L + 1)
+    (hpref : ∀ i : Nat, i < Rule30UOR.Core.twopow k →
+      Rule30UOR.Interfaces.lhCenter (((z + 1) + Rule30UOR.Core.twopow k) + m * P) (1 + i) =
+      Rule30UOR.Interfaces.lhCenter ((z + 1) + Rule30UOR.Core.twopow k) (1 + i))
+    (hspat : ∀ i : Nat, i ≤ L →
+      Rule30UOR.Interfaces.lhCenter (((z + 1) + m * P) + Rule30UOR.Core.twopow k) ((1 + Rule30UOR.Core.twopow k) + i) =
+      Rule30UOR.Interfaces.lhCenter (((z + 1) + m * P) + Rule30UOR.Core.twopow k) (((1 + Rule30UOR.Core.twopow k) + i) + m * P)) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  Rule30Paper.Paper.not_centerperiodic_of_late_scale_doubles_settlebound_prefix_and_single_lh_row_tail
+    T P m z L k hP hm ht hz hd hbt hL hpref hspat
+
 end Rule30Bridge

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-late-scale-diag-shift-periodic-of-doubles-le"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const r30.joint::doubles-at) (local Q) (local z))) (explicit hdz (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (local t) (local p)) (local z))) (explicit hset (app (const r30.witt::settled-by) (app (const lexlean.std.nat::sub) (local t) (local p)) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k)))))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local p) (local Q)) (app (const r30.scale::twopow) (local k)))) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.nat::add) (local p) (app (const r30.scale::twopow) (local k)))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_late_scale_diag_shift_periodic_of_doubles_le_prop"
+
+[[form]]
+id = "lhcenter-late-scale-diag-shift-periodic-of-doubles-le"
+channel = "math"
+surface = "lhcenterlatescalediagshiftperiodicofdoublesle"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcenterlatescalediagshiftperiodicofdoublesle) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

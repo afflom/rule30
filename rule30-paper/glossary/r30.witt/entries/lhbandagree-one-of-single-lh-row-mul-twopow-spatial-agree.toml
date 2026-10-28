@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhbandagree-one-of-single-lh-row-mul-twopow-spatial-agree"
+category = "proof-constant"
+signature = "(pi ((explicit e (const lexlean.std.nat::nat)) (explicit w (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit hde (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (local t) (nat 1)) (local e))) (explicit hset (pi ((explicit i (const lexlean.std.nat::nat))) (pi ((explicit hi (app (const lexlean.std.nat::le) (local i) (local S)))) (app (const r30.witt::settled-by) (app (const lexlean.std.nat::sub) (local t) (app (const lexlean.std.nat::add) (nat 1) (local i))) (local t))))) (explicit hspat (pi ((explicit i (const lexlean.std.nat::nat))) (pi ((explicit hi (app (const lexlean.std.nat::le) (local i) (local S)))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local e)))) (app (const lexlean.std.nat::add) (nat 1) (local i))) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local e)))) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (nat 1) (local i)) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local e)))))))))) (app (const r30.witt::lh-band-agree) (local t) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local e))) (nat 1) (local S))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhBandAgree_one_of_single_lh_row_mul_twopow_spatial_agree_prop"
+
+[[form]]
+id = "lhbandagree-one-of-single-lh-row-mul-twopow-spatial-agree"
+channel = "math"
+surface = "lhbandagreeoneofsinglelhrowmultwopowspatialagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhbandagreeoneofsinglelhrowmultwopowspatialagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "lhcenter-eq-shifted-row-of-mul-twopow-and-spatial-agree"
+category = "proof-constant"
+signature = "(pi ((explicit e (const lexlean.std.nat::nat)) (explicit w (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hde (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::sub) (local t) (local p)) (local e))) (explicit hset (app (const r30.witt::settled-by) (app (const lexlean.std.nat::sub) (local t) (local p)) (local t))) (explicit hspat (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local e)))) (local p)) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local e)))) (app (const lexlean.std.nat::add) (local p) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local e)))))))) (app (const lexlean.core::eq) (app (const r30.witt::lh-center) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local e)))) (local p)) (app (const r30.witt::lh-center) (local t) (local p)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.lhCenter_eq_shifted_row_of_mul_twopow_and_spatial_agree_prop"
+
+[[form]]
+id = "lhcenter-eq-shifted-row-of-mul-twopow-and-spatial-agree"
+channel = "math"
+surface = "lhcentereqshiftedrowofmultwopowandspatialagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lhcentereqshiftedrowofmultwopowandspatialagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

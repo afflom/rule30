@@ -12901,5 +12901,495 @@
   \end{proof}
   \end{theorem}
 
+  \begin{theorem}{ldiag-settled-mul-twopow-periodic-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(e\) and natural number \(w\) and natural number \(d\) and natural number \(t\), if \(d ≤ e\), then if \(settledby(d, t)\), then \(ldiag(d, t + w * twopow(e)) = ldiag(d, t)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::ldiag-settled-mul-twopow-periodic-le}(e, w, d, t)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-diag-shift-mul-twopow-periodic-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(e\) and natural number \(w\) and natural number \(t\) and natural number \(p\), if \(t - p ≤ e\), then if \(settledby(t - p, t)\), then \(lhcenter(t + w * twopow(e), p + w * twopow(e)) = lhcenter(t, p)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-diag-shift-mul-twopow-periodic-le}(e, w, t, p)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-eq-shifted-row-of-mul-twopow-and-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(e\) and natural number \(w\) and natural number \(t\) and natural number \(p\), if \(t - p ≤ e\), then if \(settledby(t - p, t)\), then if \(lhcenter(t + w * twopow(e), p) = lhcenter(t + w * twopow(e), p + w * twopow(e))\), then \(lhcenter(t + w * twopow(e), p) = lhcenter(t, p)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-eq-shifted-row-of-mul-twopow-and-spatial-agree}(e, w, t, p)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-of-single-lh-row-mul-twopow-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(e\) and natural number \(w\) and natural number \(t\) and natural number \(p0\) and natural number \(L\), if \(t - p0 ≤ e\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby(t - (p0 + i), t)\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter(t + w * twopow(e), p0 + i) = lhcenter(t + w * twopow(e), (p0 + i) + w * twopow(e))\), then \(lhbandagree(t, w * twopow(e), p0, L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-of-single-lh-row-mul-twopow-spatial-agree}(e, w, t, p0, L)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-single-lh-row-mul-twopow-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(e\) and natural number \(w\) and natural number \(t\) and natural number \(S\), if \(t - 1 ≤ e\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby(t - (1 + i), t)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter(t + w * twopow(e), 1 + i) = lhcenter(t + w * twopow(e), (1 + i) + w * twopow(e))\), then \(lhbandagree(t, w * twopow(e), 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-single-lh-row-mul-twopow-spatial-agree}(e, w, t, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-single-lh-row-dyadic-mul-period-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(e\) and natural number \(c\) and natural number \(P\) and natural number \(t\) and natural number \(S\), if \(t - 1 ≤ e\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby(t - (1 + i), t)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter(t + (c * twopow(e)) * P, 1 + i) = lhcenter(t + (c * twopow(e)) * P, (1 + i) + (c * twopow(e)) * P)\), then \(lhbandagree(t, (c * twopow(e)) * P, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-single-lh-row-dyadic-mul-period-spatial-agree}(e, c, P, t, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-of-single-lh-row-dyadic-mul-period-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(c\) and natural number \(e\) and natural number \(t\) and natural number \(S\), if \(T ≤ t\), then if \(t - 1 ≤ e\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby(t - (1 + i), t)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter(t + (c * twopow(e)) * P, 1 + i) = lhcenter(t + (c * twopow(e)) * P, (1 + i) + (c * twopow(e)) * P)\), then \(lhcolagree(t, (c * twopow(e)) * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(c\), \(e\), \(t\), \(S\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-of-single-lh-row-dyadic-mul-period-spatial-agree}(T, P, hP, hper, c, e, t, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-of-single-lh-row-dyadic-mul-period-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(c\) and natural number \(e\) and natural number \(t\) and natural number \(S\) and natural number \(s\), if \(T ≤ t\), then if \(t - 1 ≤ e\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby(t - (1 + i), t)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter(t + (c * twopow(e)) * P, 1 + i) = lhcenter(t + (c * twopow(e)) * P, (1 + i) + (c * twopow(e)) * P)\), then if \(s ≤ S\), then \(maskparity((t + s) + (c * twopow(e)) * P, 0) = maskparity(t + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(c\), \(e\), \(t\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-of-single-lh-row-dyadic-mul-period-spatial-agree}(T, P, hP, hper, c, e, t, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-single-lh-row-dyadic-mul-period-spatial-agree-at-zero-diag-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(z\) and natural number \(p\) and natural number \(e\) and natural number \(S\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat((c * twopow(e)) * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - (c * twopow(e)) * P, z + (p + 1))\), then if \(p + 3 * ((c * twopow(e)) * P) ≤ S + 1\), then if \((z + (p + 1)) - 1 ≤ e\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + (p + 1)) - (1 + i), z + (p + 1))\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter((z + (p + 1)) + (c * twopow(e)) * P, 1 + i) = lhcenter((z + (p + 1)) + (c * twopow(e)) * P, (1 + i) + (c * twopow(e)) * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-single-lh-row-dyadic-mul-period-spatial-agree-at-zero-diag-doubles}(T, P, c, z, p, e, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-single-lh-row-dyadic-mul-period-spatial-agree-twopow}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(t\) and natural number \(k\) and natural number \(e\) and natural number \(S\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ t\), then if \(t + (c * twopow(e)) * P = twopow(k)\), then if \(twopow(k) ≤ S + 1\), then if \(t - 1 ≤ e\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby(t - (1 + i), t)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter(t + (c * twopow(e)) * P, 1 + i) = lhcenter(t + (c * twopow(e)) * P, (1 + i) + (c * twopow(e)) * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-single-lh-row-dyadic-mul-period-spatial-agree-twopow}(T, P, c, t, k, e, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-of-doubles-le-and-single-lh-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p0\) and natural number \(L\), if \(doublesat(Q, z)\), then if \(t - p0 ≤ z\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby(t - (p0 + i), t)\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter(t + Q, p0 + i) = lhcenter(t + Q, (p0 + i) + Q)\), then \(lhbandagree(t, Q, p0, L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-of-doubles-le-and-single-lh-row-spatial-agree}(Q, z, t, p0, L)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(S\), if \(doublesat(Q, z)\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter((z + 1) + Q, 1 + i) = lhcenter((z + 1) + Q, (1 + i) + Q)\), then \(lhbandagree(z + 1, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree}(Q, z, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(z\) and natural number \(S\), if \(T ≤ z + 1\), then if \(doublesat(m * P, z)\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter((z + 1) + m * P, 1 + i) = lhcenter((z + 1) + m * P, (1 + i) + m * P)\), then \(lhcolagree(z + 1, m * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(z\), \(S\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree}(T, P, hP, hper, m, z, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(z\) and natural number \(S\) and natural number \(s\), if \(T ≤ z + 1\), then if \(doublesat(m * P, z)\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter((z + 1) + m * P, 1 + i) = lhcenter((z + 1) + m * P, (1 + i) + m * P)\), then if \(s ≤ S\), then \(maskparity(((z + 1) + s) + m * P, 0) = maskparity((z + 1) + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(z\), \(S\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree}(T, P, hP, hper, m, z, S, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-single-lh-row-spatial-agree-at-zero-diag-succ-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + 1\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + 1)\), then if \(settledby((z + 1) - m * P, z + 1)\), then if \(3 * (m * P) ≤ S + 1\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter((z + 1) + m * P, 1 + i) = lhcenter((z + 1) + m * P, (1 + i) + m * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-single-lh-row-spatial-agree-at-zero-diag-succ-doubles}(T, P, m, z, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-at-zero-diag-of-doubles-prefix-and-single-lh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(doublesat(Q, z)\), then if for every natural number \(i\), if \(i < p\), then \(lhcenter((z + (p + 1)) + Q, 1 + i) = lhcenter(z + (p + 1), 1 + i)\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(settledby((z + (p + 1)) - (1 + i), z + (p + 1))\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(lhcenter((z + (p + 1)) + Q, 1 + i) = lhcenter((z + (p + 1)) + Q, (1 + i) + Q)\), then \(lhbandagree(z + (p + 1), Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-at-zero-diag-of-doubles-prefix-and-single-lh-row-tail}(Q, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-at-zero-diag-of-doubles-prefix-and-single-lh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(T ≤ z + (p + 1)\), then if \(doublesat(m * P, z)\), then if for every natural number \(i\), if \(i < p\), then \(lhcenter((z + (p + 1)) + m * P, 1 + i) = lhcenter(z + (p + 1), 1 + i)\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(settledby((z + (p + 1)) - (1 + i), z + (p + 1))\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(lhcenter((z + (p + 1)) + m * P, 1 + i) = lhcenter((z + (p + 1)) + m * P, (1 + i) + m * P)\), then \(lhcolagree(z + (p + 1), m * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(z\), \(p\), \(S\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-at-zero-diag-of-doubles-prefix-and-single-lh-row-tail}(T, P, hP, hper, m, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-doubles-prefix-and-single-lh-row-tail-at-zero-diag}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + (p + 1))\), then if \(settledby((z + 1) - m * P, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if for every natural number \(i\), if \(i < p\), then \(lhcenter((z + (p + 1)) + m * P, 1 + i) = lhcenter(z + (p + 1), 1 + i)\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(settledby((z + (p + 1)) - (1 + i), z + (p + 1))\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(lhcenter((z + (p + 1)) + m * P, 1 + i) = lhcenter((z + (p + 1)) + m * P, (1 + i) + m * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-doubles-prefix-and-single-lh-row-tail-at-zero-diag}(T, P, m, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rhcenter-dyadic-left-shift-pair-eq-lhcenter-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(d\), if \(1 ≤ v\), then if \((t + Q) + (d + Q) ≤ K\), then if \(rhcenter((t + Q) + v * twopow(K), (v * twopow(K)) - d) = rhcenter((t + Q) + v * twopow(K), (v * twopow(K)) - (d + Q))\), then \(lhcenter(t + Q, d) = lhcenter(t + Q, d + Q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rhcenter-dyadic-left-shift-pair-eq-lhcenter-pair}(t, Q, K, v, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-of-doubles-le-and-single-rh-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p0\) and natural number \(L\) and natural number \(K\) and natural number \(v\), if \(doublesat(Q, z)\), then if \(t - p0 ≤ z\), then if \(1 ≤ v\), then if \((t + Q) + ((p0 + L) + Q) ≤ K\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby(t - (p0 + i), t)\), then if for every natural number \(i\), if \(i ≤ L\), then \(rhcenter((t + Q) + v * twopow(K), (v * twopow(K)) - (p0 + i)) = rhcenter((t + Q) + v * twopow(K), (v * twopow(K)) - ((p0 + i) + Q))\), then \(lhbandagree(t, Q, p0, L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-of-doubles-le-and-single-rh-row-dyadic-left-spatial-agree}(Q, z, t, p0, L, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(S\) and natural number \(K\) and natural number \(v\), if \(doublesat(Q, z)\), then if \(1 ≤ v\), then if \(((z + 1) + Q) + ((1 + S) + Q) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter(((z + 1) + Q) + v * twopow(K), (v * twopow(K)) - (1 + i)) = rhcenter(((z + 1) + Q) + v * twopow(K), (v * twopow(K)) - ((1 + i) + Q))\), then \(lhbandagree(z + 1, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree}(Q, z, S, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(z\) and natural number \(S\) and natural number \(K\) and natural number \(v\), if \(T ≤ z + 1\), then if \(doublesat(m * P, z)\), then if \(1 ≤ v\), then if \(((z + 1) + m * P) + ((1 + S) + m * P) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter(((z + 1) + m * P) + v * twopow(K), (v * twopow(K)) - (1 + i)) = rhcenter(((z + 1) + m * P) + v * twopow(K), (v * twopow(K)) - ((1 + i) + m * P))\), then \(lhcolagree(z + 1, m * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(z\), \(S\), \(K\), \(v\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree}(T, P, hP, hper, m, z, S, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(z\) and natural number \(S\) and natural number \(K\) and natural number \(v\) and natural number \(s\), if \(T ≤ z + 1\), then if \(doublesat(m * P, z)\), then if \(1 ≤ v\), then if \(((z + 1) + m * P) + ((1 + S) + m * P) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter(((z + 1) + m * P) + v * twopow(K), (v * twopow(K)) - (1 + i)) = rhcenter(((z + 1) + m * P) + v * twopow(K), (v * twopow(K)) - ((1 + i) + m * P))\), then if \(s ≤ S\), then \(maskparity(((z + 1) + s) + m * P, 0) = maskparity((z + 1) + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(z\), \(S\), \(K\), \(v\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree}(T, P, hP, hper, m, z, S, K, v, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-single-rh-row-dyadic-left-spatial-agree-at-zero-diag-succ-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(S\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + 1\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + 1)\), then if \(settledby((z + 1) - m * P, z + 1)\), then if \(3 * (m * P) ≤ S + 1\), then if \(1 ≤ v\), then if \(((z + 1) + m * P) + ((1 + S) + m * P) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(rhcenter(((z + 1) + m * P) + v * twopow(K), (v * twopow(K)) - (1 + i)) = rhcenter(((z + 1) + m * P) + v * twopow(K), (v * twopow(K)) - ((1 + i) + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-single-rh-row-dyadic-left-spatial-agree-at-zero-diag-succ-doubles}(T, P, m, z, S, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{rdrv-dyadic-left-shift-pair-eq-lhcenter-pair}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(t\) and natural number \(Q\) and natural number \(K\) and natural number \(v\) and natural number \(d\), if \(1 ≤ v\), then if \((t + Q) + (d + Q) ≤ K\), then if \(rdrv(td, v * twopow(K), t + Q, (v * twopow(K)) - d) = rdrv(td, v * twopow(K), t + Q, (v * twopow(K)) - (d + Q))\), then \(lhcenter(t + Q, d) = lhcenter(t + Q, d + Q)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::rdrv-dyadic-left-shift-pair-eq-lhcenter-pair}(td, t, Q, K, v, d)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-of-doubles-le-and-single-rdrv-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p0\) and natural number \(L\) and natural number \(K\) and natural number \(v\), if \(doublesat(Q, z)\), then if \(t - p0 ≤ z\), then if \(1 ≤ v\), then if \((t + Q) + ((p0 + L) + Q) ≤ K\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby(t - (p0 + i), t)\), then if for every natural number \(i\), if \(i ≤ L\), then \(rdrv(td, v * twopow(K), t + Q, (v * twopow(K)) - (p0 + i)) = rdrv(td, v * twopow(K), t + Q, (v * twopow(K)) - ((p0 + i) + Q))\), then \(lhbandagree(t, Q, p0, L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-of-doubles-le-and-single-rdrv-row-dyadic-left-spatial-agree}(td, Q, z, t, p0, L, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-at-zero-diag-succ-of-doubles-and-single-rdrv-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(Q\) and natural number \(z\) and natural number \(S\) and natural number \(K\) and natural number \(v\), if \(doublesat(Q, z)\), then if \(1 ≤ v\), then if \(((z + 1) + Q) + ((1 + S) + Q) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, v * twopow(K), (z + 1) + Q, (v * twopow(K)) - (1 + i)) = rdrv(td, v * twopow(K), (z + 1) + Q, (v * twopow(K)) - ((1 + i) + Q))\), then \(lhbandagree(z + 1, Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-at-zero-diag-succ-of-doubles-and-single-rdrv-row-dyadic-left-spatial-agree}(td, Q, z, S, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-at-zero-diag-succ-of-doubles-and-single-rdrv-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(S\) and natural number \(K\) and natural number \(v\), if \(T ≤ z + 1\), then if \(doublesat(m * P, z)\), then if \(1 ≤ v\), then if \(((z + 1) + m * P) + ((1 + S) + m * P) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, v * twopow(K), (z + 1) + m * P, (v * twopow(K)) - (1 + i)) = rdrv(td, v * twopow(K), (z + 1) + m * P, (v * twopow(K)) - ((1 + i) + m * P))\), then \(lhcolagree(z + 1, m * P, 1, S)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(td\), \(m\), \(z\), \(S\), \(K\), \(v\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-at-zero-diag-succ-of-doubles-and-single-rdrv-row-dyadic-left-spatial-agree}(T, P, hP, hper, td, m, z, S, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-maskparity-zero-agree-at-zero-diag-succ-of-doubles-and-single-rdrv-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(S\) and natural number \(K\) and natural number \(v\) and natural number \(s\), if \(T ≤ z + 1\), then if \(doublesat(m * P, z)\), then if \(1 ≤ v\), then if \(((z + 1) + m * P) + ((1 + S) + m * P) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, v * twopow(K), (z + 1) + m * P, (v * twopow(K)) - (1 + i)) = rdrv(td, v * twopow(K), (z + 1) + m * P, (v * twopow(K)) - ((1 + i) + m * P))\), then if \(s ≤ S\), then \(maskparity(((z + 1) + s) + m * P, 0) = maskparity((z + 1) + s, 0)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(td\), \(m\), \(z\), \(S\), \(K\), \(v\), \(s\).
+  Close the goal with \(\lexeme{r30.witt::periodic-maskparity-zero-agree-at-zero-diag-succ-of-doubles-and-single-rdrv-row-dyadic-left-spatial-agree}(T, P, hP, hper, td, m, z, S, K, v, s)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-single-rdrv-row-dyadic-left-spatial-agree-at-zero-diag-succ-doubles}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(S\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + 1\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, z + 1)\), then if \(settledby((z + 1) - m * P, z + 1)\), then if \(3 * (m * P) ≤ S + 1\), then if \(1 ≤ v\), then if \(((z + 1) + m * P) + ((1 + S) + m * P) ≤ K\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), z + 1)\), then if for every natural number \(i\), if \(i ≤ S\), then \(rdrv(td, v * twopow(K), (z + 1) + m * P, (v * twopow(K)) - (1 + i)) = rdrv(td, v * twopow(K), (z + 1) + m * P, (v * twopow(K)) - ((1 + i) + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-single-rdrv-row-dyadic-left-spatial-agree-at-zero-diag-succ-doubles}(T, P, td, m, z, S, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-late-scale-diag-shift-periodic-of-doubles-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p\) and natural number \(k\), if \(doublesat(Q, z)\), then if \(t - p ≤ z\), then if \(settledby(t - p, t + twopow(k))\), then \(lhcenter((t + Q) + twopow(k), (p + Q) + twopow(k)) = lhcenter(t + twopow(k), p + twopow(k))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-late-scale-diag-shift-periodic-of-doubles-le}(Q, z, t, p, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-late-scale-diag-shift-mul-twopow-periodic-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(e\) and natural number \(w\) and natural number \(t\) and natural number \(p\) and natural number \(k\), if \(t - p ≤ e\), then if \(settledby(t - p, t + twopow(k))\), then \(lhcenter((t + w * twopow(e)) + twopow(k), (p + w * twopow(e)) + twopow(k)) = lhcenter(t + twopow(k), p + twopow(k))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-late-scale-diag-shift-mul-twopow-periodic-le}(e, w, t, p, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-late-scale-eq-of-doubles-le-and-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p\) and natural number \(k\), if \(doublesat(Q, z)\), then if \(t - p ≤ z\), then if \(settledby(t - p, t + twopow(k))\), then if \(lhcenter((t + Q) + twopow(k), p + twopow(k)) = lhcenter((t + Q) + twopow(k), (p + Q) + twopow(k))\), then \(lhcenter((t + Q) + twopow(k), p + twopow(k)) = lhcenter(t + twopow(k), p + twopow(k))\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-late-scale-eq-of-doubles-le-and-spatial-agree}(Q, z, t, p, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-late-scale-of-doubles-le-and-single-lh-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p0\) and natural number \(L\) and natural number \(k\), if \(doublesat(Q, z)\), then if \(t - p0 ≤ z\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby(t - (p0 + i), t + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter((t + Q) + twopow(k), (p0 + twopow(k)) + i) = lhcenter((t + Q) + twopow(k), ((p0 + twopow(k)) + i) + Q)\), then \(lhbandagree(t + twopow(k), Q, p0 + twopow(k), L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-late-scale-of-doubles-le-and-single-lh-row-spatial-agree}(Q, z, t, p0, L, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-late-scale-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(S\) and natural number \(k\), if \(doublesat(Q, z)\), then if for every natural number \(i\), if \(i ≤ S\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ S\), then \(lhcenter(((z + 1) + Q) + twopow(k), (1 + twopow(k)) + i) = lhcenter(((z + 1) + Q) + twopow(k), ((1 + twopow(k)) + i) + Q)\), then \(lhbandagree((z + 1) + twopow(k), Q, 1 + twopow(k), S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-late-scale-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree}(Q, z, S, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-append-of-split}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(p0\) and natural number \(A\) and natural number \(B\), if \(lhbandagree(t, Q, p0, A)\), then if \(lhbandagree(t, Q, p0 + A, B)\), then \(lhbandagree(t, Q, p0, A + B)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-append-of-split}(t, Q, p0, A, B)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-of-prefix-and-shifted-band}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(t\) and natural number \(Q\) and natural number \(P0\) and natural number \(L\), if for every natural number \(i\), if \(i < P0\), then \(lhcenter(t + Q, 1 + i) = lhcenter(t, 1 + i)\), then if \(lhbandagree(t, Q, 1 + P0, L)\), then \(lhbandagree(t, Q, 1, P0 + L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-of-prefix-and-shifted-band}(t, Q, P0, L)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-lh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(L\) and natural number \(k\), if \(doublesat(Q, z)\), then if for every natural number \(i\), if \(i < twopow(k)\), then \(lhcenter(((z + 1) + twopow(k)) + Q, 1 + i) = lhcenter((z + 1) + twopow(k), 1 + i)\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter(((z + 1) + Q) + twopow(k), (1 + twopow(k)) + i) = lhcenter(((z + 1) + Q) + twopow(k), ((1 + twopow(k)) + i) + Q)\), then \(lhbandagree((z + 1) + twopow(k), Q, 1, twopow(k) + L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-lh-row-tail}(Q, z, L, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{periodic-lhcolagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-lh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then for every natural number \(m\) and natural number \(z\) and natural number \(L\) and natural number \(k\), if \(T ≤ (z + 1) + twopow(k)\), then if \(doublesat(m * P, z)\), then if for every natural number \(i\), if \(i < twopow(k)\), then \(lhcenter(((z + 1) + twopow(k)) + m * P, 1 + i) = lhcenter((z + 1) + twopow(k), 1 + i)\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter(((z + 1) + m * P) + twopow(k), (1 + twopow(k)) + i) = lhcenter(((z + 1) + m * P) + twopow(k), ((1 + twopow(k)) + i) + m * P)\), then \(lhcolagree((z + 1) + twopow(k), m * P, 1, twopow(k) + L)\).
+  \begin{proof}
+  Assume \(hP\), \(hper\), \(m\), \(z\), \(L\), \(k\).
+  Close the goal with \(\lexeme{r30.witt::periodic-lhcolagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-lh-row-tail}(T, P, hP, hper, m, z, L, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-late-scale-doubles-prefix-and-single-lh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(L\) and natural number \(k\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ (z + 1) + twopow(k)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, (z + 1) + twopow(k))\), then if \(settledby((z + 1) - m * P, (z + 1) + twopow(k))\), then if \(3 * (m * P) ≤ L + 1\), then if for every natural number \(i\), if \(i < twopow(k)\), then \(lhcenter(((z + 1) + twopow(k)) + m * P, 1 + i) = lhcenter((z + 1) + twopow(k), 1 + i)\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter(((z + 1) + m * P) + twopow(k), (1 + twopow(k)) + i) = lhcenter(((z + 1) + m * P) + twopow(k), ((1 + twopow(k)) + i) + m * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-late-scale-doubles-prefix-and-single-lh-row-tail}(T, P, m, z, L, k)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-late-scale-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(L\) and natural number \(k\) and natural number \(K\) and natural number \(v\), if \(doublesat(Q, z)\), then if \(1 ≤ v\), then if \((((z + 1) + Q) + twopow(k)) + (((1 + twopow(k)) + L) + Q) ≤ K\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(rhcenter((((z + 1) + Q) + twopow(k)) + v * twopow(K), (v * twopow(K)) - ((1 + twopow(k)) + i)) = rhcenter((((z + 1) + Q) + twopow(k)) + v * twopow(K), (v * twopow(K)) - (((1 + twopow(k)) + i) + Q))\), then \(lhbandagree((z + 1) + twopow(k), Q, 1 + twopow(k), L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-late-scale-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree}(Q, z, L, k, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-rh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(L\) and natural number \(k\) and natural number \(K\) and natural number \(v\), if \(doublesat(Q, z)\), then if \(1 ≤ v\), then if \((((z + 1) + Q) + twopow(k)) + (((1 + twopow(k)) + L) + Q) ≤ K\), then if for every natural number \(i\), if \(i < twopow(k)\), then \(lhcenter(((z + 1) + twopow(k)) + Q, 1 + i) = lhcenter((z + 1) + twopow(k), 1 + i)\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(rhcenter((((z + 1) + Q) + twopow(k)) + v * twopow(K), (v * twopow(K)) - ((1 + twopow(k)) + i)) = rhcenter((((z + 1) + Q) + twopow(k)) + v * twopow(K), (v * twopow(K)) - (((1 + twopow(k)) + i) + Q))\), then \(lhbandagree((z + 1) + twopow(k), Q, 1, twopow(k) + L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-rh-row-tail}(Q, z, L, k, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-late-scale-doubles-prefix-and-single-rh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(L\) and natural number \(k\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ (z + 1) + twopow(k)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, (z + 1) + twopow(k))\), then if \(settledby((z + 1) - m * P, (z + 1) + twopow(k))\), then if \(3 * (m * P) ≤ L + 1\), then if \(1 ≤ v\), then if \((((z + 1) + m * P) + twopow(k)) + (((1 + twopow(k)) + L) + m * P) ≤ K\), then if for every natural number \(i\), if \(i < twopow(k)\), then \(lhcenter(((z + 1) + twopow(k)) + m * P, 1 + i) = lhcenter((z + 1) + twopow(k), 1 + i)\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(rhcenter((((z + 1) + m * P) + twopow(k)) + v * twopow(K), (v * twopow(K)) - ((1 + twopow(k)) + i)) = rhcenter((((z + 1) + m * P) + twopow(k)) + v * twopow(K), (v * twopow(K)) - (((1 + twopow(k)) + i) + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-late-scale-doubles-prefix-and-single-rh-row-tail}(T, P, m, z, L, k, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-rdrv-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(Q\) and natural number \(z\) and natural number \(L\) and natural number \(k\) and natural number \(K\) and natural number \(v\), if \(doublesat(Q, z)\), then if \(1 ≤ v\), then if \((((z + 1) + Q) + twopow(k)) + (((1 + twopow(k)) + L) + Q) ≤ K\), then if for every natural number \(i\), if \(i < twopow(k)\), then \(lhcenter(((z + 1) + twopow(k)) + Q, 1 + i) = lhcenter((z + 1) + twopow(k), 1 + i)\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(rdrv(td, v * twopow(K), ((z + 1) + Q) + twopow(k), (v * twopow(K)) - ((1 + twopow(k)) + i)) = rdrv(td, v * twopow(K), ((z + 1) + Q) + twopow(k), (v * twopow(K)) - (((1 + twopow(k)) + i) + Q))\), then \(lhbandagree((z + 1) + twopow(k), Q, 1, twopow(k) + L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-rdrv-row-tail}(td, Q, z, L, k, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-late-scale-doubles-prefix-and-single-rdrv-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(L\) and natural number \(k\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ (z + 1) + twopow(k)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledby(z + 1, (z + 1) + twopow(k))\), then if \(settledby((z + 1) - m * P, (z + 1) + twopow(k))\), then if \(3 * (m * P) ≤ L + 1\), then if \(1 ≤ v\), then if \((((z + 1) + m * P) + twopow(k)) + (((1 + twopow(k)) + L) + m * P) ≤ K\), then if for every natural number \(i\), if \(i < twopow(k)\), then \(lhcenter(((z + 1) + twopow(k)) + m * P, 1 + i) = lhcenter((z + 1) + twopow(k), 1 + i)\), then if for every natural number \(i\), if \(i ≤ L\), then \(settledby((z + 1) - (1 + i), (z + 1) + twopow(k))\), then if for every natural number \(i\), if \(i ≤ L\), then \(rdrv(td, v * twopow(K), ((z + 1) + m * P) + twopow(k), (v * twopow(K)) - ((1 + twopow(k)) + i)) = rdrv(td, v * twopow(K), ((z + 1) + m * P) + twopow(k), (v * twopow(K)) - (((1 + twopow(k)) + i) + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-late-scale-doubles-prefix-and-single-rdrv-row-tail}(T, P, td, m, z, L, k, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{settledby-of-le-and-settlebound-le}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(D\) and natural number \(d\) and natural number \(t\), if \(d ≤ D\), then if \(settledupto(D, t)\), then \(settledby(d, t)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::settledby-of-le-and-settlebound-le}(D, d, t)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{ldiag-settled-periodic-of-doubles-le-settlebound}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(d\) and natural number \(t\), if \(doublesat(Q, z)\), then if \(d ≤ z\), then if \(settledupto(z, t)\), then \(ldiag(d, t + Q) = ldiag(d, t)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::ldiag-settled-periodic-of-doubles-le-settlebound}(Q, z, d, t)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-diag-shift-periodic-of-doubles-le-settlebound}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p\), if \(doublesat(Q, z)\), then if \(t - p ≤ z\), then if \(settledupto(z, t)\), then \(lhcenter(t + Q, p + Q) = lhcenter(t, p)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-diag-shift-periodic-of-doubles-le-settlebound}(Q, z, t, p)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhcenter-diag-shift-mul-twopow-periodic-le-settlebound}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(e\) and natural number \(w\) and natural number \(t\) and natural number \(p\), if \(t - p ≤ e\), then if \(settledupto(e, t)\), then \(lhcenter(t + w * twopow(e), p + w * twopow(e)) = lhcenter(t, p)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhcenter-diag-shift-mul-twopow-periodic-le-settlebound}(e, w, t, p)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-of-doubles-le-settlebound-and-single-lh-row-spatial-agree}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(t\) and natural number \(p0\) and natural number \(L\), if \(doublesat(Q, z)\), then if \(t - p0 ≤ z\), then if \(settledupto(z, t)\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter(t + Q, p0 + i) = lhcenter(t + Q, (p0 + i) + Q)\), then \(lhbandagree(t, Q, p0, L)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-of-doubles-le-settlebound-and-single-lh-row-spatial-agree}(Q, z, t, p0, L)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-at-zero-diag-of-doubles-settlebound-prefix-and-single-lh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(Q\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(doublesat(Q, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if for every natural number \(i\), if \(i < p\), then \(lhcenter((z + (p + 1)) + Q, 1 + i) = lhcenter(z + (p + 1), 1 + i)\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(lhcenter((z + (p + 1)) + Q, 1 + i) = lhcenter((z + (p + 1)) + Q, (1 + i) + Q)\), then \(lhbandagree(z + (p + 1), Q, 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-at-zero-diag-of-doubles-settlebound-prefix-and-single-lh-row-tail}(Q, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-lhbandagree-one-at-zero-diag-doubles-settlebound}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(lhbandagree(z + (p + 1), m * P, 1, S)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-lhbandagree-one-at-zero-diag-doubles-settlebound}(T, P, m, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-doubles-settlebound-prefix-and-single-lh-row-tail-at-zero-diag}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(S\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if for every natural number \(i\), if \(i < p\), then \(lhcenter((z + (p + 1)) + m * P, 1 + i) = lhcenter(z + (p + 1), 1 + i)\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(lhcenter((z + (p + 1)) + m * P, 1 + i) = lhcenter((z + (p + 1)) + m * P, (1 + i) + m * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-doubles-settlebound-prefix-and-single-lh-row-tail-at-zero-diag}(T, P, m, z, p, S)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-doubles-settlebound-prefix-and-single-rh-row-tail-at-zero-diag}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(S\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(1 ≤ v\), then if \(((z + (p + 1)) + m * P) + ((1 + S) + m * P) ≤ K\), then if for every natural number \(i\), if \(i < p\), then \(lhcenter((z + (p + 1)) + m * P, 1 + i) = lhcenter(z + (p + 1), 1 + i)\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(rhcenter(((z + (p + 1)) + m * P) + v * twopow(K), (v * twopow(K)) - (1 + i)) = rhcenter(((z + (p + 1)) + m * P) + v * twopow(K), (v * twopow(K)) - ((1 + i) + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-doubles-settlebound-prefix-and-single-rh-row-tail-at-zero-diag}(T, P, m, z, p, S, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-doubles-settlebound-prefix-and-single-rdrv-row-tail-at-zero-diag}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(m\) and natural number \(z\) and natural number \(p\) and natural number \(S\) and natural number \(K\) and natural number \(v\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(p + 3 * (m * P) ≤ S + 1\), then if \(1 ≤ v\), then if \(((z + (p + 1)) + m * P) + ((1 + S) + m * P) ≤ K\), then if for every natural number \(i\), if \(i < p\), then \(lhcenter((z + (p + 1)) + m * P, 1 + i) = lhcenter(z + (p + 1), 1 + i)\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(rdrv(td, v * twopow(K), (z + (p + 1)) + m * P, (v * twopow(K)) - (1 + i)) = rdrv(td, v * twopow(K), (z + (p + 1)) + m * P, (v * twopow(K)) - ((1 + i) + m * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-doubles-settlebound-prefix-and-single-rdrv-row-tail-at-zero-diag}(T, P, td, m, z, p, S, K, v)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-at-zero-diag-of-two-scale-single-rh-row-prefix-and-tail-settlebound}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(z\) and natural number \(p\) and natural number \(S\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\), if \(doublesat(w * twopow(K), z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(1 ≤ u\), then if \((z + (p + 1)) + p ≤ K\), then if \(((z + (p + 1)) + w * twopow(K)) + ((1 + S) + w * twopow(K)) ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i < p\), then \(rhcenter(((z + (p + 1)) + u * twopow(L)) + w * twopow(K), (u * twopow(L)) - (1 + i)) = rhcenter(((z + (p + 1)) + u * twopow(L)) + w * twopow(K), ((u * twopow(L)) + w * twopow(K)) - (1 + i))\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(rhcenter(((z + (p + 1)) + u * twopow(L)) + w * twopow(K), (u * twopow(L)) - (1 + i)) = rhcenter(((z + (p + 1)) + u * twopow(L)) + w * twopow(K), (u * twopow(L)) - ((1 + i) + w * twopow(K)))\), then \(lhbandagree(z + (p + 1), w * twopow(K), 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-at-zero-diag-of-two-scale-single-rh-row-prefix-and-tail-settlebound}(z, p, S, K, L, u, w)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-two-scale-single-rh-row-prefix-and-tail-settlebound}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(c\) and natural number \(z\) and natural number \(p\) and natural number \(S\) and natural number \(K\) and natural number \(L\) and natural number \(u\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat((c * twopow(K)) * P, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(p + 3 * ((c * twopow(K)) * P) ≤ S + 1\), then if \(1 ≤ u\), then if \((z + (p + 1)) + p ≤ K\), then if \(((z + (p + 1)) + (c * twopow(K)) * P) + ((1 + S) + (c * twopow(K)) * P) ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i < p\), then \(rhcenter(((z + (p + 1)) + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rhcenter(((z + (p + 1)) + u * twopow(L)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(rhcenter(((z + (p + 1)) + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rhcenter(((z + (p + 1)) + u * twopow(L)) + (c * twopow(K)) * P, (u * twopow(L)) - ((1 + i) + (c * twopow(K)) * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-two-scale-single-rh-row-prefix-and-tail-settlebound}(T, P, c, z, p, S, K, L, u)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{lhbandagree-one-at-zero-diag-of-two-scale-single-rdrv-row-prefix-and-tail-settlebound}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(td\) and natural number \(z\) and natural number \(p\) and natural number \(S\) and natural number \(K\) and natural number \(L\) and natural number \(u\) and natural number \(w\), if \(doublesat(w * twopow(K), z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(1 ≤ u\), then if \((z + (p + 1)) + p ≤ K\), then if \(((z + (p + 1)) + w * twopow(K)) + ((1 + S) + w * twopow(K)) ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i < p\), then \(rdrv(td, u * twopow(L), (z + (p + 1)) + w * twopow(K), (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), (z + (p + 1)) + w * twopow(K), ((u * twopow(L)) + w * twopow(K)) - (1 + i))\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(rdrv(td, u * twopow(L), (z + (p + 1)) + w * twopow(K), (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), (z + (p + 1)) + w * twopow(K), (u * twopow(L)) - ((1 + i) + w * twopow(K)))\), then \(lhbandagree(z + (p + 1), w * twopow(K), 1, S)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::lhbandagree-one-at-zero-diag-of-two-scale-single-rdrv-row-prefix-and-tail-settlebound}(td, z, p, S, K, L, u, w)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-two-scale-single-rdrv-row-prefix-and-tail-settlebound}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(td\) and natural number \(c\) and natural number \(z\) and natural number \(p\) and natural number \(S\) and natural number \(K\) and natural number \(L\) and natural number \(u\), if \(0 < P\), then if \(0 < c\), then if \(T ≤ z + (p + 1)\), then if \(zerodiagonal(z)\), then if \(doublesat((c * twopow(K)) * P, z)\), then if \(settledupto(z + 1, z + (p + 1))\), then if \(p + 3 * ((c * twopow(K)) * P) ≤ S + 1\), then if \(1 ≤ u\), then if \((z + (p + 1)) + p ≤ K\), then if \(((z + (p + 1)) + (c * twopow(K)) * P) + ((1 + S) + (c * twopow(K)) * P) ≤ L\), then if \(K ≤ L\), then if for every natural number \(i\), if \(i < p\), then \(rdrv(td, u * twopow(L), (z + (p + 1)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), (z + (p + 1)) + (c * twopow(K)) * P, ((u * twopow(L)) + (c * twopow(K)) * P) - (1 + i))\), then if for every natural number \(i\), if \(p ≤ i\), then if \(i ≤ S\), then \(rdrv(td, u * twopow(L), (z + (p + 1)) + (c * twopow(K)) * P, (u * twopow(L)) - (1 + i)) = rdrv(td, u * twopow(L), (z + (p + 1)) + (c * twopow(K)) * P, (u * twopow(L)) - ((1 + i) + (c * twopow(K)) * P))\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-two-scale-single-rdrv-row-prefix-and-tail-settlebound}(T, P, td, c, z, p, S, K, L, u)\).
+  \end{proof}
+  \end{theorem}
+
+  \begin{theorem}{not-centerperiodic-of-late-scale-doubles-settlebound-prefix-and-single-lh-row-tail}
+  \allowaxioms{Classical.choice;Quot.sound;propext}
+  For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(z\) and natural number \(L\) and natural number \(k\), if \(0 < P\), then if \(0 < m\), then if \(T ≤ (z + 1) + twopow(k)\), then if \(zerodiagonal(z)\), then if \(doublesat(m * P, z)\), then if \(settledupto(z + 1, (z + 1) + twopow(k))\), then if \(3 * (m * P) ≤ L + 1\), then if for every natural number \(i\), if \(i < twopow(k)\), then \(lhcenter(((z + 1) + twopow(k)) + m * P, 1 + i) = lhcenter((z + 1) + twopow(k), 1 + i)\), then if for every natural number \(i\), if \(i ≤ L\), then \(lhcenter(((z + 1) + m * P) + twopow(k), (1 + twopow(k)) + i) = lhcenter(((z + 1) + m * P) + twopow(k), ((1 + twopow(k)) + i) + m * P)\), then \(¬ centerperiodic(T, P)\).
+  \begin{proof}
+  Close the goal with \(\lexeme{r30.witt::not-centerperiodic-of-late-scale-doubles-settlebound-prefix-and-single-lh-row-tail}(T, P, m, z, L, k)\).
+  \end{proof}
+  \end{theorem}
+
 \end{section}
 \end{lexlean}
