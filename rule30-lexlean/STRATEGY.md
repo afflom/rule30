@@ -81,6 +81,13 @@ events near the center from any left-half defect. These are structural constrain
 sufficient route to Problem 1; they do not yet provide an unconditional recurrence theorem for
 left-heavy witnesses in the single-seed orbit.
 
+The current submission-facing shape of the open obligation is explicit in this module:
+`submission_problem1_of_zeroDiag_doubles_leftHeavy` and
+`submission_problem1_of_zeroDiag_doubles_assembly`. The remaining work is to prove one of the
+bridge hypotheses (`ZeroDiagDoublesLeftHeavyRecurrence` or the finer-grained
+`ZeroDiagDoublesLeftHeavyAssembly`) from single-seed dynamics, using the existing
+zero-diagonal/doubling machinery only as contextual witnesses rather than as a full defect proof.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,
