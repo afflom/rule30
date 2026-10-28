@@ -37545,4 +37545,119 @@ theorem lhBandAgree_two_mul_of_doubles_and_single_lh_row_spatial_agree (Q z t p0
   exact lhCenter_diag_shift_two_mul_periodic_le_add_three_of_doubles Q z t (p0 + i) hz hd
     (by omega) (by omega) hbt
 
+/-! ### Batch 86: Audit Theorems — Unsatisfiability of the Left-Band Engine Hypotheses and Exact Equivalence of the Engine Input with Problem 1 (9.1582–9.1587) -/
+
+/-- **9.1582 (audit)**: The hypothesis bundle of `not_centerPeriodic_of_lhBandAgree_one_at_zero_diag_doubles`
+    (everything except `CenterPeriodic` and `T ≤ z + (p + 1)`) is unsatisfiable. That engine's conclusion
+    therefore follows from `False`; its `CenterPeriodic` hypothesis carries no information. -/
+theorem lhBandAgree_engine_hypotheses_unsat (P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
+    (hset1 : SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (h : LhBandAgree (z + (p + 1)) (m * P) 1 S) : False := by
+  have hmP : 0 < m * P := Nat.mul_pos hm hP
+  exact not_lhBandAgree_of_doubles_single (m * P) (z + (p + 1)) p 1 S (by omega)
+    (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+    (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+    (by rw [show (z + (p + 1)) - (p + 1) = z by omega]; exact hset1)
+    (by rw [show (z + (p + 1)) - (p + m * P) = (z + 1) - m * P by omega]; exact hset2)
+    (by omega) (by omega) h
+
+/-- **9.1583 (audit)**: The hypothesis bundle of the prefix/tail refutation `9.1559` (minus `CenterPeriodic`
+    and the time bound) is unsatisfiable. -/
+theorem prefix_tail_engine_hypotheses_unsat (P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
+    (hbt : SettledUpTo (z + 1) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hpref : ∀ i : Nat, i < p →
+      lhCenter ((z + (p + 1)) + m * P) (1 + i) = lhCenter (z + (p + 1)) (1 + i))
+    (htail : ∀ i : Nat, p ≤ i → i ≤ S →
+      lhCenter ((z + (p + 1)) + m * P) (1 + i) = lhCenter ((z + (p + 1)) + m * P) ((1 + i) + m * P)) :
+    False := by
+  have hmP : 0 < m * P := Nat.mul_pos hm hP
+  exact not_lhBandAgree_one_at_zero_diag_of_doubles_settledUpTo (m * P) z p S (by omega) hz hd hbt hS
+    (lhBandAgree_one_at_zero_diag_of_doubles_settleBound_prefix_and_single_lh_row_tail
+      (m * P) z p S hd hbt hpref htail)
+
+/-- **9.1584 (audit)**: The hypothesis bundle of the late-scale refutation
+    `not_centerPeriodic_of_late_scale_doubles_prefix_and_single_lh_row_tail` (minus `CenterPeriodic`
+    and the time bound) is unsatisfiable. -/
+theorem late_scale_engine_hypotheses_unsat (P m z L k : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
+    (hset1 : SettledBy (z + 1) ((z + 1) + twopow k))
+    (hset2 : SettledBy ((z + 1) - m * P) ((z + 1) + twopow k))
+    (hL : 3 * (m * P) ≤ L + 1)
+    (hpref : ∀ i : Nat, i < twopow k →
+      lhCenter (((z + 1) + twopow k) + m * P) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
+    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
+    (hspat : ∀ i : Nat, i ≤ L →
+      lhCenter (((z + 1) + m * P) + twopow k) ((1 + twopow k) + i) =
+      lhCenter (((z + 1) + m * P) + twopow k) (((1 + twopow k) + i) + m * P)) :
+    False := by
+  have hmP : 0 < m * P := Nat.mul_pos hm hP
+  have hband := lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail
+    (m * P) z L k hd hpref hset hspat
+  exact not_lhBandAgree_of_doubles_single (m * P) ((z + 1) + twopow k) (twopow k) 1 (twopow k + L)
+    (by omega)
+    (by rwa [show ((z + 1) + twopow k) - (twopow k + 1) = z by omega])
+    (by rwa [show ((z + 1) + twopow k) - (twopow k + 1) = z by omega])
+    (by rw [show ((z + 1) + twopow k) - (twopow k + 1) = z by omega]; exact hset1)
+    (by rw [show ((z + 1) + twopow k) - (twopow k + m * P) = (z + 1) - m * P by omega]; exact hset2)
+    (by omega) (by omega) hband
+
+/-- **9.1585 (audit)**: The hypothesis bundle of the single-row refutation at `t = z + 1` (Batch 81)
+    is unsatisfiable whenever `3 * Q ≤ S + 1`. -/
+theorem single_row_zero_diag_succ_engine_hypotheses_unsat (Q z S : Nat) (hQ : 1 ≤ Q)
+    (hz : IsZeroDiag z) (hd : DoublesAt Q z)
+    (hset1 : SettledBy (z + 1) (z + 1))
+    (hset2 : SettledBy ((z + 1) - Q) (z + 1))
+    (hS : 3 * Q ≤ S + 1)
+    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
+    (hspat : ∀ i : Nat, i ≤ S →
+      lhCenter ((z + 1) + Q) (1 + i) = lhCenter ((z + 1) + Q) ((1 + i) + Q)) :
+    False :=
+  not_lhBandAgree_of_doubles_single Q (z + 1) 0 1 S hQ
+    (by rwa [show (z + 1) - (0 + 1) = z by omega])
+    (by rwa [show (z + 1) - (0 + 1) = z by omega])
+    (by rw [show (z + 1) - (0 + 1) = z by omega]; exact hset1)
+    (by rw [show (z + 1) - (0 + Q) = (z + 1) - Q by omega]; exact hset2)
+    (by omega) (by omega)
+    (lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree Q z S hd hset hspat)
+
+/-- **9.1586 (audit)**: Period by period, the engine input — "a `P`-periodic center yields column-`1`
+    agreement on a window after a doubling zero diagonal" — is equivalent to excluding period `P`. -/
+theorem engine_input_iff_not_centerPeriodic (T P : Nat) (hP : 0 < P) :
+    (Rule30UOR.Scale.CenterPeriodic T P →
+      ∃ m z p S : Nat, 0 < m ∧ T ≤ z + (p + 1) ∧ IsZeroDiag z ∧ DoublesAt (m * P) z ∧
+        SettledBy (z + 1) (z + (p + 1)) ∧ SettledBy ((z + 1) - m * P) (z + (p + 1)) ∧
+        p + 3 * (m * P) ≤ S + 1 ∧ RhColAgree (z + (p + 1)) (m * P) 1 S) ↔
+    ¬ Rule30UOR.Scale.CenterPeriodic T P := by
+  constructor
+  · intro h hc
+    obtain ⟨m, z, p, S, hm, ht, hz, hd, hs1, hs2, hS, hrc⟩ := h hc
+    exact not_periodic_rhColAgree_one_of_doubles T P hP hc m (z + (p + 1)) p S hm ht
+      (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+      (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+      (by rw [show (z + (p + 1)) - (p + 1) = z by omega]; exact hs1)
+      (by rw [show (z + (p + 1)) - (p + m * P) = (z + 1) - m * P by omega]; exact hs2)
+      hS hrc
+  · intro hn hc
+    exact absurd hc hn
+
+/-- **9.1587 (audit)**: Problem 1 is equivalent to the engine input holding for every period. The
+    missing step of the zero-diagonal program is therefore Problem 1 itself, not a weaker lemma. -/
+theorem problem1_iff_engine_input :
+    Ruliology.CellularAutomata.Rule30Prize.Problem1 ↔
+      ∀ T P : Nat, 0 < P → Rule30UOR.Scale.CenterPeriodic T P →
+        ∃ m z p S : Nat, 0 < m ∧ T ≤ z + (p + 1) ∧ IsZeroDiag z ∧ DoublesAt (m * P) z ∧
+          SettledBy (z + 1) (z + (p + 1)) ∧ SettledBy ((z + 1) - m * P) (z + (p + 1)) ∧
+          p + 3 * (m * P) ≤ S + 1 ∧ RhColAgree (z + (p + 1)) (m * P) 1 S := by
+  rw [Rule30UOR.Scale.problem1_iff]
+  constructor
+  · intro h T P hP
+    exact (engine_input_iff_not_centerPeriodic T P hP).mpr (h T P hP)
+  · intro h T P hP
+    exact (engine_input_iff_not_centerPeriodic T P hP).mp (h T P hP)
+
 end Rule30UOR.Interfaces

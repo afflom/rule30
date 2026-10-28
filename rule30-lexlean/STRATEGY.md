@@ -4,6 +4,28 @@
 `Rule30Submission.problem1 : Ruliology.CellularAutomata.Rule30Prize.Problem1`, one module,
 axioms within {propext, Classical.choice, Quot.sound}, kit commit named by the verifier.
 
+## Current proof frontier (2026-10-28)
+Problem 1 remains open in this repository. The sections below record the development of the
+strategy; earlier proposed obligations are not assumptions or established consequences of a
+periodic center.
+
+Batch 86 (host Lean, `Rule30UOR.Interfaces`, 9.1582–9.1587) audits the zero-diagonal engines:
+four left-band/prefix-tail hypothesis bundles already imply `False` without a center-periodicity
+assumption. `engine_input_iff_not_centerPeriodic` and `problem1_iff_engine_input` prove the exact
+remaining obligation. Rephrasing these impossible agreement bundles is not a discharge of it.
+
+`cd rule30-core-lean && lake build && lake env lean scripts/AuditVacuous.lean` checks the audit
+and writes `.lake/build/vacuity-audit.txt`. The conservative proof-term analysis classifies 26
+of 184 refutation theorems as vacuous; the other 158 are **unclassified**, not certified
+nonvacuous. The six audit theorems use only `propext`, `Classical.choice`, and `Quot.sound`.
+These host additions are not yet included in the attested LexLean paper or release PDFs.
+
+The active question is whether forced temporal disagreements can remain compatible with an
+eventually periodic center in the **single-seed** orbit. Work on the exact difference field
+must retain the nonlinear cancellation term and both halves' initial conditions. A periodic
+external driver alone does not force periodicity of the driven left half: the kit proves the
+opposite for finite nonzero left starts. No measured damage speed or density is a premise.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,
