@@ -26,6 +26,19 @@ must retain the nonlinear cancellation term and both halves' initial conditions.
 external driver alone does not force periodicity of the driven left half: the kit proves the
 opposite for finite nonzero left starts. No measured damage speed or density is a premise.
 
+`Rule30UOR.TemporalDefect` implements the exact temporal difference of physical columns.
+Its update includes the quadratic difference term; an equivalent linear form uses a
+coefficient from the later row, so it does not assert a periodic-coefficient linear system.
+For every Boolean sequence `f` and `Q > 0`, `difference_eventuallyPeriodic_iff` proves that
+`t ↦ f(t+Q) XOR f(t)` is eventually periodic iff `f` is. Specifically, an `R`-periodic
+`Q`-difference integrates to period `2*R*Q` from the same starting time.
+Under a hypothetical periodic center, Jen therefore forces every positive-shift difference
+on every other column to be aperiodic. `masked_defect_not_eventuallyPeriodic` strengthens
+this to the masked right-neighbor signal at every positive multiple of the center period.
+This rules out periodic compensation; it does not yet rule out aperiodic compensation.
+`make check-research` builds the core, runs both audits, and independently kernel-checks
+the research modules. The axiom audit fails on any dependency outside the three allowed axioms.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,
