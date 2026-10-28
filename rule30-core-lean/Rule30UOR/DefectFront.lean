@@ -1,6 +1,7 @@
 module
 
 public import Rule30UOR.DefectSource
+public import Rule30UOR.CompilePoints
 
 /-!
 # Defect fronts: exact rightward transport of temporal disagreement
@@ -106,6 +107,39 @@ theorem problem1_of_leftHeavy_recurrence
   have h1 := defect_center_of_leftHeavy (m * P) t k hl
   rw [center_defect_zero hc m (t + k) (by omega)] at h1
   contradiction
+
+/--
+Bridge hypothesis for the defect-front route: at every scale `(T, P)` there is a witness time
+carrying both a zero-diagonal doubling certificate and a left-heavy defect profile at period
+multiple `m * P`.
+-/
+def ZeroDiagDoublesLeftHeavyRecurrence : Prop :=
+  ∀ T P : Nat, 0 < P →
+    ∃ m z t k : Nat,
+      T ≤ t ∧
+      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
+      Rule30UOR.CompilePoints.DoublesAt (m * P) z ∧
+      LeftHeavy (m * P) t k
+
+/--
+Concrete bridge theorem: the zero-diagonal/doubling witness schema implies the left-heavy
+recurrence hypothesis used by `problem1_of_leftHeavy_recurrence`.
+-/
+theorem leftHeavy_recurrence_of_zeroDiag_doubles
+    (h : ZeroDiagDoublesLeftHeavyRecurrence) :
+    ∀ T P : Nat, 0 < P → ∃ m t k : Nat, T ≤ t ∧ LeftHeavy (m * P) t k := by
+  intro T P hP
+  obtain ⟨m, _z, t, k, ht, _hz, _hd, hl⟩ := h T P hP
+  exact ⟨m, t, k, ht, hl⟩
+
+/--
+Submission-facing reduction for the current defect-front strategy: proving
+`ZeroDiagDoublesLeftHeavyRecurrence` is sufficient to solve Problem 1.
+-/
+theorem submission_problem1_of_zeroDiag_doubles_leftHeavy
+    (h : ZeroDiagDoublesLeftHeavyRecurrence) :
+    Problem1 :=
+  problem1_of_leftHeavy_recurrence (leftHeavy_recurrence_of_zeroDiag_doubles h)
 
 /-- Under a periodic center, every left defect is shielded inside `(-k, k]`. -/
 theorem shield_of_periodic {T P : Nat} (hc : ∀ t, T ≤ t → center (t + P) = center t)
