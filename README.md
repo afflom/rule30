@@ -1,5 +1,12 @@
 # Rule 30 — LexLean & Lean 4 Formalization (`v0.1`)
 
+**Research status on `main`: Problem 1 remains unproved.** The `v0.1` tag and release artifacts
+are unchanged. Subsequent host Lean work audits the refutation engines and formalizes exact
+temporal differences, their aperiodic compensation constraint, and a physically aligned Witt
+pair evolution. See the [current proof frontier](rule30-lexlean/STRATEGY.md#current-proof-frontier-2026-10-28).
+Run `make check-research` to build and independently kernel-check these additions and enforce
+the allowed axiom set. They are not yet incorporated into the release PDFs described below.
+
 Kernel-checked [LexLean](https://github.com/afflom) and Lean 4 formalization of Wolfram's **Rule 30** cellular automaton (`Rule 30 Prize Problem 1` program) using the UOR Atlas, 2-adic Witt / carry-algebra coordinates, left-diagonal doubling theory, and driven right-half (`kit [33]`) spatio-temporal self-similarity.
 
 Every theorem in [`Paper.pdf`](Rule30-Paper.pdf) (**280 pages**, **1,386 kernel-checked statements** through `9.1386`) and [`Core.pdf`](Rule30-Core.pdf) is verified by the Lean 4 kernel (`leanprover/lean4:v4.32.1`) and `leanchecker` under only the standard Lean axioms (`{propext, Classical.choice, Quot.sound}`), with zero `sorry`s and zero custom axioms.

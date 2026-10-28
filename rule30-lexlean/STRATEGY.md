@@ -39,6 +39,19 @@ This rules out periodic compensation; it does not yet rule out aperiodic compens
 `make check-research` builds the core, runs both audits, and independently kernel-checks
 the research modules. The axiom audit fails on any dependency outside the three allowed axioms.
 
+`Rule30UOR.WittDefect` retains physical alignment in the integer encoding:
+`alignedDefect Q t = row (t+Q) XOR (row t << Q)`. It reuses the existing bilinear cross-carry
+and proves the exact update `d' = phi d XOR (crossCarry b d << 1)` with
+`b = row t << Q`, `b' = phi b`. The autonomous pair starts at
+`(1 << Q, row Q XOR (1 << Q))`; `pairOrbit_eq` connects every step to the actual seeded rows.
+Bit `j+Q` reads the physical-column defect at `t-j`. In particular, the center is bit `t+Q`.
+The persistent nonzero bit zero is at the moving right edge and does not establish a center
+disagreement. `problem1_iff_pairOrbit_center` states the exact open target: for each `Q > 0`
+and every `T`, some `t >= T` has pair-defect bit `t+Q` equal to one.
+This implementation provides an exact system for the non-cancellation question; it does not
+prove that the required center witnesses exist. The new modules remain host Lean results,
+separate from the release's attested LexLean paper.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,
