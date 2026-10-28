@@ -342,6 +342,27 @@ theorem submission_problem1_of_primitive_doubles_leftHeavy
   submission_problem1_of_zeroDiag_doubles_leftHeavy
     (zeroDiag_doubles_leftHeavyRecurrence_of_primitive h)
 
+/--
+Direct submission-facing reduction from the strongest local clean-window assumption at
+every primitive doubling point.
+-/
+theorem submission_problem1_of_any_doubling_point_cleanWindow
+    (h : PrimitiveCleanWindowAtAnyDoublesPoint) :
+    Problem1 :=
+  submission_problem1_of_primitive_doubles_cleanWindow
+    (primitive_doubles_cleanWindow_of_any_doubling_point h)
+
+/--
+Direct submission-facing reduction from local-any-point defect production plus global
+witness-to-window upgrade.
+-/
+theorem submission_problem1_of_any_doubling_point_components
+    (hA : PrimitiveLeftDefectAtAnyDoublesPoint)
+    (hB : PrimitiveDoublesCleanWindowFromWitness) :
+    Problem1 :=
+  submission_problem1_of_primitive_doubles_components
+    (primitive_doubles_leftDefect_of_any_doubling_point hA) hB
+
 /-- Under a periodic center, every left defect is shielded inside `(-k, k]`. -/
 theorem shield_of_periodic {T P : Nat} (hc : ∀ t, T ≤ t → center (t + P) = center t)
     (m t k : Nat) (ht : T ≤ t) (hk : 0 < k) (hd : defect (m * P) t (-(k : Int)) = true) :
