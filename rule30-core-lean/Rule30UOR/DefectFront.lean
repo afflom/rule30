@@ -176,6 +176,36 @@ theorem submission_problem1_of_zeroDiag_doubles_assembly
   submission_problem1_of_zeroDiag_doubles_leftHeavy
     (zeroDiag_doubles_leftHeavyRecurrence_of_assembly h)
 
+/--
+Primitive-period bridge obligation: for every `(T, P)`, at some zero-diagonal doubling point for
+the same period `P`, there is a left-heavy witness for shift `P` itself (`m = 1`).
+-/
+def PrimitiveDoublesLeftHeavyRecurrence : Prop :=
+  ∀ T P : Nat, 0 < P →
+    ∃ z t k : Nat,
+      T ≤ t ∧
+      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
+      Rule30UOR.CompilePoints.DoublesAt P z ∧
+      LeftHeavy P t k
+
+/-- Primitive-period recurrence implies the zero-diagonal/doubling recurrence schema (`m = 1`). -/
+theorem zeroDiag_doubles_leftHeavyRecurrence_of_primitive
+    (h : PrimitiveDoublesLeftHeavyRecurrence) :
+    ZeroDiagDoublesLeftHeavyRecurrence := by
+  intro T P hP
+  obtain ⟨z, t, k, ht, hz, hd, hl⟩ := h T P hP
+  exact ⟨1, z, t, k, ht, hz, by simpa using hd, by simpa using hl⟩
+
+/--
+Submission-facing reduction at primitive period: proving left-heavy recurrence at doubling points
+for shift `P` is sufficient for Problem 1.
+-/
+theorem submission_problem1_of_primitive_doubles_leftHeavy
+    (h : PrimitiveDoublesLeftHeavyRecurrence) :
+    Problem1 :=
+  submission_problem1_of_zeroDiag_doubles_leftHeavy
+    (zeroDiag_doubles_leftHeavyRecurrence_of_primitive h)
+
 /-- Under a periodic center, every left defect is shielded inside `(-k, k]`. -/
 theorem shield_of_periodic {T P : Nat} (hc : ∀ t, T ≤ t → center (t + P) = center t)
     (m t k : Nat) (ht : T ≤ t) (hk : 0 < k) (hd : defect (m * P) t (-(k : Int)) = true) :
