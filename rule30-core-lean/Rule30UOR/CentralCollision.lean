@@ -234,6 +234,21 @@ theorem noPeriod_of_no_recurrent_central_collision
       periodic_recurrent_central_column T P 1 hP (by decide) hcP
   exact hno T P hP hcP hrec
 
+/-- Canonical `NoPeriod` implies the recurrent-central-collision criterion vacuously,
+since its periodic-center premise is impossible. -/
+theorem no_recurrent_central_collision_of_noPeriod
+    (h : Rule30UOR.Scale.NoPeriod) : NoRecurrentCentralCollision := by
+  intro T P hP hcP
+  exact (h T P hP hcP).elim
+
+/-- Exact canonical form at this layer: excluding periodic-center recurrent central
+collisions is equivalent to `NoPeriod`. -/
+theorem no_recurrent_central_collision_iff_noPeriod :
+    NoRecurrentCentralCollision ↔ Rule30UOR.Scale.NoPeriod := by
+  constructor
+  · exact noPeriod_of_no_recurrent_central_collision
+  · exact no_recurrent_central_collision_of_noPeriod
+
 /-- Problem 1 follows once one rules out fixed-band recurrent central collisions under
 every hypothetical periodic-center witness. -/
 theorem problem1_of_no_recurrent_central_collision
@@ -247,18 +262,14 @@ theorem problem1_of_no_recurrent_central_collision
 /-- Problem 1 implies the recurrent-central-collision obstruction criterion. -/
 theorem no_recurrent_central_collision_of_problem1
     (h : Rule30Prize.Problem1) : NoRecurrentCentralCollision := by
-  intro T P hP hcP
-  intro hrec
-  have hnp := Rule30UOR.Scale.noPeriod_of_problem1 h
-  exact (hnp T P hP hcP).elim
+  exact no_recurrent_central_collision_of_noPeriod
+    (Rule30UOR.Scale.noPeriod_of_problem1 h)
 
 /-- Exact frontier at this layer: Problem 1 is equivalent to excluding recurrent central
 collision witnesses under every periodic-center hypothesis. -/
 theorem problem1_iff_no_recurrent_central_collision :
     Rule30Prize.Problem1 ↔ NoRecurrentCentralCollision := by
-  constructor
-  · exact no_recurrent_central_collision_of_problem1
-  · intro hno
-    exact problem1_of_no_recurrent_central_collision hno
+  rw [Rule30UOR.Scale.problem1_iff]
+  exact (no_recurrent_central_collision_iff_noPeriod).symm
 
 end Rule30UOR.CentralCollision
