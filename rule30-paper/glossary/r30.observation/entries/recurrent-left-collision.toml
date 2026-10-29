@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "recurrent-left-collision"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit B (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.RecurrentLeftCollision"
+
+[[form]]
+id = "recurrent-left-collision"
+channel = "math"
+surface = "recurrentleftcollision"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name recurrentleftcollision) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -151,4 +151,125 @@ theorem left_edge_collision (Q T : Nat) (hQ : 0 < Q) :
   have hh := temporal_collision_of_incompatible Q T (-((T + Q : Nat) : Int)) Q hbad
   simpa only [show -((T + Q : Nat) : Int) + (Q : Int) = -(T : Int) by omega] using hh
 
+
+/-- A disagreement colour and a shared black colour, in either order. -/
+private def Mixed (a b c d : Bool) : Prop :=
+  (a ≠ b ∧ c = true ∧ d = true) ∨ (a = true ∧ b = true ∧ c ≠ d)
+
+private theorem mixed_self (a b : Bool) : ¬ Mixed a b a b := by
+  unfold Mixed
+  cases a <;> cases b <;> decide
+
+private theorem mixed_bad : ∀ a b c d : Bool, Mixed a b c d → ¬ Good a b c d := by
+  unfold Mixed Good
+  decide +kernel
+
+private theorem mixed_middle : ∀ a b c d e f : Bool, Mixed a b e f →
+    (c = false ∧ d = false) ∨ Mixed a b c d ∨ Mixed c d e f := by
+  unfold Mixed
+  decide +kernel
+
+private theorem mixed_gap_two : ∀ a b c d e f : Bool, Mixed a b c d →
+    ¬ Good (rule a false c) (rule b false d)
+      (rule false c e) (rule false d f) := by
+  unfold Mixed Good
+  decide +kernel
+
+private theorem cell_step (t : Nat) (p : Int) :
+    cell (t + 1) p = rule (cell t (p - 1)) (cell t p) (cell t (p + 1)) := rfl
+
+/-- Mixed colours collide inside their initial spatial hull. A zero gap closes from
+both ends; the time is at most half the initial distance. -/
+private theorem mixed_collision (Q : Nat) : ∀ (d t : Nat) (p : Int),
+    Mixed (cell t p) (cell (t + Q) p)
+      (cell t (p + (d : Int))) (cell (t + Q) (p + (d : Int))) →
+    ∃ s : Nat, 2 * s ≤ d ∧ ∃ x : Int, p ≤ x ∧ x < p + (d : Int) ∧
+      collision Q (t + s) x = true := by
+  intro d
+  induction d using Nat.strongRecOn with
+  | ind d ih =>
+    intro t p hm
+    by_cases hd0 : d = 0
+    · subst d
+      simp only [Int.ofNat_zero, Int.add_zero] at hm
+      exact (mixed_self _ _ hm).elim
+    by_cases hd1 : d = 1
+    · subst d
+      refine ⟨0, by omega, p, by omega, by omega, ?_⟩
+      apply (collision_iff Q t p).2
+      exact mixed_bad _ _ _ _ (by simpa using hm)
+    apply Classical.byContradiction
+    intro hn
+    have mid : ∀ x : Int, p < x → x < p + (d : Int) →
+        cell t x = false ∧ cell (t + Q) x = false := by
+      intro x hx1 hx2
+      let k := (x - p).toNat
+      have hk : (k : Int) = x - p := Int.toNat_of_nonneg (by omega)
+      rcases mixed_middle (cell t p) (cell (t + Q) p) (cell t x) (cell (t + Q) x)
+        (cell t (p + (d : Int))) (cell (t + Q) (p + (d : Int))) hm with hz | hl | hr
+      · exact hz
+      · obtain ⟨s, hs, y, hy1, hy2, hc⟩ := ih k (by omega) t p (by
+          simpa only [show p + (k : Int) = x by omega] using hl)
+        exact (hn ⟨s, by omega, y, hy1, by omega, hc⟩).elim
+      · obtain ⟨s, hs, y, hy1, hy2, hc⟩ := ih (d - k) (by omega) t x (by
+          simpa only [show x + ((d - k : Nat) : Int) = p + (d : Int) by omega] using hr)
+        exact (hn ⟨s, by omega, y, by omega, by omega, hc⟩).elim
+    by_cases hd2 : d = 2
+    · subst d
+      obtain ⟨az, bz⟩ := mid (p + 1) (by omega) (by omega)
+      have hc : collision Q (t + 1) (p + 1) = true := by
+        apply (collision_iff Q (t + 1) (p + 1)).2
+        rw [show t + 1 + Q = (t + Q) + 1 by omega,
+          show p + 1 + 1 = p + 2 by omega,
+          cell_step t (p + 1), cell_step (t + Q) (p + 1),
+          cell_step t (p + 2), cell_step (t + Q) (p + 2),
+          show p + 1 - 1 = p by omega, show p + 2 - 1 = p + 1 by omega,
+          show p + 1 + 1 = p + 2 by omega, az, bz]
+        exact mixed_gap_two _ _ _ _ _ _ (by simpa using hm)
+      exact hn ⟨1, by omega, p + 1, by omega, by omega, hc⟩
+    · obtain ⟨a1, b1⟩ := mid (p + 1) (by omega) (by omega)
+      obtain ⟨a2, b2⟩ := mid (p + 2) (by omega) (by omega)
+      obtain ⟨az, bz⟩ := mid (p + (d : Int) - 2) (by omega) (by omega)
+      obtain ⟨az1, bz1⟩ := mid (p + (d : Int) - 1) (by omega) (by omega)
+      have la : cell (t + 1) (p + 1) = cell t p := by
+        rw [cell_step, show p + 1 - 1 = p by omega,
+          show p + 1 + 1 = p + 2 by omega, a1, a2]
+        simp [rule]
+      have lb : cell (t + 1 + Q) (p + 1) = cell (t + Q) p := by
+        rw [show t + 1 + Q = (t + Q) + 1 by omega, cell_step,
+          show p + 1 - 1 = p by omega, show p + 1 + 1 = p + 2 by omega, b1, b2]
+        simp [rule]
+      have ra : cell (t + 1) (p + (d : Int) - 1) = cell t (p + (d : Int)) := by
+        rw [cell_step, show p + (d : Int) - 1 - 1 = p + (d : Int) - 2 by omega,
+          show p + (d : Int) - 1 + 1 = p + (d : Int) by omega, az, az1]
+        simp [rule]
+      have rb : cell (t + 1 + Q) (p + (d : Int) - 1) = cell (t + Q) (p + (d : Int)) := by
+        rw [show t + 1 + Q = (t + Q) + 1 by omega, cell_step,
+          show p + (d : Int) - 1 - 1 = p + (d : Int) - 2 by omega,
+          show p + (d : Int) - 1 + 1 = p + (d : Int) by omega, bz, bz1]
+        simp [rule]
+      obtain ⟨s, hs, x, hx1, hx2, hc⟩ := ih (d - 2) (by omega) (t + 1) (p + 1) (by
+        rw [show p + 1 + ((d - 2 : Nat) : Int) = p + (d : Int) - 1 by omega,
+          la, lb, ra, rb]
+        exact hm)
+      exact hn ⟨s + 1, by omega, x, by omega, by omega, by
+        simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hc⟩
+
+/-- A left defect and a shared black center force a collision entirely to the left
+of the center, within half the defect's distance. No periodicity is assumed. -/
+theorem left_collision_of_defect_and_black (Q t k : Nat)
+    (hd : Rule30UOR.TemporalDefect.defect Q t (-(k : Int)) = true)
+    (ha : center t = true) (hb : center (t + Q) = true) :
+    ∃ s : Nat, 2 * s ≤ k ∧ ∃ x : Int, -(k : Int) ≤ x ∧ x < 0 ∧
+      collision Q (t + s) x = true := by
+  have hm : Mixed (cell t (-(k : Int))) (cell (t + Q) (-(k : Int)))
+      (cell t (-(k : Int) + (k : Int))) (cell (t + Q) (-(k : Int) + (k : Int))) := by
+    left
+    refine ⟨?_, ?_, ?_⟩
+    · intro he
+      simp [Rule30UOR.TemporalDefect.defect, Rule30UOR.TemporalDefect.difference, he] at hd
+    · simpa only [show -(k : Int) + (k : Int) = 0 by omega, center] using ha
+    · simpa only [show -(k : Int) + (k : Int) = 0 by omega, center] using hb
+  simpa only [show -(k : Int) + (k : Int) = 0 by omega] using mixed_collision Q k t (-(k : Int)) hm
+
 end Rule30UOR.Collision

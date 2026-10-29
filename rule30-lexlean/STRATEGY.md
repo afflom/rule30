@@ -171,6 +171,31 @@ maintain cancellation, and the finite central strip receives inputs from outside
 periodicity or finite-state closure of its source signal follows. A seed-specific
 obstruction to sustaining that central cancellation is still unproved.
 
+### One-sided localization of the required sources
+
+`Collision.left_collision_of_defect_and_black` uses a more precise colour argument.
+A disagreement colour and a shared black colour force a collision inside their original
+spatial hull, within half their separation. Choose a nearer mixed pair if an intermediate
+colour is nonzero; otherwise the intervening zero gap closes from both ends. The two-cell
+case is a finite Boolean identity. No source-free region or empirical propagation speed
+is assumed.
+
+Under a periodic center, a unit defect at a white time must already occur somewhere in
+the width-`P` left prefix at a preceding black time. Otherwise the prefix-observation theorem
+would force agreement at the later unit-defect time. At that black time the shared center
+and the left defect form the mixed pair above. Column `-1` is collision-free, so the forced
+source lies in `[-P,-2]`.
+
+`periodic_left_collision_window` gives a source for every `N >= T`, at a time
+`N <= t < 2*N + m*P + 3*P`. `periodic_recurrent_left_column` selects one fixed column in
+`[-P,-2]` with collisions arbitrarily late, for every positive multiplier `m`. The earlier
+central-column theorem now follows from this stronger one-sided result. The statements
+are authored in `Observations.lex.tex` and its `r30.observation` glossary.
+
+This excludes both moving-edge escape and an explanation confined to right-side sources.
+It still does not exclude the remaining left-side nonlinear cancellation; Problem 1 remains
+open until that obstruction is proved.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

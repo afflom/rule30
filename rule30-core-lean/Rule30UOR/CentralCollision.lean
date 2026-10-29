@@ -2,6 +2,7 @@ module
 
 public import Rule30UOR.DefectFront
 public import Rule30UOR.Scale
+public import Rule30UOR.MaskedObservation
 
 /-!
 # Central localization of collision sources
@@ -10,7 +11,8 @@ Statements are authored in `rule30-paper/src/Observations.lex.tex`.
 An adjacent defect and a common future black center force incompatible paired colors
 within a bounded distance. Finite XOR rigidity then forces a nearby carry collision.
 Under a hypothetical period `P`, common black centers occur within `P` steps, so collision
-sources recur in the fixed band `[-2P, 2P]`. This is a necessary condition, not Problem 1.
+sources recur in the fixed left band `[-P, -2]`. This strengthens the earlier
+central-band localization. It remains a necessary condition, not Problem 1.
 -/
 
 @[expose] public section
@@ -33,6 +35,15 @@ def NearCollision (Q t H B : Nat) : Prop :=
 nonzero collisions arbitrarily late. -/
 def RecurrentCentralCollision (Q B : Nat) : Prop :=
   ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ (B : Int) ∧ x ≠ -1 ∧
+    ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collision Q t x = true
+
+/-- A collision source in a fixed left strip, excluding the source-free column `-1`. -/
+def LeftCollision (Q t B : Nat) : Prop :=
+  ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ -2 ∧ collision Q t x = true
+
+/-- A single fixed column of the left strip carries collisions arbitrarily late. -/
+def RecurrentLeftCollision (Q B : Nat) : Prop :=
+  ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ -2 ∧
     ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collision Q t x = true
 
 /-- Frontier obstruction at fixed period: under a hypothetical periodic center of period `P`,
@@ -139,6 +150,83 @@ private theorem kit_period {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P)
   intro t ht
   simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
 
+/-- A white-phase unit defect must already have been present in a bounded left
+prefix at a preceding black phase. Matching prefixes would determine its whole trace. -/
+private theorem black_left_defect_before {T P : Nat} (hP : 0 < P)
+    (hc : ∀ t, T ≤ t → center (t + P) = center t) (m v : Nat)
+    (hv : T + P ≤ v) (hd : leftAdjacentDefect (m * P) v = true) :
+    ∃ b k : Nat, v + 1 - P ≤ b ∧ b ≤ v ∧ 1 ≤ k ∧ k ≤ P ∧
+      center b = true ∧ defect (m * P) b (-(k : Int)) = true := by
+  let a := v + 1 - P
+  have ha : T ≤ a := by dsimp [a]; omega
+  obtain ⟨r, hr, hblack⟩ := black_within_period hP hc a ha
+  let b := a + r
+  have hb1 : v + 1 - P ≤ b := by dsimp [b, a]; omega
+  have hb2 : b ≤ v := by dsimp [b, a]; omega
+  have hbT : T ≤ b := by dsimp [b]; omega
+  have hgap : v - b < P := by omega
+  have hwhite : center v = false := by
+    have hp := defect_right_and_white_of_clean_pair (m * P) v 0
+      (center_defect_zero hc m v (by omega))
+      (center_defect_zero hc m (v + 1) (by omega)) hd
+    exact hp.2
+  by_cases hex : ∃ k : Nat, 1 ≤ k ∧ k ≤ P ∧ defect (m * P) b (-(k : Int)) = true
+  · obtain ⟨k, hk1, hkP, hk⟩ := hex
+    exact ⟨b, k, hb1, hb2, hk1, hkP, hblack, hk⟩
+  · have pref : Rule30UOR.MaskedObservation.LeftPrefixAgree b (b + m * P) P := by
+      intro k hk1 hkP
+      have hz : defect (m * P) b (-(k : Int)) = false := by
+        cases hh : defect (m * P) b (-(k : Int))
+        · rfl
+        · exact (hex ⟨k, hk1, hkP, hh⟩).elim
+      exact ((difference_eq_false_iff (fun t => cell t (-(k : Int))) (m * P) b).1 hz).symm
+    have win : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + m * P) P := by
+      intro j hj
+      simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+        (periodic_mul hc m (b + j) (by omega)).symm
+    have he := (Rule30UOR.MaskedObservation.prefix_agreement_iff_white_trace
+      b (b + m * P) P win).1 pref (v - b) hgap (by
+        simpa only [show b + (v - b) = v by omega] using hwhite)
+    have he' : cell v (-1) = cell (v + m * P) (-1) := by
+      simpa only [Rule30UOR.MaskedObservation.leftDigit,
+        show -((1 : Nat) : Int) = (-1 : Int) by omega,
+        show b + (v - b) = v by omega,
+        show b + m * P + (v - b) = v + m * P by omega] using he
+    have hz : leftAdjacentDefect (m * P) v = false := by
+      simp [leftAdjacentDefect, defect, difference, he']
+    rw [hz] at hd
+    contradiction
+
+/-- Black-phase prefix observation and mixed-colour collision transport put the
+source entirely on the left. The bound comes from the actual moving left edge. -/
+theorem periodic_left_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
+    ∃ t : Nat, N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 3 * P ∧
+      LeftCollision (m * P) t P := by
+  have hp := kit_period hc
+  obtain ⟨r, hr0, hr, hd, _, _⟩ := exists_unit_defect_and_white_center_of_periodic
+    hP hp m (N + P) hm (by omega)
+  obtain ⟨b, k, hb1, hb2, hk1, hkP, hblack, hdef⟩ :=
+    black_left_defect_before hP hp m (N + P + (r - 1)) (by omega) hd
+  have hbT : T ≤ b := by omega
+  obtain ⟨s, hs, x, hx1, hx2, hcol⟩ := left_collision_of_defect_and_black (m * P) b k hdef
+    hblack ((periodic_mul hp m b hbT).trans hblack)
+  have hne : x ≠ -1 := by
+    intro he
+    rw [he] at hcol
+    have hz := Rule30UOR.DefectSource.collision_neg_one_of_agree (m * P) (b + s)
+      (center_defect_zero hp m (b + s) (by omega))
+      (center_defect_zero hp m (b + s + 1) (by omega))
+    rw [hz] at hcol
+    contradiction
+  exact ⟨b + s, by omega, by omega, x, by omega, by omega, hcol⟩
+
+theorem periodic_left_collisions (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) :
+    ∃ t : Nat, N ≤ t ∧ LeftCollision (m * P) t P := by
+  obtain ⟨t, ht, _, hcol⟩ := periodic_left_collision_window T P m (max T N) hP hm hc (by omega)
+  exact ⟨t, by omega, hcol⟩
+
 /-- The localization radius depends only on the proposed period, not the transient,
 time, or period multiplier. -/
 theorem periodic_unit_defect_forces_near_collision (T P m t : Nat) (hP : 0 < P)
@@ -196,27 +284,25 @@ private theorem finite_recurrent_choice (f : Nat → Nat → Prop) (n : Nat) :
         exact ⟨t, by omega, j, by omega, hf⟩)
       exact ⟨i, by omega, hf⟩
 
+/-- A periodic center forces recurrence at a fixed strictly left column. Neither
+right-side sources nor sources escaping with the cone edges suffice. -/
+theorem periodic_recurrent_left_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentLeftCollision (m * P) P := by
+  obtain ⟨i, hi, hf⟩ := finite_recurrent_choice
+    (fun i t => collision (m * P) t (-(P : Int) + (i : Int)) = true) (P - 1) (by
+      intro N
+      obtain ⟨t, ht, x, hx1, hx2, hcol⟩ := periodic_left_collisions T P m N hP hm hc
+      refine ⟨t, ht, (x + (P : Int)).toNat, by omega, ?_⟩
+      simpa only [Int.toNat_of_nonneg (show 0 ≤ x + (P : Int) by omega),
+        show -(P : Int) + (x + (P : Int)) = x by omega] using hcol)
+  exact ⟨-(P : Int) + (i : Int), by omega, by omega, hf⟩
+
 /-- Finite choice localizes recurrence to one fixed source column. The central strip
 is not a closed dynamical system: this theorem does not make its source signal periodic. -/
 theorem periodic_recurrent_central_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentCentralCollision (m * P) (2 * P) := by
-  let B := 2 * P
-  obtain ⟨i, hi, hf⟩ := finite_recurrent_choice
-    (fun i t => collision (m * P) t (-(B : Int) + (i : Int)) = true) (2 * B + 1) (by
-      intro N
-      obtain ⟨t, ht, x, hx1, hx2, hcol⟩ := periodic_central_collisions T P m N hP hm hc
-      refine ⟨t, ht, (x + (B : Int)).toNat, by omega, ?_⟩
-      simpa only [Int.toNat_of_nonneg (show 0 ≤ x + (B : Int) by omega),
-        show -(B : Int) + (x + (B : Int)) = x by omega] using hcol)
-  refine ⟨-(B : Int) + (i : Int), by omega, by omega, ?_, hf⟩
-  intro he
-  obtain ⟨t, ht, hcol⟩ := hf T
-  rw [he] at hcol
-  have hz := Rule30UOR.DefectSource.collision_neg_one_of_agree (m * P) t
-    (center_defect_zero (kit_period hc) m t ht)
-    (center_defect_zero (kit_period hc) m (t + 1) (by omega))
-  rw [hz] at hcol
-  contradiction
+  obtain ⟨x, hx1, hx2, hf⟩ := periodic_recurrent_left_column T P m hP hm hc
+  exact ⟨x, by omega, by omega, by omega, hf⟩
 
 /-- Frontier reduction: any eventual periodic center hypothesis yields a fixed-band
 recurrent central collision witness. This packages the `T, P` witness extraction and
