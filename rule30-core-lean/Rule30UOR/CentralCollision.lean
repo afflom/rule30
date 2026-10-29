@@ -35,6 +35,12 @@ def RecurrentCentralCollision (Q B : Nat) : Prop :=
   ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ (B : Int) ∧ x ≠ -1 ∧
     ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collision Q t x = true
 
+/-- Frontier obstruction at fixed period: under a hypothetical periodic center of period `P`,
+the period-scale recurrent central collision witness must fail. -/
+def NoRecurrentCentralCollision : Prop :=
+  ∀ T P : Nat, 0 < P → Rule30UOR.Scale.CenterPeriodic T P →
+    ¬ RecurrentCentralCollision P (2 * P)
+
 private theorem white_cone (t : Nat) : ∀ (r : Nat) (p : Int),
     (∀ q : Int, p - (r : Int) ≤ q → q ≤ p + (r : Int) → cell t q = false) →
     cell (t + r) p = false := by
@@ -237,5 +243,22 @@ theorem problem1_of_no_recurrent_central_collision
     Rule30Prize.Problem1 := by
   exact Rule30UOR.Scale.problem1_of_noPeriod
     (noPeriod_of_no_recurrent_central_collision hno)
+
+/-- Problem 1 implies the recurrent-central-collision obstruction criterion. -/
+theorem no_recurrent_central_collision_of_problem1
+    (h : Rule30Prize.Problem1) : NoRecurrentCentralCollision := by
+  intro T P hP hcP
+  intro hrec
+  have hnp := Rule30UOR.Scale.noPeriod_of_problem1 h
+  exact (hnp T P hP hcP).elim
+
+/-- Exact frontier at this layer: Problem 1 is equivalent to excluding recurrent central
+collision witnesses under every periodic-center hypothesis. -/
+theorem problem1_iff_no_recurrent_central_collision :
+    Rule30Prize.Problem1 ↔ NoRecurrentCentralCollision := by
+  constructor
+  · exact no_recurrent_central_collision_of_problem1
+  · intro hno
+    exact problem1_of_no_recurrent_central_collision hno
 
 end Rule30UOR.CentralCollision
