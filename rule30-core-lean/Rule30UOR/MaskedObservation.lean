@@ -150,7 +150,7 @@ theorem prefix_of_white_trace {t1 t2 n : Nat} (hc : CenterWindowAgree t1 t2 n)
   simpa only [Nat.add_zero, show (-1 : Int) - ((k - 1 : Nat) : Int) = -(k : Int) by omega]
     using hh
 
-private theorem trace_of_prefix {t1 t2 n : Nat} (hc : CenterWindowAgree t1 t2 n)
+theorem trace_of_prefix {t1 t2 n : Nat} (hc : CenterWindowAgree t1 t2 n)
     (hp : LeftPrefixAgree t1 t2 n) :
     ∀ s : Nat, s < n → cell (t1 + s) (-1) = cell (t2 + s) (-1) := by
   have triangle : ∀ s : Nat, s ≤ n → ∀ p : Int,

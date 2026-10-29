@@ -120,9 +120,17 @@ Close the goal with \(\lexeme{r30.observation::periodic-recurrent-central-column
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{black-window-forces-left-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(leftadjacentdefect(Q, b + r) = true\), then there exists a natural number \(s\) such that \(2 * s ≤ r + 1 ∧ s ≤ r ∧ leftcollision(Q, b + s, r + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::black-window-forces-left-collision}(Q, b, r)\).
+\end{proof}
+\end{theorem}
+
 \begin{theorem}{periodic-left-collision-window}
 \allowaxioms{Classical.choice;Quot.sound;propext}
-For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 3 * P ∧ leftcollision(m * P, t, P)\).
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ leftcollision(m * P, t, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-left-collision-window}(T, P, m, N)\).
 \end{proof}
@@ -165,6 +173,32 @@ Close the goal with \(\lexeme{r30.frontier::no-row-center-period-iff-no-recurren
 \(problemone ↔ norecurrentcentralcollision\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.frontier::problem-one-iff-no-recurrent-central-collision}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-period-of-no-recurrent-central-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+if \(norecurrentcentralcollision\), then \(noperiod\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.frontier::no-period-of-no-recurrent-central-collision}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{not-center-periodic-of-no-recurrent-central-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(norecurrentcentralcollision\), then \(¬ centerperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.frontier::not-center-periodic-of-no-recurrent-central-collision}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{not-eventually-periodic-of-no-recurrent-central-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+if \(norecurrentcentralcollision\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.frontier::not-eventually-periodic-of-no-recurrent-central-collision}(h)\).
 \end{proof}
 \end{theorem}
 

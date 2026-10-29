@@ -37,6 +37,23 @@ theorem problem1_iff_noRecurrentCentralCollision :
     Problem1 ↔ Rule30UOR.CentralCollision.NoRecurrentCentralCollision :=
   Rule30UOR.CentralCollision.problem1_iff_no_recurrent_central_collision
 
+theorem noPeriod_of_noRecurrentCentralCollision
+    (h : Rule30UOR.CentralCollision.NoRecurrentCentralCollision) :
+    Rule30UOR.Scale.NoPeriod :=
+  noPeriod_iff_noRecurrentCentralCollision.2 h
+
+theorem not_centerPeriodic_of_noRecurrentCentralCollision
+    (T P : Nat) (hP : 0 < P)
+    (h : Rule30UOR.CentralCollision.NoRecurrentCentralCollision) :
+    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  noPeriod_of_noRecurrentCentralCollision h T P hP
+
+theorem not_eventuallyPeriodic_center_of_noRecurrentCentralCollision
+    (h : Rule30UOR.CentralCollision.NoRecurrentCentralCollision) :
+    ¬ Ruliology.CellularAutomata.Rule30Jen.EventuallyPeriodic
+      Ruliology.CellularAutomata.Rule30Prize.center := by
+  simpa only [Problem1] using problem1_iff_noRecurrentCentralCollision.2 h
+
 theorem problem1_of_noRecurrentCentralCollision
     (h : Rule30UOR.CentralCollision.NoRecurrentCentralCollision) : Problem1 :=
   problem1_iff_noRecurrentCentralCollision.2 h

@@ -187,10 +187,24 @@ and the left defect form the mixed pair above. Column `-1` is collision-free, so
 source lies in `[-P,-2]`.
 
 `periodic_left_collision_window` gives a source for every `N >= T`, at a time
-`N <= t < 2*N + m*P + 3*P`. `periodic_recurrent_left_column` selects one fixed column in
+`N <= t < 2*N + m*P + 2*P`. `periodic_recurrent_left_column` selects one fixed column in
 `[-P,-2]` with collisions arbitrarily late, for every positive multiplier `m`. The earlier
 central-column theorem now follows from this stronger one-sided result. The statements
 are authored in `Observations.lex.tex` and its `r30.observation` glossary.
+
+
+`black_window_forces_left_collision` now isolates the finite causal statement. If the two
+centers agree through offsets `0..r+1`, start at a shared black center, and have a unit
+left defect at offset `r > 0`, then there is a left collision at offset `s` with
+`2*s <= r+1` and `s <= r`, in `[-(r+1),-2]`. Agreement of the initial width-`r+1` prefix
+would otherwise determine agreement of the later left trace. The mixed-colour lemma
+then puts a collision in the first half of the window. This result assumes no eventual
+periodicity and no source-free region.
+
+Applying it to the preceding black phase places the source no later than the moving-edge unit
+witness, sharpening the previous `3*P` deadline allowance to `2*P`. The strip-wide time
+bound and the fixed-column recurrence remain separate statements: no bounded-gap
+recurrence rate for the selected single column has been proved.
 
 This excludes both moving-edge escape and an explanation confined to right-side sources.
 It still does not exclude the remaining left-side nonlinear cancellation; Problem 1 remains

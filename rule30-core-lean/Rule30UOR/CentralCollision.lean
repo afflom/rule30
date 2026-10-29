@@ -150,76 +150,100 @@ private theorem kit_period {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P)
   intro t ht
   simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
 
-/-- A white-phase unit defect must already have been present in a bounded left
-prefix at a preceding black phase. Matching prefixes would determine its whole trace. -/
-private theorem black_left_defect_before {T P : Nat} (hP : 0 < P)
-    (hc : ∀ t, T ≤ t → center (t + P) = center t) (m v : Nat)
-    (hv : T + P ≤ v) (hd : leftAdjacentDefect (m * P) v = true) :
-    ∃ b k : Nat, v + 1 - P ≤ b ∧ b ≤ v ∧ 1 ≤ k ∧ k ≤ P ∧
-      center b = true ∧ defect (m * P) b (-(k : Int)) = true := by
-  let a := v + 1 - P
-  have ha : T ≤ a := by dsimp [a]; omega
-  obtain ⟨r, hr, hblack⟩ := black_within_period hP hc a ha
-  let b := a + r
-  have hb1 : v + 1 - P ≤ b := by dsimp [b, a]; omega
-  have hb2 : b ≤ v := by dsimp [b, a]; omega
-  have hbT : T ≤ b := by dsimp [b]; omega
-  have hgap : v - b < P := by omega
-  have hwhite : center v = false := by
-    have hp := defect_right_and_white_of_clean_pair (m * P) v 0
-      (center_defect_zero hc m v (by omega))
-      (center_defect_zero hc m (v + 1) (by omega)) hd
-    exact hp.2
-  by_cases hex : ∃ k : Nat, 1 ≤ k ∧ k ≤ P ∧ defect (m * P) b (-(k : Int)) = true
-  · obtain ⟨k, hk1, hkP, hk⟩ := hex
-    exact ⟨b, k, hb1, hb2, hk1, hkP, hblack, hk⟩
-  · have pref : Rule30UOR.MaskedObservation.LeftPrefixAgree b (b + m * P) P := by
-      intro k hk1 hkP
-      have hz : defect (m * P) b (-(k : Int)) = false := by
-        cases hh : defect (m * P) b (-(k : Int))
-        · rfl
-        · exact (hex ⟨k, hk1, hkP, hh⟩).elim
-      exact ((difference_eq_false_iff (fun t => cell t (-(k : Int))) (m * P) b).1 hz).symm
-    have win : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + m * P) P := by
-      intro j hj
-      simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
-        (periodic_mul hc m (b + j) (by omega)).symm
-    have he := (Rule30UOR.MaskedObservation.prefix_agreement_iff_white_trace
-      b (b + m * P) P win).1 pref (v - b) hgap (by
-        simpa only [show b + (v - b) = v by omega] using hwhite)
-    have he' : cell v (-1) = cell (v + m * P) (-1) := by
-      simpa only [Rule30UOR.MaskedObservation.leftDigit,
-        show -((1 : Nat) : Int) = (-1 : Int) by omega,
-        show b + (v - b) = v by omega,
-        show b + m * P + (v - b) = v + m * P by omega] using he
-    have hz : leftAdjacentDefect (m * P) v = false := by
-      simp [leftAdjacentDefect, defect, difference, he']
-    rw [hz] at hd
-    contradiction
+/-- A matching finite center window transports an agreeing left prefix forward.
+Consequently a unit defect at the end has a witness in the initial prefix. -/
+private theorem left_defect_of_agreeing_window (Q b r : Nat)
+    (hc : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + Q) (r + 1))
+    (hd : leftAdjacentDefect Q (b + r) = true) :
+    ∃ k : Nat, 1 ≤ k ∧ k ≤ r + 1 ∧ defect Q b (-(k : Int)) = true := by
+  apply Classical.byContradiction
+  intro hn
+  have pref : Rule30UOR.MaskedObservation.LeftPrefixAgree b (b + Q) (r + 1) := by
+    intro k hk1 hkr
+    have hz : defect Q b (-(k : Int)) = false := by
+      cases hh : defect Q b (-(k : Int))
+      · rfl
+      · exact (hn ⟨k, hk1, hkr, hh⟩).elim
+    exact ((difference_eq_false_iff (fun t => cell t (-(k : Int))) Q b).1 hz).symm
+  have he := Rule30UOR.MaskedObservation.trace_of_prefix hc pref r (by omega)
+  have he' : cell (b + r) (-1) = cell (b + r + Q) (-1) := by
+    simpa only [show b + Q + r = b + r + Q by omega] using he
+  have hz : leftAdjacentDefect Q (b + r) = false := by
+    simp [leftAdjacentDefect, defect, difference, he']
+  rw [hz] at hd
+  contradiction
 
-/-- Black-phase prefix observation and mixed-colour collision transport put the
-source entirely on the left. The bound comes from the actual moving left edge. -/
-theorem periodic_left_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
-    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
-    ∃ t : Nat, N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 3 * P ∧
-      LeftCollision (m * P) t P := by
-  have hp := kit_period hc
-  obtain ⟨r, hr0, hr, hd, _, _⟩ := exists_unit_defect_and_white_center_of_periodic
-    hP hp m (N + P) hm (by omega)
-  obtain ⟨b, k, hb1, hb2, hk1, hkP, hblack, hdef⟩ :=
-    black_left_defect_before hP hp m (N + P + (r - 1)) (by omega) hd
-  have hbT : T ≤ b := by omega
-  obtain ⟨s, hs, x, hx1, hx2, hcol⟩ := left_collision_of_defect_and_black (m * P) b k hdef
-    hblack ((periodic_mul hp m b hbT).trans hblack)
+/-- Finite causal localization: a unit defect after a shared black center forces
+a left-side collision no later than the unit defect, within the first half of the
+observation window.
+No eventual-periodicity assumption is needed. -/
+theorem black_window_forces_left_collision (Q b r : Nat) (hr : 0 < r)
+    (hc : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + Q) (r + 1))
+    (hb : Rule30UOR.Core.center b = true)
+    (hd : leftAdjacentDefect Q (b + r) = true) :
+    ∃ s : Nat, 2 * s ≤ r + 1 ∧ s ≤ r ∧ LeftCollision Q (b + s) (r + 1) := by
+  obtain ⟨k, hk1, hkr, hdef⟩ := left_defect_of_agreeing_window Q b r hc hd
+  have hb' : center b = true := by
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hb
+  have hbQ : center (b + Q) = true := by
+    have he := hc 0 (by omega)
+    simp only [Nat.add_zero] at he
+    exact he.symm.trans hb'
+  obtain ⟨s, hs, x, hx1, hx2, hcol⟩ := left_collision_of_defect_and_black Q b k hdef hb' hbQ
+  have hsr : s ≤ r := by omega
+  have clean : ∀ j : Nat, j ≤ r + 1 → defect Q (b + j) 0 = false := by
+    intro j hj
+    change difference (fun t => cell t 0) Q (b + j) = false
+    apply (difference_eq_false_iff (fun t => cell t 0) Q (b + j)).2
+    simpa only [center, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using (hc j hj).symm
   have hne : x ≠ -1 := by
     intro he
     rw [he] at hcol
-    have hz := Rule30UOR.DefectSource.collision_neg_one_of_agree (m * P) (b + s)
-      (center_defect_zero hp m (b + s) (by omega))
-      (center_defect_zero hp m (b + s + 1) (by omega))
+    have hz := Rule30UOR.DefectSource.collision_neg_one_of_agree Q (b + s)
+      (clean s (by omega)) (by
+        simpa only [Nat.add_assoc] using clean (s + 1) (by omega))
     rw [hz] at hcol
     contradiction
-  exact ⟨b + s, by omega, by omega, x, by omega, by omega, hcol⟩
+  exact ⟨s, by omega, hsr, x, by omega, by omega, hcol⟩
+
+/-- The source occurs no later than the unit defect supplied by the moving edge. This
+removes the extra future localization allowance from the earlier deadline. -/
+theorem periodic_left_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
+    ∃ t : Nat, N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧
+      LeftCollision (m * P) t P := by
+  have hp := kit_period hc
+  obtain ⟨r, hr0, hr, hd, _, hw⟩ := exists_unit_defect_and_white_center_of_periodic
+    hP hp m (N + P) hm (by omega)
+  let v := N + P + (r - 1)
+  let a := v + 1 - P
+  have haT : T ≤ a := by dsimp [a, v]; omega
+  have haN : N ≤ a := by dsimp [a, v]; omega
+  obtain ⟨j, hj, hb⟩ := black_within_period hP hp a haT
+  let b := a + j
+  have hbT : T ≤ b := by dsimp [b]; omega
+  have hbN : N ≤ b := by dsimp [b]; omega
+  have hbv : b ≤ v := by dsimp [b, a]; omega
+  have hgap : v - b < P := by dsimp [b, a]; omega
+  have hgap0 : 0 < v - b := by
+    apply Classical.byContradiction
+    intro hn
+    have he : v = b := by omega
+    have hwhite : center v = false := hw
+    have hblack : center b = true := hb
+    rw [he, hblack] at hwhite
+    contradiction
+  have win : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + m * P) (v - b + 1) := by
+    intro k hk
+    simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+      (periodic_mul hp m (b + k) (by omega)).symm
+  obtain ⟨s, hs, hsr, x, hx1, hx2, hcol⟩ := black_window_forces_left_collision
+    (m * P) b (v - b) hgap0 win
+    (by simpa only [Rule30UOR.Scale.center_eq_kit] using hb) (by
+      simpa only [show b + (v - b) = v by omega, leftAdjacentDefect, v] using hd)
+  refine ⟨b + s, by omega, ?_, x, by omega, hx2, hcol⟩
+  dsimp [v] at hsr
+  omega
 
 theorem periodic_left_collisions (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) :

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-period-of-no-recurrent-central-collision"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.frontier::no-recurrent-central-collision))) (const r30.scale::no-period))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Frontier"
+name = "Rule30UOR.Frontier.noPeriod_of_noRecurrentCentralCollision"
+
+[[form]]
+id = "no-period-of-no-recurrent-central-collision"
+channel = "math"
+surface = "noperiodofnorecurrentcentralcollision"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name noperiodofnorecurrentcentralcollision) (paren (seq (slot 0))))"

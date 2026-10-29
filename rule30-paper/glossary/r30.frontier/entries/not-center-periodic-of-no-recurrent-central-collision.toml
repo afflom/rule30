@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-center-periodic-of-no-recurrent-central-collision"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit h (const r30.frontier::no-recurrent-central-collision))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Frontier"
+name = "Rule30UOR.Frontier.not_centerPeriodic_of_noRecurrentCentralCollision"
+
+[[form]]
+id = "not-center-periodic-of-no-recurrent-central-collision"
+channel = "math"
+surface = "notcenterperiodicofnorecurrentcentralcollision"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notcenterperiodicofnorecurrentcentralcollision) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
