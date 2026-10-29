@@ -151,16 +151,27 @@ theorem periodic_unit_defect_forces_near_collision (T P m t : Nat) (hP : 0 < P)
     unit_defect_forces_near_collision_kit (m * P) t r hd hb hb'
   exact ⟨s, by omega, x, by omega, by omega, hcol⟩
 
+/-- The moving left edge gives a quantitative recurrence window. A left defect at
+distance `N + m*P` reaches a unit pair within that many steps; localization then
+takes at most `P` more steps. No recurrence rate is inferred from measured data. -/
+theorem periodic_central_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
+    ∃ t : Nat, N ≤ t ∧ t + 1 ≤ 2 * N + m * P + P ∧
+      CentralCollision (m * P) t (2 * P) := by
+  obtain ⟨r, hr0, hr, hd, _, _⟩ :=
+    exists_unit_defect_and_white_center_of_periodic hP (kit_period hc) m N hm hN
+  obtain ⟨s, hs, hcol⟩ := periodic_unit_defect_forces_near_collision
+    T P m (N + (r - 1)) hP hm hc (by omega) hd
+  exact ⟨N + (r - 1) + s, by omega, by omega, hcol⟩
+
 /-- A hypothetical periodic center forces collision sources arbitrarily late in a
 fixed central strip. They cannot all escape with the moving cone edges. -/
 theorem periodic_central_collisions (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) :
     ∃ t : Nat, N ≤ t ∧ CentralCollision (m * P) t (2 * P) := by
-  have hp := kit_period hc
-  obtain ⟨t, ht, hd⟩ := exists_defect_true_of_periodic ⟨T, P, hP, hp⟩
-    (m * P) (Nat.mul_pos hm hP) (-1) (by decide) (max T N)
-  obtain ⟨s, hs, hcol⟩ := periodic_unit_defect_forces_near_collision T P m t hP hm hc (by omega) hd
-  exact ⟨t + s, by omega, hcol⟩
+  obtain ⟨t, ht, _, hcol⟩ := periodic_central_collision_window
+    T P m (max T N) hP hm hc (by omega)
+  exact ⟨t, by omega, hcol⟩
 
 private theorem finite_recurrent_choice (f : Nat → Nat → Prop) (n : Nat) :
     (∀ N : Nat, ∃ t : Nat, N ≤ t ∧ ∃ i : Nat, i < n ∧ f i t) →

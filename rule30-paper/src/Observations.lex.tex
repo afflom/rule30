@@ -95,6 +95,14 @@ Close the goal with \(\lexeme{r30.observation::periodic-unit-defect-forces-near-
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{periodic-central-collision-window}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + P ∧ centralcollision(m * P, t, 2 * P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-central-collision-window}(T, P, m, N)\).
+\end{proof}
+\end{theorem}
+
 \begin{theorem}{periodic-central-collisions}
 \allowaxioms{Classical.choice;Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then there exists a natural number \(t\) such that \(N ≤ t ∧ centralcollision(m * P, t, 2 * P)\).

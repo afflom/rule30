@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-central-collision-window"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit N (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit hN (app (const lexlean.std.nat::le) (local T) (local N)))) (app (const lexlean.core::exists-op) (lam ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local N) (local t)) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local N)) (app (const lexlean.std.nat::mul) (local m) (local P))) (local P))) (app (const r30.observation::central-collision) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t) (app (const lexlean.std.nat::mul) (nat 2) (local P)))))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.periodic_central_collision_window"
+
+[[form]]
+id = "periodic-central-collision-window"
+channel = "math"
+surface = "periodiccentralcollisionwindow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiccentralcollisionwindow) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

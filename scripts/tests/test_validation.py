@@ -33,6 +33,8 @@ class SnapshotHookTests(unittest.TestCase):
         self.env.pop("ALLOW_NON_LEXLEAN_AUTHORING", None)
         self.env["PATH"] = str(tools) + os.pathsep + self.env["PATH"]
         self.env["LEXLEAN_BIN"] = str(self.compiler)
+        self.env["ELAN_TOOLCHAIN"] = "caller-override-must-not-reach-build"
+        self.env["MAKEFLAGS"] = "--dry-run"
         self.env["VALIDATION_COUNTER"] = str(self.base / "counter")
         self.git("init", "-q")
         self.git("config", "user.name", "Validation Test")
@@ -52,6 +54,7 @@ class SnapshotHookTests(unittest.TestCase):
 from pathlib import Path
 p = Path(os.environ["VALIDATION_COUNTER"])
 p.write_text(p.read_text() + "run\\n" if p.exists() else "run\\n")
+assert "ELAN_TOOLCHAIN" not in os.environ
 assert "FAIL" not in Path("rule30-paper/src/Observations.lex.tex").read_text()
 ''')
         self.git("add", ".")

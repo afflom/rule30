@@ -141,6 +141,24 @@ in that fixed strip. Finite choice strengthens it to `periodic_recurrent_central
 one fixed column of the strip, distinct from `-1`, has nonzero collision arbitrarily late.
 The radius is independent of the time, transient, and period multiplier.
 
+`periodic_central_collision_window` makes this recurrence quantitative using the seed's
+moving left edge. For every `N >= T` and `m > 0`, a collision for lag `m*P` occurs at a time
+`t` satisfying
+
+    N <= t < 2*N + m*P + P,
+
+still inside `[-2P,2P]`. At time `N`, the left-edge defect has distance `N+m*P` from the
+center. The proved transport theorem produces a unit defect within `N+m*P-1` steps;
+localization takes at most `P` further steps. The qualitative recurrence theorem now follows
+from this finite window bound, without invoking nonzero-column defect recurrence. This is
+an exact consequence of the seed and dynamics, with no measured speed or gap premise.
+
+The newer canonical interface equivalences identify the remaining obstruction precisely:
+`NoRecurrentCentralCollision` is equivalent to `Scale.NoPeriod` and to Problem 1. Those
+equivalences do not prove the obstruction; in the reverse direction the periodic-center
+premise is impossible by assumption. The quantitative result above supplies a stronger
+necessary consequence of that premise, not its refutation.
+
 This rules out explaining all collision recurrence solely by sources escaping along the
 moving edges. It does not refute a periodic center: the sources are precisely what can
 maintain cancellation, and the finite central strip receives inputs from outside. No

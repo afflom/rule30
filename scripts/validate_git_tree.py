@@ -46,10 +46,15 @@ def main():
     # commands in the snapshot (including regression-test fixture repositories).
     for name in output("git", "rev-parse", "--local-env-vars").splitlines():
         env.pop(name, None)
-    env["ELAN_TOOLCHAIN"] = toolchain
+    # Match CI: each workspace selects its checked-in toolchain. A caller's
+    # ELAN_TOOLCHAIN must not hide an incompatible bridge/project toolchain.
+    env.pop("ELAN_TOOLCHAIN", None)
+    for name in ("MAKEFLAGS", "MFLAGS", "MAKEOVERRIDES"):
+        env.pop(name, None)
     env["LEXLEAN_BIN"] = compiler
-    lean_version = output("lean", "--version", env=env)
-    lake_version = output("lake", "--version", env=env)
+    version_env = dict(env, ELAN_TOOLCHAIN=toolchain)
+    lean_version = output("lean", "--version", env=version_env)
+    lake_version = output("lake", "--version", env=version_env)
     digest = hashlib.sha256()
     for item in (tree, toolchain, lean_version, lake_version, version):
         digest.update(item.encode() + b"\0")
