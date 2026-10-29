@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-adjacent-defect"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.leftAdjacentDefect"
+
+[[form]]
+id = "left-adjacent-defect"
+channel = "math"
+surface = "leftadjacentdefect"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftadjacentdefect) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

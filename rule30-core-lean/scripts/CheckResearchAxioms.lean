@@ -5,6 +5,7 @@ import Rule30UOR.Collision
 import Rule30UOR.DefectSource
 import Rule30UOR.DefectFront
 import Rule30UOR.MaskedObservation
+import Rule30UOR.CentralCollision
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -31,7 +32,8 @@ elab "#check_research_axioms" : command => do
         (`Rule30UOR.Collision).isPrefixOf name ||
         (`Rule30UOR.DefectSource).isPrefixOf name ||
         (`Rule30UOR.DefectFront).isPrefixOf name ||
-        (`Rule30UOR.MaskedObservation).isPrefixOf name then
+        (`Rule30UOR.MaskedObservation).isPrefixOf name ||
+        (`Rule30UOR.CentralCollision).isPrefixOf name then
       if let .thmInfo _ := info then
         let axioms ← collectAxioms name
         for axiomName in axioms do

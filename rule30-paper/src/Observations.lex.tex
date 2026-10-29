@@ -75,4 +75,41 @@ Close the goal with \(\lexeme{r30.observation::information-bound-audit}(n, t, w,
 \end{theorem}
 
 \end{section}
+
+\begin{section}{central-collisions}
+\heading{Central collision recurrence}
+
+\begin{theorem}{unit-defect-forces-near-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(r\), if \(leftadjacentdefect(Q, t) = true\), then if \(center(t + r) = true\), then if \(center((t + r) + Q) = true\), then \(nearcollision(Q, t, r + 1, 2 * (r + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::unit-defect-forces-near-collision}(Q, t, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-unit-defect-forces-near-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(leftadjacentdefect(m * P, t) = true\), then \(nearcollision(m * P, t, P, 2 * P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-unit-defect-forces-near-collision}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-central-collisions}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then there exists a natural number \(t\) such that \(N ≤ t ∧ centralcollision(m * P, t, 2 * P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-central-collisions}(T, P, m, N)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-recurrent-central-column}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentcentralcollision(m * P, 2 * P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-recurrent-central-column}(T, P, m)\).
+\end{proof}
+\end{theorem}
+
+\end{section}
 \end{lexlean}

@@ -124,6 +124,29 @@ values and their coupling to the seed.
 `information_bound_audit` separately proves that `n < (w+1)*P` already implies the
 numerical edge inequality, so that inequality alone cannot provide the missing contradiction.
 
+### Central localization of collision sources (2026-10-29)
+
+`Rule30UOR.CentralCollision` adds a seed-specific localization consequence to the same
+LexLean supplement. If `defect Q t (-1)` is true and both compared histories have a black
+center at `t+r`, then one history has a black ancestor in `[-r,r]` incompatible with the
+paired color at `-1`. The finite XOR-rigidity rectangle then forces a collision within
+`r+1` steps and radius `2(r+1)` (`unit_defect_forces_near_collision`). These are finite
+premises with actual examples; the local theorem does not assume a periodic center.
+
+Under `CenterPeriodic T P`, black centers recur within `P` steps (otherwise the actual
+center would be eventually white). For each positive `m`, a unit defect for lag `m*P`
+therefore forces a collision within `P` steps in `[-2P,2P]`. The previously proved
+recurrence of unit defects gives `periodic_central_collisions`: arbitrarily late sources
+in that fixed strip. Finite choice strengthens it to `periodic_recurrent_central_column`:
+one fixed column of the strip, distinct from `-1`, has nonzero collision arbitrarily late.
+The radius is independent of the time, transient, and period multiplier.
+
+This rules out explaining all collision recurrence solely by sources escaping along the
+moving edges. It does not refute a periodic center: the sources are precisely what can
+maintain cancellation, and the finite central strip receives inputs from outside. No
+periodicity or finite-state closure of its source signal follows. A seed-specific
+obstruction to sustaining that central cancellation is still unproved.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

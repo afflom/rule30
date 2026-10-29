@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-central-collisions"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit N (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P)))) (app (const lexlean.core::exists-op) (lam ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local N) (local t)) (app (const r30.observation::central-collision) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t) (app (const lexlean.std.nat::mul) (nat 2) (local P))))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.periodic_central_collisions"
+
+[[form]]
+id = "periodic-central-collisions"
+channel = "math"
+surface = "periodiccentralcollisions"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiccentralcollisions) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

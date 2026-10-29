@@ -7,7 +7,7 @@ pair evolution. See the [current proof frontier](rule30-lexlean/STRATEGY.md#curr
 Run `make check-research` to build and independently kernel-check these additions and enforce
 the allowed axiom set. They are not yet incorporated into the release PDFs described below.
 The additional LexLean entrypoint [Observations.lex.tex](rule30-paper/src/Observations.lex.tex)
-contains the checked masked-observation and information-bound results; packaging renders
+contains the checked masked-observation, information-bound, and central-collision recurrence results; packaging renders
 it separately as `dist/Observations.pdf`.
 
 Kernel-checked [LexLean](https://github.com/afflom) and Lean 4 formalization of Wolfram's **Rule 30** cellular automaton (`Rule 30 Prize Problem 1` program) using the UOR Atlas, 2-adic Witt / carry-algebra coordinates, left-diagonal doubling theory, and driven right-half (`kit [33]`) spatio-temporal self-similarity.
