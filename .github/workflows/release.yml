@@ -20,24 +20,8 @@ jobs:
       - name: Set up proof toolchain
         uses: ./.github/actions/setup-proof-tools
 
-      - name: Test authoring policy and build tooling
-        run: make check-tooling
-
-      - name: Build rule30-core-lean and run research gate (audits + leanchecker)
-        run: make check-research
-
-      - name: Build bridge package
-        run: make bridge
-
-      - name: Verify LexLean core and paper
-        run: |
-          make lexlean LEXLEAN="$LEXLEAN_BIN"
-          git diff --exit-code -- rule30-lexlean/lexlean.lock rule30-paper/lexlean.lock
-
-      - name: Build PDFs and package LexLean verified artifacts
-        run: |
-          chmod +x scripts/build_release.sh
-          ./scripts/build_release.sh --package-only
+      - name: Run complete acceptance gate (proofs, LexLean, tooling, PDFs)
+        run: make check-ci LEXLEAN="$LEXLEAN_BIN"
 
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v4

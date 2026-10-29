@@ -11,6 +11,9 @@
 # Release staging directory
 dist/
 
+# Repository-local pinned compiler
+/.local/
+
 # LaTeX intermediate files (PDFs and .tex files ARE tracked)
 *.aux
 *.log

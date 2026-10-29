@@ -49,7 +49,7 @@ class HookTests(unittest.TestCase):
         self.git("add", "--", path)
 
     def hook(self, allowed):
-        result = subprocess.run(["bash", str(ROOT / ".githooks/pre-commit")],
+        result = subprocess.run(["bash", str(ROOT / "scripts/check_authoring_policy.sh")],
                                 cwd=self.repo, env=self.env, capture_output=True, text=True)
         self.assertEqual(result.returncode == 0, allowed, result.stderr)
 

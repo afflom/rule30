@@ -1,8 +1,11 @@
-.PHONY: all core check-research check-tooling lexlean pdf bridge release-artifacts hooks clean
+.PHONY: all check-ci core check-research check-tooling lexlean pdf bridge release-artifacts hooks clean
 
-LEXLEAN ?= lexlean
+LEXLEAN ?= $(if $(LEXLEAN_BIN),$(LEXLEAN_BIN),$(if $(wildcard .local/bin/lexlean),$(abspath .local/bin/lexlean),lexlean))
 
 all: core lexlean bridge release-artifacts
+
+check-ci:
+	./scripts/check_ci.sh "$(LEXLEAN)"
 
 core:
 	cd rule30-core-lean && lake build LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build

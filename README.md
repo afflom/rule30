@@ -108,19 +108,40 @@ To enforce this locally, install the repository-managed git hooks:
 make hooks
 ```
 
-The pre-commit hook blocks commits that modify proof-surface host Lean or generated artifacts without accompanying LexLean source changes.
+The pre-commit hook first blocks proof-surface host Lean or generated artifact edits without
+accompanying LexLean source changes, then runs `make check-ci` on a clean snapshot of the
+**staged tree**. This includes tooling tests, Lean builds, research audits and kernel replay,
+the bridge, both LexLean projects, lockfile reproducibility, and PDF packaging. Unstaged fixes
+cannot hide a broken staged source. The pre-push hook checks the actual outgoing trees too.
+Both CI workflows use the same gate. Successful local results are cached under
+`.git/rule30-validation`, keyed by the exact tree, validator, and proof tools; failures are
+never cached. A matching commit/push reuses the successful result.
 Compiler maintenance is the narrow exception: a staged `.github/lexlean-revision` change may
 accompany lockfile edits that change only `compiler_semantics` fingerprints. Proof edits and
 other generated artifacts still require LexLean source changes. Deletions are checked too.
-For exceptional maintenance-only commits, you can bypass once with:
+For exceptional maintenance-only commits, you can bypass the authoring policy once with:
 
 ```bash
 ALLOW_NON_LEXLEAN_AUTHORING=1 git commit ...
 ```
 
-If `lexlean` is installed:
+This override still runs the full validation gate. Hooks can be disabled by Git clients;
+CI remains the independent remote check.
+
+Install the compiler pinned in `.github/lexlean-revision` locally:
+
 ```bash
-make LEXLEAN=/path/to/lexlean all
+cargo install --locked --git https://github.com/UOR-Foundation/LexLean.git \
+  --rev "$(cat .github/lexlean-revision)" --root "$PWD/.local" lexlean
+make check-ci
+```
+
+Alternatively set `LEXLEAN_BIN=/absolute/path/to/lexlean` or
+`git config rule30.lexlean /absolute/path/to/lexlean` for hooks. The hook rejects compilers
+whose semantics do not match the staged locks. `.local/` is ignored. For manual builds:
+
+```bash
+make check-ci LEXLEAN=/path/to/lexlean
 ```
 
 Main CI and releases install the compiler revision in `.github/lexlean-revision`, including

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+cd "$ROOT_DIR"
+while read -r local_ref local_oid remote_ref remote_oid; do
+  # Deleting a remote ref introduces no tree to validate.
+  if [[ "$local_oid" =~ ^0+$ ]]; then continue; fi
+  python3 ./scripts/validate_git_tree.py "$local_oid"
+done
