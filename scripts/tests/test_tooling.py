@@ -245,6 +245,14 @@ class PackagingTests(unittest.TestCase):
         (self.repo / "rule30-lexlean/lexlean.lock").write_text('compiler_semantics = "different"\n')
         self.run_package(False, "--package-only")
 
+    def test_observation_supplement_is_packaged_when_present(self):
+        modules = self.repo / "rule30-paper/verified-latest" / ("f" * 64) / "modules/Rule30Paper"
+        for extension in ("lean", "tex"):
+            (modules / ("Observations." + extension)).write_text("supplement")
+        self.run_package(True, "--package-only")
+        for extension in ("pdf", "lean", "tex"):
+            self.assertTrue((self.repo / "dist" / ("Observations." + extension)).is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

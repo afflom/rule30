@@ -9,7 +9,7 @@ core:
 
 check-research: core
 	cd rule30-core-lean && lake env lean scripts/AuditVacuous.lean && lake env lean scripts/CheckResearchAxioms.lean
-	cd rule30-core-lean && lake env "$$(lake env lean --print-prefix)/bin/leanchecker" Rule30UOR.Interfaces Rule30UOR.TemporalDefect Rule30UOR.WittDefect Rule30UOR.Collision Rule30UOR.DefectSource Rule30UOR.DefectFront
+	cd rule30-core-lean && lake env "$$(lake env lean --print-prefix)/bin/leanchecker" Rule30UOR.Interfaces Rule30UOR.TemporalDefect Rule30UOR.WittDefect Rule30UOR.Collision Rule30UOR.DefectSource Rule30UOR.DefectFront Rule30UOR.MaskedObservation
 
 lexlean:
 	./scripts/verify_lexlean.sh "$(LEXLEAN)"

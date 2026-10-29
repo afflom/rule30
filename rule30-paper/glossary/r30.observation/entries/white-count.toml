@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "white-count"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.whiteCount"
+
+[[form]]
+id = "white-count"
+channel = "math"
+surface = "whitecount"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name whitecount) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

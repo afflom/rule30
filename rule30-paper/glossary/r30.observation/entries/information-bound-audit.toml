@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "information-bound-audit"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit w (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hn (app (const lexlean.std.nat::lt) (local n) (app (const lexlean.std.nat::mul) (app (const lexlean.std.nat::add) (local w) (nat 1)) (local P))))) (app (const lexlean.std.nat::lt) (local n) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local w)) (local P))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.information_bound_audit"
+
+[[form]]
+id = "information-bound-audit"
+channel = "math"
+surface = "informationboundaudit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name informationboundaudit) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

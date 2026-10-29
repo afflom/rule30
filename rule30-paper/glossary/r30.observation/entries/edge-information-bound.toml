@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "edge-information-bound"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t)))) (app (const lexlean.std.nat::lt) (local n) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (app (const r30.observation::white-count) (local t) (local n))) (local P))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.edge_information_bound"
+
+[[form]]
+id = "edge-information-bound"
+channel = "math"
+surface = "edgeinformationbound"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name edgeinformationbound) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

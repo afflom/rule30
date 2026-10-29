@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "white-count-white-step"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (const lexlean.std.bool::false)))) (app (const lexlean.core::eq) (app (const r30.observation::white-count) (local t) (app (const lexlean.std.nat::add) (local n) (nat 1))) (app (const lexlean.std.nat::add) (app (const r30.observation::white-count) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local n)) (nat 1)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.white_count_white_step_core"
+
+[[form]]
+id = "white-count-white-step"
+channel = "math"
+surface = "whitecountwhitestep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name whitecountwhitestep) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "prefix-agreement-iff-white-trace"
+category = "proof-constant"
+signature = "(pi ((explicit t1 (const lexlean.std.nat::nat)) (explicit t2 (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.observation::center-window-agree) (local t1) (local t2) (local n)))) (app (const lexlean.core::iff) (app (const r30.observation::left-prefix-agree) (local t1) (local t2) (local n)) (app (const r30.observation::white-trace-agree) (local t1) (local t2) (local n)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.prefix_agreement_iff_white_trace"
+
+[[form]]
+id = "prefix-agreement-iff-white-trace"
+channel = "math"
+surface = "prefixagreementiffwhitetrace"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name prefixagreementiffwhitetrace) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

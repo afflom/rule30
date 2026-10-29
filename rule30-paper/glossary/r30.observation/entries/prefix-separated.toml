@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "prefix-separated"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit M (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.PrefixSeparated"
+
+[[form]]
+id = "prefix-separated"
+channel = "math"
+surface = "prefixseparated"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name prefixseparated) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "compressed-prefix-repeat"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t)))) (app (const lexlean.core::exists-op) (lam ((explicit a (const lexlean.std.nat::nat))) (app (const lexlean.core::exists-op) (lam ((explicit b (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::lt) (local a) (local b)) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local b) (app (const r30.scale::twopow) (app (const r30.observation::white-count) (local t) (local n)))) (app (const r30.observation::left-prefix-agree) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local a) (local P))) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local b) (local P))) (local n))))))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.compressed_prefix_repeat"
+
+[[form]]
+id = "compressed-prefix-repeat"
+channel = "math"
+surface = "compressedprefixrepeat"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name compressedprefixrepeat) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

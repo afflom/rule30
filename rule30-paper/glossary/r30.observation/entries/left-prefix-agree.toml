@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-prefix-agree"
+category = "function"
+signature = "(pi ((explicit t1 (const lexlean.std.nat::nat)) (explicit t2 (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.LeftPrefixAgree"
+
+[[form]]
+id = "left-prefix-agree"
+channel = "math"
+surface = "leftprefixagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftprefixagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

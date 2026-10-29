@@ -58,6 +58,9 @@ jobs:
             dist/Paper.tex
             dist/Core.lean
             dist/Core.tex
+            dist/Observations.pdf
+            dist/Observations.lean
+            dist/Observations.tex
             dist/paper-attestation-*.json
             dist/core-attestation-*.json
             dist/paper-lexlean.lock

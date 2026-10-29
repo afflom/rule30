@@ -1,0 +1,78 @@
+\begin{lexlean}{Observations}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\useglossary{r30.doc@1.0.0}
+\useglossary{r30.time@1.0.0}
+\useglossary{r30.scale@1.0.0}
+\useglossary{r30.observation@1.0.0}
+\title{Masked observations}
+
+\begin{section}{masked-observations}
+\heading{Masked observations}
+
+\begin{theorem}{white-count-zero}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\), \(whitecount(t, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::white-count-zero}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{white-count-black-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\) and natural number \(n\), if \(center(t) = true\), then \(whitecount(t, n + 1) = whitecount(t + 1, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::white-count-black-step}(t, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{white-count-white-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\) and natural number \(n\), if \(center(t) = false\), then \(whitecount(t, n + 1) = whitecount(t + 1, n) + 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::white-count-white-step}(t, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{prefix-agreement-iff-white-trace}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t1\) and natural number \(t2\) and natural number \(n\), if \(centerwindowagree(t1, t2, n)\), then \(leftprefixagree(t1, t2, n) ↔ whitetraceagree(t1, t2, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::prefix-agreement-iff-white-trace}(t1, t2, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{compressed-prefix-repeat}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then there exists a natural number \(a\) such that there exists a natural number \(b\) such that \(a < b ∧ b ≤ twopow(whitecount(t, n)) ∧ leftprefixagree(t + a * P, t + b * P, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::compressed-prefix-repeat}(T, P, t, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{separated-prefix-bound}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\) and natural number \(M\), if \(0 < P\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(prefixseparated(t, P, n, M)\), then \(M ≤ twopow(whitecount(t, n))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::separated-prefix-bound}(T, P, t, n, M)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{edge-information-bound}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(n < t + twopow(whitecount(t, n)) * P\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::edge-information-bound}(T, P, t, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{information-bound-audit}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(n\) and natural number \(t\) and natural number \(w\) and natural number \(P\), if \(n < (w + 1) * P\), then \(n < t + twopow(w) * P\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::information-bound-audit}(n, t, w, P)\).
+\end{proof}
+\end{theorem}
+
+\end{section}
+\end{lexlean}

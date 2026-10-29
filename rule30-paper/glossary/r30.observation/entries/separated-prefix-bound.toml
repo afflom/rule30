@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "separated-prefix-bound"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit M (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hsep (app (const r30.observation::prefix-separated) (local t) (local P) (local n) (local M)))) (app (const lexlean.std.nat::le) (local M) (app (const r30.scale::twopow) (app (const r30.observation::white-count) (local t) (local n))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.separated_prefix_bound"
+
+[[form]]
+id = "separated-prefix-bound"
+channel = "math"
+surface = "separatedprefixbound"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name separatedprefixbound) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

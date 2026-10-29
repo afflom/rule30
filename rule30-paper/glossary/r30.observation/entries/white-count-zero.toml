@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "white-count-zero"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::white-count) (local t) (nat 0)) (nat 0)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.MaskedObservation"
+name = "Rule30UOR.MaskedObservation.white_count_zero"
+
+[[form]]
+id = "white-count-zero"
+channel = "math"
+surface = "whitecountzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name whitecountzero) (paren (slot 0)))"

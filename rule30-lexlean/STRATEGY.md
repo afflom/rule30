@@ -91,6 +91,39 @@ unsatisfiable universal clean-window upgrade `PrimitiveDoublesCleanWindowFromWit
 removed during cleanup so `DefectFront` contains only unconditional transport theorems and
 satisfiable consequences of a periodic center.
 
+### Masked observation and exact information bound (2026-10-29)
+
+The standalone LexLean source `rule30-paper/src/Observations.lex.tex` now states the new
+observation theorems, with host proofs in `Rule30UOR.MaskedObservation` and vocabulary owned
+by the acyclic `r30.observation` package. Both paper entrypoints are verified by the normal
+pipeline; the supplement is rendered as `Observations.pdf` during packaging.
+
+`CenterWindowAgree t1 t2 n` means center agreement at offsets `0..n`.
+`LeftPrefixAgree t1 t2 n` means row agreement on columns `-1..-n`.
+`WhiteTraceAgree t1 t2 n` compares column `-1` at offsets `0..n-1` only where the common
+center is white. `prefix_agreement_iff_white_trace` proves the exact equivalence of the latter
+two agreements under the first: light-cone determination gives one direction, and black
+center times fix column `-1` from the next center value in the other.
+
+`whiteCount t n = W(t,n)` counts the white center times in that window. The compressed
+trace is a Boolean list of exactly that length. Under `CenterPeriodic T P`, all samples
+`t + a*P` (`t >= T`) use the same mask. `separated_prefix_bound` bounds every separated
+family of width-`n` prefixes by `2^W(t,n)`. `compressed_prefix_repeat` therefore produces
+`a < b <= 2^W(t,n)` whose left prefixes of width `n` agree. It uses only pigeonhole, not
+independence or a halving assumption. Reading the later sample's moving left edge against
+the earlier sample gives `edge_information_bound`:
+
+    n < t + P * 2^W(t,n).
+
+This is a proved necessary constraint on a hypothetical periodic center. It does not
+exclude periodic words containing white phases: their white counts can grow linearly, so
+the exponential upper bound is compatible with the moving edge. No lower complexity
+bound, death clock after the available initial bits, or recurrence of a left-heavy profile
+has been established. The outstanding step still concerns the actual nonlinear carry
+values and their coupling to the seed.
+`information_bound_audit` separately proves that `n < (w+1)*P` already implies the
+numerical edge inequality, so that inequality alone cannot provide the missing contradiction.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

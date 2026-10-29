@@ -3,7 +3,7 @@ name = "rule30-paper"
 language = "1.2"
 module_prefix = "Rule30Paper"
 source_roots = ["src"]
-entrypoints = ["src/Paper.lex.tex"]
+entrypoints = ["src/Observations.lex.tex", "src/Paper.lex.tex"]
 build_root = ".lexlean"
 lockfile = "lexlean.lock"
 lean_workspace = "."
@@ -40,6 +40,11 @@ path = "glossary/r30.known"
 package = "r30.local"
 kind = "path"
 path = "glossary/r30.local"
+
+[[lexicon_source]]
+package = "r30.observation"
+kind = "path"
+path = "glossary/r30.observation"
 
 [[lexicon_source]]
 package = "r30.real"

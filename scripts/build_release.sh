@@ -86,6 +86,9 @@ PAPER_DIR="$STAGING_DIR/paper/$PAPER_ATTEST"
 echo "==> Packaging verified Core ($CORE_ATTEST) and Paper ($PAPER_ATTEST)..."
 compile_tex "$CORE_DIR/modules/Rule30UOR" Core.tex
 compile_tex "$PAPER_DIR/modules/Rule30Paper" Paper.tex
+if [[ -f "$PAPER_DIR/modules/Rule30Paper/Observations.tex" ]]; then
+  compile_tex "$PAPER_DIR/modules/Rule30Paper" Observations.tex
+fi
 find "$STAGING_DIR" -type f \( -name '*.aux' -o -name '*.log' -o -name '*.out' \) -delete
 
 rm -rf "$DIST_DIR"
@@ -98,6 +101,11 @@ cp "$CORE_DIR/modules/Rule30UOR/Core.lean" "$DIST_DIR/Core.lean"
 cp "$CORE_DIR/modules/Rule30UOR/Core.tex" "$DIST_DIR/Core.tex"
 cp "$PAPER_DIR/modules/Rule30Paper/Paper.lean" "$DIST_DIR/Paper.lean"
 cp "$PAPER_DIR/modules/Rule30Paper/Paper.tex" "$DIST_DIR/Paper.tex"
+if [[ -f "$PAPER_DIR/modules/Rule30Paper/Observations.pdf" ]]; then
+  for extension in pdf lean tex; do
+    cp "$PAPER_DIR/modules/Rule30Paper/Observations.$extension" "$DIST_DIR/Observations.$extension"
+  done
+fi
 cp "$CORE_DIR/attestation.json" "$DIST_DIR/core-attestation-${CORE_ATTEST:0:12}.json"
 cp "$PAPER_DIR/attestation.json" "$DIST_DIR/paper-attestation-${PAPER_ATTEST:0:12}.json"
 cp "$ROOT_DIR/rule30-lexlean/lexlean.lock" "$DIST_DIR/core-lexlean.lock"
