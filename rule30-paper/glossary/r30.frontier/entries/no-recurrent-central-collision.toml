@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-recurrent-central-collision"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.NoRecurrentCentralCollision"
+
+[[form]]
+id = "no-recurrent-central-collision"
+channel = "math"
+surface = "norecurrentcentralcollision"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name norecurrentcentralcollision)"

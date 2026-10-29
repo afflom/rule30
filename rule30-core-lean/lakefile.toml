@@ -12,4 +12,4 @@ roots = ["Ruliology.CellularAutomata.Rule30Jen", "Ruliology.CellularAutomata.Rul
 
 [[lean_lib]]
 name = "Rule30UOR"
-roots = ["Rule30UOR.Core", "Rule30UOR.Kit", "Rule30UOR.Intent", "Rule30UOR.ZeroDiagonals", "Rule30UOR.CompilePoints", "Rule30UOR.Right", "Rule30UOR.Fixed", "Rule30UOR.Project", "Rule30UOR.Scale", "Rule30UOR.Rational", "Rule30UOR.Interfaces", "Rule30UOR.TemporalDefect", "Rule30UOR.WittDefect", "Rule30UOR.Collision", "Rule30UOR.DefectSource", "Rule30UOR.DefectFront", "Rule30UOR.MaskedObservation", "Rule30UOR.CentralCollision"]
+roots = ["Rule30UOR.Core", "Rule30UOR.Kit", "Rule30UOR.Intent", "Rule30UOR.ZeroDiagonals", "Rule30UOR.CompilePoints", "Rule30UOR.Right", "Rule30UOR.Fixed", "Rule30UOR.Project", "Rule30UOR.Scale", "Rule30UOR.Rational", "Rule30UOR.Interfaces", "Rule30UOR.TemporalDefect", "Rule30UOR.WittDefect", "Rule30UOR.Collision", "Rule30UOR.DefectSource", "Rule30UOR.DefectFront", "Rule30UOR.MaskedObservation", "Rule30UOR.CentralCollision", "Rule30UOR.Frontier"]

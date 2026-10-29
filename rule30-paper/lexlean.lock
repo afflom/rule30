@@ -1,7 +1,7 @@
 spec = "lexlean/lock/2"
 language = "1.2"
 compiler_semantics = "2a0617a236367ffb610a9b5957fa21759aec43c2e2bbd5c5ed71b28e0b0bc7e3"
-project_config_sha256 = "b23172686a21fbd46879a73dcdd5fbbae8fda83e1b97a7d45e65e9d13b84ae15"
+project_config_sha256 = "771ea45c4c8bb3426d115cc256b252d11018324f8d536e1616b96fea6fb051cb"
 lean_toolchain = "leanprover/lean4:v4.32.1"
 
 [[workspace_file]]
@@ -65,6 +65,16 @@ revision = "none"
 tree_sha256 = "8cbd17a0091ce6230ecbf927bddf12b80dd3243c0ada4fa17154808e4809a167"
 manifest_sha256 = "710ae70a43f0d0806f8beca11245adef7d4a316b89c37f7fed94ee6608ccb048"
 imports = ["lexlean.core@1.2.0", "lexlean.std.nat@1.2.0"]
+
+[[package]]
+id = "r30.frontier"
+version = "1.0.0"
+kind = "path"
+source = "glossary/r30.frontier"
+revision = "none"
+tree_sha256 = "ded448c3513cdf2f7b713a92c0bfa1c9cd49ee785b274c0aa76bfaa1f74b04ff"
+manifest_sha256 = "2fb190f9189904fbcf1dfc392cd8bb7c8b565cbe45c28d28bd99b179e224d110"
+imports = ["lexlean.core@1.2.0", "r30.joint@1.0.0", "r30.scale@1.0.0", "r30.witt@1.0.0"]
 
 [[package]]
 id = "r30.joint"

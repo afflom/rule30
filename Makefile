@@ -1,4 +1,4 @@
-.PHONY: all check-ci core check-research check-tooling lexlean pdf bridge release-artifacts hooks clean
+.PHONY: all check-ci core check-research check-research-coverage check-tooling lexlean pdf bridge release-artifacts hooks clean
 
 LEXLEAN ?= $(if $(LEXLEAN_BIN),$(LEXLEAN_BIN),$(if $(wildcard .local/bin/lexlean),$(abspath .local/bin/lexlean),lexlean))
 
@@ -10,9 +10,12 @@ check-ci:
 core:
 	cd rule30-core-lean && lake build LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build
 
-check-research: core
+check-research-coverage:
+	python3 scripts/check_research_coverage.py
+
+check-research: check-research-coverage core
 	cd rule30-core-lean && lake env lean scripts/AuditVacuous.lean && lake env lean scripts/CheckResearchAxioms.lean
-	cd rule30-core-lean && lake env "$$(lake env lean --print-prefix)/bin/leanchecker" Rule30UOR.Interfaces Rule30UOR.TemporalDefect Rule30UOR.WittDefect Rule30UOR.Collision Rule30UOR.DefectSource Rule30UOR.DefectFront Rule30UOR.MaskedObservation Rule30UOR.CentralCollision
+	cd rule30-core-lean && modules="$$(python3 ../scripts/check_research_coverage.py --modules)" && lake env "$$(lake env lean --print-prefix)/bin/leanchecker" $$modules
 
 lexlean:
 	./scripts/verify_lexlean.sh "$(LEXLEAN)"

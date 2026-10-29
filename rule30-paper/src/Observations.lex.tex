@@ -2,6 +2,7 @@
 \useglossary{lexlean.std.bool@1.2.0}
 \useglossary{lexlean.std.nat@1.2.0}
 \useglossary{r30.doc@1.0.0}
+\useglossary{r30.frontier@1.0.0}
 \useglossary{r30.time@1.0.0}
 \useglossary{r30.scale@1.0.0}
 \useglossary{r30.observation@1.0.0}
@@ -116,6 +117,30 @@ Close the goal with \(\lexeme{r30.observation::periodic-central-collisions}(T, P
 For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentcentralcollision(m * P, 2 * P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-recurrent-central-column}(T, P, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-period-iff-no-recurrent-central-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(noperiod ↔ norecurrentcentralcollision\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.frontier::no-period-iff-no-recurrent-central-collision}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-row-center-period-iff-no-recurrent-central-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(norowcenterperiod ↔ norecurrentcentralcollision\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.frontier::no-row-center-period-iff-no-recurrent-central-collision}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem-one-iff-no-recurrent-central-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(problemone ↔ norecurrentcentralcollision\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.frontier::problem-one-iff-no-recurrent-central-collision}\).
 \end{proof}
 \end{theorem}
 

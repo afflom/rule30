@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem-one-iff-no-recurrent-central-collision"
+category = "proof-constant"
+signature = "(app (const lexlean.core::iff) (const r30.joint::problem-one) (const r30.frontier::no-recurrent-central-collision))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Frontier"
+name = "Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision"
+
+[[form]]
+id = "problem-one-iff-no-recurrent-central-collision"
+channel = "math"
+surface = "problemoneiffnorecurrentcentralcollision"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name problemoneiffnorecurrentcentralcollision)"

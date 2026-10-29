@@ -159,6 +159,12 @@ equivalences do not prove the obstruction; in the reverse direction the periodic
 premise is impossible by assumption. The quantitative result above supplies a stronger
 necessary consequence of that premise, not its refutation.
 
+`Rule30UOR.Frontier` composes those interfaces with `Interfaces.NoRowCenterPeriod`, the
+integer-encoded center condition. The acyclic `r30.frontier` glossary now owns the composition
+statements, exported as checked theorems in `Observations.lex.tex`. This layer introduces no
+new dynamical assertion. In particular, its implication toward Problem 1 still requires a
+proof of `NoRecurrentCentralCollision`; an equivalence alone supplies no such proof.
+
 This rules out explaining all collision recurrence solely by sources escaping along the
 moving edges. It does not refute a periodic center: the sources are precisely what can
 maintain cancellation, and the finite central strip receives inputs from outside. No

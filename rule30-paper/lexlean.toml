@@ -27,6 +27,11 @@ kind = "path"
 path = "glossary/r30.doc"
 
 [[lexicon_source]]
+package = "r30.frontier"
+kind = "path"
+path = "glossary/r30.frontier"
+
+[[lexicon_source]]
 package = "r30.joint"
 kind = "path"
 path = "glossary/r30.joint"

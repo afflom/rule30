@@ -1,11 +1,22 @@
+import Rule30UOR.CentralCollision
+import Rule30UOR.Collision
+import Rule30UOR.CompilePoints
+import Rule30UOR.Core
+import Rule30UOR.DefectFront
+import Rule30UOR.DefectSource
+import Rule30UOR.Fixed
+import Rule30UOR.Frontier
+import Rule30UOR.Intent
 import Rule30UOR.Interfaces
+import Rule30UOR.Kit
+import Rule30UOR.MaskedObservation
+import Rule30UOR.Project
+import Rule30UOR.Rational
+import Rule30UOR.Right
+import Rule30UOR.Scale
 import Rule30UOR.TemporalDefect
 import Rule30UOR.WittDefect
-import Rule30UOR.Collision
-import Rule30UOR.DefectSource
-import Rule30UOR.DefectFront
-import Rule30UOR.MaskedObservation
-import Rule30UOR.CentralCollision
+import Rule30UOR.ZeroDiagonals
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -27,13 +38,7 @@ elab "#check_research_axioms" : command => do
     ``Rule30UOR.Interfaces.problem1_iff_engine_input]
   let mut checked := 0
   for (name, info) in env.constants.toList do
-    if audits.contains name || (`Rule30UOR.TemporalDefect).isPrefixOf name ||
-        (`Rule30UOR.WittDefect).isPrefixOf name ||
-        (`Rule30UOR.Collision).isPrefixOf name ||
-        (`Rule30UOR.DefectSource).isPrefixOf name ||
-        (`Rule30UOR.DefectFront).isPrefixOf name ||
-        (`Rule30UOR.MaskedObservation).isPrefixOf name ||
-        (`Rule30UOR.CentralCollision).isPrefixOf name then
+    if (`Rule30UOR).isPrefixOf name then
       if let .thmInfo _ := info then
         let axioms ← collectAxioms name
         for axiomName in axioms do
@@ -41,7 +46,7 @@ elab "#check_research_axioms" : command => do
             throwError "{name} depends on unapproved axiom {axiomName}"
         checked := checked + 1
   unless checked > audits.size do
-    throwError "Temporal-defect theorems were not found"
+    throwError "Rule30UOR theorems were not found"
   logInfo m!"Checked {checked} research theorems; all axioms are in propext, Classical.choice, Quot.sound."
 
 #check_research_axioms

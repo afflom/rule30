@@ -5,10 +5,13 @@ are unchanged. Subsequent host Lean work audits the refutation engines and forma
 temporal differences, their aperiodic compensation constraint, and a physically aligned Witt
 pair evolution. See the [current proof frontier](rule30-lexlean/STRATEGY.md#current-proof-frontier-2026-10-28).
 Run `make check-research` to build and independently kernel-check these additions and enforce
-the allowed axiom set. They are not yet incorporated into the release PDFs described below.
+the allowed axiom set across every `Rule30UOR` theorem. Module coverage is checked before
+building: every host source must be a Lake root and an axiom-audit import, and kernel replay
+uses that same root list. They are not yet incorporated into the release PDFs described below.
 The additional LexLean entrypoint [Observations.lex.tex](rule30-paper/src/Observations.lex.tex)
 contains the checked masked-observation, information-bound, and central-collision recurrence results; packaging renders
-it separately as `dist/Observations.pdf`.
+it separately as `dist/Observations.pdf`. Its `r30.frontier` vocabulary also exports the exact
+equivalences between Problem 1, the Witt center condition, and the collision obstruction.
 
 Kernel-checked [LexLean](https://github.com/afflom) and Lean 4 formalization of Wolfram's **Rule 30** cellular automaton (`Rule 30 Prize Problem 1` program) using the UOR Atlas, 2-adic Witt / carry-algebra coordinates, left-diagonal doubling theory, and driven right-half (`kit [33]`) spatio-temporal self-similarity.
 
@@ -116,6 +119,8 @@ cannot hide a broken staged source. The pre-push hook checks the actual outgoing
 Both CI workflows use the same gate. Successful local results are cached under
 `.git/rule30-validation`, keyed by the exact tree, validator, and proof tools; failures are
 never cached. A matching commit/push reuses the successful result.
+`make check-research-coverage` provides a quick check that new host modules are included in
+the build, axiom audit, and kernel replay.
 Compiler maintenance is the narrow exception: a staged `.github/lexlean-revision` change may
 accompany lockfile edits that change only `compiler_semantics` fingerprints. Proof edits and
 other generated artifacts still require LexLean source changes. Deletions are checked too.
