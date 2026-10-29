@@ -1,7 +1,6 @@
 module
 
 public import Rule30UOR.DefectSource
-public import Rule30UOR.CompilePoints
 
 /-!
 # Defect fronts: exact rightward transport of temporal disagreement
@@ -22,6 +21,14 @@ window `(x, x + 2k]` reaches `x + k` at time `t + k`. At the center:
 * `right_shield_of_periodic`: a necessary condition under a hypothetical periodic center.
   Every left defect at distance `k` is matched by a right-half defect at distance at most `k`.
   This is a structural consequence, not a refutation: its hypotheses are satisfiable.
+* `defect_succ_of_clean`, `defect_left_front_step`, `defect_pinch_step`: exact 1-step laws at a
+  clean site `p`, showing that left defects enter with coefficient `1` while right defects are
+  gated by `!cell t p`.
+* `rightmost_left_defect_propagates`, `center_white_and_right_defect_of_rightmost_left`,
+  `exists_unit_defect_and_white_center_of_left_defect`: because a clean center column `p = 0`
+  blocks right-half defects from crossing into the left half, the rightmost left-half defect
+  propagates deterministically to `-1` and forces a unit defect pair `(-1, 1)` together with a
+  white center cell.
 -/
 
 @[expose] public section
@@ -108,261 +115,6 @@ theorem problem1_of_leftHeavy_recurrence
   rw [center_defect_zero hc m (t + k) (by omega)] at h1
   contradiction
 
-/--
-Bridge hypothesis for the defect-front route: at every scale `(T, P)` there is a witness time
-carrying both a zero-diagonal doubling certificate and a left-heavy defect profile at period
-multiple `m * P`.
--/
-def ZeroDiagDoublesLeftHeavyRecurrence : Prop :=
-  ∀ T P : Nat, 0 < P →
-    ∃ m z t k : Nat,
-      T ≤ t ∧
-      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
-      Rule30UOR.CompilePoints.DoublesAt (m * P) z ∧
-      LeftHeavy (m * P) t k
-
-/--
-Finer-grained bridge obligation for the same route. It keeps the zero-diagonal/doubling witness,
-and spells the left-heavy profile in component form: distance positivity, a left defect at `-k`,
-and a clean window `(-k, k]`.
--/
-def ZeroDiagDoublesLeftHeavyAssembly : Prop :=
-  ∀ T P : Nat, 0 < P →
-    ∃ m z t k : Nat,
-      T ≤ t ∧
-      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
-      Rule30UOR.CompilePoints.DoublesAt (m * P) z ∧
-      0 < k ∧
-      defect (m * P) t (-(k : Int)) = true ∧
-      (∀ p : Int, -(k : Int) < p → p ≤ (k : Int) → defect (m * P) t p = false)
-
-/--
-The assembly form implies `ZeroDiagDoublesLeftHeavyRecurrence` by repackaging the component
-conditions as `LeftHeavy`.
--/
-theorem zeroDiag_doubles_leftHeavyRecurrence_of_assembly
-    (h : ZeroDiagDoublesLeftHeavyAssembly) :
-    ZeroDiagDoublesLeftHeavyRecurrence := by
-  intro T P hP
-  obtain ⟨m, z, t, k, ht, hz, hd, hk, hdef, hclean⟩ := h T P hP
-  exact ⟨m, z, t, k, ht, hz, hd, ⟨hk, hdef, hclean⟩⟩
-
-/--
-Concrete bridge theorem: the zero-diagonal/doubling witness schema implies the left-heavy
-recurrence hypothesis used by `problem1_of_leftHeavy_recurrence`.
--/
-theorem leftHeavy_recurrence_of_zeroDiag_doubles
-    (h : ZeroDiagDoublesLeftHeavyRecurrence) :
-    ∀ T P : Nat, 0 < P → ∃ m t k : Nat, T ≤ t ∧ LeftHeavy (m * P) t k := by
-  intro T P hP
-  obtain ⟨m, _z, t, k, ht, _hz, _hd, hl⟩ := h T P hP
-  exact ⟨m, t, k, ht, hl⟩
-
-/--
-Submission-facing reduction for the current defect-front strategy: proving
-`ZeroDiagDoublesLeftHeavyRecurrence` is sufficient to solve Problem 1.
--/
-theorem submission_problem1_of_zeroDiag_doubles_leftHeavy
-    (h : ZeroDiagDoublesLeftHeavyRecurrence) :
-    Problem1 :=
-  problem1_of_leftHeavy_recurrence (leftHeavy_recurrence_of_zeroDiag_doubles h)
-
-/--
-Submission-facing reduction in the finer-grained assembly form.
--/
-theorem submission_problem1_of_zeroDiag_doubles_assembly
-    (h : ZeroDiagDoublesLeftHeavyAssembly) :
-    Problem1 :=
-  submission_problem1_of_zeroDiag_doubles_leftHeavy
-    (zeroDiag_doubles_leftHeavyRecurrence_of_assembly h)
-
-/--
-Primitive-period bridge obligation: for every `(T, P)`, at some zero-diagonal doubling point for
-the same period `P`, there is a left-heavy witness for shift `P` itself (`m = 1`).
--/
-def PrimitiveDoublesLeftHeavyRecurrence : Prop :=
-  ∀ T P : Nat, 0 < P →
-    ∃ z t k : Nat,
-      T ≤ t ∧
-      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
-      Rule30UOR.CompilePoints.DoublesAt P z ∧
-      LeftHeavy P t k
-
-/--
-Component A at primitive period: at a doubling point of `P`, produce a left defect at `-k`.
--/
-def PrimitiveDoublesLeftDefect : Prop :=
-  ∀ T P : Nat, 0 < P →
-    ∃ z t k : Nat,
-      T ≤ t ∧
-      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
-      Rule30UOR.CompilePoints.DoublesAt P z ∧
-      0 < k ∧ defect P t (-(k : Int)) = true
-
-/--
-Stronger local form: at every certified primitive doubling point `(z, P)`, a left defect witness
-can be produced after any lower time bound `T`.
--/
-def PrimitiveLeftDefectAtAnyDoublesPoint : Prop :=
-  ∀ T P z : Nat,
-    0 < P →
-    Rule30UOR.ZeroDiagonals.IsZeroDiag z →
-    Rule30UOR.CompilePoints.DoublesAt P z →
-    ∃ t k : Nat, T ≤ t ∧ 0 < k ∧ defect P t (-(k : Int)) = true
-
-/--
-Component B' at primitive period: any witness from `PrimitiveDoublesLeftDefect` can be upgraded
-to a clean window on `(-k, k]`.
--/
-def PrimitiveDoublesCleanWindowFromWitness : Prop :=
-  ∀ T P z t k : Nat,
-    0 < P → T ≤ t →
-    Rule30UOR.ZeroDiagonals.IsZeroDiag z →
-    Rule30UOR.CompilePoints.DoublesAt P z →
-    0 < k → defect P t (-(k : Int)) = true →
-    (∀ p : Int, -(k : Int) < p → p ≤ (k : Int) → defect P t p = false)
-
-/--
-Stronger local form: at every certified primitive doubling point `(z, P)`, directly produce
-a full clean-window witness after any lower time bound `T`.
--/
-def PrimitiveCleanWindowAtAnyDoublesPoint : Prop :=
-  ∀ T P z : Nat,
-    0 < P →
-    Rule30UOR.ZeroDiagonals.IsZeroDiag z →
-    Rule30UOR.CompilePoints.DoublesAt P z →
-    ∃ t k : Nat,
-      T ≤ t ∧ 0 < k ∧ defect P t (-(k : Int)) = true ∧
-      (∀ p : Int, -(k : Int) < p → p ≤ (k : Int) → defect P t p = false)
-
-/--
-From the local-any-point form and `CompilePoints.doubling_points`, obtain
-`PrimitiveDoublesLeftDefect`.
--/
-theorem primitive_doubles_leftDefect_of_any_doubling_point
-    (h : PrimitiveLeftDefectAtAnyDoublesPoint) :
-    PrimitiveDoublesLeftDefect := by
-  intro T P hP
-  obtain ⟨z, hz, hd⟩ := Rule30UOR.CompilePoints.doubling_points P hP
-  obtain ⟨t, k, ht, hk, hdef⟩ := h T P z hP hz hd
-  exact ⟨z, t, k, ht, hz, hd, hk, hdef⟩
-
-/--
-Component B at primitive period: for the same witness data, provide the clean window `(-k, k]`.
--/
-def PrimitiveDoublesCleanWindow : Prop :=
-  ∀ T P : Nat, 0 < P →
-    ∃ z t k : Nat,
-      T ≤ t ∧
-      Rule30UOR.ZeroDiagonals.IsZeroDiag z ∧
-      Rule30UOR.CompilePoints.DoublesAt P z ∧
-      0 < k ∧
-      defect P t (-(k : Int)) = true ∧
-      (∀ p : Int, -(k : Int) < p → p ≤ (k : Int) → defect P t p = false)
-
-/--
-From the stronger local clean-window form and `CompilePoints.doubling_points`, obtain
-`PrimitiveDoublesCleanWindow`.
--/
-theorem primitive_doubles_cleanWindow_of_any_doubling_point
-    (h : PrimitiveCleanWindowAtAnyDoublesPoint) :
-    PrimitiveDoublesCleanWindow := by
-  intro T P hP
-  obtain ⟨z, hz, hd⟩ := Rule30UOR.CompilePoints.doubling_points P hP
-  obtain ⟨t, k, ht, hk, hdef, hclean⟩ := h T P z hP hz hd
-  exact ⟨z, t, k, ht, hz, hd, hk, hdef, hclean⟩
-
-/--
-Component composition: the clean-window component already packages component A and yields
-primitive-period left-heavy recurrence.
--/
-theorem primitive_doubles_leftHeavy_of_cleanWindow
-    (h : PrimitiveDoublesCleanWindow) :
-    PrimitiveDoublesLeftHeavyRecurrence := by
-  intro T P hP
-  obtain ⟨z, t, k, ht, hz, hd, hk, hdef, hclean⟩ := h T P hP
-  exact ⟨z, t, k, ht, hz, hd, ⟨hk, hdef, hclean⟩⟩
-
-/--
-Compositional assembly: witness production (component A) plus witness-to-window upgrade
-(component B') imply `PrimitiveDoublesCleanWindow`.
--/
-theorem primitive_doubles_cleanWindow_of_components
-    (hA : PrimitiveDoublesLeftDefect)
-    (hB : PrimitiveDoublesCleanWindowFromWitness) :
-    PrimitiveDoublesCleanWindow := by
-  intro T P hP
-  obtain ⟨z, t, k, ht, hz, hd, hk, hdef⟩ := hA T P hP
-  exact ⟨z, t, k, ht, hz, hd, hk, hdef, hB T P z t k hP ht hz hd hk hdef⟩
-
-/--
-Submission-facing reduction through the compositional component split.
--/
-theorem submission_problem1_of_primitive_doubles_components
-    (hA : PrimitiveDoublesLeftDefect)
-    (hB : PrimitiveDoublesCleanWindowFromWitness) :
-    Problem1 := by
-  have hprim : PrimitiveDoublesLeftHeavyRecurrence :=
-    primitive_doubles_leftHeavy_of_cleanWindow
-      (primitive_doubles_cleanWindow_of_components hA hB)
-  apply submission_problem1_of_zeroDiag_doubles_leftHeavy
-  intro T P hP
-  obtain ⟨z, t, k, ht, hz, hd, hl⟩ := hprim T P hP
-  exact ⟨1, z, t, k, ht, hz, by simpa using hd, by simpa using hl⟩
-
-/--
-Submission-facing reduction through the split components. This isolates the remaining work to
-proving `PrimitiveDoublesCleanWindow`.
--/
-theorem submission_problem1_of_primitive_doubles_cleanWindow
-    (h : PrimitiveDoublesCleanWindow) :
-    Problem1 := by
-  have hprim : PrimitiveDoublesLeftHeavyRecurrence :=
-    primitive_doubles_leftHeavy_of_cleanWindow h
-  apply submission_problem1_of_zeroDiag_doubles_leftHeavy
-  intro T P hP
-  obtain ⟨z, t, k, ht, hz, hd, hl⟩ := hprim T P hP
-  exact ⟨1, z, t, k, ht, hz, by simpa using hd, by simpa using hl⟩
-
-/-- Primitive-period recurrence implies the zero-diagonal/doubling recurrence schema (`m = 1`). -/
-theorem zeroDiag_doubles_leftHeavyRecurrence_of_primitive
-    (h : PrimitiveDoublesLeftHeavyRecurrence) :
-    ZeroDiagDoublesLeftHeavyRecurrence := by
-  intro T P hP
-  obtain ⟨z, t, k, ht, hz, hd, hl⟩ := h T P hP
-  exact ⟨1, z, t, k, ht, hz, by simpa using hd, by simpa using hl⟩
-
-/--
-Submission-facing reduction at primitive period: proving left-heavy recurrence at doubling points
-for shift `P` is sufficient for Problem 1.
--/
-theorem submission_problem1_of_primitive_doubles_leftHeavy
-    (h : PrimitiveDoublesLeftHeavyRecurrence) :
-    Problem1 :=
-  submission_problem1_of_zeroDiag_doubles_leftHeavy
-    (zeroDiag_doubles_leftHeavyRecurrence_of_primitive h)
-
-/--
-Direct submission-facing reduction from the strongest local clean-window assumption at
-every primitive doubling point.
--/
-theorem submission_problem1_of_any_doubling_point_cleanWindow
-    (h : PrimitiveCleanWindowAtAnyDoublesPoint) :
-    Problem1 :=
-  submission_problem1_of_primitive_doubles_cleanWindow
-    (primitive_doubles_cleanWindow_of_any_doubling_point h)
-
-/--
-Direct submission-facing reduction from local-any-point defect production plus global
-witness-to-window upgrade.
--/
-theorem submission_problem1_of_any_doubling_point_components
-    (hA : PrimitiveLeftDefectAtAnyDoublesPoint)
-    (hB : PrimitiveDoublesCleanWindowFromWitness) :
-    Problem1 :=
-  submission_problem1_of_primitive_doubles_components
-    (primitive_doubles_leftDefect_of_any_doubling_point hA) hB
-
 /-- Under a periodic center, every left defect is shielded inside `(-k, k]`. -/
 theorem shield_of_periodic {T P : Nat} (hc : ∀ t, T ≤ t → center (t + P) = center t)
     (m t k : Nat) (ht : T ≤ t) (hk : 0 < k) (hd : defect (m * P) t (-(k : Int)) = true) :
@@ -409,29 +161,19 @@ theorem defect_succ_of_clean (Q t : Nat) (p : Int) (hp : defect Q t p = false) :
   unfold rule
   cases defect Q t (p - 1) <;> cases defect Q t (p + 1) <;> cases cell t p <;> simp
 
-/-- If a site `p` is clean at both `t` and `t + 1`, its left defect equals its right
-defect gated by `!cell t p`. -/
-theorem defect_left_eq_of_clean_pair (Q t : Nat) (p : Int)
-    (hp0 : defect Q t p = false) (hp1 : defect Q (t + 1) p = false) :
-    defect Q t (p - 1) = (defect Q t (p + 1) && !cell t p) := by
-  have h := defect_succ_of_clean Q t p hp0
-  rw [hp1] at h
-  cases ha : defect Q t (p - 1) <;> cases hb : (defect Q t (p + 1) && !cell t p) <;>
-    rw [ha, hb] at h <;> first | rfl | contradiction
-
 /-- If `p` is clean at `t` and `t + 1` and has a defect on its left, then it must also
 have a defect on its right and `cell t p` must be `false` (white). -/
 theorem defect_right_and_white_of_clean_pair (Q t : Nat) (p : Int)
     (hp0 : defect Q t p = false) (hp1 : defect Q (t + 1) p = false)
     (hl : defect Q t (p - 1) = true) :
     defect Q t (p + 1) = true ∧ cell t p = false := by
-  have h := defect_left_eq_of_clean_pair Q t p hp0 hp1
+  have h := neighbor_matching Q t p hp0 hp1
   rw [hl] at h
-  cases hd : defect Q t (p + 1) <;> cases hc : cell t p
-  · rw [hd, hc] at h; contradiction
-  · rw [hd, hc] at h; contradiction
+  cases hc : cell t p <;> cases hd : defect Q t (p + 1)
+  · rw [hc, hd] at h; contradiction
   · exact ⟨rfl, rfl⟩
-  · rw [hd, hc] at h; contradiction
+  · rw [hc, hd] at h; contradiction
+  · rw [hc, hd] at h; contradiction
 
 /-- **Leftward front step.** At the left edge of a right-half defect (`p - 1` and `p` clean,
 `p + 1` defective), the defect steps left into `p` iff `cell t p = false`. -/
@@ -543,5 +285,75 @@ theorem exists_unit_defect_and_white_center_of_left_defect
             (by rwa [show -((-p).toNat : Int) = p by omega])
           exact (hno ⟨r, hr0, by omega, hr1, hr2, hr3⟩).elim
 
-end Rule30UOR.DefectFront
+/-- **Unconditional left-edge defect.** For every `Q > 0` and time `t`, the shifted row
+`t + Q` is on its left edge at `p = -(t + Q)` while row `t` is outside the light cone,
+giving `defect Q t (-(t + Q)) = true`. -/
+theorem left_edge_defect (Q t : Nat) (hQ : 0 < Q) :
+    defect Q t (-((t + Q : Nat) : Int)) = true := by
+  unfold defect difference
+  have hedge : (fun s => cell s (-↑(t + Q))) (t + Q) = true := by
+    simpa using cell_left_edge (t + Q)
+  have hout : (fun s => cell s (-↑(t + Q))) t = false := by
+    simpa using cell_eq_false_of_lt t (-((t + Q : Nat) : Int)) (by omega)
+  rw [hedge, hout]
+  decide
 
+/-- Under a periodic center, at every time `t ≥ T` and positive multiple `m * P`, there is
+a right-half defect within `0 < y ≤ t + m * P` shielding the left-edge defect. -/
+theorem exists_right_shield_of_periodic
+    {T P : Nat} (hP : 0 < P) (hc : ∀ t, T ≤ t → center (t + P) = center t)
+    (m t : Nat) (hm : 0 < m) (ht : T ≤ t) :
+    ∃ y : Nat, 0 < y ∧ y ≤ t + m * P ∧ defect (m * P) t (y : Int) = true := by
+  have hQ : 0 < m * P := Nat.mul_pos hm hP
+  exact right_shield_of_periodic hc m t ht (t + m * P) (by omega)
+    (left_edge_defect (m * P) t hQ)
+
+/-- Under a periodic center, at every time `t ≥ T` and positive multiple `m * P`, the
+left-edge defect forces a unit defect pair at `-1` and `1` and a white center cell at
+some time `t + (r - 1)` with `0 < r ≤ t + m * P`. -/
+theorem exists_unit_defect_and_white_center_of_periodic
+    {T P : Nat} (hP : 0 < P) (hc : ∀ t, T ≤ t → center (t + P) = center t)
+    (m t : Nat) (hm : 0 < m) (ht : T ≤ t) :
+    ∃ r : Nat, 0 < r ∧ r ≤ t + m * P ∧
+      defect (m * P) (t + (r - 1)) (-1) = true ∧
+      defect (m * P) (t + (r - 1)) 1 = true ∧
+      center (t + (r - 1)) = false := by
+  have hQ : 0 < m * P := Nat.mul_pos hm hP
+  exact exists_unit_defect_and_white_center_of_left_defect hc m t ht (t + m * P) (by omega)
+    (left_edge_defect (m * P) t hQ)
+
+/-- Under a periodic center, every nonzero column `p ≠ 0` has `defect Q t p = true`
+infinitely often for every `Q > 0`. -/
+theorem exists_defect_true_of_periodic (hc : EventuallyPeriodic center)
+    (Q : Nat) (hQ : 0 < Q) (p : Int) (hp : p ≠ 0) (T : Nat) :
+    ∃ t : Nat, T ≤ t ∧ defect Q t p = true := by
+  apply Classical.byContradiction
+  intro hno
+  have hall : ∀ t, T ≤ t → defect Q t p = false := by
+    intro t ht
+    cases hb : defect Q t p
+    · rfl
+    · exact (hno ⟨t, ht, hb⟩).elim
+  exact other_column_defect_not_eventuallyPeriodic hc Q hQ p hp
+    ⟨T, 1, by omega, fun t ht => by
+      change defect Q (t + 1) p = defect Q t p
+      rw [hall (t + 1) (by omega), hall t ht]⟩
+
+/-- Under a periodic center, every nonzero column `p ≠ 0` has `defect Q t p = false`
+infinitely often for every `Q > 0`. -/
+theorem exists_defect_false_of_periodic (hc : EventuallyPeriodic center)
+    (Q : Nat) (hQ : 0 < Q) (p : Int) (hp : p ≠ 0) (T : Nat) :
+    ∃ t : Nat, T ≤ t ∧ defect Q t p = false := by
+  apply Classical.byContradiction
+  intro hno
+  have hall : ∀ t, T ≤ t → defect Q t p = true := by
+    intro t ht
+    cases hb : defect Q t p
+    · exact (hno ⟨t, ht, hb⟩).elim
+    · rfl
+  exact other_column_defect_not_eventuallyPeriodic hc Q hQ p hp
+    ⟨T, 1, by omega, fun t ht => by
+      change defect Q (t + 1) p = defect Q t p
+      rw [hall (t + 1) (by omega), hall t ht]⟩
+
+end Rule30UOR.DefectFront
