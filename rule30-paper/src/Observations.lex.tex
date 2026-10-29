@@ -304,6 +304,110 @@ Close the goal with \(\lexeme{r30.observation::periodic-recurrent-advancing-left
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{left-defect-false-colours}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftdefect(Q, t, k) = false ↔ leftcolour(Q, t, k) = 0 ∨ leftcolour(Q, t, k) = 3\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-defect-false-colours}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-defect-true-colours}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftdefect(Q, t, k) = true ↔ leftcolour(Q, t, k) = 1 ∨ leftcolour(Q, t, k) = 2\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-defect-true-colours}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-colours-outside-seed-cone}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(t < k\), then \(leftcolour(Q, t, k) = 0 ∨ leftcolour(Q, t, k) = 2\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-colours-outside-seed-cone}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{collision-code-support}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(collisioncode(Q, t, k) ≠ 0\), then \(k ≤ t + 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::collision-code-support}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{gate-code-nonzero}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(gatecode(Q, t, k) ≠ 0 ↔ leftgatedifference(Q, t, k) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::gate-code-nonzero}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{gate-code-bound}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(gatecode(Q, t, k) ≤ 6\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::gate-code-bound}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{gate-code-colours}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \((gatecode(Q, t, k) = 1 ↔ leftcolour(Q, t, k) = 1 ∧ leftcolour(Q, t, k - 1) = 0) ∧ (gatecode(Q, t, k) = 2 ↔ leftcolour(Q, t, k) = 0 ∧ leftcolour(Q, t, k - 1) = 1) ∧ (gatecode(Q, t, k) = 3 ↔ leftcolour(Q, t, k) = 1 ∧ leftcolour(Q, t, k - 1) = 1) ∧ (gatecode(Q, t, k) = 4 ↔ leftcolour(Q, t, k) = 2 ∧ leftcolour(Q, t, k - 1) = 0) ∧ (gatecode(Q, t, k) = 5 ↔ leftcolour(Q, t, k) = 0 ∧ leftcolour(Q, t, k - 1) = 2) ∧ (gatecode(Q, t, k) = 6 ↔ leftcolour(Q, t, k) = 2 ∧ leftcolour(Q, t, k - 1) = 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::gate-code-colours}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{erasure-event-of-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftdefect(Q, t, k + 1) = true\), then if \(leftdefect(Q, t + 1, k) = false\), then \(erasureevent(Q, t, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::erasure-event-of-step}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{erasure-black-phase-iff}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(erasureevent(Q, t, k)\), then \(leftcolour(Q, t + 1, k) = 3 ↔ (gatecode(Q, t, k) ≤ 3 ∧ leftcolour(Q, t, k + 1) = 2) ∨ (4 ≤ gatecode(Q, t, k) ∧ leftcolour(Q, t, k + 1) = 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::erasure-black-phase-iff}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{erasure-outside-seed-cone-white}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(t + 1 < k\), then if \(erasureevent(Q, t, k)\), then \(leftcolour(Q, t + 1, k) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::erasure-outside-seed-cone-white}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{advancing-source-first-erasure}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(2 ≤ k\), then if \(advancingatdepth(Q, t, k)\), then if \(leftdefect(Q, t + k, 0) = false\), then there exists a natural number \(j\) such that \(firstpatherasure(Q, t, k, j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::advancing-source-first-erasure}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-erasure-window}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(u\) such that there exists a natural number \(d\) such that \(N ≤ u ∧ u + 1 ≤ 2 * N + m * P + 3 * P ∧ d + 2 ≤ P ∧ erasureevent(m * P, u, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-erasure-window}(T, P, m, N)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-recurrent-source-erasure}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentsourceerasure(m * P, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-recurrent-source-erasure}(T, P, m)\).
+\end{proof}
+\end{theorem}
+
 \begin{theorem}{no-period-iff-no-recurrent-central-collision}
 \allowaxioms{Classical.choice;Quot.sound;propext}
 \(noperiod ↔ norecurrentcentralcollision\).

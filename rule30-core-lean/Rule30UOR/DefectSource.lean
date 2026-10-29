@@ -55,6 +55,59 @@ def gateDifference (Q t : Nat) (p : Int) : Bool :=
 
 def leftGateDifference (Q t k : Nat) : Bool := gateDifference Q t (-(k : Int))
 
+/-- Gate codes 1..6 are X0, 0X, XX, Y0, 0Y, YY. They encode an OR-gate
+mismatch, which may create or erase a defect depending on the incoming bit. -/
+def gateCase : Bool → Bool → Bool → Bool → Nat
+  | true, false, false, false => 1
+  | false, false, true, false => 2
+  | true, false, true, false => 3
+  | false, true, false, false => 4
+  | false, false, false, true => 5
+  | false, true, false, true => 6
+  | _, _, _, _ => 0
+
+def gateCode (Q t k : Nat) : Nat :=
+  gateCase (cell t (-(k : Int))) (cell (t + Q) (-(k : Int)))
+    (cell t (-(k : Int) + 1)) (cell (t + Q) (-(k : Int) + 1))
+
+def ErasureEvent (Q t k : Nat) : Prop :=
+  leftDefect Q t (k + 1) = true ∧ leftDefect Q (t + 1) k = false ∧
+    gateCode Q t k ≠ 0 ∧ collisionCode Q t k = 0 ∧
+    (leftColour Q (t + 1) k = 0 ∨ leftColour Q (t + 1) k = 3)
+
+theorem gate_code_nonzero (Q t k : Nat) :
+    gateCode Q t k ≠ 0 ↔ leftGateDifference Q t k = true := by
+  unfold gateCode leftGateDifference gateDifference
+  cases cell t (-(k : Int)) <;> cases cell (t + Q) (-(k : Int)) <;>
+    cases cell t (-(k : Int) + 1) <;> cases cell (t + Q) (-(k : Int) + 1) <;> decide
+
+theorem gate_code_bound (Q t k : Nat) : gateCode Q t k ≤ 6 := by
+  unfold gateCode
+  cases cell t (-(k : Int)) <;> cases cell (t + Q) (-(k : Int)) <;>
+    cases cell t (-(k : Int) + 1) <;> cases cell (t + Q) (-(k : Int) + 1) <;> decide
+
+private theorem gate_case_table : ∀ a b c d : Bool,
+    (gateCase a b c d = 1 ↔ colourCode a b = 1 ∧ colourCode c d = 0) ∧
+    (gateCase a b c d = 2 ↔ colourCode a b = 0 ∧ colourCode c d = 1) ∧
+    (gateCase a b c d = 3 ↔ colourCode a b = 1 ∧ colourCode c d = 1) ∧
+    (gateCase a b c d = 4 ↔ colourCode a b = 2 ∧ colourCode c d = 0) ∧
+    (gateCase a b c d = 5 ↔ colourCode a b = 0 ∧ colourCode c d = 2) ∧
+    (gateCase a b c d = 6 ↔ colourCode a b = 2 ∧ colourCode c d = 2) := by
+  unfold gateCase colourCode
+  decide +kernel
+
+theorem gate_code_colours (Q t k : Nat) (hk : 0 < k) :
+    (gateCode Q t k = 1 ↔ leftColour Q t k = 1 ∧ leftColour Q t (k - 1) = 0) ∧
+    (gateCode Q t k = 2 ↔ leftColour Q t k = 0 ∧ leftColour Q t (k - 1) = 1) ∧
+    (gateCode Q t k = 3 ↔ leftColour Q t k = 1 ∧ leftColour Q t (k - 1) = 1) ∧
+    (gateCode Q t k = 4 ↔ leftColour Q t k = 2 ∧ leftColour Q t (k - 1) = 0) ∧
+    (gateCode Q t k = 5 ↔ leftColour Q t k = 0 ∧ leftColour Q t (k - 1) = 2) ∧
+    (gateCode Q t k = 6 ↔ leftColour Q t k = 2 ∧ leftColour Q t (k - 1) = 2) := by
+  simpa only [gateCode, leftColour, leftCell,
+    show -((k - 1 : Nat) : Int) = -(k : Int) + 1 by omega] using
+    gate_case_table (cell t (-(k : Int))) (cell (t + Q) (-(k : Int)))
+      (cell t (-(k : Int) + 1)) (cell (t + Q) (-(k : Int) + 1))
+
 theorem defect_step_gate (Q t : Nat) (p : Int) :
     defect Q (t + 1) p = xor (defect Q t (p - 1)) (gateDifference Q t p) := by
   unfold defect difference gateDifference
@@ -166,6 +219,45 @@ theorem erasure_has_no_collision (Q t k : Nat)
   · have ht := collision_transmits_left Q t k hc
     rw [hd, he] at ht
     contradiction
+
+theorem erasure_event_of_step (Q t k : Nat)
+    (hd : leftDefect Q t (k + 1) = true) (he : leftDefect Q (t + 1) k = false) :
+    ErasureEvent Q t k := by
+  refine ⟨hd, he, ?_, erasure_has_no_collision Q t k hd he, (left_defect_false_colours Q (t + 1) k).1 he⟩
+  exact (gate_code_nonzero Q t k).2 ((incoming_defect_erased_iff Q t k hd).1 he)
+
+/-- The erased pair is black exactly when the active OR gate and incoming unit
+have opposite orientations. -/
+theorem erasure_black_phase_iff (Q t k : Nat) (he : ErasureEvent Q t k) :
+    leftColour Q (t + 1) k = 3 ↔
+      (gateCode Q t k ≤ 3 ∧ leftColour Q t (k + 1) = 2) ∨
+      (4 ≤ gateCode Q t k ∧ leftColour Q t (k + 1) = 1) := by
+  rcases he with ⟨hin, hout, hgate, hcollision, hcolour⟩
+  have step : ∀ (u : Nat) (x : Int),
+      cell (u + 1) x = rule (cell u (x - 1)) (cell u x) (cell u (x + 1)) := by
+    intro u x
+    rfl
+  simp only [leftDefect, defect, difference] at hin
+  simp only [show -((k + 1 : Nat) : Int) = -(k : Int) - 1 by omega] at hin
+  simp only [leftColour, leftCell,
+    show -((k + 1 : Nat) : Int) = -(k : Int) - 1 by omega,
+    show t + 1 + Q = (t + Q) + 1 by omega, step]
+  unfold gateCode at hgate ⊢
+  cases ha : cell t (-(k : Int) - 1) <;> cases hb : cell (t + Q) (-(k : Int) - 1) <;>
+    cases hc : cell t (-(k : Int)) <;> cases hd : cell (t + Q) (-(k : Int)) <;>
+    cases he : cell t (-(k : Int) + 1) <;> cases hf : cell (t + Q) (-(k : Int) + 1) <;>
+    simp_all [gateCase, colourCode, rule]
+
+/-- A black common reset cannot occur outside the earlier seed's cone. -/
+theorem erasure_outside_seed_cone_white (Q t k : Nat) (hk : t + 1 < k)
+    (he : ErasureEvent Q t k) : leftColour Q (t + 1) k = 0 := by
+  have ho := left_colours_outside_seed_cone Q (t + 1) k hk
+  have hp := he.2.2.2.2
+  rcases ho with h0 | h2
+  · exact h0
+  · rcases hp with h0 | h3
+    · exact h0
+    · omega
 
 /-- The actual seed also permits an erasure immediately, at a site with no collision.
 This finite reduction rules out a blanket no-erasure seed invariant. -/

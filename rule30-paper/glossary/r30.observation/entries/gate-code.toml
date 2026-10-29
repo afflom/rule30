@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "gate-code"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectSource"
+name = "Rule30UOR.DefectSource.gateCode"
+
+[[form]]
+id = "gate-code"
+channel = "math"
+surface = "gatecode"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name gatecode) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -20,7 +20,7 @@ central-band localization. It remains a necessary condition, not Problem 1.
 namespace Rule30UOR.CentralCollision
 
 open Ruliology.CellularAutomata Rule30Jen Rule30Prize
-open Rule30UOR.TemporalDefect Rule30UOR.Collision Rule30UOR.DefectFront
+open Rule30UOR.TemporalDefect Rule30UOR.Collision Rule30UOR.DefectFront Rule30UOR.DefectSource
 open Rule30XorRigidity.HalfLine (Good good_symm)
 
 def leftAdjacentDefect (Q t : Nat) : Bool := defect Q t (-1)
@@ -68,6 +68,66 @@ theorem left_defect_black_cone (Q t k : Nat)
     (by simpa only [leftDefect] using hd)
     (by simpa only [Rule30UOR.Scale.center_eq_kit] using ha)
     (by simpa only [Rule30UOR.Scale.center_eq_kit] using hb)
+
+/-- The characteristic starting one step after an advancing source is true up to
+its first erasure. The target depth decreases by one at each step. -/
+def FirstPathErasure (Q t k j : Nat) : Prop :=
+  j + 1 < k ∧
+    (∀ i : Nat, i ≤ j → leftDefect Q (t + 1 + i) (k - (i + 1)) = true) ∧
+    ErasureEvent Q (t + 1 + j) (k - (j + 2))
+
+/-- A fixed source orientation, first-erasure offset, gate pattern and reset colour
+recur together. This is a finite observation pattern, not a closed strip dynamics. -/
+def RecurrentSourceErasure (Q B : Nat) : Prop :=
+  ∃ k c j g z : Nat, 2 ≤ k ∧ k ≤ B ∧ (c = 3 ∨ c = 5) ∧ j + 1 < k ∧
+    1 ≤ g ∧ g ≤ 6 ∧ (z = 0 ∨ z = 3) ∧
+    ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collisionCode Q t k = c ∧
+      FirstPathErasure Q t k j ∧ gateCode Q (t + 1 + j) (k - (j + 2)) = g ∧
+      leftColour Q (t + 2 + j) (k - (j + 2)) = z
+
+private theorem first_drop : ∀ n : Nat, ∀ f : Nat → Bool, f 0 = true → f n = false →
+    ∃ j : Nat, j < n ∧ (∀ i : Nat, i ≤ j → f i = true) ∧ f (j + 1) = false := by
+  intro n
+  induction n with
+  | zero =>
+    intro f h0 hn
+    rw [h0] at hn
+    contradiction
+  | succ n ih =>
+    intro f h0 hn
+    cases h1 : f 1
+    · refine ⟨0, by omega, ?_, h1⟩
+      intro i hi
+      have he : i = 0 := by omega
+      simpa only [he] using h0
+    · obtain ⟨j, hj, hp, he⟩ := ih (fun i => f (i + 1)) h1
+        (by simpa only [Nat.add_comm n 1] using hn)
+      refine ⟨j + 1, by omega, ?_, ?_⟩
+      · intro i hi
+        by_cases hi0 : i = 0
+        · simpa only [hi0] using h0
+        · have hh := hp (i - 1) (by omega)
+          simpa only [show i - 1 + 1 = i by omega] using hh
+      · exact he
+
+/-- Every forced advance whose characteristic ends at a clean center has a first
+later erasure. All time, depth, prefix and colour data are retained. -/
+theorem advancing_source_first_erasure (Q t k : Nat) (hk : 2 ≤ k)
+    (ha : advancingAtDepth Q t k) (hc : leftDefect Q (t + k) 0 = false) :
+    ∃ j : Nat, FirstPathErasure Q t k j := by
+  have hstart : leftDefect Q (t + 1) (k - 1) = true := by
+    simpa only [leftDefect, show -((k - 1 : Nat) : Int) = -(k : Int) + 1 by omega] using
+      advancing_collision_step Q t (-(k : Int)) (by simpa only [advancingAtDepth] using ha)
+  have hend : leftDefect Q (t + 1 + (k - 1)) (k - ((k - 1) + 1)) = false := by
+    simpa only [show t + 1 + (k - 1) = t + k by omega,
+      show k - ((k - 1) + 1) = 0 by omega] using hc
+  obtain ⟨j, hj, hp, he⟩ := first_drop (k - 1)
+    (fun i => leftDefect Q (t + 1 + i) (k - (i + 1))) (by simpa using hstart) hend
+  have hin : leftDefect Q (t + 1 + j) ((k - (j + 2)) + 1) = true := by
+    simpa only [show k - (j + 1) = k - (j + 2) + 1 by omega] using hp j (Nat.le_refl j)
+  have hout : leftDefect Q (t + 1 + j + 1) (k - (j + 2)) = false := by
+    simpa only [Nat.add_assoc, show j + 1 + 1 = j + 2 by omega] using he
+  exact ⟨j, by omega, hp, erasure_event_of_step Q (t + 1 + j) (k - (j + 2)) hin hout⟩
 
 /-- Frontier obstruction at fixed period: under a hypothetical periodic center of period `P`,
 the period-scale recurrent central collision witness must fail. -/
@@ -278,6 +338,24 @@ theorem periodic_advancing_left_collision_window (T P m N : Nat) (hP : 0 < P) (h
   dsimp [v] at hsr
   omega
 
+/-- Each seed-forced advancing source leads to an erasure within at most P-1
+further updates. The erasure target may be the center or a deeper left column. -/
+theorem periodic_erasure_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
+    ∃ u d : Nat, N ≤ u ∧ u + 1 ≤ 2 * N + m * P + 3 * P ∧ d + 2 ≤ P ∧
+      ErasureEvent (m * P) u d := by
+  have hp := kit_period hc
+  obtain ⟨t, ht, hb, x, hx1, hx2, hadv⟩ := periodic_advancing_left_collision_window T P m N hP hm hc hN
+  let k := (-x).toNat
+  have hcast : (k : Int) = -x := Int.toNat_of_nonneg (by omega)
+  have ha : advancingAtDepth (m * P) t k := by
+    simpa only [advancingAtDepth, hcast, show -(-x) = x by omega] using hadv
+  have hclean : leftDefect (m * P) (t + k) 0 = false := by
+    simpa only [leftDefect, show -((0 : Nat) : Int) = (0 : Int) by omega] using
+      center_defect_zero hp m (t + k) (by omega)
+  obtain ⟨j, hj, hprefix, he⟩ := advancing_source_first_erasure (m * P) t k (by omega) ha hclean
+  exact ⟨t + 1 + j, k - (j + 2), by omega, by omega, by omega, he⟩
+
 /-- Forgetting the advancing orientation preserves the existing quantitative API. -/
 theorem periodic_left_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
@@ -381,6 +459,53 @@ theorem periodic_recurrent_advancing_left_column (T P m : Nat) (hP : 0 < P) (hm 
       · exact ⟨t, ht, 1, by omega, by simpa using hh⟩)
   refine ⟨k.toNat, (if j = 0 then 3 else 5), by omega, by omega, ?_, hcode⟩
   by_cases hj0 : j = 0 <;> simp [hj0]
+
+/-- Finite choice fixes an entire source-to-first-erasure pattern, including the
+OR-gate case and common reset colour, under the hypothetical periodic center. -/
+theorem periodic_recurrent_source_erasure (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentSourceErasure (m * P) P := by
+  have hp := kit_period hc
+  obtain ⟨k, c, hk, hkP, hc0, hf⟩ := periodic_recurrent_advancing_left_column T P m hP hm hc
+  obtain ⟨j, hj, hfirst⟩ := finite_recurrent_choice
+    (fun j t => collisionCode (m * P) t k = c ∧ FirstPathErasure (m * P) t k j) (k - 1) (by
+      intro N
+      obtain ⟨t, ht, hcode⟩ := hf (max T N)
+      have ha : advancingAtDepth (m * P) t k :=
+        (advancing_collision_codes (m * P) t k).2 (by rw [hcode]; exact hc0)
+      have hclean : leftDefect (m * P) (t + k) 0 = false := by
+        simpa only [leftDefect, show -((0 : Nat) : Int) = (0 : Int) by omega] using
+          center_defect_zero hp m (t + k) (by omega)
+      obtain ⟨j, hj, hpath⟩ := advancing_source_first_erasure (m * P) t k hk ha hclean
+      exact ⟨t, by omega, j, by omega, hcode, hj, hpath⟩)
+  obtain ⟨g, hg, hgate⟩ := finite_recurrent_choice
+    (fun g t => collisionCode (m * P) t k = c ∧ FirstPathErasure (m * P) t k j ∧
+      gateCode (m * P) (t + 1 + j) (k - (j + 2)) = g) 7 (by
+      intro N
+      obtain ⟨t, ht, hcode, hpath⟩ := hfirst N
+      exact ⟨t, ht, gateCode (m * P) (t + 1 + j) (k - (j + 2)), by
+        have hb := gate_code_bound (m * P) (t + 1 + j) (k - (j + 2))
+        omega, hcode, hpath, rfl⟩)
+  have hgpos : 1 ≤ g := by
+    obtain ⟨t, ht, hcode, hpath, heq⟩ := hgate 0
+    have hn := hpath.2.2.2.2.1
+    rw [heq] at hn
+    omega
+  obtain ⟨i, hi, hreset⟩ := finite_recurrent_choice
+    (fun i t => collisionCode (m * P) t k = c ∧ FirstPathErasure (m * P) t k j ∧
+      gateCode (m * P) (t + 1 + j) (k - (j + 2)) = g ∧
+      leftColour (m * P) (t + 2 + j) (k - (j + 2)) = (if i = 0 then 0 else 3)) 2 (by
+      intro N
+      obtain ⟨t, ht, hcode, hpath, heq⟩ := hgate N
+      have hh := hpath.2.2.2.2.2.2
+      have hh' : leftColour (m * P) (t + 2 + j) (k - (j + 2)) = 0 ∨
+          leftColour (m * P) (t + 2 + j) (k - (j + 2)) = 3 := by
+        simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hh
+      rcases hh' with hh0 | hh3
+      · exact ⟨t, ht, 0, by omega, hcode, hpath, heq, by simpa using hh0⟩
+      · exact ⟨t, ht, 1, by omega, hcode, hpath, heq, by simpa using hh3⟩)
+  refine ⟨k, c, j, g, (if i = 0 then 0 else 3), hk, hkP, hc0, by omega,
+    hgpos, by omega, ?_, hreset⟩
+  by_cases hi0 : i = 0 <;> simp [hi0]
 
 /-- The weaker recurring-source interface follows from a fixed advancing type. -/
 theorem periodic_recurrent_left_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m)

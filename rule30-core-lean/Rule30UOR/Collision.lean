@@ -360,6 +360,36 @@ theorem advancing_collision_codes (Q t k : Nat) :
   cases cell t (-(k : Int)) <;> cases cell (t + Q) (-(k : Int)) <;>
     cases cell t (-(k : Int) + 1) <;> cases cell (t + Q) (-(k : Int) + 1) <;> decide
 
+/-- The two defect values identify whether a paired colour is common or a unit. -/
+theorem left_defect_false_colours (Q t k : Nat) :
+    leftDefect Q t k = false ↔ leftColour Q t k = 0 ∨ leftColour Q t k = 3 := by
+  unfold leftDefect leftColour leftCell Rule30UOR.TemporalDefect.defect Rule30UOR.TemporalDefect.difference
+  dsimp only
+  cases cell t (-(k : Int)) <;> cases cell (t + Q) (-(k : Int)) <;> decide
+
+theorem left_defect_true_colours (Q t k : Nat) :
+    leftDefect Q t k = true ↔ leftColour Q t k = 1 ∨ leftColour Q t k = 2 := by
+  unfold leftDefect leftColour leftCell Rule30UOR.TemporalDefect.defect Rule30UOR.TemporalDefect.difference
+  dsimp only
+  cases cell t (-(k : Int)) <;> cases cell (t + Q) (-(k : Int)) <;> decide
+
+/-- Outside the earlier seed's left light cone, X and Z cannot occur. -/
+theorem left_colours_outside_seed_cone (Q t k : Nat) (hk : t < k) :
+    leftColour Q t k = 0 ∨ leftColour Q t k = 2 := by
+  have ha := cell_eq_false_of_lt t (-(k : Int)) (by omega)
+  unfold leftColour leftCell
+  rw [ha]
+  cases cell (t + Q) (-(k : Int)) <;> decide
+
+/-- A nonzero source needs a black cell in the earlier history's adjacent pair. -/
+theorem collision_code_support (Q t k : Nat) (hc : collisionCode Q t k ≠ 0) : k ≤ t + 1 := by
+  apply Classical.byContradiction
+  intro hn
+  have ha := cell_eq_false_of_lt t (-(k : Int)) (by omega)
+  have hb := cell_eq_false_of_lt t (-(k : Int) + 1) (by omega)
+  have hs := (collision_code_nonzero Q t k).1 hc
+  simp [collisionBit, collision, ha, hb] at hs
+
 /-- At the seed slice every strictly left paired colour is zero or Y. -/
 theorem seed_left_colours (Q k : Nat) (hk : 0 < k) :
     leftColour Q 0 k = 0 ∨ leftColour Q 0 k = 2 := by

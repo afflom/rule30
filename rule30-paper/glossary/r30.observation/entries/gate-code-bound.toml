@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "gate-code-bound"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.std.nat::le) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 6)))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectSource"
+name = "Rule30UOR.DefectSource.gate_code_bound"
+
+[[form]]
+id = "gate-code-bound"
+channel = "math"
+surface = "gatecodebound"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name gatecodebound) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

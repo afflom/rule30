@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "erasure-outside-seed-cone-white"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local k))) (explicit he (app (const r30.observation::erasure-event) (local Q) (local t) (local k)))) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local k)) (nat 0))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectSource"
+name = "Rule30UOR.DefectSource.erasure_outside_seed_cone_white"
+
+[[form]]
+id = "erasure-outside-seed-cone-white"
+channel = "math"
+surface = "erasureoutsideseedconewhite"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name erasureoutsideseedconewhite) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

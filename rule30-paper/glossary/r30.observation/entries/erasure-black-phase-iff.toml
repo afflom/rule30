@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "erasure-black-phase-iff"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit he (app (const r30.observation::erasure-event) (local Q) (local t) (local k)))) (app (const lexlean.core::iff) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local k)) (nat 3)) (app (const lexlean.core::lor) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 3)) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (local t) (app (const lexlean.std.nat::add) (local k) (nat 1))) (nat 2))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (nat 4) (app (const r30.observation::gate-code) (local Q) (local t) (local k))) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (local t) (app (const lexlean.std.nat::add) (local k) (nat 1))) (nat 1)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectSource"
+name = "Rule30UOR.DefectSource.erasure_black_phase_iff"
+
+[[form]]
+id = "erasure-black-phase-iff"
+channel = "math"
+surface = "erasureblackphaseiff"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name erasureblackphaseiff) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

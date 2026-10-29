@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "advancing-source-first-erasure"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (nat 2) (local k))) (explicit ha (app (const r30.observation::advancing-at-depth) (local Q) (local t) (local k))) (explicit hc (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (local Q) (app (const lexlean.std.nat::add) (local t) (local k)) (nat 0)) (const lexlean.std.bool::false)))) (app (const lexlean.core::exists-op) (lam ((explicit j (const lexlean.std.nat::nat))) (app (const r30.observation::first-path-erasure) (local Q) (local t) (local k) (local j))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.advancing_source_first_erasure"
+
+[[form]]
+id = "advancing-source-first-erasure"
+channel = "math"
+surface = "advancingsourcefirsterasure"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name advancingsourcefirsterasure) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

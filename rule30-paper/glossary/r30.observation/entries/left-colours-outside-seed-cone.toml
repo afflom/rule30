@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-colours-outside-seed-cone"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::lt) (local t) (local k)))) (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (local t) (local k)) (nat 0)) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (local t) (local k)) (nat 2)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Collision"
+name = "Rule30UOR.Collision.left_colours_outside_seed_cone"
+
+[[form]]
+id = "left-colours-outside-seed-cone"
+channel = "math"
+surface = "leftcoloursoutsideseedcone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftcoloursoutsideseedcone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

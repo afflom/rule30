@@ -260,6 +260,42 @@ collision code zero. A successful descent must also
 use the periodic-center compatibility and explain these source births and gate erasures.
 No closing invariant or phase contradiction has yet been proved; Problem 1 remains open.
 
+
+### First erasure and a recurring source-to-erasure pattern
+
+The advancing source at `(t,-k)` forces a unit at `(t+1,-k+1)`. If the characteristic's
+center endpoint at time `t+k` is clean, `advancing_source_first_erasure` finds the first
+later erasure. Its index satisfies `j+1<k`; the erasure update is at time `t+1+j` and
+target depth `d=k-(j+2)`. Every preceding point of this characteristic is defective.
+The incoming defect is true, the next value false, the OR-gate code nonzero, and the
+collision code zero. The erased pair is common white or common black.
+
+The six OR-gate codes are `X0,0X,XX,Y0,0Y,YY`, separately from the six collision codes.
+Codes 1..3 have the earlier OR gate active; 4..6 have the later gate active. Erasure
+leaves common black precisely for an earlier-active gate with incoming Y, or a
+later-active gate with incoming X. The other erasure phases leave common white.
+The gate-code colour table and `erasure_black_phase_iff` state these facts exactly.
+
+`periodic_erasure_window` gives an erasure update for every `N>=T` within
+`N<=u<2*N+m*P+3*P`, at a target depth `d+2<=P`. Thus its target lies in `[-(P-2),0]`.
+`periodic_recurrent_source_erasure` fixes a source depth, source orientation, first-erasure
+offset, gate case, and reset colour that recur together arbitrarily late. These are
+correlated witnesses on one characteristic, not separately chosen recurrent events.
+The repeated finite observation pattern does not imply periodicity or closure of the
+surrounding strip, and no bounded-gap rate for this selected pattern is claimed.
+
+The seed constrains this ledger through actual light cones. Outside the earlier seed's
+cone, paired colours are only zero or Y. A nonzero source at depth `k` therefore needs
+`k<=t+1`; a common-black erasure reset also needs to be inside the earlier seed's cone.
+`erasure_outside_seed_cone_white` makes the latter boundary explicit. These are boundary
+conditions for a backward ancestry proof, not a finite bound on future reset events.
+
+The source-to-erasure leg strictly decreases spatial depth. A closing descent would
+also have to control the return leg from an erasure to a suitable source: the current
+lemmas do not prove that this return preserves or decreases the same rank. The
+periodic-center-compatible source/erasure pattern has not been excluded from the seeded
+orbit. Problem 1 remains unproved.
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

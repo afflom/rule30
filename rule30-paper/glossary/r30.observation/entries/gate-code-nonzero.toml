@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "gate-code-nonzero"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const lexlean.core::lnot) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 0))) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-difference) (local Q) (local t) (local k)) (const lexlean.std.bool::true))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectSource"
+name = "Rule30UOR.DefectSource.gate_code_nonzero"
+
+[[form]]
+id = "gate-code-nonzero"
+channel = "math"
+surface = "gatecodenonzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name gatecodenonzero) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"
