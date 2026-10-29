@@ -71,33 +71,25 @@ The center-adjacent layer therefore carries no information beyond the center col
 contradiction from a periodic center cannot come from columns `-2..1`; it must use deeper
 columns, the global edge data, or the collision sources away from the center.
 
-`Rule30UOR.DefectFront` now formalizes exact front transport in this sourced defect field.
+`Rule30UOR.DefectFront` formalizes exact front transport in this sourced defect field.
 `defect_front_propagates` gives unconditional rightward transport through clean windows,
 `defect_center_of_leftHeavy` turns a left-heavy profile into a forced center disagreement, and
 `problem1_of_leftHeavy_recurrence` proves Problem 1 from a recurring left-heavy witness at
-period multiples. Under a hypothetical periodic center, `right_shield_of_periodic` and
-`exists_unit_defect_and_white_center_of_left_defect` force right-half shielding and unit-pair
-events near the center from any left-half defect. These are structural constraints and a
-sufficient route to Problem 1; they do not yet provide an unconditional recurrence theorem for
-left-heavy witnesses in the single-seed orbit.
-
-The current submission-facing shape of the open obligation is explicit in this module:
-`submission_problem1_of_zeroDiag_doubles_leftHeavy` and
-`submission_problem1_of_zeroDiag_doubles_assembly`. The remaining work is to prove one of the
-bridge hypotheses (`ZeroDiagDoublesLeftHeavyRecurrence` or the finer-grained
-`ZeroDiagDoublesLeftHeavyAssembly`) from single-seed dynamics, using the existing
-zero-diagonal/doubling machinery only as contextual witnesses rather than as a full defect proof.
-The route is now further reduced to primitive periods (`m = 1`) by
-`submission_problem1_of_primitive_doubles_leftHeavy`: it is enough to produce left-heavy
-defect witnesses at the canonical `DoublesAt P z` points supplied by the existing doubling
-theory, without adding a separate multiple-selection argument.
-This primitive route is now explicitly compositional in `DefectFront`:
-`submission_problem1_of_primitive_doubles_components` reduces Problem 1 to two obligations,
-`PrimitiveDoublesLeftDefect` (produce a primitive-period left defect witness at a doubling point)
-and `PrimitiveDoublesCleanWindowFromWitness` (upgrade any such witness to a clean window on
-`(-k, k]`). Their composition theorem `primitive_doubles_cleanWindow_of_components` isolates the
-next technical target to proving the witness-to-window upgrade from existing transport/shielding
-machinery.
+period multiples. At any clean site `p`, `defect_succ_of_clean`, `defect_left_front_step`, and
+`defect_pinch_step` show that left defects enter with coefficient `1` while right defects are
+gated by `!cell t p`. Under a hypothetical periodic center, `rightmost_left_defect_propagates`
+uses the clean center column `p = 0` as a one-way barrier so the rightmost left-half defect
+propagates deterministically to `-1`, forcing a unit defect pair at `-1` and `1` and a white
+center cell (`center_white_and_right_defect_of_rightmost_left`,
+`exists_unit_defect_and_white_center_of_left_defect`, `right_shield_of_periodic`). Together with
+the unconditional moving-edge defect `left_edge_defect`, this gives
+`exists_right_shield_of_periodic` and `exists_unit_defect_and_white_center_of_periodic`, while
+`exists_defect_true_of_periodic` and `exists_defect_false_of_periodic` show that every nonzero
+column alternates infinitely often between `true` and `false` defects. Earlier intermediate
+`Prop` wrappers in `DefectFront` (`ZeroDiagDoubles*`, `PrimitiveDoubles*`, including the
+unsatisfiable universal clean-window upgrade `PrimitiveDoublesCleanWindowFromWitness`) were
+removed during cleanup so `DefectFront` contains only unconditional transport theorems and
+satisfiable consequences of a periodic center.
 
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns

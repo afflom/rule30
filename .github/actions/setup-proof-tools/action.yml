@@ -1,0 +1,61 @@
+name: Set up proof toolchain
+description: Install the repository's Lean toolchain, pinned LexLean compiler, and TeX tools.
+runs:
+  using: composite
+  steps:
+    - name: Install system dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          ca-certificates curl git build-essential \
+          texlive-latex-base texlive-latex-recommended \
+          texlive-fonts-recommended texlive-latex-extra cm-super
+
+    - name: Install Elan and Lean
+      shell: bash
+      run: |
+        for i in 1 2 3 4 5; do
+          curl --retry 5 --retry-all-errors https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none && break
+          sleep 3
+        done
+        echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+        export PATH="$HOME/.elan/bin:$PATH"
+        toolchain="$(cat rule30-core-lean/lean-toolchain)"
+        for i in 1 2 3 4 5; do
+          elan toolchain install "$toolchain" && elan default "$toolchain" && break
+          sleep 5
+        done
+        lean --version
+        lake --version
+
+    - name: Read pinned LexLean revision
+      id: revision
+      shell: bash
+      run: |
+        revision="$(cat .github/lexlean-revision)"
+        [[ "$revision" =~ ^[0-9a-f]{40}$ ]]
+        echo "value=$revision" >> "$GITHUB_OUTPUT"
+        echo "LEXLEAN_BIN=$GITHUB_WORKSPACE/.local/bin/lexlean" >> "$GITHUB_ENV"
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache Cargo downloads
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: ${{ runner.os }}-cargo-lexlean-${{ steps.revision.outputs.value }}
+
+    - name: Install pinned LexLean compiler
+      shell: bash
+      env:
+        LEXLEAN_REF: ${{ steps.revision.outputs.value }}
+      run: |
+        cargo install --locked \
+          --git https://github.com/UOR-Foundation/LexLean.git \
+          --rev "$LEXLEAN_REF" \
+          --root "$GITHUB_WORKSPACE/.local" lexlean
+        "$LEXLEAN_BIN" --version

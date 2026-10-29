@@ -74,6 +74,7 @@ Every theorem in [`Paper.pdf`](Rule30-Paper.pdf) (**280 pages**, **1,386 kernel-
 ## Building from Source
 
 ### Prerequisites
+- **Python 3.11+** for repository tooling and packaging checks
 - **Lean 4** (`leanprover/lean4:v4.32.1` via [`elan`](https://github.com/leanprover/elan))
 - **TeX Live** (`pdflatex`) or the `lexlean-tex:latest` Docker image
 - **LexLean** (`v0.4+`, optional if building from the pre-verified `verified-latest/` bundles)
@@ -105,6 +106,9 @@ make hooks
 ```
 
 The pre-commit hook blocks commits that modify proof-surface host Lean or generated artifacts without accompanying LexLean source changes.
+Compiler maintenance is the narrow exception: a staged `.github/lexlean-revision` change may
+accompany lockfile edits that change only `compiler_semantics` fingerprints. Proof edits and
+other generated artifacts still require LexLean source changes. Deletions are checked too.
 For exceptional maintenance-only commits, you can bypass once with:
 
 ```bash
@@ -115,6 +119,14 @@ If `lexlean` is installed:
 ```bash
 make LEXLEAN=/path/to/lexlean all
 ```
+
+Main CI and releases install the compiler revision in `.github/lexlean-revision`, including
+the unbounded `Nat` bitwise extension. `make check-tooling` tests the authoring hook and
+packaging rules. `make lexlean` records the successful verification IDs in each project's
+ignored `.lexlean/latest-verified.json`; packaging uses those exact bundles. Offline
+`--package-only` builds can use a single committed `verified-latest` bundle when no local
+verification has been attempted. Rendering and packaging write to `dist/` and temporary
+directories, preserving tracked release PDFs and verified bundles.
 
 ### Automated Releases
 Pushing any version tag `v*` (e.g. `v0.1`) triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which builds `rule30-core-lean`, `Rule30PrizeKit/lean`, and `rule30-bridge`, compiles `Rule30-Paper.pdf` and `Rule30-Core.pdf`, packages the verified LexLean bundles, and attaches all PDFs and LexLean artifacts to the GitHub Release.

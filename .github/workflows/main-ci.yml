@@ -20,65 +20,15 @@ jobs:
   validate:
     name: Build and Validate (No Publish)
     runs-on: ubuntu-latest
-    env:
-      LEXLEAN_REPO: https://github.com/UOR-Foundation/LexLean.git
-      LEXLEAN_REF: 1a96a19cc5de88d6edaeba05fcd74376678abc74
-      LEXLEAN_BIN: ${{ github.workspace }}/.local/bin/lexlean
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            ca-certificates \
-            curl \
-            git \
-            build-essential \
-            texlive-latex-base \
-            texlive-latex-recommended \
-            texlive-fonts-recommended \
-            texlive-latex-extra \
-            cm-super
+      - name: Set up proof toolchain
+        uses: ./.github/actions/setup-proof-tools
 
-      - name: Install Elan and Lean 4.32.1 toolchain
-        run: |
-          for i in 1 2 3 4 5; do
-            curl --retry 5 --retry-all-errors https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none && break
-            sleep 3
-          done
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
-          export PATH="$HOME/.elan/bin:$PATH"
-          for i in 1 2 3 4 5; do
-            elan toolchain install leanprover/lean4:v4.32.1 && elan default leanprover/lean4:v4.32.1 && break
-            echo "Retrying Lean 4.32.1 toolchain download (attempt $i)..."
-            sleep 5
-          done
-          lean --version
-          lake --version
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache Cargo registry and build outputs
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            ~/.cargo/bin
-          key: ${{ runner.os }}-cargo-lexlean-${{ env.LEXLEAN_REF }}
-
-      - name: Install pinned LexLean branch compiler
-        run: |
-          mkdir -p "$(dirname "$LEXLEAN_BIN")"
-          cargo install --locked \
-            --git "$LEXLEAN_REPO" \
-            --rev "$LEXLEAN_REF" \
-            --root "${{ github.workspace }}/.local" \
-            lexlean
-          "$LEXLEAN_BIN" --version
+      - name: Test authoring policy and build tooling
+        run: make check-tooling
 
       - name: Run research gate (build + audits + leanchecker)
         run: make check-research
@@ -87,14 +37,14 @@ jobs:
         run: make bridge
 
       - name: Run LexLean verification (core + paper)
-        run: make lexlean LEXLEAN="$LEXLEAN_BIN"
+        run: |
+          make lexlean LEXLEAN="$LEXLEAN_BIN"
+          git diff --exit-code -- rule30-lexlean/lexlean.lock rule30-paper/lexlean.lock
 
       - name: Build PDFs and release artifacts (without publishing)
-        env:
-          LEXLEAN_BIN: ${{ env.LEXLEAN_BIN }}
         run: |
           chmod +x scripts/build_release.sh
-          ./scripts/build_release.sh
+          ./scripts/build_release.sh --package-only
 
       - name: Upload CI artifacts
         uses: actions/upload-artifact@v4

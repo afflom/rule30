@@ -1,8 +1,8 @@
-.PHONY: all core check-research lexlean pdf bridge release-artifacts hooks clean
+.PHONY: all core check-research check-tooling lexlean pdf bridge release-artifacts hooks clean
 
-LEXLEAN ?= /home/alex/Desktop/lexlean-v04/src/target/release/lexlean
+LEXLEAN ?= lexlean
 
-all: core lexlean pdf bridge release-artifacts
+all: core lexlean bridge release-artifacts
 
 core:
 	cd rule30-core-lean && lake build LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build
@@ -12,8 +12,10 @@ check-research: core
 	cd rule30-core-lean && lake env "$$(lake env lean --print-prefix)/bin/leanchecker" Rule30UOR.Interfaces Rule30UOR.TemporalDefect Rule30UOR.WittDefect Rule30UOR.Collision Rule30UOR.DefectSource Rule30UOR.DefectFront
 
 lexlean:
-	cd rule30-lexlean && $(LEXLEAN) lock && $(LEXLEAN) verify
-	cd rule30-paper && $(LEXLEAN) lock && $(LEXLEAN) verify
+	./scripts/verify_lexlean.sh "$(LEXLEAN)"
+
+check-tooling:
+	python3 -m unittest discover -s scripts/tests -v
 
 pdf:
 	./scripts/build_release.sh --package-only

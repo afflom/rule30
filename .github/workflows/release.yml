@@ -17,43 +17,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install TeX Live for LexLean PDF compilation
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            texlive-latex-base \
-            texlive-latex-recommended \
-            texlive-fonts-recommended \
-            texlive-latex-extra \
-            cm-super
+      - name: Set up proof toolchain
+        uses: ./.github/actions/setup-proof-tools
 
-      - name: Install Elan and Lean 4.32.1 toolchain
-        run: |
-          for i in 1 2 3 4 5; do
-            curl --retry 5 --retry-all-errors https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none && break
-            sleep 3
-          done
-          export PATH="$HOME/.elan/bin:$PATH"
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
-          for i in 1 2 3 4 5; do
-            elan toolchain install leanprover/lean4:v4.32.1 && elan default leanprover/lean4:v4.32.1 && break
-            echo "Retrying Lean 4.32.1 toolchain download (attempt $i)..."
-            sleep 5
-          done
+      - name: Test authoring policy and build tooling
+        run: make check-tooling
 
-      - name: Build rule30-core-lean (24 modules)
-        run: |
-          cd rule30-core-lean
-          lake build LexLeanRuntime
-          lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean
-          lake build
+      - name: Build rule30-core-lean and run research gate (audits + leanchecker)
+        run: make check-research
 
-      - name: Build rule30-bridge (54 modules)
+      - name: Build bridge package
+        run: make bridge
+
+      - name: Verify LexLean core and paper
         run: |
-          cd rule30-bridge
-          lake build LexLeanRuntime
-          lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean
-          lake build
+          make lexlean LEXLEAN="$LEXLEAN_BIN"
+          git diff --exit-code -- rule30-lexlean/lexlean.lock rule30-paper/lexlean.lock
 
       - name: Build PDFs and package LexLean verified artifacts
         run: |
