@@ -201,4 +201,33 @@ theorem periodic_recurrent_central_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m
   rw [hz] at hcol
   contradiction
 
+/-- Frontier reduction: any eventual periodic center hypothesis yields a fixed-band
+recurrent central collision witness. This packages the `T, P` witness extraction and
+the periodic recurrence theorem into one contradiction-ready consequence. -/
+theorem recurrent_central_collision_of_eventual_periodic
+  (m : Nat) (hm : 0 < m) (hc : EventuallyPeriodic Rule30Prize.center) :
+    ∃ T P : Nat, 0 < P ∧ Rule30UOR.Scale.CenterPeriodic T P ∧
+      RecurrentCentralCollision (m * P) (2 * P) := by
+  obtain ⟨T, P, hP, hper⟩ := hc
+  refine ⟨T, P, hP, ?_, periodic_recurrent_central_column T P m hP hm ?_⟩
+  · intro t ht
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hper t ht
+  · intro t ht
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hper t ht
+
+/-- Problem 1 follows once one rules out fixed-band recurrent central collisions under
+every hypothetical periodic-center witness. -/
+theorem problem1_of_no_recurrent_central_collision
+    (hno : ∀ T P : Nat, 0 < P →
+      Rule30UOR.Scale.CenterPeriodic T P →
+      ¬ RecurrentCentralCollision P (2 * P)) :
+    Rule30Prize.Problem1 := by
+  intro hEP
+  obtain ⟨T, P, hP, hcP, hrec⟩ :=
+    recurrent_central_collision_of_eventual_periodic 1 (by decide) hEP
+  have hcontra := hno T P hP hcP
+  have hrec' : RecurrentCentralCollision P (2 * P) := by
+    simpa [Nat.one_mul] using hrec
+  exact hcontra hrec'
+
 end Rule30UOR.CentralCollision
