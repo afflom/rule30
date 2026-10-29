@@ -21,6 +21,8 @@ jobs:
     name: Build and Validate (No Publish)
     runs-on: ubuntu-latest
     env:
+      LEXLEAN_REPO: https://github.com/UOR-Foundation/LexLean.git
+      LEXLEAN_REF: 1a96a19cc5de88d6edaeba05fcd74376678abc74
       LEXLEAN_BIN: ${{ github.workspace }}/.local/bin/lexlean
     steps:
       - name: Checkout repository
@@ -65,12 +67,17 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ runner.os }}-cargo-lexlean-v0.3.0
+            ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-lexlean-${{ env.LEXLEAN_REF }}
 
-      - name: Install LexLean v0.3.0
+      - name: Install pinned LexLean branch compiler
         run: |
           mkdir -p "$(dirname "$LEXLEAN_BIN")"
-          cargo install --locked --git https://github.com/afflom/lexlean --tag v0.3.0 --root "${{ github.workspace }}/.local" lexlean
+          cargo install --locked \
+            --git "$LEXLEAN_REPO" \
+            --rev "$LEXLEAN_REF" \
+            --root "${{ github.workspace }}/.local" \
+            lexlean
           "$LEXLEAN_BIN" --version
 
       - name: Run research gate (build + audits + leanchecker)
@@ -83,7 +90,11 @@ jobs:
         run: make lexlean LEXLEAN="$LEXLEAN_BIN"
 
       - name: Build PDFs and release artifacts (without publishing)
-        run: make release-artifacts
+        env:
+          LEXLEAN_BIN: ${{ env.LEXLEAN_BIN }}
+        run: |
+          chmod +x scripts/build_release.sh
+          ./scripts/build_release.sh
 
       - name: Upload CI artifacts
         uses: actions/upload-artifact@v4
