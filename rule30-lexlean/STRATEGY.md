@@ -166,8 +166,8 @@ new dynamical assertion. In particular, its implication toward Problem 1 still r
 proof of `NoRecurrentCentralCollision`; an equivalence alone supplies no such proof.
 
 This rules out explaining all collision recurrence solely by sources escaping along the
-moving edges. It does not refute a periodic center: the sources are precisely what can
-maintain cancellation, and the finite central strip receives inputs from outside. No
+moving edges. It does not refute a periodic center: source recurrence constrains the nonlinear defect evolution, and the finite central strip
+receives inputs from outside. No
 periodicity or finite-state closure of its source signal follows. A seed-specific
 obstruction to sustaining that central cancellation is still unproved.
 
@@ -209,6 +209,56 @@ recurrence rate for the selected single column has been proved.
 This excludes both moving-edge escape and an explanation confined to right-side sources.
 It still does not exclude the remaining left-side nonlinear cancellation; Problem 1 remains
 open until that obstruction is proved.
+
+
+### Oriented cone geometry, transport cases, and the seed boundary
+
+The mixed-colour proof now retains its orientation: a unit colour on the left and
+shared black colour on the right. Its selected source at offset `s`, starting from
+`-k` and `0`, satisfies
+
+    -k+s <= x <= -s,  x < 0,  2*s <= k.
+
+The witness is an `AdvancingCollision`: its right endpoint is shared black and becomes
+defective one step later, regardless of the outside cells. Repeated finite choice under
+a hypothetical period selects both one fixed depth in `[2,P]` and one fixed advancing
+orientation occurring arbitrarily late. The other four orientations are excluded from
+this selected witness; they are not excluded from the full orbit.
+
+Paired colours are `X=10`, `Y=01`, `Z=11`, with the earlier history first. Collision codes
+`1..6` are respectively `XY,YX,XZ,ZX,YZ,ZY`; code zero is no collision. The six cases are
+exhaustive, disjoint, and bounded. With `a` and `b` the earlier and later histories and
+`L` the incoming defect at `p-1`, the exact transport table is:
+
+| Code | Colours at `p,p+1` | Next defect at `p` | Next defect at `p+1` |
+|---|---|---|---|
+| 1 | XY | L | a(p+2) |
+| 2 | YX | L | b(p+2) |
+| 3 | XZ | L | true |
+| 4 | ZX | L | not b(p+2) |
+| 5 | YZ | L | true |
+| 6 | ZY | L | not a(p+2) |
+
+The advancing phase is retained as well: XZ produces a Y defect at the next right
+endpoint, and YZ produces X. These local transitions exchange the two unit colours;
+they do not supply a strictly decreasing colour order.
+
+All nonzero collisions have matching OR gates, so each copies the incoming left defect
+at its own site. Actual erasure of a true incoming defect requires an OR-gate mismatch
+and has collision code zero at that update site. This distinction refines the earlier
+phrase "cancellation by sources": advancing source recurrence and gate erasures are
+separate parts of the same paired dynamics. The gate difference retains both actual
+histories; it is not a freely chosen forcing sequence.
+
+The seed provides a proved terminal boundary: at time zero every strictly left paired
+colour is zero or Y, and every source at depth at least two has code zero. This is not
+an invariant. `seed_advancing_collision_birth` kernel-reduces the exact example
+`collisionCode 1 1 2 = 5`, an advancing YZ source at column -2 after one step. Thus seed
+absence alone cannot exclude future advancing sources. `seed_gate_erasure` likewise
+proves an immediate erasure in the actual seeded pair, with gate difference true and
+collision code zero. A successful descent must also
+use the periodic-center compatibility and explain these source births and gate erasures.
+No closing invariant or phase contradiction has yet been proved; Problem 1 remains open.
 
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "advancing-at-depth"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Collision"
+name = "Rule30UOR.Collision.advancingAtDepth"
+
+[[form]]
+id = "advancing-at-depth"
+channel = "math"
+surface = "advancingatdepth"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name advancingatdepth) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

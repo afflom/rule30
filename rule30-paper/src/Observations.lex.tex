@@ -152,6 +152,158 @@ Close the goal with \(\lexeme{r30.observation::periodic-recurrent-left-column}(T
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{collision-code-nonzero}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(collisioncode(Q, t, k) ≠ 0 ↔ collisionbit(Q, t, k) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::collision-code-nonzero}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{collision-code-bound}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(collisioncode(Q, t, k) ≤ 6\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::collision-code-bound}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{collision-code-colours}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \((collisioncode(Q, t, k) = 1 ↔ leftcolour(Q, t, k) = 1 ∧ leftcolour(Q, t, k - 1) = 2) ∧ (collisioncode(Q, t, k) = 2 ↔ leftcolour(Q, t, k) = 2 ∧ leftcolour(Q, t, k - 1) = 1) ∧ (collisioncode(Q, t, k) = 3 ↔ leftcolour(Q, t, k) = 1 ∧ leftcolour(Q, t, k - 1) = 3) ∧ (collisioncode(Q, t, k) = 4 ↔ leftcolour(Q, t, k) = 3 ∧ leftcolour(Q, t, k - 1) = 1) ∧ (collisioncode(Q, t, k) = 5 ↔ leftcolour(Q, t, k) = 2 ∧ leftcolour(Q, t, k - 1) = 3) ∧ (collisioncode(Q, t, k) = 6 ↔ leftcolour(Q, t, k) = 3 ∧ leftcolour(Q, t, k - 1) = 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::collision-code-colours}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{advancing-collision-codes}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(advancingatdepth(Q, t, k) ↔ collisioncode(Q, t, k) = 3 ∨ collisioncode(Q, t, k) = 5\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::advancing-collision-codes}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{collision-transmits-left}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(collisioncode(Q, t, k) ≠ 0\), then \(leftdefect(Q, t + 1, k) = leftdefect(Q, t, k + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::collision-transmits-left}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{collision-gates-agree}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(collisioncode(Q, t, k) ≠ 0\), then \(leftgatedifference(Q, t, k) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::collision-gates-agree}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{collision-right-transport-table}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(2 ≤ k\), then \((collisioncode(Q, t, k) = 1 → leftdefect(Q, t + 1, k - 1) = leftcell(t, k - 2)) ∧ (collisioncode(Q, t, k) = 2 → leftdefect(Q, t + 1, k - 1) = leftcell(t + Q, k - 2)) ∧ (collisioncode(Q, t, k) = 3 → leftdefect(Q, t + 1, k - 1) = true) ∧ (collisioncode(Q, t, k) = 4 → leftdefect(Q, t + 1, k - 1) = \lexeme{lexlean.std.bool::not}(leftcell(t + Q, k - 2))) ∧ (collisioncode(Q, t, k) = 5 → leftdefect(Q, t + 1, k - 1) = true) ∧ (collisioncode(Q, t, k) = 6 → leftdefect(Q, t + 1, k - 1) = \lexeme{lexlean.std.bool::not}(leftcell(t, k - 2)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::collision-right-transport-table}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{advancing-right-colour-table}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \((collisioncode(Q, t, k) = 3 → leftcolour(Q, t + 1, k - 1) = 2) ∧ (collisioncode(Q, t, k) = 5 → leftcolour(Q, t + 1, k - 1) = 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::advancing-right-colour-table}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{gate-difference-iff-flip}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftdefect(Q, t + 1, k) = \lexeme{lexlean.std.bool::not}(leftdefect(Q, t, k + 1)) ↔ leftgatedifference(Q, t, k) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::gate-difference-iff-flip}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{incoming-defect-erased-iff}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftdefect(Q, t, k + 1) = true\), then \(leftdefect(Q, t + 1, k) = false ↔ leftgatedifference(Q, t, k) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::incoming-defect-erased-iff}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{erasure-has-no-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftdefect(Q, t, k + 1) = true\), then if \(leftdefect(Q, t + 1, k) = false\), then \(collisioncode(Q, t, k) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::erasure-has-no-collision}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-left-colours}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(k\), if \(0 < k\), then \(leftcolour(Q, 0, k) = 0 ∨ leftcolour(Q, 0, k) = 2\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-left-colours}(Q, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-left-collision-zero}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(k\), if \(2 ≤ k\), then \(collisioncode(Q, 0, k) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-left-collision-zero}(Q, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-advancing-collision-birth}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(collisioncode(1, 1, 2) = 5\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-advancing-collision-birth}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-gate-erasure}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(leftdefect(3, 0, 3) = true ∧ leftdefect(3, 1, 2) = false ∧ leftgatedifference(3, 0, 2) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-gate-erasure}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-defect-black-cone}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftdefect(Q, t, k) = true\), then if \(center(t) = true\), then if \(center(t + Q) = true\), then \(advancingleftcone(Q, t, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-defect-black-cone}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{black-window-forces-advancing-collision}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(leftadjacentdefect(Q, b + r) = true\), then there exists a natural number \(s\) such that \(2 * s ≤ r + 1 ∧ s ≤ r ∧ advancingleftcollision(Q, b + s, r + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::black-window-forces-advancing-collision}(Q, b, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-advancing-left-collision-window}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ advancingleftcollision(m * P, t, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-advancing-left-collision-window}(T, P, m, N)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-recurrent-advancing-left-column}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentadvancingleftcollision(m * P, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-recurrent-advancing-left-column}(T, P, m)\).
+\end{proof}
+\end{theorem}
+
 \begin{theorem}{no-period-iff-no-recurrent-central-collision}
 \allowaxioms{Classical.choice;Quot.sound;propext}
 \(noperiod ↔ norecurrentcentralcollision\).

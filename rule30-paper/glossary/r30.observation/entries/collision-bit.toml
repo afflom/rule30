@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "collision-bit"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Collision"
+name = "Rule30UOR.Collision.collisionBit"
+
+[[form]]
+id = "collision-bit"
+channel = "math"
+surface = "collisionbit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name collisionbit) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

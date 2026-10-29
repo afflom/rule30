@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-recurrent-advancing-left-column"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P)))) (app (const r30.observation::recurrent-advancing-left-collision) (app (const lexlean.std.nat::mul) (local m) (local P)) (local P))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.periodic_recurrent_advancing_left_column"
+
+[[form]]
+id = "periodic-recurrent-advancing-left-column"
+channel = "math"
+surface = "periodicrecurrentadvancingleftcolumn"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicrecurrentadvancingleftcolumn) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

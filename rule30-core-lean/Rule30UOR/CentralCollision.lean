@@ -46,6 +46,29 @@ def RecurrentLeftCollision (Q B : Nat) : Prop :=
   ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ -2 ∧
     ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collision Q t x = true
 
+/-- A cone witness retaining the collision's unit/black endpoint orientation. -/
+def AdvancingLeftCone (Q t k : Nat) : Prop :=
+  ∃ s : Nat, 2 * s ≤ k ∧ ∃ x : Int, -(k : Int) + (s : Int) ≤ x ∧
+    x ≤ -(s : Int) ∧ x < 0 ∧ AdvancingCollision Q (t + s) x
+
+def AdvancingLeftCollision (Q t B : Nat) : Prop :=
+  ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ -2 ∧ AdvancingCollision Q t x
+
+/-- Both the column and one of the advancing orientations recur infinitely often. -/
+def RecurrentAdvancingLeftCollision (Q B : Nat) : Prop :=
+  ∃ k c : Nat, 2 ≤ k ∧ k ≤ B ∧ (c = 3 ∨ c = 5) ∧
+    ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collisionCode Q t k = c
+
+/-- The sharper mixed-colour witness is a cone with an advancing right endpoint. -/
+theorem left_defect_black_cone (Q t k : Nat)
+    (hd : leftDefect Q t k = true)
+    (ha : Rule30UOR.Core.center t = true) (hb : Rule30UOR.Core.center (t + Q) = true) :
+    AdvancingLeftCone Q t k := by
+  exact left_advancing_collision_of_defect_and_black Q t k
+    (by simpa only [leftDefect] using hd)
+    (by simpa only [Rule30UOR.Scale.center_eq_kit] using ha)
+    (by simpa only [Rule30UOR.Scale.center_eq_kit] using hb)
+
 /-- Frontier obstruction at fixed period: under a hypothetical periodic center of period `P`,
 the period-scale recurrent central collision witness must fail. -/
 def NoRecurrentCentralCollision : Prop :=
@@ -177,11 +200,11 @@ private theorem left_defect_of_agreeing_window (Q b r : Nat)
 a left-side collision no later than the unit defect, within the first half of the
 observation window.
 No eventual-periodicity assumption is needed. -/
-theorem black_window_forces_left_collision (Q b r : Nat) (hr : 0 < r)
+theorem black_window_forces_advancing_collision (Q b r : Nat) (hr : 0 < r)
     (hc : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + Q) (r + 1))
     (hb : Rule30UOR.Core.center b = true)
     (hd : leftAdjacentDefect Q (b + r) = true) :
-    ∃ s : Nat, 2 * s ≤ r + 1 ∧ s ≤ r ∧ LeftCollision Q (b + s) (r + 1) := by
+    ∃ s : Nat, 2 * s ≤ r + 1 ∧ s ≤ r ∧ AdvancingLeftCollision Q (b + s) (r + 1) := by
   obtain ⟨k, hk1, hkr, hdef⟩ := left_defect_of_agreeing_window Q b r hc hd
   have hb' : center b = true := by
     simpa only [Rule30UOR.Scale.center_eq_kit] using hb
@@ -189,7 +212,8 @@ theorem black_window_forces_left_collision (Q b r : Nat) (hr : 0 < r)
     have he := hc 0 (by omega)
     simp only [Nat.add_zero] at he
     exact he.symm.trans hb'
-  obtain ⟨s, hs, x, hx1, hx2, hcol⟩ := left_collision_of_defect_and_black Q b k hdef hb' hbQ
+  obtain ⟨s, hs, x, hx1, hx2, hx3, hadv⟩ := left_advancing_collision_of_defect_and_black Q b k hdef hb' hbQ
+  have hcol := advancing_collision_has_source Q (b + s) x hadv
   have hsr : s ≤ r := by omega
   have clean : ∀ j : Nat, j ≤ r + 1 → defect Q (b + j) 0 = false := by
     intro j hj
@@ -204,14 +228,23 @@ theorem black_window_forces_left_collision (Q b r : Nat) (hr : 0 < r)
         simpa only [Nat.add_assoc] using clean (s + 1) (by omega))
     rw [hz] at hcol
     contradiction
-  exact ⟨s, by omega, hsr, x, by omega, by omega, hcol⟩
+  exact ⟨s, by omega, hsr, x, by omega, by omega, hadv⟩
+
+/-- The original collision interface follows by forgetting the endpoint colours. -/
+theorem black_window_forces_left_collision (Q b r : Nat) (hr : 0 < r)
+    (hc : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + Q) (r + 1))
+    (hb : Rule30UOR.Core.center b = true)
+    (hd : leftAdjacentDefect Q (b + r) = true) :
+    ∃ s : Nat, 2 * s ≤ r + 1 ∧ s ≤ r ∧ LeftCollision Q (b + s) (r + 1) := by
+  obtain ⟨s, hs, hsr, x, hx1, hx2, hadv⟩ := black_window_forces_advancing_collision Q b r hr hc hb hd
+  exact ⟨s, hs, hsr, x, hx1, hx2, advancing_collision_has_source Q (b + s) x hadv⟩
 
 /-- The source occurs no later than the unit defect supplied by the moving edge. This
 removes the extra future localization allowance from the earlier deadline. -/
-theorem periodic_left_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
+theorem periodic_advancing_left_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
     ∃ t : Nat, N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧
-      LeftCollision (m * P) t P := by
+      AdvancingLeftCollision (m * P) t P := by
   have hp := kit_period hc
   obtain ⟨r, hr0, hr, hd, _, hw⟩ := exists_unit_defect_and_white_center_of_periodic
     hP hp m (N + P) hm (by omega)
@@ -237,13 +270,22 @@ theorem periodic_left_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
     intro k hk
     simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
       (periodic_mul hp m (b + k) (by omega)).symm
-  obtain ⟨s, hs, hsr, x, hx1, hx2, hcol⟩ := black_window_forces_left_collision
+  obtain ⟨s, hs, hsr, x, hx1, hx2, hcol⟩ := black_window_forces_advancing_collision
     (m * P) b (v - b) hgap0 win
     (by simpa only [Rule30UOR.Scale.center_eq_kit] using hb) (by
       simpa only [show b + (v - b) = v by omega, leftAdjacentDefect, v] using hd)
   refine ⟨b + s, by omega, ?_, x, by omega, hx2, hcol⟩
   dsimp [v] at hsr
   omega
+
+/-- Forgetting the advancing orientation preserves the existing quantitative API. -/
+theorem periodic_left_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
+    ∃ t : Nat, N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧
+      LeftCollision (m * P) t P := by
+  obtain ⟨t, ht, hb, x, hx1, hx2, hadv⟩ :=
+    periodic_advancing_left_collision_window T P m N hP hm hc hN
+  exact ⟨t, ht, hb, x, hx1, hx2, advancing_collision_has_source (m * P) t x hadv⟩
 
 theorem periodic_left_collisions (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) :
@@ -308,18 +350,48 @@ private theorem finite_recurrent_choice (f : Nat → Nat → Prop) (n : Nat) :
         exact ⟨t, by omega, j, by omega, hf⟩)
       exact ⟨i, by omega, hf⟩
 
-/-- A periodic center forces recurrence at a fixed strictly left column. Neither
-right-side sources nor sources escaping with the cone edges suffice. -/
+/-- Finitely many depths and two orientations give a fixed recurring advancing
+case. The proof retains the seed-dependent moving-edge witness. -/
+theorem periodic_recurrent_advancing_left_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentAdvancingLeftCollision (m * P) P := by
+  obtain ⟨i, hi, hf⟩ := finite_recurrent_choice
+    (fun i t => AdvancingCollision (m * P) t (-(P : Int) + (i : Int))) (P - 1) (by
+      intro N
+      obtain ⟨t, ht, _, x, hx1, hx2, hadv⟩ :=
+        periodic_advancing_left_collision_window T P m (max T N) hP hm hc (by omega)
+      refine ⟨t, by omega, (x + (P : Int)).toNat, by omega, ?_⟩
+      simpa only [Int.toNat_of_nonneg (show 0 ≤ x + (P : Int) by omega),
+        show -(P : Int) + (x + (P : Int)) = x by omega] using hadv)
+  let k := (P : Int) - (i : Int)
+  have hk : 2 ≤ k := by dsimp [k]; omega
+  have hkP : k ≤ (P : Int) := by dsimp [k]; omega
+  have hcast : (k.toNat : Int) = k := Int.toNat_of_nonneg (by omega)
+  have hcases : ∀ N : Nat, ∃ t : Nat, N ≤ t ∧
+      (collisionCode (m * P) t k.toNat = 3 ∨ collisionCode (m * P) t k.toNat = 5) := by
+    intro N
+    obtain ⟨t, ht, hadv⟩ := hf N
+    refine ⟨t, ht, (advancing_collision_codes (m * P) t k.toNat).1 ?_⟩
+    simpa only [advancingAtDepth, hcast, show -k = -(P : Int) + (i : Int) by dsimp [k]; omega] using hadv
+  obtain ⟨j, hj, hcode⟩ := finite_recurrent_choice
+    (fun j t => collisionCode (m * P) t k.toNat = (if j = 0 then 3 else 5)) 2 (by
+      intro N
+      obtain ⟨t, ht, hh⟩ := hcases N
+      rcases hh with hh | hh
+      · exact ⟨t, ht, 0, by omega, by simpa using hh⟩
+      · exact ⟨t, ht, 1, by omega, by simpa using hh⟩)
+  refine ⟨k.toNat, (if j = 0 then 3 else 5), by omega, by omega, ?_, hcode⟩
+  by_cases hj0 : j = 0 <;> simp [hj0]
+
+/-- The weaker recurring-source interface follows from a fixed advancing type. -/
 theorem periodic_recurrent_left_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentLeftCollision (m * P) P := by
-  obtain ⟨i, hi, hf⟩ := finite_recurrent_choice
-    (fun i t => collision (m * P) t (-(P : Int) + (i : Int)) = true) (P - 1) (by
-      intro N
-      obtain ⟨t, ht, x, hx1, hx2, hcol⟩ := periodic_left_collisions T P m N hP hm hc
-      refine ⟨t, ht, (x + (P : Int)).toNat, by omega, ?_⟩
-      simpa only [Int.toNat_of_nonneg (show 0 ≤ x + (P : Int) by omega),
-        show -(P : Int) + (x + (P : Int)) = x by omega] using hcol)
-  exact ⟨-(P : Int) + (i : Int), by omega, by omega, hf⟩
+  obtain ⟨k, c, hk, hkP, hc0, hf⟩ := periodic_recurrent_advancing_left_column T P m hP hm hc
+  refine ⟨-(k : Int), by omega, by omega, ?_⟩
+  intro N
+  obtain ⟨t, ht, hcode⟩ := hf N
+  have hne : collisionCode (m * P) t k ≠ 0 := by rw [hcode]; rcases hc0 with h | h <;> omega
+  refine ⟨t, ht, ?_⟩
+  simpa only [collisionBit] using (collision_code_nonzero (m * P) t k).1 hne
 
 /-- Finite choice localizes recurrence to one fixed source column. The central strip
 is not a closed dynamical system: this theorem does not make its source signal periodic. -/

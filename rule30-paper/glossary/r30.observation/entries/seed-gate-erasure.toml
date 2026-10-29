@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-gate-erasure"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (nat 3) (nat 0) (nat 3)) (const lexlean.std.bool::true)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (nat 3) (nat 1) (nat 2)) (const lexlean.std.bool::false)) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-difference) (nat 3) (nat 0) (nat 2)) (const lexlean.std.bool::true))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectSource"
+name = "Rule30UOR.DefectSource.seed_gate_erasure"
+
+[[form]]
+id = "seed-gate-erasure"
+channel = "math"
+surface = "seedgateerasure"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name seedgateerasure)"

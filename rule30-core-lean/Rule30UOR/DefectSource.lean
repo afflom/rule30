@@ -48,6 +48,131 @@ theorem defect_source_law (Q t : Nat) (p : Int) :
   cases defect Q t (p - 1) <;> cases defect Q t p <;> cases defect Q t (p + 1) <;>
     cases cell t p <;> cases cell t (p + 1) <;> rfl
 
+/-- The exact difference of the two OR gates. This is where an incoming defect
+can be flipped; it retains both backgrounds. -/
+def gateDifference (Q t : Nat) (p : Int) : Bool :=
+  xor (cell (t + Q) p || cell (t + Q) (p + 1)) (cell t p || cell t (p + 1))
+
+def leftGateDifference (Q t k : Nat) : Bool := gateDifference Q t (-(k : Int))
+
+theorem defect_step_gate (Q t : Nat) (p : Int) :
+    defect Q (t + 1) p = xor (defect Q t (p - 1)) (gateDifference Q t p) := by
+  unfold defect difference gateDifference
+  dsimp only
+  rw [show t + 1 + Q = (t + Q) + 1 by omega]
+  change xor (rule (cell (t + Q) (p - 1)) (cell (t + Q) p) (cell (t + Q) (p + 1)))
+    (rule (cell t (p - 1)) (cell t p) (cell t (p + 1))) = _
+  unfold rule
+  cases cell t (p - 1) <;> cases cell (t + Q) (p - 1) <;>
+    cases cell t p <;> cases cell (t + Q) p <;>
+    cases cell t (p + 1) <;> cases cell (t + Q) (p + 1) <;> rfl
+
+theorem left_defect_step_gate (Q t k : Nat) :
+    leftDefect Q (t + 1) k = xor (leftDefect Q t (k + 1)) (leftGateDifference Q t k) := by
+  simpa only [leftDefect, leftGateDifference,
+    show -(k : Int) - 1 = -((k + 1 : Nat) : Int) by omega] using defect_step_gate Q t (-(k : Int))
+
+theorem gate_difference_iff_flip (Q t k : Nat) :
+    (leftDefect Q (t + 1) k = !leftDefect Q t (k + 1)) ↔ leftGateDifference Q t k = true := by
+  rw [left_defect_step_gate]
+  cases leftDefect Q t (k + 1) <;> cases leftGateDifference Q t k <;> decide
+
+/-- Every nonzero collision has matching OR gates. It is transparent to the
+incoming left defect at its own site. -/
+theorem collision_gate_agreement (Q t : Nat) (p : Int)
+    (hc : collision Q t p = true) : gateDifference Q t p = false := by
+  unfold collision at hc
+  unfold gateDifference
+  cases ha : cell t p <;> cases hb : cell (t + Q) p <;>
+    cases hc1 : cell t (p + 1) <;> cases hd : cell (t + Q) (p + 1) <;> simp_all
+
+theorem collision_transmits_left (Q t k : Nat) (hc : collisionCode Q t k ≠ 0) :
+    leftDefect Q (t + 1) k = leftDefect Q t (k + 1) := by
+  have hs : collision Q t (-(k : Int)) = true := by
+    simpa only [collisionBit] using (collision_code_nonzero Q t k).1 hc
+  simp only [leftDefect, defect_step_gate, collision_gate_agreement Q t (-(k : Int)) hs,
+    Bool.xor_false, show -(k : Int) - 1 = -((k + 1 : Nat) : Int) by omega]
+
+theorem collision_gates_agree_at_depth (Q t k : Nat) (hc : collisionCode Q t k ≠ 0) :
+    leftGateDifference Q t k = false := by
+  unfold leftGateDifference
+  apply collision_gate_agreement
+  simpa only [collisionBit] using (collision_code_nonzero Q t k).1 hc
+
+/-- All six oriented cases, retaining the outside right bit where it is needed.
+The common-black right endpoint (cases 3 and 5) forces an advance. -/
+theorem collision_right_transport_table (Q t k : Nat) (hk : 2 ≤ k) :
+    (collisionCode Q t k = 1 → leftDefect Q (t + 1) (k - 1) = leftCell t (k - 2)) ∧
+    (collisionCode Q t k = 2 → leftDefect Q (t + 1) (k - 1) = leftCell (t + Q) (k - 2)) ∧
+    (collisionCode Q t k = 3 → leftDefect Q (t + 1) (k - 1) = true) ∧
+    (collisionCode Q t k = 4 → leftDefect Q (t + 1) (k - 1) = !leftCell (t + Q) (k - 2)) ∧
+    (collisionCode Q t k = 5 → leftDefect Q (t + 1) (k - 1) = true) ∧
+    (collisionCode Q t k = 6 → leftDefect Q (t + 1) (k - 1) = !leftCell t (k - 2)) := by
+  simp only [leftDefect, leftCell,
+    show -((k - 1 : Nat) : Int) = -(k : Int) + 1 by omega,
+    show -((k - 2 : Nat) : Int) = -(k : Int) + 2 by omega,
+    defect_step_gate]
+  unfold gateDifference defect difference collisionCode
+  dsimp only
+  simp only [show -(k : Int) + 1 + 1 = -(k : Int) + 2 by omega]
+  cases ha : cell t (-(k : Int)) <;> cases hb : cell (t + Q) (-(k : Int)) <;>
+    cases hc : cell t (-(k : Int) + 1) <;> cases hd : cell (t + Q) (-(k : Int) + 1) <;>
+    cases he : cell t (-(k : Int) + 2) <;> cases hf : cell (t + Q) (-(k : Int) + 2) <;>
+    simp_all [colourCase]
+
+/-- Crossing a shared black right endpoint reverses the unit orientation. -/
+theorem advancing_right_colour_table (Q t k : Nat) (hk : 0 < k) :
+    (collisionCode Q t k = 3 → leftColour Q (t + 1) (k - 1) = 2) ∧
+    (collisionCode Q t k = 5 → leftColour Q (t + 1) (k - 1) = 1) := by
+  have step : ∀ (u : Nat) (x : Int),
+      cell (u + 1) x = rule (cell u (x - 1)) (cell u x) (cell u (x + 1)) := by
+    intro u x
+    rfl
+  simp only [leftColour, leftCell,
+    show -((k - 1 : Nat) : Int) = -(k : Int) + 1 by omega,
+    show t + 1 + Q = (t + Q) + 1 by omega, step,
+    show -(k : Int) + 1 - 1 = -(k : Int) by omega]
+  unfold collisionCode
+  cases ha : cell t (-(k : Int)) <;> cases hb : cell (t + Q) (-(k : Int)) <;>
+    cases hc : cell t (-(k : Int) + 1) <;> cases hd : cell (t + Q) (-(k : Int) + 1) <;>
+    simp_all [colourCase, colourCode, rule]
+
+/-- A selected unit/black collision forces the defect one site right, irrespective
+of the outside cells. -/
+theorem advancing_collision_step (Q t : Nat) (p : Int)
+    (hc : AdvancingCollision Q t p) : defect Q (t + 1) (p + 1) = true := by
+  rcases hc with ⟨hd, ha, hb⟩
+  rw [defect_step_gate]
+  simp only [show p + 1 - 1 = p by omega]
+  unfold gateDifference defect difference
+  rw [ha, hb]
+  cases h1 : cell t p <;> cases h2 : cell (t + Q) p <;> simp_all
+
+/-- Cancellation of a true incoming defect requires a mismatching OR gate. -/
+theorem incoming_defect_erased_iff (Q t k : Nat) (hd : leftDefect Q t (k + 1) = true) :
+    leftDefect Q (t + 1) k = false ↔ leftGateDifference Q t k = true := by
+  have he := defect_step_gate Q t (-(k : Int))
+  change defect Q t (-((k + 1 : Nat) : Int)) = true at hd
+  rw [show -(k : Int) - 1 = -((k + 1 : Nat) : Int) by omega, hd] at he
+  change defect Q (t + 1) (-(k : Int)) = false ↔ gateDifference Q t (-(k : Int)) = true
+  rw [he]
+  cases gateDifference Q t (-(k : Int)) <;> decide
+
+theorem erasure_has_no_collision (Q t k : Nat)
+    (hd : leftDefect Q t (k + 1) = true) (he : leftDefect Q (t + 1) k = false) :
+    collisionCode Q t k = 0 := by
+  by_cases hc : collisionCode Q t k = 0
+  · exact hc
+  · have ht := collision_transmits_left Q t k hc
+    rw [hd, he] at ht
+    contradiction
+
+/-- The actual seed also permits an erasure immediately, at a site with no collision.
+This finite reduction rules out a blanket no-erasure seed invariant. -/
+theorem seed_gate_erasure :
+    leftDefect 3 0 3 = true ∧ leftDefect 3 1 2 = false ∧ leftGateDifference 3 0 2 = true := by
+  decide +kernel
+
 /-- Away from collisions the defect is an exact Rule 30 history. -/
 theorem defect_rule_of_no_collision (Q t : Nat) (p : Int) (h : collision Q t p = false) :
     defect Q (t + 1) p = rule (defect Q t (p - 1)) (defect Q t p) (defect Q t (p + 1)) := by

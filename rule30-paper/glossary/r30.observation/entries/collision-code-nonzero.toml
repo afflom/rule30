@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "collision-code-nonzero"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const lexlean.core::lnot) (app (const lexlean.core::eq) (app (const r30.observation::collision-code) (local Q) (local t) (local k)) (nat 0))) (app (const lexlean.core::eq) (app (const r30.observation::collision-bit) (local Q) (local t) (local k)) (const lexlean.std.bool::true))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Collision"
+name = "Rule30UOR.Collision.collision_code_nonzero"
+
+[[form]]
+id = "collision-code-nonzero"
+channel = "math"
+surface = "collisioncodenonzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name collisioncodenonzero) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

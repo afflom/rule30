@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "advancing-left-cone"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.AdvancingLeftCone"
+
+[[form]]
+id = "advancing-left-cone"
+channel = "math"
+surface = "advancingleftcone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name advancingleftcone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

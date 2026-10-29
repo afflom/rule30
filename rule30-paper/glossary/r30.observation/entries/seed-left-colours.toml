@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-left-colours"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::lt) (nat 0) (local k)))) (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (nat 0) (local k)) (nat 0)) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (nat 0) (local k)) (nat 2)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Collision"
+name = "Rule30UOR.Collision.seed_left_colours"
+
+[[form]]
+id = "seed-left-colours"
+channel = "math"
+surface = "seedleftcolours"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name seedleftcolours) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

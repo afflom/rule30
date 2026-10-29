@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-cell"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Collision"
+name = "Rule30UOR.Collision.leftCell"
+
+[[form]]
+id = "left-cell"
+channel = "math"
+surface = "leftcell"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftcell) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

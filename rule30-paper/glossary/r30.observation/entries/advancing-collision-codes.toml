@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "advancing-collision-codes"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const r30.observation::advancing-at-depth) (local Q) (local t) (local k)) (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::collision-code) (local Q) (local t) (local k)) (nat 3)) (app (const lexlean.core::eq) (app (const r30.observation::collision-code) (local Q) (local t) (local k)) (nat 5)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Collision"
+name = "Rule30UOR.Collision.advancing_collision_codes"
+
+[[form]]
+id = "advancing-collision-codes"
+channel = "math"
+surface = "advancingcollisioncodes"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name advancingcollisioncodes) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

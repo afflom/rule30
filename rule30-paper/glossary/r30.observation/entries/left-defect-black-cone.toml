@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-defect-black-cone"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (local Q) (local t) (local k)) (const lexlean.std.bool::true))) (explicit ha (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (const lexlean.std.bool::true))) (explicit hb (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (local Q))) (const lexlean.std.bool::true)))) (app (const r30.observation::advancing-left-cone) (local Q) (local t) (local k))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.left_defect_black_cone"
+
+[[form]]
+id = "left-defect-black-cone"
+channel = "math"
+surface = "leftdefectblackcone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftdefectblackcone) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-gate-difference"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectSource"
+name = "Rule30UOR.DefectSource.leftGateDifference"
+
+[[form]]
+id = "left-gate-difference"
+channel = "math"
+surface = "leftgatedifference"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftgatedifference) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"
