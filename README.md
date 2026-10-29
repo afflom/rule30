@@ -90,6 +90,27 @@ make bridge
 make release-artifacts
 ```
 
+### LexLean-First Authoring Policy
+
+This repository treats LexLean documents as the authoring surface for proof content.
+
+- Source-of-truth proof text lives in `rule30-paper/src/*.lex.tex` and `rule30-lexlean/src/*.lex.tex`.
+- Host Lean modules in `rule30-core-lean/Rule30UOR` and bridge Lean in `rule30-bridge` are bridge/derived surfaces used to reuse the Rule30PrizeKit and related Lean ecosystems.
+- Generated artifacts (PDFs, `verified-latest`, lockfiles, and `dist`) should be produced from LexLean verification/build steps, not hand-edited.
+
+To enforce this locally, install the repository-managed git hooks:
+
+```bash
+make hooks
+```
+
+The pre-commit hook blocks commits that modify proof-surface host Lean or generated artifacts without accompanying LexLean source changes.
+For exceptional maintenance-only commits, you can bypass once with:
+
+```bash
+ALLOW_NON_LEXLEAN_AUTHORING=1 git commit ...
+```
+
 If `lexlean` is installed:
 ```bash
 make LEXLEAN=/path/to/lexlean all

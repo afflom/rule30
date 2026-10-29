@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# LexLean-first authoring policy:
+# - Proof-level Lean changes in rule30-core-lean/Rule30UOR or rule30-bridge must
+#   be paired with LexLean source edits.
+# - Generated artifacts must not be edited without LexLean source edits.
+
+if [[ "${ALLOW_NON_LEXLEAN_AUTHORING:-0}" == "1" ]]; then
+  exit 0
+fi
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  exit 0
+fi
+
+mapfile -t staged < <(git diff --cached --name-only --diff-filter=ACMR)
+if [[ ${#staged[@]} -eq 0 ]]; then
+  exit 0
+fi
+
+has_lexlean_source=0
+has_host_proof_edit=0
+has_generated_artifact_edit=0
+
+for p in "${staged[@]}"; do
+  case "$p" in
+    rule30-lexlean/src/*.lex.tex|rule30-lexlean/src/**/*.lex.tex|rule30-paper/src/*.lex.tex|rule30-paper/src/**/*.lex.tex|rule30-lexlean/glossary/*|rule30-paper/glossary/*)
+      has_lexlean_source=1
+      ;;
+  esac
+
+  case "$p" in
+    rule30-core-lean/Rule30UOR/*.lean|rule30-core-lean/Rule30UOR/**/*.lean|rule30-bridge/*.lean|rule30-bridge/**/*.lean)
+      has_host_proof_edit=1
+      ;;
+  esac
+
+  case "$p" in
+    Rule30-Core.pdf|Rule30-Paper.pdf|rule30-lexlean/Core.pdf|rule30-paper/Paper.pdf|rule30-lexlean/lexlean.lock|rule30-paper/lexlean.lock|rule30-lexlean/pdf/*|rule30-paper/pdf/*|rule30-lexlean/verified-latest/*|rule30-paper/verified-latest/*|dist/*)
+      has_generated_artifact_edit=1
+      ;;
+  esac
+done
+
+if [[ $has_host_proof_edit -eq 1 && $has_lexlean_source -eq 0 ]]; then
+  cat >&2 <<'MSG'
+pre-commit: blocked by LexLean authoring policy.
+
+Detected staged proof-surface Lean edits in rule30-core-lean/Rule30UOR or rule30-bridge,
+but no staged LexLean source edits under rule30-lexlean/src or rule30-paper/src.
+
+Policy: the paper/LexLean sources are the authoring surface; host Lean and bridge are
+derived/bridge artifacts.
+
+If this commit is intentionally tooling-only, set ALLOW_NON_LEXLEAN_AUTHORING=1 for this commit.
+MSG
+  exit 1
+fi
+
+if [[ $has_generated_artifact_edit -eq 1 && $has_lexlean_source -eq 0 ]]; then
+  cat >&2 <<'MSG'
+pre-commit: blocked by LexLean authoring policy.
+
+Detected staged generated artifact edits (pdf/lock/verified-latest/dist) without
+LexLean source edits.
+
+Regenerate artifacts from LexLean source, or set ALLOW_NON_LEXLEAN_AUTHORING=1
+if this is an exceptional maintenance commit.
+MSG
+  exit 1
+fi
+
+exit 0

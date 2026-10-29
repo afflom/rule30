@@ -1,4 +1,4 @@
-.PHONY: all core check-research lexlean pdf bridge release-artifacts clean
+.PHONY: all core check-research lexlean pdf bridge release-artifacts hooks clean
 
 LEXLEAN ?= /home/alex/Desktop/lexlean-v04/src/target/release/lexlean
 
@@ -23,6 +23,9 @@ bridge:
 
 release-artifacts:
 	./scripts/build_release.sh --package-only
+
+hooks:
+	./scripts/install-git-hooks.sh
 
 clean:
 	rm -rf dist
