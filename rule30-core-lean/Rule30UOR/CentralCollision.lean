@@ -215,6 +215,19 @@ theorem recurrent_central_collision_of_eventual_periodic
   · intro t ht
     simpa only [Rule30UOR.Scale.center_eq_kit] using hper t ht
 
+/-- Canonical interface form of the same frontier reduction: excluding periodic-center
+recurrent central collisions is exactly a `NoPeriod` witness. -/
+theorem noPeriod_of_no_recurrent_central_collision
+    (hno : ∀ T P : Nat, 0 < P →
+      Rule30UOR.Scale.CenterPeriodic T P →
+      ¬ RecurrentCentralCollision P (2 * P)) :
+    Rule30UOR.Scale.NoPeriod := by
+  intro T P hP hcP
+  have hrec : RecurrentCentralCollision P (2 * P) := by
+    simpa [Nat.one_mul] using
+      periodic_recurrent_central_column T P 1 hP (by decide) hcP
+  exact hno T P hP hcP hrec
+
 /-- Problem 1 follows once one rules out fixed-band recurrent central collisions under
 every hypothetical periodic-center witness. -/
 theorem problem1_of_no_recurrent_central_collision
@@ -222,12 +235,7 @@ theorem problem1_of_no_recurrent_central_collision
       Rule30UOR.Scale.CenterPeriodic T P →
       ¬ RecurrentCentralCollision P (2 * P)) :
     Rule30Prize.Problem1 := by
-  intro hEP
-  obtain ⟨T, P, hP, hcP, hrec⟩ :=
-    recurrent_central_collision_of_eventual_periodic 1 (by decide) hEP
-  have hcontra := hno T P hP hcP
-  have hrec' : RecurrentCentralCollision P (2 * P) := by
-    simpa [Nat.one_mul] using hrec
-  exact hcontra hrec'
+  exact Rule30UOR.Scale.problem1_of_noPeriod
+    (noPeriod_of_no_recurrent_central_collision hno)
 
 end Rule30UOR.CentralCollision
