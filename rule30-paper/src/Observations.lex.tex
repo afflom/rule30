@@ -1286,5 +1286,61 @@ Close the goal with \(\lexeme{r30.observation::center-flip-mask-invisible}(d, n,
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{observer-code-readout}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\) and natural number \(j\), \(rowbit(observercode(t), j) = leftcell(t, j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-code-readout}(t, j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-defect-alignment}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(observerdefect(Q, t) = wittxor(observercode(t + Q), observercode(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-defect-alignment}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-defect-readout}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), \(rowbit(observerdefect(Q, t), j) = rowbit(aligneddefect(Q, t), t + Q + j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-defect-readout}(Q, t, j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-val-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\), \(vala(observercode(t + 1)) = bxor(center(t), bxor(vala(wittcarry(observercode(t))), observerinput(t))) ∧ valb(observercode(t + 1)) = bxor(center(t), valb(wittcarry(observercode(t))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-val-step}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-val-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(vala(observerdefect(m * P, t + 1)) = bxor(vala(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t)))), leftdefect(m * P, t, 1)) ∧ valb(observerdefect(m * P, t + 1)) = valb(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-val-step}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-edges}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(rowbit(observerdefect(m * P, t), t + m * P) = true ∧ rowbit(observerdefect(m * P, t), 0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-edges}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-seed-zero-val}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(observerdefect(2, 0) = 7 ∧ vala(observerdefect(2, 0)) = false ∧ valb(observerdefect(2, 0)) = false ∧ rowbit(observerdefect(2, 0), 0) = true ∧ observerdefect(4, 0) = 24 ∧ vala(observerdefect(4, 0)) = true ∧ valb(observerdefect(4, 0)) = true ∧ rowbit(observerdefect(4, 0), 0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-seed-zero-val}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

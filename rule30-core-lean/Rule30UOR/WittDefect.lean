@@ -2807,4 +2807,196 @@ theorem center_flip_mask_invisible (d n j : Nat) (hj : j < n ∨ n + 2 < j) :
   · exact congrArg Prod.fst vv
   · exact congrArg Prod.snd vv
 
+/-! ## F4 transport at the moving physical center cut
+
+The observer word `row t >> t` begins at the center and continues to the
+left seed edge. Its F4 update has a boundary term: the masked right head.
+Under a periodic center, the difference of that boundary term is precisely
+the column-minus-one defect. The full carry difference remains in the law.
+-/
+
+/-- Center at bit zero, left seed edge at bit `t`. -/
+def observerCode (t : Nat) : Nat := row t >>> t
+
+/-- The actual right-head input that survives the center's OR mask. -/
+def observerInput (t : Nat) : Bool := (!Rule30UOR.Core.center t) && rightCell t 1
+
+/-- The aligned temporal defect viewed from its moving physical center. -/
+def observerDefect (Q t : Nat) : Nat := alignedDefect Q t >>> (t + Q)
+
+theorem observer_code_readout (t j : Nat) : (observerCode t).testBit j = leftCell t j := by
+  rw [observerCode, Nat.testBit_shiftRight, Rule30UOR.Interfaces.row_testBit,
+    Rule30UOR.Right.rdiag_eq_R]
+  unfold Rule30Diagonals.R leftCell
+  congr 1
+  omega
+
+theorem observer_defect_alignment (Q t : Nat) :
+    observerDefect Q t = observerCode (t + Q) ^^^ observerCode t := by
+  apply Nat.eq_of_testBit_eq
+  intro j
+  simp only [observerDefect, alignedDefect, background, observerCode,
+    Nat.testBit_shiftRight, Nat.testBit_xor, Nat.testBit_shiftLeft,
+    show decide (t + Q + j ≥ Q) = true from decide_eq_true (by omega), Bool.true_and]
+  rw [show t + Q + j - Q = t + j by omega]
+
+/-- Exact coefficient index of the moving physical cut. -/
+theorem observer_defect_readout (Q t j : Nat) :
+    (observerDefect Q t).testBit j = (alignedDefect Q t).testBit (t + Q + j) := by
+  simp only [observerDefect, Nat.testBit_shiftRight]
+
+private def observerPoly (x : Nat) (input : Bool) : Nat :=
+  ((((x >>> 1) ^^^ x) ^^^ (x <<< 1)) ^^^ Rule30UOR.Core.carry x) ^^^ input.toNat
+
+private theorem carry_bit (x j : Nat) :
+    (Rule30UOR.Core.carry x).testBit j = (x.testBit j && (x <<< 1).testBit j) := by
+  change (x &&& (x <<< 1)).testBit j = _
+  rw [Nat.testBit_and]
+
+private theorem observer_code_step (t : Nat) :
+    observerCode (t + 1) = observerPoly (observerCode t) (observerInput t) := by
+  apply Nat.eq_of_testBit_eq
+  intro j
+  simp only [observerPoly, Nat.testBit_xor, Nat.testBit_shiftRight, carry_bit,
+    Nat.testBit_shiftLeft, Nat.testBit_bool_toNat]
+  cases j with
+  | zero =>
+    simp only [Nat.add_zero, show decide (0 ≥ 1) = false by decide,
+      show decide (0 = 0) = true by decide, decide_true, Bool.false_and, Bool.true_and, Bool.and_false,
+      Bool.xor_false, observer_code_readout]
+    unfold observerInput rightCell leftCell
+    rw [Rule30UOR.Scale.center_eq_kit]
+    change rule (cell t (-1)) (cell t 0) (cell t 1) =
+      xor (xor (cell t (-1)) (cell t 0)) ((!cell t 0) && cell t 1)
+    cases cell t (-1) <;> cases cell t 0 <;> cases cell t 1 <;> rfl
+  | succ j =>
+    simp only [show decide (j + 1 ≥ 1) = true from decide_eq_true (by omega),
+      show decide (j + 1 = 0) = false from decide_eq_false (by omega),
+      Nat.add_sub_cancel, Bool.true_and, Bool.false_and, Bool.xor_false,
+      observer_code_readout]
+    unfold leftCell
+    change rule (cell t (-((j + 1 : Nat) : Int) - 1))
+      (cell t (-((j + 1 : Nat) : Int))) (cell t (-((j + 1 : Nat) : Int) + 1)) = _
+    rw [show -((j + 1 : Nat) : Int) - 1 = -((j + 2 : Nat) : Int) by omega,
+      show -((j + 1 : Nat) : Int) + 1 = -(j : Int) by omega,
+      show 1 + (j + 1) = j + 2 by omega]
+    cases cell t (-((j + 2 : Nat) : Int)) <;>
+      cases cell t (-((j + 1 : Nat) : Int)) <;> cases cell t (-(j : Int)) <;> rfl
+
+private theorem val_unit (input : Bool) :
+    Rule30UOR.Interfaces.val input.toNat = (input, false) := by
+  cases input <;> decide +kernel
+
+private theorem observer_poly_val (x : Nat) (input : Bool) :
+    Rule30UOR.Interfaces.val (observerPoly x input) =
+      (xor (x.testBit 0) (xor (Rule30UOR.Interfaces.valA (Rule30UOR.Core.carry x)) input),
+        xor (x.testBit 0) (Rule30UOR.Interfaces.valB (Rule30UOR.Core.carry x))) := by
+  have div_shift : x / 2 = x >>> 1 := by
+    rw [Nat.shiftRight_eq_div_pow, Nat.pow_one]
+  have decomposed := Rule30UOR.Interfaces.val_eq x
+  rw [div_shift] at decomposed
+  unfold observerPoly
+  simp only [Rule30UOR.Interfaces.val_xor, Rule30UOR.Interfaces.val_shl, val_unit]
+  simp only [decomposed, Rule30UOR.Interfaces.valA, Rule30UOR.Interfaces.valB,
+    Rule30UOR.Interfaces.add4, Rule30UOR.Interfaces.mulω]
+  cases x.testBit 0 <;> cases input <;>
+    cases (Rule30UOR.Interfaces.val (x >>> 1)).1 <;>
+    cases (Rule30UOR.Interfaces.val (x >>> 1)).2 <;>
+    cases (Rule30UOR.Interfaces.val (Rule30UOR.Core.carry x)).1 <;>
+    cases (Rule30UOR.Interfaces.val (Rule30UOR.Core.carry x)).2 <;> rfl
+
+/-- The center cut restores the boundary terms lost by whole-row evaluation. -/
+theorem observer_val_step (t : Nat) :
+    Rule30UOR.Interfaces.valA (observerCode (t + 1)) = Rule30UOR.Core.bxor
+      (Rule30UOR.Core.center t)
+      (Rule30UOR.Core.bxor (Rule30UOR.Interfaces.valA (Rule30UOR.Core.carry (observerCode t))) (observerInput t)) ∧
+    Rule30UOR.Interfaces.valB (observerCode (t + 1)) = Rule30UOR.Core.bxor
+      (Rule30UOR.Core.center t) (Rule30UOR.Interfaces.valB (Rule30UOR.Core.carry (observerCode t))) := by
+  have c : (observerCode t).testBit 0 = Rule30UOR.Core.center t := by
+    rw [observer_code_readout]
+    simp only [leftCell, Int.natCast_zero, Int.neg_zero,
+      Rule30UOR.Scale.center_eq_kit, Rule30Prize.center]
+  unfold Rule30UOR.Interfaces.valA Rule30UOR.Interfaces.valB
+  rw [observer_code_step, observer_poly_val, c]
+  simp only [Rule30UOR.Scale.bxor_eq]
+  exact ⟨rfl, rfl⟩
+
+private theorem observer_input_difference (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    difference observerInput (m * P) t = leftDefect (m * P) t 1 := by
+  have hp : ∀ s, T ≤ s → center (s + P) = center s := by
+    intro s hs
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc s hs
+  have same := Rule30UOR.Scale.center_mul hc m t ht
+  have matched := center_matching hp m t ht
+  change xor (observerInput (t + m * P)) (observerInput t) = defect (m * P) t (-1)
+  unfold observerInput
+  rw [same, matched]
+  simp only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center, rightCell, defect, difference]
+  cases cell t 0 <;> cases cell t 1 <;> cases cell (t + m * P) 1 <;> rfl
+
+private theorem observer_xor_coordinates (x y : Nat) :
+    Rule30UOR.Interfaces.valA (x ^^^ y) = xor (Rule30UOR.Interfaces.valA x) (Rule30UOR.Interfaces.valA y) ∧
+      Rule30UOR.Interfaces.valB (x ^^^ y) = xor (Rule30UOR.Interfaces.valB x) (Rule30UOR.Interfaces.valB y) := by
+  unfold Rule30UOR.Interfaces.valA Rule30UOR.Interfaces.valB
+  rw [Rule30UOR.Interfaces.val_xor]
+  exact ⟨rfl, rfl⟩
+
+/-- At the physical center, periodicity cancels the common center term but
+retains both the full carry difference and the actual left-neighbor defect. -/
+theorem periodic_observer_val_step (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    Rule30UOR.Interfaces.valA (observerDefect (m * P) (t + 1)) = Rule30UOR.Core.bxor
+      (Rule30UOR.Interfaces.valA (Rule30UOR.Core.carry (observerCode (t + m * P)) ^^^
+        Rule30UOR.Core.carry (observerCode t))) (leftDefect (m * P) t 1) ∧
+    Rule30UOR.Interfaces.valB (observerDefect (m * P) (t + 1)) =
+      Rule30UOR.Interfaces.valB (Rule30UOR.Core.carry (observerCode (t + m * P)) ^^^
+        Rule30UOR.Core.carry (observerCode t)) := by
+  have later := observer_val_step (t + m * P)
+  have earlier := observer_val_step t
+  have same := Rule30UOR.Scale.center_mul hc m t ht
+  have boundary := observer_input_difference T P m t hc ht
+  change xor (observerInput (t + m * P)) (observerInput t) = leftDefect (m * P) t 1 at boundary
+  rw [observer_defect_alignment,
+    show (t + 1) + m * P = (t + m * P) + 1 by omega]
+  have out := observer_xor_coordinates (observerCode ((t + m * P) + 1)) (observerCode (t + 1))
+  have carr := observer_xor_coordinates (Rule30UOR.Core.carry (observerCode (t + m * P)))
+    (Rule30UOR.Core.carry (observerCode t))
+  rw [out.1, out.2, carr.1, carr.2, later.1, earlier.1, later.2, earlier.2, same]
+  simp only [Rule30UOR.Scale.bxor_eq]
+  rw [← boundary]
+  cases Rule30UOR.Core.center t <;>
+    cases observerInput (t + m * P) <;> cases observerInput t <;>
+    cases Rule30UOR.Interfaces.valA (Rule30UOR.Core.carry (observerCode (t + m * P))) <;>
+    cases Rule30UOR.Interfaces.valA (Rule30UOR.Core.carry (observerCode t)) <;>
+    cases Rule30UOR.Interfaces.valB (Rule30UOR.Core.carry (observerCode (t + m * P))) <;>
+    cases Rule30UOR.Interfaces.valB (Rule30UOR.Core.carry (observerCode t)) <;> exact ⟨rfl, rfl⟩
+
+/-- The two seed/periodicity constraints coexist at distinct coefficients of
+one observer word: its leading bit is 1 and its center bit is 0. -/
+theorem periodic_observer_edges (T P m t : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    (observerDefect (m * P) t).testBit (t + m * P) = true ∧
+      (observerDefect (m * P) t).testBit 0 = false := by
+  have top := aligned_defect_top_bit (m * P) t (Nat.mul_pos hm hP)
+  have same := Rule30UOR.Scale.center_mul hc m t ht
+  constructor
+  · simpa only [observerDefect, Nat.testBit_shiftRight, Nat.two_mul] using top
+  · simp only [observerDefect, Nat.testBit_shiftRight, Nat.add_zero]
+    rw [alignedDefect_center]
+    apply (difference_eq_false_iff center (m * P) t).2
+    simpa only [Rule30UOR.Scale.center_eq_kit] using same
+
+/-- At the moving cut, zero F4 value can accompany a nonzero center bit,
+and nonzero F4 value can accompany a zero center bit. Both are actual seed
+comparisons, without an infinite periodic-center premise. -/
+theorem observer_seed_zero_val :
+    observerDefect 2 0 = 7 ∧ Rule30UOR.Interfaces.valA (observerDefect 2 0) = false ∧
+      Rule30UOR.Interfaces.valB (observerDefect 2 0) = false ∧
+      (observerDefect 2 0).testBit 0 = true ∧
+    observerDefect 4 0 = 24 ∧ Rule30UOR.Interfaces.valA (observerDefect 4 0) = true ∧
+      Rule30UOR.Interfaces.valB (observerDefect 4 0) = true ∧
+      (observerDefect 4 0).testBit 0 = false := by
+  decide +kernel
+
 end Rule30UOR.WittDefect

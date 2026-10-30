@@ -2204,3 +2204,56 @@ need not respect the nonlinear update. It shows why the missing center
 argument must use further history-specific information, rather than
 inferring a coefficient from the three coarse projections alone.
 Problem 1 remains unproved.
+
+### The F4 boundary law at the moving center cut
+
+To evaluate at the physical observer rather than only on the full row, put
+`H_t = row t >> t`, `I_t = (!center t) && cell t 1`, and
+`E_Q(t) = alignedDefect Q t >> (t+Q) = H_(t+Q) xor H_t`.
+`observer_code_readout`, `observer_defect_alignment`, and
+`observer_defect_readout` record the precise coordinates. The seed's
+leading coefficient is now at bit `t+Q` of `E_Q`; its bit zero is the
+physical center difference. Under a positive hypothetical center period,
+`periodic_observer_edges` retains both the leading 1 and the center 0.
+These are different coefficients, so their coexistence is not a contradiction.
+
+The exact single-history upper-tail update is
+
+```
+H_(t+1) = (H_t >> 1) xor H_t xor (H_t << 1)
+          xor carry(H_t) xor I_t.toNat.
+```
+
+At omega the three bulk linear terms cancel after retaining the boundary
+coefficient of the right shift. Thus, writing `val(H)=A(H)+B(H)*omega`,
+`observer_val_step` proves
+
+```
+A(H_(t+1)) = center(t) xor A(carry H_t) xor I_t
+B(H_(t+1)) = center(t) xor B(carry H_t).
+```
+
+This is the F4 reading at the moving cut. It differs from the whole-row
+formula, which has no observer boundary. Under `CenterPeriodic T P`,
+`Q=mP`, and `t>=T`, set `K=carry(H_(t+Q)) xor carry(H_t)`.
+The common center term cancels, and center matching identifies
+`I_(t+Q) xor I_t` with the actual column-minus-one defect.
+`periodic_observer_val_step` therefore gives
+
+```
+A(E_Q(t+1)) = A(K) xor leftDefect Q t 1
+B(E_Q(t+1)) = B(K).
+```
+
+The full carry difference remains essential. No closure or periodicity of
+`A(K)` or `B(K)` has been established from the finite F4 state space.
+Nor is F4 nonvanishing restored by moving the cut: the actual seed has
+`E_2(0)=7`, of value 0 with center bit 1, while `E_4(0)=24` has value
+`1+omega` with center bit 0. `observer_seed_zero_val` kernel-checks both
+finite comparisons. Neither example assumes an infinite center period.
+
+This locates the desired meeting at the correct observer and exhibits its
+boundary input. A closing argument must still constrain the actual seeded
+carry history strongly enough that this boundary compensation cannot
+continue. The boundary law itself does not exclude it; Problem 1 is not
+claimed solved.

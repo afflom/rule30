@@ -1125,4 +1125,53 @@ For every natural number \(d\) and natural number \(n\) and natural number \(j\)
 \begin{proof}
 The goal follows from \(\operatorname{centerflipmaskinvisible}(d, n, j)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:observer-code-readout}
+For every natural number \(t\) and natural number \(j\), \(\operatorname{rowbit}(\operatorname{observercode}(t), j) = \operatorname{leftcell}(t, j)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observercodereadout}(t, j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-defect-alignment}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{observerdefect}(Q, t) = \operatorname{wittxor}(\operatorname{observercode}(t + Q), \operatorname{observercode}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerdefectalignment}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-defect-readout}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), \(\operatorname{rowbit}(\operatorname{observerdefect}(Q, t), j) = \operatorname{rowbit}(\operatorname{aligneddefect}(Q, t), t + Q + j)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerdefectreadout}(Q, t, j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-val-step}
+For every natural number \(t\), \(\operatorname{vala}(\operatorname{observercode}(t + 1)) = \operatorname{bxor}(\operatorname{center}(t), \operatorname{bxor}(\operatorname{vala}(\operatorname{wittcarry}(\operatorname{observercode}(t))), \operatorname{observerinput}(t)))\) and \(\operatorname{valb}(\operatorname{observercode}(t + 1)) = \operatorname{bxor}(\operatorname{center}(t), \operatorname{valb}(\operatorname{wittcarry}(\operatorname{observercode}(t))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observervalstep}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-val-step}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{vala}(\operatorname{observerdefect}(m \cdot P, t + 1)) = \operatorname{bxor}(\operatorname{vala}(\operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observercode}(t + m \cdot P)), \operatorname{wittcarry}(\operatorname{observercode}(t)))), \operatorname{leftdefect}(m \cdot P, t, 1))\) and \(\operatorname{valb}(\operatorname{observerdefect}(m \cdot P, t + 1)) = \operatorname{valb}(\operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observercode}(t + m \cdot P)), \operatorname{wittcarry}(\operatorname{observercode}(t))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobservervalstep}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-edges}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{rowbit}(\operatorname{observerdefect}(m \cdot P, t), t + m \cdot P) = \operatorname{true}\) and \(\operatorname{rowbit}(\operatorname{observerdefect}(m \cdot P, t), 0) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserveredges}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-seed-zero-val}
+\(\operatorname{observerdefect}(2, 0) = 7\) and \(\operatorname{vala}(\operatorname{observerdefect}(2, 0)) = \operatorname{false} \land \operatorname{valb}(\operatorname{observerdefect}(2, 0)) = \operatorname{false} \land \operatorname{rowbit}(\operatorname{observerdefect}(2, 0), 0) = \operatorname{true} \land \operatorname{observerdefect}(4, 0) = 24 \land \operatorname{vala}(\operatorname{observerdefect}(4, 0)) = \operatorname{true} \land \operatorname{valb}(\operatorname{observerdefect}(4, 0)) = \operatorname{true} \land \operatorname{rowbit}(\operatorname{observerdefect}(4, 0), 0) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerseedzeroval}\).
+\end{proof}
 \end{document}
