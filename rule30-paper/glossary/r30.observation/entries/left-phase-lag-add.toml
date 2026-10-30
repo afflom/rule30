@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-phase-lag-add"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit R (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (app (const lexlean.std.nat::add) (local Q) (local R)) (local t) (local k)) (app (const lexlean.std.int::add) (app (const r30.observation::left-phase) (local Q) (local t) (local k)) (app (const r30.observation::left-phase) (local R) (app (const lexlean.std.nat::add) (local t) (local Q)) (local k)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.left_phase_lag_add"
+
+[[form]]
+id = "left-phase-lag-add"
+channel = "math"
+surface = "leftphaselagadd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftphaselagadd) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

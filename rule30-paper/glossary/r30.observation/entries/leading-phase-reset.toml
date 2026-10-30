@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "leading-phase-reset"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hl (app (const r30.observation::leading-advance) (local Q) (local t) (local k))) (explicit hc (app (const r30.observation::center-clean-through) (local Q) (local t) (local k)))) (app (const lexlean.core::land) (app (const lexlean.core::iff) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (app (const lexlean.std.nat::add) (local t) (local k)) (nat 0)) (nat 3)) (app (const lexlean.core::eq) (app (const lexlean.std.int::mul) (app (const r30.observation::left-gate-phase) (local Q) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::sub) (local k) (nat 1))) (nat 0)) (app (const lexlean.std.int::add) (app (const r30.observation::left-phase) (local Q) (local t) (local k)) (app (const r30.observation::path-flux) (local Q) (local t) (local k) (app (const lexlean.std.nat::sub) (local k) (nat 1))))) (app (const lexlean.std.int::neg) (nat 1)))) (app (const lexlean.core::iff) (app (const lexlean.core::eq) (app (const r30.observation::left-colour) (local Q) (app (const lexlean.std.nat::add) (local t) (local k)) (nat 0)) (nat 0)) (app (const lexlean.core::eq) (app (const lexlean.std.int::mul) (app (const r30.observation::left-gate-phase) (local Q) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::sub) (local k) (nat 1))) (nat 0)) (app (const lexlean.std.int::add) (app (const r30.observation::left-phase) (local Q) (local t) (local k)) (app (const r30.observation::path-flux) (local Q) (local t) (local k) (app (const lexlean.std.nat::sub) (local k) (nat 1))))) (nat 1))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.leading_phase_reset"
+
+[[form]]
+id = "leading-phase-reset"
+channel = "math"
+surface = "leadingphasereset"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leadingphasereset) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

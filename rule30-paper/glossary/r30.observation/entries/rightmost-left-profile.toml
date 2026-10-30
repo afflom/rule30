@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rightmost-left-profile"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (pi ((explicit h (app (const r30.observation::rightmost-left) (local Q) (local t) (local k))) (explicit hs (app (const lexlean.std.nat::lt) (local s) (local k))) (explicit hc (app (const r30.observation::center-clean-through) (local Q) (local t) (local s)))) (app (const r30.observation::rightmost-left) (local Q) (app (const lexlean.std.nat::add) (local t) (local s)) (app (const lexlean.std.nat::sub) (local k) (local s)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectFront"
+name = "Rule30UOR.DefectFront.rightmost_left_profile"
+
+[[form]]
+id = "rightmost-left-profile"
+channel = "math"
+surface = "rightmostleftprofile"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rightmostleftprofile) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

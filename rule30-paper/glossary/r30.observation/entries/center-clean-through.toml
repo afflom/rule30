@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-clean-through"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DefectFront"
+name = "Rule30UOR.DefectFront.CenterCleanThrough"
+
+[[form]]
+id = "center-clean-through"
+channel = "math"
+surface = "centercleanthrough"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centercleanthrough) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

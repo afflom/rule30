@@ -580,5 +580,77 @@ Close the goal with \(\lexeme{r30.observation::seed-phase-cancellation}\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{rightmost-left-profile}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(s\), if \(rightmostleft(Q, t, k)\), then if \(s < k\), then if \(centercleanthrough(Q, t, s)\), then \(rightmostleft(Q, t + s, k - s)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rightmost-left-profile}(Q, t, k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{leading-first-erasure}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leadingadvance(Q, t, k)\), then if \(centercleanthrough(Q, t, k)\), then \(firstpatherasure(Q, t, k, k - 2) ∧ erasureevent(Q, t + (k - 1), 0) ∧ (gatecode(Q, t + (k - 1), 0) = 2 ∨ gatecode(Q, t + (k - 1), 0) = 5) ∧ center(t + (k - 1)) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::leading-first-erasure}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{black-window-forces-leading-source}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(leftadjacentdefect(Q, b + r) = true\), then there exists a natural number \(s\) such that there exists a natural number \(k\) such that \(2 * s ≤ r + 1 ∧ s ≤ r ∧ k + s ≤ r + 1 ∧ leadingadvance(Q, b + s, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::black-window-forces-leading-source}(Q, b, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-leading-source-window}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that there exists a natural number \(k\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ k ≤ P ∧ leadingadvance(m * P, t, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-leading-source-window}(T, P, m, N)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-leading-erasure-window}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that there exists a natural number \(k\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ k ≤ P ∧ leadingadvance(m * P, t, k) ∧ firstpatherasure(m * P, t, k, k - 2) ∧ (gatecode(m * P, t + (k - 1), 0) = 2 ∨ gatecode(m * P, t + (k - 1), 0) = 5)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-leading-erasure-window}(T, P, m, N)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-recurrent-leading-erasure}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentleadingerasure(m * P, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-recurrent-leading-erasure}(T, P, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-phase-lag-add}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(R\) and natural number \(t\) and natural number \(k\), \(leftphase(Q + R, t, k) = leftphase(Q, t, k) intplus leftphase(R, t + Q, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-phase-lag-add}(Q, R, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{path-flux-lag-add}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(R\) and natural number \(t\) and natural number \(k\) and natural number \(n\), \(pathflux(Q + R, t, k, n) = pathflux(Q, t, k, n) intplus pathflux(R, t + Q, k, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::path-flux-lag-add}(Q, R, t, k, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{leading-phase-reset}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leadingadvance(Q, t, k)\), then if \(centercleanthrough(Q, t, k)\), then \((leftcolour(Q, t + k, 0) = 3 ↔ leftgatephase(Q, t + (k - 1), 0) inttimes (leftphase(Q, t, k) intplus pathflux(Q, t, k, k - 1)) = intneg 1) ∧ (leftcolour(Q, t + k, 0) = 0 ↔ leftgatephase(Q, t + (k - 1), 0) inttimes (leftphase(Q, t, k) intplus pathflux(Q, t, k, k - 1)) = 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::leading-phase-reset}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

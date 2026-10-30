@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "path-flux-lag-add"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit R (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::path-flux) (app (const lexlean.std.nat::add) (local Q) (local R)) (local t) (local k) (local n)) (app (const lexlean.std.int::add) (app (const r30.observation::path-flux) (local Q) (local t) (local k) (local n)) (app (const r30.observation::path-flux) (local R) (app (const lexlean.std.nat::add) (local t) (local Q)) (local k) (local n)))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.path_flux_lag_add"
+
+[[form]]
+id = "path-flux-lag-add"
+channel = "math"
+surface = "pathfluxlagadd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pathfluxlagadd) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

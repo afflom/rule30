@@ -210,6 +210,40 @@ theorem rightmost_left_defect_step (Q t : Nat) (x : Int) (hx : x ≤ -2)
   · exact defect_clean_step Q t (x + 1) 0
       (fun q hq1 hq2 => hc q (by omega) hq2) p (by omega) (by omega)
 
+/-- A rightmost left defect, including the entire clean prefix to the center. -/
+def RightmostLeft (Q t k : Nat) : Prop :=
+  0 < k ∧ leftDefect Q t k = true ∧ ∀ r : Nat, r < k → leftDefect Q t r = false
+
+def CenterCleanThrough (Q t n : Nat) : Prop :=
+  ∀ j : Nat, j ≤ n → leftDefect Q (t + j) 0 = false
+
+/-- Retain the complete rightmost profile at every intermediate time, rather
+than just the unit defect at its final arrival next to the center. -/
+theorem rightmost_left_profile (Q t k s : Nat) (h : RightmostLeft Q t k) :
+    s < k → CenterCleanThrough Q t s → RightmostLeft Q (t + s) (k - s) := by
+  induction s with
+  | zero =>
+    intro _ _
+    simpa using h
+  | succ s ih =>
+    intro hs hc
+    obtain ⟨hk, hd, hp⟩ := ih (by omega) (fun j hj => hc j (by omega))
+    have hstep := rightmost_left_defect_step Q (t + s) (-((k - s : Nat) : Int))
+      (by omega) hd (by
+        intro p hp1 hp2
+        have hh := hp (-p).toNat (by omega)
+        simpa only [leftDefect, Int.toNat_of_nonneg (show 0 ≤ -p by omega),
+          show -(-p) = p by omega] using hh)
+      (by simpa only [leftDefect, Int.natCast_zero, Int.neg_zero, Nat.add_assoc]
+        using hc (s + 1) (Nat.le_refl _))
+    refine ⟨by omega, ?_, ?_⟩
+    · simpa only [leftDefect, Nat.add_assoc,
+        show -((k - s : Nat) : Int) + 1 = -((k - (s + 1) : Nat) : Int) by omega]
+        using hstep.1
+    · intro r hr
+      simpa only [leftDefect, Nat.add_assoc] using
+        hstep.2 (-(r : Int)) (by omega) (by omega)
+
 /-- **Rightmost left-half defect propagation.** If `-(k + 1)` is the rightmost left-half
 defect at time `t` and the center `0` is clean during `[t, t + k]`, then the rightmost
 left-half defect reaches `-1` at time `t + k` with `(-1, 0]` clean. -/

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "black-window-forces-leading-source"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit hr (app (const lexlean.std.nat::lt) (nat 0) (local r))) (explicit hc (app (const r30.observation::center-window-agree) (local b) (app (const lexlean.std.nat::add) (local b) (local Q)) (app (const lexlean.std.nat::add) (local r) (nat 1)))) (explicit hb (app (const lexlean.core::eq) (app (const r30.scale::center) (local b)) (const lexlean.std.bool::true))) (explicit hd (app (const lexlean.core::eq) (app (const r30.observation::left-adjacent-defect) (local Q) (app (const lexlean.std.nat::add) (local b) (local r))) (const lexlean.std.bool::true)))) (app (const lexlean.core::exists-op) (lam ((explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::exists-op) (lam ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::mul) (nat 2) (local s)) (app (const lexlean.std.nat::add) (local r) (nat 1))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local s) (local r)) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local k) (local s)) (app (const lexlean.std.nat::add) (local r) (nat 1))) (app (const r30.observation::leading-advance) (local Q) (app (const lexlean.std.nat::add) (local b) (local s)) (local k)))))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.black_window_forces_leading_source"
+
+[[form]]
+id = "black-window-forces-leading-source"
+channel = "math"
+surface = "blackwindowforcesleadingsource"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name blackwindowforcesleadingsource) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

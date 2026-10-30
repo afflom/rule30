@@ -2,7 +2,7 @@ module
 
 public import Rule30UOR.Interfaces
 public import Rule30UOR.TemporalDefect
-public import Rule30UOR.DefectSource
+public import Rule30UOR.CentralCollision
 
 /-!
 # The temporal difference as an exact seeded Witt evolution
@@ -340,5 +340,59 @@ theorem seed_phase_cancellation :
     leftPhase 3 0 3 = 1 ∧ leftPhase 3 1 2 = 0 ∧ leftPhaseFlux 3 0 2 = -1 ∧
       leftGatePhase 3 0 2 = 1 := by
   decide +kernel
+
+private theorem phase_lag_add (Q R t : Nat) (p : Int) :
+    phase (Q + R) t p = phase Q t p + phase R (t + Q) p := by
+  unfold phase
+  rw [show t + (Q + R) = (t + Q) + R by omega]
+  omega
+
+theorem left_phase_lag_add (Q R t k : Nat) :
+    leftPhase (Q + R) t k = leftPhase Q t k + leftPhase R (t + Q) k := by
+  exact phase_lag_add Q R t (-(k : Int))
+
+private theorem phase_flux_lag_add (Q R t : Nat) (p : Int) :
+    phaseFlux (Q + R) t p = phaseFlux Q t p + phaseFlux R (t + Q) p := by
+  have h0 := phase_balance (Q + R) t p
+  have h1 := phase_balance Q t p
+  have h2 := phase_balance R (t + Q) p
+  have ha := phase_lag_add Q R (t + 1) p
+  have hb := phase_lag_add Q R t (p - 1)
+  rw [show t + 1 + Q = (t + Q) + 1 by omega] at ha
+  omega
+
+/-- Lag compensation is additive only with the second background shifted by Q.
+This does not give repeated copies of one fixed-background flux. -/
+theorem path_flux_lag_add (Q R t k : Nat) : ∀ n : Nat,
+    pathFlux (Q + R) t k n = pathFlux Q t k n + pathFlux R (t + Q) k n := by
+  intro n
+  induction n with
+  | zero => simp [pathFlux]
+  | succ n ih =>
+    simp only [pathFlux, ih, phase_flux_lag_add,
+      show t + n + Q = t + Q + n by omega]
+    omega
+
+/-- The physical leading-front witness ties the source's initial orientation
+and its intervening flux to the actual center reset. -/
+theorem leading_phase_reset (Q t k : Nat)
+    (hl : Rule30UOR.CentralCollision.LeadingAdvance Q t k)
+    (hc : Rule30UOR.DefectFront.CenterCleanThrough Q t k) :
+    (leftColour Q (t + k) 0 = 3 ↔
+      leftGatePhase Q (t + (k - 1)) 0 *
+        (leftPhase Q t k + pathFlux Q t k (k - 1)) = -1) ∧
+    (leftColour Q (t + k) 0 = 0 ↔
+      leftGatePhase Q (t + (k - 1)) 0 *
+        (leftPhase Q t k + pathFlux Q t k (k - 1)) = 1) := by
+  obtain ⟨hf, he, hg, hw⟩ := Rule30UOR.CentralCollision.leading_first_erasure Q t k hl hc
+  have hp : leftPhase Q (t + (k - 1)) 1 = leftPhase Q t k + pathFlux Q t k (k - 1) := by
+    have hk := hl.1
+    simpa only [pathPhase, leftPhase,
+      show -(k : Int) + ((k - 1 : Nat) : Int) = -(1 : Int) by omega,
+      show -((1 : Nat) : Int) = -(1 : Int) by omega] using
+      path_balance Q t k (k - 1)
+  have hr := erasure_reset_product Q (t + (k - 1)) 0 he
+  have hk := hl.1
+  simpa only [Nat.zero_add, show t + (k - 1) + 1 = t + k by omega, hp] using hr
 
 end Rule30UOR.WittDefect

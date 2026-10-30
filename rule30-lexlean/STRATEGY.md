@@ -261,7 +261,7 @@ use the periodic-center compatibility and explain these source births and gate e
 No closing invariant or phase contradiction has yet been proved; Problem 1 remains open.
 
 
-#### Signed phase, exact flux, and the seed boundary
+### Signed phase, exact flux, and the seed boundary
 
 `WittDefect.pairPhase b d i` is the integer difference between bit `i` of
 `b XOR d` and bit `i` of `b`. It is `-1` on X, `+1` on Y, and zero on
@@ -303,7 +303,7 @@ cross-characteristic compatibility theorem would have to exclude the required
 assumed or asserted here; Problem 1 remains open.
 
 
-## First erasure and a recurring source-to-erasure pattern
+### First erasure and a recurring source-to-erasure pattern
 
 The advancing source at `(t,-k)` forces a unit at `(t+1,-k+1)`. If the characteristic's
 center endpoint at time `t+k` is clean, `advancing_source_first_erasure` finds the first
@@ -337,6 +337,40 @@ also have to control the return leg from an erasure to a suitable source: the cu
 lemmas do not prove that this return preserves or decreases the same rank. The
 periodic-center-compatible source/erasure pattern has not been excluded from the seeded
 orbit. Problem 1 remains unproved.
+
+### Leading sources and cancellation at the center
+
+The mixed-colour source can now be chosen on the actual rightmost defect front.
+`RightmostLeft` records a defect at depth `k` and agreement at every shallower
+depth, including the center. `rightmost_left_profile` retains this entire profile
+at each intermediate step while the center remains clean. Starting at a common
+black center, choose the nearest left defect. The cone lower bound is then the
+moving front itself; a source strictly to its right would contradict the clean
+prefix. `black_window_forces_leading_source` identifies the two positions exactly.
+This sharpens the selected witness, not every collision in the orbit.
+
+`LeadingAdvance` records this source and its clean right prefix. Its characteristic
+cannot erase before reaching the center: `leading_first_erasure` fixes the first
+erasure index to `k-2`, target depth to zero, and update time to `t+k-1`.
+The center is common white at that update, with unit colours on both neighbors.
+Consequently only OR-gate cases 2 and 5 (`0X`, `0Y`) survive for this selected
+erasure. The other four cases remain possible elsewhere in the full orbit.
+
+`periodic_leading_erasure_window` forces such a correlated source/center-erasure
+pair in the same period-width strip and source-time window as before.
+`periodic_recurrent_leading_erasure` fixes its depth, advancing orientation and
+one of the two remaining gate cases, jointly recurring arbitrarily late. The older
+source and erasure recurrence APIs now follow by forgetting this sharper data.
+No periodicity or finite-state closure of the forcing strip is inferred.
+
+`leading_phase_reset` ties the center's actual reset colour to the initial source
+phase plus its accumulated pre-erasure flux. Lag composition is also exact:
+`path_flux_lag_add` adds the second lag's flux at the shifted background time
+`t+Q`, not a repeated copy of the original flux. Thus multiplying a lag does not
+produce a linear drift contradiction. These compatibility laws have not excluded
+the remaining `0X`/`0Y` center cancellations. The seed-specific closing obstruction
+is still unproved, and Problem 1 remains open.
+
 
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
