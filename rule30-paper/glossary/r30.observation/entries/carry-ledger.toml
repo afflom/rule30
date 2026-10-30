@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "carry-ledger"
+category = "function"
+signature = "(pi ((explicit L (const lexlean.std.nat::nat)) (explicit H (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.carryLedger"
+
+[[form]]
+id = "carry-ledger"
+channel = "math"
+surface = "carryledger"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name carryledger) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

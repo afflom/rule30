@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-sixteen-page"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.witt::witt-linpow) (nat 16) (nat 1)) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-xor) (nat 1) (app (const r30.witt::witt-shl) (nat 1) (nat 16))) (app (const r30.witt::witt-shl) (nat 1) (nat 32)))) (app (const lexlean.core::eq) (app (const r30.witt::witt-linpow) (nat 16) (app (const r30.witt::witt-xor) (nat 1) (app (const r30.witt::witt-shl) (nat 1) (nat 16)))) (app (const r30.witt::witt-xor) (nat 1) (app (const r30.witt::witt-shl) (nat 1) (nat 48)))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.q_sixteen_page"
+
+[[form]]
+id = "q-sixteen-page"
+channel = "math"
+surface = "qsixteenpage"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name qsixteenpage)"

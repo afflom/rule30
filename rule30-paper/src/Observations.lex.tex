@@ -1546,5 +1546,86 @@ Close the goal with \(\lexeme{r30.observation::q-order-search-zero}(d)\).
 \end{proof}
 \end{theorem}
 
+
+\begin{theorem}{q-frobenius-twopow}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(y\), \(wittlinpow(twopow(a), y) = wittxor(wittxor(y, wittshl(y, twopow(a))), wittshl(y, twopow(a) + twopow(a)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-frobenius-twopow}(a, y)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-sixteen-page}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(wittlinpow(16, 1) = wittxor(wittxor(1, wittshl(1, 16)), wittshl(1, 32)) ∧ wittlinpow(16, wittxor(1, wittshl(1, 16))) = wittxor(1, wittshl(1, 48))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-sixteen-page}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-divides-page-shift-twopow}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(y\), \(qdivides(twopow(a), wittxor(y, wittshl(y, 3 * twopow(a))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-page-shift-twopow}(a, y)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-divides-page-fold-twopow}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(n\) and natural number \(H\), \(qdivides(twopow(a), wittxor(H, wittxor(pagefold(3 * twopow(a), H, n), pagetail(3 * twopow(a), H, n))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-page-fold-twopow}(a, n, H)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{page-carry}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(L\) and natural number \(H\) and natural number \(p\), if \(0 < L\), then \(page(L, wittcarry(H), p) = wittxor(wittcarry(page(L, H, p)), naturalbit(pageboundarycarry(L, H, p)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::page-carry}(L, H, p)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{carry-fold-eq-ledger}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(L\) and natural number \(H\) and natural number \(n\), if \(0 < L\), then \(pagefold(L, wittcarry(H), n) = carryledger(L, H, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::carry-fold-eq-ledger}(L, H, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{carry-ledger-congruence-twopow}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(H\) and natural number \(n\), \(qdivides(twopow(a), wittxor(wittcarry(H), wittxor(carryledger(3 * twopow(a), H, n), pagetail(3 * twopow(a), wittcarry(H), n))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::carry-ledger-congruence-twopow}(a, H, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-source-ledger}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(a\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(qdivides(twopow(a), wittxor(observersource(m * P, t), wittxor(wittxor(carryledger(3 * twopow(a), observercode(t + m * P), t + m * P + 1), carryledger(3 * twopow(a), observercode(t), t + m * P + 1)), naturalbit(leftdefect(m * P, t, 1)))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-source-ledger}(T, P, m, t, a)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-q-gain-ledger}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(r\) and natural number \(a\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(r + 1 ≤ twopow(a)\), then if \(qdivides(r, observerdefect(m * P, t))\), then \(qdivides(r + 1, observerdefect(m * P, t + 1)) ↔ qdivides(r + 1, wittxor(wittxor(carryledger(3 * twopow(a), observercode(t + m * P), t + m * P + 1), carryledger(3 * twopow(a), observercode(t), t + m * P + 1)), naturalbit(leftdefect(m * P, t, 1))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-q-gain-ledger}(T, P, m, t, r, a)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{page-residue-not-closed}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(qdivides(16, wittlinpow(16, 1)) ∧ wittxor(wittphi(wittxor(2, wittlinpow(16, 1))), wittphi(2)) = wittxor(wittlinpow(17, 1), 4) ∧ ¬ qdivides(16, wittxor(wittphi(wittxor(2, wittlinpow(16, 1))), wittphi(2)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::page-residue-not-closed}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

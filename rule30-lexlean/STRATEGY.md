@@ -2391,3 +2391,57 @@ proved constraint on the complete source residues between actual seeded
 successor windows, or a corrected rank that accounts for the interior
 carry contributions. None of the diagnostic output is imported by Lean or
 LexLean, and Problem 1 remains unproved.
+
+### Pages modulo q^(2^a) and the exact carry ledger
+
+In characteristic two, Frobenius gives `q^(2^a) = 1 + X^(2^a) + X^(2*2^a)`
+(`q_frobenius`, `q_frobenius_twopow`; for `a = 4`, `q_sixteen_page` checks
+`q^16 = 1 + X^16 + X^32`). Hence
+
+    1 + X^(3*2^a) = (1 + X^(2^a)) q^(2^a),
+
+so `X^(3*2^a) = 1` modulo `q^(2^a)` (`q_page_identity`,
+`q_divides_page_shift_twopow`). Spatial coefficients therefore fold into
+pages of width `3*2^a`: 48 coefficients modulo `q^16`, 96 modulo `q^32`, and
+so on. `page L H p` is the block of coefficients `L*p .. L*p+L-1`,
+`pageFold` XORs the first `n` pages, and `pageTail` is the remainder beyond
+them. `q_divides_page_fold_twopow` proves the exact congruence
+
+    H = pageFold(H, n) + pageTail(H, n)   (mod q^(2^a)).
+
+These pages are pages of *spatial coefficient indices* of the observer word.
+They are not the low byte of an integer's value. Several conservation claims
+proposed for value-indexed pages are not used: the XOR of 48 consecutive
+integers is zero (24 even/odd pairs, each XORing to 1). The proposed page
+flux telescopes to `R(48p+48) - R(48p)`, which has no reason to vanish. And
+`R(2m) = R(2m+1)` rules out the proposed strict local extrema. The
+48- and 256-periodic structures align every 768 integers (16 pages, 3
+cycles), but no theorem here relies on that alignment.
+
+**Exact carry ledger.** For the existing carry `H & (X H)`,
+`page_carry` proves for every width `L > 0`
+
+    page(carry H, p) = carry(page(H, p)) + [X^0]B_p * [X^(L-1)]B_(p-1),
+
+with `B_(-1) = 0` (`pageBoundaryCarry`). Page-interior carries and the single
+carry crossing each page junction are separated and both retained.
+`carry_fold_eq_ledger` identifies the folded carry with `carryLedger`, and
+`carry_ledger_congruence_twopow` gives `carry H = carryLedger(H, n) + tail`
+modulo `q^(2^a)`. At the observer, `t + Q + 1` pages cover both compared
+codes. Under a hypothetical center period, `periodic_observer_source_ledger`
+proves that the actual observer source is congruent, modulo `q^(2^a)`, to
+the two page ledgers plus the physical column-minus-one defect, that is,
+the arrival/erasure term at the cut. `periodic_observer_q_gain_ledger`
+restates the q-gain criterion in this form for every `r + 1 <= 2^a`. The
+unresolved source congruence is now a statement about page interiors, page
+junctions, and the arrival/erasure bit, with nothing dropped.
+
+**Limitation.** The residue does not determine its own evolution.
+`page_residue_not_closed` proves that `X` and `X + q^16` have equal residues
+modulo `q^16`, while their exact Rule 30 images differ by `q^17 + X^2`,
+which is not divisible by `q^16`. A page-residue model therefore needs
+additional carry information. Any closing argument must constrain the
+complete seeded ledger across page interiors, page junctions and physical
+arrival/erasure events; the blocks `3*2^a` supply the analogous pages for
+deeper q-adic information. No such seed-specific restriction is proved
+here, and Problem 1 remains unproved.

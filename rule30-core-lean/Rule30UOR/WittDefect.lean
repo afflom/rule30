@@ -3477,4 +3477,320 @@ theorem observer_seed_q_loss :
   rw [hne] at hv
   exact Bool.noConfusion hv
 
+/-! ## Pages modulo q^(2^a) and the exact carry ledger
+
+Frobenius in characteristic two gives `q^(2^a) = 1 + X^(2^a) + X^(2*2^a)`, hence
+`1 + X^(3*2^a) = (1 + X^(2^a)) q^(2^a)`. Spatial coefficients therefore fold into
+pages of width `3*2^a` modulo `q^(2^a)`; for `a = 4` these are pages of 48
+coefficients modulo `q^16`. Carries split exactly into page-interior carries and
+one boundary carry per page junction. Both are retained. The page residue does
+not determine its own nonlinear evolution (`page_residue_not_closed`).
+-/
+
+/-- Frobenius: the `2^a`-th power of `q` is the three-term binary polynomial. -/
+theorem q_frobenius (a y : Nat) :
+    phiLinearPow (2 ^ a) y = y ^^^ (y <<< 2 ^ a) ^^^ (y <<< (2 ^ a + 2 ^ a)) := by
+  have h := Rule30UOR.Interfaces.phiLinear_freshman a y
+  rw [Rule30UOR.Interfaces.twopow_eq_pow] at h
+  rw [h]
+  simp only [Rule30UOR.Core.phiScale, Rule30UOR.Interfaces.twopow_eq_pow]
+  rfl
+
+/-- `1 + X^(3*2^a) = (1 + X^(2^a)) q^(2^a)`, applied to any word. -/
+theorem q_page_identity (a y : Nat) :
+    phiLinearPow (2 ^ a) (y ^^^ (y <<< 2 ^ a)) = y ^^^ (y <<< (3 * 2 ^ a)) := by
+  rw [q_frobenius, Nat.shiftLeft_xor_distrib, Nat.shiftLeft_xor_distrib,
+    ← Nat.shiftLeft_add, ← Nat.shiftLeft_add,
+    show 2 ^ a + (2 ^ a + 2 ^ a) = 3 * 2 ^ a by omega]
+  generalize y <<< 2 ^ a = u
+  generalize y <<< (2 ^ a + 2 ^ a) = v
+  generalize y <<< (3 * 2 ^ a) = w
+  apply Nat.eq_of_testBit_eq
+  intro i
+  simp only [Nat.testBit_xor]
+  cases y.testBit i <;> cases u.testBit i <;> cases v.testBit i <;> cases w.testBit i <;> rfl
+
+/-- The `a = 4` instance: `q^16 = 1 + X^16 + X^32` and `1 + X^48 = (1 + X^16) q^16`. -/
+theorem q_sixteen_page :
+    phiLinearPow 16 1 = 1 ^^^ (1 <<< 16) ^^^ (1 <<< 32) ∧
+      phiLinearPow 16 (1 ^^^ (1 <<< 16)) = 1 ^^^ (1 <<< 48) := by
+  exact ⟨by decide +kernel, by decide +kernel⟩
+
+/-- Shifting by a full page is the identity modulo `q^(2^a)`. -/
+theorem q_divides_page_shift (a y : Nat) : QDivides (2 ^ a) (y ^^^ (y <<< (3 * 2 ^ a))) :=
+  ⟨y ^^^ (y <<< 2 ^ a), q_page_identity a y⟩
+
+/-- Page `p` of width `L`: coefficients `L*p .. L*p+L-1`, shifted to degree zero. -/
+def page (L H p : Nat) : Nat := (H >>> (L * p)) % 2 ^ L
+
+/-- Everything beyond the first `n` pages, shifted to degree zero. -/
+def pageTail (L H n : Nat) : Nat := H >>> (L * n)
+
+/-- XOR of the first `n` pages. -/
+def pageFold (L H : Nat) : Nat → Nat
+  | 0 => 0
+  | n + 1 => pageFold L H n ^^^ page L H n
+
+/-- The carry crossing into page `p`: lowest coefficient of page `p` times the
+highest coefficient of page `p-1`. Page zero has no incoming boundary carry. -/
+def pageBoundaryCarry (L H : Nat) : Nat → Bool
+  | 0 => false
+  | p + 1 => (page L H (p + 1)).testBit 0 && (page L H p).testBit (L - 1)
+
+/-- The page ledger of carries: interior carries and boundary carries, folded. -/
+def carryLedger (L H : Nat) : Nat → Nat
+  | 0 => 0
+  | n + 1 => carryLedger L H n ^^^ (carry (page L H n) ^^^ (pageBoundaryCarry L H n).toNat)
+
+private theorem testBit_page (L H p i : Nat) :
+    (page L H p).testBit i = (decide (i < L) && H.testBit (L * p + i)) := by
+  simp only [page, Nat.testBit_mod_two_pow, Nat.testBit_shiftRight]
+
+private theorem testBit_bool_toNat (b : Bool) (i : Nat) :
+    (b.toNat).testBit i = (decide (i = 0) && b) := by
+  cases b with
+  | false => simp
+  | true =>
+    cases i with
+    | zero => rfl
+    | succ n =>
+      simp only [Bool.toNat_true]
+      rw [Nat.testBit_succ]
+      simp
+
+private theorem testBit_carry (x j : Nat) :
+    (carry x).testBit j = (x.testBit j && (decide (1 ≤ j) && x.testBit (j - 1))) := by
+  change (x &&& (x <<< 1)).testBit j = _
+  rw [Nat.testBit_and, Nat.testBit_shiftLeft]
+
+private theorem page_succ (L H p : Nat) : page L H (p + 1) = page L (H >>> L) p := by
+  simp only [page]
+  rw [show L * (p + 1) = L + L * p by rw [Nat.mul_succ]; omega, Nat.shiftRight_add]
+
+private theorem page_split (L H : Nat) : H = page L H 0 ^^^ ((H >>> L) <<< L) := by
+  apply Nat.eq_of_testBit_eq
+  intro i
+  simp only [Nat.testBit_xor, testBit_page, Nat.mul_zero, Nat.zero_add,
+    Nat.testBit_shiftLeft, Nat.testBit_shiftRight]
+  by_cases hi : i < L
+  · simp [hi, show ¬ (L ≤ i) by omega]
+  · simp [hi, show L ≤ i by omega, show L + (i - L) = i by omega]
+
+private theorem page_fold_succ (L H : Nat) : ∀ n : Nat,
+    pageFold L H (n + 1) = page L H 0 ^^^ pageFold L (H >>> L) n := by
+  intro n
+  induction n with
+  | zero => simp [pageFold]
+  | succ n ih =>
+    rw [pageFold, ih, pageFold, page_succ, Nat.xor_assoc]
+
+/-- **Page folding.** Modulo `q^(2^a)` a word equals the XOR of its first `n`
+pages of width `3*2^a` plus its untouched tail beyond them. -/
+theorem q_divides_page_fold (a : Nat) : ∀ (n H : Nat),
+    QDivides (2 ^ a) (H ^^^ (pageFold (3 * 2 ^ a) H n ^^^ (H >>> (3 * 2 ^ a * n)))) := by
+  intro n
+  induction n with
+  | zero =>
+    intro H
+    refine ⟨0, ?_⟩
+    rw [q_power_zero]
+    simp [pageFold]
+  | succ n ih =>
+    intro H
+    have hsplit := page_split (3 * 2 ^ a) H
+    have htail : H >>> (3 * 2 ^ a * (n + 1)) = (H >>> (3 * 2 ^ a)) >>> (3 * 2 ^ a * n) := by
+      rw [← Nat.shiftRight_add]
+      congr 1
+      rw [Nat.mul_succ]
+      omega
+    have key : H ^^^ (pageFold (3 * 2 ^ a) H (n + 1) ^^^ (H >>> (3 * 2 ^ a * (n + 1)))) =
+        ((H >>> (3 * 2 ^ a)) ^^^ ((H >>> (3 * 2 ^ a)) <<< (3 * 2 ^ a))) ^^^
+          ((H >>> (3 * 2 ^ a)) ^^^ (pageFold (3 * 2 ^ a) (H >>> (3 * 2 ^ a)) n ^^^
+            ((H >>> (3 * 2 ^ a)) >>> (3 * 2 ^ a * n)))) := by
+      rw [page_fold_succ, htail]
+      apply Nat.eq_of_testBit_eq
+      intro i
+      have hb := congrArg (fun x => x.testBit i) hsplit
+      simp only [Nat.testBit_xor] at hb ⊢
+      rw [hb]
+      cases (page (3 * 2 ^ a) H 0).testBit i <;>
+        cases ((H >>> (3 * 2 ^ a)) <<< (3 * 2 ^ a)).testBit i <;>
+        cases (H >>> (3 * 2 ^ a)).testBit i <;>
+        cases (pageFold (3 * 2 ^ a) (H >>> (3 * 2 ^ a)) n).testBit i <;>
+        cases ((H >>> (3 * 2 ^ a)) >>> (3 * 2 ^ a * n)).testBit i <;> rfl
+    rw [key]
+    exact q_divides_xor _ _ _ (q_divides_page_shift a _) (ih _)
+
+/-- Frobenius with the paper's `twopow`. -/
+theorem q_frobenius_twopow (a y : Nat) :
+    phiLinearPow (Rule30UOR.Core.twopow a) y =
+      y ^^^ (y <<< Rule30UOR.Core.twopow a) ^^^
+        (y <<< (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a)) := by
+  simpa only [Rule30UOR.Interfaces.twopow_eq_pow] using q_frobenius a y
+
+/-- A full page shift is the identity modulo `q^(twopow a)`. -/
+theorem q_divides_page_shift_twopow (a y : Nat) :
+    QDivides (Rule30UOR.Core.twopow a) (y ^^^ (y <<< (3 * Rule30UOR.Core.twopow a))) := by
+  simpa only [Rule30UOR.Interfaces.twopow_eq_pow] using q_divides_page_shift a y
+
+/-- Page folding with the paper's `twopow`. -/
+theorem q_divides_page_fold_twopow (a n H : Nat) :
+    QDivides (Rule30UOR.Core.twopow a) (H ^^^ (pageFold (3 * Rule30UOR.Core.twopow a) H n ^^^
+      pageTail (3 * Rule30UOR.Core.twopow a) H n)) := by
+  unfold pageTail
+  simpa only [Rule30UOR.Interfaces.twopow_eq_pow] using q_divides_page_fold a n H
+
+/-- **Exact carry decomposition by pages.** Page `p` of the carry is the carry
+of page `p` XOR the single boundary carry entering it. Nothing is discarded. -/
+theorem page_carry (L H p : Nat) (hL : 0 < L) :
+    page L (carry H) p = carry (page L H p) ^^^ (pageBoundaryCarry L H p).toNat := by
+  apply Nat.eq_of_testBit_eq
+  intro i
+  rw [testBit_page, testBit_carry, Nat.testBit_xor, testBit_carry, testBit_page, testBit_page,
+    testBit_bool_toNat]
+  cases p with
+  | zero =>
+    simp only [pageBoundaryCarry, Bool.and_false, Bool.xor_false, Nat.mul_zero, Nat.zero_add]
+    by_cases hi : i < L
+    · by_cases h1 : 1 ≤ i
+      · simp [hi, h1, show i - 1 < L by omega]
+      · simp [hi, h1]
+    · simp [hi]
+  | succ p =>
+    have hb : pageBoundaryCarry L H (p + 1) =
+        (H.testBit (L * (p + 1)) && H.testBit (L * (p + 1) - 1)) := by
+      simp only [pageBoundaryCarry, testBit_page, Nat.add_zero, hL, decide_true,
+        Bool.true_and, show L - 1 < L by omega]
+      congr 2
+      rw [Nat.mul_succ]
+      omega
+    rw [hb]
+    have h1 : 1 ≤ L * (p + 1) := Nat.mul_pos hL (by omega)
+    by_cases h0 : i = 0
+    · subst h0
+      simp [hL, h1]
+    · by_cases hi : i < L
+      · simp [hi, h0, show 1 ≤ i by omega, show i - 1 < L by omega,
+          show 1 ≤ L * (p + 1) + i by omega,
+          show L * (p + 1) + i - 1 = L * (p + 1) + (i - 1) by omega]
+      · simp [hi, h0]
+
+/-- The folded carry is exactly the page ledger. -/
+theorem carry_fold_eq_ledger (L H n : Nat) (hL : 0 < L) :
+    pageFold L (carry H) n = carryLedger L H n := by
+  induction n with
+  | zero => rfl
+  | succ n ih => rw [pageFold, carryLedger, ih, page_carry L H n hL]
+
+/-- **Carry ledger congruence.** Modulo `q^(2^a)` the carry of any word equals
+its ledger of page-interior and page-boundary carries, plus its tail. -/
+theorem carry_ledger_congruence (a H n : Nat) :
+    QDivides (2 ^ a) (carry H ^^^ (carryLedger (3 * 2 ^ a) H n ^^^
+      (carry H >>> (3 * 2 ^ a * n)))) := by
+  have h := q_divides_page_fold a n (carry H)
+  rwa [carry_fold_eq_ledger (3 * 2 ^ a) H n (by have := Nat.two_pow_pos a; omega)] at h
+
+/-- Carry ledger congruence with the paper's `twopow`. -/
+theorem carry_ledger_congruence_twopow (a H n : Nat) :
+    QDivides (Rule30UOR.Core.twopow a) (carry H ^^^
+      (carryLedger (3 * Rule30UOR.Core.twopow a) H n ^^^
+        pageTail (3 * Rule30UOR.Core.twopow a) (carry H) n)) := by
+  unfold pageTail
+  simpa only [Rule30UOR.Interfaces.twopow_eq_pow] using carry_ledger_congruence a H n
+
+private theorem shiftRight_eq_zero_of_testBit (x k : Nat)
+    (h : ∀ j, k ≤ j → x.testBit j = false) : x >>> k = 0 := by
+  apply Nat.eq_of_testBit_eq
+  intro i
+  simp only [Nat.testBit_shiftRight, Nat.zero_testBit]
+  exact h (k + i) (by omega)
+
+private theorem observer_code_testBit_high (t j : Nat) (hj : t < j) :
+    (observerCode t).testBit j = false := by
+  simp only [observerCode, Nat.testBit_shiftRight]
+  rw [Rule30UOR.Interfaces.row_testBit]
+  exact Rule30UOR.Interfaces.rdiag_gt_two_mul t (t + j) (by omega)
+
+private theorem carry_observer_tail (t k : Nat) (hk : t < k) :
+    carry (observerCode t) >>> k = 0 := by
+  apply shiftRight_eq_zero_of_testBit
+  intro j hj
+  rw [testBit_carry, observer_code_testBit_high t j (by omega)]
+  rfl
+
+/-- **Observer source ledger.** Under a hypothetical center period, the actual
+observer source is congruent modulo `q^(2^a)` to the page ledgers of both compared
+observer codes plus the physical column-minus-one defect at the cut. Page
+interiors, page junctions, and the arrival/erasure boundary term are all retained;
+`t + Q + 1` pages cover both codes completely. -/
+theorem periodic_observer_source_ledger (T P m t a : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    QDivides (Rule30UOR.Core.twopow a) (observerSource (m * P) t ^^^
+      ((carryLedger (3 * Rule30UOR.Core.twopow a) (observerCode (t + m * P)) (t + m * P + 1) ^^^
+        carryLedger (3 * Rule30UOR.Core.twopow a) (observerCode t) (t + m * P + 1)) ^^^
+          (leftDefect (m * P) t 1).toNat)) := by
+  rw [Rule30UOR.Interfaces.twopow_eq_pow]
+  have hL : 1 ≤ 3 * 2 ^ a := by have := Nat.two_pow_pos a; omega
+  have bound : t + m * P + 1 ≤ 3 * 2 ^ a * (t + m * P + 1) := Nat.le_mul_of_pos_left _ hL
+  have h1 := carry_ledger_congruence a (observerCode (t + m * P)) (t + m * P + 1)
+  have h2 := carry_ledger_congruence a (observerCode t) (t + m * P + 1)
+  rw [carry_observer_tail _ _ (by omega), Nat.xor_zero] at h1
+  rw [carry_observer_tail _ _ (by omega), Nat.xor_zero] at h2
+  have h12 := q_divides_xor _ _ _ h1 h2
+  rw [periodic_observer_source T P m t hc ht]
+  generalize carry (observerCode (t + m * P)) = c1 at h12 ⊢
+  generalize carry (observerCode t) = c2 at h12 ⊢
+  generalize carryLedger (3 * 2 ^ a) (observerCode (t + m * P)) (t + m * P + 1) = l1 at h12 ⊢
+  generalize carryLedger (3 * 2 ^ a) (observerCode t) (t + m * P + 1) = l2 at h12 ⊢
+  generalize (leftDefect (m * P) t 1).toNat = d
+  have e : (c1 ^^^ c2 ^^^ d) ^^^ ((l1 ^^^ l2) ^^^ d) = (c1 ^^^ l1) ^^^ (c2 ^^^ l2) := by
+    apply Nat.eq_of_testBit_eq
+    intro i
+    simp only [Nat.testBit_xor]
+    cases c1.testBit i <;> cases c2.testBit i <;> cases d.testBit i <;>
+      cases l1.testBit i <;> cases l2.testBit i <;> rfl
+  rw [e]
+  exact h12
+
+/-- **The q-gain criterion in ledger form.** While `r + 1 ≤ 2^a`, gaining one
+q-factor at the observer is equivalent to the same divisibility of the complete
+page ledger with its physical boundary term. -/
+theorem periodic_observer_q_gain_ledger (T P m t r a : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
+    (hra : r + 1 ≤ Rule30UOR.Core.twopow a)
+    (hr : QDivides r (observerDefect (m * P) t)) :
+    QDivides (r + 1) (observerDefect (m * P) (t + 1)) ↔
+      QDivides (r + 1)
+        ((carryLedger (3 * Rule30UOR.Core.twopow a) (observerCode (t + m * P)) (t + m * P + 1) ^^^
+          carryLedger (3 * Rule30UOR.Core.twopow a) (observerCode t) (t + m * P + 1)) ^^^
+            (leftDefect (m * P) t 1).toNat) := by
+  rw [periodic_observer_q_gain T P m t r hc ht hr]
+  have hl := q_divides_down (r + 1) (Rule30UOR.Core.twopow a) _ hra
+    (periodic_observer_source_ledger T P m t a hc ht)
+  constructor
+  · intro hs
+    have hh := q_divides_xor _ _ _ hs hl
+    simpa only [← Nat.xor_assoc, Nat.xor_self, Nat.zero_xor] using hh
+  · intro hlg
+    have hh := q_divides_xor _ _ _ hl hlg
+    simpa only [Nat.xor_assoc, Nat.xor_self, Nat.xor_zero] using hh
+
+/-- **The page residue is not a closed state.** `X` and `X + q^16` have the same
+residue modulo `q^16`, but their exact Rule 30 images differ by `q^17 + X^2`,
+which is not divisible by `q^16`. Additional carry information is required. -/
+theorem page_residue_not_closed :
+    QDivides 16 (phiLinearPow 16 1) ∧
+      phi (2 ^^^ phiLinearPow 16 1) ^^^ phi 2 = phiLinearPow 17 1 ^^^ 4 ∧
+      ¬ QDivides 16 (phi (2 ^^^ phiLinearPow 16 1) ^^^ phi 2) := by
+  have hdiff : phi (2 ^^^ phiLinearPow 16 1) ^^^ phi 2 = phiLinearPow 17 1 ^^^ 4 := by
+    decide +kernel
+  refine ⟨q_divides_intro 16 1, hdiff, ?_⟩
+  intro h
+  rw [hdiff] at h
+  have h17 : QDivides 16 (phiLinearPow 17 1) := q_divides_down 16 17 _ (by omega) (q_divides_intro 17 1)
+  have h4 := (q_divides_xor_iff 16 _ 4 h17).1 h
+  have hb := q_divides_degree_bound 16 4 (by decide) h4
+  have hd : binaryDegree 4 = 2 := by decide
+  omega
+
 end Rule30UOR.WittDefect

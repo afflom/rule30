@@ -1351,4 +1351,74 @@ For every natural number \(d\), \(\operatorname{qordersearch}(d, 0) = 0\).
 \begin{proof}
 The goal follows from \(\operatorname{qordersearchzero}(d)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:q-frobenius-twopow}
+For every natural number \(a\) and natural number \(y\), \(\operatorname{wittlinpow}(\operatorname{twopow}(a), y) = \operatorname{wittxor}(\operatorname{wittxor}(y, \operatorname{wittshl}(y, \operatorname{twopow}(a))), \operatorname{wittshl}(y, \operatorname{twopow}(a) + \operatorname{twopow}(a)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qfrobeniustwopow}(a, y)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-sixteen-page}
+\(\operatorname{wittlinpow}(16, 1) = \operatorname{wittxor}(\operatorname{wittxor}(1, \operatorname{wittshl}(1, 16)), \operatorname{wittshl}(1, 32))\) and \(\operatorname{wittlinpow}(16, \operatorname{wittxor}(1, \operatorname{wittshl}(1, 16))) = \operatorname{wittxor}(1, \operatorname{wittshl}(1, 48))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qsixteenpage}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-divides-page-shift-twopow}
+For every natural number \(a\) and natural number \(y\), \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{wittxor}(y, \operatorname{wittshl}(y, 3 \cdot \operatorname{twopow}(a))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdividespageshifttwopow}(a, y)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-divides-page-fold-twopow}
+For every natural number \(a\) and natural number \(n\) and natural number \(H\), \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{wittxor}(H, \operatorname{wittxor}(\operatorname{pagefold}(3 \cdot \operatorname{twopow}(a), H, n), \operatorname{pagetail}(3 \cdot \operatorname{twopow}(a), H, n))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdividespagefoldtwopow}(a, n, H)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:page-carry}
+For every natural number \(L\) and natural number \(H\) and natural number \(p\), if \(0 < L\), then \(\operatorname{page}(L, \operatorname{wittcarry}(H), p) = \operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{page}(L, H, p)), \operatorname{naturalbit}(\operatorname{pageboundarycarry}(L, H, p)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pagecarry}(L, H, p)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:carry-fold-eq-ledger}
+For every natural number \(L\) and natural number \(H\) and natural number \(n\), if \(0 < L\), then \(\operatorname{pagefold}(L, \operatorname{wittcarry}(H), n) = \operatorname{carryledger}(L, H, n)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{carryfoldeqledger}(L, H, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:carry-ledger-congruence-twopow}
+For every natural number \(a\) and natural number \(H\) and natural number \(n\), \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{wittxor}(\operatorname{wittcarry}(H), \operatorname{wittxor}(\operatorname{carryledger}(3 \cdot \operatorname{twopow}(a), H, n), \operatorname{pagetail}(3 \cdot \operatorname{twopow}(a), \operatorname{wittcarry}(H), n))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{carryledgercongruencetwopow}(a, H, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-source-ledger}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(a\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{wittxor}(\operatorname{observersource}(m \cdot P, t), \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{carryledger}(3 \cdot \operatorname{twopow}(a), \operatorname{observercode}(t + m \cdot P), t + m \cdot P + 1), \operatorname{carryledger}(3 \cdot \operatorname{twopow}(a), \operatorname{observercode}(t), t + m \cdot P + 1)), \operatorname{naturalbit}(\operatorname{leftdefect}(m \cdot P, t, 1)))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserversourceledger}(T, P, m, t, a)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-q-gain-ledger}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(r\) and natural number \(a\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(r + 1 \le \operatorname{twopow}(a)\), then if \(\operatorname{qdivides}(r, \operatorname{observerdefect}(m \cdot P, t))\), then \(\operatorname{qdivides}(r + 1, \operatorname{observerdefect}(m \cdot P, t + 1))\) if and only if \(\operatorname{qdivides}(r + 1, \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{carryledger}(3 \cdot \operatorname{twopow}(a), \operatorname{observercode}(t + m \cdot P), t + m \cdot P + 1), \operatorname{carryledger}(3 \cdot \operatorname{twopow}(a), \operatorname{observercode}(t), t + m \cdot P + 1)), \operatorname{naturalbit}(\operatorname{leftdefect}(m \cdot P, t, 1))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserverqgainledger}(T, P, m, t, r, a)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:page-residue-not-closed}
+\(\operatorname{qdivides}(16, \operatorname{wittlinpow}(16, 1))\) and \(\operatorname{wittxor}(\operatorname{wittphi}(\operatorname{wittxor}(2, \operatorname{wittlinpow}(16, 1))), \operatorname{wittphi}(2)) = \operatorname{wittxor}(\operatorname{wittlinpow}(17, 1), 4) \land \lnot\operatorname{qdivides}(16, \operatorname{wittxor}(\operatorname{wittphi}(\operatorname{wittxor}(2, \operatorname{wittlinpow}(16, 1))), \operatorname{wittphi}(2)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pageresiduenotclosed}\).
+\end{proof}
 \end{document}
