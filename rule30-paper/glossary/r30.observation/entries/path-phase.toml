@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "path-phase"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (const lexlean.std.int::int))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.pathPhase"
+
+[[form]]
+id = "path-phase"
+channel = "math"
+surface = "pathphase"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pathphase) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "pair-phase-step"
+category = "proof-constant"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::pair-phase) (app (const r30.witt::witt-phi) (local b)) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-phi) (local d)) (app (const r30.witt::witt-shl) (app (const r30.witt::cross-carry) (local b) (local d)) (nat 1))) (local i)) (app (const lexlean.std.int::sub) (app (const r30.observation::bit-value) (app (const r30.observation::row-bit) (app (const r30.witt::witt-phi) (app (const r30.witt::witt-xor) (local b) (local d))) (local i))) (app (const r30.observation::bit-value) (app (const r30.observation::row-bit) (app (const r30.witt::witt-phi) (local b)) (local i))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.pair_phase_step"
+
+[[form]]
+id = "pair-phase-step"
+channel = "math"
+surface = "pairphasestep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pairphasestep) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

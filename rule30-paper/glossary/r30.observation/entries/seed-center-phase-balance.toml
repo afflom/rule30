@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-center-phase-balance"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q)))) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (local Q) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::add) (local t) (local Q))) (nat 0)) (app (const lexlean.std.int::add) (nat 1) (app (const r30.observation::path-flux) (local Q) (local t) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::add) (local t) (local Q)))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.seed_center_balance"
+
+[[form]]
+id = "seed-center-phase-balance"
+channel = "math"
+surface = "seedcenterphasebalance"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name seedcenterphasebalance) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

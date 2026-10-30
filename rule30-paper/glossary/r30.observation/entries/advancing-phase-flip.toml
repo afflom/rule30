@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "advancing-phase-flip"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::lt) (nat 0) (local k))) (explicit ha (app (const r30.observation::advancing-at-depth) (local Q) (local t) (local k)))) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (local Q) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::sub) (local k) (nat 1))) (app (const lexlean.std.int::neg) (app (const r30.observation::left-phase) (local Q) (local t) (local k))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.advancing_phase_flip"
+
+[[form]]
+id = "advancing-phase-flip"
+channel = "math"
+surface = "advancingphaseflip"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name advancingphaseflip) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

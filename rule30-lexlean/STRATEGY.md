@@ -261,7 +261,49 @@ use the periodic-center compatibility and explain these source births and gate e
 No closing invariant or phase contradiction has yet been proved; Problem 1 remains open.
 
 
-### First erasure and a recurring source-to-erasure pattern
+#### Signed phase, exact flux, and the seed boundary
+
+`WittDefect.pairPhase b d i` is the integer difference between bit `i` of
+`b XOR d` and bit `i` of `b`. It is `-1` on X, `+1` on Y, and zero on
+both common colours. The background remains part of the state. `pair_phase_step`
+proves agreement with the full `phi`/`crossCarry` update, and `aligned_phase_left`
+identifies bit `t+k+Q` with physical column `-k`.
+
+Write `a=cell t`, `b=cell (t+Q)`, `sigma(p)=b(p)-a(p)` using integer bits,
+`g(p)=(b(p) OR b(p+1))-(a(p) OR a(p+1))`, and `v=b(p) OR b(p+1)`.
+The old local cells define the signed flux
+
+    J(p) = -2*v*sigma(p-1) + (1-2*a(p-1))*g(p).
+
+`phase_balance` proves `sigma_next(p)=sigma(p-1)+J(p)`. This is an integer
+identity of the exact Boolean update, with no truncation or assumed conservation.
+Nonzero collisions have `J=-2*sigma_in`. An advancing source reverses the unit
+orientation at its right endpoint. Gate cases 1..3 have `g=-1`, cases 4..6
+have `g=+1`; every erasure has `J=-sigma_in`. Its reset is common black
+exactly when `g*sigma_in=-1`, and common white exactly when the product is `+1`.
+The phase and flux retain their actual update time and physical position.
+
+`path_balance` telescopes this local law on the characteristic from `(t,-k)`
+to `(t+n,-k+n)`. The seed gives signed phase `+1` at the later row's moving
+left edge `k=t+Q`. At its center endpoint, the exact identity is
+
+    sigma_Q(2*t+Q,0) = 1 + pathFlux_Q(t,t+Q,t+Q).
+
+A hypothetical periodic center therefore requires total flux `-1` on every
+such path launched late enough, for every positive lag `Q=m*P`.
+`periodic_seed_flux` proves this necessary compensation condition. Periodicity
+of the center does not make this characteristic flux zero: the other endpoint
+is the moving seed boundary. `seed_phase_cancellation` kernel-checks an actual
+immediate cancellation for lag 3, excluding monotonicity of this signed phase.
+
+The phase supplies an exact balance law and a seed contribution, but not yet
+an obstruction surviving all allowed cancellations. A further spatial or
+cross-characteristic compatibility theorem would have to exclude the required
+`-1` compensation, using more than this endpoint identity. No such theorem is
+assumed or asserted here; Problem 1 remains open.
+
+
+## First erasure and a recurring source-to-erasure pattern
 
 The advancing source at `(t,-k)` forces a unit at `(t+1,-k+1)`. If the characteristic's
 center endpoint at time `t+k` is clean, `advancing_source_first_erasure` finds the first

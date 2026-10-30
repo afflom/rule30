@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-gate-phase"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (const lexlean.std.int::int))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.leftGatePhase"
+
+[[form]]
+id = "left-gate-phase"
+channel = "math"
+surface = "leftgatephase"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftgatephase) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

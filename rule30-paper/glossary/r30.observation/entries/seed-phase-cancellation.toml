@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-phase-cancellation"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (nat 3) (nat 0) (nat 3)) (nat 1)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (nat 3) (nat 1) (nat 2)) (nat 0)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::left-phase-flux) (nat 3) (nat 0) (nat 2)) (app (const lexlean.std.int::neg) (nat 1))) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (nat 3) (nat 0) (nat 2)) (nat 1)))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.seed_phase_cancellation"
+
+[[form]]
+id = "seed-phase-cancellation"
+channel = "math"
+surface = "seedphasecancellation"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name seedphasecancellation)"

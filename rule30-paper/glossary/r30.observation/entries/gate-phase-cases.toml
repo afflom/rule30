@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "gate-phase-cases"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 1)))) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (local Q) (local t) (local k)) (app (const lexlean.std.int::neg) (nat 1)))) (app (const lexlean.core::land) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 2)))) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (local Q) (local t) (local k)) (app (const lexlean.std.int::neg) (nat 1)))) (app (const lexlean.core::land) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 3)))) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (local Q) (local t) (local k)) (app (const lexlean.std.int::neg) (nat 1)))) (app (const lexlean.core::land) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 4)))) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (local Q) (local t) (local k)) (nat 1))) (app (const lexlean.core::land) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 5)))) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (local Q) (local t) (local k)) (nat 1))) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (local k)) (nat 6)))) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (local Q) (local t) (local k)) (nat 1)))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.gate_phase_cases"
+
+[[form]]
+id = "gate-phase-cases"
+channel = "math"
+surface = "gatephasecases"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name gatephasecases) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

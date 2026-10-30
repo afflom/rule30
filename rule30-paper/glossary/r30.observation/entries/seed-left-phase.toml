@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-left-phase"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q)))) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (local Q) (local t) (app (const lexlean.std.nat::add) (local t) (local Q))) (nat 1))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.seed_left_phase"
+
+[[form]]
+id = "seed-left-phase"
+channel = "math"
+surface = "seedleftphase"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name seedleftphase) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

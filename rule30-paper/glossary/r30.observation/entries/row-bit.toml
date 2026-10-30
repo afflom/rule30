@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "row-bit"
+category = "function"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.rowBit"
+
+[[form]]
+id = "row-bit"
+channel = "math"
+surface = "rowbit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rowbit) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

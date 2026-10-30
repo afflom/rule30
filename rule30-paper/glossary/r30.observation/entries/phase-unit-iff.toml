@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "phase-unit-iff"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (local Q) (local t) (local k)) (app (const lexlean.std.int::neg) (nat 1))) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (local Q) (local t) (local k)) (nat 1))) (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (local Q) (local t) (local k)) (const lexlean.std.bool::true))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.phase_unit_iff"
+
+[[form]]
+id = "phase-unit-iff"
+channel = "math"
+surface = "phaseunitiff"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name phaseunitiff) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

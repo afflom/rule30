@@ -6,6 +6,8 @@
 \useglossary{r30.time@1.0.0}
 \useglossary{r30.scale@1.0.0}
 \useglossary{r30.observation@1.0.0}
+\useglossary{lexlean.std.int@1.2.0}
+\useglossary{r30.witt@1.0.0}
 \title{Masked observations}
 
 \begin{section}{masked-observations}
@@ -455,6 +457,126 @@ if \(norecurrentcentralcollision\), then \(problemone\).
 \begin{proof}
 Assume \(h\).
 Close the goal with \(\lexeme{r30.frontier::not-eventually-periodic-of-no-recurrent-central-collision}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pair-phase-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(b\) and natural number \(d\) and natural number \(i\), \(pairphase(wittphi(b), wittxor(wittphi(d), wittshl(crosscarry(b, d), 1)), i) = bitvalue(rowbit(wittphi(wittxor(b, d)), i)) intminus bitvalue(rowbit(wittphi(b), i))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pair-phase-step}(b, d, i)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{aligned-phase-left}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(alignedphase(Q, t, t + k + Q) = leftphase(Q, t, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-phase-left}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phase-zero-iff}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftphase(Q, t, k) = 0 ↔ leftdefect(Q, t, k) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phase-zero-iff}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phase-unit-iff}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \((leftphase(Q, t, k) = intneg 1 ∨ leftphase(Q, t, k) = 1) ↔ leftdefect(Q, t, k) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phase-unit-iff}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-phase-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftphase(Q, t + 1, k) = leftphase(Q, t, k + 1) intplus leftphaseflux(Q, t, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-phase-balance}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{collision-phase-flip}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(collisioncode(Q, t, k) ≠ 0\), then \(leftphaseflux(Q, t, k) = intneg 2 inttimes leftphase(Q, t, k + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::collision-phase-flip}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{advancing-phase-flip}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then if \(advancingatdepth(Q, t, k)\), then \(leftphase(Q, t + 1, k - 1) = intneg leftphase(Q, t, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::advancing-phase-flip}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{gate-phase-cases}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \((gatecode(Q, t, k) = 1 → leftgatephase(Q, t, k) = intneg 1) ∧ (gatecode(Q, t, k) = 2 → leftgatephase(Q, t, k) = intneg 1) ∧ (gatecode(Q, t, k) = 3 → leftgatephase(Q, t, k) = intneg 1) ∧ (gatecode(Q, t, k) = 4 → leftgatephase(Q, t, k) = 1) ∧ (gatecode(Q, t, k) = 5 → leftgatephase(Q, t, k) = 1) ∧ (gatecode(Q, t, k) = 6 → leftgatephase(Q, t, k) = 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::gate-phase-cases}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{erasure-phase-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(erasureevent(Q, t, k)\), then \(leftphase(Q, t + 1, k) = 0 ∧ leftphaseflux(Q, t, k) = intneg leftphase(Q, t, k + 1) ∧ (leftphase(Q, t, k + 1) = intneg 1 ∨ leftphase(Q, t, k + 1) = 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::erasure-phase-balance}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{erasure-reset-product}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(erasureevent(Q, t, k)\), then \((leftcolour(Q, t + 1, k) = 3 ↔ leftgatephase(Q, t, k) inttimes leftphase(Q, t, k + 1) = intneg 1) ∧ (leftcolour(Q, t + 1, k) = 0 ↔ leftgatephase(Q, t, k) inttimes leftphase(Q, t, k + 1) = 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::erasure-reset-product}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{path-phase-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(n\), \(pathphase(Q, t, k, n) = leftphase(Q, t, k) intplus pathflux(Q, t, k, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::path-phase-balance}(Q, t, k, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-left-phase}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(leftphase(Q, t, t + Q) = 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-left-phase}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-center-phase-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(leftphase(Q, t + (t + Q), 0) = 1 intplus pathflux(Q, t, t + Q, t + Q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-center-phase-balance}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-seed-flux}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then \(pathflux(m * P, N, N + m * P, N + m * P) = intneg 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-seed-flux}(T, P, m, N)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-phase-cancellation}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(leftphase(3, 0, 3) = 1 ∧ leftphase(3, 1, 2) = 0 ∧ leftphaseflux(3, 0, 2) = intneg 1 ∧ leftgatephase(3, 0, 2) = 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-phase-cancellation}\).
 \end{proof}
 \end{theorem}
 

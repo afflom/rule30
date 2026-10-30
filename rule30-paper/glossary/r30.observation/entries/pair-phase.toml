@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "pair-phase"
+category = "function"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat))) (const lexlean.std.int::int))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.pairPhase"
+
+[[form]]
+id = "pair-phase"
+channel = "math"
+surface = "pairphase"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pairphase) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

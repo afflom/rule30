@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "aligned-phase-left"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::aligned-phase) (local Q) (local t) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local k)) (local Q))) (app (const r30.observation::left-phase) (local Q) (local t) (local k))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.aligned_phase_left"
+
+[[form]]
+id = "aligned-phase-left"
+channel = "math"
+surface = "alignedphaseleft"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name alignedphaseleft) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

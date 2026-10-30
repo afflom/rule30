@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-value"
+category = "function"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool))) (const lexlean.std.int::int))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.bitValue"
+
+[[form]]
+id = "bit-value"
+channel = "math"
+surface = "bitvalue"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitvalue) (paren (seq (slot 0))))"
