@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "white-block-gate-convex"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hw (app (const r30.observation::common-white-block) (local Q) (local b) (local n))) (explicit hij (app (const lexlean.std.nat::le) (local i) (local j))) (explicit hjk (app (const lexlean.std.nat::le) (local j) (local k))) (explicit hkn (app (const lexlean.std.nat::le) (local k) (local n))) (explicit hi (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (app (const lexlean.std.nat::add) (local b) (local i)) (nat 0)) (nat 2)) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (app (const lexlean.std.nat::add) (local b) (local i)) (nat 0)) (nat 5)))) (explicit hk (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (app (const lexlean.std.nat::add) (local b) (local k)) (nat 0)) (nat 2)) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (app (const lexlean.std.nat::add) (local b) (local k)) (nat 0)) (nat 5))))) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (app (const lexlean.std.nat::add) (local b) (local j)) (nat 0)) (app (const r30.observation::gate-code) (local Q) (app (const lexlean.std.nat::add) (local b) (local i)) (nat 0)))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.white_block_gate_convex"
+
+[[form]]
+id = "white-block-gate-convex"
+channel = "math"
+surface = "whiteblockgateconvex"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name whiteblockgateconvex) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

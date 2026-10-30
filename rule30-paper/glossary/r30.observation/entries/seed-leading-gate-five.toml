@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-leading-gate-five"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const r30.observation::leading-advance) (nat 4) (nat 5) (nat 2)) (app (const lexlean.core::land) (app (const r30.observation::center-clean-through) (nat 4) (nat 5) (nat 2)) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (nat 4) (nat 6) (nat 0)) (nat 5))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.seed_leading_gate_five"
+
+[[form]]
+id = "seed-leading-gate-five"
+channel = "math"
+surface = "seedleadinggatefive"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name seedleadinggatefive)"

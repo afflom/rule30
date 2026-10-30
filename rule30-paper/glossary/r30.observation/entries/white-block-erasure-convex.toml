@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "white-block-erasure-convex"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hw (app (const r30.observation::common-white-block) (local Q) (local b) (local n))) (explicit hc (app (const r30.observation::center-clean-through) (local Q) (local b) (app (const lexlean.std.nat::add) (local n) (nat 1)))) (explicit hij (app (const lexlean.std.nat::le) (local i) (local j))) (explicit hjk (app (const lexlean.std.nat::le) (local j) (local k))) (explicit hkn (app (const lexlean.std.nat::le) (local k) (local n))) (explicit hi (app (const r30.observation::erasure-event) (local Q) (app (const lexlean.std.nat::add) (local b) (local i)) (nat 0))) (explicit hk (app (const r30.observation::erasure-event) (local Q) (app (const lexlean.std.nat::add) (local b) (local k)) (nat 0)))) (app (const lexlean.core::land) (app (const r30.observation::erasure-event) (local Q) (app (const lexlean.std.nat::add) (local b) (local j)) (nat 0)) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (app (const lexlean.std.nat::add) (local b) (local j)) (nat 0)) (app (const r30.observation::gate-code) (local Q) (app (const lexlean.std.nat::add) (local b) (local i)) (nat 0))))))"
+surface_arity = 6
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.white_block_erasure_convex"
+
+[[form]]
+id = "white-block-erasure-convex"
+channel = "math"
+surface = "whiteblockerasureconvex"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name whiteblockerasureconvex) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4) (token comma) (space) (slot 5))))"

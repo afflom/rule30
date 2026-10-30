@@ -372,6 +372,34 @@ the remaining `0X`/`0Y` center cancellations. The seed-specific closing obstruct
 is still unproved, and Problem 1 remains open.
 
 
+### Erasure bursts and finite viability of the surviving cases
+
+`CommonWhiteBlock Q b n` keeps both compared center columns white throughout the
+finite interval. On such a block each right neighbor is monotone: once black, it
+stays black until the end of the block. `white_block_gate_convex` proves that the
+mismatching center gates form an interval with one orientation. With center
+agreement through the next update, `white_block_erasure_convex` transfers this
+restriction to the actual erasure events. It imposes compatibility on witnesses
+at different times, beyond selecting one repeatedly occurring gate case.
+
+This argument stops at a black-center phase. It does not give periodicity of the
+successive bursts, or a closed dynamics for the strip receiving outside inputs.
+The existing white-drive persistence laws in `Interfaces` likewise do not imply
+such periodicity; the new statements retain the paired erasure witnesses.
+
+Finite kernel certificates now realize both remaining gate cases in the single
+seed: a leading source at lag 4, time 5, depth 2 gives gate 5 at time 6; lag 7,
+time 7, depth 4 gives gate 2 at time 10. Lag 11, time 4, depth 4 also realizes a
+common-black reset at the center at time 8. These are exact finite propositions,
+not samples used as premises of any unbounded claim. They rule out forbidding
+these local configurations outright, including forbidding all black resets.
+
+The missing seed-specific result must exclude an infinite, period-compatible
+succession of these viable bursts. The current phase balance, leading-front
+geometry and block compatibility have not proved that exclusion. Problem 1
+remains unproved.
+
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

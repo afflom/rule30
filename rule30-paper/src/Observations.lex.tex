@@ -652,5 +652,53 @@ Close the goal with \(\lexeme{r30.observation::leading-phase-reset}(Q, t, k)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{center-erasure-iff-gate}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(leftdefect(Q, t, 0) = false\), then if \(leftdefect(Q, t + 1, 0) = false\), then \(erasureevent(Q, t, 0) ↔ (gatecode(Q, t, 0) = 2 ∨ gatecode(Q, t, 0) = 5)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-erasure-iff-gate}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{white-block-gate-convex}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(n\) and natural number \(i\) and natural number \(j\) and natural number \(k\), if \(commonwhiteblock(Q, b, n)\), then if \(i ≤ j\), then if \(j ≤ k\), then if \(k ≤ n\), then if \(gatecode(Q, b + i, 0) = 2 ∨ gatecode(Q, b + i, 0) = 5\), then if \(gatecode(Q, b + k, 0) = 2 ∨ gatecode(Q, b + k, 0) = 5\), then \(gatecode(Q, b + j, 0) = gatecode(Q, b + i, 0)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::white-block-gate-convex}(Q, b, n, i, j, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{white-block-erasure-convex}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(n\) and natural number \(i\) and natural number \(j\) and natural number \(k\), if \(commonwhiteblock(Q, b, n)\), then if \(centercleanthrough(Q, b, n + 1)\), then if \(i ≤ j\), then if \(j ≤ k\), then if \(k ≤ n\), then if \(erasureevent(Q, b + i, 0)\), then if \(erasureevent(Q, b + k, 0)\), then \(erasureevent(Q, b + j, 0) ∧ gatecode(Q, b + j, 0) = gatecode(Q, b + i, 0)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::white-block-erasure-convex}(Q, b, n, i, j, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-leading-gate-five}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(leadingadvance(4, 5, 2) ∧ centercleanthrough(4, 5, 2) ∧ gatecode(4, 6, 0) = 5\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-leading-gate-five}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-leading-gate-two}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(leadingadvance(7, 7, 4) ∧ centercleanthrough(7, 7, 4) ∧ gatecode(7, 10, 0) = 2\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-leading-gate-two}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-leading-black-reset}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(leadingadvance(11, 4, 4) ∧ centercleanthrough(11, 4, 4) ∧ gatecode(11, 7, 0) = 5 ∧ leftcolour(11, 8, 0) = 3\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-leading-black-reset}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "common-white-block"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.CommonWhiteBlock"
+
+[[form]]
+id = "common-white-block"
+channel = "math"
+surface = "commonwhiteblock"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name commonwhiteblock) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

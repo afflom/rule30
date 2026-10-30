@@ -395,4 +395,205 @@ theorem leading_phase_reset (Q t k : Nat)
   have hk := hl.1
   simpa only [Nat.zero_add, show t + (k - 1) + 1 = t + k by omega, hp] using hr
 
+/-! ## Compatibility of center erasures within a white block -/
+
+def CommonWhiteBlock (Q b n : Nat) : Prop :=
+  ∀ s : Nat, s ≤ n → cell (b + s) 0 = false ∧ cell (b + s + Q) 0 = false
+
+private theorem right_black_persists (t : Nat) : ∀ n : Nat,
+    (∀ s : Nat, s < n → cell (t + s) 0 = false) → cell t 1 = true → cell (t + n) 1 = true := by
+  intro n
+  induction n with
+  | zero => intro _ hb; simpa using hb
+  | succ n ih =>
+    intro hw hb
+    have hprev := ih (fun s hs => hw s (by omega)) hb
+    rw [show t + (n + 1) = (t + n) + 1 by omega]
+    change rule (cell (t + n) 0) (cell (t + n) 1) (cell (t + n) 2) = true
+    rw [hw n (by omega), hprev]
+    rfl
+
+private theorem white_block_mono (Q b n i j : Nat) (hw : CommonWhiteBlock Q b n)
+    (hij : i ≤ j) (hjn : j ≤ n) :
+    (cell (b + i) 1 = true → cell (b + j) 1 = true) ∧
+    (cell (b + i + Q) 1 = true → cell (b + j + Q) 1 = true) := by
+  constructor
+  · intro hb
+    have hh := right_black_persists (b + i) (j - i) (fun s hs => by
+      simpa only [Nat.add_assoc] using (hw (i + s) (by omega)).1) hb
+    simpa only [show b + i + (j - i) = b + j by omega] using hh
+  · intro hb
+    have hh := right_black_persists (b + i + Q) (j - i) (fun s hs => by
+      simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using (hw (i + s) (by omega)).2) hb
+    simpa only [show b + i + Q + (j - i) = b + j + Q by omega] using hh
+
+private theorem center_gate_white (Q t : Nat) (hw : cell t 0 = false)
+    (hw' : cell (t + Q) 0 = false) :
+    (gateCode Q t 0 = 2 ↔ cell t 1 = true ∧ cell (t + Q) 1 = false) ∧
+    (gateCode Q t 0 = 5 ↔ cell t 1 = false ∧ cell (t + Q) 1 = true) := by
+  simp only [gateCode, Int.natCast_zero, Int.neg_zero, Int.zero_add, hw, hw']
+  cases cell t 1 <;> cases cell (t + Q) 1 <;> decide
+
+private theorem center_gate_nonzero (Q t : Nat) (h0 : leftDefect Q t 0 = false)
+    (hg : gateCode Q t 0 ≠ 0) : gateCode Q t 0 = 2 ∨ gateCode Q t 0 = 5 := by
+  simp only [leftDefect, defect, difference, Int.natCast_zero, Int.neg_zero] at h0
+  simp only [gateCode, Int.natCast_zero, Int.neg_zero, Int.zero_add] at hg ⊢
+  cases ha : cell t 0 <;> cases hb : cell (t + Q) 0 <;>
+    cases hc : cell t 1 <;> cases hd : cell (t + Q) 1 <;> simp_all [gateCase]
+
+theorem center_erasure_iff_gate (Q t : Nat) (h0 : leftDefect Q t 0 = false)
+    (h1 : leftDefect Q (t + 1) 0 = false) :
+    ErasureEvent Q t 0 ↔ gateCode Q t 0 = 2 ∨ gateCode Q t 0 = 5 := by
+  constructor
+  · intro he
+    exact center_gate_nonzero Q t h0 he.2.2.1
+  · intro hg
+    have hne : gateCode Q t 0 ≠ 0 := by rcases hg with he | he <;> omega
+    have hgate := (gate_code_nonzero Q t 0).1 hne
+    have hs := left_defect_step_gate Q t 0
+    rw [h1, hgate] at hs
+    have hin : leftDefect Q t 1 = true := by
+      cases hd : leftDefect Q t 1
+      · simp only [Nat.zero_add, hd] at hs
+        cases hs
+      · rfl
+    exact erasure_event_of_step Q t 0 hin h1
+
+/-- Two mismatching OR gates within a common white block force every intervening
+gate to have the same orientation. Deeper right cells remain unrestricted. -/
+theorem white_block_gate_convex (Q b n i j k : Nat) (hw : CommonWhiteBlock Q b n)
+    (hij : i ≤ j) (hjk : j ≤ k) (hkn : k ≤ n)
+    (hi : gateCode Q (b + i) 0 = 2 ∨ gateCode Q (b + i) 0 = 5)
+    (hk : gateCode Q (b + k) 0 = 2 ∨ gateCode Q (b + k) 0 = 5) :
+    gateCode Q (b + j) 0 = gateCode Q (b + i) 0 := by
+  have ci := center_gate_white Q (b + i) (hw i (by omega)).1 (hw i (by omega)).2
+  have cj := center_gate_white Q (b + j) (hw j (by omega)).1 (hw j (by omega)).2
+  have ck := center_gate_white Q (b + k) (hw k hkn).1 (hw k hkn).2
+  have mij := white_block_mono Q b n i j hw hij (by omega)
+  have mjk := white_block_mono Q b n j k hw hjk hkn
+  have mik := white_block_mono Q b n i k hw (by omega) hkn
+  rcases hi with hi | hi <;> rcases hk with hk | hk
+  · have ai := (ci.1.1 hi).1
+    have bk := (ck.1.1 hk).2
+    have aj := mij.1 ai
+    have bj : cell (b + j + Q) 1 = false := by
+      cases he : cell (b + j + Q) 1
+      · rfl
+      · have hh := mjk.2 he
+        rw [bk] at hh
+        contradiction
+    exact (cj.1.2 ⟨aj, bj⟩).trans hi.symm
+  · have hh := mik.1 (ci.1.1 hi).1
+    rw [(ck.2.1 hk).1] at hh
+    contradiction
+  · have hh := mik.2 (ci.2.1 hi).2
+    rw [(ck.1.1 hk).2] at hh
+    contradiction
+  · have bi := (ci.2.1 hi).2
+    have ak := (ck.2.1 hk).1
+    have bj := mij.2 bi
+    have aj : cell (b + j) 1 = false := by
+      cases he : cell (b + j) 1
+      · rfl
+      · have hh := mjk.1 he
+        rw [ak] at hh
+        contradiction
+    exact (cj.2.2 ⟨aj, bj⟩).trans hi.symm
+
+/-- With the finite center-agreement window retained, the entire erasure burst
+is an interval with one gate orientation. -/
+theorem white_block_erasure_convex (Q b n i j k : Nat) (hw : CommonWhiteBlock Q b n)
+    (hc : Rule30UOR.DefectFront.CenterCleanThrough Q b (n + 1))
+    (hij : i ≤ j) (hjk : j ≤ k) (hkn : k ≤ n)
+    (hi : ErasureEvent Q (b + i) 0) (hk : ErasureEvent Q (b + k) 0) :
+    ErasureEvent Q (b + j) 0 ∧ gateCode Q (b + j) 0 = gateCode Q (b + i) 0 := by
+  have cases_at : ∀ s : Nat, s ≤ n →
+      (ErasureEvent Q (b + s) 0 ↔ gateCode Q (b + s) 0 = 2 ∨ gateCode Q (b + s) 0 = 5) := by
+    intro s hs
+    exact center_erasure_iff_gate Q (b + s) (hc s (by omega))
+      (by simpa only [Nat.add_assoc] using hc (s + 1) (by omega))
+  have gi := (cases_at i (by omega)).1 hi
+  have gk := (cases_at k hkn).1 hk
+  have ge := white_block_gate_convex Q b n i j k hw hij hjk hkn gi gk
+  exact ⟨(cases_at j (by omega)).2 (by rw [ge]; exact gi), ge⟩
+
+/-! These finite certificates establish that the surviving gate cases, including
+a common-black reset, occur in the actual seed orbit. They are not recurrence
+premises or evidence for any unbounded statement. -/
+
+private theorem cell_as_row (t : Nat) (p : Int) (hp : p ≤ (t : Int)) :
+    cell t p = (row t).testBit (((t : Int) - p).toNat) := by
+  rw [Rule30UOR.Interfaces.row_testBit, Rule30UOR.Right.rdiag_eq_R]
+  unfold Rule30Diagonals.R
+  rw [show (t : Int) - ((((t : Int) - p).toNat : Nat) : Int) = p by omega]
+
+private theorem cell_left_as_row (t k : Nat) :
+    cell t (-(k : Int)) = (row t).testBit (t + k) := by
+  rw [cell_as_row t (-(k : Int)) (by omega)]
+  congr 1
+  omega
+
+private def RowLeadingData (Q t k : Nat) : Prop :=
+  2 ≤ k ∧ (row t).testBit (t + k) ≠ (row (t + Q)).testBit (t + Q + k) ∧
+    (row t).testBit (t + (k - 1)) = true ∧ (row (t + Q)).testBit (t + Q + (k - 1)) = true ∧
+    (∀ r : Nat, r < k → (row t).testBit (t + r) = (row (t + Q)).testBit (t + Q + r)) ∧
+    (∀ s : Nat, s ≤ k → (row (t + s)).testBit (t + s) = (row (t + s + Q)).testBit (t + s + Q))
+
+private theorem leading_of_rows (Q t k : Nat) (h : RowLeadingData Q t k) :
+    Rule30UOR.CentralCollision.LeadingAdvance Q t k ∧
+      Rule30UOR.DefectFront.CenterCleanThrough Q t k := by
+  obtain ⟨hk, hne, hb, hb', hp, hc⟩ := h
+  have hu : leftDefect Q t k = true := by
+    unfold leftDefect defect difference
+    dsimp only
+    rw [cell_left_as_row, cell_left_as_row]
+    cases ha : (row t).testBit (t + k) <;>
+      cases hb : (row (t + Q)).testBit (t + Q + k) <;> simp_all
+  refine ⟨⟨hk, ?_, by omega, hu, ?_⟩, ?_⟩
+  · change cell t (-(k : Int)) ≠ cell (t + Q) (-(k : Int)) ∧
+      cell t (-(k : Int) + 1) = true ∧ cell (t + Q) (-(k : Int) + 1) = true
+    rw [show -(k : Int) + 1 = -((k - 1 : Nat) : Int) by omega,
+      cell_left_as_row, cell_left_as_row, cell_left_as_row, cell_left_as_row]
+    exact ⟨hne, hb, hb'⟩
+  · intro r hr
+    apply (difference_eq_false_iff (fun u => cell u (-(r : Int))) Q t).2
+    simpa only [cell_left_as_row] using (hp r hr).symm
+  · intro s hs
+    apply (difference_eq_false_iff (fun u => cell u (-((0 : Nat) : Int))) Q (t + s)).2
+    simpa only [cell_left_as_row, Nat.add_zero] using (hc s hs).symm
+
+theorem seed_leading_gate_five :
+    Rule30UOR.CentralCollision.LeadingAdvance 4 5 2 ∧
+      Rule30UOR.DefectFront.CenterCleanThrough 4 5 2 ∧ gateCode 4 6 0 = 5 := by
+  obtain ⟨hl, hc⟩ := leading_of_rows 4 5 2 (by unfold RowLeadingData; decide +kernel)
+  refine ⟨hl, hc, ?_⟩
+  simp only [gateCode, Int.natCast_zero, Int.neg_zero, Int.zero_add]
+  rw [cell_as_row 6 0 (by omega), cell_as_row 10 0 (by omega),
+    cell_as_row 6 1 (by omega), cell_as_row 10 1 (by omega)]
+  decide +kernel
+
+theorem seed_leading_gate_two :
+    Rule30UOR.CentralCollision.LeadingAdvance 7 7 4 ∧
+      Rule30UOR.DefectFront.CenterCleanThrough 7 7 4 ∧ gateCode 7 10 0 = 2 := by
+  obtain ⟨hl, hc⟩ := leading_of_rows 7 7 4 (by unfold RowLeadingData; decide +kernel)
+  refine ⟨hl, hc, ?_⟩
+  simp only [gateCode, Int.natCast_zero, Int.neg_zero, Int.zero_add]
+  rw [cell_as_row 10 0 (by omega), cell_as_row 17 0 (by omega),
+    cell_as_row 10 1 (by omega), cell_as_row 17 1 (by omega)]
+  decide +kernel
+
+theorem seed_leading_black_reset :
+    Rule30UOR.CentralCollision.LeadingAdvance 11 4 4 ∧
+      Rule30UOR.DefectFront.CenterCleanThrough 11 4 4 ∧
+      gateCode 11 7 0 = 5 ∧ leftColour 11 8 0 = 3 := by
+  obtain ⟨hl, hc⟩ := leading_of_rows 11 4 4 (by unfold RowLeadingData; decide +kernel)
+  refine ⟨hl, hc, ?_, ?_⟩
+  · simp only [gateCode, Int.natCast_zero, Int.neg_zero, Int.zero_add]
+    rw [cell_as_row 7 0 (by omega), cell_as_row 18 0 (by omega),
+      cell_as_row 7 1 (by omega), cell_as_row 18 1 (by omega)]
+    decide +kernel
+  · simp only [leftColour, leftCell, Int.natCast_zero, Int.neg_zero]
+    rw [cell_as_row 8 0 (by omega), cell_as_row 19 0 (by omega)]
+    decide +kernel
+
 end Rule30UOR.WittDefect

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-leading-gate-two"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const r30.observation::leading-advance) (nat 7) (nat 7) (nat 4)) (app (const lexlean.core::land) (app (const r30.observation::center-clean-through) (nat 7) (nat 7) (nat 4)) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (nat 7) (nat 10) (nat 0)) (nat 2))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.seed_leading_gate_two"
+
+[[form]]
+id = "seed-leading-gate-two"
+channel = "math"
+surface = "seedleadinggatetwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name seedleadinggatetwo)"

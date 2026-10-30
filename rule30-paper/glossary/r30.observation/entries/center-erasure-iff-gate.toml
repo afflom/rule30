@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-erasure-iff-gate"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit h0 (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (local Q) (local t) (nat 0)) (const lexlean.std.bool::false))) (explicit h1 (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (local Q) (app (const lexlean.std.nat::add) (local t) (nat 1)) (nat 0)) (const lexlean.std.bool::false)))) (app (const lexlean.core::iff) (app (const r30.observation::erasure-event) (local Q) (local t) (nat 0)) (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (nat 0)) (nat 2)) (app (const lexlean.core::eq) (app (const r30.observation::gate-code) (local Q) (local t) (nat 0)) (nat 5))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.center_erasure_iff_gate"
+
+[[form]]
+id = "center-erasure-iff-gate"
+channel = "math"
+surface = "centererasureiffgate"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centererasureiffgate) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
