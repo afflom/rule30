@@ -596,4 +596,238 @@ theorem seed_leading_black_reset :
     rw [cell_as_row 8 0 (by omega), cell_as_row 19 0 (by omega)]
     decide +kernel
 
+/-! ## The erasure kernel with its gate channel retained
+
+This is an exact local bookkeeping map, not an autonomous finite-state model.
+Its coefficients and gate channel are supplied by the actual paired background.
+-/
+
+def transferPhase (a g : Bool) (incoming gate : Int) : Int :=
+  (1 - 2 * bitValue g) * incoming + (1 - 2 * bitValue a) * gate
+
+def recoverPhase (a g : Bool) (outgoing gate : Int) : Int :=
+  (1 - 2 * bitValue g) * (outgoing - (1 - 2 * bitValue a) * gate)
+
+def laterGate (Q t k : Nat) : Bool :=
+  cell (t + Q) (-(k : Int)) || cell (t + Q) (-(k : Int) + 1)
+
+theorem transfer_recover (a g : Bool) (incoming gate : Int) :
+    recoverPhase a g (transferPhase a g incoming gate) gate = incoming := by
+  cases a <;> cases g <;> simp [transferPhase, recoverPhase, bitValue] <;> omega
+
+theorem transfer_kernel (a g : Bool) (incoming gate : Int) :
+    transferPhase a g incoming gate = 0 ↔ incoming = recoverPhase a g 0 gate := by
+  cases a <;> cases g <;> simp [transferPhase, recoverPhase, bitValue] <;> omega
+
+theorem phase_transfer (Q t k : Nat) :
+    leftPhase Q (t + 1) k =
+      transferPhase (leftCell t (k + 1)) (laterGate Q t k)
+        (leftPhase Q t (k + 1)) (leftGatePhase Q t k) := by
+  have hb := left_phase_balance Q t k
+  simp only [leftPhase, leftPhaseFlux, phaseFlux, transferPhase, laterGate, leftCell, leftGatePhase,
+    show -(k : Int) - 1 = -((k + 1 : Nat) : Int) by omega] at hb ⊢
+  cases ha : cell t (-((k + 1 : Nat) : Int)) <;>
+    cases hg : (cell (t + Q) (-(k : Int)) || cell (t + Q) (-(k : Int) + 1)) <;>
+    simp_all [bitValue] <;> omega
+
+theorem phase_recover (Q t k : Nat) :
+    leftPhase Q t (k + 1) =
+      recoverPhase (leftCell t (k + 1)) (laterGate Q t k)
+        (leftPhase Q (t + 1) k) (leftGatePhase Q t k) := by
+  rw [phase_transfer]
+  exact (transfer_recover _ _ _ _).symm
+
+/-- A zero center/left readout at an erasure still retains a nonzero gate channel.
+The erased incoming unit is recoverable from that channel and its background. -/
+theorem erasure_recovery (Q t k : Nat) (he : ErasureEvent Q t k) :
+    leftGatePhase Q t k ≠ 0 ∧ leftPhase Q t (k + 1) =
+      recoverPhase (leftCell t (k + 1)) (laterGate Q t k) 0 (leftGatePhase Q t k) := by
+  constructor
+  · have hg := (gate_code_nonzero Q t k).1 he.2.2.1
+    unfold leftGateDifference gateDifference at hg
+    unfold leftGatePhase gatePhase
+    cases ha : (cell t (-(k : Int)) || cell t (-(k : Int) + 1)) <;>
+      cases hb : (cell (t + Q) (-(k : Int)) || cell (t + Q) (-(k : Int) + 1)) <;>
+      simp_all [bitValue]
+  · have hr := phase_recover Q t k
+    rw [(phase_zero_iff Q (t + 1) k).2 he.2.1] at hr
+    exact hr
+
+/-! ## Both erasure orientations are forced under a periodic center
+
+A Boolean signal with only downward Q-shifts eventually becomes Q-periodic.
+The proof uses the exact mass of a sliding Q-window and well-foundedness of Nat;
+there is no density or measured-frequency premise.
+-/
+
+private def windowMass (f : Nat → Bool) : Nat → Nat → Nat
+  | 0, _ => 0
+  | n + 1, t => (if f t then 1 else 0) + windowMass f n (t + 1)
+
+private theorem window_mass_slide (f : Nat → Bool) : ∀ Q t : Nat,
+    windowMass f Q (t + 1) + (if f t then 1 else 0) =
+      windowMass f Q t + (if f (t + Q) then 1 else 0) := by
+  intro Q
+  induction Q with
+  | zero => intro t; simp [windowMass]
+  | succ Q ih =>
+    intro t
+    have hh := ih (t + 1)
+    simp only [windowMass] at ⊢
+    rw [show t + 1 + Q = t + (Q + 1) by omega] at hh
+    omega
+
+private theorem decreasing_nat_stabilizes (g : Nat → Nat)
+    (hs : ∀ n : Nat, g (n + 1) ≤ g n) : ∃ U : Nat, ∀ t : Nat, U ≤ t → g t = g U := by
+  have hle : ∀ i d : Nat, g (i + d) ≤ g i := by
+    intro i d
+    induction d with
+    | zero => simp
+    | succ d ih =>
+      have hh := hs (i + d)
+      rw [show i + (d + 1) = i + d + 1 by omega]
+      omega
+  have aux : ∀ a s : Nat, g s ≤ a → ∃ U : Nat, s ≤ U ∧ ∀ t : Nat, U ≤ t → g t = g U := by
+    intro a
+    induction a with
+    | zero =>
+      intro s hgs
+      refine ⟨s, Nat.le_refl s, ?_⟩
+      intro t ht
+      have hh := hle s (t - s)
+      rw [show s + (t - s) = t by omega] at hh
+      omega
+    | succ a ih =>
+      intro s hgs
+      by_cases he : ∀ t : Nat, s ≤ t → g t = g s
+      · exact ⟨s, Nat.le_refl s, he⟩
+      · have hex : ∃ t : Nat, s ≤ t ∧ g t < g s := by
+          apply Classical.byContradiction
+          intro hn
+          apply he
+          intro t ht
+          have hh := hle s (t - s)
+          rw [show s + (t - s) = t by omega] at hh
+          by_cases hlt : g t < g s
+          · exact (hn ⟨t, ht, hlt⟩).elim
+          · omega
+        obtain ⟨t, ht, hlt⟩ := hex
+        obtain ⟨U, hU, hh⟩ := ih t (by omega)
+        exact ⟨U, by omega, hh⟩
+  obtain ⟨U, hU, hh⟩ := aux (g 0) 0 (Nat.le_refl _)
+  exact ⟨U, hh⟩
+
+private theorem no_rise_eventually_periodic (f : Nat → Bool) (Q T : Nat) (hQ : 0 < Q)
+    (hn : ∀ t : Nat, T ≤ t → f t = false → f (t + Q) = false) : EventuallyPeriodic f := by
+  let g (n : Nat) := windowMass f Q (T + n)
+  have hg : ∀ n : Nat, g (n + 1) ≤ g n := by
+    intro n
+    have hh := window_mass_slide f Q (T + n)
+    cases ha : f (T + n)
+    · have hb := hn (T + n) (by omega) ha
+      simp only [ha, hb, Bool.false_eq_true, ite_false] at hh
+      dsimp [g]
+      rw [show T + (n + 1) = T + n + 1 by omega]
+      omega
+    · cases hb : f (T + n + Q) <;>
+        simp only [ha, hb, Bool.false_eq_true, ite_false, ite_true] at hh <;>
+        dsimp [g] <;> rw [show T + (n + 1) = T + n + 1 by omega] <;> omega
+  obtain ⟨U, hu⟩ := decreasing_nat_stabilizes g hg
+  refine ⟨T + U, Q, hQ, ?_⟩
+  intro t ht
+  have h0 := hu (t - T) (by omega)
+  have h1 := hu (t + 1 - T) (by omega)
+  dsimp [g] at h0 h1
+  rw [show T + (t - T) = t by omega] at h0
+  rw [show T + (t + 1 - T) = t + 1 by omega] at h1
+  have hh := window_mass_slide f Q t
+  rw [h0, h1] at hh
+  cases ha : f t <;> cases hb : f (t + Q) <;> simp_all
+
+private theorem nonperiodic_has_rise (f : Nat → Bool) (hf : ¬ EventuallyPeriodic f)
+    (Q N : Nat) (hQ : 0 < Q) : ∃ t : Nat, N ≤ t ∧ f t = false ∧ f (t + Q) = true := by
+  apply Classical.byContradiction
+  intro hn
+  apply hf
+  apply no_rise_eventually_periodic f Q N hQ
+  intro t ht hw
+  cases hb : f (t + Q)
+  · rfl
+  · exact (hn ⟨t, ht, hw, hb⟩).elim
+
+private theorem nonperiodic_has_fall (f : Nat → Bool) (hf : ¬ EventuallyPeriodic f)
+    (Q N : Nat) (hQ : 0 < Q) : ∃ t : Nat, N ≤ t ∧ f t = true ∧ f (t + Q) = false := by
+  have hn : ¬ EventuallyPeriodic (fun t => !f t) := by
+    rintro ⟨U, R, hR, hp⟩
+    apply hf
+    refine ⟨U, R, hR, ?_⟩
+    intro t ht
+    have hh := hp t ht
+    cases ha : f t <;> cases hb : f (t + R) <;> simp_all
+  obtain ⟨t, ht, h0, h1⟩ := nonperiodic_has_rise (fun t => !f t) hn Q N hQ
+  refine ⟨t, ht, ?_, ?_⟩
+  · cases ha : f t <;> simp_all
+  · cases hb : f (t + Q) <;> simp_all
+
+private def maskedRight (t : Nat) : Bool := (!center t) && cell t 1
+
+private theorem masked_right_nonperiodic {T P : Nat} (hP : 0 < P)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : ¬ EventuallyPeriodic maskedRight := by
+  intro hm
+  have hp : EventuallyPeriodic center := ⟨T, P, hP, fun t ht => by
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht⟩
+  obtain ⟨U, R, hR, hpc, hpm⟩ := common_period hp hm
+  apply Rule30MaskedJen.masked_jen 0 hR
+    (fun t ht => by simpa only [Rule30Prize.center] using hpc t ht)
+  intro t ht hw
+  have h0 : center t = false := by simpa only [Rule30Prize.center] using hw
+  have h1 : center (t + R) = false := (hpc t ht).trans h0
+  simpa only [maskedRight, h0, h1, Bool.not_false, Bool.true_and, Int.zero_add] using hpm t ht
+
+private theorem mask_gate_table : ∀ a b r s : Bool,
+    b = a → (!b && s) ≠ (!a && r) →
+      gateCase a b r s = (if !a && r then 2 else 5) := by
+  unfold gateCase
+  decide +kernel
+
+private theorem gate_of_mask_change (Q t : Nat) (hc : center (t + Q) = center t)
+    (hm : maskedRight (t + Q) ≠ maskedRight t) :
+    gateCode Q t 0 = (if maskedRight t then 2 else 5) := by
+  simp only [maskedRight, Rule30Prize.center] at hc hm ⊢
+  simp only [gateCode, Int.natCast_zero, Int.neg_zero, Int.zero_add]
+  exact mask_gate_table (cell t 0) (cell (t + Q) 0) (cell t 1) (cell (t + Q) 1) hc hm
+
+/-- For every positive multiple of a hypothetical center period, both orientations
+of actual center erasures recur arbitrarily late. A one-sided phase drift cannot
+be inferred by selecting just one recurring cancellation case. -/
+theorem periodic_erasure_orientation (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
+    ∃ t : Nat, N ≤ t ∧ ErasureEvent (m * P) t 0 ∧ gateCode (m * P) t 0 = g := by
+  have hf := masked_right_nonperiodic hP hc
+  have hp : ∀ t : Nat, T ≤ t → center (t + P) = center t := by
+    intro t ht
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
+  have produce : ∀ t : Nat, max T N ≤ t →
+      gateCode (m * P) t 0 = g →
+      ∃ u : Nat, N ≤ u ∧ ErasureEvent (m * P) u 0 ∧ gateCode (m * P) u 0 = g := by
+    intro t ht hgate
+    have h0 : leftDefect (m * P) t 0 = false := by
+      simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
+        Rule30UOR.DefectFront.center_defect_zero hp m t (by omega)
+    have h1 : leftDefect (m * P) (t + 1) 0 = false := by
+      simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
+        Rule30UOR.DefectFront.center_defect_zero hp m (t + 1) (by omega)
+    exact ⟨t, by omega, (center_erasure_iff_gate (m * P) t h0 h1).2 (by rw [hgate]; exact hg), hgate⟩
+  rcases hg with hg | hg
+  · obtain ⟨t, ht, h0, h1⟩ := nonperiodic_has_fall maskedRight hf (m * P) (max T N) (Nat.mul_pos hm hP)
+    have hchange : maskedRight (t + m * P) ≠ maskedRight t := by rw [h0, h1]; decide
+    have hgate := gate_of_mask_change (m * P) t (periodic_mul hp m t (by omega)) hchange
+    simp only [h0, ite_true] at hgate
+    exact produce t ht (by simpa only [hg] using hgate)
+  · obtain ⟨t, ht, h0, h1⟩ := nonperiodic_has_rise maskedRight hf (m * P) (max T N) (Nat.mul_pos hm hP)
+    have hchange : maskedRight (t + m * P) ≠ maskedRight t := by rw [h0, h1]; decide
+    have hgate := gate_of_mask_change (m * P) t (periodic_mul hp m t (by omega)) hchange
+    simp only [h0, Bool.false_eq_true, ite_false] at hgate
+    exact produce t ht (by simpa only [hg] using hgate)
+
 end Rule30UOR.WittDefect

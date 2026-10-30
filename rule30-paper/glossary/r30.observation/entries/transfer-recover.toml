@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "transfer-recover"
+category = "proof-constant"
+signature = "(pi ((explicit incomingBit (const lexlean.std.bool::bool)) (explicit laterBit (const lexlean.std.bool::bool)) (explicit incoming (const lexlean.std.int::int)) (explicit gate (const lexlean.std.int::int))) (app (const lexlean.core::eq) (app (const r30.observation::recover-phase) (local incomingBit) (local laterBit) (app (const r30.observation::transfer-phase) (local incomingBit) (local laterBit) (local incoming) (local gate)) (local gate)) (local incoming)))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.transfer_recover"
+
+[[form]]
+id = "transfer-recover"
+channel = "math"
+surface = "transferrecover"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name transferrecover) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "erasure-recovery"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit he (app (const r30.observation::erasure-event) (local Q) (local t) (local k)))) (app (const lexlean.core::land) (app (const lexlean.core::lnot) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (local Q) (local t) (local k)) (nat 0))) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (local Q) (local t) (app (const lexlean.std.nat::add) (local k) (nat 1))) (app (const r30.observation::recover-phase) (app (const r30.observation::left-cell) (local t) (app (const lexlean.std.nat::add) (local k) (nat 1))) (app (const r30.observation::later-gate) (local Q) (local t) (local k)) (nat 0) (app (const r30.observation::left-gate-phase) (local Q) (local t) (local k)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.erasure_recovery"
+
+[[form]]
+id = "erasure-recovery"
+channel = "math"
+surface = "erasurerecovery"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name erasurerecovery) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

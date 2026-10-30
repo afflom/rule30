@@ -400,6 +400,43 @@ geometry and block compatibility have not proved that exclusion. Problem 1
 remains unproved.
 
 
+### Retained-channel recovery and both recurrent erasure orientations
+
+The local annihilator description now uses the actual phase transfer. With `a`
+the earlier incoming cell, `g` the later OR gate, `x` the incoming signed phase,
+and `y` the signed gate difference, define
+
+    transferPhase(a,g,x,y) = (1-2*g)*x + (1-2*a)*y.
+
+`phase_transfer` identifies this expression with the physical next phase.
+`transfer_recover` and `phase_recover` prove that retaining `y` and the actual
+background signs recovers `x` exactly. `transfer_kernel` describes the kernel
+of the scalar readout. In the completed two-channel bookkeeping map, the
+coefficient on `x` is a unit, `+1` or `-1`. `erasure_recovery` also proves that
+`y` is nonzero at every erasure. This is an invertible local bookkeeping
+transformation with supplied background, not an autonomous closed model of
+the orbit. The zero readout does not imply zero in the retained channel.
+
+The seed forces more than one selected recurring gate orientation under a
+hypothetical center period. For every positive multiple `Q=m*P`, both gate
+cases 2 and 5 occur as actual center erasures arbitrarily late
+(`periodic_erasure_orientation`). The proof is exact: a Boolean signal whose
+Q-shifts can only change downward has a nonincreasing finite-window black
+count. This count stabilizes by well-foundedness of Nat, forcing eventual
+Q-periodicity. Apply this argument to the masked right-neighbor signal and
+its complement. Masked Jen excludes their periodicity under a periodic
+center, forcing both upward and downward changes. These changes are exactly
+the two oriented center-erasure gates.
+
+Combined with white-block convexity, opposite orientations require different
+common white blocks. Selecting one recurring orientation therefore does not
+justify an eventual single-sign flux or a global monotone phase. No spectral
+multiplicity, finite modular reduction, or real zero-divisor classification
+has been assumed. A further invariant must control the succession across
+black resets while remaining tied to the full seeded background. That global
+exclusion remains unproved; Problem 1 remains open.
+
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

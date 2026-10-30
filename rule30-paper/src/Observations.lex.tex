@@ -700,5 +700,53 @@ Close the goal with \(\lexeme{r30.observation::seed-leading-black-reset}\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{transfer-recover}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every truth value \(incomingBit\) and truth value \(laterBit\) and integer \(incoming\) and integer \(gate\), \(recoverphase(incomingBit, laterBit, transferphase(incomingBit, laterBit, incoming, gate), gate) = incoming\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::transfer-recover}(incomingBit, laterBit, incoming, gate)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{transfer-kernel}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every truth value \(incomingBit\) and truth value \(laterBit\) and integer \(incoming\) and integer \(gate\), \(transferphase(incomingBit, laterBit, incoming, gate) = 0 ↔ incoming = recoverphase(incomingBit, laterBit, 0, gate)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::transfer-kernel}(incomingBit, laterBit, incoming, gate)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phase-transfer}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftphase(Q, t + 1, k) = transferphase(leftcell(t, k + 1), latergate(Q, t, k), leftphase(Q, t, k + 1), leftgatephase(Q, t, k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phase-transfer}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phase-recover}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftphase(Q, t, k + 1) = recoverphase(leftcell(t, k + 1), latergate(Q, t, k), leftphase(Q, t + 1, k), leftgatephase(Q, t, k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phase-recover}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{erasure-recovery}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(erasureevent(Q, t, k)\), then \(¬ (leftgatephase(Q, t, k) = 0) ∧ leftphase(Q, t, k + 1) = recoverphase(leftcell(t, k + 1), latergate(Q, t, k), 0, leftgatephase(Q, t, k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::erasure-recovery}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-erasure-orientation}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(t\) such that \(N ≤ t ∧ erasureevent(m * P, t, 0) ∧ gatecode(m * P, t, 0) = g\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-erasure-orientation}(T, P, m, N, g)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}
