@@ -677,4 +677,18 @@ For every natural number \(Q\) and natural number \(t\), if \(\operatorname{lead
 \begin{proof}
 The goal follows from \(\operatorname{leadingdepthtwoblack}(Q, t)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:black-gap-erasure-origin}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\) and natural number \(g\), if \(0 < r\), then if \(\operatorname{centerwindowagree}(b, b + Q, r + 1)\), then if \(\operatorname{center}(b) = \operatorname{true}\), then if \(\operatorname{whitecentergap}(b, r)\), then if \(\operatorname{erasureevent}(Q, b + r, 0)\), then if \(\operatorname{gatecode}(Q, b + r, 0) = g\), then there exists a natural number \(k\) such that \(k \le r + 1\) and \(\operatorname{leadingadvance}(Q, b, k) \land \operatorname{firstpatherasure}(Q, b, k, k - 2) \land \operatorname{gatecode}(Q, b + (k - 1), 0) = g\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{blackgaperasureorigin}(Q, b, r, g)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-black-erasure-origin}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(g = 2\) or \(g = 5\), then there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N \le b\) and \(k \le P \land \operatorname{center}(b) = \operatorname{true} \land \operatorname{whitecentergap}(b, k - 1) \land \operatorname{leadingadvance}(m \cdot P, b, k) \land \operatorname{firstpatherasure}(m \cdot P, b, k, k - 2) \land \operatorname{gatecode}(m \cdot P, b + (k - 1), 0) = g\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicblackerasureorigin}(T, P, m, N, g)\).
+\end{proof}
 \end{document}

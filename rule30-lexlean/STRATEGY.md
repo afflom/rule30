@@ -464,6 +464,31 @@ center phase. It has not excluded repeated black-boundary sources followed by
 white-center erasures. The global seed-specific obstruction remains unproved.
 
 
+
+### Both erasure orientations have physical black-boundary sources
+
+`black_gap_erasure_origin` correlates the finite black-gap source with an actual
+oriented erasure in that gap. A gate-2 or gate-5 erasure at time `b+r` has a
+leading source at the initial black time `b`, at depth `k <= r+1`. Its first
+center erasure occurs at `b+k-1` and has exactly the same gate orientation as
+the given erasure. The proof retains the common white block and uses its gate
+convexity to transfer the orientation; the two witnesses are not independent.
+
+`periodic_black_erasure_origin` combines this with the recurrence of both gate
+orientations. For every positive lag `Q=m*P`, either prescribed gate `g=2` or
+`g=5`, and every deadline `N`, there is a black boundary `b>=N` with a leading
+source of depth `2<=k<=P`. All center times `b+1` through `b+k-1` are white,
+and its first center erasure has gate `g`. The last preceding black phase is
+chosen within the period window, so this conclusion preserves the actual
+source, white gap, first-arrival time, and orientation together.
+
+This strengthens the compatibility data available at the boundaries. It does
+not order the sources at different boundaries or prove a decrease of a rank
+between them. Both oriented boundary-to-erasure histories are still allowed
+by the established laws. Excluding their indefinite succession in the seeded
+orbit remains the unproved global step; Problem 1 remains unproved.
+
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

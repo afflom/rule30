@@ -830,4 +830,137 @@ theorem periodic_erasure_orientation (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
     simp only [h0, Bool.false_eq_true, ite_false] at hgate
     exact produce t ht (by simpa only [hg] using hgate)
 
+/-! ## The physical black-boundary origin of an oriented erasure burst -/
+
+open Rule30UOR.CentralCollision Rule30UOR.DefectFront
+
+/-- An erasure in a black-then-white gap has a leading source at the initial
+black boundary. Its first center erasure has the same orientation as the given
+erasure, even when the latter lies later in the burst. -/
+theorem black_gap_erasure_origin (Q b r g : Nat) (hr : 0 < r)
+    (hc : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + Q) (r + 1))
+    (hb : Rule30UOR.Core.center b = true) (hw : WhiteCenterGap b r)
+    (he : ErasureEvent Q (b + r) 0) (hg : gateCode Q (b + r) 0 = g) :
+    ∃ k : Nat, k ≤ r + 1 ∧ LeadingAdvance Q b k ∧
+      FirstPathErasure Q b k (k - 2) ∧ gateCode Q (b + (k - 1)) 0 = g := by
+  have clean : CenterCleanThrough Q b (r + 1) := by
+    intro j hj
+    simp only [leftDefect, Int.natCast_zero, Int.neg_zero]
+    apply (difference_eq_false_iff (fun u => cell u 0) Q (b + j)).2
+    simpa only [center, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using (hc j hj).symm
+  obtain ⟨k, hk, hl⟩ := black_gap_forces_initial_leading Q b r hr hc hb hw (by
+    change defect Q (b + r) (-1) = true
+    exact he.1)
+  obtain ⟨hf, _he, hfirst, _hw⟩ := leading_first_erasure Q b k hl
+    (fun j hj => clean j (by omega))
+  have hlast := (center_erasure_iff_gate Q (b + r) (clean r (by omega))
+    (by simpa only [Nat.add_assoc] using clean (r + 1) (Nat.le_refl _))).1 he
+  have block : CommonWhiteBlock Q (b + 1) (r - 1) := by
+    intro j hj
+    have hw0 : cell (b + 1 + j) 0 = false := by
+      simpa only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center, Nat.add_assoc] using
+        hw (1 + j) (by omega) (by omega)
+    have hs := (difference_eq_false_iff (fun u => cell u 0) Q (b + 1 + j)).1 (by
+      simpa only [leftDefect, defect, Int.natCast_zero, Int.neg_zero, Nat.add_assoc] using
+        clean (1 + j) (by omega))
+    exact ⟨hw0, hs.trans hw0⟩
+  have hk2 := hl.1
+  have eqg := white_block_gate_convex Q (b + 1) (r - 1) (k - 2) (r - 1) (r - 1)
+    block (by omega) (Nat.le_refl _) (Nat.le_refl _)
+    (by simpa only [show b + 1 + (k - 2) = b + (k - 1) by omega] using hfirst)
+    (by simpa only [show b + 1 + (r - 1) = b + r by omega] using hlast)
+  have same : gateCode Q (b + r) 0 = gateCode Q (b + (k - 1)) 0 := by
+    simpa only [show b + 1 + (r - 1) = b + r by omega,
+      show b + 1 + (k - 2) = b + (k - 1) by omega] using eqg
+  exact ⟨k, hk, hl, hf, same.symm.trans hg⟩
+
+private theorem last_black_prefix (f : Nat → Bool) : ∀ n : Nat,
+    f 0 = true → f n = false →
+      ∃ j : Nat, j < n ∧ f j = true ∧ ∀ i : Nat, j < i → i ≤ n → f i = false := by
+  intro n
+  induction n with
+  | zero => intro h0 hn; rw [h0] at hn; contradiction
+  | succ n ih =>
+    intro h0 hn
+    cases hb : f n
+    · obtain ⟨j, hj, hblack, hwhite⟩ := ih h0 hb
+      refine ⟨j, by omega, hblack, ?_⟩
+      intro i hji hi
+      by_cases hin : i ≤ n
+      · exact hwhite i hji hin
+      · simpa only [show i = n + 1 by omega] using hn
+    · refine ⟨n, by omega, hb, ?_⟩
+      intro i hni hi
+      simpa only [show i = n + 1 by omega] using hn
+
+private theorem black_in_period {T P : Nat} (hP : 0 < P)
+    (hc : ∀ t, T ≤ t → center (t + P) = center t) (t : Nat) (ht : T ≤ t) :
+    ∃ r : Nat, r < P ∧ center (t + r) = true := by
+  have hex : ∃ u : Nat, t ≤ u ∧ center u = true := by
+    apply Classical.byContradiction
+    intro hn
+    apply center_not_eventually_constant
+    refine ⟨t, false, fun u hu => ?_⟩
+    cases hb : center u
+    · rfl
+    · exact (hn ⟨u, hu, hb⟩).elim
+  obtain ⟨u, hu, hb⟩ := hex
+  let r := (u - t) % P
+  have hr : r < P := Nat.mod_lt _ hP
+  have he : (t + r) + ((u - t) / P) * P = u := by
+    have hh := Nat.mod_add_div (u - t) P
+    rw [Nat.mul_comm P ((u - t) / P)] at hh
+    dsimp [r]
+    omega
+  have hp := periodic_mul hc ((u - t) / P) (t + r) (by omega)
+  rw [he] at hp
+  exact ⟨r, hr, hp.symm.trans hb⟩
+
+/-- Both gate orientations recur with their actual leading sources on common
+black boundaries. The entire interval from that boundary to the first erasure
+is retained, so orientation recurrence and source recurrence are correlated. -/
+theorem periodic_black_erasure_origin (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
+    ∃ b k : Nat, N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
+      WhiteCenterGap b (k - 1) ∧ LeadingAdvance (m * P) b k ∧
+      FirstPathErasure (m * P) b k (k - 2) ∧ gateCode (m * P) (b + (k - 1)) 0 = g := by
+  have hp : ∀ t, T ≤ t → center (t + P) = center t := by
+    intro t ht
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
+  obtain ⟨t, ht, he, hgate⟩ := periodic_erasure_orientation T P m (max T N + P) g hP hm hc hg
+  have h0 := center_defect_zero hp m t (by omega)
+  have h1 := center_defect_zero hp m (t + 1) (by omega)
+  have hwhite : center t = false := (defect_right_and_white_of_clean_pair (m * P) t 0
+    h0 h1 he.1).2
+  let a := t + 1 - P
+  have haT : T ≤ a := by dsimp [a]; omega
+  have haN : N ≤ a := by dsimp [a]; omega
+  obtain ⟨s, hs, hblack⟩ := black_in_period hP hp a haT
+  have hst : a + s ≤ t := by dsimp [a] at *; omega
+  obtain ⟨j, hj, hb, hw⟩ := last_black_prefix (fun i => center (a + s + i)) (t - (a + s))
+    (by simpa only [Nat.add_zero] using hblack)
+    (by simpa only [show a + s + (t - (a + s)) = t by omega] using hwhite)
+  let b := a + s + j
+  let r := t - b
+  have hbN : N ≤ b := by dsimp [b]; omega
+  have hbT : T ≤ b := by dsimp [b]; omega
+  have hbr : b + r = t := by dsimp [b, r]; omega
+  have hr : 0 < r := by dsimp [b, r]; omega
+  have hrP : r < P := by dsimp [a, b, r] at *; omega
+  have hwb : WhiteCenterGap b r := by
+    intro i hi hir
+    have hh := hw (j + i) (by omega) (by dsimp [b, r] at hir; omega)
+    simpa only [Rule30UOR.Scale.center_eq_kit, Nat.add_assoc, b] using hh
+  have win : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + m * P) (r + 1) := by
+    intro i _hi
+    simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+      (periodic_mul hp m (b + i) (by omega)).symm
+  have hbc : Rule30UOR.Core.center b = true := by
+    simpa only [Rule30UOR.Scale.center_eq_kit, b] using hb
+  obtain ⟨k, hk, hl, hf, hge⟩ := black_gap_erasure_origin (m * P) b r g hr win hbc hwb
+    (by simpa only [hbr] using he) (by simpa only [hbr] using hgate)
+  refine ⟨b, k, hbN, by omega, hbc, ?_, hl, hf, hge⟩
+  intro i hi hik
+  exact hwb i hi (by omega)
+
 end Rule30UOR.WittDefect
