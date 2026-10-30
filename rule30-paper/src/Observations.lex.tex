@@ -861,5 +861,53 @@ Close the goal with \(\lexeme{r30.observation::periodic-coupled-cancellation}(T,
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{leading-arrival-phase-eq-gate-phase}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\), if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then \(leftphase(Q, b, k) intplus pathflux(Q, b, k, k - 1) = (1 intminus 2 inttimes bitvalue(center(b + k))) inttimes leftgatephase(Q, b + (k - 1), 0)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::leading-arrival-phase-eq-gate-phase}(Q, b, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{head-import-path-gate-phase}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(headimportpath(Q, start, finish)\), then if \(centercleanthrough(Q, start, finish - start)\), then if \(center(finish) = false\), then \(leftgatephase(Q, finish, 0) = centersign(start, finish - start) inttimes rightphase(Q, start, 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::head-import-path-gate-phase}(Q, start, finish)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{head-import-path-rejects-negative-gate}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(headimportpath(Q, start, finish)\), then if \(centercleanthrough(Q, start, finish - start)\), then if \(center(finish) = false\), then \(¬ (leftgatephase(Q, finish, 0) = intneg (centersign(start, finish - start) inttimes rightphase(Q, start, 2)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::head-import-path-rejects-negative-gate}(Q, start, finish)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-coupled-gate-phase-sign}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ leftgatephase(m * P, b + (k - 1), 0) = centersign(start, b + (k - 1) - start) inttimes rightphase(m * P, start, 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-coupled-gate-phase-sign}(T, P, m, N, g)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-doubled-seed-flux-split}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then \(pathflux(m * P + m * P, N, N + (m * P + m * P), N + (m * P + m * P)) = intneg 1 ∧ pathflux(m * P, N, N + (m * P + m * P), N + (m * P + m * P)) = 0 ∧ pathflux(m * P, N + m * P, N + (m * P + m * P), N + (m * P + m * P)) = intneg 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-doubled-seed-flux-split}(T, P, m, N)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-coupled-gate-sign}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(leadingadvance(11, 4, 4) ∧ centercleanthrough(11, 4, 4) ∧ headimportpath(11, 6, 7) ∧ centercleanthrough(11, 6, 1) ∧ leftgatephase(11, 7, 0) = 1 ∧ centersign(6, 1) = 1 ∧ rightphase(11, 6, 2) = 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-coupled-gate-sign}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -1295,4 +1295,153 @@ theorem periodic_coupled_cancellation (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m
   rw [← leftphase, matched, transported]
   simp only [finish, show b + (k - 1) + 1 = b + k by omega, Int.mul_assoc]
 
+/-! ## Sign and seed-boundary audit of proposed closing arguments -/
+
+private theorem white_gate_phase (Q t : Nat) (hc : leftDefect Q t 0 = false)
+    (hw : Rule30UOR.Core.center t = false) : leftGatePhase Q t 0 = rightPhase Q t 1 := by
+  have same := (difference_eq_false_iff (fun u => cell u 0) Q t).1 (by
+    simpa only [leftDefect, defect, Int.natCast_zero, Int.neg_zero] using hc)
+  have hw0 : cell t 0 = false := by
+    simpa only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using hw
+  have hw1 : cell (t + Q) 0 = false := same.trans hw0
+  simp only [leftGatePhase, gatePhase, rightPhase, rightCell, Int.natCast_zero, Int.neg_zero,
+    Int.zero_add, Int.natCast_one, hw0, hw1, Bool.false_or]
+
+/-- The reset color multiplies the gate phase at the same physical arrival. -/
+theorem leading_arrival_phase_eq_gate_phase (Q b k : Nat)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k) :
+    leftPhase Q b k + pathFlux Q b k (k - 1) =
+      (1 - 2 * bitValue (Rule30UOR.Core.center (b + k))) * leftGatePhase Q (b + (k - 1)) 0 := by
+  obtain ⟨_hf, _he, _hg, hw⟩ := leading_first_erasure Q b k hl hc
+  have hk := hl.1
+  have h0 := hc (k - 1) (by omega)
+  have h1 : leftDefect Q (b + (k - 1) + 1) 0 = false := by
+    simpa only [show b + (k - 1) + 1 = b + k by omega] using hc k (Nat.le_refl _)
+  have matching := white_center_phase_matching Q (b + (k - 1)) h0 h1 hw
+  rw [← white_gate_phase Q (b + (k - 1)) h0 hw] at matching
+  have path : leftPhase Q (b + (k - 1)) 1 = leftPhase Q b k + pathFlux Q b k (k - 1) := by
+    simpa only [pathPhase, leftPhase, Int.natCast_one,
+      show -(k : Int) + ((k - 1 : Nat) : Int) = -1 by omega] using path_balance Q b k (k - 1)
+  simpa only [show b + (k - 1) + 1 = b + k by omega] using path.symm.trans matching
+
+/-- With the stated phase conventions there is no extra minus sign at a white
+center: the OR-gate phase is the transported right-head phase itself. -/
+theorem head_import_path_gate_phase (Q start finish : Nat)
+    (hp : HeadImportPath Q start finish) (hc : CenterCleanThrough Q start (finish - start))
+    (hw : Rule30UOR.Core.center finish = false) :
+    leftGatePhase Q finish 0 = centerSign start (finish - start) * rightPhase Q start 2 := by
+  have hlt := hp.1
+  have hfinish : leftDefect Q finish 0 = false := by
+    simpa only [show start + (finish - start) = finish by omega] using
+      hc (finish - start) (Nat.le_refl _)
+  rw [white_gate_phase Q finish hfinish hw]
+  exact head_import_path_phase Q start finish hp hc
+
+/-- Reversing that sign is incompatible with an actual nonzero import path,
+without assuming a periodic center. It cannot be used as an unproved local law. -/
+theorem head_import_path_rejects_negative_gate (Q start finish : Nat)
+    (hp : HeadImportPath Q start finish) (hc : CenterCleanThrough Q start (finish - start))
+    (hw : Rule30UOR.Core.center finish = false) :
+    leftGatePhase Q finish 0 ≠ -(centerSign start (finish - start) * rightPhase Q start 2) := by
+  have positive := head_import_path_gate_phase Q start finish hp hc hw
+  have phase_at_end := head_import_path_phase Q start finish hp hc
+  have hd := hp.2.2.2.2.2.2 finish hp.1 (Nat.le_refl _)
+  have nonzero : rightPhase Q finish 1 ≠ 0 := by
+    intro hz
+    simp only [rightDefect] at hd
+    simp only [rightPhase] at hz
+    cases ha : rightCell finish 1 <;> cases hb : rightCell (finish + Q) 1 <;> simp_all [bitValue]
+  intro negative
+  apply nonzero
+  omega
+
+/-- The coupled gate balance has the positive transport sign for either
+recurring erasure orientation. The closing minus-sign assertion is not a
+consequence of the coupled witness or its phase conventions. -/
+theorem periodic_coupled_gate_phase_sign (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
+    ∃ start b k : Nat, N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
+      WhiteCenterGap b (k - 1) ∧ LeadingAdvance (m * P) b k ∧
+      FirstPathErasure (m * P) b k (k - 2) ∧ gateCode (m * P) (b + (k - 1)) 0 = g ∧
+      HeadImportPath (m * P) start (b + (k - 1)) ∧
+      leftGatePhase (m * P) (b + (k - 1)) 0 =
+        centerSign start (b + (k - 1) - start) * rightPhase (m * P) start 2 := by
+  obtain ⟨start, b, k, hs, hb, hk, hblack, hwhite, hl, hf, hgate, path, _balance⟩ :=
+    periodic_coupled_cancellation T P m (max T N) g hP hm hc hg
+  have hp : ∀ t, T ≤ t → center (t + P) = center t := by
+    intro t ht
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
+  have clean : ∀ t n : Nat, T ≤ t → CenterCleanThrough (m * P) t n := by
+    intro t n ht s _hbound
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using center_defect_zero hp m (t + s) (by omega)
+  obtain ⟨_hf, _he, _hg, hw⟩ := leading_first_erasure (m * P) b k hl (clean b k (by omega))
+  exact ⟨start, b, k, by omega, by omega, hk, hblack, hwhite, hl, hf, hgate, path,
+    head_import_path_gate_phase (m * P) start (b + (k - 1)) path
+      (clean start (b + (k - 1) - start) (by omega)) hw⟩
+
+/-- On the doubled-lag seed characteristic the smaller-lag fluxes are 0 and
+-1, not two copies of -1. The first component starts outside both seed cones. -/
+theorem periodic_doubled_seed_flux_split (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
+    pathFlux (m * P + m * P) N (N + (m * P + m * P)) (N + (m * P + m * P)) = -1 ∧
+    pathFlux (m * P) N (N + (m * P + m * P)) (N + (m * P + m * P)) = 0 ∧
+    pathFlux (m * P) (N + m * P) (N + (m * P + m * P)) (N + (m * P + m * P)) = -1 := by
+  have hQ := Nat.mul_pos hm hP
+  let extent := N + (m * P + m * P)
+  have initial : leftPhase (m * P) N extent = 0 := by
+    unfold leftPhase phase
+    rw [cell_eq_false_of_lt (N + m * P) _ (by dsimp [extent]; omega),
+      cell_eq_false_of_lt N _ (by dsimp [extent]; omega)]
+    rfl
+  have hz : leftPhase (m * P) (N + extent) 0 = 0 := by
+    apply (phase_zero_iff (m * P) (N + extent) 0).2
+    have hp : ∀ t, T ≤ t → center (t + P) = center t := by
+      intro t ht
+      simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using center_defect_zero hp m (N + extent) (by omega)
+  have balance : leftPhase (m * P) (N + extent) 0 =
+      leftPhase (m * P) N extent + pathFlux (m * P) N extent extent := by
+    simpa only [pathPhase, leftPhase, Int.natCast_zero, Int.neg_zero,
+      show -(extent : Int) + (extent : Int) = 0 by omega] using path_balance (m * P) N extent extent
+  have first : pathFlux (m * P) N extent extent = 0 := by omega
+  have second : pathFlux (m * P) (N + m * P) extent extent = -1 := by
+    simpa only [extent, Nat.add_assoc] using periodic_seed_flux T P m (N + m * P) hP hm hc (by omega)
+  have split := path_flux_lag_add (m * P) (m * P) N extent extent
+  have total : pathFlux (m * P + m * P) N extent extent = -1 := by omega
+  exact ⟨total, first, second⟩
+
+/-- A finite kernel certificate for the positive transport sign in an actual
+seeded cancellation. This is not a counterexample to a periodic-center premise;
+it refutes the proposed unconditional local negative-sign extension. -/
+theorem seed_coupled_gate_sign :
+    LeadingAdvance 11 4 4 ∧ CenterCleanThrough 11 4 4 ∧
+    HeadImportPath 11 6 7 ∧ CenterCleanThrough 11 6 1 ∧
+    leftGatePhase 11 7 0 = 1 ∧ centerSign 6 1 = 1 ∧ rightPhase 11 6 2 = 1 := by
+  obtain ⟨hl, hc, hg, _hreset⟩ := seed_leading_black_reset
+  have data : rightCell 6 1 = false ∧ rightCell 17 1 = false ∧
+      rightCell 7 1 = false ∧ rightCell 18 1 = true ∧
+      rightCell 6 2 = false ∧ rightCell 17 2 = true := by
+    simp only [rightCell, Int.natCast_one, show ((2 : Nat) : Int) = 2 by omega]
+    rw [cell_as_row 6 1 (by omega), cell_as_row 17 1 (by omega),
+      cell_as_row 7 1 (by omega), cell_as_row 18 1 (by omega),
+      cell_as_row 6 2 (by omega), cell_as_row 17 2 (by omega)]
+    decide +kernel
+  have hd : rightDefect 11 6 1 = false := by simp [rightDefect, data.1, data.2.1]
+  have hn : rightDefect 11 7 1 = true := by simp [rightDefect, data.2.2.1, data.2.2.2.1]
+  have hc' : CenterCleanThrough 11 6 1 := by
+    intro s hs
+    simpa only [show 4 + (2 + s) = 6 + s by omega] using hc (2 + s) (by omega)
+  have birth := right_head_birth 11 6
+    (by simpa only [Nat.add_zero] using clean_center_core 11 6 1 hc' 0 (by omega)) hd hn
+  have path : HeadImportPath 11 6 7 := by
+    refine ⟨by omega, hd, birth.1, birth.2.1, birth.2.2.1, birth.2.2.2.1, ?_⟩
+    intro s h6 h7
+    simpa only [show s = 7 by omega] using hn
+  have hw6 : Rule30UOR.Core.center 6 = false := by
+    obtain ⟨hl4, hc4, _hg4⟩ := seed_leading_gate_five
+    exact (leading_first_erasure 4 5 2 hl4 hc4).2.2.2
+  refine ⟨hl, hc, path, hc', (gate_phase_cases 11 7 0).2.2.2.2.1 hg, ?_, ?_⟩
+  · simp [centerSign, hw6, bitValue]
+  · simp [rightPhase, data.2.2.2.2.1, data.2.2.2.2.2, bitValue]
+
 end Rule30UOR.WittDefect

@@ -754,4 +754,46 @@ For every natural number \(T\) and natural number \(P\) and natural number \(m\)
 \begin{proof}
 The goal follows from \(\operatorname{periodiccoupledcancellation}(T, P, m, N, g)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:leading-arrival-phase-eq-gate-phase}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\), if \(\operatorname{leadingadvance}(Q, b, k)\), then if \(\operatorname{centercleanthrough}(Q, b, k)\), then \(\operatorname{leftphase}(Q, b, k) + \operatorname{pathflux}(Q, b, k, k - 1) = (1 - 2 \cdot \operatorname{bitvalue}(\operatorname{center}(b + k))) \cdot \operatorname{leftgatephase}(Q, b + (k - 1), 0)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leadingarrivalphaseeqgatephase}(Q, b, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:head-import-path-gate-phase}
+For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(\operatorname{headimportpath}(Q, start, finish)\), then if \(\operatorname{centercleanthrough}(Q, start, finish - start)\), then if \(\operatorname{center}(finish) = \operatorname{false}\), then \(\operatorname{leftgatephase}(Q, finish, 0) = \operatorname{centersign}(start, finish - start) \cdot \operatorname{rightphase}(Q, start, 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{headimportpathgatephase}(Q, start, finish)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:head-import-path-rejects-negative-gate}
+For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(\operatorname{headimportpath}(Q, start, finish)\), then if \(\operatorname{centercleanthrough}(Q, start, finish - start)\), then if \(\operatorname{center}(finish) = \operatorname{false}\), then not \(\operatorname{leftgatephase}(Q, finish, 0) = -(\operatorname{centersign}(start, finish - start) \cdot \operatorname{rightphase}(Q, start, 2))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{headimportpathrejectsnegativegate}(Q, start, finish)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-coupled-gate-phase-sign}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(g = 2\) or \(g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N \le start\) and \(N \le b \land k \le P \land \operatorname{center}(b) = \operatorname{true} \land \operatorname{whitecentergap}(b, k - 1) \land \operatorname{leadingadvance}(m \cdot P, b, k) \land \operatorname{firstpatherasure}(m \cdot P, b, k, k - 2) \land \operatorname{gatecode}(m \cdot P, b + (k - 1), 0) = g \land \operatorname{headimportpath}(m \cdot P, start, b + (k - 1)) \land \operatorname{leftgatephase}(m \cdot P, b + (k - 1), 0) = \operatorname{centersign}(start, b + (k - 1) - start) \cdot \operatorname{rightphase}(m \cdot P, start, 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodiccoupledgatephasesign}(T, P, m, N, g)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-doubled-seed-flux-split}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le N\), then \(\operatorname{pathflux}(m \cdot P + m \cdot P, N, N + (m \cdot P + m \cdot P), N + (m \cdot P + m \cdot P)) = -1\) and \(\operatorname{pathflux}(m \cdot P, N, N + (m \cdot P + m \cdot P), N + (m \cdot P + m \cdot P)) = 0 \land \operatorname{pathflux}(m \cdot P, N + m \cdot P, N + (m \cdot P + m \cdot P), N + (m \cdot P + m \cdot P)) = -1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicdoubledseedfluxsplit}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-coupled-gate-sign}
+\(\operatorname{leadingadvance}(11, 4, 4)\) and \(\operatorname{centercleanthrough}(11, 4, 4) \land \operatorname{headimportpath}(11, 6, 7) \land \operatorname{centercleanthrough}(11, 6, 1) \land \operatorname{leftgatephase}(11, 7, 0) = 1 \land \operatorname{centersign}(6, 1) = 1 \land \operatorname{rightphase}(11, 6, 2) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedcoupledgatesign}\).
+\end{proof}
 \end{document}

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-coupled-gate-sign"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const r30.observation::leading-advance) (nat 11) (nat 4) (nat 4)) (app (const lexlean.core::land) (app (const r30.observation::center-clean-through) (nat 11) (nat 4) (nat 4)) (app (const lexlean.core::land) (app (const r30.observation::head-import-path) (nat 11) (nat 6) (nat 7)) (app (const lexlean.core::land) (app (const r30.observation::center-clean-through) (nat 11) (nat 6) (nat 1)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::left-gate-phase) (nat 11) (nat 7) (nat 0)) (nat 1)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::center-sign) (nat 6) (nat 1)) (nat 1)) (app (const lexlean.core::eq) (app (const r30.observation::right-phase) (nat 11) (nat 6) (nat 2)) (nat 1))))))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.seed_coupled_gate_sign"
+
+[[form]]
+id = "seed-coupled-gate-sign"
+channel = "math"
+surface = "seedcoupledgatesign"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name seedcoupledgatesign)"

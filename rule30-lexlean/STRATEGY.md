@@ -564,6 +564,50 @@ A further seed-specific incompatibility of these coupled histories remains
 unproved. Problem 1 remains unproved.
 
 
+
+### Audit of proposed sign and doubled-lag closing arguments
+
+A proposed completion cited `not_centerPeriodic_of_dyadic_zcenter_obstruction`
+and `not_centerPeriodic_of_coupled_phase_cancellation`, but supplied no proofs
+of those lemmas. Neither declaration was present on `main`. Calling a lemma
+with the desired conclusion does not establish that conclusion. The earlier
+settlement and row-agreement hypotheses also still require derivations from
+the periodic-center assumption; the existing engine audits remain applicable.
+
+The proposed negative version of the coupled gate law has a sign mismatch.
+`leading_arrival_phase_eq_gate_phase` proves the valid reset-weighted arrival
+identity. However, at a common white center the gate phase equals the right
+head phase with the same sign. `head_import_path_gate_phase` therefore proves
+
+    leftGatePhase(Q,finish,0)
+      = centerSign(start,finish-start) * rightPhase(Q,start,2).
+
+`head_import_path_rejects_negative_gate` proves that inserting a minus sign is
+incompatible with the nonzero physical path, without any center-periodicity
+assumption. `periodic_coupled_gate_phase_sign` exports the positive version
+with the actual recurring source and path. A separate derivation of the
+negative sign from the seed and periodicity would already be the missing
+obstruction; it is not a consequence of the transport identity.
+
+`seed_coupled_gate_sign` kernel-checks a finite seeded example with lag 11,
+left source at time 4 and depth 4, right import at time 6, and erasure at time
+7. Its gate phase, center-sign product, and input phase are all +1. This
+refutes an unconditional local negative-sign extension; it is not a
+counterexample to the hypothetical periodic-center premise.
+
+Lag addition also preserves the seed boundary. On the seed characteristic
+for lag `2Q`, the two lag-Q components have that longer common path, rather
+than their separate lag-Q seed paths. `periodic_doubled_seed_flux_split`
+proves that their fluxes are 0 and -1: the first starts outside both seed
+cones, while the second carries the unit boundary charge. The total is -1,
+not two copies of -1. The correct lag-addition identity gives no drift
+contradiction.
+
+These audits remove two possible false closing steps. They do not establish
+a dyadic obstruction or exclude indefinitely repeated fresh coupled imports.
+Problem 1 remains unproved.
+
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,
