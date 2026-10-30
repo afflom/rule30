@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "observer-seed-q-loss"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::observer-defect) (nat 5) (nat 2)) (nat 216)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::observer-defect) (nat 5) (nat 3)) (nat 412)) (app (const lexlean.core::land) (app (const r30.observation::q-divides) (nat 1) (app (const r30.observation::observer-defect) (nat 5) (nat 2))) (app (const lexlean.core::land) (app (const lexlean.core::lnot) (app (const r30.observation::q-divides) (nat 1) (app (const r30.observation::observer-defect) (nat 5) (nat 3)))) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.scale::center) (nat 2)) (const lexlean.std.bool::false)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.scale::center) (nat 7)) (const lexlean.std.bool::false)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.scale::center) (nat 3)) (const lexlean.std.bool::true)) (app (const lexlean.core::eq) (app (const r30.scale::center) (nat 8)) (const lexlean.std.bool::true)))))))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.observer_seed_q_loss"
+
+[[form]]
+id = "observer-seed-q-loss"
+channel = "math"
+surface = "observerseedqloss"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name observerseedqloss)"

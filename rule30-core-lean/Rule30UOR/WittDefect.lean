@@ -2999,4 +2999,482 @@ theorem observer_seed_zero_val :
       (observerDefect 4 0).testBit 0 = false := by
   decide +kernel
 
+/-! ## Exact q-adic divisibility at the observer
+
+`phiLinearPow r` is multiplication by `(1 + X + X^2)^r` on binary
+polynomials. Divisibility is an existential proposition, not an assumed
+finite-state closure. The source retains the full carry and boundary input.
+The rank criterion below does not assert that seeded windows satisfy it.
+-/
+
+open Rule30UOR.Core (phiLinear phiLinearPow carry)
+
+/-- Polynomial divisibility by `q^r`, with `q = 1 + X + X^2`. -/
+def QDivides (r d : Nat) : Prop := ∃ a : Nat, phiLinearPow r a = d
+
+/-- Degree of a nonzero binary polynomial; zero has sentinel degree 0. -/
+def binaryDegree (d : Nat) : Nat := d.log2
+
+/-- The natural coefficient represented by a Boolean bit. -/
+def naturalBit (b : Bool) : Nat := b.toNat
+
+theorem q_divides_intro (r a : Nat) : QDivides r (phiLinearPow r a) := ⟨a, rfl⟩
+
+theorem q_divides_elim (r d : Nat) (h : QDivides r d) :
+    ∃ a : Nat, phiLinearPow r a = d := h
+
+private theorem q_linear_shl (a n : Nat) : phiLinear (a <<< n) = phiLinear a <<< n := by
+  change ((a <<< n) ^^^ ((a <<< n) <<< 1)) ^^^ ((a <<< n) <<< 2) =
+    ((a ^^^ (a <<< 1)) ^^^ (a <<< 2)) <<< n
+  simp only [Nat.shiftLeft_xor_distrib, ← Nat.shiftLeft_add]
+  rw [Nat.add_comm n 1, Nat.add_comm n 2]
+
+private theorem q_power_shl (r a n : Nat) :
+    phiLinearPow r (a <<< n) = phiLinearPow r a <<< n := by
+  induction r with
+  | zero => rfl
+  | succ r ih => simp only [phiLinearPow, ih, q_linear_shl]
+
+private theorem q_power_zero (r : Nat) : phiLinearPow r 0 = 0 := by
+  induction r with
+  | zero => rfl
+  | succ r ih => simp [phiLinearPow, ih, phiLinear]
+
+private theorem q_power_bit_zero (r a : Nat) :
+    (phiLinearPow r a).testBit 0 = a.testBit 0 := by
+  induction r with
+  | zero => rfl
+  | succ r ih =>
+    change ((phiLinearPow r a ^^^ (phiLinearPow r a <<< 1)) ^^^
+      (phiLinearPow r a <<< 2)).testBit 0 = _
+    simpa only [Nat.testBit_xor, Nat.testBit_shiftLeft,
+      show decide (0 ≥ 1) = false by decide, show decide (0 ≥ 2) = false by decide,
+      Bool.false_and, Bool.xor_false] using ih
+
+private theorem observer_shift_injective (a b n : Nat) (h : a <<< n = b <<< n) : a = b := by
+  apply Nat.eq_of_testBit_eq
+  intro j
+  have hb := congrArg (fun x : Nat => x.testBit (n + j)) h
+  simpa only [Nat.testBit_shiftLeft, Nat.le_add_right, decide_true,
+    Bool.true_and, Nat.add_sub_cancel_left] using hb
+
+private theorem q_divides_shl_one (r d : Nat) : QDivides r (d <<< 1) ↔ QDivides r d := by
+  constructor
+  · rintro ⟨a, ha⟩
+    have hz : a.testBit 0 = false := by
+      have hb := congrArg (fun x : Nat => x.testBit 0) ha
+      simpa only [q_power_bit_zero, Nat.testBit_shiftLeft,
+        show decide (0 ≥ 1) = false by decide, Bool.false_and] using hb
+    have split : a = (a >>> 1) <<< 1 := by
+      apply Nat.eq_of_testBit_eq
+      intro j
+      cases j with
+      | zero => simp [hz]
+      | succ j => simp [Nat.testBit_shiftLeft, Nat.testBit_shiftRight,
+          show 1 + j = j + 1 by omega]
+    refine ⟨a >>> 1, observer_shift_injective _ _ 1 ?_⟩
+    rw [← q_power_shl, ← split, ha]
+  · rintro ⟨a, ha⟩
+    exact ⟨a <<< 1, by rw [q_power_shl, ha]⟩
+
+/-- A spatial shift is a unit at the q-place. -/
+theorem q_divides_shl (r d n : Nat) : QDivides r (d <<< n) ↔ QDivides r d := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    rw [Nat.shiftLeft_add]
+    exact (q_divides_shl_one r (d <<< n)).trans ih
+
+private theorem q_divides_xor (r a b : Nat) (ha : QDivides r a) (hb : QDivides r b) :
+    QDivides r (a ^^^ b) := by
+  obtain ⟨x, hx⟩ := ha
+  obtain ⟨y, hy⟩ := hb
+  exact ⟨x ^^^ y, by rw [Rule30UOR.Interfaces.phiLinearPow_xor, hx, hy]⟩
+
+private theorem q_divides_xor_iff (r a b : Nat) (ha : QDivides r a) :
+    QDivides r (a ^^^ b) ↔ QDivides r b := by
+  constructor
+  · intro h
+    have hh := q_divides_xor r a (a ^^^ b) ha h
+    simpa only [← Nat.xor_assoc, Nat.xor_self, Nat.zero_xor] using hh
+  · exact q_divides_xor r a b ha
+
+private theorem q_divides_down (r s d : Nat) (hrs : r ≤ s) (hs : QDivides s d) :
+    QDivides r d := by
+  obtain ⟨a, ha⟩ := hs
+  refine ⟨phiLinearPow (s - r) a, ?_⟩
+  rw [← Rule30UOR.Interfaces.phiLinearPow_add, show r + (s - r) = s by omega, ha]
+
+private theorem q_divides_power (n r d : Nat) (hr : QDivides r d) :
+    QDivides (n + r) (phiLinearPow n d) := by
+  obtain ⟨a, ha⟩ := hr
+  exact ⟨a, by rw [Rule30UOR.Interfaces.phiLinearPow_add, ha]⟩
+
+/-- Divisibility by a positive q-power kills both F4 coordinates. -/
+theorem q_divides_val (r d : Nat) (hr : 0 < r) (hd : QDivides r d) :
+    Rule30UOR.Interfaces.valA d = false ∧ Rule30UOR.Interfaces.valB d = false := by
+  obtain ⟨a, rfl⟩ := hd
+  obtain ⟨s, rfl⟩ : ∃ s, r = s + 1 := ⟨r - 1, by omega⟩
+  have hv := Rule30UOR.Interfaces.val_phiLinearPow_succ s a
+  exact ⟨congrArg Prod.fst hv, congrArg Prod.snd hv⟩
+
+private theorem q_linear_top (a k : Nat) (ht : a.testBit k = true)
+    (ha : ∀ j, k < j → a.testBit j = false) :
+    (phiLinear a).testBit (k + 2) = true ∧
+      ∀ j, k + 2 < j → (phiLinear a).testBit j = false := by
+  constructor
+  · change ((a ^^^ (a <<< 1)) ^^^ (a <<< 2)).testBit (k + 2) = true
+    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft,
+      show decide (k + 2 ≥ 1) = true from decide_eq_true (by omega),
+      show decide (k + 2 ≥ 2) = true from decide_eq_true (by omega), Bool.true_and,
+      show k + 2 - 1 = k + 1 by omega, show k + 2 - 2 = k by omega,
+      ha (k + 2) (by omega), ha (k + 1) (by omega), ht]
+    rfl
+  · intro j hj
+    change ((a ^^^ (a <<< 1)) ^^^ (a <<< 2)).testBit j = false
+    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft,
+      show decide (j ≥ 1) = true from decide_eq_true (by omega),
+      show decide (j ≥ 2) = true from decide_eq_true (by omega), Bool.true_and,
+      ha j (by omega), ha (j - 1) (by omega), ha (j - 2) (by omega)]
+    rfl
+
+private theorem q_power_top (r a k : Nat) (ht : a.testBit k = true)
+    (ha : ∀ j, k < j → a.testBit j = false) :
+    (phiLinearPow r a).testBit (k + 2 * r) = true ∧
+      ∀ j, k + 2 * r < j → (phiLinearPow r a).testBit j = false := by
+  induction r with
+  | zero => simpa only [Nat.mul_zero, Nat.add_zero, phiLinearPow] using And.intro ht ha
+  | succ r ih =>
+    have hh := q_linear_top (phiLinearPow r a) (k + 2 * r) ih.1 ih.2
+    simpa only [phiLinearPow, show k + 2 * (r + 1) = (k + 2 * r) + 2 by omega] using hh
+
+/-- Each q-factor uses two degrees of a nonzero binary polynomial. -/
+theorem q_divides_degree_bound (r d : Nat) (hd : d ≠ 0) (hr : QDivides r d) :
+    2 * r ≤ binaryDegree d := by
+  change 2 * r ≤ d.log2
+  obtain ⟨a, ha⟩ := hr
+  have hne : a ≠ 0 := by
+    intro hz
+    subst a
+    rw [q_power_zero] at ha
+    exact hd ha.symm
+  have top := q_power_top r a a.log2 (Nat.testBit_log2 hne) (fun j hj =>
+    Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le Nat.lt_log2_self
+      (Nat.pow_le_pow_right (by decide) (by omega))))
+  rw [ha] at top
+  have hle := (Nat.le_log2 hd).2 (Nat.ge_two_pow_of_testBit top.1)
+  omega
+
+theorem q_order_exists (d : Nat) (hd : d ≠ 0) :
+    ∃ r, QDivides r d ∧ ¬ QDivides (r + 1) d := by
+  have bounded : ∀ n, (∀ r, QDivides r d → r ≤ n) →
+      ∃ r, QDivides r d ∧ ¬ QDivides (r + 1) d := by
+    intro n
+    induction n with
+    | zero =>
+      intro hb
+      refine ⟨0, ⟨d, rfl⟩, ?_⟩
+      intro h
+      have := hb 1 h
+      omega
+    | succ n ih =>
+      intro hb
+      by_cases h : QDivides (n + 1) d
+      · refine ⟨n + 1, h, ?_⟩
+        intro hh
+        have := hb (n + 1 + 1) hh
+        omega
+      · apply ih
+        intro r hr
+        have := hb r hr
+        have hn : r ≠ n + 1 := by intro he; subst r; exact h hr
+        omega
+  apply bounded d.log2
+  intro r hr
+  have hb := q_divides_degree_bound r d hd hr
+  change 2 * r ≤ d.log2 at hb
+  omega
+
+/-- Every polynomial q-power quotient is at most the encoded dividend. -/
+theorem q_quotient_bound (r a d : Nat) (ha : phiLinearPow r a = d) : a ≤ d := by
+  by_cases hz : a = 0
+  · subst a; exact Nat.zero_le _
+  cases r with
+  | zero => simpa only [phiLinearPow] using Nat.le_of_eq ha
+  | succ r =>
+    have top := q_power_top (r + 1) a a.log2 (Nat.testBit_log2 hz) (fun j hj =>
+      Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le Nat.lt_log2_self
+        (Nat.pow_le_pow_right (by decide) (by omega))))
+    rw [ha] at top
+    exact Nat.le_trans (Nat.le_of_lt Nat.lt_log2_self)
+      (Nat.le_trans (Nat.pow_le_pow_right (by decide) (by omega))
+        (Nat.ge_two_pow_of_testBit top.1))
+
+/-- A finite search decides q-divisibility; this is a reference procedure,
+not a claim of an efficient polynomial-division implementation. -/
+theorem q_divides_bounded (r d : Nat) :
+    QDivides r d ↔ ∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d := by
+  constructor
+  · rintro ⟨a, ha⟩
+    exact ⟨a, q_quotient_bound r a d ha, ha⟩
+  · rintro ⟨a, _, ha⟩
+    exact ⟨a, ha⟩
+
+theorem q_divides_bounded_witness (r d : Nat) (h : QDivides r d) :
+    ∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d := (q_divides_bounded r d).1 h
+
+instance qDividesDecidable (r d : Nat) : Decidable (QDivides r d) :=
+  decidable_of_iff (∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d) (q_divides_bounded r d).symm
+
+/-- Executable bounded maximum of q-divisible exponents. -/
+def qOrderSearch (d : Nat) : Nat → Nat
+  | 0 => 0
+  | r + 1 => if QDivides (r + 1) d then r + 1 else qOrderSearch d r
+
+theorem q_order_search_zero (d : Nat) : qOrderSearch d 0 = 0 := rfl
+
+theorem q_order_search_hit (d r : Nat) (h : QDivides (r + 1) d) :
+    qOrderSearch d (r + 1) = r + 1 := by simp only [qOrderSearch, if_pos h]
+
+theorem q_order_search_miss (d r : Nat) (h : ¬ QDivides (r + 1) d) :
+    qOrderSearch d (r + 1) = qOrderSearch d r := by simp only [qOrderSearch, if_neg h]
+
+private theorem q_order_search_spec (d n : Nat) :
+    QDivides (qOrderSearch d n) d ∧ qOrderSearch d n ≤ n ∧
+      ∀ r, r ≤ n → QDivides r d → r ≤ qOrderSearch d n := by
+  induction n with
+  | zero => exact ⟨⟨d, rfl⟩, Nat.le_refl _, fun r hr _ => hr⟩
+  | succ n ih =>
+    by_cases h : QDivides (n + 1) d
+    · rw [q_order_search_hit d n h]
+      exact ⟨h, Nat.le_refl _, fun r hr _ => hr⟩
+    · rw [q_order_search_miss d n h]
+      refine ⟨ih.1, by have := ih.2.1; omega, ?_⟩
+      intro r hr hd
+      have hn : r ≠ n + 1 := by intro he; subst r; exact h hd
+      exact ih.2.2 r (by omega) hd
+
+/-- The finite q-adic order of a nonzero word; zero has sentinel 0.
+Its bounded search is executable, with no efficiency claim. -/
+def qOrder (d : Nat) : Nat := qOrderSearch d (binaryDegree d)
+
+theorem q_order_definition (d : Nat) : qOrder d = qOrderSearch d (binaryDegree d) := rfl
+
+private theorem q_order_spec (d : Nat) (hd : d ≠ 0) :
+    QDivides (qOrder d) d ∧ ¬ QDivides (qOrder d + 1) d := by
+  have hs := q_order_search_spec d (binaryDegree d)
+  refine ⟨hs.1, ?_⟩
+  intro h
+  have hb := q_divides_degree_bound (qOrder d + 1) d hd h
+  have hm := hs.2.2 (qOrder d + 1) (by omega) h
+  change qOrder d + 1 ≤ qOrder d at hm
+  omega
+
+/-- The chosen order is exactly the q-divisibility threshold for nonzero words. -/
+theorem q_divides_iff_order (r d : Nat) (hd : d ≠ 0) : QDivides r d ↔ r ≤ qOrder d := by
+  have hs := q_order_spec d hd
+  constructor
+  · intro hr
+    apply Nat.le_of_not_gt
+    intro hh
+    exact hs.2 (q_divides_down (qOrder d + 1) r d (by omega) hr)
+  · intro hr
+    exact q_divides_down r (qOrder d) d hr hs.1
+
+/-- Actual carry and masked right-head differences, with no external driver. -/
+def observerSource (Q t : Nat) : Nat :=
+  (carry (observerCode (t + Q)) ^^^ carry (observerCode t)) ^^^
+    (xor (observerInput (t + Q)) (observerInput t)).toNat
+
+/-- Full source sum after multiplying a length-n observer path by X^n. -/
+def observerSourceFlux (Q t : Nat) : Nat → Nat
+  | 0 => 0
+  | n + 1 => phiLinear (observerSourceFlux Q t n) ^^^ (observerSource Q (t + n) <<< (n + 1))
+
+theorem observer_source_flux_zero (Q t : Nat) : observerSourceFlux Q t 0 = 0 := rfl
+
+theorem observer_source_flux_step (Q t n : Nat) :
+    observerSourceFlux Q t (n + 1) = phiLinear (observerSourceFlux Q t n) ^^^
+      (observerSource Q (t + n) <<< (n + 1)) := rfl
+
+/-- Composition retains every source in both adjacent physical intervals. -/
+theorem observer_source_flux_append (Q t n s : Nat) :
+    observerSourceFlux Q t (n + s) =
+      phiLinearPow s (observerSourceFlux Q t n) ^^^ (observerSourceFlux Q (t + n) s <<< n) := by
+  induction s with
+  | zero => simp [observerSourceFlux, phiLinearPow]
+  | succ s ih =>
+    rw [show n + (s + 1) = (n + s) + 1 by omega,
+      observerSourceFlux, ih, Rule30UOR.Interfaces.phiLinear_xor]
+    simp only [phiLinearPow, observerSourceFlux, Nat.shiftLeft_xor_distrib,
+      ← q_linear_shl, ← Nat.shiftLeft_add,
+      show s + 1 + n = n + s + 1 by omega,
+      show (t + n) + s = t + (n + s) by omega, Nat.xor_assoc]
+
+/-- Degree left outside the q-primary part of the seeded observer defect. -/
+def observerQRank (Q t : Nat) : Nat := t + Q - 2 * qOrder (observerDefect Q t)
+
+theorem observer_q_rank_definition (Q t : Nat) :
+    observerQRank Q t = t + Q - 2 * qOrder (observerDefect Q t) := rfl
+
+private theorem observer_poly_shift (x : Nat) (input : Bool) :
+    observerPoly x input <<< 1 = phiLinear x ^^^
+      (x.testBit 0).toNat ^^^ (carry x <<< 1) ^^^ (input.toNat <<< 1) := by
+  have split : (x >>> 1) <<< 1 = x ^^^ (x.testBit 0).toNat := by
+    apply Nat.eq_of_testBit_eq
+    intro j
+    cases j with
+    | zero =>
+      simp only [Nat.testBit_shiftLeft, show decide (0 ≥ 1) = false by decide,
+        Bool.false_and, Nat.testBit_xor, Nat.testBit_bool_toNat,
+        decide_true, Bool.true_and, Bool.xor_self]
+    | succ j => simp [Nat.testBit_bool_toNat, Nat.testBit_shiftRight,
+        Nat.testBit_shiftLeft, show 1 + j = j + 1 by omega]
+  unfold observerPoly
+  rw [Nat.shiftLeft_xor_distrib, Nat.shiftLeft_xor_distrib,
+    Nat.shiftLeft_xor_distrib, Nat.shiftLeft_xor_distrib, split]
+  change (((x ^^^ (x.testBit 0).toNat) ^^^ (x <<< 1)) ^^^ ((x <<< 1) <<< 1)) ^^^
+    (carry x <<< 1) ^^^ (input.toNat <<< 1) = _
+  rw [← Nat.shiftLeft_add]
+  apply Nat.eq_of_testBit_eq
+  intro j
+  change _ = (((((x ^^^ (x <<< 1)) ^^^ (x <<< 2)) ^^^ (x.testBit 0).toNat) ^^^
+    (carry x <<< 1)) ^^^ (input.toNat <<< 1)).testBit j
+  simp only [Nat.testBit_xor]
+  cases x.testBit j <;> cases ((x.testBit 0).toNat).testBit j <;>
+    cases (x <<< 1).testBit j <;> cases (x <<< 2).testBit j <;>
+    cases (carry x <<< 1).testBit j <;> cases (input.toNat <<< 1).testBit j <;> rfl
+
+/-- Exact observer transport, retaining the complete nonlinear source. -/
+theorem periodic_observer_polynomial_step (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    observerDefect (m * P) (t + 1) <<< 1 =
+      phiLinear (observerDefect (m * P) t) ^^^ (observerSource (m * P) t <<< 1) := by
+  have same := Rule30UOR.Scale.center_mul hc m t ht
+  have samebit : (observerCode (t + m * P)).testBit 0 = (observerCode t).testBit 0 := by
+    rw [observer_code_readout, observer_code_readout]
+    change cell (t + m * P) 0 = cell t 0
+    simpa only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using same
+  rw [observer_defect_alignment, show (t + 1) + m * P = (t + m * P) + 1 by omega,
+    Nat.shiftLeft_xor_distrib, observer_code_step, observer_code_step,
+    observer_poly_shift, observer_poly_shift, observer_defect_alignment,
+    Rule30UOR.Interfaces.phiLinear_xor]
+  unfold observerSource
+  apply Nat.eq_of_testBit_eq
+  intro j
+  simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, Nat.testBit_bool_toNat, samebit]
+  cases decide (j ≥ 1) <;> cases decide (j = 0) <;> cases decide (j - 1 = 0) <;>
+    cases (phiLinear (observerCode (t + m * P))).testBit j <;>
+    cases (phiLinear (observerCode t)).testBit j <;>
+    cases (observerCode t).testBit 0 <;>
+    cases (carry (observerCode (t + m * P))).testBit (j - 1) <;>
+    cases (carry (observerCode t)).testBit (j - 1) <;>
+    cases observerInput (t + m * P) <;> cases observerInput t <;> rfl
+
+/-- Center matching identifies the source's actual boundary coefficient. -/
+theorem periodic_observer_source (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    observerSource (m * P) t =
+      (carry (observerCode (t + m * P)) ^^^ carry (observerCode t)) ^^^
+        (leftDefect (m * P) t 1).toNat := by
+  have hb := observer_input_difference T P m t hc ht
+  exact congrArg (fun v : Bool =>
+    (carry (observerCode (t + m * P)) ^^^ carry (observerCode t)) ^^^ v.toNat) hb
+
+/-- Exact Duhamel law at the physical observer, before taking any quotient. -/
+theorem periodic_observer_polynomial_window (T P m t n : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    observerDefect (m * P) (t + n) <<< n =
+      phiLinearPow n (observerDefect (m * P) t) ^^^ observerSourceFlux (m * P) t n := by
+  induction n with
+  | zero => simp [phiLinearPow, observerSourceFlux]
+  | succ n ih =>
+    have step := periodic_observer_polynomial_step T P m (t + n) hc (by omega)
+    rw [show t + (n + 1) = (t + n) + 1 by omega,
+      show n + 1 = 1 + n by omega, Nat.shiftLeft_add, step,
+      Nat.shiftLeft_xor_distrib, ← q_linear_shl, ih,
+      Rule30UOR.Interfaces.phiLinear_xor]
+    simp only [phiLinearPow, observerSourceFlux, ← Nat.shiftLeft_add,
+      show 1 + n = n + 1 by omega, Nat.xor_assoc]
+
+/-- Once the initial term has enough q-factors, the entire endpoint condition
+is equivalent to divisibility of the accumulated physical source sum. -/
+theorem periodic_observer_window_divisibility (T P m t n r k : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
+    (hr : QDivides r (observerDefect (m * P) t)) (hk : k ≤ n + r) :
+    QDivides k (observerDefect (m * P) (t + n)) ↔
+      QDivides k (observerSourceFlux (m * P) t n) := by
+  have initial := q_divides_down k (n + r) _ hk (q_divides_power n r _ hr)
+  rw [← q_divides_shl k (observerDefect (m * P) (t + n)) n,
+    periodic_observer_polynomial_window T P m t n hc ht]
+  exact q_divides_xor_iff k _ _ initial
+
+/-- A one-step gain is equivalent to the same gain in the full source. -/
+theorem periodic_observer_q_gain (T P m t r : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
+    (hr : QDivides r (observerDefect (m * P) t)) :
+    QDivides (r + 1) (observerDefect (m * P) (t + 1)) ↔
+      QDivides (r + 1) (observerSource (m * P) t) := by
+  have hh := periodic_observer_window_divisibility T P m t 1 r (r + 1) hc ht hr (by omega)
+  have hs : observerSourceFlux (m * P) t 1 = observerSource (m * P) t <<< 1 := by
+    simp [observerSourceFlux, phiLinear]
+  rw [hs] at hh
+  exact hh.trans (q_divides_shl (r + 1) (observerSource (m * P) t) 1)
+
+private theorem observer_defect_degree (Q t : Nat) (hQ : 0 < Q) :
+    observerDefect Q t ≠ 0 ∧ (observerDefect Q t).log2 = t + Q := by
+  have top : (observerDefect Q t).testBit (t + Q) = true := by
+    simpa only [observerDefect, Nat.testBit_shiftRight, Nat.two_mul] using
+      aligned_defect_top_bit Q t hQ
+  have ne : observerDefect Q t ≠ 0 := by intro hz; rw [hz] at top; simp at top
+  refine ⟨ne, (Nat.log2_eq_iff ne).2 ⟨Nat.ge_two_pow_of_testBit top, ?_⟩⟩
+  apply Nat.lt_pow_two_of_testBit
+  intro j hj
+  rw [observer_defect_readout]
+  exact aligned_defect_above_top Q t _ (by omega)
+
+/-- The seed gives a finite degree budget for its q-primary part. -/
+theorem observer_q_order_bound (Q t : Nat) (hQ : 0 < Q) :
+    2 * qOrder (observerDefect Q t) ≤ t + Q := by
+  have hd := observer_defect_degree Q t hQ
+  have hb := q_divides_degree_bound _ _ hd.1 (q_order_spec _ hd.1).1
+  simpa only [binaryDegree, hd.2] using hb
+
+/-- Exact criterion for the proposed q-adic rank decrease. This does not
+assert that any seeded cancellation window satisfies the source congruence. -/
+theorem periodic_observer_q_rank_drop (T P m t n : Nat)
+    (hP : 0 < P) (hm : 0 < m) (hc : Rule30UOR.Scale.CenterPeriodic T P)
+    (ht : T ≤ t) (hn : 0 < n) :
+    observerQRank (m * P) (t + n) < observerQRank (m * P) t ↔
+      QDivides (qOrder (observerDefect (m * P) t) + n / 2 + 1)
+        (observerSourceFlux (m * P) t n) := by
+  have hQ := Nat.mul_pos hm hP
+  have hd := observer_defect_degree (m * P) t hQ
+  have hd' := observer_defect_degree (m * P) (t + n) hQ
+  have hb := observer_q_order_bound (m * P) t hQ
+  have hb' := observer_q_order_bound (m * P) (t + n) hQ
+  have step := periodic_observer_window_divisibility T P m t n
+    (qOrder (observerDefect (m * P) t))
+    (qOrder (observerDefect (m * P) t) + n / 2 + 1) hc ht
+    (q_order_spec _ hd.1).1 (by omega)
+  rw [← step, q_divides_iff_order _ _ hd'.1]
+  unfold observerQRank
+  omega
+
+/-- An exact seeded center-matching step can destroy a q-factor. The finite
+certificate assumes no infinite center period and is not a counterexample
+to a stronger theorem linking successive cancellation windows. -/
+theorem observer_seed_q_loss :
+    observerDefect 5 2 = 216 ∧ observerDefect 5 3 = 412 ∧
+      QDivides 1 (observerDefect 5 2) ∧ ¬ QDivides 1 (observerDefect 5 3) ∧
+      Rule30UOR.Core.center 2 = false ∧ Rule30UOR.Core.center 7 = false ∧
+      Rule30UOR.Core.center 3 = true ∧ Rule30UOR.Core.center 8 = true := by
+  refine ⟨by decide +kernel, by decide +kernel, ⟨40, by decide +kernel⟩, ?_,
+    by decide +kernel, by decide +kernel, by decide +kernel, by decide +kernel⟩
+  intro h
+  have hv := (q_divides_val 1 (observerDefect 5 3) (by omega) h).1
+  have hne : Rule30UOR.Interfaces.valA (observerDefect 5 3) = true := by decide +kernel
+  rw [hne] at hv
+  exact Bool.noConfusion hv
+
 end Rule30UOR.WittDefect

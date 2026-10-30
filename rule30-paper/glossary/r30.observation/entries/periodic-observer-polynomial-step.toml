@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-observer-polynomial-step"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t)))) (app (const lexlean.core::eq) (app (const r30.witt::witt-shl) (app (const r30.observation::observer-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::add) (local t) (nat 1))) (nat 1)) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-linear) (app (const r30.observation::observer-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t))) (app (const r30.witt::witt-shl) (app (const r30.observation::observer-source) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t)) (nat 1))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.periodic_observer_polynomial_step"
+
+[[form]]
+id = "periodic-observer-polynomial-step"
+channel = "math"
+surface = "periodicobserverpolynomialstep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicobserverpolynomialstep) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-divides"
+category = "function"
+signature = "(pi ((explicit r (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.QDivides"
+
+[[form]]
+id = "q-divides"
+channel = "math"
+surface = "qdivides"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qdivides) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

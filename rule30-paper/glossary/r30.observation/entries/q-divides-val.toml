@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-divides-val"
+category = "proof-constant"
+signature = "(pi ((explicit r (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (pi ((explicit hr (app (const lexlean.std.nat::lt) (nat 0) (local r))) (explicit hd (app (const r30.observation::q-divides) (local r) (local d)))) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.witt::val-a) (local d)) (const lexlean.std.bool::false)) (app (const lexlean.core::eq) (app (const r30.witt::val-b) (local d)) (const lexlean.std.bool::false)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.q_divides_val"
+
+[[form]]
+id = "q-divides-val"
+channel = "math"
+surface = "qdividesval"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qdividesval) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

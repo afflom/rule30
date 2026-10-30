@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-divides-iff-order"
+category = "proof-constant"
+signature = "(pi ((explicit r (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const lexlean.core::lnot) (app (const lexlean.core::eq) (local d) (nat 0))))) (app (const lexlean.core::iff) (app (const r30.observation::q-divides) (local r) (local d)) (app (const lexlean.std.nat::le) (local r) (app (const r30.observation::q-order) (local d))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.q_divides_iff_order"
+
+[[form]]
+id = "q-divides-iff-order"
+channel = "math"
+surface = "qdividesifforder"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qdividesifforder) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-order-definition"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::q-order) (local d)) (app (const r30.observation::q-order-search) (local d) (app (const r30.observation::binary-degree) (local d)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.q_order_definition"
+
+[[form]]
+id = "q-order-definition"
+channel = "math"
+surface = "qorderdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qorderdefinition) (paren (seq (slot 0))))"

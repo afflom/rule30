@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-observer-q-gain"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hr (app (const r30.observation::q-divides) (local r) (app (const r30.observation::observer-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t))))) (app (const lexlean.core::iff) (app (const r30.observation::q-divides) (app (const lexlean.std.nat::add) (local r) (nat 1)) (app (const r30.observation::observer-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::add) (local t) (nat 1)))) (app (const r30.observation::q-divides) (app (const lexlean.std.nat::add) (local r) (nat 1)) (app (const r30.observation::observer-source) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.periodic_observer_q_gain"
+
+[[form]]
+id = "periodic-observer-q-gain"
+channel = "math"
+surface = "periodicobserverqgain"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicobserverqgain) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

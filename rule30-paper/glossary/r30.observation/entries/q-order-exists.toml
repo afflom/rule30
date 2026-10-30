@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-order-exists"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const lexlean.core::lnot) (app (const lexlean.core::eq) (local d) (nat 0))))) (app (const lexlean.core::exists-op) (lam ((explicit r (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const r30.observation::q-divides) (local r) (local d)) (app (const lexlean.core::lnot) (app (const r30.observation::q-divides) (app (const lexlean.std.nat::add) (local r) (nat 1)) (local d))))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.q_order_exists"
+
+[[form]]
+id = "q-order-exists"
+channel = "math"
+surface = "qorderexists"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qorderexists) (paren (seq (slot 0))))"

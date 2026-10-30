@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-order-search-zero"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::q-order-search) (local d) (nat 0)) (nat 0)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.q_order_search_zero"
+
+[[form]]
+id = "q-order-search-zero"
+channel = "math"
+surface = "qordersearchzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qordersearchzero) (paren (seq (slot 0))))"

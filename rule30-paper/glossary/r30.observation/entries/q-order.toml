@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-order"
+category = "function"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.qOrder"
+
+[[form]]
+id = "q-order"
+channel = "math"
+surface = "qorder"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qorder) (paren (seq (slot 0))))"

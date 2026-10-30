@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "observer-source"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.observerSource"
+
+[[form]]
+id = "observer-source"
+channel = "math"
+surface = "observersource"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name observersource) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

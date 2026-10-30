@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "binary-degree"
+category = "function"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.binaryDegree"
+
+[[form]]
+id = "binary-degree"
+channel = "math"
+surface = "binarydegree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name binarydegree) (paren (seq (slot 0))))"

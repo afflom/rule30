@@ -1343,4 +1343,208 @@ Close the goal with \(\lexeme{r30.observation::observer-seed-zero-val}\).
 \end{theorem}
 
 \end{section}
+\begin{section}{observer-q-adic}
+\heading{Cyclotomic observer transport}
+
+\begin{theorem}{q-divides-intro}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(a\), \(qdivides(r, wittlinpow(r, a))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-intro}(r, a)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-divides-elim}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(d\), if \(qdivides(r, d)\), then there exists a natural number \(a\) such that \(wittlinpow(r, a) = d\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-elim}(r, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-divides-shl}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(d\) and natural number \(n\), \(qdivides(r, wittshl(d, n)) ↔ qdivides(r, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-shl}(r, d, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-divides-val}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(d\), if \(0 < r\), then if \(qdivides(r, d)\), then \(vala(d) = false ∧ valb(d) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-val}(r, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-divides-degree-bound}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(d\), if \(d ≠ 0\), then if \(qdivides(r, d)\), then \(2 * r ≤ binarydegree(d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-degree-bound}(r, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-order-exists}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(d\), if \(d ≠ 0\), then there exists a natural number \(r\) such that \(qdivides(r, d) ∧ ¬ qdivides(r + 1, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-order-exists}(d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-divides-iff-order}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(d\), if \(d ≠ 0\), then \(qdivides(r, d) ↔ r ≤ qorder(d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-iff-order}(r, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-source-flux-zero}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(observersourceflux(Q, t, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-source-flux-zero}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-source-flux-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(n\), \(observersourceflux(Q, t, n + 1) = wittxor(wittlinear(observersourceflux(Q, t, n)), wittshl(observersource(Q, t + n), n + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-source-flux-step}(Q, t, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-source-flux-append}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(n\) and natural number \(s\), \(observersourceflux(Q, t, n + s) = wittxor(wittlinpow(s, observersourceflux(Q, t, n)), wittshl(observersourceflux(Q, t + n, s), n))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-source-flux-append}(Q, t, n, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-q-rank-definition}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(observerqrank(Q, t) = t + Q - 2 * qorder(observerdefect(Q, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-q-rank-definition}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-polynomial-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(wittshl(observerdefect(m * P, t + 1), 1) = wittxor(wittlinear(observerdefect(m * P, t)), wittshl(observersource(m * P, t), 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-polynomial-step}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-source}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(observersource(m * P, t) = wittxor(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t))), naturalbit(leftdefect(m * P, t, 1)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-source}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-polynomial-window}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(wittshl(observerdefect(m * P, t + n), n) = wittxor(wittlinpow(n, observerdefect(m * P, t)), observersourceflux(m * P, t, n))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-polynomial-window}(T, P, m, t, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-window-divisibility}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\) and natural number \(r\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(qdivides(r, observerdefect(m * P, t))\), then if \(k ≤ n + r\), then \(qdivides(k, observerdefect(m * P, t + n)) ↔ qdivides(k, observersourceflux(m * P, t, n))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-window-divisibility}(T, P, m, t, n, r, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-q-gain}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(r\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(qdivides(r, observerdefect(m * P, t))\), then \(qdivides(r + 1, observerdefect(m * P, t + 1)) ↔ qdivides(r + 1, observersource(m * P, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-q-gain}(T, P, m, t, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-q-order-bound}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(2 * qorder(observerdefect(Q, t)) ≤ t + Q\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-q-order-bound}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-q-rank-drop}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(0 < n\), then \(observerqrank(m * P, t + n) < observerqrank(m * P, t) ↔ qdivides(qorder(observerdefect(m * P, t)) + n / 2 + 1, observersourceflux(m * P, t, n))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-q-rank-drop}(T, P, m, t, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-seed-q-loss}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(observerdefect(5, 2) = 216 ∧ observerdefect(5, 3) = 412 ∧ qdivides(1, observerdefect(5, 2)) ∧ ¬ qdivides(1, observerdefect(5, 3)) ∧ center(2) = false ∧ center(7) = false ∧ center(3) = true ∧ center(8) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-seed-q-loss}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-quotient-bound}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(a\) and natural number \(d\), if \(wittlinpow(r, a) = d\), then \(a ≤ d\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-quotient-bound}(r, a, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-order-search-hit}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(d\) and natural number \(r\), if \(qdivides(r + 1, d)\), then \(qordersearch(d, r + 1) = r + 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-order-search-hit}(d, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-order-search-miss}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(d\) and natural number \(r\), if \(¬ qdivides(r + 1, d)\), then \(qordersearch(d, r + 1) = qordersearch(d, r)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-order-search-miss}(d, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-order-definition}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(d\), \(qorder(d) = qordersearch(d, binarydegree(d))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-order-definition}(d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-divides-bounded-witness}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(d\), if \(qdivides(r, d)\), then there exists a natural number \(a\) such that \(a ≤ d ∧ wittlinpow(r, a) = d\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-divides-bounded-witness}(r, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-order-search-zero}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(d\), \(qordersearch(d, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-order-search-zero}(d)\).
+\end{proof}
+\end{theorem}
+
+\end{section}
 \end{lexlean}

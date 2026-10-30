@@ -1174,4 +1174,181 @@ The goal follows from \(\operatorname{periodicobserveredges}(T, P, m, t)\).
 \begin{proof}
 The goal follows from \(\operatorname{observerseedzeroval}\).
 \end{proof}
+\section{Cyclotomic observer transport}
+\label{ll:observations:observer-q-adic}
+\begin{theorem}
+\label{ll:observations:q-divides-intro}
+For every natural number \(r\) and natural number \(a\), \(\operatorname{qdivides}(r, \operatorname{wittlinpow}(r, a))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdividesintro}(r, a)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-divides-elim}
+For every natural number \(r\) and natural number \(d\), if \(\operatorname{qdivides}(r, d)\), then there exists a natural number \(a\) such that \(\operatorname{wittlinpow}(r, a) = d\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdivideselim}(r, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-divides-shl}
+For every natural number \(r\) and natural number \(d\) and natural number \(n\), \(\operatorname{qdivides}(r, \operatorname{wittshl}(d, n))\) if and only if \(\operatorname{qdivides}(r, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdividesshl}(r, d, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-divides-val}
+For every natural number \(r\) and natural number \(d\), if \(0 < r\), then if \(\operatorname{qdivides}(r, d)\), then \(\operatorname{vala}(d) = \operatorname{false}\) and \(\operatorname{valb}(d) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdividesval}(r, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-divides-degree-bound}
+For every natural number \(r\) and natural number \(d\), if \(d \ne 0\), then if \(\operatorname{qdivides}(r, d)\), then \(2 \cdot r \le \operatorname{binarydegree}(d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdividesdegreebound}(r, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-order-exists}
+For every natural number \(d\), if \(d \ne 0\), then there exists a natural number \(r\) such that \(\operatorname{qdivides}(r, d)\) and not \(\operatorname{qdivides}(r + 1, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qorderexists}(d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-divides-iff-order}
+For every natural number \(r\) and natural number \(d\), if \(d \ne 0\), then \(\operatorname{qdivides}(r, d)\) if and only if \(r \le \operatorname{qorder}(d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdividesifforder}(r, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-source-flux-zero}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{observersourceflux}(Q, t, 0) = 0\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observersourcefluxzero}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-source-flux-step}
+For every natural number \(Q\) and natural number \(t\) and natural number \(n\), \(\operatorname{observersourceflux}(Q, t, n + 1) = \operatorname{wittxor}(\operatorname{wittlinear}(\operatorname{observersourceflux}(Q, t, n)), \operatorname{wittshl}(\operatorname{observersource}(Q, t + n), n + 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observersourcefluxstep}(Q, t, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-source-flux-append}
+For every natural number \(Q\) and natural number \(t\) and natural number \(n\) and natural number \(s\), \(\operatorname{observersourceflux}(Q, t, n + s) = \operatorname{wittxor}(\operatorname{wittlinpow}(s, \operatorname{observersourceflux}(Q, t, n)), \operatorname{wittshl}(\operatorname{observersourceflux}(Q, t + n, s), n))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observersourcefluxappend}(Q, t, n, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-q-rank-definition}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{observerqrank}(Q, t) = t + Q - 2 \cdot \operatorname{qorder}(\operatorname{observerdefect}(Q, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerqrankdefinition}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-polynomial-step}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{wittshl}(\operatorname{observerdefect}(m \cdot P, t + 1), 1) = \operatorname{wittxor}(\operatorname{wittlinear}(\operatorname{observerdefect}(m \cdot P, t)), \operatorname{wittshl}(\operatorname{observersource}(m \cdot P, t), 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserverpolynomialstep}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-source}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{observersource}(m \cdot P, t) = \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observercode}(t + m \cdot P)), \operatorname{wittcarry}(\operatorname{observercode}(t))), \operatorname{naturalbit}(\operatorname{leftdefect}(m \cdot P, t, 1)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserversource}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-polynomial-window}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{wittshl}(\operatorname{observerdefect}(m \cdot P, t + n), n) = \operatorname{wittxor}(\operatorname{wittlinpow}(n, \operatorname{observerdefect}(m \cdot P, t)), \operatorname{observersourceflux}(m \cdot P, t, n))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserverpolynomialwindow}(T, P, m, t, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-window-divisibility}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\) and natural number \(r\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{qdivides}(r, \operatorname{observerdefect}(m \cdot P, t))\), then if \(k \le n + r\), then \(\operatorname{qdivides}(k, \operatorname{observerdefect}(m \cdot P, t + n))\) if and only if \(\operatorname{qdivides}(k, \operatorname{observersourceflux}(m \cdot P, t, n))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserverwindowdivisibility}(T, P, m, t, n, r, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-q-gain}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(r\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{qdivides}(r, \operatorname{observerdefect}(m \cdot P, t))\), then \(\operatorname{qdivides}(r + 1, \operatorname{observerdefect}(m \cdot P, t + 1))\) if and only if \(\operatorname{qdivides}(r + 1, \operatorname{observersource}(m \cdot P, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserverqgain}(T, P, m, t, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-q-order-bound}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(2 \cdot \operatorname{qorder}(\operatorname{observerdefect}(Q, t)) \le t + Q\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerqorderbound}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-q-rank-drop}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(0 < n\), then \(\operatorname{observerqrank}(m \cdot P, t + n) < \operatorname{observerqrank}(m \cdot P, t)\) if and only if \(\operatorname{qdivides}(\operatorname{qorder}(\operatorname{observerdefect}(m \cdot P, t)) + n / 2 + 1, \operatorname{observersourceflux}(m \cdot P, t, n))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserverqrankdrop}(T, P, m, t, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-seed-q-loss}
+\(\operatorname{observerdefect}(5, 2) = 216\) and \(\operatorname{observerdefect}(5, 3) = 412 \land \operatorname{qdivides}(1, \operatorname{observerdefect}(5, 2)) \land \lnot\operatorname{qdivides}(1, \operatorname{observerdefect}(5, 3)) \land \operatorname{center}(2) = \operatorname{false} \land \operatorname{center}(7) = \operatorname{false} \land \operatorname{center}(3) = \operatorname{true} \land \operatorname{center}(8) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerseedqloss}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-quotient-bound}
+For every natural number \(r\) and natural number \(a\) and natural number \(d\), if \(\operatorname{wittlinpow}(r, a) = d\), then \(a \le d\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qquotientbound}(r, a, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-order-search-hit}
+For every natural number \(d\) and natural number \(r\), if \(\operatorname{qdivides}(r + 1, d)\), then \(\operatorname{qordersearch}(d, r + 1) = r + 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qordersearchhit}(d, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-order-search-miss}
+For every natural number \(d\) and natural number \(r\), if not \(\operatorname{qdivides}(r + 1, d)\), then \(\operatorname{qordersearch}(d, r + 1) = \operatorname{qordersearch}(d, r)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qordersearchmiss}(d, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-order-definition}
+For every natural number \(d\), \(\operatorname{qorder}(d) = \operatorname{qordersearch}(d, \operatorname{binarydegree}(d))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qorderdefinition}(d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-divides-bounded-witness}
+For every natural number \(r\) and natural number \(d\), if \(\operatorname{qdivides}(r, d)\), then there exists a natural number \(a\) such that \(a \le d\) and \(\operatorname{wittlinpow}(r, a) = d\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qdividesboundedwitness}(r, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-order-search-zero}
+For every natural number \(d\), \(\operatorname{qordersearch}(d, 0) = 0\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qordersearchzero}(d)\).
+\end{proof}
 \end{document}

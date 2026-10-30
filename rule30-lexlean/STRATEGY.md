@@ -2257,3 +2257,137 @@ boundary input. A closing argument must still constrain the actual seeded
 carry history strongly enough that this boundary compensation cannot
 continue. The boundary law itself does not exclude it; Problem 1 is not
 claimed solved.
+
+### Exact q-adic transport and the remaining window congruence
+
+The observer's Phi_3 reading extends to divisibility by every power of
+`q=1+X+X^2`, using the existing binary-polynomial map `phiLinearPow`.
+`QDivides r d` means `exists a, phiLinearPow r a = d`; multiplication and
+addition here are polynomial operations over F2, not ordinary Nat
+multiplication and addition. `q_divides_intro` and `q_divides_elim` publish
+this definition. `q_quotient_bound` bounds every quotient by the encoded
+dividend, and `q_divides_bounded` supplies an executable finite-witness
+decision procedure. `qOrderSearch` takes the maximum divisible exponent
+through a finite bound; `q_order_search_hit`, `q_order_search_miss`, and
+`q_order_definition` publish its recursion and the degree cutoff. No
+efficiency claim is made for this exhaustive reference procedure.
+`qOrder d` is the unique divisibility threshold for a nonzero word. Its
+value at zero is the sentinel 0, not the valuation of zero.
+`q_divides_iff_order` explicitly requires a nonzero word.
+
+The degree budget is structural: the leading bit of `phiLinearPow r a`
+for nonzero `a` is at `log2(a)+2*r`. Thus `q_divides_degree_bound` proves
+`2*r <= binaryDegree(d)` for every nonzero `d` divisible by `q^r`.
+Existence of a finite threshold follows from this bound; it is not inferred
+from data. `q_divides_shl` proves that multiplication by X is a unit at the
+q-place, and `q_divides_val` proves that a positive q-power kills both F4
+coordinates. The converse for a single factor is not needed here.
+
+Set `H_t=observerCode t`, `E_t=observerDefect Q t`, and retain the actual
+source polynomial
+
+```
+S_t = carry(H_(t+Q)) xor carry(H_t)
+      xor (observerInput(t+Q) xor observerInput(t)).toNat.
+```
+
+Under `CenterPeriodic T P`, `Q=mP`, and `t>=T`,
+`periodic_observer_source` identifies the boundary term with
+`(leftDefect Q t 1).toNat`. `periodic_observer_polynomial_step` proves
+
+```
+X E_(t+1) = q E_t + X S_t.
+```
+
+No carry is dropped. Define `C_(t,0)=0` and
+`C_(t,n+1)=q C_(t,n)+X^(n+1) S_(t+n)`.
+`observer_source_flux_zero`, `observer_source_flux_step`, and
+`periodic_observer_polynomial_window` give the exact finite-interval law
+
+```
+X^n E_(t+n) = q^n E_t + C_(t,n).
+```
+
+`observer_source_flux_append` also proves the composition law
+`C_(t,n+s)=q^s C_(t,n)+X^n C_(t+n,s)` for adjacent intervals. This retains
+all sources across the join, including black resets. It does not identify
+an admissible successor cancellation window.
+
+If `q^r` divides `E_t` and `k<=n+r`,
+`periodic_observer_window_divisibility` proves that `q^k` divides the
+endpoint `E_(t+n)` exactly when it divides the complete source sum
+`C_(t,n)`. In particular `periodic_observer_q_gain` proves that gaining
+one q-factor from an initial r factors requires, and is equivalent to,
+`q^(r+1)` dividing `S_t`. Center matching alone does not establish this.
+
+For the actual positive-lag seed, `E_t` is nonzero with degree `t+Q`.
+`observer_q_order_bound` proves `2*qOrder(E_t)<=t+Q`, giving the natural
+rank `R_t=t+Q-2*qOrder(E_t)`. For every positive interval length n,
+`periodic_observer_q_rank_drop` proves the exact equivalence
+
+```
+R_(t+n) < R_t
+  iff QDivides (qOrder(E_t) + n/2 + 1) C_(t,n).
+```
+
+This completes the algebraic criterion, not the seed-specific descent
+argument. The remaining mathematical obligation is to construct a nonempty
+class of actual causally linked seeded cancellation windows and prove this
+source congruence on an admissible successor at every link. The earlier
+moving-diagonal data and local reset tables do not yet supply that theorem.
+No source congruence is assumed as an axiom or claimed to follow from the
+finite F4 alphabet.
+
+`observer_seed_q_loss` gives a kernel-checked finite obstruction to naive
+preservation: `E_5(2)=216` is divisible by q, while `E_5(3)=412` is not.
+The two centers are both white at times 2 and 7, and both black at times
+3 and 8. This is exact seeded arithmetic, not measured evidence for an
+infinite assertion. It assumes no infinite center period and does not
+refute a stronger theorem about linked windows. Problem 1 remains unproved.
+
+### Finite diagnostic of white updates versus black resets
+
+Run `python3 scripts/diagnose_qadic_windows.py` to enumerate finite seeded
+windows. The default bounds are `0<=b<=512`, `1<=Q<=128`, and `3<=k<=Q`.
+The filters check `LeadingAdvance Q b k`, `CenterCleanThrough Q b k`,
+`WhiteCenterGap b (k-1)`, and the actual `HeadImportPath` from `b+k-2` to
+`b+k-1`. Assertions independently check the exact mirror front, the forced
+white staircase, the black root prefix, the left front up to arrival, and
+the complete polynomial source update at every step. The search uses exact
+integer bit operations and polynomial division over F2[X]. It assumes no
+infinite center period. Windows can overlap and are not claimed to form a
+causal successor chain.
+
+The script classifies an update by its INPUT center. Thus the update from
+b to b+1 is the black reset, and updates from b+1 through b+k-1 are white,
+including the last arrival-erasure update. With the default bounds it finds
+167 windows (158 with k=3 and 9 with k=4). The white totals are positive in
+139 windows, zero in 23, and negative in 5. The reset totals are positive
+in 137 windows and negative in 30. None of the 343 white updates has an
+identically zero full carry difference. These counts are diagnostics only,
+not theorem premises or asymptotic evidence.
+
+Two explicit diagnostic examples illustrate the split:
+
+| Q | b | k | reset change in R | interior white changes | arrival white change | all white changes |
+|---|---|---|---|---|---|---|
+| 11 | 5 | 3 | +1 | +1 | +1 | +2 |
+| 21 | 103 | 4 | +1 | -1, +3 | +1 | +3 |
+
+For Q=11 at t=6, the full carry difference is the binary word 160368.
+Its coefficients at 0,1,2,3 vanish, but its q-remainder is X, so its F4
+value is omega. The boundary difference is zero at this step. This is the
+important distinction between a silent prefix at the physical cut and
+q-divisibility of the entire carry polynomial. At the following white
+arrival step, the carry has q-remainder zero but the boundary term is 1.
+The q-orders of E_11 at times 5,6,7,8 are all zero, and R increases at each
+step. The longer k=4 example also replenishes R in the interior of its
+white gap, rather than only at a black reset.
+
+These finite calculations do not support a forced white-gap spend derived
+solely from the classified finite window data. They do not refute a stronger
+consequence of infinite periodicity. A termination argument still needs a
+proved constraint on the complete source residues between actual seeded
+successor windows, or a corrected rank that accounts for the interior
+carry contributions. None of the diagnostic output is imported by Lean or
+LexLean, and Problem 1 remains unproved.

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "observer-q-order-bound"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q)))) (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::mul) (nat 2) (app (const r30.observation::q-order) (app (const r30.observation::observer-defect) (local Q) (local t)))) (app (const lexlean.std.nat::add) (local t) (local Q)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.observer_q_order_bound"
+
+[[form]]
+id = "observer-q-order-bound"
+channel = "math"
+surface = "observerqorderbound"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name observerqorderbound) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

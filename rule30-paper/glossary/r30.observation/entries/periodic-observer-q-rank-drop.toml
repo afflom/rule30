@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-observer-q-rank-drop"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hn (app (const lexlean.std.nat::lt) (nat 0) (local n)))) (app (const lexlean.core::iff) (app (const lexlean.std.nat::lt) (app (const r30.observation::observer-q-rank) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::add) (local t) (local n))) (app (const r30.observation::observer-q-rank) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t))) (app (const r30.observation::q-divides) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (app (const r30.observation::q-order) (app (const r30.observation::observer-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t))) (app (const lexlean.std.nat::div) (local n) (nat 2))) (nat 1)) (app (const r30.observation::observer-source-flux) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t) (local n))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.periodic_observer_q_rank_drop"
+
+[[form]]
+id = "periodic-observer-q-rank-drop"
+channel = "math"
+surface = "periodicobserverqrankdrop"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicobserverqrankdrop) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

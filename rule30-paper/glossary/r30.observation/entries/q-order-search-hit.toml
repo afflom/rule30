@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-order-search-hit"
+category = "proof-constant"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit h (app (const r30.observation::q-divides) (app (const lexlean.std.nat::add) (local r) (nat 1)) (local d)))) (app (const lexlean.core::eq) (app (const r30.observation::q-order-search) (local d) (app (const lexlean.std.nat::add) (local r) (nat 1))) (app (const lexlean.std.nat::add) (local r) (nat 1)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.q_order_search_hit"
+
+[[form]]
+id = "q-order-search-hit"
+channel = "math"
+surface = "qordersearchhit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qordersearchhit) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

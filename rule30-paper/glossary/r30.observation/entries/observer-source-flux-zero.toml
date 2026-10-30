@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "observer-source-flux-zero"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::observer-source-flux) (local Q) (local t) (nat 0)) (nat 0)))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.observer_source_flux_zero"
+
+[[form]]
+id = "observer-source-flux-zero"
+channel = "math"
+surface = "observersourcefluxzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name observersourcefluxzero) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

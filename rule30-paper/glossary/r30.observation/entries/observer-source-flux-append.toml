@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "observer-source-flux-append"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::observer-source-flux) (local Q) (local t) (app (const lexlean.std.nat::add) (local n) (local s))) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-linpow) (local s) (app (const r30.observation::observer-source-flux) (local Q) (local t) (local n))) (app (const r30.witt::witt-shl) (app (const r30.observation::observer-source-flux) (local Q) (app (const lexlean.std.nat::add) (local t) (local n)) (local s)) (local n)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.observer_source_flux_append"
+
+[[form]]
+id = "observer-source-flux-append"
+channel = "math"
+surface = "observersourcefluxappend"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name observersourcefluxappend) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"
