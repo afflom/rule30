@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "right-import-difference"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.rightImportDifference"
+
+[[form]]
+id = "right-import-difference"
+channel = "math"
+surface = "rightimportdifference"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rightimportdifference) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -112,9 +112,9 @@ version = "1.0.0"
 kind = "path"
 source = "glossary/r30.observation"
 revision = "none"
-tree_sha256 = "52ebe41d0dbc12f1687a4679944ffe461e7f6666d5fbac94fa344c04caca6db7"
-manifest_sha256 = "4108074c124492c3825fd25526bf10cacd88104f2839a671472d95d7d49f73e7"
-imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.int@1.2.0", "lexlean.std.nat@1.2.0", "r30.scale@1.0.0", "r30.time@1.0.0", "r30.witt@1.0.0"]
+tree_sha256 = "c4e396783de2d83861a0534fd9a086b142d68d3e6fcd58f1a3112720fd261a9e"
+manifest_sha256 = "1383ef3de49ef1aa78a9fc790eaa8b36da1ee07c949d4f027aa4ba6faecbad28"
+imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.int@1.2.0", "lexlean.std.nat@1.2.0", "r30.local@1.0.0", "r30.scale@1.0.0", "r30.time@1.0.0", "r30.witt@1.0.0"]
 
 [[package]]
 id = "r30.real"

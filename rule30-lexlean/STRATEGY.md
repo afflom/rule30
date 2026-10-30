@@ -489,6 +489,43 @@ by the established laws. Excluding their indefinite succession in the seeded
 orbit remains the unproved global step; Problem 1 remains unproved.
 
 
+
+### Exact black-reset transfer and the required deeper input
+
+`rightCell`, `rightDefect`, and `rightPhase` retain physical columns to the
+right of the center in the same seeded orbit. The effective input from column
+2 is `rightImport(t) = (!cell(t,1)) && cell(t,2)`. The exact identity
+`right_import_step` is
+
+    cell(t+1,1) = center(t) XOR cell(t,1) XOR rightImport(t).
+
+Under center agreement for a lag `Q`, `right_defect_import_balance` identifies
+the import difference with the change of the right-head defect. This is a
+physical feedback input whose mask contains the actual head values, rather
+than a freely prescribed boundary signal.
+
+At a common black center, `black_reset_survival` proves that a surviving head
+defect reverses its signed orientation. `black_reset_import` classifies a new
+head defect: the previous heads must both be white, column 2 must already be
+defective, and its phase arrives with the opposite sign. No sign-monotone
+rank on the head phase follows from these transitions.
+
+The deeper input also cannot be discarded as eventually periodic.
+`periodic_right_import_orientation` proves that, under a hypothetical center
+period `P`, both orientations of the import difference recur at every positive
+lag `m*P`, arbitrarily late. Each such import changes the head defect on that
+step. For the proof, periodic center and periodic import would make the
+one-step difference of the head periodic; exact integration would then make
+the head periodic, contradicting Jen. This uses the proved difference-period
+lemma and the seed theorem, with no measured input.
+
+This gives an exact transfer law across a black reset and a recurrence
+constraint on its deeper forcing. The remaining obligation is to control the
+succession using the full seed and background; neither the head phase nor its
+import is a closed periodic state. No well-founded global rank or exclusion
+of all such successions has been proved. Problem 1 remains unproved.
+
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

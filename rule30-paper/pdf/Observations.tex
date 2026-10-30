@@ -691,4 +691,39 @@ For every natural number \(T\) and natural number \(P\) and natural number \(m\)
 \begin{proof}
 The goal follows from \(\operatorname{periodicblackerasureorigin}(T, P, m, N, g)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:right-import-step}
+For every natural number \(t\), \(\operatorname{rightcell}(t + 1, 1) = \operatorname{bxor}(\operatorname{center}(t), \operatorname{bxor}(\operatorname{rightcell}(t, 1), \operatorname{rightimport}(t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightimportstep}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-defect-import-balance}
+For every natural number \(Q\) and natural number \(t\), if \(\operatorname{center}(t + Q) = \operatorname{center}(t)\), then \(\operatorname{rightdefect}(Q, t + 1, 1) = \operatorname{bxor}(\operatorname{rightdefect}(Q, t, 1), \operatorname{rightimportdifference}(Q, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightdefectimportbalance}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:black-reset-survival}
+For every natural number \(Q\) and natural number \(t\), if \(\operatorname{center}(t) = \operatorname{true}\), then if \(\operatorname{center}(t + Q) = \operatorname{true}\), then if \(\operatorname{rightdefect}(Q, t, 1) = \operatorname{true}\), then if \(\operatorname{rightdefect}(Q, t + 1, 1) = \operatorname{true}\), then \(\operatorname{rightphase}(Q, t + 1, 1) = -\operatorname{rightphase}(Q, t, 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{blackresetsurvival}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:black-reset-import}
+For every natural number \(Q\) and natural number \(t\), if \(\operatorname{center}(t) = \operatorname{true}\), then if \(\operatorname{center}(t + Q) = \operatorname{true}\), then if \(\operatorname{rightdefect}(Q, t, 1) = \operatorname{false}\), then if \(\operatorname{rightdefect}(Q, t + 1, 1) = \operatorname{true}\), then \(\operatorname{rightcell}(t, 1) = \operatorname{false}\) and \(\operatorname{rightcell}(t + Q, 1) = \operatorname{false} \land \operatorname{rightdefect}(Q, t, 2) = \operatorname{true} \land \operatorname{rightphase}(Q, t + 1, 1) = -\operatorname{rightphase}(Q, t, 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{blackresetimport}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-right-import-orientation}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and truth value \(before\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then there exists a natural number \(t\) such that \(N \le t\) and \(\operatorname{rightimport}(t) = before \land \operatorname{rightimport}(t + m \cdot P) = \operatorname{not}(before) \land \operatorname{rightdefect}(m \cdot P, t + 1, 1) = \operatorname{not}(\operatorname{rightdefect}(m \cdot P, t, 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicrightimportorientation}(T, P, m, N, before)\).
+\end{proof}
 \end{document}

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "right-import"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.rightImport"
+
+[[form]]
+id = "right-import"
+channel = "math"
+surface = "rightimport"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rightimport) (paren (seq (slot 0))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-right-import-orientation"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit N (const lexlean.std.nat::nat)) (explicit before (const lexlean.std.bool::bool))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hm (app (const lexlean.std.nat::lt) (nat 0) (local m))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P)))) (app (const lexlean.core::exists-op) (lam ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local N) (local t)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::right-import) (local t)) (local before)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::right-import) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (local m) (local P)))) (app (const lexlean.std.bool::not) (local before))) (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::add) (local t) (nat 1)) (nat 1)) (app (const lexlean.std.bool::not) (app (const r30.observation::right-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t) (nat 1)))))))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.periodic_right_import_orientation"
+
+[[form]]
+id = "periodic-right-import-orientation"
+channel = "math"
+surface = "periodicrightimportorientation"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicrightimportorientation) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

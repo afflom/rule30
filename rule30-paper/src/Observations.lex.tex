@@ -8,6 +8,7 @@
 \useglossary{r30.observation@1.0.0}
 \useglossary{lexlean.std.int@1.2.0}
 \useglossary{r30.witt@1.0.0}
+\useglossary{r30.local@1.0.0}
 \title{Masked observations}
 
 \begin{section}{masked-observations}
@@ -785,6 +786,46 @@ Close the goal with \(\lexeme{r30.observation::black-gap-erasure-origin}(Q, b, r
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-black-erasure-origin}(T, P, m, N, g)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-import-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\), \(rightcell(t + 1, 1) = bxor(center(t), bxor(rightcell(t, 1), rightimport(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-import-step}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-defect-import-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(center(t + Q) = center(t)\), then \(rightdefect(Q, t + 1, 1) = bxor(rightdefect(Q, t, 1), rightimportdifference(Q, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-defect-import-balance}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{black-reset-survival}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(center(t) = true\), then if \(center(t + Q) = true\), then if \(rightdefect(Q, t, 1) = true\), then if \(rightdefect(Q, t + 1, 1) = true\), then \(rightphase(Q, t + 1, 1) = intneg rightphase(Q, t, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::black-reset-survival}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{black-reset-import}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(center(t) = true\), then if \(center(t + Q) = true\), then if \(rightdefect(Q, t, 1) = false\), then if \(rightdefect(Q, t + 1, 1) = true\), then \(rightcell(t, 1) = false ∧ rightcell(t + Q, 1) = false ∧ rightdefect(Q, t, 2) = true ∧ rightphase(Q, t + 1, 1) = intneg rightphase(Q, t, 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::black-reset-import}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-right-import-orientation}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and truth value \(before\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then there exists a natural number \(t\) such that \(N ≤ t ∧ rightimport(t) = before ∧ rightimport(t + m * P) = not(before) ∧ rightdefect(m * P, t + 1, 1) = not(rightdefect(m * P, t, 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-right-import-orientation}(T, P, m, N, before)\).
 \end{proof}
 \end{theorem}
 

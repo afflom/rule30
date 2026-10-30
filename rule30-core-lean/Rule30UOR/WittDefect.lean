@@ -963,4 +963,131 @@ theorem periodic_black_erasure_origin (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m
   intro i hi hik
   exact hwb i hi (by omega)
 
+/-! ## Return across black phases retains the deeper right input
+
+The effective input is (!head) && next. It is a physical signal of the same
+seed orbit, not an independent driver. The white-center convexity argument
+cannot discard it when passing from one black boundary to the next.
+-/
+
+def rightCell (t k : Nat) : Bool := cell t (k : Int)
+def rightDefect (Q t k : Nat) : Bool := xor (rightCell (t + Q) k) (rightCell t k)
+def rightPhase (Q t k : Nat) : Int := bitValue (rightCell (t + Q) k) - bitValue (rightCell t k)
+def rightImport (t : Nat) : Bool := (!rightCell t 1) && rightCell t 2
+def rightImportDifference (Q t : Nat) : Bool := difference rightImport Q t
+
+/-- Exact XOR decomposition of the head update with its masked deeper input. -/
+theorem right_import_step (t : Nat) :
+    rightCell (t + 1) 1 = Rule30UOR.Core.bxor (Rule30UOR.Core.center t)
+      (Rule30UOR.Core.bxor (rightCell t 1) (rightImport t)) := by
+  simp only [Rule30UOR.Scale.bxor_eq]
+  rw [Rule30UOR.Scale.center_eq_kit]
+  change rule (cell t 0) (cell t 1) (cell t 2) =
+    xor (cell t 0) (xor (cell t 1) ((!cell t 1) && cell t 2))
+  cases cell t 0 <;> cases cell t 1 <;> cases cell t 2 <;> rfl
+
+/-- With the common center retained, the import difference is exactly the
+change of the head defect. The mask still contains both physical backgrounds. -/
+theorem right_defect_import_balance (Q t : Nat)
+    (hc : Rule30UOR.Core.center (t + Q) = Rule30UOR.Core.center t) :
+    rightDefect Q (t + 1) 1 = Rule30UOR.Core.bxor (rightDefect Q t 1) (rightImportDifference Q t) := by
+  simp only [rightDefect, rightImportDifference, difference]
+  rw [show t + 1 + Q = (t + Q) + 1 by omega, right_import_step, right_import_step, hc]
+  simp only [Rule30UOR.Scale.bxor_eq]
+  cases Rule30UOR.Core.center t <;> cases rightCell t 1 <;> cases rightCell (t + Q) 1 <;>
+    cases rightImport t <;> cases rightImport (t + Q) <;> rfl
+
+private theorem black_reset_table : ∀ a b c d : Bool,
+    (xor b a = true → xor (rule true b d) (rule true a c) = true →
+      bitValue (rule true b d) - bitValue (rule true a c) = -(bitValue b - bitValue a)) ∧
+    (xor b a = false → xor (rule true b d) (rule true a c) = true →
+      a = false ∧ b = false ∧ xor d c = true ∧
+      bitValue (rule true b d) - bitValue (rule true a c) = -(bitValue d - bitValue c)) := by
+  unfold rule bitValue
+  decide +kernel
+
+private theorem black_reset_physical (Q t : Nat)
+    (hb : Rule30UOR.Core.center t = true) (hb' : Rule30UOR.Core.center (t + Q) = true) :
+    (rightDefect Q t 1 = true → rightDefect Q (t + 1) 1 = true →
+      rightPhase Q (t + 1) 1 = -rightPhase Q t 1) ∧
+    (rightDefect Q t 1 = false → rightDefect Q (t + 1) 1 = true →
+      rightCell t 1 = false ∧ rightCell (t + Q) 1 = false ∧ rightDefect Q t 2 = true ∧
+      rightPhase Q (t + 1) 1 = -rightPhase Q t 2) := by
+  have h0 : cell t 0 = true := by
+    simpa only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using hb
+  have h0' : cell (t + Q) 0 = true := by
+    simpa only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using hb'
+  have step0 : rightCell (t + 1) 1 = rule true (rightCell t 1) (rightCell t 2) := by
+    change rule (cell t 0) (cell t 1) (cell t 2) = _
+    rw [h0]
+    rfl
+  have step1 : rightCell (t + 1 + Q) 1 =
+      rule true (rightCell (t + Q) 1) (rightCell (t + Q) 2) := by
+    rw [show t + 1 + Q = (t + Q) + 1 by omega]
+    change rule (cell (t + Q) 0) (cell (t + Q) 1) (cell (t + Q) 2) = _
+    rw [h0']
+    rfl
+  simp only [rightDefect, rightPhase, step0, step1]
+  exact black_reset_table (rightCell t 1) (rightCell (t + Q) 1) (rightCell t 2) (rightCell (t + Q) 2)
+
+/-- An existing head disagreement that survives a common black step reverses
+its signed orientation. No restriction on column 2 was imposed. -/
+theorem black_reset_survival (Q t : Nat)
+    (hb : Rule30UOR.Core.center t = true) (hb' : Rule30UOR.Core.center (t + Q) = true)
+    (hd : rightDefect Q t 1 = true) (hn : rightDefect Q (t + 1) 1 = true) :
+    rightPhase Q (t + 1) 1 = -rightPhase Q t 1 :=
+  (black_reset_physical Q t hb hb').1 hd hn
+
+/-- A new head disagreement at a common black step is imported from column 2
+through a common white head. Its signed orientation also reverses. -/
+theorem black_reset_import (Q t : Nat)
+    (hb : Rule30UOR.Core.center t = true) (hb' : Rule30UOR.Core.center (t + Q) = true)
+    (hd : rightDefect Q t 1 = false) (hn : rightDefect Q (t + 1) 1 = true) :
+    rightCell t 1 = false ∧ rightCell (t + Q) 1 = false ∧ rightDefect Q t 2 = true ∧
+      rightPhase Q (t + 1) 1 = -rightPhase Q t 2 :=
+  (black_reset_physical Q t hb hb').2 hd hn
+
+private theorem right_head_derivative (t : Nat) :
+    difference (fun u => rightCell u 1) 1 t = xor (Rule30UOR.Core.center t) (rightImport t) := by
+  simp only [difference]
+  rw [right_import_step]
+  simp only [Rule30UOR.Scale.bxor_eq]
+  cases Rule30UOR.Core.center t <;> cases rightCell t 1 <;> cases rightImport t <;> rfl
+
+private theorem right_import_nonperiodic {T P : Nat} (hP : 0 < P)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : ¬ EventuallyPeriodic rightImport := by
+  intro hi
+  have hp : EventuallyPeriodic (Rule30UOR.Core.center) := ⟨T, P, hP, hc⟩
+  obtain ⟨U, R, hR, hpc, hpi⟩ := common_period hp hi
+  have hder : EventuallyPeriodic (difference (fun u => rightCell u 1) 1) := by
+    refine ⟨U, R, hR, fun t ht => ?_⟩
+    rw [right_head_derivative, right_head_derivative, hpc t ht, hpi t ht]
+  have hhead := (difference_eventuallyPeriodic_iff (fun u => rightCell u 1) 1 (by decide)).1 hder
+  have hc' : EventuallyPeriodic center := ⟨T, P, hP, fun t ht => by
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht⟩
+  exact jen 1 0 (by decide) ⟨by simpa only [rightCell, Int.natCast_one] using hhead, hc'⟩
+
+/-- Both orientations of the actual gated column-2 input occur arbitrarily late
+for every positive period multiple. Each changes the head defect on that step;
+thus a periodic center cannot make this return input periodic or discard it. -/
+theorem periodic_right_import_orientation (T P m N : Nat) (before : Bool)
+    (hP : 0 < P) (hm : 0 < m) (hc : Rule30UOR.Scale.CenterPeriodic T P) :
+    ∃ t : Nat, N ≤ t ∧ rightImport t = before ∧ rightImport (t + m * P) = !before ∧
+      rightDefect (m * P) (t + 1) 1 = !rightDefect (m * P) t 1 := by
+  have hf := right_import_nonperiodic hP hc
+  have hex : ∃ t : Nat, max T N ≤ t ∧ rightImport t = before ∧
+      rightImport (t + m * P) = !before := by
+    cases before
+    · exact nonperiodic_has_rise rightImport hf (m * P) (max T N) (Nat.mul_pos hm hP)
+    · exact nonperiodic_has_fall rightImport hf (m * P) (max T N) (Nat.mul_pos hm hP)
+  obtain ⟨t, ht, h0, h1⟩ := hex
+  have hd : rightImportDifference (m * P) t = true := by
+    simp only [rightImportDifference, difference, h0, h1]
+    cases before <;> rfl
+  have hc0 := Rule30UOR.Scale.center_mul hc m t (by omega)
+  have hs := right_defect_import_balance (m * P) t hc0
+  rw [Rule30UOR.Scale.bxor_eq, hd] at hs
+  refine ⟨t, by omega, h0, h1, ?_⟩
+  simpa only [Bool.xor_true] using hs
+
 end Rule30UOR.WittDefect
