@@ -2279,4 +2279,114 @@ theorem periodic_diagonal_import_balance (T P m d t start : Nat)
   rw [head_import_path_phase (m * P + m * P) start (t + (t - d - 1)) hp clean] at matched
   exact matched
 
+/-! ## Forced mirror front from the physical import birth
+
+The import's common white heads, traced backwards through the white center
+run, force both initial right prefixes to be white. Mirror domination is
+therefore an equality, not merely an upper bound. This is a constraint on
+the actual two-history background, without a phase or orientation assumption.
+-/
+
+private theorem right_cell_rh (t p : Nat) :
+    rightCell t p = Rule30UOR.Interfaces.rhCenter t p := by
+  unfold rightCell Rule30UOR.Interfaces.rhCenter
+  rw [Rule30UOR.Fixed.Rh_center t (p : Int) (by omega)]
+
+private theorem head_white_forces_prefix (t n : Nat)
+    (hw : ∀ s : Nat, s < n → Rule30UOR.Core.center (t + s) = false)
+    (hh : rightCell (t + n) 1 = false) :
+    ∀ q : Nat, 1 ≤ q → q ≤ n + 1 → rightCell t q = false := by
+  intro q hq1 hqn
+  cases hb : rightCell t q
+  · rfl
+  · have init : Rule30UOR.Interfaces.rhCenter t ((q - 1) + 1) = true := by
+      rw [show q - 1 + 1 = q by omega, ← right_cell_rh]
+      exact hb
+    have hit := Rule30UOR.Interfaces.rdrv_col_one_black_from_init_of_white_drive
+      t t (q - 1) n n hw init (by omega) (Nat.le_refl _)
+    rw [Rule30UOR.Interfaces.rdrv_diag_eq_rhCenter, ← right_cell_rh, hh] at hit
+    exact absurd hit (by decide)
+
+/-- A coupled white-gap cancellation forces the entire common white right
+prefix and an exact mirror front at the first time after the source. -/
+private theorem coupled_right_front_and_prefix (Q b k start : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) (hp : HeadImportPath Q start (b + (k - 1))) :
+    RightFront Q (b + 1) (k - 1) ∧
+      ∀ q : Nat, 1 ≤ q → q + 1 < k →
+        rightCell (b + 1) q = false ∧ rightCell (b + 1 + Q) q = false := by
+  have hs := coupled_import_born_at_arrival Q b k start h3 hl hc hw hp
+  have wa : rightCell (b + 1 + (k - 3)) 1 = false := by
+    simpa only [hs, show b + 1 + (k - 3) = b + (k - 2) by omega] using hp.2.2.1
+  have wb : rightCell (b + 1 + Q + (k - 3)) 1 = false := by
+    simpa only [hs, show b + 1 + Q + (k - 3) = b + (k - 2) + Q by omega] using hp.2.2.2.1
+  have pa := head_white_forces_prefix (b + 1) (k - 3) (fun s hs => by
+    simpa only [Nat.add_assoc] using hw (1 + s) (by omega) (by omega)) wa
+  have pb := head_white_forces_prefix (b + 1 + Q) (k - 3) (fun s hs => by
+    have eqc := clean_center_core Q b k hc (1 + s) (by omega)
+    have wh := hw (1 + s) (by omega) (by omega)
+    have eqc' : Rule30UOR.Core.center (b + 1 + Q + s) =
+        Rule30UOR.Core.center (b + (1 + s)) := by
+      simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using eqc
+    exact eqc'.trans wh) wb
+  have whitePrefix : ∀ q : Nat, 1 ≤ q → q + 1 < k →
+      rightCell (b + 1) q = false ∧ rightCell (b + 1 + Q) q = false := by
+    intro q hq1 hq
+    exact ⟨pa q hq1 (by omega), pb q hq1 (by omega)⟩
+  obtain ⟨y, _hhead, hy, hy2, hyk⟩ :=
+    coupled_right_front_mirror_at Q b k 1 hQ h3 hl hc hw (Nat.le_refl _) (by omega)
+  have yeq : y = k - 1 := by
+    apply Classical.byContradiction
+    intro hne
+    have white := whitePrefix y (by omega) (by omega)
+    have hz : rightDefect Q (b + 1) y = false := by
+      simp only [rightDefect, white.1, white.2, Bool.xor_self]
+    have hin := hy.2.1
+    rw [hz] at hin
+    cases hin
+  rw [yeq] at hy
+  exact ⟨hy, whitePrefix⟩
+
+/-- Pointwise readout of the exact initial mirror front and its common white prefix. -/
+theorem coupled_right_front_exact (Q b k start q : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) (hp : HeadImportPath Q start (b + (k - 1)))
+    (hq1 : 1 ≤ q) (hq : q + 1 < k) :
+    RightFront Q (b + 1) (k - 1) ∧
+      rightCell (b + 1) q = false ∧ rightCell (b + 1 + Q) q = false := by
+  have h := coupled_right_front_and_prefix Q b k start hQ h3 hl hc hw hp
+  exact ⟨h.1, h.2 q hq1 hq⟩
+
+/-- The common white staircase is forced throughout the gap, including the
+column-2 import time. Both fronts advance towards the center in exact mirror
+positions, and each right descent crosses a common white cell. -/
+theorem coupled_forced_white_staircase (Q b k start i : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) (hp : HeadImportPath Q start (b + (k - 1)))
+    (hi : 1 ≤ i) (hik : i + 1 < k) :
+    RightFront Q (b + i) (k - i) ∧
+      rightCell (b + i) (k - i - 1) = false ∧
+      rightCell (b + i + Q) (k - i - 1) = false := by
+  have exact_front := (coupled_right_front_and_prefix Q b k start hQ h3 hl hc hw hp).1
+  have hs := coupled_import_born_at_arrival Q b k start h3 hl hc hw hp
+  by_cases hlast : i = k - 2
+  · have htime : b + i = start := by omega
+    have hpos : k - i = 2 := by omega
+    have hinner : k - i - 1 = 1 := by omega
+    have hf : RightFront Q start 2 := ⟨by omega, hp.2.2.2.2.1, fun q hq1 hq2 => by
+      have hq : q = 1 := by omega
+      rw [hq]
+      exact hp.2.1⟩
+    exact ⟨by simpa only [htime, hpos] using hf,
+      by simpa only [htime, hinner] using hp.2.2.1,
+      by simpa only [htime, hinner] using hp.2.2.2.1⟩
+  · have he : RightFront Q (b + 1) (k - 1) := exact_front
+    have stair := coupled_white_staircase Q b k 1 hQ h3 hl hc hw (Nat.le_refl _) he i hi (by omega)
+    have same : rightCell (b + i + Q) (k - i - 1) = rightCell (b + i) (k - i - 1) := by
+      have hz := stair.1.2.2 (k - i - 1) (by omega) (by omega)
+      unfold rightDefect at hz
+      cases a : rightCell (b + i) (k - i - 1) <;>
+        cases c : rightCell (b + i + Q) (k - i - 1) <;> simp_all
+    exact ⟨stair.1, stair.2, same.trans stair.2⟩
+
 end Rule30UOR.WittDefect

@@ -1110,5 +1110,21 @@ Close the goal with \(\lexeme{r30.observation::periodic-diagonal-import-balance}
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{coupled-right-front-exact}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\) and natural number \(q\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then if \(1 ≤ q\), then if \(q + 1 < k\), then \(rightfront(Q, b + 1, k - 1) ∧ rightcell(b + 1, q) = false ∧ rightcell(b + 1 + Q, q) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::coupled-right-front-exact}(Q, b, k, start, q)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{coupled-forced-white-staircase}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\) and natural number \(i\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then if \(1 ≤ i\), then if \(i + 1 < k\), then \(rightfront(Q, b + i, k - i) ∧ rightcell(b + i, k - i - 1) = false ∧ rightcell(b + i + Q, k - i - 1) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::coupled-forced-white-staircase}(Q, b, k, start, i)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -2075,3 +2075,23 @@ left-source witness has an arrival of the required parity and settlement,
 nor do they bound its ray flux or exclude indefinite cancellation.
 Problem 1 remains open: a further seeded restriction on these joint
 transport histories is still required.
+
+### Exact mirror front, forced by the import's white heads
+
+The physical import fixes more of the initial background than the previous
+mirror bound retained. When `k ≥ 3`, its birth time is `b + (k - 2)` and
+both heads are white there. During the preceding white center run, any
+initial black cell at a right column `q ≤ k - 2` would already have reached
+that head. Consequently both histories at time `b + 1` are white on
+columns `1 .. k - 2`. Combining this with mirror domination pins the
+first right defect exactly at column `k - 1`, not merely in `[2, k - 1]`.
+
+`coupled_right_front_exact` retains this common white prefix pointwise.
+`coupled_forced_white_staircase` removes the former conditional mirror
+position: throughout `1 ≤ i ≤ k - 2`, the right front is exactly at
+`k - i`, and the cell immediately inside it is white in both histories.
+The terminal case is the actual column-2 import with common white heads.
+These statements use the given physical coupled witness, not independently
+selected recurrence times or a measured pattern. They constrain each
+cancellation window but still do not exclude a seeded sequence of such
+windows across successive black resets.

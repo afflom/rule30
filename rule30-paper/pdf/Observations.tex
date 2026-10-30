@@ -971,4 +971,18 @@ For every natural number \(T\) and natural number \(P\) and natural number \(m\)
 \begin{proof}
 The goal follows from \(\operatorname{periodicdiagonalimportbalance}(T, P, m, d, t, start)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:coupled-right-front-exact}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\) and natural number \(q\), if \(0 < Q\), then if \(3 \le k\), then if \(\operatorname{leadingadvance}(Q, b, k)\), then if \(\operatorname{centercleanthrough}(Q, b, k)\), then if \(\operatorname{whitecentergap}(b, k - 1)\), then if \(\operatorname{headimportpath}(Q, start, b + (k - 1))\), then if \(1 \le q\), then if \(q + 1 < k\), then \(\operatorname{rightfront}(Q, b + 1, k - 1)\) and \(\operatorname{rightcell}(b + 1, q) = \operatorname{false} \land \operatorname{rightcell}(b + 1 + Q, q) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{coupledrightfrontexact}(Q, b, k, start, q)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:coupled-forced-white-staircase}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\) and natural number \(i\), if \(0 < Q\), then if \(3 \le k\), then if \(\operatorname{leadingadvance}(Q, b, k)\), then if \(\operatorname{centercleanthrough}(Q, b, k)\), then if \(\operatorname{whitecentergap}(b, k - 1)\), then if \(\operatorname{headimportpath}(Q, start, b + (k - 1))\), then if \(1 \le i\), then if \(i + 1 < k\), then \(\operatorname{rightfront}(Q, b + i, k - i)\) and \(\operatorname{rightcell}(b + i, k - i - 1) = \operatorname{false} \land \operatorname{rightcell}(b + i + Q, k - i - 1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{coupledforcedwhitestaircase}(Q, b, k, start, i)\).
+\end{proof}
 \end{document}
