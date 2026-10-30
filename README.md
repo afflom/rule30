@@ -7,15 +7,18 @@ pair evolution. See the [current proof frontier](rule30-lexlean/STRATEGY.md#curr
 Run `make check-research` to build and independently kernel-check these additions and enforce
 the allowed axiom set across every `Rule30UOR` theorem. Module coverage is checked before
 building: every host source must be a Lake root and an axiom-audit import, and kernel replay
-uses that same root list. They are not yet incorporated into the release PDFs described below.
+uses that same root list. The current research statements are published in the observations PDF below.
 The additional LexLean entrypoint [Observations.lex.tex](rule30-paper/src/Observations.lex.tex)
 contains the checked masked-observation, information-bound, and central-collision recurrence results; packaging renders
-it separately as `dist/Observations.pdf`. Its `r30.frontier` vocabulary also exports the exact
+it as [Rule30-Observations.pdf](Rule30-Observations.pdf) and `dist/Observations.pdf`. Its `r30.frontier` vocabulary also exports the exact
 equivalences between Problem 1, the Witt center condition, and the collision obstruction.
 
 Kernel-checked [LexLean](https://github.com/afflom) and Lean 4 formalization of Wolfram's **Rule 30** cellular automaton (`Rule 30 Prize Problem 1` program) using the UOR Atlas, 2-adic Witt / carry-algebra coordinates, left-diagonal doubling theory, and driven right-half (`kit [33]`) spatio-temporal self-similarity.
 
-Every theorem in [`Paper.pdf`](Rule30-Paper.pdf) (**280 pages**, **1,386 kernel-checked statements** through `9.1386`) and [`Core.pdf`](Rule30-Core.pdf) is verified by the Lean 4 kernel (`leanprover/lean4:v4.32.1`) and `leanchecker` under only the standard Lean axioms (`{propext, Classical.choice, Quot.sound}`), with zero `sorry`s and zero custom axioms.
+The authored statements in [Paper](Rule30-Paper.pdf), [Core](Rule30-Core.pdf), and
+[Observations](Rule30-Observations.pdf) are verified by the Lean 4 kernel
+(`leanprover/lean4:v4.32.1`) and `leanchecker` under only the standard Lean axioms
+(`{propext, Classical.choice, Quot.sound}`), with zero `sorry`s and zero custom axioms.
 
 ---
 
@@ -23,11 +26,12 @@ Every theorem in [`Paper.pdf`](Rule30-Paper.pdf) (**280 pages**, **1,386 kernel-
 
 | Artifact | Path | Description |
 | :--- | :--- | :--- |
-| **`Rule30-Paper.pdf`** (`Paper.pdf`) | [`Rule30-Paper.pdf`](Rule30-Paper.pdf) / [`rule30-paper/Paper.pdf`](rule30-paper/Paper.pdf) | **280-page** LexLean-generated mathematical paper (`9.1`–`9.1386`) |
+| **`Rule30-Paper.pdf`** (`Paper.pdf`) | [`Rule30-Paper.pdf`](Rule30-Paper.pdf) / [`rule30-paper/Paper.pdf`](rule30-paper/Paper.pdf) | Current LexLean-generated mathematical paper |
 | **`Rule30-Core.pdf`** (`Core.pdf`) | [`Rule30-Core.pdf`](Rule30-Core.pdf) / [`rule30-lexlean/Core.pdf`](rule30-lexlean/Core.pdf) | LexLean-generated foundational core (`Core.lex.tex`) |
+| **`Rule30-Observations.pdf`** | [`Rule30-Observations.pdf`](Rule30-Observations.pdf) / [`rule30-paper/Observations.pdf`](rule30-paper/Observations.pdf) | Current research statements, including the phase and collision results |
 | **`Paper.lex.tex`** | [`rule30-paper/src/Paper.lex.tex`](rule30-paper/src/Paper.lex.tex) | LexLean source document for the main paper |
-| **`Paper.lean` & `Paper.tex`** | [`rule30-paper/verified-latest/cf8daedd319c5849f628cc49d6ed7bdee6f940685bb77a31d1db0a86fdc01c9e/modules/Rule30Paper/`](rule30-paper/verified-latest/cf8daedd319c5849f628cc49d6ed7bdee6f940685bb77a31d1db0a86fdc01c9e/modules/Rule30Paper/) | Verified Lean 4 and LaTeX outputs emitted by `lexlean verify` (attestation `cf8daedd319c...`) |
-| **`Core.lean` & `Core.tex`** | [`rule30-lexlean/verified-latest/0c4efc6363c642730fbc09cb826a8a9f66ee6a39b11b1c2f3e9b6bc9aeb20a6a/modules/Rule30UOR/`](rule30-lexlean/verified-latest/0c4efc6363c642730fbc09cb826a8a9f66ee6a39b11b1c2f3e9b6bc9aeb20a6a/modules/Rule30UOR/) | Verified Lean 4 and LaTeX outputs for the core module (attestation `0c4efc6363c6...`) |
+| **Verified Lean & TeX outputs** | CI artifacts in `dist/`; TeX mirrors in [`rule30-paper/pdf/`](rule30-paper/pdf/) and [`rule30-lexlean/pdf/`](rule30-lexlean/pdf/) | Outputs from the current verification; `verified-latest/` retains historical proof records |
+| **PDF provenance** | [`pdf-manifest.json`](pdf-manifest.json) | Source fingerprint, generation time, and PDF/TeX checksums checked by CI |
 | **`Rule30Bridge.lean`** | [`rule30-bridge/Rule30Bridge.lean`](rule30-bridge/Rule30Bridge.lean) | Bridge module connecting every LexLean paper theorem directly to `Ruliology.CellularAutomata.Rule30Prize` (`Rule30PrizeKit`) |
 
 ---
@@ -36,14 +40,16 @@ Every theorem in [`Paper.pdf`](Rule30-Paper.pdf) (**280 pages**, **1,386 kernel-
 
 ```text
 .
-├── Rule30-Paper.pdf          # Latest 280-page compiled LexLean paper PDF (9.1–9.1386)
+├── Rule30-Paper.pdf          # Current compiled LexLean paper PDF
 ├── Rule30-Core.pdf           # Latest compiled LexLean core PDF
+├── Rule30-Observations.pdf   # Current research statements
+├── pdf-manifest.json         # Source provenance and checksums for every PDF mirror
 ├── Makefile                  # Build targets for core, lexlean, pdf, bridge, and release artifacts
 ├── rule30-lexlean/           # LexLean core specification (src/Core.lex.tex, glossary/, STRATEGY.md)
 │   └── verified-latest/      # Attested LexLean output (0c4efc6363c6...)
 ├── rule30-core-lean/         # Lean 4 host package (24 modules: Rule30UOR.Core, Kit, Scale, Interfaces, ...)
 ├── rule30-paper/             # LexLean paper (src/Paper.lex.tex) & 9 domain glossaries (glossary/r30.*)
-│   └── verified-latest/      # Attested LexLean output (cf8daedd319c...)
+│   └── verified-latest/      # Historical attested LexLean output
 ├── rule30-bridge/            # Bridge package (54 targets) linking Rule30Paper.Paper to Rule30PrizeKit
 ├── Rule30PrizeKit/           # Wolfram Institute Rule 30 Prize Kit (Lean 4 definitions & equivalents catalog)
 ├── scripts/                  # Release packaging script (build_release.sh) & exploratory measurement scripts
@@ -111,19 +117,28 @@ To enforce this locally, install the repository-managed git hooks:
 make hooks
 ```
 
-The pre-commit hook first blocks proof-surface host Lean or generated artifact edits without
+The pre-commit hook first blocks proof-surface host Lean or non-PDF generated artifact edits without
 accompanying LexLean source changes, then runs `make check-ci` on a clean snapshot of the
 **staged tree**. This includes tooling tests, Lean builds, research audits and kernel replay,
-the bridge, both LexLean projects, lockfile reproducibility, and PDF packaging. Unstaged fixes
-cannot hide a broken staged source. The pre-push hook checks the actual outgoing trees too.
+the bridge, both LexLean projects, lockfile reproducibility, and PDF packaging. It then copies
+and stages the freshly rendered Core, Paper, and Observations PDFs, their TeX mirrors, and
+`pdf-manifest.json` into the same commit. This happens for tooling commits too. Unstaged
+source edits are preserved; unstaged edits to generated files block the commit rather than
+being overwritten. Unstaged fixes cannot hide a broken staged source.
+The pre-push hook and CI check the actual outgoing sources against the PDF manifest and
+verified TeX, and check every PDF mirror's checksum. A commit made without hooks that leaves
+stale PDFs is rejected. Source fingerprints exclude only these generated outputs, avoiding
+a circular dependency between the PDFs and their commit.
 Both CI workflows use the same gate. Successful local results are cached under
 `.git/rule30-validation`, keyed by the exact tree, validator, and proof tools; failures are
-never cached. A matching commit/push reuses the successful result.
+never cached. The final tree containing the generated PDFs is certified, so a matching push
+reuses the successful result without a second proof build.
 `make check-research-coverage` provides a quick check that new host modules are included in
 the build, axiom audit, and kernel replay.
 Compiler maintenance is the narrow exception: a staged `.github/lexlean-revision` change may
 accompany lockfile edits that change only `compiler_semantics` fingerprints. Proof edits and
-other generated artifacts still require LexLean source changes. Deletions are checked too.
+other generated artifacts still require LexLean source changes. Automatically refreshed PDFs
+and their TeX mirrors are handled by the validation gate. Deletions are checked too.
 For exceptional maintenance-only commits, you can bypass the authoring policy once with:
 
 ```bash
@@ -154,8 +169,10 @@ the unbounded `Nat` bitwise extension. `make check-tooling` tests the authoring 
 packaging rules. `make lexlean` records the successful verification IDs in each project's
 ignored `.lexlean/latest-verified.json`; packaging uses those exact bundles. Offline
 `--package-only` builds can use a single committed `verified-latest` bundle when no local
-verification has been attempted. Rendering and packaging write to `dist/` and temporary
-directories, preserving tracked release PDFs and verified bundles.
+verification has been attempted. These historical bundles retain their original proof
+records; their old PDF copies have been retired. Rendering requires TeX and always compiles
+the selected verified TeX rather than falling back to an existing PDF. Standalone packaging
+writes to `dist/`; the pre-commit gate publishes those outputs to all tracked PDF mirrors.
 
 ### Automated Releases
 Pushing any version tag `v*` (e.g. `v0.1`) triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which builds `rule30-core-lean`, `Rule30PrizeKit/lean`, and `rule30-bridge`, compiles `Rule30-Paper.pdf` and `Rule30-Core.pdf`, packages the verified LexLean bundles, and attaches all PDFs and LexLean artifacts to the GitHub Release.

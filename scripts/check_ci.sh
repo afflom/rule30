@@ -16,3 +16,8 @@ make lexlean LEXLEAN="$LEXLEAN_COMPILER"
 cmp "$LOCK_DIR/core.lock" rule30-lexlean/lexlean.lock
 cmp "$LOCK_DIR/paper.lock" rule30-paper/lexlean.lock
 make release-artifacts
+if [[ "${RULE30_REFRESH_PDFS:-0}" == "1" ]]; then
+  python3 scripts/sync_pdfs.py --refresh
+else
+  python3 scripts/sync_pdfs.py
+fi

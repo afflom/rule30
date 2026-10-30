@@ -28,6 +28,8 @@ jobs:
         uses: ./.github/actions/setup-proof-tools
 
       - name: Run complete acceptance gate (proofs, LexLean, tooling, PDFs)
+        env:
+          RULE30_REFRESH_PDFS: "0"
         run: make check-ci LEXLEAN="$LEXLEAN_BIN"
 
       - name: Upload CI artifacts

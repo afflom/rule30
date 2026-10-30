@@ -73,8 +73,6 @@ compile_tex() {
   elif command -v docker >/dev/null 2>&1 && docker image inspect lexlean-tex:latest >/dev/null 2>&1; then
     docker run --rm --user "$(id -u):$(id -g)" -v "${workdir}:/work" -w /work lexlean-tex:latest pdflatex -halt-on-error -interaction=nonstopmode "$texfile" >/dev/null
     docker run --rm --user "$(id -u):$(id -g)" -v "${workdir}:/work" -w /work lexlean-tex:latest pdflatex -halt-on-error -interaction=nonstopmode "$texfile" >/dev/null
-  elif [[ -s "$workdir/${texfile%.tex}.pdf" ]]; then
-    echo "TeX unavailable; using the verified bundle's existing ${texfile%.tex}.pdf" >&2
   else
     echo "TeX is required to render $workdir/$texfile" >&2
     exit 1

@@ -41,7 +41,8 @@ class SnapshotHookTests(unittest.TestCase):
         self.git("config", "user.email", "validation@example.invalid")
         self.git("config", "core.hooksPath", "/dev/null")
         for path in (".githooks/pre-commit", ".githooks/pre-push",
-                     "scripts/check_authoring_policy.sh", "scripts/validate_git_tree.py"):
+                     "scripts/check_authoring_policy.sh", "scripts/validate_git_tree.py",
+                     "scripts/sync_pdfs.py"):
             target = self.repo / path
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(ROOT / path, target)
@@ -51,11 +52,19 @@ class SnapshotHookTests(unittest.TestCase):
         self.write("rule30-paper/src/Observations.lex.tex", "valid\n")
         self.write("Makefile", "check-ci:\n\tpython3 fixture_gate.py\n")
         self.write("fixture_gate.py", '''import os
+import subprocess
+import sys
 from pathlib import Path
 p = Path(os.environ["VALIDATION_COUNTER"])
 p.write_text(p.read_text() + "run\\n" if p.exists() else "run\\n")
 assert "ELAN_TOOLCHAIN" not in os.environ
 assert "FAIL" not in Path("rule30-paper/src/Observations.lex.tex").read_text()
+Path("dist").mkdir(exist_ok=True)
+for name in ("Core", "Paper", "Observations"):
+    Path("dist", name + ".pdf").write_bytes(b"%PDF-1.4 fresh " + name.encode())
+    Path("dist", name + ".tex").write_text("verified " + name)
+subprocess.run([sys.executable, "scripts/sync_pdfs.py"] +
+               (["--refresh"] if os.environ.get("RULE30_REFRESH_PDFS") == "1" else []), check=True)
 ''')
         self.git("add", ".")
         self.git("commit", "-qm", "baseline")
@@ -152,6 +161,62 @@ assert "FAIL" not in Path("rule30-paper/src/Observations.lex.tex").read_text()
         self.assertEqual(self.push_hook("0" * 40).returncode, 0)
         self.assertEqual(self.runs(), 1)
 
+    def test_commit_includes_fresh_pdfs_from_one_staged_build(self):
+        self.stage("new proof\n")
+        self.write("rule30-paper/src/Observations.lex.tex", "unstaged work\n")
+        self.git("commit", "-qm", "with fresh PDFs")
+        for path in ("Rule30-Core.pdf", "Rule30-Paper.pdf", "Rule30-Observations.pdf",
+                     "rule30-paper/pdf/Observations.pdf", "pdf-manifest.json"):
+            self.assertTrue(self.git("cat-file", "-e", "HEAD:" + path, check=False).returncode == 0)
+        self.assertEqual(self.git("show", "HEAD:rule30-paper/src/Observations.lex.tex").stdout,
+                         "new proof\n")
+        self.assertEqual((self.repo / "rule30-paper/src/Observations.lex.tex").read_text(),
+                         "unstaged work\n")
+        self.assertEqual(self.runs(), 1)
+        self.assertEqual(self.push_hook(self.git("rev-parse", "HEAD").stdout.strip()).returncode, 0)
+        self.assertEqual(self.runs(), 1)
+
+    def test_tooling_only_commit_also_publishes_current_pdfs(self):
+        self.write("README.md", "tooling documentation\n")
+        self.git("add", "README.md")
+        self.git("commit", "-qm", "documentation and PDFs")
+        self.assertIn("fresh Observations", self.git("show", "HEAD:Rule30-Observations.pdf").stdout)
+        self.assertEqual(self.runs(), 1)
+
+    def test_unstaged_pdf_is_preserved_and_blocks_overwrite(self):
+        self.stage("valid source\n")
+        self.write("Rule30-Paper.pdf", "unsaved PDF edit\n")
+        result = self.validate(False)
+        self.assertIn("Unstaged generated artifact", result.stderr)
+        self.assertEqual((self.repo / "Rule30-Paper.pdf").read_text(), "unsaved PDF edit\n")
+        self.assertEqual(self.runs(), 0)
+
+    def test_unchecked_pdf_edit_blocks_push(self):
+        self.stage("valid source\n")
+        self.git("commit", "-qm", "checked")
+        self.write("Rule30-Paper.pdf", "%PDF-1.4 stale\n")
+        self.git("add", "Rule30-Paper.pdf")
+        self.git("-c", "core.hooksPath=/dev/null", "commit", "-qm", "unchecked PDF")
+        result = self.push_hook(self.git("rev-parse", "HEAD").stdout.strip())
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Stale or modified generated artifact", result.stderr)
+
+    def test_unchecked_source_edit_without_pdf_refresh_blocks_push(self):
+        self.stage("valid source\n")
+        self.git("commit", "-qm", "checked")
+        self.stage("newer source\n")
+        self.git("-c", "core.hooksPath=/dev/null", "commit", "-qm", "unchecked source")
+        result = self.push_hook(self.git("rev-parse", "HEAD").stdout.strip())
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("different sources", result.stderr)
+
+    def test_staged_pdf_edits_are_replaced_by_verified_outputs(self):
+        self.stage("valid source\n")
+        self.write("Rule30-Paper.pdf", "%PDF-1.4 stale\n")
+        self.git("add", "Rule30-Paper.pdf")
+        self.git("commit", "-qm", "refresh")
+        self.assertIn("fresh Paper", self.git("show", "HEAD:Rule30-Paper.pdf").stdout)
+
     def push_hook(self, oid):
         return subprocess.run(["bash", ".githooks/pre-push"], cwd=self.repo, env=self.env,
                               input=f"refs/heads/main {oid} refs/heads/main {'0' * 40}\n",
@@ -164,6 +229,7 @@ class CompleteGateTests(unittest.TestCase):
             repo = Path(directory)
             (repo / "scripts").mkdir()
             shutil.copy(ROOT / "scripts/check_ci.sh", repo / "scripts")
+            shutil.copy(ROOT / "scripts/sync_pdfs.py", repo / "scripts")
             for project in ("rule30-lexlean", "rule30-paper"):
                 (repo / project).mkdir()
                 (repo / project / "lexlean.lock").write_text("original\n")
@@ -175,10 +241,16 @@ class CompleteGateTests(unittest.TestCase):
                     recipe += "\t@exit 1\n"
                 if stage == "lexlean" and drift:
                     recipe += f"\t@echo drift >> {drift}/lexlean.lock\n"
+                if stage == "release-artifacts":
+                    recipe += "\t@mkdir -p dist\n"
+                    for name in ("Core", "Paper", "Observations"):
+                        recipe += f"\t@echo '%PDF-1.4 rendered' > dist/{name}.pdf\n"
+                        recipe += f"\t@echo verified > dist/{name}.tex\n"
                 recipes.append(recipe)
             (repo / "Makefile").write_text("\n".join(recipes))
             result = subprocess.run(["bash", "scripts/check_ci.sh", "compiler"],
-                                    cwd=repo, capture_output=True, text=True)
+                                    cwd=repo, capture_output=True, text=True,
+                                    env=dict(os.environ, RULE30_REFRESH_PDFS="1", RULE30_SOURCE_DIGEST="fixture"))
             return result, (repo / "stages").read_text().splitlines()
 
     def test_gate_runs_every_ci_stage(self):

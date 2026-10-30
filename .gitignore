@@ -35,3 +35,5 @@ __pycache__/
 # Large LexLean source-map and coverage dumps inside verified-latest
 **/verified-latest/*/coverage/
 **/verified-latest/*/maps/
+# Historical proof bundles keep their records; current PDFs live at the documented mirrors.
+**/verified-latest/**/*.pdf

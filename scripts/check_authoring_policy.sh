@@ -36,6 +36,17 @@ for p in "${staged[@]}"; do
       ;;
   esac
 
+  # The acceptance gate regenerates and stages these derivatives on every commit.
+  # Historical bundle PDFs are retired; their deletion needs no proof-text edit.
+  case "$p" in
+    Rule30-Core.pdf|Rule30-Paper.pdf|Rule30-Observations.pdf|rule30-lexlean/Core.pdf|rule30-paper/Paper.pdf|rule30-paper/Observations.pdf|rule30-lexlean/pdf/Core.pdf|rule30-lexlean/pdf/Core.tex|rule30-paper/pdf/Paper.pdf|rule30-paper/pdf/Paper.tex|rule30-paper/pdf/Observations.pdf|rule30-paper/pdf/Observations.tex)
+      continue ;;
+  esac
+  case "$p" in
+    rule30-lexlean/verified-latest/*.pdf|rule30-paper/verified-latest/*.pdf)
+      if ! git cat-file -e ":$p" 2>/dev/null; then continue; fi ;;
+  esac
+
   case "$p" in
     rule30-core-lean/Rule30UOR/*.lean|rule30-core-lean/Rule30UOR/**/*.lean|rule30-bridge/*.lean|rule30-bridge/**/*.lean)
       has_host_proof_edit=1

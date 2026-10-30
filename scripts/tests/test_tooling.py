@@ -80,8 +80,16 @@ class HookTests(unittest.TestCase):
         self.write("rule30-lexlean/src/Core.lex.tex", "unstaged\n")
         self.hook(False)
 
-    def test_generated_requires_source(self):
+    def test_pdf_derivatives_are_regenerated_by_validator(self):
         self.stage("Rule30-Core.pdf")
+        self.hook(True)
+
+    def test_other_generated_artifacts_still_require_source(self):
+        self.stage("rule30-paper/verified-latest/example/attestation.json")
+        self.hook(False)
+
+    def test_unmanaged_pdf_directory_artifacts_still_require_source(self):
+        self.stage("rule30-paper/pdf/handwritten.tex")
         self.hook(False)
 
     def test_generated_with_source(self):
@@ -103,10 +111,10 @@ class HookTests(unittest.TestCase):
         self.stage("rule30-lexlean/lexlean.lock", 'language = "1.3"\n')
         self.hook(False)
 
-    def test_compiler_refresh_cannot_edit_pdfs(self):
+    def test_compiler_refresh_allows_automatically_regenerated_pdfs(self):
         self.compiler_refresh()
         self.stage("Rule30-Core.pdf")
-        self.hook(False)
+        self.hook(True)
 
     def test_compiler_refresh_cannot_edit_proofs(self):
         self.compiler_refresh()
@@ -210,6 +218,7 @@ class PackagingTests(unittest.TestCase):
         result = subprocess.run(["bash", str(self.repo / "scripts/build_release.sh"), *args],
                                 env=self.env, cwd=self.repo, capture_output=True, text=True)
         self.assertEqual(result.returncode == 0, success, result.stdout + result.stderr)
+        return result
 
     def test_release_bundle_and_clean_sources(self):
         before = {p: p.read_bytes() for p in self.repo.rglob("*") if p.is_file()}
@@ -252,6 +261,20 @@ class PackagingTests(unittest.TestCase):
         self.run_package(True, "--package-only")
         for extension in ("pdf", "lean", "tex"):
             self.assertTrue((self.repo / "dist" / ("Observations." + extension)).is_file())
+
+    def test_missing_tex_cannot_reuse_an_old_pdf(self):
+        (self.bin / "pdflatex").unlink()
+        # Retain shell/packaging tools, but hide system TeX and Docker.
+        for command in ("bash", "python3", "dirname", "basename", "mktemp", "mkdir",
+                        "cp", "rm", "find", "tar", "sha256sum"):
+            (self.bin / command).symlink_to(shutil.which(command))
+        self.env["PATH"] = str(self.bin)
+        for project, name, module in (("rule30-lexlean", "Core", "Rule30UOR"),
+                                      ("rule30-paper", "Paper", "Rule30Paper")):
+            path = self.repo / project / "verified-latest" / ("f" * 64) / "modules" / module
+            (path / (name + ".pdf")).write_bytes(b"%PDF-1.4 stale")
+        result = self.run_package(False, "--package-only")
+        self.assertIn("TeX is required", result.stderr)
 
 
 if __name__ == "__main__":

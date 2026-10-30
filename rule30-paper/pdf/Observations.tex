@@ -1,0 +1,680 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\begin{document}
+\begin{center}
+{\LARGE Masked observations}
+\end{center}
+\section{Masked observations}
+\label{ll:observations:masked-observations}
+\begin{theorem}
+\label{ll:observations:white-count-zero}
+For every natural number \(t\), \(\operatorname{whitecount}(t, 0) = 0\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{whitecountzero}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:white-count-black-step}
+For every natural number \(t\) and natural number \(n\), if \(\operatorname{center}(t) = \operatorname{true}\), then \(\operatorname{whitecount}(t, n + 1) = \operatorname{whitecount}(t + 1, n)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{whitecountblackstep}(t, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:white-count-white-step}
+For every natural number \(t\) and natural number \(n\), if \(\operatorname{center}(t) = \operatorname{false}\), then \(\operatorname{whitecount}(t, n + 1) = \operatorname{whitecount}(t + 1, n) + 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{whitecountwhitestep}(t, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:prefix-agreement-iff-white-trace}
+For every natural number \(t1\) and natural number \(t2\) and natural number \(n\), if \(\operatorname{centerwindowagree}(t1, t2, n)\), then \(\operatorname{leftprefixagree}(t1, t2, n)\) if and only if \(\operatorname{whitetraceagree}(t1, t2, n)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{prefixagreementiffwhitetrace}(t1, t2, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:compressed-prefix-repeat}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then there exists a natural number \(a\) such that there exists a natural number \(b\) such that \(a < b\) and \(b \le \operatorname{twopow}(\operatorname{whitecount}(t, n)) \land \operatorname{leftprefixagree}(t + a \cdot P, t + b \cdot P, n)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{compressedprefixrepeat}(T, P, t, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:separated-prefix-bound}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\) and natural number \(M\), if \(0 < P\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{prefixseparated}(t, P, n, M)\), then \(M \le \operatorname{twopow}(\operatorname{whitecount}(t, n))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{separatedprefixbound}(T, P, t, n, M)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:edge-information-bound}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(n < t + \operatorname{twopow}(\operatorname{whitecount}(t, n)) \cdot P\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{edgeinformationbound}(T, P, t, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:information-bound-audit}
+For every natural number \(n\) and natural number \(t\) and natural number \(w\) and natural number \(P\), if \(n < (w + 1) \cdot P\), then \(n < t + \operatorname{twopow}(w) \cdot P\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{informationboundaudit}(n, t, w, P)\).
+\end{proof}
+\section{Central collision recurrence}
+\label{ll:observations:central-collisions}
+\begin{theorem}
+\label{ll:observations:unit-defect-forces-near-collision}
+For every natural number \(Q\) and natural number \(t\) and natural number \(r\), if \(\operatorname{leftadjacentdefect}(Q, t) = \operatorname{true}\), then if \(\operatorname{center}(t + r) = \operatorname{true}\), then if \(\operatorname{center}(t + r + Q) = \operatorname{true}\), then \(\operatorname{nearcollision}(Q, t, r + 1, 2 \cdot (r + 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{unitdefectforcesnearcollision}(Q, t, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-unit-defect-forces-near-collision}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{leftadjacentdefect}(m \cdot P, t) = \operatorname{true}\), then \(\operatorname{nearcollision}(m \cdot P, t, P, 2 \cdot P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicunitdefectforcesnearcollision}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-central-collision-window}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le N\), then there exists a natural number \(t\) such that \(N \le t\) and \(t + 1 \le 2 \cdot N + m \cdot P + P \land \operatorname{centralcollision}(m \cdot P, t, 2 \cdot P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodiccentralcollisionwindow}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-central-collisions}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then there exists a natural number \(t\) such that \(N \le t\) and \(\operatorname{centralcollision}(m \cdot P, t, 2 \cdot P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodiccentralcollisions}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-recurrent-central-column}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{recurrentcentralcollision}(m \cdot P, 2 \cdot P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicrecurrentcentralcolumn}(T, P, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:black-window-forces-left-collision}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(\operatorname{centerwindowagree}(b, b + Q, r + 1)\), then if \(\operatorname{center}(b) = \operatorname{true}\), then if \(\operatorname{leftadjacentdefect}(Q, b + r) = \operatorname{true}\), then there exists a natural number \(s\) such that \(2 \cdot s \le r + 1\) and \(s \le r \land \operatorname{leftcollision}(Q, b + s, r + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{blackwindowforcesleftcollision}(Q, b, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-left-collision-window}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le N\), then there exists a natural number \(t\) such that \(N \le t\) and \(t + 1 \le 2 \cdot N + m \cdot P + 2 \cdot P \land \operatorname{leftcollision}(m \cdot P, t, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicleftcollisionwindow}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-left-collisions}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then there exists a natural number \(t\) such that \(N \le t\) and \(\operatorname{leftcollision}(m \cdot P, t, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicleftcollisions}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-recurrent-left-column}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{recurrentleftcollision}(m \cdot P, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicrecurrentleftcolumn}(T, P, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:collision-code-nonzero}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{collisioncode}(Q, t, k) \ne 0\) if and only if \(\operatorname{collisionbit}(Q, t, k) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{collisioncodenonzero}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:collision-code-bound}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{collisioncode}(Q, t, k) \le 6\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{collisioncodebound}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:collision-code-colours}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \(\operatorname{collisioncode}(Q, t, k) = 1 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 1 \land \operatorname{leftcolour}(Q, t, k - 1) = 2\) and \((\operatorname{collisioncode}(Q, t, k) = 2 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 2 \land \operatorname{leftcolour}(Q, t, k - 1) = 1) \land (\operatorname{collisioncode}(Q, t, k) = 3 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 1 \land \operatorname{leftcolour}(Q, t, k - 1) = 3) \land (\operatorname{collisioncode}(Q, t, k) = 4 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 3 \land \operatorname{leftcolour}(Q, t, k - 1) = 1) \land (\operatorname{collisioncode}(Q, t, k) = 5 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 2 \land \operatorname{leftcolour}(Q, t, k - 1) = 3) \land (\operatorname{collisioncode}(Q, t, k) = 6 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 3 \land \operatorname{leftcolour}(Q, t, k - 1) = 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{collisioncodecolours}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:advancing-collision-codes}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{advancingatdepth}(Q, t, k)\) if and only if \(\operatorname{collisioncode}(Q, t, k) = 3\) or \(\operatorname{collisioncode}(Q, t, k) = 5\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{advancingcollisioncodes}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:collision-transmits-left}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{collisioncode}(Q, t, k) \ne 0\), then \(\operatorname{leftdefect}(Q, t + 1, k) = \operatorname{leftdefect}(Q, t, k + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{collisiontransmitsleft}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:collision-gates-agree}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{collisioncode}(Q, t, k) \ne 0\), then \(\operatorname{leftgatedifference}(Q, t, k) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{collisiongatesagree}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:collision-right-transport-table}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(2 \le k\), then \(\operatorname{collisioncode}(Q, t, k) = 1 \to \operatorname{leftdefect}(Q, t + 1, k - 1) = \operatorname{leftcell}(t, k - 2)\) and \((\operatorname{collisioncode}(Q, t, k) = 2 \to \operatorname{leftdefect}(Q, t + 1, k - 1) = \operatorname{leftcell}(t + Q, k - 2)) \land (\operatorname{collisioncode}(Q, t, k) = 3 \to \operatorname{leftdefect}(Q, t + 1, k - 1) = \operatorname{true}) \land (\operatorname{collisioncode}(Q, t, k) = 4 \to \operatorname{leftdefect}(Q, t + 1, k - 1) = \operatorname{not}(\operatorname{leftcell}(t + Q, k - 2))) \land (\operatorname{collisioncode}(Q, t, k) = 5 \to \operatorname{leftdefect}(Q, t + 1, k - 1) = \operatorname{true}) \land (\operatorname{collisioncode}(Q, t, k) = 6 \to \operatorname{leftdefect}(Q, t + 1, k - 1) = \operatorname{not}(\operatorname{leftcell}(t, k - 2)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{collisionrighttransporttable}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:advancing-right-colour-table}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \(\operatorname{collisioncode}(Q, t, k) = 3 \to \operatorname{leftcolour}(Q, t + 1, k - 1) = 2\) and if \(\operatorname{collisioncode}(Q, t, k) = 5\), then \(\operatorname{leftcolour}(Q, t + 1, k - 1) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{advancingrightcolourtable}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:gate-difference-iff-flip}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftdefect}(Q, t + 1, k) = \operatorname{not}(\operatorname{leftdefect}(Q, t, k + 1))\) if and only if \(\operatorname{leftgatedifference}(Q, t, k) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{gatedifferenceiffflip}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:incoming-defect-erased-iff}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{leftdefect}(Q, t, k + 1) = \operatorname{true}\), then \(\operatorname{leftdefect}(Q, t + 1, k) = \operatorname{false}\) if and only if \(\operatorname{leftgatedifference}(Q, t, k) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{incomingdefecterasediff}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:erasure-has-no-collision}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{leftdefect}(Q, t, k + 1) = \operatorname{true}\), then if \(\operatorname{leftdefect}(Q, t + 1, k) = \operatorname{false}\), then \(\operatorname{collisioncode}(Q, t, k) = 0\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{erasurehasnocollision}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-left-colours}
+For every natural number \(Q\) and natural number \(k\), if \(0 < k\), then \(\operatorname{leftcolour}(Q, 0, k) = 0\) or \(\operatorname{leftcolour}(Q, 0, k) = 2\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedleftcolours}(Q, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-left-collision-zero}
+For every natural number \(Q\) and natural number \(k\), if \(2 \le k\), then \(\operatorname{collisioncode}(Q, 0, k) = 0\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedleftcollisionzero}(Q, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-advancing-collision-birth}
+\(\operatorname{collisioncode}(1, 1, 2) = 5\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedadvancingcollisionbirth}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-gate-erasure}
+\(\operatorname{leftdefect}(3, 0, 3) = \operatorname{true}\) and \(\operatorname{leftdefect}(3, 1, 2) = \operatorname{false} \land \operatorname{leftgatedifference}(3, 0, 2) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedgateerasure}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-defect-black-cone}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{leftdefect}(Q, t, k) = \operatorname{true}\), then if \(\operatorname{center}(t) = \operatorname{true}\), then if \(\operatorname{center}(t + Q) = \operatorname{true}\), then \(\operatorname{advancingleftcone}(Q, t, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftdefectblackcone}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:black-window-forces-advancing-collision}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(\operatorname{centerwindowagree}(b, b + Q, r + 1)\), then if \(\operatorname{center}(b) = \operatorname{true}\), then if \(\operatorname{leftadjacentdefect}(Q, b + r) = \operatorname{true}\), then there exists a natural number \(s\) such that \(2 \cdot s \le r + 1\) and \(s \le r \land \operatorname{advancingleftcollision}(Q, b + s, r + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{blackwindowforcesadvancingcollision}(Q, b, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-advancing-left-collision-window}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le N\), then there exists a natural number \(t\) such that \(N \le t\) and \(t + 1 \le 2 \cdot N + m \cdot P + 2 \cdot P \land \operatorname{advancingleftcollision}(m \cdot P, t, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicadvancingleftcollisionwindow}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-recurrent-advancing-left-column}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{recurrentadvancingleftcollision}(m \cdot P, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicrecurrentadvancingleftcolumn}(T, P, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-defect-false-colours}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftdefect}(Q, t, k) = \operatorname{false}\) if and only if \(\operatorname{leftcolour}(Q, t, k) = 0\) or \(\operatorname{leftcolour}(Q, t, k) = 3\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftdefectfalsecolours}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-defect-true-colours}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftdefect}(Q, t, k) = \operatorname{true}\) if and only if \(\operatorname{leftcolour}(Q, t, k) = 1\) or \(\operatorname{leftcolour}(Q, t, k) = 2\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftdefecttruecolours}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-colours-outside-seed-cone}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(t < k\), then \(\operatorname{leftcolour}(Q, t, k) = 0\) or \(\operatorname{leftcolour}(Q, t, k) = 2\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftcoloursoutsideseedcone}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:collision-code-support}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{collisioncode}(Q, t, k) \ne 0\), then \(k \le t + 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{collisioncodesupport}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:gate-code-nonzero}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{gatecode}(Q, t, k) \ne 0\) if and only if \(\operatorname{leftgatedifference}(Q, t, k) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{gatecodenonzero}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:gate-code-bound}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{gatecode}(Q, t, k) \le 6\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{gatecodebound}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:gate-code-colours}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \(\operatorname{gatecode}(Q, t, k) = 1 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 1 \land \operatorname{leftcolour}(Q, t, k - 1) = 0\) and \((\operatorname{gatecode}(Q, t, k) = 2 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 0 \land \operatorname{leftcolour}(Q, t, k - 1) = 1) \land (\operatorname{gatecode}(Q, t, k) = 3 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 1 \land \operatorname{leftcolour}(Q, t, k - 1) = 1) \land (\operatorname{gatecode}(Q, t, k) = 4 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 2 \land \operatorname{leftcolour}(Q, t, k - 1) = 0) \land (\operatorname{gatecode}(Q, t, k) = 5 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 0 \land \operatorname{leftcolour}(Q, t, k - 1) = 2) \land (\operatorname{gatecode}(Q, t, k) = 6 \leftrightarrow \operatorname{leftcolour}(Q, t, k) = 2 \land \operatorname{leftcolour}(Q, t, k - 1) = 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{gatecodecolours}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:erasure-event-of-step}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{leftdefect}(Q, t, k + 1) = \operatorname{true}\), then if \(\operatorname{leftdefect}(Q, t + 1, k) = \operatorname{false}\), then \(\operatorname{erasureevent}(Q, t, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{erasureeventofstep}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:erasure-black-phase-iff}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{erasureevent}(Q, t, k)\), then \(\operatorname{leftcolour}(Q, t + 1, k) = 3\) if and only if \(\operatorname{gatecode}(Q, t, k) \le 3\) and \(\operatorname{leftcolour}(Q, t, k + 1) = 2\) or \(4 \le \operatorname{gatecode}(Q, t, k)\) and \(\operatorname{leftcolour}(Q, t, k + 1) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{erasureblackphaseiff}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:erasure-outside-seed-cone-white}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(t + 1 < k\), then if \(\operatorname{erasureevent}(Q, t, k)\), then \(\operatorname{leftcolour}(Q, t + 1, k) = 0\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{erasureoutsideseedconewhite}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:advancing-source-first-erasure}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(2 \le k\), then if \(\operatorname{advancingatdepth}(Q, t, k)\), then if \(\operatorname{leftdefect}(Q, t + k, 0) = \operatorname{false}\), then there exists a natural number \(j\) such that \(\operatorname{firstpatherasure}(Q, t, k, j)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{advancingsourcefirsterasure}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-erasure-window}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le N\), then there exists a natural number \(u\) such that there exists a natural number \(d\) such that \(N \le u\) and \(u + 1 \le 2 \cdot N + m \cdot P + 3 \cdot P \land d + 2 \le P \land \operatorname{erasureevent}(m \cdot P, u, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicerasurewindow}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-recurrent-source-erasure}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{recurrentsourceerasure}(m \cdot P, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicrecurrentsourceerasure}(T, P, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-period-iff-no-recurrent-central-collision}
+\(\operatorname{noperiod}\) if and only if \(\operatorname{norecurrentcentralcollision}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{noperiodiffnorecurrentcentralcollision}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-row-center-period-iff-no-recurrent-central-collision}
+\(\operatorname{norowcenterperiod}\) if and only if \(\operatorname{norecurrentcentralcollision}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{norowcenterperiodiffnorecurrentcentralcollision}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem-one-iff-no-recurrent-central-collision}
+\(\operatorname{problemone}\) if and only if \(\operatorname{norecurrentcentralcollision}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{problemoneiffnorecurrentcentralcollision}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-period-of-no-recurrent-central-collision}
+If \(\operatorname{norecurrentcentralcollision}\), then \(\operatorname{noperiod}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{noperiodofnorecurrentcentralcollision}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:not-center-periodic-of-no-recurrent-central-collision}
+For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(\operatorname{norecurrentcentralcollision}\), then not \(\operatorname{centerperiodic}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{notcenterperiodicofnorecurrentcentralcollision}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:not-eventually-periodic-of-no-recurrent-central-collision}
+If \(\operatorname{norecurrentcentralcollision}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{noteventuallyperiodicofnorecurrentcentralcollision}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pair-phase-step}
+For every natural number \(b\) and natural number \(d\) and natural number \(i\), \(\operatorname{pairphase}(\operatorname{wittphi}(b), \operatorname{wittxor}(\operatorname{wittphi}(d), \operatorname{wittshl}(\operatorname{crosscarry}(b, d), 1)), i) = \operatorname{bitvalue}(\operatorname{rowbit}(\operatorname{wittphi}(\operatorname{wittxor}(b, d)), i)) - \operatorname{bitvalue}(\operatorname{rowbit}(\operatorname{wittphi}(b), i))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pairphasestep}(b, d, i)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:aligned-phase-left}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{alignedphase}(Q, t, t + k + Q) = \operatorname{leftphase}(Q, t, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{alignedphaseleft}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phase-zero-iff}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftphase}(Q, t, k) = 0\) if and only if \(\operatorname{leftdefect}(Q, t, k) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{phasezeroiff}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phase-unit-iff}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftphase}(Q, t, k) = -1\) or \(\operatorname{leftphase}(Q, t, k) = 1\) if and only if \(\operatorname{leftdefect}(Q, t, k) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{phaseunitiff}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-phase-balance}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftphase}(Q, t + 1, k) = \operatorname{leftphase}(Q, t, k + 1) + \operatorname{leftphaseflux}(Q, t, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftphasebalance}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:collision-phase-flip}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{collisioncode}(Q, t, k) \ne 0\), then \(\operatorname{leftphaseflux}(Q, t, k) = -2 \cdot \operatorname{leftphase}(Q, t, k + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{collisionphaseflip}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:advancing-phase-flip}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then if \(\operatorname{advancingatdepth}(Q, t, k)\), then \(\operatorname{leftphase}(Q, t + 1, k - 1) = -\operatorname{leftphase}(Q, t, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{advancingphaseflip}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:gate-phase-cases}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{gatecode}(Q, t, k) = 1 \to \operatorname{leftgatephase}(Q, t, k) = -1\) and \((\operatorname{gatecode}(Q, t, k) = 2 \to \operatorname{leftgatephase}(Q, t, k) = -1) \land (\operatorname{gatecode}(Q, t, k) = 3 \to \operatorname{leftgatephase}(Q, t, k) = -1) \land (\operatorname{gatecode}(Q, t, k) = 4 \to \operatorname{leftgatephase}(Q, t, k) = 1) \land (\operatorname{gatecode}(Q, t, k) = 5 \to \operatorname{leftgatephase}(Q, t, k) = 1) \land (\operatorname{gatecode}(Q, t, k) = 6 \to \operatorname{leftgatephase}(Q, t, k) = 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{gatephasecases}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:erasure-phase-balance}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{erasureevent}(Q, t, k)\), then \(\operatorname{leftphase}(Q, t + 1, k) = 0\) and \(\operatorname{leftphaseflux}(Q, t, k) = -\operatorname{leftphase}(Q, t, k + 1) \land (\operatorname{leftphase}(Q, t, k + 1) = -1 \lor \operatorname{leftphase}(Q, t, k + 1) = 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{erasurephasebalance}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:erasure-reset-product}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{erasureevent}(Q, t, k)\), then \(\operatorname{leftcolour}(Q, t + 1, k) = 3 \leftrightarrow \operatorname{leftgatephase}(Q, t, k) \cdot \operatorname{leftphase}(Q, t, k + 1) = -1\) and \(\operatorname{leftcolour}(Q, t + 1, k) = 0 \leftrightarrow \operatorname{leftgatephase}(Q, t, k) \cdot \operatorname{leftphase}(Q, t, k + 1) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{erasureresetproduct}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:path-phase-balance}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(n\), \(\operatorname{pathphase}(Q, t, k, n) = \operatorname{leftphase}(Q, t, k) + \operatorname{pathflux}(Q, t, k, n)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pathphasebalance}(Q, t, k, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-left-phase}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(\operatorname{leftphase}(Q, t, t + Q) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedleftphase}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-center-phase-balance}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(\operatorname{leftphase}(Q, t + (t + Q), 0) = 1 + \operatorname{pathflux}(Q, t, t + Q, t + Q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedcenterphasebalance}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-seed-flux}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le N\), then \(\operatorname{pathflux}(m \cdot P, N, N + m \cdot P, N + m \cdot P) = -1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicseedflux}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-phase-cancellation}
+\(\operatorname{leftphase}(3, 0, 3) = 1\) and \(\operatorname{leftphase}(3, 1, 2) = 0 \land \operatorname{leftphaseflux}(3, 0, 2) = -1 \land \operatorname{leftgatephase}(3, 0, 2) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedphasecancellation}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rightmost-left-profile}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(s\), if \(\operatorname{rightmostleft}(Q, t, k)\), then if \(s < k\), then if \(\operatorname{centercleanthrough}(Q, t, s)\), then \(\operatorname{rightmostleft}(Q, t + s, k - s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightmostleftprofile}(Q, t, k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:leading-first-erasure}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{leadingadvance}(Q, t, k)\), then if \(\operatorname{centercleanthrough}(Q, t, k)\), then \(\operatorname{firstpatherasure}(Q, t, k, k - 2)\) and \(\operatorname{erasureevent}(Q, t + (k - 1), 0) \land (\operatorname{gatecode}(Q, t + (k - 1), 0) = 2 \lor \operatorname{gatecode}(Q, t + (k - 1), 0) = 5) \land \operatorname{center}(t + (k - 1)) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leadingfirsterasure}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:black-window-forces-leading-source}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(\operatorname{centerwindowagree}(b, b + Q, r + 1)\), then if \(\operatorname{center}(b) = \operatorname{true}\), then if \(\operatorname{leftadjacentdefect}(Q, b + r) = \operatorname{true}\), then there exists a natural number \(s\) such that there exists a natural number \(k\) such that \(2 \cdot s \le r + 1\) and \(s \le r \land k + s \le r + 1 \land \operatorname{leadingadvance}(Q, b + s, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{blackwindowforcesleadingsource}(Q, b, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-leading-source-window}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le N\), then there exists a natural number \(t\) such that there exists a natural number \(k\) such that \(N \le t\) and \(t + 1 \le 2 \cdot N + m \cdot P + 2 \cdot P \land k \le P \land \operatorname{leadingadvance}(m \cdot P, t, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicleadingsourcewindow}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-leading-erasure-window}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le N\), then there exists a natural number \(t\) such that there exists a natural number \(k\) such that \(N \le t\) and \(t + 1 \le 2 \cdot N + m \cdot P + 2 \cdot P \land k \le P \land \operatorname{leadingadvance}(m \cdot P, t, k) \land \operatorname{firstpatherasure}(m \cdot P, t, k, k - 2) \land (\operatorname{gatecode}(m \cdot P, t + (k - 1), 0) = 2 \lor \operatorname{gatecode}(m \cdot P, t + (k - 1), 0) = 5)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicleadingerasurewindow}(T, P, m, N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-recurrent-leading-erasure}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{recurrentleadingerasure}(m \cdot P, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicrecurrentleadingerasure}(T, P, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-phase-lag-add}
+For every natural number \(Q\) and natural number \(R\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftphase}(Q + R, t, k) = \operatorname{leftphase}(Q, t, k) + \operatorname{leftphase}(R, t + Q, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftphaselagadd}(Q, R, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:path-flux-lag-add}
+For every natural number \(Q\) and natural number \(R\) and natural number \(t\) and natural number \(k\) and natural number \(n\), \(\operatorname{pathflux}(Q + R, t, k, n) = \operatorname{pathflux}(Q, t, k, n) + \operatorname{pathflux}(R, t + Q, k, n)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pathfluxlagadd}(Q, R, t, k, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:leading-phase-reset}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{leadingadvance}(Q, t, k)\), then if \(\operatorname{centercleanthrough}(Q, t, k)\), then \(\operatorname{leftcolour}(Q, t + k, 0) = 3 \leftrightarrow \operatorname{leftgatephase}(Q, t + (k - 1), 0) \cdot (\operatorname{leftphase}(Q, t, k) + \operatorname{pathflux}(Q, t, k, k - 1)) = -1\) and \(\operatorname{leftcolour}(Q, t + k, 0) = 0 \leftrightarrow \operatorname{leftgatephase}(Q, t + (k - 1), 0) \cdot (\operatorname{leftphase}(Q, t, k) + \operatorname{pathflux}(Q, t, k, k - 1)) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leadingphasereset}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-erasure-iff-gate}
+For every natural number \(Q\) and natural number \(t\), if \(\operatorname{leftdefect}(Q, t, 0) = \operatorname{false}\), then if \(\operatorname{leftdefect}(Q, t + 1, 0) = \operatorname{false}\), then \(\operatorname{erasureevent}(Q, t, 0)\) if and only if \(\operatorname{gatecode}(Q, t, 0) = 2\) or \(\operatorname{gatecode}(Q, t, 0) = 5\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centererasureiffgate}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:white-block-gate-convex}
+For every natural number \(Q\) and natural number \(b\) and natural number \(n\) and natural number \(i\) and natural number \(j\) and natural number \(k\), if \(\operatorname{commonwhiteblock}(Q, b, n)\), then if \(i \le j\), then if \(j \le k\), then if \(k \le n\), then if \(\operatorname{gatecode}(Q, b + i, 0) = 2\) or \(\operatorname{gatecode}(Q, b + i, 0) = 5\), then if \(\operatorname{gatecode}(Q, b + k, 0) = 2\) or \(\operatorname{gatecode}(Q, b + k, 0) = 5\), then \(\operatorname{gatecode}(Q, b + j, 0) = \operatorname{gatecode}(Q, b + i, 0)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{whiteblockgateconvex}(Q, b, n, i, j, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:white-block-erasure-convex}
+For every natural number \(Q\) and natural number \(b\) and natural number \(n\) and natural number \(i\) and natural number \(j\) and natural number \(k\), if \(\operatorname{commonwhiteblock}(Q, b, n)\), then if \(\operatorname{centercleanthrough}(Q, b, n + 1)\), then if \(i \le j\), then if \(j \le k\), then if \(k \le n\), then if \(\operatorname{erasureevent}(Q, b + i, 0)\), then if \(\operatorname{erasureevent}(Q, b + k, 0)\), then \(\operatorname{erasureevent}(Q, b + j, 0)\) and \(\operatorname{gatecode}(Q, b + j, 0) = \operatorname{gatecode}(Q, b + i, 0)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{whiteblockerasureconvex}(Q, b, n, i, j, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-leading-gate-five}
+\(\operatorname{leadingadvance}(4, 5, 2)\) and \(\operatorname{centercleanthrough}(4, 5, 2) \land \operatorname{gatecode}(4, 6, 0) = 5\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedleadinggatefive}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-leading-gate-two}
+\(\operatorname{leadingadvance}(7, 7, 4)\) and \(\operatorname{centercleanthrough}(7, 7, 4) \land \operatorname{gatecode}(7, 10, 0) = 2\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedleadinggatetwo}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-leading-black-reset}
+\(\operatorname{leadingadvance}(11, 4, 4)\) and \(\operatorname{centercleanthrough}(11, 4, 4) \land \operatorname{gatecode}(11, 7, 0) = 5 \land \operatorname{leftcolour}(11, 8, 0) = 3\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedleadingblackreset}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:transfer-recover}
+For every truth value \(incomingBit\) and truth value \(laterBit\) and integer \(incoming\) and integer \(gate\), \(\operatorname{recoverphase}(incomingBit, laterBit, \operatorname{transferphase}(incomingBit, laterBit, incoming, gate), gate) = incoming\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{transferrecover}(incomingBit, laterBit, incoming, gate)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:transfer-kernel}
+For every truth value \(incomingBit\) and truth value \(laterBit\) and integer \(incoming\) and integer \(gate\), \(\operatorname{transferphase}(incomingBit, laterBit, incoming, gate) = 0\) if and only if \(incoming = \operatorname{recoverphase}(incomingBit, laterBit, 0, gate)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{transferkernel}(incomingBit, laterBit, incoming, gate)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phase-transfer}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftphase}(Q, t + 1, k) = \operatorname{transferphase}(\operatorname{leftcell}(t, k + 1), \operatorname{latergate}(Q, t, k), \operatorname{leftphase}(Q, t, k + 1), \operatorname{leftgatephase}(Q, t, k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{phasetransfer}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phase-recover}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leftphase}(Q, t, k + 1) = \operatorname{recoverphase}(\operatorname{leftcell}(t, k + 1), \operatorname{latergate}(Q, t, k), \operatorname{leftphase}(Q, t + 1, k), \operatorname{leftgatephase}(Q, t, k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{phaserecover}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:erasure-recovery}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{erasureevent}(Q, t, k)\), then not \(\operatorname{leftgatephase}(Q, t, k) = 0\) and \(\operatorname{leftphase}(Q, t, k + 1) = \operatorname{recoverphase}(\operatorname{leftcell}(t, k + 1), \operatorname{latergate}(Q, t, k), 0, \operatorname{leftgatephase}(Q, t, k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{erasurerecovery}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-erasure-orientation}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(g = 2\) or \(g = 5\), then there exists a natural number \(t\) such that \(N \le t\) and \(\operatorname{erasureevent}(m \cdot P, t, 0) \land \operatorname{gatecode}(m \cdot P, t, 0) = g\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicerasureorientation}(T, P, m, N, g)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:leading-black-before-arrival}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{leadingadvance}(Q, t, k)\), then if \(\operatorname{centercleanthrough}(Q, t, k)\), then there exists a natural number \(s\) such that \(s + 1 < k\) and \(\operatorname{center}(t + s) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leadingblackbeforearrival}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:black-gap-forces-initial-leading}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(\operatorname{centerwindowagree}(b, b + Q, r + 1)\), then if \(\operatorname{center}(b) = \operatorname{true}\), then if \(\operatorname{whitecentergap}(b, r)\), then if \(\operatorname{leftadjacentdefect}(Q, b + r) = \operatorname{true}\), then there exists a natural number \(k\) such that \(k \le r + 1\) and \(\operatorname{leadingadvance}(Q, b, k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{blackgapforcesinitialleading}(Q, b, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:leading-depth-two-black}
+For every natural number \(Q\) and natural number \(t\), if \(\operatorname{leadingadvance}(Q, t, 2)\), then if \(\operatorname{centercleanthrough}(Q, t, 2)\), then \(\operatorname{center}(t) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leadingdepthtwoblack}(Q, t)\).
+\end{proof}
+\end{document}
