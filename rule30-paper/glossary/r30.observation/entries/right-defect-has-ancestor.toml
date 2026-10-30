@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "right-defect-has-ancestor"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (local Q) (app (const lexlean.std.nat::add) (local t) (nat 1)) (app (const lexlean.std.nat::add) (local j) (nat 1))) (const lexlean.std.bool::true)))) (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (local Q) (local t) (local j)) (const lexlean.std.bool::true)) (app (const lexlean.core::lor) (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (local Q) (local t) (app (const lexlean.std.nat::add) (local j) (nat 1))) (const lexlean.std.bool::true)) (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (local Q) (local t) (app (const lexlean.std.nat::add) (local j) (nat 2))) (const lexlean.std.bool::true))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.right_defect_has_ancestor"
+
+[[form]]
+id = "right-defect-has-ancestor"
+channel = "math"
+surface = "rightdefecthasancestor"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rightdefecthasancestor) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

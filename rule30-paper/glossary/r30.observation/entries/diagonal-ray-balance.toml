@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "diagonal-ray-balance"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit hp (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local d) (local p)) (local t)))) (app (const lexlean.core::eq) (app (const r30.observation::left-phase) (app (const lexlean.std.nat::add) (local Q) (local Q)) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::sub) (local t) (local d)) (local p))) (local p)) (app (const lexlean.std.int::add) (app (const r30.observation::diagonal-phase) (local Q) (local d) (local t)) (app (const r30.observation::diagonal-flux) (local Q) (local d) (local t) (local p))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.diagonal_ray_balance"
+
+[[form]]
+id = "diagonal-ray-balance"
+channel = "math"
+surface = "diagonalraybalance"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name diagonalraybalance) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

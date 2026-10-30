@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-coupled-import-at-arrival"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const r30.observation::leading-advance) (nat 14) (nat 5) (nat 3)) (app (const lexlean.core::land) (app (const r30.observation::center-clean-through) (nat 14) (nat 5) (nat 3)) (app (const lexlean.core::land) (app (const r30.observation::white-center-gap) (nat 5) (nat 2)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.scale::center) (nat 5)) (const lexlean.std.bool::true)) (app (const lexlean.core::land) (app (const r30.observation::right-front) (nat 14) (nat 6) (nat 2)) (app (const r30.observation::head-import-path) (nat 14) (nat 6) (nat 7)))))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.seed_coupled_import_at_arrival"
+
+[[form]]
+id = "seed-coupled-import-at-arrival"
+channel = "math"
+surface = "seedcoupledimportatarrival"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name seedcoupledimportatarrival)"

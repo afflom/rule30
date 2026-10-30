@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "diagonal-flux-lag-add"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit R (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::diagonal-flux) (app (const lexlean.std.nat::add) (local Q) (local R)) (local d) (local t) (local p)) (app (const lexlean.std.int::add) (app (const r30.observation::diagonal-flux) (local Q) (local d) (local t) (local p)) (app (const r30.observation::diagonal-flux) (local R) (local d) (app (const lexlean.std.nat::add) (local t) (local Q)) (local p)))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.diagonal_flux_lag_add"
+
+[[form]]
+id = "diagonal-flux-lag-add"
+channel = "math"
+surface = "diagonalfluxlagadd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name diagonalfluxlagadd) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

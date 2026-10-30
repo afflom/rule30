@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ray-bit-balance"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::bit-value) (app (const r30.observation::ray-bit) (local t) (local k) (local n))) (app (const lexlean.std.int::add) (app (const r30.observation::bit-value) (app (const r30.observation::ray-bit) (local t) (local k) (nat 0))) (app (const r30.observation::ray-flux) (local t) (local k) (local n)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.ray_bit_balance"
+
+[[form]]
+id = "ray-bit-balance"
+channel = "math"
+surface = "raybitbalance"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name raybitbalance) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

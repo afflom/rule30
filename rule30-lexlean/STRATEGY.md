@@ -608,6 +608,123 @@ a dyadic obstruction or exclude indefinitely repeated fresh coupled imports.
 Problem 1 remains unproved.
 
 
+
+### Ancestry of the coupled imports and the forced front rendezvous (2026-10-30)
+
+This batch addresses the first of the three remaining obligations: determine
+which ancestry transitions are forced and which terminal configurations the
+seed permits, before introducing any rank. Every statement below is exact and
+none assumes a periodic center, except the final corollary, which only
+specializes them to the existing periodic witness.
+
+**No defect appears from a clean neighbourhood.** `defect_has_ancestor` (and its
+right-half form `right_defect_has_ancestor`) proves that a defect at `(t+1,p)`
+has a defective neighbour in `{p-1,p,p+1}` at time `t`. `ancestry_gate_table`
+gives the complete one-step table. The next defect is the incoming left defect
+XOR the gate difference. The gate difference is zero when `p,p+1` are clean. With only
+`p` defective it equals the common white test at `p+1`, and with only `p+1`
+defective the common white test at `p`. When both are defective it equals the
+equality of the earlier colours there. `defect_ancestry` iterates this to a
+nearest-neighbour lineage `AncestryPath` of actual defects reaching the seed row.
+
+**Terminal configurations.** `ancestry_seed_terminal` proves every lineage ends
+at a time-zero defect, that is, at a cell where row `Q` differs from the single
+seed. Off the center this is a black cell of row `Q` with signed phase `+1`. At
+the center it is a white cell of row `Q` with phase `-1`. It always lies in
+`[-Q,Q]`. These are the only terminal configurations the seed permits.
+
+**Clean columns are one-way barriers for lineages.** `ancestry_barrier_right` and
+`ancestry_barrier_left` show that a lineage cannot cross a column that is clean
+throughout the window. Consequently, while the center is clean on `[T,t]`, every
+right-half defect descends only from right-half defects (`RightLineage`,
+`right_lineage_of_clean_center`), and every left-half defect only from left-half
+defects (`LeftLineage`, `left_lineage_of_clean_center`). `right_lineage_at_start`
+and `left_lineage_at_start` read the ancestor at time `T` within light-cone
+distance. When the window starts at time zero, `right_lineage_seed` and
+`left_lineage_seed` put the terminal at a black cell of the same half of row `Q`,
+with phase `+1`.
+
+**Forced motion of the leftmost right defect.** `RightFront Q t y` is the
+leftmost right-half defect. For a positive lag it always exists, within the later
+light cone, because of the later row's right edge (`exists_right_front`). Under a
+clean center it moves left by at most one column (`right_front_lower`). From
+`y >= 2` it descends exactly when the common colour at `y-1` is white
+(`right_front_descent`). Any leftward move is therefore a single step through a
+common white cell (`right_front_lockstep`). By contrast, the rightmost left
+defect advances deterministically by one column per step (`DefectFront`).
+
+**Rendezvous and the timing of the coupled import.** Before the rightmost left
+defect arrives next to the center, a right-head defect can only occur at a black
+center time (`leading_head_black_before_arrival`). This follows from the
+matching law at column 0, because the left defect at `-1` is still absent. In
+the white gap of a leading source of depth `k >= 3` the head is therefore clean.
+`coupled_import_born_at_arrival` then pins the import exactly:
+
+    start = b + (k - 2),
+
+one step before the first center erasure. The import is not an input available
+at an arbitrary earlier time. Its column-2 defect exists at the arrival step,
+with common white heads. `coupled_right_front_mirror_at` proves mirror
+domination throughout the gap. At time `b+s` the right front lies in `[2,k-s]`,
+never farther from the center than the left front at depth `k-s`. Once the two
+fronts are at mirror positions, `coupled_white_staircase_at` forces lockstep
+descent. Each stair requires a common white cell at column `k-s-1` at time
+`b+s`, and the import's white heads are the last stair.
+
+`periodic_coupled_import_ancestry` attaches all of this to the existing joint
+periodic witness. It retains: the birth time for `k >= 3`; the bound
+`2 <= y <= k-1` on the right front one step after the source; a right-half
+lineage of the import's column-2 defect on `[T,start]`; and a left-half lineage
+of the source on `[T,b]`. After the transient time `T` the two lineages are
+disjoint, because each is confined to its own half.
+
+`seed_coupled_import_at_arrival` kernel-checks that the white-gap hypotheses
+are jointly satisfiable in the actual seed, so the gap theorems are not vacuous.
+The instance has lag 14, a black source time 5, depth 3, and white centers at
+6 and 7. The right front is at the mirror position 2 at time 6, and the head
+import is born at time 6, one step before arrival. It is a finite certificate,
+not a premise.
+
+**What this does and does not settle.**
+
+1. *Ancestry of the import.* The import is now traced. Its birth time is forced.
+   On the gap its lineage stays in columns `>= 2`, and before that in the right
+   half back to `T`. Its time-`T` ancestor is a right-half defect within
+   light-cone distance. The import is not an independent input; it is a
+   descendant of the right-half defect field present at time `T`, propagated
+   only through the transitions of `ancestry_gate_table`. The left source likewise
+   descends only from the time-`T` left-half field.
+2. *Composable obstruction.* None is proved. Mirror domination composes along one
+   white gap, and the staircase is forced once mirror positions are reached.
+   Outside white gaps, the analogous domination `y <= k` of the right front by
+   the left front's depth is exactly the content of `right_shield_of_periodic`.
+   It is therefore not a new global constraint. The difference `k - y` counts
+   the remaining non-lockstep steps before the next arrival and returns to zero
+   there. Across a black reset, however, the right front may sit at column 1 (the head
+   may be defective at black centers). After an arrival the left front jumps to a
+   new depth fixed by the left profile, not by the right side. No quantity has
+   been shown to decrease across the reset and both erasure orientations
+   together.
+3. *Seed boundary.* The confined lineages meet the seed row only when the clean
+   window starts at time zero. A periodic premise does not provide that, because
+   `T` is arbitrary. For `T > 0` both lineages pass through the transient, where
+   they may cross the center. The seed therefore enters the present argument only
+   through the time-`T` profiles. The exact terminal classification above is the
+   input a backward argument would have to use. It does not by itself give a
+   contradiction.
+
+The separation result sharpens the form of the remaining step. After `T` the
+left defects are the difference of two left halves driven through the OR gate
+by the same center signal. The right defects are the corresponding difference
+of two right halves driven through the XOR input. The coupled cancellations
+require these two separately descended fields to have identical
+white-center-masked head schedules. They also require no left unit defect at
+black centers. This is the fixed-point form already recorded in `Rule30UOR.Fixed`.
+The new theorems show that no shared ancestry after `T` can explain the
+agreement. A global ingredient must still exclude that agreement for the seeded
+initial profiles. Problem 1 remains unproved.
+
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,
@@ -1927,3 +2044,34 @@ relation to Problem 1 stated and proved; measurements are never premises.
 - **Batch 49 (9.1027–9.1041, attestation `3cf8d0972d7cbe8a43baff85ade7391c2901c9056bdb5e01c49114000a0282b9`)**:
   - **Monotonicity of `twopow` & Unconditional Fundamental-Period (`P` Itself, `m = 1`) Flip Witnesses at Every Scale `k ≥ T + P` Without `DoublesAt` or `SettledBy` (`9.1027`–`9.1036`)**: Proves `a ≤ b → twopow a ≤ twopow b` (`twopow_mono`, 9.1027) and `n ≤ k → n < twopow k` (`lt_twopow_of_le`, 9.1028), upgrading the `2^k - m * P` cone-boundary refutations (`not_centerPeriodic_of_white_center_rhCenter_one_sub_twopow_ge`, 9.1029; `not_centerPeriodic_of_maskparity_zero_agree_sub_twopow_ge`, 9.1030) and unconditional flip-witness existence theorems (`exists_white_center_rhCenter_one_flip_sub_twopow_ge_of_periodic`, 9.1031; `exists_maskparity_zero_flip_sub_twopow_ge_of_periodic`, 9.1032; `exists_lhCenter_one_flip_sub_twopow_ge_of_periodic`, 9.1033) to hold for **every** scale `k ≥ T + m * P`. Setting `m = 1` eliminates the multiplier `m` completely, proving under `CenterPeriodic T P` (`0 < P`) **alone** (with no `m`, `t`, `S`, `z`, `DoublesAt`, or `SettledBy`!) that for **every** scale `k ≥ T + P`, the dyadic window `[twopow k - P, 2 * twopow k - P)` contains `s < twopow k` where `center ((twopow k - P) + s) = false ∧ rhCenter (((twopow k - P) + s) + P) 1 = !rhCenter ((twopow k - P) + s) 1` (`exists_white_center_rhCenter_one_flip_sub_twopow_P_of_periodic`, 9.1034), `maskparity (((twopow k - P) + s) + P) 0 = !maskparity ((twopow k - P) + s) 0` (`exists_maskparity_zero_flip_sub_twopow_P_of_periodic`, 9.1035), and `lhCenter (((twopow k - P) + s) + P) 1 = !lhCenter ((twopow k - P) + s) 1` (`exists_lhCenter_one_flip_sub_twopow_P_of_periodic`, 9.1036).
   - **Two-Zero-Diagonal Unconditional Flip Witnesses & Scale-Step `maskparity ⊕ leftresponse` Defect Flip Across Dyadic Doubling Zero Diagonals (`9.1037`–`9.1041`)**: Completes the unconditional `lhCenter · 1` flip witness at `z + twopow k` for `m * P = 2` (`exists_lhCenter_one_flip_at_zero_diag_step_two_of_periodic`, 9.1037) and proves unconditional white-center `rhCenter · 1` (`exists_white_center_rhCenter_one_flip_of_two_zero_diags_and_periodic`, 9.1038), `maskparity · 0` (`exists_maskparity_zero_flip_of_two_zero_diags_and_periodic`, 9.1039), and `lhCenter · 1` (`exists_lhCenter_one_flip_of_two_zero_diags_and_periodic`, 9.1040) flip witnesses within `twopow k ≤ S + 1` steps of `z + twopow k` whenever both `z` and `(z + m * P) - 2` are settled zero diagonals. Also proves through `split_paper` that across any dyadic doubling zero diagonal `z` (`DoublesAt (twopow k) z`, `d ≤ z`, `d + m * P = z + 1`), the combined `(maskparity ⊕ maskparity) ⊕ (leftresponse ⊕ leftresponse)` shift defect flips from scale `k` at `d + twopow k` to scale `k + 1` at `d + twopow (k + 1)` without `DoublesAt (m * P) z` or `z ≤ k` (`periodic_late_maskparity_xor_leftresponse_defect_flip_of_doubles`, 9.1041).
+
+### Moving diagonal to physical head, with complete ray flux
+
+The three settled diagonal histories are not fixed-column temporal histories.
+`WittDefect.diagonal_ray_balance` now records the exact coordinate conversion:
+a point on diagonal `d` at time `t` reaches column `-p` at
+`t + (t - d - p)`. The corresponding point at time `t + Q` reaches the
+same column `Q + Q` steps later, along a characteristic longer by `Q`.
+`rayFlux` sums the actual signed OR contributions along each single-history
+characteristic; `diagonalFlux` retains their difference without dropping
+interior toggles, resets, or the shifted starting geometry.
+
+The settled doubling input is a unit, reverses orientation in the next
+history, and vanishes in the outer comparison (`diagonal_phase_doubles`).
+The `z + 1` point at `t` and the `z + 3` reset successor at `t + 1` have
+the same physical head endpoint. Their phases are opposite and their full
+tail fluxes differ by twice the first phase (`diagonal_reset_phase`,
+`diagonal_reset_flux_jump`). This uses the seeded black diagonal `z + 2`;
+it is not a proposed opposite-sign transport at a center erasure.
+
+At a specified white arrival, `periodic_diagonal_white_head_balance`
+identifies this input plus flux with the physical right-head phase at lag
+`Q + Q`, with the actual next-center sign. If that head is supplied by a
+specified `HeadImportPath`, `periodic_diagonal_import_balance` identifies
+the same quantity with its column-2 birth and all intervening center signs.
+The arrival alignment, white-center condition, and import path remain
+explicit hypotheses. The new identities do not establish that a recurring
+left-source witness has an arrival of the required parity and settlement,
+nor do they bound its ray flux or exclude indefinite cancellation.
+Problem 1 remains open: a further seeded restriction on these joint
+transport histories is still required.

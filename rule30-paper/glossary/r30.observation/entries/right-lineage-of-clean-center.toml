@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "right-lineage-of-clean-center"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit T (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::le) (nat 1) (local j))) (explicit hT (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hd (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (local Q) (local t) (local j)) (const lexlean.std.bool::true))) (explicit hc (app (const r30.observation::center-clean-through) (local Q) (local T) (app (const lexlean.std.nat::sub) (local t) (local T))))) (app (const r30.observation::right-lineage) (local Q) (local t) (local j) (local T))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.right_lineage_of_clean_center"
+
+[[form]]
+id = "right-lineage-of-clean-center"
+channel = "math"
+surface = "rightlineageofcleancenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rightlineageofcleancenter) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

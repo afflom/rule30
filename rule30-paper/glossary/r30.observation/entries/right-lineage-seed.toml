@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "right-lineage-seed"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (pi ((explicit h (app (const r30.observation::right-lineage) (local Q) (local t) (local j) (nat 0)))) (app (const lexlean.core::exists-op) (lam ((explicit i (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (nat 1) (local i)) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local i) (local Q)) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local i) (app (const lexlean.std.nat::add) (local j) (local t))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local j) (app (const lexlean.std.nat::add) (local i) (local t))) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (local Q) (nat 0) (local i)) (const lexlean.std.bool::true)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::right-cell) (local Q) (local i)) (const lexlean.std.bool::true)) (app (const lexlean.core::eq) (app (const r30.observation::right-phase) (local Q) (nat 0) (local i)) (nat 1))))))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.right_lineage_seed"
+
+[[form]]
+id = "right-lineage-seed"
+channel = "math"
+surface = "rightlineageseed"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rightlineageseed) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

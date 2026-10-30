@@ -909,5 +909,206 @@ Close the goal with \(\lexeme{r30.observation::seed-coupled-gate-sign}\).
 \end{proof}
 \end{theorem}
 
+
+\begin{theorem}{right-defect-has-ancestor}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(rightdefect(Q, t + 1, j + 1) = true\), then \(rightdefect(Q, t, j) = true ∨ rightdefect(Q, t, j + 1) = true ∨ rightdefect(Q, t, j + 2) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-defect-has-ancestor}(Q, t, j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-lineage-of-clean-center}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\) and natural number \(T\), if \(1 ≤ j\), then if \(T ≤ t\), then if \(rightdefect(Q, t, j) = true\), then if \(centercleanthrough(Q, T, t - T)\), then \(rightlineage(Q, t, j, T)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-lineage-of-clean-center}(Q, t, j, T)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-lineage-of-clean-center}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(T\), if \(1 ≤ k\), then if \(T ≤ t\), then if \(leftdefect(Q, t, k) = true\), then if \(centercleanthrough(Q, T, t - T)\), then \(leftlineage(Q, t, k, T)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-lineage-of-clean-center}(Q, t, k, T)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-lineage-at-start}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\) and natural number \(T\), if \(T ≤ t\), then if \(rightlineage(Q, t, j, T)\), then there exists a natural number \(i\) such that \(1 ≤ i ∧ i ≤ j + (t - T) ∧ j ≤ i + (t - T) ∧ rightdefect(Q, T, i) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-lineage-at-start}(Q, t, j, T)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-lineage-at-start}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(T\), if \(T ≤ t\), then if \(leftlineage(Q, t, k, T)\), then there exists a natural number \(i\) such that \(1 ≤ i ∧ i ≤ k + (t - T) ∧ k ≤ i + (t - T) ∧ leftdefect(Q, T, i) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-lineage-at-start}(Q, t, k, T)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-lineage-seed}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(rightlineage(Q, t, j, 0)\), then there exists a natural number \(i\) such that \(1 ≤ i ∧ i ≤ Q ∧ i ≤ j + t ∧ j ≤ i + t ∧ rightdefect(Q, 0, i) = true ∧ rightcell(Q, i) = true ∧ rightphase(Q, 0, i) = 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-lineage-seed}(Q, t, j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-lineage-seed}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftlineage(Q, t, k, 0)\), then there exists a natural number \(i\) such that \(1 ≤ i ∧ i ≤ Q ∧ i ≤ k + t ∧ k ≤ i + t ∧ leftdefect(Q, 0, i) = true ∧ leftcell(Q, i) = true ∧ leftphase(Q, 0, i) = 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-lineage-seed}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exists-right-front}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then there exists a natural number \(y\) such that \(y ≤ t + Q ∧ rightfront(Q, t, y)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exists-right-front}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-front-lower}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(y\) and natural number \(z\), if \(leftdefect(Q, t, 0) = false\), then if \(rightfront(Q, t, y)\), then if \(rightfront(Q, t + 1, z)\), then \(y ≤ z + 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-front-lower}(Q, t, y, z)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-front-descent}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(y\), if \(leftdefect(Q, t, 0) = false\), then if \(rightfront(Q, t, y)\), then if \(2 ≤ y\), then \(rightdefect(Q, t + 1, y - 1) = \lexeme{lexlean.std.bool::not}(rightcell(t, y - 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-front-descent}(Q, t, y)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-front-lockstep}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(y\) and natural number \(z\), if \(leftdefect(Q, t, 0) = false\), then if \(rightfront(Q, t, y)\), then if \(2 ≤ y\), then if \(rightfront(Q, t + 1, z)\), then if \(z + 1 ≤ y\), then \(z = y - 1 ∧ rightcell(t, y - 1) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-front-lockstep}(Q, t, y, z)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{leading-head-black-before-arrival}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(rightmostleft(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(s + 1 < k\), then if \(rightdefect(Q, b + s, 1) = true\), then \(center(b + s) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::leading-head-black-before-arrival}(Q, b, k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{coupled-import-born-at-arrival}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\), if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then \(start = b + (k - 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::coupled-import-born-at-arrival}(Q, b, k, start)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{coupled-right-front-mirror-at}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(1 ≤ s\), then if \(s + 1 < k\), then there exists a natural number \(y\) such that \(rightdefect(Q, b + s, 1) = false ∧ rightfront(Q, b + s, y) ∧ 2 ≤ y ∧ y ≤ k - s\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::coupled-right-front-mirror-at}(Q, b, k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{coupled-white-staircase-at}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(1 ≤ s\), then if \(s + 2 < k\), then if \(rightfront(Q, b + s, k - s)\), then \(rightcell(b + s, k - s - 1) = false ∧ rightfront(Q, b + (s + 1), k - (s + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::coupled-white-staircase-at}(Q, b, k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-coupled-import-ancestry}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that there exists a natural number \(y\) such that \(N ≤ start ∧ N ≤ b ∧ T ≤ b ∧ T ≤ start ∧ 2 ≤ k ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ (3 ≤ k → start = b + (k - 2)) ∧ (3 ≤ k → rightfront(m * P, b + 1, y) ∧ 2 ≤ y ∧ y ≤ k - 1) ∧ rightlineage(m * P, start, 2, T) ∧ leftlineage(m * P, b, k, T)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-coupled-import-ancestry}(T, P, m, N, g)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-coupled-import-at-arrival}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(leadingadvance(14, 5, 3) ∧ centercleanthrough(14, 5, 3) ∧ whitecentergap(5, 2) ∧ center(5) = true ∧ rightfront(14, 6, 2) ∧ headimportpath(14, 6, 7)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-coupled-import-at-arrival}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ray-bit-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\) and natural number \(k\) and natural number \(n\), \(bitvalue(raybit(t, k, n)) = bitvalue(raybit(t, k, 0)) intplus rayflux(t, k, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ray-bit-balance}(t, k, n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{diagonal-ray-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(d\) and natural number \(t\) and natural number \(p\), if \(d + p ≤ t\), then \(leftphase(Q + Q, t + (t - d - p), p) = diagonalphase(Q, d, t) intplus diagonalflux(Q, d, t, p)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-ray-balance}(Q, d, t, p)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{diagonal-flux-lag-add}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(R\) and natural number \(d\) and natural number \(t\) and natural number \(p\), \(diagonalflux(Q + R, d, t, p) = diagonalflux(Q, d, t, p) intplus diagonalflux(R, d, t + Q, p)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-flux-lag-add}(Q, R, d, t, p)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{diagonal-phase-doubles}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(settledby(z + 1, t)\), then \((diagonalphase(Q, z + 1, t) = intneg 1 ∨ diagonalphase(Q, z + 1, t) = 1) ∧ diagonalphase(Q, z + 1, t + Q) = intneg diagonalphase(Q, z + 1, t) ∧ diagonalphase(Q + Q, z + 1, t) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-phase-doubles}(Q, z, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{diagonal-reset-phase}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(settledby(z + 2, t)\), then \(diagonalphase(Q, z + 3, t + 1) = intneg diagonalphase(Q, z + 1, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-reset-phase}(Q, z, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{diagonal-reset-flux-jump}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(settledby(z + 2, t)\), then if \(z + 3 ≤ t\), then \(diagonalflux(Q, z + 3, t + 1, 1) = diagonalflux(Q, z + 1, t, 1) intplus 2 inttimes diagonalphase(Q, z + 1, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-reset-flux-jump}(Q, z, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-diagonal-white-head-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(d\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(d + 1 ≤ t\), then if \(T ≤ t + (t - d - 1)\), then if \(center(t + (t - d - 1)) = false\), then \(diagonalphase(m * P, d, t) intplus diagonalflux(m * P, d, t, 1) = (1 intminus 2 inttimes bitvalue(center(t + (t - d - 1) + 1))) inttimes rightphase(m * P + m * P, t + (t - d - 1), 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-diagonal-white-head-balance}(T, P, m, d, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-diagonal-import-balance}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(d\) and natural number \(t\) and natural number \(start\), if \(centerperiodic(T, P)\), then if \(d + 1 ≤ t\), then if \(T ≤ start\), then if \(headimportpath(m * P + m * P, start, t + (t - d - 1))\), then if \(center(t + (t - d - 1)) = false\), then \(diagonalphase(m * P, d, t) intplus diagonalflux(m * P, d, t, 1) = (1 intminus 2 inttimes bitvalue(center(t + (t - d - 1) + 1))) inttimes (centersign(start, t + (t - d - 1) - start) inttimes rightphase(m * P + m * P, start, 2))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-diagonal-import-balance}(T, P, m, d, t, start)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

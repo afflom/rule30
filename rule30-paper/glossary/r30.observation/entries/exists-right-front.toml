@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exists-right-front"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q)))) (app (const lexlean.core::exists-op) (lam ((explicit y (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local y) (app (const lexlean.std.nat::add) (local t) (local Q))) (app (const r30.observation::right-front) (local Q) (local t) (local y)))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.exists_right_front"
+
+[[form]]
+id = "exists-right-front"
+channel = "math"
+surface = "existsrightfront"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name existsrightfront) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "diagonal-flux"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (const lexlean.std.int::int))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.diagonalFlux"
+
+[[form]]
+id = "diagonal-flux"
+channel = "math"
+surface = "diagonalflux"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name diagonalflux) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

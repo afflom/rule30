@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-lineage-at-start"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit T (const lexlean.std.nat::nat))) (pi ((explicit hT (app (const lexlean.std.nat::le) (local T) (local t))) (explicit h (app (const r30.observation::left-lineage) (local Q) (local t) (local k) (local T)))) (app (const lexlean.core::exists-op) (lam ((explicit i (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (nat 1) (local i)) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local i) (app (const lexlean.std.nat::add) (local k) (app (const lexlean.std.nat::sub) (local t) (local T)))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local k) (app (const lexlean.std.nat::add) (local i) (app (const lexlean.std.nat::sub) (local t) (local T)))) (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (local Q) (local T) (local i)) (const lexlean.std.bool::true)))))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.left_lineage_at_start"
+
+[[form]]
+id = "left-lineage-at-start"
+channel = "math"
+surface = "leftlineageatstart"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftlineageatstart) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "coupled-import-born-at-arrival"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit start (const lexlean.std.nat::nat))) (pi ((explicit h3 (app (const lexlean.std.nat::le) (nat 3) (local k))) (explicit hl (app (const r30.observation::leading-advance) (local Q) (local b) (local k))) (explicit hc (app (const r30.observation::center-clean-through) (local Q) (local b) (local k))) (explicit hw (app (const r30.observation::white-center-gap) (local b) (app (const lexlean.std.nat::sub) (local k) (nat 1)))) (explicit hp (app (const r30.observation::head-import-path) (local Q) (local start) (app (const lexlean.std.nat::add) (local b) (app (const lexlean.std.nat::sub) (local k) (nat 1)))))) (app (const lexlean.core::eq) (local start) (app (const lexlean.std.nat::add) (local b) (app (const lexlean.std.nat::sub) (local k) (nat 2))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.coupled_import_born_at_arrival"
+
+[[form]]
+id = "coupled-import-born-at-arrival"
+channel = "math"
+surface = "coupledimportbornatarrival"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name coupledimportbornatarrival) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

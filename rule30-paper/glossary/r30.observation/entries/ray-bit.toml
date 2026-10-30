@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ray-bit"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.rayBit"
+
+[[form]]
+id = "ray-bit"
+channel = "math"
+surface = "raybit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name raybit) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

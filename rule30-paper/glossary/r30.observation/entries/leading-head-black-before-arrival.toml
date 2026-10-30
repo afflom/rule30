@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "leading-head-black-before-arrival"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (pi ((explicit hr (app (const r30.observation::rightmost-left) (local Q) (local b) (local k))) (explicit hc (app (const r30.observation::center-clean-through) (local Q) (local b) (local k))) (explicit hs (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local s) (nat 1)) (local k))) (explicit hh (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (local Q) (app (const lexlean.std.nat::add) (local b) (local s)) (nat 1)) (const lexlean.std.bool::true)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local b) (local s))) (const lexlean.std.bool::true))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.leading_head_black_before_arrival"
+
+[[form]]
+id = "leading-head-black-before-arrival"
+channel = "math"
+surface = "leadingheadblackbeforearrival"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leadingheadblackbeforearrival) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

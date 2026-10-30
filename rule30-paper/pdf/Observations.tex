@@ -796,4 +796,179 @@ The goal follows from \(\operatorname{periodicdoubledseedfluxsplit}(T, P, m, N)\
 \begin{proof}
 The goal follows from \(\operatorname{seedcoupledgatesign}\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:right-defect-has-ancestor}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(\operatorname{rightdefect}(Q, t + 1, j + 1) = \operatorname{true}\), then \(\operatorname{rightdefect}(Q, t, j) = \operatorname{true}\) or \(\operatorname{rightdefect}(Q, t, j + 1) = \operatorname{true} \lor \operatorname{rightdefect}(Q, t, j + 2) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightdefecthasancestor}(Q, t, j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-lineage-of-clean-center}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\) and natural number \(T\), if \(1 \le j\), then if \(T \le t\), then if \(\operatorname{rightdefect}(Q, t, j) = \operatorname{true}\), then if \(\operatorname{centercleanthrough}(Q, T, t - T)\), then \(\operatorname{rightlineage}(Q, t, j, T)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightlineageofcleancenter}(Q, t, j, T)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-lineage-of-clean-center}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(T\), if \(1 \le k\), then if \(T \le t\), then if \(\operatorname{leftdefect}(Q, t, k) = \operatorname{true}\), then if \(\operatorname{centercleanthrough}(Q, T, t - T)\), then \(\operatorname{leftlineage}(Q, t, k, T)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftlineageofcleancenter}(Q, t, k, T)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-lineage-at-start}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\) and natural number \(T\), if \(T \le t\), then if \(\operatorname{rightlineage}(Q, t, j, T)\), then there exists a natural number \(i\) such that \(1 \le i\) and \(i \le j + (t - T) \land j \le i + (t - T) \land \operatorname{rightdefect}(Q, T, i) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightlineageatstart}(Q, t, j, T)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-lineage-at-start}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(T\), if \(T \le t\), then if \(\operatorname{leftlineage}(Q, t, k, T)\), then there exists a natural number \(i\) such that \(1 \le i\) and \(i \le k + (t - T) \land k \le i + (t - T) \land \operatorname{leftdefect}(Q, T, i) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftlineageatstart}(Q, t, k, T)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-lineage-seed}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(\operatorname{rightlineage}(Q, t, j, 0)\), then there exists a natural number \(i\) such that \(1 \le i\) and \(i \le Q \land i \le j + t \land j \le i + t \land \operatorname{rightdefect}(Q, 0, i) = \operatorname{true} \land \operatorname{rightcell}(Q, i) = \operatorname{true} \land \operatorname{rightphase}(Q, 0, i) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightlineageseed}(Q, t, j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-lineage-seed}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(\operatorname{leftlineage}(Q, t, k, 0)\), then there exists a natural number \(i\) such that \(1 \le i\) and \(i \le Q \land i \le k + t \land k \le i + t \land \operatorname{leftdefect}(Q, 0, i) = \operatorname{true} \land \operatorname{leftcell}(Q, i) = \operatorname{true} \land \operatorname{leftphase}(Q, 0, i) = 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftlineageseed}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exists-right-front}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then there exists a natural number \(y\) such that \(y \le t + Q\) and \(\operatorname{rightfront}(Q, t, y)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{existsrightfront}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-front-lower}
+For every natural number \(Q\) and natural number \(t\) and natural number \(y\) and natural number \(z\), if \(\operatorname{leftdefect}(Q, t, 0) = \operatorname{false}\), then if \(\operatorname{rightfront}(Q, t, y)\), then if \(\operatorname{rightfront}(Q, t + 1, z)\), then \(y \le z + 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightfrontlower}(Q, t, y, z)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-front-descent}
+For every natural number \(Q\) and natural number \(t\) and natural number \(y\), if \(\operatorname{leftdefect}(Q, t, 0) = \operatorname{false}\), then if \(\operatorname{rightfront}(Q, t, y)\), then if \(2 \le y\), then \(\operatorname{rightdefect}(Q, t + 1, y - 1) = \operatorname{not}(\operatorname{rightcell}(t, y - 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightfrontdescent}(Q, t, y)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-front-lockstep}
+For every natural number \(Q\) and natural number \(t\) and natural number \(y\) and natural number \(z\), if \(\operatorname{leftdefect}(Q, t, 0) = \operatorname{false}\), then if \(\operatorname{rightfront}(Q, t, y)\), then if \(2 \le y\), then if \(\operatorname{rightfront}(Q, t + 1, z)\), then if \(z + 1 \le y\), then \(z = y - 1\) and \(\operatorname{rightcell}(t, y - 1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightfrontlockstep}(Q, t, y, z)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:leading-head-black-before-arrival}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(\operatorname{rightmostleft}(Q, b, k)\), then if \(\operatorname{centercleanthrough}(Q, b, k)\), then if \(s + 1 < k\), then if \(\operatorname{rightdefect}(Q, b + s, 1) = \operatorname{true}\), then \(\operatorname{center}(b + s) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leadingheadblackbeforearrival}(Q, b, k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:coupled-import-born-at-arrival}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\), if \(3 \le k\), then if \(\operatorname{leadingadvance}(Q, b, k)\), then if \(\operatorname{centercleanthrough}(Q, b, k)\), then if \(\operatorname{whitecentergap}(b, k - 1)\), then if \(\operatorname{headimportpath}(Q, start, b + (k - 1))\), then \(start = b + (k - 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{coupledimportbornatarrival}(Q, b, k, start)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:coupled-right-front-mirror-at}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(0 < Q\), then if \(3 \le k\), then if \(\operatorname{leadingadvance}(Q, b, k)\), then if \(\operatorname{centercleanthrough}(Q, b, k)\), then if \(\operatorname{whitecentergap}(b, k - 1)\), then if \(1 \le s\), then if \(s + 1 < k\), then there exists a natural number \(y\) such that \(\operatorname{rightdefect}(Q, b + s, 1) = \operatorname{false}\) and \(\operatorname{rightfront}(Q, b + s, y) \land 2 \le y \land y \le k - s\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{coupledrightfrontmirrorat}(Q, b, k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:coupled-white-staircase-at}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(0 < Q\), then if \(3 \le k\), then if \(\operatorname{leadingadvance}(Q, b, k)\), then if \(\operatorname{centercleanthrough}(Q, b, k)\), then if \(\operatorname{whitecentergap}(b, k - 1)\), then if \(1 \le s\), then if \(s + 2 < k\), then if \(\operatorname{rightfront}(Q, b + s, k - s)\), then \(\operatorname{rightcell}(b + s, k - s - 1) = \operatorname{false}\) and \(\operatorname{rightfront}(Q, b + (s + 1), k - (s + 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{coupledwhitestaircaseat}(Q, b, k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-coupled-import-ancestry}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(g = 2\) or \(g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that there exists a natural number \(y\) such that \(N \le start\) and \(N \le b \land T \le b \land T \le start \land 2 \le k \land k \le P \land \operatorname{center}(b) = \operatorname{true} \land \operatorname{whitecentergap}(b, k - 1) \land \operatorname{leadingadvance}(m \cdot P, b, k) \land \operatorname{gatecode}(m \cdot P, b + (k - 1), 0) = g \land \operatorname{headimportpath}(m \cdot P, start, b + (k - 1)) \land (3 \le k \to start = b + (k - 2)) \land (3 \le k \to \operatorname{rightfront}(m \cdot P, b + 1, y) \land 2 \le y \land y \le k - 1) \land \operatorname{rightlineage}(m \cdot P, start, 2, T) \land \operatorname{leftlineage}(m \cdot P, b, k, T)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodiccoupledimportancestry}(T, P, m, N, g)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-coupled-import-at-arrival}
+\(\operatorname{leadingadvance}(14, 5, 3)\) and \(\operatorname{centercleanthrough}(14, 5, 3) \land \operatorname{whitecentergap}(5, 2) \land \operatorname{center}(5) = \operatorname{true} \land \operatorname{rightfront}(14, 6, 2) \land \operatorname{headimportpath}(14, 6, 7)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedcoupledimportatarrival}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ray-bit-balance}
+For every natural number \(t\) and natural number \(k\) and natural number \(n\), \(\operatorname{bitvalue}(\operatorname{raybit}(t, k, n)) = \operatorname{bitvalue}(\operatorname{raybit}(t, k, 0)) + \operatorname{rayflux}(t, k, n)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{raybitbalance}(t, k, n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:diagonal-ray-balance}
+For every natural number \(Q\) and natural number \(d\) and natural number \(t\) and natural number \(p\), if \(d + p \le t\), then \(\operatorname{leftphase}(Q + Q, t + (t - d - p), p) = \operatorname{diagonalphase}(Q, d, t) + \operatorname{diagonalflux}(Q, d, t, p)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalraybalance}(Q, d, t, p)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:diagonal-flux-lag-add}
+For every natural number \(Q\) and natural number \(R\) and natural number \(d\) and natural number \(t\) and natural number \(p\), \(\operatorname{diagonalflux}(Q + R, d, t, p) = \operatorname{diagonalflux}(Q, d, t, p) + \operatorname{diagonalflux}(R, d, t + Q, p)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalfluxlagadd}(Q, R, d, t, p)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:diagonal-phase-doubles}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{doublesat}(Q, z)\), then if \(\operatorname{settledby}(z + 1, t)\), then \(\operatorname{diagonalphase}(Q, z + 1, t) = -1 \lor \operatorname{diagonalphase}(Q, z + 1, t) = 1\) and \(\operatorname{diagonalphase}(Q, z + 1, t + Q) = -\operatorname{diagonalphase}(Q, z + 1, t) \land \operatorname{diagonalphase}(Q + Q, z + 1, t) = 0\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalphasedoubles}(Q, z, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:diagonal-reset-phase}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{settledby}(z + 2, t)\), then \(\operatorname{diagonalphase}(Q, z + 3, t + 1) = -\operatorname{diagonalphase}(Q, z + 1, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalresetphase}(Q, z, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:diagonal-reset-flux-jump}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{settledby}(z + 2, t)\), then if \(z + 3 \le t\), then \(\operatorname{diagonalflux}(Q, z + 3, t + 1, 1) = \operatorname{diagonalflux}(Q, z + 1, t, 1) + 2 \cdot \operatorname{diagonalphase}(Q, z + 1, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalresetfluxjump}(Q, z, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-diagonal-white-head-balance}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(d\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(d + 1 \le t\), then if \(T \le t + (t - d - 1)\), then if \(\operatorname{center}(t + (t - d - 1)) = \operatorname{false}\), then \(\operatorname{diagonalphase}(m \cdot P, d, t) + \operatorname{diagonalflux}(m \cdot P, d, t, 1) = (1 - 2 \cdot \operatorname{bitvalue}(\operatorname{center}(t + (t - d - 1) + 1))) \cdot \operatorname{rightphase}(m \cdot P + m \cdot P, t + (t - d - 1), 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicdiagonalwhiteheadbalance}(T, P, m, d, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-diagonal-import-balance}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(d\) and natural number \(t\) and natural number \(start\), if \(\operatorname{centerperiodic}(T, P)\), then if \(d + 1 \le t\), then if \(T \le start\), then if \(\operatorname{headimportpath}(m \cdot P + m \cdot P, start, t + (t - d - 1))\), then if \(\operatorname{center}(t + (t - d - 1)) = \operatorname{false}\), then \(\operatorname{diagonalphase}(m \cdot P, d, t) + \operatorname{diagonalflux}(m \cdot P, d, t, 1) = (1 - 2 \cdot \operatorname{bitvalue}(\operatorname{center}(t + (t - d - 1) + 1))) \cdot (\operatorname{centersign}(start, t + (t - d - 1) - start) \cdot \operatorname{rightphase}(m \cdot P + m \cdot P, start, 2))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicdiagonalimportbalance}(T, P, m, d, t, start)\).
+\end{proof}
 \end{document}

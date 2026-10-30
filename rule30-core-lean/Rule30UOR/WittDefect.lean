@@ -1444,4 +1444,839 @@ theorem seed_coupled_gate_sign :
   · simp [centerSign, hw6, bitValue]
   · simp [rightPhase, data.2.2.2.2.1, data.2.2.2.2.2, bitValue]
 
+/-! ## Ancestry of imports: forced lineages, fronts, and the seed boundary
+
+No defect appears from a clean neighbourhood. Every actual defect therefore has a
+nearest-neighbour lineage of actual defects reaching the seed row, where the defects
+are exactly the cells in which row `Q` differs from the single black cell. A clean
+column is a one-way barrier for lineages. The leftmost right-half defect moves left by
+at most one column per step, and only through a common white cell. These are exact
+statements about the seeded pair; none assumes a periodic center.
+-/
+
+private theorem cell_eq_false_of_gt : ∀ (t : Nat) (p : Int), (t : Int) < p → cell t p = false
+  | 0, p, h => by
+    show decide (p = 0) = false
+    simp only [decide_eq_false_iff_not]
+    omega
+  | t + 1, p, h => by
+    show rule (cell t (p - 1)) (cell t p) (cell t (p + 1)) = false
+    rw [cell_eq_false_of_gt t (p - 1) (by omega), cell_eq_false_of_gt t p (by omega),
+      cell_eq_false_of_gt t (p + 1) (by omega)]
+    rfl
+
+private theorem cell_right_edge : ∀ t : Nat, cell t (t : Int) = true
+  | 0 => rfl
+  | t + 1 => by
+    show rule (cell t (((t + 1 : Nat) : Int) - 1)) (cell t ((t + 1 : Nat) : Int))
+      (cell t (((t + 1 : Nat) : Int) + 1)) = true
+    rw [show ((t + 1 : Nat) : Int) - 1 = (t : Int) by omega, cell_right_edge t,
+      cell_eq_false_of_gt t _ (by omega), cell_eq_false_of_gt t _ (by omega)]
+    rfl
+
+theorem rightDefect_eq_defect (Q t j : Nat) : rightDefect Q t j = defect Q t (j : Int) := rfl
+
+/-- The exact one-step ancestry table. The next defect is the incoming left defect
+XOR the gate difference, and the gate difference is fixed by which of `p, p+1`
+are defective together with the earlier colours there. -/
+theorem ancestry_gate_table (Q t : Nat) (p : Int) :
+    (defect Q t p = false → defect Q t (p + 1) = false → gateDifference Q t p = false) ∧
+    (defect Q t p = true → defect Q t (p + 1) = false →
+      gateDifference Q t p = !cell t (p + 1)) ∧
+    (defect Q t p = false → defect Q t (p + 1) = true →
+      gateDifference Q t p = !cell t p) ∧
+    (defect Q t p = true → defect Q t (p + 1) = true →
+      gateDifference Q t p = (cell t p == cell t (p + 1))) := by
+  unfold defect difference gateDifference
+  dsimp only
+  cases cell t p <;> cases cell (t + Q) p <;> cases cell t (p + 1) <;>
+    cases cell (t + Q) (p + 1) <;> decide
+
+/-- Defects are never created from a clean neighbourhood. -/
+theorem defect_has_ancestor (Q t : Nat) (p : Int) (h : defect Q (t + 1) p = true) :
+    defect Q t (p - 1) = true ∨ defect Q t p = true ∨ defect Q t (p + 1) = true := by
+  cases h1 : defect Q t (p - 1)
+  · cases h2 : defect Q t p
+    · cases h3 : defect Q t (p + 1)
+      · rw [defect_step_gate, h1, (ancestry_gate_table Q t p).1 h2 h3] at h
+        exact absurd h (by decide)
+      · exact Or.inr (Or.inr rfl)
+    · exact Or.inr (Or.inl rfl)
+  · exact Or.inl rfl
+
+/-- The right-half form of `defect_has_ancestor`; column `0` is the center. -/
+theorem right_defect_has_ancestor (Q t j : Nat) (h : rightDefect Q (t + 1) (j + 1) = true) :
+    rightDefect Q t j = true ∨ rightDefect Q t (j + 1) = true ∨
+      rightDefect Q t (j + 2) = true := by
+  have hh := defect_has_ancestor Q t ((j + 1 : Nat) : Int) h
+  simpa only [rightDefect_eq_defect, show ((j + 1 : Nat) : Int) - 1 = (j : Int) by omega,
+    show ((j + 1 : Nat) : Int) + 1 = ((j + 2 : Nat) : Int) by omega] using hh
+
+/-- A nearest-neighbour backward lineage of actual defects. -/
+def AncestryPath (Q t : Nat) (p : Int) (f : Nat → Int) : Prop :=
+  f t = p ∧ (∀ s : Nat, s < t → f s - 1 ≤ f (s + 1) ∧ f (s + 1) ≤ f s + 1) ∧
+    ∀ s : Nat, s ≤ t → defect Q s (f s) = true
+
+/-- Every actual defect has a lineage reaching the seed row. -/
+theorem defect_ancestry (Q : Nat) : ∀ (t : Nat) (p : Int), defect Q t p = true →
+    ∃ f : Nat → Int, AncestryPath Q t p f := by
+  intro t
+  induction t with
+  | zero =>
+    intro p h
+    refine ⟨fun _ => p, rfl, fun s hs => absurd hs (Nat.not_lt_zero _), fun s hs => ?_⟩
+    rw [Nat.le_zero.1 hs]
+    exact h
+  | succ t ih =>
+    intro p h
+    have hq : ∃ q : Int, p - 1 ≤ q ∧ q ≤ p + 1 ∧ defect Q t q = true := by
+      rcases defect_has_ancestor Q t p h with h' | h' | h'
+      · exact ⟨p - 1, by omega, by omega, h'⟩
+      · exact ⟨p, by omega, by omega, h'⟩
+      · exact ⟨p + 1, by omega, by omega, h'⟩
+    obtain ⟨q, hq1, hq2, hqd⟩ := hq
+    obtain ⟨f, hf0, hf1, hf2⟩ := ih q hqd
+    refine ⟨fun s => if s ≤ t then f s else p, ?_, ?_, ?_⟩
+    · simp only [show ¬ (t + 1 ≤ t) by omega, if_false]
+    · intro s hs
+      by_cases hst : s + 1 ≤ t
+      · simp only [show s ≤ t by omega, hst, if_true]
+        exact hf1 s (by omega)
+      · have hs' : s = t := by omega
+        rw [hs']
+        simp only [Nat.le_refl, if_true, show ¬ (t + 1 ≤ t) by omega, if_false, hf0]
+        omega
+    · intro s hs
+      by_cases hst : s ≤ t
+      · simp only [hst, if_true]
+        exact hf2 s hst
+      · have hs' : s = t + 1 := by omega
+        rw [hs']
+        simp only [show ¬ (t + 1 ≤ t) by omega, if_false]
+        exact h
+
+/-- A lineage moves by at most one column per step. -/
+theorem ancestry_displacement (Q t : Nat) (p : Int) (f : Nat → Int) (h : AncestryPath Q t p f) :
+    ∀ s : Nat, s ≤ t → f s ≤ p + ((t - s : Nat) : Int) ∧ p - ((t - s : Nat) : Int) ≤ f s := by
+  obtain ⟨hf0, hf1, _⟩ := h
+  have key : ∀ j : Nat, j ≤ t → f (t - j) ≤ p + (j : Int) ∧ p - (j : Int) ≤ f (t - j) := by
+    intro j
+    induction j with
+    | zero => intro _; simp only [Nat.sub_zero, hf0]; omega
+    | succ j ih =>
+      intro hj
+      have h1 := ih (by omega)
+      have hstep := hf1 (t - (j + 1)) (by omega)
+      rw [show t - (j + 1) + 1 = t - j by omega] at hstep
+      omega
+  intro s hs
+  have := key (t - s) (by omega)
+  rwa [show t - (t - s) = s by omega] at this
+
+/-- **Seed terminal.** Every lineage ends at a seed-row defect: a cell of row `Q`
+that differs from the single seed. Off the center it is black in row `Q` (signed
+phase `+1`); at the center it is white in row `Q` (signed phase `-1`). It lies in
+`[-Q, Q]`. -/
+theorem ancestry_seed_terminal (Q t : Nat) (p : Int) (f : Nat → Int) (h : AncestryPath Q t p f) :
+    -(Q : Int) ≤ f 0 ∧ f 0 ≤ (Q : Int) ∧
+      ((f 0 = 0 ∧ cell Q 0 = false ∧ phase Q 0 0 = -1) ∨
+        (f 0 ≠ 0 ∧ cell Q (f 0) = true ∧ phase Q 0 (f 0) = 1)) := by
+  have hd := h.2.2 0 (Nat.zero_le _)
+  have hd' : xor (cell Q (f 0)) (decide (f 0 = 0)) = true := by
+    have h0 : cell 0 (f 0) = decide (f 0 = 0) := rfl
+    simpa only [defect, difference, Nat.zero_add, h0] using hd
+  refine ⟨?_, ?_, ?_⟩
+  · apply Classical.byContradiction
+    intro hlt
+    rw [cell_eq_false_of_lt Q (f 0) (by omega)] at hd'
+    have : decide (f 0 = 0) = false := by simp only [decide_eq_false_iff_not]; omega
+    rw [this] at hd'
+    exact absurd hd' (by decide)
+  · apply Classical.byContradiction
+    intro hlt
+    rw [cell_eq_false_of_gt Q (f 0) (by omega)] at hd'
+    have : decide (f 0 = 0) = false := by simp only [decide_eq_false_iff_not]; omega
+    rw [this] at hd'
+    exact absurd hd' (by decide)
+  · by_cases h0 : f 0 = 0
+    · left
+      rw [h0] at hd'
+      have hc : cell Q 0 = false := by
+        cases hq : cell Q 0
+        · rfl
+        · rw [hq] at hd'; exact absurd hd' (by decide)
+      refine ⟨h0, hc, ?_⟩
+      simp only [phase, Nat.zero_add, hc, bitValue]
+      rfl
+    · right
+      have hz : decide (f 0 = 0) = false := by simp only [decide_eq_false_iff_not]; exact h0
+      rw [hz] at hd'
+      have hc : cell Q (f 0) = true := by simpa using hd'
+      have hc0 : cell 0 (f 0) = false := by
+        show decide (f 0 = 0) = false
+        exact hz
+      refine ⟨h0, hc, ?_⟩
+      simp only [phase, Nat.zero_add, hc, hc0, bitValue]
+      rfl
+
+/-- **Barrier.** A column that is clean on `[T, t]` cannot be crossed by a lineage
+there: a lineage strictly right of it at time `t` stays strictly right of it. -/
+theorem ancestry_barrier_right (Q t T : Nat) (p c : Int) (f : Nat → Int)
+    (h : AncestryPath Q t p f) (hp : c < p)
+    (hc : ∀ s : Nat, T ≤ s → s ≤ t → defect Q s c = false) :
+    ∀ s : Nat, T ≤ s → s ≤ t → c < f s := by
+  obtain ⟨hf0, hf1, hf2⟩ := h
+  have key : ∀ j : Nat, j ≤ t - T → c < f (t - j) := by
+    intro j
+    induction j with
+    | zero => intro _; simpa only [Nat.sub_zero, hf0] using hp
+    | succ j ih =>
+      intro hj
+      have h1 := ih (by omega)
+      have hstep := hf1 (t - (j + 1)) (by omega)
+      rw [show t - (j + 1) + 1 = t - j by omega] at hstep
+      have hne : f (t - (j + 1)) ≠ c := by
+        intro h0
+        have := hf2 (t - (j + 1)) (by omega)
+        rw [h0, hc (t - (j + 1)) (by omega) (by omega)] at this
+        exact absurd this (by decide)
+      omega
+  intro s hs hst
+  have := key (t - s) (by omega)
+  rwa [show t - (t - s) = s by omega] at this
+
+/-- The mirror barrier: a lineage strictly left of a clean column stays left of it. -/
+theorem ancestry_barrier_left (Q t T : Nat) (p c : Int) (f : Nat → Int)
+    (h : AncestryPath Q t p f) (hp : p < c)
+    (hc : ∀ s : Nat, T ≤ s → s ≤ t → defect Q s c = false) :
+    ∀ s : Nat, T ≤ s → s ≤ t → f s < c := by
+  obtain ⟨hf0, hf1, hf2⟩ := h
+  have key : ∀ j : Nat, j ≤ t - T → f (t - j) < c := by
+    intro j
+    induction j with
+    | zero => intro _; simpa only [Nat.sub_zero, hf0] using hp
+    | succ j ih =>
+      intro hj
+      have h1 := ih (by omega)
+      have hstep := hf1 (t - (j + 1)) (by omega)
+      rw [show t - (j + 1) + 1 = t - j by omega] at hstep
+      have hne : f (t - (j + 1)) ≠ c := by
+        intro h0
+        have := hf2 (t - (j + 1)) (by omega)
+        rw [h0, hc (t - (j + 1)) (by omega) (by omega)] at this
+        exact absurd this (by decide)
+      omega
+  intro s hs hst
+  have := key (t - s) (by omega)
+  rwa [show t - (t - s) = s by omega] at this
+
+/-- A right-half lineage: a lineage of actual defects from right column `j` at time
+`t`, confined to the right half on `[T, t]`. Before `T` it may cross the center. -/
+def RightLineage (Q t j T : Nat) : Prop :=
+  ∃ f : Nat → Int, AncestryPath Q t (j : Int) f ∧ ∀ s : Nat, T ≤ s → s ≤ t → 1 ≤ f s
+
+/-- A left-half lineage from depth `k` at time `t`, confined to the left half on `[T, t]`. -/
+def LeftLineage (Q t k T : Nat) : Prop :=
+  ∃ f : Nat → Int, AncestryPath Q t (-(k : Int)) f ∧ ∀ s : Nat, T ≤ s → s ≤ t → f s ≤ -1
+
+/-- While the center is clean, every right-half defect descends from right-half
+defects only. -/
+theorem right_lineage_of_clean_center (Q t j T : Nat) (hj : 1 ≤ j) (hT : T ≤ t)
+    (hd : rightDefect Q t j = true) (hc : CenterCleanThrough Q T (t - T)) :
+    RightLineage Q t j T := by
+  obtain ⟨f, hf⟩ := defect_ancestry Q t (j : Int) hd
+  refine ⟨f, hf, fun s hs hst => ?_⟩
+  have := ancestry_barrier_right Q t T (j : Int) 0 f hf (by omega) (fun s hs hst => by
+    have hh := hc (s - T) (by omega)
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero,
+      show T + (s - T) = s by omega] using hh) s hs hst
+  omega
+
+/-- While the center is clean, every left-half defect descends from left-half
+defects only. -/
+theorem left_lineage_of_clean_center (Q t k T : Nat) (hk : 1 ≤ k) (hT : T ≤ t)
+    (hd : leftDefect Q t k = true) (hc : CenterCleanThrough Q T (t - T)) :
+    LeftLineage Q t k T := by
+  obtain ⟨f, hf⟩ := defect_ancestry Q t (-(k : Int)) hd
+  refine ⟨f, hf, fun s hs hst => ?_⟩
+  have := ancestry_barrier_left Q t T (-(k : Int)) 0 f hf (by omega) (fun s hs hst => by
+    have hh := hc (s - T) (by omega)
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero,
+      show T + (s - T) = s by omega] using hh) s hs hst
+  omega
+
+/-- A right lineage reads a right-half defect at time `T` within light-cone distance. -/
+theorem right_lineage_at_start (Q t j T : Nat) (hT : T ≤ t) (h : RightLineage Q t j T) :
+    ∃ i : Nat, 1 ≤ i ∧ i ≤ j + (t - T) ∧ j ≤ i + (t - T) ∧ rightDefect Q T i = true := by
+  obtain ⟨f, hf, hr⟩ := h
+  have h1 := hr T (Nat.le_refl _) hT
+  have hb := ancestry_displacement Q t (j : Int) f hf T hT
+  refine ⟨(f T).toNat, by omega, by omega, by omega, ?_⟩
+  rw [rightDefect_eq_defect, Int.toNat_of_nonneg (by omega)]
+  exact hf.2.2 T hT
+
+/-- A left lineage reads a left-half defect at time `T` within light-cone distance. -/
+theorem left_lineage_at_start (Q t k T : Nat) (hT : T ≤ t) (h : LeftLineage Q t k T) :
+    ∃ i : Nat, 1 ≤ i ∧ i ≤ k + (t - T) ∧ k ≤ i + (t - T) ∧ leftDefect Q T i = true := by
+  obtain ⟨f, hf, hl⟩ := h
+  have h1 := hl T (Nat.le_refl _) hT
+  have hb := ancestry_displacement Q t (-(k : Int)) f hf T hT
+  refine ⟨(-(f T)).toNat, by omega, by omega, by omega, ?_⟩
+  simp only [leftDefect]
+  rw [show -(((-(f T)).toNat : Nat) : Int) = f T by omega]
+  exact hf.2.2 T hT
+
+/-- **Seed boundary of a right lineage.** If the lineage is confined from time zero,
+it ends at a black cell of the right half of row `Q`: a seed-row defect of signed
+phase `+1` within light-cone distance. -/
+theorem right_lineage_seed (Q t j : Nat) (h : RightLineage Q t j 0) :
+    ∃ i : Nat, 1 ≤ i ∧ i ≤ Q ∧ i ≤ j + t ∧ j ≤ i + t ∧ rightDefect Q 0 i = true ∧
+      rightCell Q i = true ∧ rightPhase Q 0 i = 1 := by
+  obtain ⟨f, hf, hr⟩ := h
+  have h1 := hr 0 (Nat.le_refl _) (Nat.zero_le _)
+  have hb := ancestry_displacement Q t (j : Int) f hf 0 (Nat.zero_le _)
+  have term := ancestry_seed_terminal Q t (j : Int) f hf
+  have hi : ((f 0).toNat : Int) = f 0 := Int.toNat_of_nonneg (by omega)
+  rcases term with ⟨_, hQ, hcase⟩
+  rcases hcase with ⟨h0, _, _⟩ | ⟨_, hcell, hph⟩
+  · omega
+  · refine ⟨(f 0).toNat, by omega, by omega, by omega, by omega, ?_, ?_, ?_⟩
+    · rw [rightDefect_eq_defect, hi]; exact hf.2.2 0 (Nat.zero_le _)
+    · simp only [rightCell, hi]; exact hcell
+    · simpa only [rightPhase, rightCell, hi, phase, Nat.zero_add] using hph
+
+/-- **Seed boundary of a left lineage.** Confined from time zero, it ends at a black
+cell of the left half of row `Q`, of signed phase `+1`. -/
+theorem left_lineage_seed (Q t k : Nat) (h : LeftLineage Q t k 0) :
+    ∃ i : Nat, 1 ≤ i ∧ i ≤ Q ∧ i ≤ k + t ∧ k ≤ i + t ∧ leftDefect Q 0 i = true ∧
+      leftCell Q i = true ∧ leftPhase Q 0 i = 1 := by
+  obtain ⟨f, hf, hl⟩ := h
+  have h1 := hl 0 (Nat.le_refl _) (Nat.zero_le _)
+  have hb := ancestry_displacement Q t (-(k : Int)) f hf 0 (Nat.zero_le _)
+  have term := ancestry_seed_terminal Q t (-(k : Int)) f hf
+  have hi : -(((-(f 0)).toNat : Nat) : Int) = f 0 := by omega
+  rcases term with ⟨hQ, _, hcase⟩
+  rcases hcase with ⟨h0, _, _⟩ | ⟨_, hcell, hph⟩
+  · omega
+  · refine ⟨(-(f 0)).toNat, by omega, by omega, by omega, by omega, ?_, ?_, ?_⟩
+    · simp only [leftDefect, hi]; exact hf.2.2 0 (Nat.zero_le _)
+    · simp only [leftCell, hi]; exact hcell
+    · simpa only [leftPhase, hi, Nat.zero_add] using hph
+
+/-! ### The leftmost right-half defect -/
+
+/-- The leftmost right-half defect at time `t` is at column `y ≥ 1`. -/
+def RightFront (Q t y : Nat) : Prop :=
+  1 ≤ y ∧ rightDefect Q t y = true ∧ ∀ j : Nat, 1 ≤ j → j < y → rightDefect Q t j = false
+
+private theorem least_witness (P : Nat → Prop) : ∀ n : Nat, P n →
+    ∃ y, y ≤ n ∧ P y ∧ ∀ j, j < y → ¬ P j := by
+  intro n
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    intro hn
+    by_cases h : ∃ j, j < n ∧ P j
+    · obtain ⟨j, hj, hpj⟩ := h
+      obtain ⟨y, hy, hpy, hmin⟩ := ih j hj hpj
+      exact ⟨y, by omega, hpy, hmin⟩
+    · exact ⟨n, Nat.le_refl n, hn, fun j hj hpj => h ⟨j, hj, hpj⟩⟩
+
+/-- For a positive lag the right half always carries a defect: the later row's
+right edge. Hence the leftmost one exists, within the later light cone. -/
+theorem exists_right_front (Q t : Nat) (hQ : 0 < Q) :
+    ∃ y : Nat, y ≤ t + Q ∧ RightFront Q t y := by
+  have hedge : 1 ≤ t + Q ∧ rightDefect Q t (t + Q) = true := by
+    refine ⟨by omega, ?_⟩
+    simp only [rightDefect, rightCell]
+    rw [cell_right_edge (t + Q), cell_eq_false_of_gt t _ (by omega)]
+    rfl
+  obtain ⟨y, hy, ⟨hy1, hyd⟩, hmin⟩ :=
+    least_witness (fun y => 1 ≤ y ∧ rightDefect Q t y = true) (t + Q) hedge
+  refine ⟨y, hy, hy1, hyd, fun j hj hjy => ?_⟩
+  cases hb : rightDefect Q t j
+  · rfl
+  · exact absurd ⟨hj, hb⟩ (hmin j hjy)
+
+private theorem right_front_clean (Q t y : Nat) (hc : leftDefect Q t 0 = false)
+    (hy : RightFront Q t y) :
+    ∀ p : Int, 0 ≤ p → p ≤ (y : Int) - 1 → defect Q t p = false := by
+  intro p hp1 hp2
+  by_cases hp0 : p = 0
+  · rw [hp0]
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using hc
+  · have hh := hy.2.2 p.toNat (by omega) (by omega)
+    rwa [rightDefect_eq_defect, Int.toNat_of_nonneg hp1] at hh
+
+/-- Under a clean center, the right front moves left by at most one column. -/
+theorem right_front_lower (Q t y z : Nat) (hc : leftDefect Q t 0 = false)
+    (hy : RightFront Q t y) (hz : RightFront Q (t + 1) z) : y ≤ z + 1 := by
+  apply Classical.byContradiction
+  intro hlt
+  have hclean := defect_clean_step Q t 0 ((y : Int) - 1) (right_front_clean Q t y hc hy)
+    (z : Int) (by have := hz.1; omega) (by omega)
+  rw [← rightDefect_eq_defect, hz.2.1] at hclean
+  exact absurd hclean (by decide)
+
+/-- Under a clean center, a right front at `y ≥ 2` descends to `y - 1` exactly
+when the common colour at `y - 1` is white. -/
+theorem right_front_descent (Q t y : Nat) (hc : leftDefect Q t 0 = false)
+    (hy : RightFront Q t y) (h2 : 2 ≤ y) :
+    rightDefect Q (t + 1) (y - 1) = !rightCell t (y - 1) := by
+  have hclean := right_front_clean Q t y hc hy
+  have step := defect_left_front_step Q t ((y - 1 : Nat) : Int)
+    (hclean _ (by omega) (by omega)) (hclean _ (by omega) (by omega))
+    (by rw [show ((y - 1 : Nat) : Int) + 1 = (y : Int) by omega, ← rightDefect_eq_defect]
+        exact hy.2.1)
+  simpa only [rightDefect_eq_defect, rightCell] using step
+
+/-! ### Rendezvous of the two fronts and the timing of the coupled import -/
+
+private theorem center_clean_cell (Q t : Nat) (h : leftDefect Q t 0 = false) :
+    defect Q t 0 = false := by
+  simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using h
+
+/-- Before the rightmost left defect arrives next to the center, a right-head
+defect can occur only at a black center time. -/
+theorem leading_head_black_before_arrival (Q b k s : Nat) (hr : RightmostLeft Q b k)
+    (hc : CenterCleanThrough Q b k) (hs : s + 1 < k)
+    (hh : rightDefect Q (b + s) 1 = true) : Rule30UOR.Core.center (b + s) = true := by
+  have prof := rightmost_left_profile Q b k s hr (by omega) (fun j hj => hc j (by omega))
+  have hl : leftDefect Q (b + s) 1 = false := prof.2.2 1 (by omega)
+  have m := neighbor_matching Q (b + s) 0
+    (center_clean_cell Q (b + s) (hc s (by omega)))
+    (center_clean_cell Q (b + s + 1) (by
+      simpa only [Nat.add_assoc] using hc (s + 1) (by omega)))
+  have hl' : defect Q (b + s) (0 - 1) = false := by
+    simpa only [leftDefect, show (0 : Int) - 1 = -((1 : Nat) : Int) by omega] using hl
+  rw [hl', show (0 : Int) + 1 = ((1 : Nat) : Int) by omega, ← rightDefect_eq_defect, hh] at m
+  rw [Rule30UOR.Scale.center_eq_kit]
+  cases hcell : cell (b + s) 0
+  · rw [hcell] at m; exact absurd m (by decide)
+  · exact hcell
+
+/-- **The coupled import is born at the arrival step.** For a leading source of
+depth `k ≥ 3` followed by an all-white center gap, a head-import path ending at the
+first center erasure must start exactly one step before it. Earlier persistence of
+the head defect would put it at a white center before the left front arrives. -/
+theorem coupled_import_born_at_arrival (Q b k start : Nat) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) (hp : HeadImportPath Q start (b + (k - 1))) :
+    start = b + (k - 2) := by
+  have hlt := hp.1
+  apply Classical.byContradiction
+  intro hne
+  have hh : rightDefect Q (b + (k - 2)) 1 = true :=
+    hp.2.2.2.2.2.2 (b + (k - 2)) (by omega) (by omega)
+  have hb := leading_head_black_before_arrival Q b k (k - 2) hl.2.2 hc (by omega) hh
+  have hwhite := hw (k - 2) (by omega) (by omega)
+  rw [hb] at hwhite
+  exact absurd hwhite (by decide)
+
+/-- **Mirror domination.** Between the source and the import the head stays clean,
+so the right front is at least `2`; it must reach column `2` at the import time and
+moves left by at most one column per step. At every time `b + s` of the white gap it
+therefore lies in `[2, k - s]`: never farther from the center than the left front,
+which is at depth `k - s`. -/
+theorem coupled_right_front_mirror (Q b k : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) :
+    (∀ s : Nat, 1 ≤ s → s + 1 < k → rightDefect Q (b + s) 1 = false) ∧
+      ∀ s : Nat, 1 ≤ s → s + 1 < k → ∃ y : Nat, RightFront Q (b + s) y ∧ 2 ≤ y ∧ y ≤ k - s := by
+  have hclean : ∀ s : Nat, 1 ≤ s → s + 1 < k → rightDefect Q (b + s) 1 = false := by
+    intro s hs1 hs
+    cases hh : rightDefect Q (b + s) 1
+    · rfl
+    · have hb := leading_head_black_before_arrival Q b k s hl.2.2 hc hs hh
+      have hwhite := hw s (by omega) (by omega)
+      rw [hb] at hwhite
+      exact absurd hwhite (by decide)
+  refine ⟨hclean, ?_⟩
+  have hge : ∀ s y : Nat, 1 ≤ s → s + 1 < k → RightFront Q (b + s) y → 2 ≤ y := by
+    intro s y hs1 hs hy
+    apply Classical.byContradiction
+    intro hlt
+    have hy1 : y = 1 := by have := hy.1; omega
+    have := hy.2.1
+    rw [hy1, hclean s hs1 hs] at this
+    exact absurd this (by decide)
+  -- the import: the head is clean at b+(k-2) and defective at b+(k-1)
+  have hfront_end : ∀ y : Nat, RightFront Q (b + (k - 2)) y → y ≤ 2 := by
+    intro y hy
+    apply Classical.byContradiction
+    intro hgt
+    obtain ⟨_hf, he, _hg, _hw⟩ := leading_first_erasure Q b k hl hc
+    have hin : leftDefect Q (b + (k - 1)) 1 = true := he.1
+    have hk' : leftDefect Q (b + (k - 1) + 1) 0 = false := by
+      rw [show b + (k - 1) + 1 = b + k by omega]
+      exact hc k (Nat.le_refl _)
+    have hin' : defect Q (b + (k - 1)) (0 - 1) = true := by
+      simpa only [leftDefect, show (0 : Int) - 1 = -((1 : Nat) : Int) by omega] using hin
+    have pair := defect_right_and_white_of_clean_pair Q (b + (k - 1)) 0
+      (center_clean_cell Q _ (hc (k - 1) (by omega))) (center_clean_cell Q _ hk') hin'
+    have hend : rightDefect Q (b + (k - 1)) 1 = true := by
+      rw [rightDefect_eq_defect]
+      simpa only [show (0 : Int) + 1 = ((1 : Nat) : Int) by omega] using pair.1
+    have hclean' := defect_clean_step Q (b + (k - 2)) 0 ((y : Int) - 1)
+      (right_front_clean Q (b + (k - 2)) y (hc (k - 2) (by omega)) hy)
+      ((1 : Nat) : Int) (by omega) (by omega)
+    rw [← rightDefect_eq_defect, show b + (k - 2) + 1 = b + (k - 1) by omega, hend] at hclean'
+    exact absurd hclean' (by decide)
+  have back : ∀ j : Nat, j + 3 ≤ k →
+      ∃ y : Nat, RightFront Q (b + (k - 2 - j)) y ∧ y ≤ 2 + j := by
+    intro j
+    induction j with
+    | zero =>
+      intro _
+      obtain ⟨y, _, hy⟩ := exists_right_front Q (b + (k - 2)) hQ
+      exact ⟨y, by simpa only [Nat.sub_zero] using hy, hfront_end y hy⟩
+    | succ j ih =>
+      intro hj
+      obtain ⟨y', hy', hy'b⟩ := ih (by omega)
+      obtain ⟨y, _, hy⟩ := exists_right_front Q (b + (k - 2 - (j + 1))) hQ
+      have hlow := right_front_lower Q (b + (k - 2 - (j + 1))) y y'
+        (by simpa only [Nat.add_assoc] using hc (k - 2 - (j + 1)) (by omega)) hy
+        (by rwa [show b + (k - 2 - (j + 1)) + 1 = b + (k - 2 - j) by omega])
+      exact ⟨y, hy, by omega⟩
+  intro s hs1 hs
+  obtain ⟨y, hy, hyb⟩ := back (k - 2 - s) (by omega)
+  rw [show b + (k - 2 - (k - 2 - s)) = b + s by omega] at hy
+  exact ⟨y, hy, hge s y hs1 hs hy, by omega⟩
+
+/-- Under a clean center, a front that moves left must move by exactly one column,
+through a common white cell. -/
+theorem right_front_lockstep (Q t y z : Nat) (hc : leftDefect Q t 0 = false)
+    (hy : RightFront Q t y) (h2 : 2 ≤ y) (hz : RightFront Q (t + 1) z) (hle : z + 1 ≤ y) :
+    z = y - 1 ∧ rightCell t (y - 1) = false := by
+  have hlow := right_front_lower Q t y z hc hy hz
+  have he : z = y - 1 := by omega
+  refine ⟨he, ?_⟩
+  have hd := right_front_descent Q t y hc hy h2
+  have hy'd := hz.2.1
+  rw [he, show t + 1 = t + 1 from rfl, hd] at hy'd
+  cases hcell : rightCell t (y - 1)
+  · rfl
+  · rw [hcell] at hy'd; exact absurd hy'd (by decide)
+
+/-- **White staircase.** In the coupled gap, once the right front is at the mirror
+position `k - s` of the left front, it must descend in lockstep with it until the
+import. Each step needs a common white cell at the column just inside the front. -/
+theorem coupled_white_staircase (Q b k s : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) (hs1 : 1 ≤ s) (heq : RightFront Q (b + s) (k - s)) :
+    ∀ i : Nat, s ≤ i → i + 2 < k →
+      RightFront Q (b + i) (k - i) ∧ rightCell (b + i) (k - i - 1) = false := by
+  have dom := (coupled_right_front_mirror Q b k hQ h3 hl hc hw).2
+  intro i
+  induction i with
+  | zero => intro hi; omega
+  | succ i ih =>
+    intro hi hik
+    have hfront : RightFront Q (b + (i + 1)) (k - (i + 1)) := by
+      by_cases hsi : s = i + 1
+      · rw [← hsi]; exact heq
+      · have prev := ih (by omega) (by omega)
+        obtain ⟨y', hy', _, hy'b⟩ := dom (i + 1) (by omega) (by omega)
+        have ls := right_front_lockstep Q (b + i) (k - i) y'
+          (hc i (by omega)) prev.1 (by omega)
+          (by rwa [show b + i + 1 = b + (i + 1) by omega]) (by omega)
+        rw [ls.1, show k - i - 1 = k - (i + 1) by omega] at hy'
+        exact hy'
+    refine ⟨hfront, ?_⟩
+    obtain ⟨y', hy', _, hy'b⟩ := dom (i + 2) (by omega) (by omega)
+    have ls := right_front_lockstep Q (b + (i + 1)) (k - (i + 1)) y'
+      (hc (i + 1) (by omega)) hfront (by omega)
+      (by rwa [show b + (i + 1) + 1 = b + (i + 2) by omega]) (by omega)
+    simpa only [show k - (i + 1) - 1 = k - (i + 1) - 1 from rfl] using ls.2
+
+/-- The mirror domination at one time `b + s` of the white gap. -/
+theorem coupled_right_front_mirror_at (Q b k s : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) (hs1 : 1 ≤ s) (hs : s + 1 < k) :
+    ∃ y : Nat, rightDefect Q (b + s) 1 = false ∧ RightFront Q (b + s) y ∧ 2 ≤ y ∧ y ≤ k - s := by
+  have h := coupled_right_front_mirror Q b k hQ h3 hl hc hw
+  obtain ⟨y, hy, hy2, hyk⟩ := h.2 s hs1 hs
+  exact ⟨y, h.1 s hs1 hs, hy, hy2, hyk⟩
+
+/-- One stair of the forced white staircase: mirror position at `b + s` forces the
+common white cell just inside the front and mirror position one step later. -/
+theorem coupled_white_staircase_at (Q b k s : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) (hs1 : 1 ≤ s) (hs : s + 2 < k)
+    (heq : RightFront Q (b + s) (k - s)) :
+    rightCell (b + s) (k - s - 1) = false ∧ RightFront Q (b + (s + 1)) (k - (s + 1)) := by
+  have st := coupled_white_staircase Q b k s hQ h3 hl hc hw hs1 heq
+  refine ⟨(st s (Nat.le_refl _) hs).2, ?_⟩
+  by_cases hk : s + 3 < k
+  · exact (st (s + 1) (by omega) (by omega)).1
+  · obtain ⟨y', _, hy', _, hy'b⟩ := coupled_right_front_mirror_at Q b k (s + 1) hQ h3 hl hc hw
+      (by omega) (by omega)
+    have ls := right_front_lockstep Q (b + s) (k - s) y' (hc s (by omega)) heq (by omega)
+      (by rwa [show b + s + 1 = b + (s + 1) by omega]) (by omega)
+    rwa [ls.1, show k - s - 1 = k - (s + 1) by omega] at hy'
+
+/-- A finite kernel certificate that the coupled white-gap hypotheses are jointly
+satisfiable in the actual seed: lag 14, black source time 5, depth 3, white centers
+at 6 and 7, the right front at the mirror position 2 at time 6, and the head import
+born at time 6, exactly one step before arrival. Not a premise of any unbounded claim. -/
+theorem seed_coupled_import_at_arrival :
+    LeadingAdvance 14 5 3 ∧ CenterCleanThrough 14 5 3 ∧ WhiteCenterGap 5 2 ∧
+      Rule30UOR.Core.center 5 = true ∧ RightFront 14 6 2 ∧ HeadImportPath 14 6 7 := by
+  obtain ⟨hl, hc⟩ := leading_of_rows 14 5 3 (by unfold RowLeadingData; decide +kernel)
+  have data : cell 5 0 = true ∧ cell 6 0 = false ∧ cell 7 0 = false ∧
+      rightCell 6 1 = false ∧ rightCell 20 1 = false ∧ rightCell 6 2 = false ∧
+      rightCell 20 2 = true ∧ rightCell 7 1 = false ∧ rightCell 21 1 = true := by
+    simp only [rightCell, Int.natCast_one, show ((2 : Nat) : Int) = 2 by omega]
+    rw [cell_as_row 5 0 (by omega), cell_as_row 6 0 (by omega), cell_as_row 7 0 (by omega),
+      cell_as_row 6 1 (by omega), cell_as_row 20 1 (by omega), cell_as_row 6 2 (by omega),
+      cell_as_row 20 2 (by omega), cell_as_row 7 1 (by omega), cell_as_row 21 1 (by omega)]
+    decide +kernel
+  obtain ⟨h5, h6, h7, a61, a201, a62, a202, a71, a211⟩ := data
+  have hd1 : rightDefect 14 6 1 = false := by simp [rightDefect, a61, a201]
+  have hd2 : rightDefect 14 6 2 = true := by simp [rightDefect, a62, a202]
+  have hn : rightDefect 14 7 1 = true := by simp [rightDefect, a71, a211]
+  have hc6 : Rule30UOR.Core.center (6 + 14) = Rule30UOR.Core.center 6 := by
+    have := clean_center_core 14 5 3 hc 1 (by omega)
+    simpa only [show 5 + 1 = 6 by omega] using this
+  have birth := right_head_birth 14 6 hc6 hd1 hn
+  refine ⟨hl, hc, ?_, ?_, ⟨by omega, hd2, ?_⟩, ⟨by omega, hd1, birth.1, birth.2.1, birth.2.2.1,
+    birth.2.2.2.1, ?_⟩⟩
+  · intro j hj0 hj2
+    rw [Rule30UOR.Scale.center_eq_kit]
+    rcases (show j = 1 ∨ j = 2 by omega) with rfl | rfl
+    · exact h6
+    · exact h7
+  · rw [Rule30UOR.Scale.center_eq_kit]; exact h5
+  · intro j hj1 hj2
+    rw [show j = 1 by omega]; exact hd1
+  · intro s h6' h7'
+    rw [show s = 7 by omega]; exact hn
+
+/-- **Coupled ancestry under a hypothetical periodic center.** The joint witness of
+`periodic_coupled_cancellation` has, in addition: the import is born at the arrival
+step whenever `k ≥ 3`; the right front one step after the source lies in `[2, k - 1]`
+with a clean head until the import; and the import's column-2 defect and the left
+source descend, after time `T`, from right-half and left-half defects respectively.
+Their lineages meet only before `T`. -/
+theorem periodic_coupled_import_ancestry (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
+    ∃ start b k y : Nat, N ≤ start ∧ N ≤ b ∧ T ≤ b ∧ T ≤ start ∧ 2 ≤ k ∧ k ≤ P ∧
+      Rule30UOR.Core.center b = true ∧ WhiteCenterGap b (k - 1) ∧
+      LeadingAdvance (m * P) b k ∧ gateCode (m * P) (b + (k - 1)) 0 = g ∧
+      HeadImportPath (m * P) start (b + (k - 1)) ∧
+      (3 ≤ k → start = b + (k - 2)) ∧
+      (3 ≤ k → RightFront (m * P) (b + 1) y ∧ 2 ≤ y ∧ y ≤ k - 1) ∧
+      RightLineage (m * P) start 2 T ∧ LeftLineage (m * P) b k T := by
+  obtain ⟨start, b, k, hs, hb, hk, hblack, hwhite, hl, _hf, hgate, path, _balance⟩ :=
+    periodic_coupled_cancellation T P m (max T N) g hP hm hc hg
+  have hp : ∀ t, T ≤ t → center (t + P) = center t := by
+    intro t ht
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
+  have clean : ∀ t n : Nat, T ≤ t → CenterCleanThrough (m * P) t n := by
+    intro t n ht s _hbound
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
+      center_defect_zero hp m (t + s) (by omega)
+  have hQ : 0 < m * P := Nat.mul_pos hm hP
+  have hy : ∃ y : Nat, 3 ≤ k → RightFront (m * P) (b + 1) y ∧ 2 ≤ y ∧ y ≤ k - 1 := by
+    by_cases h3 : 3 ≤ k
+    · obtain ⟨y, _, hy, hy2, hyk⟩ := coupled_right_front_mirror_at (m * P) b k 1 hQ h3 hl
+        (clean b k (by omega)) hwhite (Nat.le_refl _) (by omega)
+      exact ⟨y, fun _ => ⟨hy, hy2, hyk⟩⟩
+    · exact ⟨0, fun h => absurd h h3⟩
+  obtain ⟨y, hy⟩ := hy
+  refine ⟨start, b, k, y, by omega, by omega, by omega, by omega, hl.1, hk, hblack, hwhite, hl,
+    hgate, path, fun h3 => coupled_import_born_at_arrival (m * P) b k start h3 hl
+      (clean b k (by omega)) hwhite path, hy,
+    right_lineage_of_clean_center (m * P) start 2 T (by omega) (by omega) path.2.2.2.2.1
+      (clean T (start - T) (Nat.le_refl _)),
+    left_lineage_of_clean_center (m * P) b k T (by have := hl.1; omega) (by omega)
+      hl.2.2.2.1 (clean T (b - T) (Nat.le_refl _))⟩
+
+/-! ## Moving-diagonal transport to a physical head
+
+A diagonal point at time `t` has position `d - t`. Its right-moving
+characteristic reaches column `-p` at time `t + (t - d - p)`.
+The corresponding point at time `t + Q` reaches that same column `2 * Q`
+steps later. The two characteristics have different lengths; neither flux
+may be discarded. The reset pair on `z + 1` and `z + 3` has one common
+physical endpoint, and its two tail fluxes differ by twice the initial phase.
+-/
+
+/-- One physical characteristic in the actual seeded orbit. -/
+def rayBit (t k n : Nat) : Bool := cell (t + n) (-(k : Int) + (n : Int))
+
+/-- Exact single-history OR contribution along that characteristic. -/
+def rayFlux (t k : Nat) : Nat → Int
+  | 0 => 0
+  | n + 1 => rayFlux t k n +
+      (1 - 2 * bitValue (rayBit t k n)) *
+        bitValue (cell (t + n) (-(k : Int) + (n : Int) + 1) ||
+          cell (t + n) (-(k : Int) + (n : Int) + 2))
+
+/-- Signed difference on a moving diagonal, distinct from `leftPhase`. -/
+def diagonalPhase (Q d t : Nat) : Int :=
+  bitValue (Rule30UOR.Core.ldiag d (t + Q)) - bitValue (Rule30UOR.Core.ldiag d t)
+
+/-- Later minus earlier flux, with the later characteristic longer by `Q`. -/
+def diagonalFlux (Q d t p : Nat) : Int :=
+  rayFlux (t + Q) (t + Q - d) (t + Q - d - p) -
+    rayFlux t (t - d) (t - d - p)
+
+private theorem bit_toggle_balance (a g : Bool) :
+    bitValue (xor a g) = bitValue a + (1 - 2 * bitValue a) * bitValue g := by
+  cases a <;> cases g <;> decide
+
+/-- Every interior toggle/reset is retained in the ray flux. -/
+theorem ray_bit_balance (t k : Nat) : ∀ n : Nat,
+    bitValue (rayBit t k n) = bitValue (rayBit t k 0) + rayFlux t k n := by
+  intro n
+  induction n with
+  | zero => simp only [rayFlux, Int.add_zero]
+  | succ n ih =>
+    have hs : rayBit t k (n + 1) = xor (rayBit t k n)
+        (cell (t + n) (-(k : Int) + (n : Int) + 1) ||
+          cell (t + n) (-(k : Int) + (n : Int) + 2)) := by
+      unfold rayBit
+      rw [show t + (n + 1) = (t + n) + 1 by omega,
+        show -(k : Int) + ((n + 1 : Nat) : Int) = -(k : Int) + (n : Int) + 1 by omega]
+      change xor (cell (t + n) ((-(k : Int) + (n : Int) + 1) - 1))
+        (cell (t + n) (-(k : Int) + (n : Int) + 1) ||
+          cell (t + n) ((-(k : Int) + (n : Int) + 1) + 1)) = _
+      rw [show (-(k : Int) + (n : Int) + 1) - 1 = -(k : Int) + (n : Int) by omega,
+        show (-(k : Int) + (n : Int) + 1) + 1 = -(k : Int) + (n : Int) + 2 by omega]
+    rw [hs, bit_toggle_balance]
+    simp only [rayFlux]
+    omega
+
+private theorem ray_start_diagonal (d t : Nat) (hd : d ≤ t) :
+    rayBit t (t - d) 0 = Rule30UOR.Core.ldiag d t := by
+  have h := Rule30UOR.Interfaces.ldiag_eq_cell_neg d (t - d)
+  rw [show d + (t - d) = t by omega, Rule30UOR.Scale.cell_eq_kit] at h
+  simpa only [rayBit, Nat.add_zero, Int.natCast_zero, Int.add_zero] using h.symm
+
+/-- Moving-diagonal lag `Q` arrives as physical-column lag `Q + Q`. -/
+theorem diagonal_ray_balance (Q d t p : Nat) (hp : d + p ≤ t) :
+    leftPhase (Q + Q) (t + (t - d - p)) p =
+      diagonalPhase Q d t + diagonalFlux Q d t p := by
+  have h0 := ray_bit_balance t (t - d) (t - d - p)
+  have h1 := ray_bit_balance (t + Q) (t + Q - d) (t + Q - d - p)
+  have e0 : rayBit t (t - d) (t - d - p) =
+      cell (t + (t - d - p)) (-(p : Int)) := by
+    unfold rayBit
+    congr 1 <;> omega
+  have e1 : rayBit (t + Q) (t + Q - d) (t + Q - d - p) =
+      cell ((t + (t - d - p)) + (Q + Q)) (-(p : Int)) := by
+    unfold rayBit
+    congr 1 <;> omega
+  rw [e0, ray_start_diagonal d t (by omega)] at h0
+  rw [e1, ray_start_diagonal d (t + Q) (by omega)] at h1
+  unfold leftPhase phase diagonalPhase diagonalFlux
+  omega
+
+/-- Lag addition shifts both the start time and the characteristic length. -/
+theorem diagonal_flux_lag_add (Q R d t p : Nat) :
+    diagonalFlux (Q + R) d t p =
+      diagonalFlux Q d t p + diagonalFlux R d (t + Q) p := by
+  unfold diagonalFlux
+  rw [show t + (Q + R) = (t + Q) + R by omega]
+  omega
+
+/-- The settled doubling diagonal supplies a unit phase and its opposite
+in the next history; the outer comparison has zero phase. -/
+theorem diagonal_phase_doubles (Q z t : Nat)
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hd : Rule30UOR.CompilePoints.DoublesAt Q z)
+    (hs : Rule30UOR.Interfaces.SettledBy (z + 1) t) :
+    (diagonalPhase Q (z + 1) t = -1 ∨ diagonalPhase Q (z + 1) t = 1) ∧
+      diagonalPhase Q (z + 1) (t + Q) = -diagonalPhase Q (z + 1) t ∧
+      diagonalPhase (Q + Q) (z + 1) t = 0 := by
+  have h0 := Rule30UOR.Interfaces.ldiag_settled_antiperiodic_of_doubles Q z t hz hd hs
+  have h1 := Rule30UOR.Interfaces.ldiag_settled_antiperiodic_of_doubles Q z (t + Q) hz hd
+    (show Rule30UOR.Interfaces.SettledBy (z + 1) (t + Q) from Nat.le_trans hs (by omega))
+  have h2 : Rule30UOR.Core.ldiag (z + 1) (t + (Q + Q)) =
+      Rule30UOR.Core.ldiag (z + 1) t := by
+    rw [show t + (Q + Q) = (t + Q) + Q by omega, h1, h0, Bool.not_not]
+  simp only [diagonalPhase, h1, h2, h0]
+  cases Rule30UOR.Core.ldiag (z + 1) t <;> decide
+
+private theorem zero_reset_value (z t : Nat)
+    (hb : Rule30UOR.Core.ldiag (z + 2) t = true) :
+    Rule30UOR.Core.ldiag (z + 3) (t + 1) = !Rule30UOR.Core.ldiag (z + 1) t := by
+  change Rule30UOR.Core.bxor (Rule30UOR.Core.ldiag (z + 1) t)
+    (Rule30UOR.Core.ldiag (z + 2) t || Rule30UOR.Core.ldiag (z + 3) t) = _
+  rw [hb, Bool.true_or]
+  cases Rule30UOR.Core.ldiag (z + 1) t <;> rfl
+
+/-- The seed's settled black diagonal complements both moving histories. -/
+theorem diagonal_reset_phase (Q z t : Nat)
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hs : Rule30UOR.Interfaces.SettledBy (z + 2) t) :
+    diagonalPhase Q (z + 3) (t + 1) = -diagonalPhase Q (z + 1) t := by
+  have b0 := Rule30UOR.Interfaces.ldiag_after_zero_diag z t hz hs
+  have b1 := Rule30UOR.Interfaces.ldiag_after_zero_diag z (t + Q) hz (by
+    exact Nat.le_trans hs (by omega))
+  have r0 := zero_reset_value z t b0
+  have r1 := zero_reset_value z (t + Q) b1
+  unfold diagonalPhase
+  rw [show (t + 1) + Q = (t + Q) + 1 by omega, r0, r1]
+  cases Rule30UOR.Core.ldiag (z + 1) t <;>
+    cases Rule30UOR.Core.ldiag (z + 1) (t + Q) <;> decide
+
+/-- The `z + 1` and `z + 3` rays have the same physical head endpoint.
+Their complete tail fluxes differ by twice the moving input phase. -/
+theorem diagonal_reset_flux_jump (Q z t : Nat)
+    (hz : Rule30UOR.ZeroDiagonals.IsZeroDiag z)
+    (hs : Rule30UOR.Interfaces.SettledBy (z + 2) t) (ht : z + 3 ≤ t) :
+    diagonalFlux Q (z + 3) (t + 1) 1 =
+      diagonalFlux Q (z + 1) t 1 + 2 * diagonalPhase Q (z + 1) t := by
+  have h0 := diagonal_ray_balance Q (z + 1) t 1 (by omega)
+  have h1 := diagonal_ray_balance Q (z + 3) (t + 1) 1 (by omega)
+  rw [show (t + 1) + ((t + 1) - (z + 3) - 1) = t + (t - (z + 1) - 1) by omega] at h1
+  have hr := diagonal_reset_phase Q z t hz hs
+  omega
+
+/-- At a specified common white arrival, the entire moving-diagonal input
+and flux equal the physical right-head phase with the actual next-center sign.
+The arrival time and white-center hypothesis are explicit, not inferred from
+fixed-diagonal periodicity. -/
+theorem periodic_diagonal_white_head_balance (T P m d t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : d + 1 ≤ t)
+    (hT : T ≤ t + (t - d - 1))
+    (hw : Rule30UOR.Core.center (t + (t - d - 1)) = false) :
+    diagonalPhase (m * P) d t + diagonalFlux (m * P) d t 1 =
+      (1 - 2 * bitValue (Rule30UOR.Core.center (t + (t - d - 1) + 1))) *
+        rightPhase (m * P + m * P) (t + (t - d - 1)) 1 := by
+  have hp : ∀ s, T ≤ s → center (s + P) = center s := by
+    intro s hs
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc s hs
+  have clean (s : Nat) (hs : T ≤ s) : leftDefect (m * P + m * P) s 0 = false := by
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero, Nat.add_mul] using
+      center_defect_zero hp (m + m) s hs
+  have matched := white_center_phase_matching (m * P + m * P) (t + (t - d - 1))
+    (clean _ hT) (clean _ (by omega)) hw
+  exact (diagonal_ray_balance (m * P) d t 1 ht).symm.trans matched
+
+/-- When that same physical head is supplied by an actual import path,
+the moving input plus every intervening ray contribution matches its column-2
+birth, including all black-center sign changes on the import path. -/
+theorem periodic_diagonal_import_balance (T P m d t start : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : d + 1 ≤ t)
+    (hs : T ≤ start)
+    (hp : HeadImportPath (m * P + m * P) start (t + (t - d - 1)))
+    (hw : Rule30UOR.Core.center (t + (t - d - 1)) = false) :
+    diagonalPhase (m * P) d t + diagonalFlux (m * P) d t 1 =
+      (1 - 2 * bitValue (Rule30UOR.Core.center (t + (t - d - 1) + 1))) *
+        (centerSign start (t + (t - d - 1) - start) *
+          rightPhase (m * P + m * P) start 2) := by
+  have hT : T ≤ t + (t - d - 1) := by have := hp.1; omega
+  have hpP : ∀ s, T ≤ s → center (s + P) = center s := by
+    intro s h
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc s h
+  have clean : CenterCleanThrough (m * P + m * P) start (t + (t - d - 1) - start) := by
+    intro s _h
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero, Nat.add_mul] using
+      center_defect_zero hpP (m + m) (start + s) (by omega)
+  have matched := periodic_diagonal_white_head_balance T P m d t hc ht hT hw
+  rw [head_import_path_phase (m * P + m * P) start (t + (t - d - 1)) hp clean] at matched
+  exact matched
+
 end Rule30UOR.WittDefect
