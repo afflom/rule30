@@ -526,6 +526,44 @@ import is a closed periodic state. No well-founded global rank or exclusion
 of all such successions has been proved. Problem 1 remains unproved.
 
 
+
+### A joint signed history of the deeper input and left-source cancellation
+
+`HeadImportPath Q start finish` records a birth of the right-head defect at
+`start+1`, from a column-2 defect through common white heads at `start`, and
+its uninterrupted persistence through `finish`. `right_head_birth` proves
+this origin for either center color, including its sign. `centerSign` is the
+product of `1-2*center(t)` over the actual intervening center values.
+`head_import_path_phase` transports the input phase along this very path.
+
+`white_center_phase_matching` ties the signed phases of the two neighbors
+at an actual white-center cancellation. The sign is determined by the next
+common center color, so the common-black reset remains part of the balance.
+
+`periodic_coupled_cancellation` selects a joint history rather than separate
+recurrences. For every lag `Q=m*P`, either erasure gate `g=2` or `g=5`, and
+every starting time `N`, it supplies a left leading source `(b,-k)` and a
+right input `(start,2)`, with `b>=N`, `start>=N`, and `2<=k<=P`. The head path
+ends at the source's first center erasure, `finish=b+k-1`, and
+
+    leftPhase(Q,b,k) + pathFlux(Q,b,k,k-1)
+      = (1-2*center(b+k)) * centerSign(start,finish-start)
+          * rightPhase(Q,start,2).
+
+Here center values on the right are interpreted as integer bits. The proof
+first chooses a late clean head state, then a later oriented leading-source
+erasure, and finally the last clean head state before that same erasure.
+The resulting birth, uninterrupted right path, left characteristic, erasure
+orientation, and reset color all belong to one physical witness.
+
+This establishes the requested causal and signed coupling to the actual
+seeded left front. It does not exclude infinitely many such joint histories.
+The input time is earlier than its own erasure, but the witnesses can restart
+arbitrarily late; that local time decrease is not a global well-founded rank.
+A further seed-specific incompatibility of these coupled histories remains
+unproved. Problem 1 remains unproved.
+
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

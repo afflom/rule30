@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "head-import-path"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit start (const lexlean.std.nat::nat)) (explicit finish (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.HeadImportPath"
+
+[[form]]
+id = "head-import-path"
+channel = "math"
+surface = "headimportpath"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name headimportpath) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

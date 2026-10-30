@@ -1090,4 +1090,209 @@ theorem periodic_right_import_orientation (T P m N : Nat) (before : Bool)
   refine ⟨t, by omega, h0, h1, ?_⟩
   simpa only [Bool.xor_true] using hs
 
+/-! ## A joint history from the deeper right input to a left-source erasure -/
+
+/-- The sign accumulated from actual common-center values, including black
+resets. No periodicity or cancellation of this product is assumed. -/
+def centerSign (start : Nat) : Nat → Int
+  | 0 => 1
+  | n + 1 => (1 - 2 * bitValue (Rule30UOR.Core.center start)) * centerSign (start + 1) n
+
+/-- A physical birth of a head defect followed without interruption to finish.
+The input is at column 2 of the same pair, through a common white head. -/
+def HeadImportPath (Q start finish : Nat) : Prop :=
+  start < finish ∧ rightDefect Q start 1 = false ∧
+    rightCell start 1 = false ∧ rightCell (start + Q) 1 = false ∧
+    rightDefect Q start 2 = true ∧ rightImportDifference Q start = true ∧
+    ∀ s : Nat, start < s → s ≤ finish → rightDefect Q s 1 = true
+
+private theorem head_birth_table : ∀ c a b r s : Bool,
+    xor b a = false → xor (rule c b s) (rule c a r) = true →
+      a = false ∧ b = false ∧ xor s r = true ∧
+        xor ((!b) && s) ((!a) && r) = true ∧
+        bitValue (rule c b s) - bitValue (rule c a r) =
+          (1 - 2 * bitValue c) * (bitValue s - bitValue r) := by
+  unfold rule bitValue
+  decide +kernel
+
+private theorem head_survival_table : ∀ c a b r s : Bool,
+    xor b a = true → xor (rule c b s) (rule c a r) = true →
+      bitValue (rule c b s) - bitValue (rule c a r) =
+        (1 - 2 * bitValue c) * (bitValue b - bitValue a) := by
+  unfold rule bitValue
+  decide +kernel
+
+private theorem right_head_next (t : Nat) :
+    rightCell (t + 1) 1 = rule (Rule30UOR.Core.center t) (rightCell t 1) (rightCell t 2) := by
+  rw [Rule30UOR.Scale.center_eq_kit]
+  rfl
+
+/-- A birth at either center color imports a column-2 unit through white heads.
+Black centers reverse its sign; white centers preserve it. -/
+theorem right_head_birth (Q t : Nat)
+    (hc : Rule30UOR.Core.center (t + Q) = Rule30UOR.Core.center t)
+    (hd : rightDefect Q t 1 = false) (hn : rightDefect Q (t + 1) 1 = true) :
+    rightCell t 1 = false ∧ rightCell (t + Q) 1 = false ∧ rightDefect Q t 2 = true ∧
+      rightImportDifference Q t = true ∧
+      rightPhase Q (t + 1) 1 = (1 - 2 * bitValue (Rule30UOR.Core.center t)) * rightPhase Q t 2 := by
+  have next : rightCell (t + 1 + Q) 1 =
+      rule (Rule30UOR.Core.center t) (rightCell (t + Q) 1) (rightCell (t + Q) 2) := by
+    rw [show t + 1 + Q = (t + Q) + 1 by omega, right_head_next, hc]
+  have hb := head_birth_table (Rule30UOR.Core.center t) (rightCell t 1)
+    (rightCell (t + Q) 1) (rightCell t 2) (rightCell (t + Q) 2)
+    hd (by simpa only [rightDefect, next, right_head_next] using hn)
+  simpa only [rightDefect, rightImportDifference, difference, rightImport, rightPhase,
+    next, right_head_next] using hb
+
+private theorem right_head_survival (Q t : Nat)
+    (hc : Rule30UOR.Core.center (t + Q) = Rule30UOR.Core.center t)
+    (hd : rightDefect Q t 1 = true) (hn : rightDefect Q (t + 1) 1 = true) :
+    rightPhase Q (t + 1) 1 = (1 - 2 * bitValue (Rule30UOR.Core.center t)) * rightPhase Q t 1 := by
+  have next : rightCell (t + 1 + Q) 1 =
+      rule (Rule30UOR.Core.center t) (rightCell (t + Q) 1) (rightCell (t + Q) 2) := by
+    rw [show t + 1 + Q = (t + Q) + 1 by omega, right_head_next, hc]
+  have hh := head_survival_table (Rule30UOR.Core.center t) (rightCell t 1)
+    (rightCell (t + Q) 1) (rightCell t 2) (rightCell (t + Q) 2)
+    hd (by simpa only [rightDefect, next, right_head_next] using hn)
+  simpa only [rightPhase, next, right_head_next] using hh
+
+private theorem right_head_transport (Q : Nat) : ∀ n start : Nat,
+    (∀ s : Nat, s ≤ n → Rule30UOR.Core.center (start + s + Q) = Rule30UOR.Core.center (start + s)) →
+    (∀ s : Nat, s ≤ n → rightDefect Q (start + s) 1 = true) →
+      rightPhase Q (start + n) 1 = centerSign start n * rightPhase Q start 1 := by
+  intro n
+  induction n with
+  | zero => intro start _ _; simp [centerSign]
+  | succ n ih =>
+    intro start hc hd
+    have step := right_head_survival Q start (by simpa only [Nat.add_zero] using hc 0 (by omega))
+      (by simpa only [Nat.add_zero] using hd 0 (by omega))
+      (by simpa only [Nat.add_zero] using hd 1 (by omega))
+    have tail := ih (start + 1) (fun s hs => by
+      simpa only [Nat.add_assoc] using hc (1 + s) (by omega))
+      (fun s hs => by simpa only [Nat.add_assoc] using hd (1 + s) (by omega))
+    rw [show start + (n + 1) = start + 1 + n by omega, tail, step]
+    simp only [centerSign, Int.mul_assoc, Int.mul_left_comm]
+
+private theorem clean_center_core (Q start n : Nat) (hc : CenterCleanThrough Q start n)
+    (s : Nat) (hs : s ≤ n) :
+    Rule30UOR.Core.center (start + s + Q) = Rule30UOR.Core.center (start + s) := by
+  have hh := (difference_eq_false_iff (fun u => cell u 0) Q (start + s)).1 (by
+    simpa only [leftDefect, defect, Int.natCast_zero, Int.neg_zero] using hc s hs)
+  simpa only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using hh
+
+/-- The exact phase carried from the column-2 birth to this same erasure time. -/
+theorem head_import_path_phase (Q start finish : Nat) (hp : HeadImportPath Q start finish)
+    (hc : CenterCleanThrough Q start (finish - start)) :
+    rightPhase Q finish 1 = centerSign start (finish - start) * rightPhase Q start 2 := by
+  obtain ⟨hlt, hzero, _hwhite, _hwhite', _hdeep, _himport, hpath⟩ := hp
+  have birth := (right_head_birth Q start
+    (by simpa only [Nat.add_zero] using clean_center_core Q start (finish - start) hc 0 (by omega))
+    hzero (hpath (start + 1) (by omega) (by omega))).2.2.2.2
+  have tail := right_head_transport Q (finish - start - 1) (start + 1)
+    (fun s hs => by
+      simpa only [Nat.add_assoc] using
+        clean_center_core Q start (finish - start) hc (1 + s) (by omega))
+    (fun s hs => hpath (start + 1 + s) (by omega) (by omega))
+  rw [show start + 1 + (finish - start - 1) = finish by omega, birth] at tail
+  rw [show finish - start = (finish - start - 1) + 1 by omega]
+  simpa only [centerSign, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm] using tail
+
+private theorem common_xor_phase : ∀ c a b : Bool,
+    bitValue (xor c b) - bitValue (xor c a) =
+      (1 - 2 * bitValue c) * (bitValue b - bitValue a) := by
+  unfold bitValue
+  decide +kernel
+
+/-- At a common white center, the two incoming signed phases match with the
+actual next center color determining the sign. -/
+theorem white_center_phase_matching (Q t : Nat)
+    (hc0 : leftDefect Q t 0 = false) (hc1 : leftDefect Q (t + 1) 0 = false)
+    (hw : Rule30UOR.Core.center t = false) :
+    leftPhase Q t 1 = (1 - 2 * bitValue (Rule30UOR.Core.center (t + 1))) * rightPhase Q t 1 := by
+  have window0 : CenterCleanThrough Q t 0 := by
+    intro s hs
+    have he : s = 0 := by omega
+    simpa only [he, Nat.add_zero] using hc0
+  have window1 : CenterCleanThrough Q (t + 1) 0 := by
+    intro s hs
+    have he : s = 0 := by omega
+    simpa only [he, Nat.add_zero] using hc1
+  have same0 := clean_center_core Q t 0 window0 0 (Nat.le_refl _)
+  have same1 := clean_center_core Q (t + 1) 0 window1 0 (Nat.le_refl _)
+  simp only [Nat.add_zero, Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] at same0 same1 hw
+  have white' : cell (t + Q) 0 = false := same0.trans hw
+  have hl := cell_left t 0
+  have hl' := cell_left (t + Q) 0
+  simp only [show (0 : Int) - 1 = -1 by omega, show (0 : Int) + 1 = 1 by omega,
+    hw, white', Bool.false_or] at hl hl'
+  rw [show t + Q + 1 = t + 1 + Q by omega, same1] at hl'
+  simp only [leftPhase, phase, rightPhase, rightCell, Int.natCast_one,
+    Rule30UOR.Scale.center_eq_kit, Rule30Prize.center]
+  rw [hl, hl']
+  exact common_xor_phase (cell (t + 1) 0) (cell t 1) (cell (t + Q) 1)
+
+/-- A late right import, its uninterrupted head path, and a particular left
+leading source are coupled at the same first erasure, with exact signed balance.
+Neither side is selected independently of the other. -/
+theorem periodic_coupled_cancellation (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
+    ∃ start b k : Nat, N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
+      WhiteCenterGap b (k - 1) ∧ LeadingAdvance (m * P) b k ∧
+      FirstPathErasure (m * P) b k (k - 2) ∧ gateCode (m * P) (b + (k - 1)) 0 = g ∧
+      HeadImportPath (m * P) start (b + (k - 1)) ∧
+      leftPhase (m * P) b k + pathFlux (m * P) b k (k - 1) =
+        (1 - 2 * bitValue (Rule30UOR.Core.center (b + k))) *
+          centerSign start (b + (k - 1) - start) * rightPhase (m * P) start 2 := by
+  have hp : ∀ t, T ≤ t → center (t + P) = center t := by
+    intro t ht
+    simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
+  have hper : EventuallyPeriodic center := ⟨T, P, hP, hp⟩
+  obtain ⟨v, hv, hzero⟩ := exists_defect_false_of_periodic hper (m * P) (Nat.mul_pos hm hP)
+    1 (by decide) (max T N)
+  have hz : rightDefect (m * P) v 1 = false := hzero
+  obtain ⟨b, k, hbv, hkP, hb, hw, hl, hf, hgate⟩ :=
+    periodic_black_erasure_origin T P m (v + 1) g hP hm hc hg
+  have hk2 := hl.1
+  let finish := b + (k - 1)
+  have clean : ∀ t : Nat, T ≤ t → leftDefect (m * P) t 0 = false := by
+    intro t ht
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using center_defect_zero hp m t ht
+  obtain ⟨_hf, he, _hg, hwhite⟩ := leading_first_erasure (m * P) b k hl
+    (fun s _hs => clean (b + s) (by omega))
+  have hend : rightDefect (m * P) finish 1 = true := by
+    have hh := (defect_right_and_white_of_clean_pair (m * P) finish 0
+      (clean finish (by dsimp [finish]; omega))
+      (clean (finish + 1) (by dsimp [finish]; omega)) he.1).1
+    exact hh
+  obtain ⟨j, hj, hzj, hpath⟩ := last_black_prefix (fun s => !rightDefect (m * P) (v + s) 1)
+    (finish - v) (by simp only [Nat.add_zero, hz, Bool.not_false])
+    (by simp only [show v + (finish - v) = finish by dsimp [finish]; omega, hend, Bool.not_true])
+  let start := v + j
+  have hstart : start < finish := by dsimp [start]; omega
+  have hzstart : rightDefect (m * P) start 1 = false := by
+    cases hh : rightDefect (m * P) start 1 <;> simp_all [start]
+  have persist : ∀ s : Nat, start < s → s ≤ finish → rightDefect (m * P) s 1 = true := by
+    intro s hs hsf
+    have hh := hpath (s - v) (by dsimp [start] at hs; omega) (by omega)
+    rw [show v + (s - v) = s by dsimp [start] at hs; omega] at hh
+    cases hd : rightDefect (m * P) s 1 <;> simp_all
+  have hbirth := right_head_birth (m * P) start (Rule30UOR.Scale.center_mul hc m start
+    (by dsimp [start]; omega)) hzstart (persist (start + 1) (by omega) (by omega))
+  have path : HeadImportPath (m * P) start finish :=
+    ⟨hstart, hzstart, hbirth.1, hbirth.2.1, hbirth.2.2.1, hbirth.2.2.2.1, persist⟩
+  have transported := head_import_path_phase (m * P) start finish path (fun s _hs =>
+    clean (start + s) (by dsimp [start]; omega))
+  have matched := white_center_phase_matching (m * P) finish
+    (clean finish (by dsimp [finish]; omega))
+    (clean (finish + 1) (by dsimp [finish]; omega)) hwhite
+  have leftpath := path_balance (m * P) b k (k - 1)
+  have leftphase : leftPhase (m * P) finish 1 =
+      leftPhase (m * P) b k + pathFlux (m * P) b k (k - 1) := by
+    simpa only [pathPhase, leftPhase, finish, Int.natCast_one,
+      show -(k : Int) + ((k - 1 : Nat) : Int) = -1 by omega] using leftpath
+  refine ⟨start, b, k, by dsimp [start]; omega, by omega, hkP, hb, hw, hl, hf, hgate, path, ?_⟩
+  rw [← leftphase, matched, transported]
+  simp only [finish, show b + (k - 1) + 1 = b + k by omega, Int.mul_assoc]
+
 end Rule30UOR.WittDefect

@@ -726,4 +726,32 @@ For every natural number \(T\) and natural number \(P\) and natural number \(m\)
 \begin{proof}
 The goal follows from \(\operatorname{periodicrightimportorientation}(T, P, m, N, before)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:right-head-birth}
+For every natural number \(Q\) and natural number \(t\), if \(\operatorname{center}(t + Q) = \operatorname{center}(t)\), then if \(\operatorname{rightdefect}(Q, t, 1) = \operatorname{false}\), then if \(\operatorname{rightdefect}(Q, t + 1, 1) = \operatorname{true}\), then \(\operatorname{rightcell}(t, 1) = \operatorname{false}\) and \(\operatorname{rightcell}(t + Q, 1) = \operatorname{false} \land \operatorname{rightdefect}(Q, t, 2) = \operatorname{true} \land \operatorname{rightimportdifference}(Q, t) = \operatorname{true} \land \operatorname{rightphase}(Q, t + 1, 1) = (1 - 2 \cdot \operatorname{bitvalue}(\operatorname{center}(t))) \cdot \operatorname{rightphase}(Q, t, 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightheadbirth}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:head-import-path-phase}
+For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(\operatorname{headimportpath}(Q, start, finish)\), then if \(\operatorname{centercleanthrough}(Q, start, finish - start)\), then \(\operatorname{rightphase}(Q, finish, 1) = \operatorname{centersign}(start, finish - start) \cdot \operatorname{rightphase}(Q, start, 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{headimportpathphase}(Q, start, finish)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:white-center-phase-matching}
+For every natural number \(Q\) and natural number \(t\), if \(\operatorname{leftdefect}(Q, t, 0) = \operatorname{false}\), then if \(\operatorname{leftdefect}(Q, t + 1, 0) = \operatorname{false}\), then if \(\operatorname{center}(t) = \operatorname{false}\), then \(\operatorname{leftphase}(Q, t, 1) = (1 - 2 \cdot \operatorname{bitvalue}(\operatorname{center}(t + 1))) \cdot \operatorname{rightphase}(Q, t, 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{whitecenterphasematching}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-coupled-cancellation}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(\operatorname{centerperiodic}(T, P)\), then if \(g = 2\) or \(g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N \le start\) and \(N \le b \land k \le P \land \operatorname{center}(b) = \operatorname{true} \land \operatorname{whitecentergap}(b, k - 1) \land \operatorname{leadingadvance}(m \cdot P, b, k) \land \operatorname{firstpatherasure}(m \cdot P, b, k, k - 2) \land \operatorname{gatecode}(m \cdot P, b + (k - 1), 0) = g \land \operatorname{headimportpath}(m \cdot P, start, b + (k - 1)) \land \operatorname{leftphase}(m \cdot P, b, k) + \operatorname{pathflux}(m \cdot P, b, k, k - 1) = (1 - 2 \cdot \operatorname{bitvalue}(\operatorname{center}(b + k))) \cdot \operatorname{centersign}(start, b + (k - 1) - start) \cdot \operatorname{rightphase}(m \cdot P, start, 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodiccoupledcancellation}(T, P, m, N, g)\).
+\end{proof}
 \end{document}

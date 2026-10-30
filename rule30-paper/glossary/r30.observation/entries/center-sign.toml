@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-sign"
+category = "function"
+signature = "(pi ((explicit start (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat))) (const lexlean.std.int::int))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.centerSign"
+
+[[form]]
+id = "center-sign"
+channel = "math"
+surface = "centersign"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centersign) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

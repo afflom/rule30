@@ -829,5 +829,37 @@ Close the goal with \(\lexeme{r30.observation::periodic-right-import-orientation
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{right-head-birth}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(center(t + Q) = center(t)\), then if \(rightdefect(Q, t, 1) = false\), then if \(rightdefect(Q, t + 1, 1) = true\), then \(rightcell(t, 1) = false ∧ rightcell(t + Q, 1) = false ∧ rightdefect(Q, t, 2) = true ∧ rightimportdifference(Q, t) = true ∧ rightphase(Q, t + 1, 1) = (1 intminus 2 inttimes bitvalue(center(t))) inttimes rightphase(Q, t, 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-head-birth}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{head-import-path-phase}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(headimportpath(Q, start, finish)\), then if \(centercleanthrough(Q, start, finish - start)\), then \(rightphase(Q, finish, 1) = centersign(start, finish - start) inttimes rightphase(Q, start, 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::head-import-path-phase}(Q, start, finish)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{white-center-phase-matching}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(leftdefect(Q, t, 0) = false\), then if \(leftdefect(Q, t + 1, 0) = false\), then if \(center(t) = false\), then \(leftphase(Q, t, 1) = (1 intminus 2 inttimes bitvalue(center(t + 1))) inttimes rightphase(Q, t, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::white-center-phase-matching}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-coupled-cancellation}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ leftphase(m * P, b, k) intplus pathflux(m * P, b, k, k - 1) = (1 intminus 2 inttimes bitvalue(center(b + k))) inttimes centersign(start, b + (k - 1) - start) inttimes rightphase(m * P, start, 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-coupled-cancellation}(T, P, m, N, g)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}
