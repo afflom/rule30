@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-flip-mask"
+category = "function"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.centerFlipMask"
+
+[[form]]
+id = "center-flip-mask"
+channel = "math"
+surface = "centerflipmask"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerflipmask) (paren (seq (slot 0))))"

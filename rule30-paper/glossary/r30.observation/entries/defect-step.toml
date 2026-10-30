@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "defect-step"
+category = "function"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.defectStep"
+
+[[form]]
+id = "defect-step"
+channel = "math"
+surface = "defectstep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name defectstep) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

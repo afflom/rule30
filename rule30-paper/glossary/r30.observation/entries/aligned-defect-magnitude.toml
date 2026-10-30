@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "aligned-defect-magnitude"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q)))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (app (const lexlean.std.nat::mul) (nat 2) (app (const lexlean.std.nat::add) (local t) (local Q)))) (app (const r30.observation::aligned-defect) (local Q) (local t))) (app (const lexlean.std.nat::lt) (app (const r30.observation::aligned-defect) (local Q) (local t)) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (app (const lexlean.std.nat::add) (local t) (local Q))) (nat 1)))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.aligned_defect_magnitude"
+
+[[form]]
+id = "aligned-defect-magnitude"
+channel = "math"
+surface = "aligneddefectmagnitude"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name aligneddefectmagnitude) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

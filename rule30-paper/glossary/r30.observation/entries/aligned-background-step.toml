@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "aligned-background-step"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::aligned-background) (local Q) (app (const lexlean.std.nat::add) (local t) (nat 1))) (app (const r30.witt::witt-phi) (app (const r30.observation::aligned-background) (local Q) (local t)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.background_step"
+
+[[form]]
+id = "aligned-background-step"
+channel = "math"
+surface = "alignedbackgroundstep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name alignedbackgroundstep) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

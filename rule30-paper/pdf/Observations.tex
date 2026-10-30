@@ -1013,4 +1013,116 @@ The goal follows from \(\operatorname{coupledblackrootprefix}(Q, b, k, start, q)
 \begin{proof}
 The goal follows from \(\operatorname{seeddepthtwosurvival}\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:aligned-background-step}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{alignedbackground}(Q, t + 1) = \operatorname{wittphi}(\operatorname{alignedbackground}(Q, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{alignedbackgroundstep}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:aligned-defect-step}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{aligneddefect}(Q, t + 1) = \operatorname{defectstep}(\operatorname{alignedbackground}(Q, t), \operatorname{aligneddefect}(Q, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{aligneddefectstep}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:background-top-bit}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{rowbit}(\operatorname{alignedbackground}(Q, t), 2 \cdot t + Q) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{backgroundtopbit}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:aligned-defect-top-bit}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(\operatorname{rowbit}(\operatorname{aligneddefect}(Q, t), 2 \cdot (t + Q)) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{aligneddefecttopbit}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:aligned-defect-magnitude}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(\operatorname{twopow}(2 \cdot (t + Q)) \le \operatorname{aligneddefect}(Q, t)\) and \(\operatorname{aligneddefect}(Q, t) < \operatorname{twopow}(2 \cdot (t + Q) + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{aligneddefectmagnitude}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:aligned-defect-above-top}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(2 \cdot (t + Q) < j\), then \(\operatorname{rowbit}(\operatorname{aligneddefect}(Q, t), j) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{aligneddefectabovetop}(Q, t, j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:aligned-defect-low-prefix}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(j < Q\), then \(\operatorname{rowbit}(\operatorname{aligneddefect}(Q, t), j) = \operatorname{rowbit}(\operatorname{wittrow}(t + Q), j)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{aligneddefectlowprefix}(Q, t, j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:defect-step-linear}
+For every natural number \(b\) and natural number \(d\), \(\operatorname{defectstep}(b, d) = \operatorname{wittxor}(\operatorname{wittlinear}(d), \operatorname{wittshl}(\operatorname{wittxor}(\operatorname{wittcarry}(d), \operatorname{crosscarry}(b, d)), 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{defectsteplinear}(b, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:defect-step-low-bit}
+For every natural number \(b\) and natural number \(d\), \(\operatorname{rowbit}(\operatorname{defectstep}(b, d), 0) = \operatorname{rowbit}(d, 0)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{defectsteplowbit}(b, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:defect-step-val-coordinates}
+For every natural number \(b\) and natural number \(d\), \(\operatorname{vala}(\operatorname{defectstep}(b, d)) = \operatorname{valb}(\operatorname{wittxor}(\operatorname{wittcarry}(d), \operatorname{crosscarry}(b, d)))\) and \(\operatorname{valb}(\operatorname{defectstep}(b, d)) = \operatorname{bxor}(\operatorname{vala}(\operatorname{wittxor}(\operatorname{wittcarry}(d), \operatorname{crosscarry}(b, d))), \operatorname{valb}(\operatorname{wittxor}(\operatorname{wittcarry}(d), \operatorname{crosscarry}(b, d))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{defectstepvalcoordinates}(b, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:edge-val-coordinates}
+For every natural number \(j\), \(\operatorname{vala}(\operatorname{wittshl}(1, j + 3)) = \operatorname{vala}(\operatorname{wittshl}(1, j))\) and \(\operatorname{valb}(\operatorname{wittshl}(1, j + 3)) = \operatorname{valb}(\operatorname{wittshl}(1, j)) \land (\operatorname{vala}(\operatorname{wittshl}(1, j)) = \operatorname{true} \lor \operatorname{valb}(\operatorname{wittshl}(1, j)) = \operatorname{true})\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{edgevalcoordinates}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:aligned-defect-window}
+For every natural number \(t\) and natural number \(k\), \(\operatorname{aligneddefect}(\operatorname{twopow}(k), t) = \operatorname{wittxor}(\operatorname{wittwin}(t, \operatorname{twopow}(k)), \operatorname{wittxor}(\operatorname{wittrow}(t), \operatorname{wittshl}(\operatorname{wittrow}(t), \operatorname{twopow}(k) + \operatorname{twopow}(k))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{aligneddefectwindow}(t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:dyadic-window-readings}
+For every natural number \(t\) and natural number \(k\), if \(t < \operatorname{twopow}(k)\), then \(\operatorname{rowbit}(\operatorname{aligneddefect}(\operatorname{twopow}(k), t), 0) = \operatorname{true}\) and \(\operatorname{rowbit}(\operatorname{wittwin}(t, \operatorname{twopow}(k)), 0) = \operatorname{false} \land \operatorname{rowbit}(\operatorname{aligneddefect}(\operatorname{twopow}(k), t), 2 \cdot (t + \operatorname{twopow}(k))) = \operatorname{true} \land \operatorname{rowbit}(\operatorname{wittwin}(t, \operatorname{twopow}(k)), 2 \cdot (t + \operatorname{twopow}(k))) = \operatorname{false} \land \operatorname{vala}(\operatorname{wittwin}(t, \operatorname{twopow}(k))) = \operatorname{vala}(\operatorname{wittrow}(t + \operatorname{twopow}(k))) \land \operatorname{valb}(\operatorname{wittwin}(t, \operatorname{twopow}(k))) = \operatorname{valb}(\operatorname{wittrow}(t + \operatorname{twopow}(k))) \land \operatorname{rowbit}(\operatorname{aligneddefect}(\operatorname{twopow}(k), t), t + \operatorname{twopow}(k)) = \operatorname{rowbit}(\operatorname{wittwin}(t, \operatorname{twopow}(k)), t + \operatorname{twopow}(k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{dyadicwindowreadings}(t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-center-cross-carry}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{rowbit}(\operatorname{wittphi}(\operatorname{aligneddefect}(m \cdot P, t)), t + m \cdot P + 1) = \operatorname{rowbit}(\operatorname{crosscarry}(\operatorname{alignedbackground}(m \cdot P, t), \operatorname{aligneddefect}(m \cdot P, t)), t + m \cdot P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodiccentercrosscarry}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:seed-val-cancellation}
+\(\operatorname{aligneddefect}(1, 0) = 5\) and \(\operatorname{vala}(\operatorname{aligneddefect}(1, 0)) = \operatorname{false} \land \operatorname{valb}(\operatorname{aligneddefect}(1, 0)) = \operatorname{true} \land \operatorname{aligneddefect}(1, 2) = 93 \land \operatorname{vala}(\operatorname{aligneddefect}(1, 2)) = \operatorname{false} \land \operatorname{valb}(\operatorname{aligneddefect}(1, 2)) = \operatorname{false} \land \operatorname{rowbit}(\operatorname{aligneddefect}(1, 2), 3) = \operatorname{true} \land \operatorname{aligneddefect}(4, 0) = 385 \land \operatorname{vala}(\operatorname{aligneddefect}(4, 0)) = \operatorname{false} \land \operatorname{valb}(\operatorname{aligneddefect}(4, 0)) = \operatorname{false} \land \operatorname{rowbit}(\operatorname{aligneddefect}(4, 0), 4) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{seedvalcancellation}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-flip-mask-invisible}
+For every natural number \(d\) and natural number \(n\) and natural number \(j\), if \(j < n\) or \(n + 2 < j\), then \(\operatorname{rowbit}(\operatorname{wittxor}(d, \operatorname{centerflipmask}(n)), n) = \operatorname{not}(\operatorname{rowbit}(d, n))\) and \(\operatorname{rowbit}(\operatorname{wittxor}(d, \operatorname{centerflipmask}(n)), j) = \operatorname{rowbit}(d, j) \land \operatorname{vala}(\operatorname{wittxor}(d, \operatorname{centerflipmask}(n))) = \operatorname{vala}(d) \land \operatorname{valb}(\operatorname{wittxor}(d, \operatorname{centerflipmask}(n))) = \operatorname{valb}(d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerflipmaskinvisible}(d, n, j)\).
+\end{proof}
 \end{document}

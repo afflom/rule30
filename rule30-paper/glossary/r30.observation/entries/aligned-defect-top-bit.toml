@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "aligned-defect-top-bit"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q)))) (app (const lexlean.core::eq) (app (const r30.observation::row-bit) (app (const r30.observation::aligned-defect) (local Q) (local t)) (app (const lexlean.std.nat::mul) (nat 2) (app (const lexlean.std.nat::add) (local t) (local Q)))) (const lexlean.std.bool::true))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.aligned_defect_top_bit"
+
+[[form]]
+id = "aligned-defect-top-bit"
+channel = "math"
+surface = "aligneddefecttopbit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name aligneddefecttopbit) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1158,5 +1158,133 @@ Close the goal with \(\lexeme{r30.observation::seed-depth-two-survival}\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{aligned-background-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(alignedbackground(Q, t + 1) = wittphi(alignedbackground(Q, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-background-step}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{aligned-defect-step}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(aligneddefect(Q, t + 1) = defectstep(alignedbackground(Q, t), aligneddefect(Q, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-defect-step}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{background-top-bit}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(rowbit(alignedbackground(Q, t), 2 * t + Q) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::background-top-bit}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{aligned-defect-top-bit}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(rowbit(aligneddefect(Q, t), 2 * (t + Q)) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-defect-top-bit}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{aligned-defect-magnitude}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(twopow(2 * (t + Q)) ≤ aligneddefect(Q, t) ∧ aligneddefect(Q, t) < twopow(2 * (t + Q) + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-defect-magnitude}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{aligned-defect-above-top}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(2 * (t + Q) < j\), then \(rowbit(aligneddefect(Q, t), j) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-defect-above-top}(Q, t, j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{aligned-defect-low-prefix}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(j < Q\), then \(rowbit(aligneddefect(Q, t), j) = rowbit(wittrow(t + Q), j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-defect-low-prefix}(Q, t, j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{defect-step-linear}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(b\) and natural number \(d\), \(defectstep(b, d) = wittxor(wittlinear(d), wittshl(wittxor(wittcarry(d), crosscarry(b, d)), 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::defect-step-linear}(b, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{defect-step-low-bit}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(b\) and natural number \(d\), \(rowbit(defectstep(b, d), 0) = rowbit(d, 0)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::defect-step-low-bit}(b, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{defect-step-val-coordinates}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(b\) and natural number \(d\), \(vala(defectstep(b, d)) = valb(wittxor(wittcarry(d), crosscarry(b, d))) ∧ valb(defectstep(b, d)) = bxor(vala(wittxor(wittcarry(d), crosscarry(b, d))), valb(wittxor(wittcarry(d), crosscarry(b, d))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::defect-step-val-coordinates}(b, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{edge-val-coordinates}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(j\), \(vala(wittshl(1, j + 3)) = vala(wittshl(1, j)) ∧ valb(wittshl(1, j + 3)) = valb(wittshl(1, j)) ∧ (vala(wittshl(1, j)) = true ∨ valb(wittshl(1, j)) = true)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::edge-val-coordinates}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{aligned-defect-window}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\) and natural number \(k\), \(aligneddefect(twopow(k), t) = wittxor(wittwin(t, twopow(k)), wittxor(wittrow(t), wittshl(wittrow(t), twopow(k) + twopow(k))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-defect-window}(t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{dyadic-window-readings}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(t\) and natural number \(k\), if \(t < twopow(k)\), then \(rowbit(aligneddefect(twopow(k), t), 0) = true ∧ rowbit(wittwin(t, twopow(k)), 0) = false ∧ rowbit(aligneddefect(twopow(k), t), 2 * (t + twopow(k))) = true ∧ rowbit(wittwin(t, twopow(k)), 2 * (t + twopow(k))) = false ∧ vala(wittwin(t, twopow(k))) = vala(wittrow(t + twopow(k))) ∧ valb(wittwin(t, twopow(k))) = valb(wittrow(t + twopow(k))) ∧ rowbit(aligneddefect(twopow(k), t), t + twopow(k)) = rowbit(wittwin(t, twopow(k)), t + twopow(k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::dyadic-window-readings}(t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-center-cross-carry}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(rowbit(wittphi(aligneddefect(m * P, t)), t + m * P + 1) = rowbit(crosscarry(alignedbackground(m * P, t), aligneddefect(m * P, t)), t + m * P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-center-cross-carry}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-val-cancellation}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(aligneddefect(1, 0) = 5 ∧ vala(aligneddefect(1, 0)) = false ∧ valb(aligneddefect(1, 0)) = true ∧ aligneddefect(1, 2) = 93 ∧ vala(aligneddefect(1, 2)) = false ∧ valb(aligneddefect(1, 2)) = false ∧ rowbit(aligneddefect(1, 2), 3) = true ∧ aligneddefect(4, 0) = 385 ∧ vala(aligneddefect(4, 0)) = false ∧ valb(aligneddefect(4, 0)) = false ∧ rowbit(aligneddefect(4, 0), 4) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-val-cancellation}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-flip-mask-invisible}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(d\) and natural number \(n\) and natural number \(j\), if \(j < n ∨ n + 2 < j\), then \(rowbit(wittxor(d, centerflipmask(n)), n) = \lexeme{lexlean.std.bool::not}(rowbit(d, n)) ∧ rowbit(wittxor(d, centerflipmask(n)), j) = rowbit(d, j) ∧ vala(wittxor(d, centerflipmask(n))) = vala(d) ∧ valb(wittxor(d, centerflipmask(n))) = valb(d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-flip-mask-invisible}(d, n, j)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

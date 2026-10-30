@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "aligned-defect-low-prefix"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::lt) (local j) (local Q)))) (app (const lexlean.core::eq) (app (const r30.observation::row-bit) (app (const r30.observation::aligned-defect) (local Q) (local t)) (local j)) (app (const r30.observation::row-bit) (app (const r30.witt::witt-row) (app (const lexlean.std.nat::add) (local t) (local Q))) (local j)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.aligned_defect_low_prefix"
+
+[[form]]
+id = "aligned-defect-low-prefix"
+channel = "math"
+surface = "aligneddefectlowprefix"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name aligneddefectlowprefix) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

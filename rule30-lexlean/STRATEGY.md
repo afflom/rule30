@@ -2126,3 +2126,81 @@ common black cells `0 .. k-3` at its root. No growth or descent of this
 prefix length across distinct windows has been established. Excluding a
 seeded infinite sequence of these fully classified windows remains the
 missing mathematical step for Problem 1.
+
+### Three readings of the aligned pair: edge bookkeeping and center audit
+
+Write `B = row t << Q`, `D = row(t+Q) xor B`, `C = crossCarry B D`,
+and `K = carry D xor C`. These are the actual seeded pair, with no external
+boundary or free phase. The exact update is
+
+```
+B' = phi B
+D' = phi D xor (C << 1) = phiLinear D xor (K << 1).
+```
+
+The following are different readings of this same Nat identity. Here `n=t+Q`.
+`val` evaluates the binary-coefficient polynomial at omega; it respects XOR
+and shifts. It is not a third absolute value on the ordinary integers.
+
+| Reading | Proved information | Seed edge contribution |
+| --- | --- | --- |
+| Ordinary magnitude, `Q>0` | `2^(2n) <= D < 2^(2n+1)`; `B` has top bit `2t+Q` | The later left edge at `2n` is 1, above the earlier aligned cone; all higher bits vanish. XOR must not be replaced by ordinary addition. |
+| Low bits / 2-adic | `D'[0]=D[0]`; `D[j]=row(t+Q)[j]` for `j<Q` | `D[0]=1`, so the entire defect is always a 2-adic unit. A zero center bit does not make the whole defect divisible by `2^(n+1)`. |
+| F4 | `val(D')=omega*val(carry D xor C)` | An isolated edge at index `j` contributes `omega^j`, nonzero and 3-periodic. Other coefficients can cancel it; the linear Phi_3 part evaluates to zero. |
+
+`defect_step_linear`, `defect_step_low_bit`,
+`defect_step_val_coordinates`, `background_top_bit`,
+`aligned_defect_top_bit`, `aligned_defect_above_top`,
+`aligned_defect_magnitude`, `aligned_defect_low_prefix`, and
+`edge_val_coordinates` formalize these statements. The actual lag-1 defect
+changes from `5` at time 0 (F4 value omega) to `93` at time 2 (F4 value 0).
+The lag-4 initial defect is `385`, also of F4 value 0. Both outer edges
+survive. `seed_val_cancellation` is an exact finite kernel certificate;
+there is no conserved nonzero F4 charge being used as a proof premise.
+
+For the window audit let `R=2^k`, `W=winWitt t R`, and
+`E=row t xor (row t << (R+R))`. Then
+
+```
+alignedDefect R t = W xor E.
+```
+
+This exact Nat identity (`aligned_defect_window`) is the conversion needed
+before transporting window statements. The two outer copies supply the
+edge charge removed by the linear comparison used to define `W`.
+
+| Existing window statement | What survives the conversion |
+| --- | --- |
+| `row_scale`, full window recurrences and XOR identities | Exact word identities may be evaluated by bit readouts or `val`; nonlinear cross-carry terms remain. Ordinary magnitude needs separate support bounds. |
+| `winWitt_testBit_low`, threshold zero gaps | These are coefficient statements about `W`, not the aligned `D`. In fact `W[0]=0` whereas `D[0]=1`. |
+| `winWitt_testBit_top_edge_zero` | For `t<R`, `W[2(t+R)]=0`, whereas the aligned defect has 1 there. The outer correction has that edge. |
+| `val_winWitt` | `val(W)=val(row(t+R))` because the linear scale term evaluates to zero. This is global polynomial information, not the value of a selected coefficient, and not `val(D)=val(W)`. |
+| Middle-ray / two-place identities | At the center, `D[t+R]=W[t+R]` if `t<R`: both outer copies vanish there. Other wing and settled-diagonal identities retain their original coordinates, settlement and scale hypotheses. |
+
+`dyadic_window_readings` checks the low edge, top edge, F4 coordinates,
+and center of the same window together. For general `Q=mP`, the dyadic
+three-copy formula must not be used unless `Q=2^k` has actually been
+established; period `P` need not divide a power of two.
+
+The periodic-center condition is the particular coefficient `D[n]=0`
+for `t>=T`. Applied to the next exact pair update it requires
+
+```
+(phi D)[n+1] = C[n].
+```
+
+`periodic_center_cross_carry` records precisely this condition at the
+physical center, without identifying a global F4 value or an outer edge
+with `C[n]`. A proof must show that the actual seeded evolution violates
+this coefficient equality somewhere, or another equivalent center
+condition. The current three readings do not establish such a violation.
+
+Finally, `center_flip_mask_invisible` proves a limitation of these
+projections: XOR with `7 << n` preserves both F4 coordinates and every bit
+outside `[n,n+2]` while flipping bit `n`. For `n>=3`, a word with top bit
+`2n` therefore keeps that top bit, its magnitude interval, and its entire
+low prefix below `n`. This is not an alternative seeded orbit: the mask
+need not respect the nonlinear update. It shows why the missing center
+argument must use further history-specific information, rather than
+inferring a coefficient from the three coarse projections alone.
+Problem 1 remains unproved.

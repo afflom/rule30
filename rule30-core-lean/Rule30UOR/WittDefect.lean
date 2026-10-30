@@ -2558,4 +2558,253 @@ theorem seed_depth_two_survival :
   · exact h5
   · exact h6
 
+/-! ## Three readings of the exact seeded defect pair
+
+Magnitude and low-bit support retain the outer seed edges. Evaluation at
+`omega` is a different, noninjective polynomial readout: it kills the linear
+Phi_3 part and need not retain a nonzero value of the full defect. A dyadic
+Witt window differs from the aligned defect by two outer copies of the earlier
+row. Their center bits agree only under the stated cone hypothesis.
+-/
+
+/-- The earlier aligned copy has its top bit at `2*t + Q`. -/
+theorem background_top_bit (Q t : Nat) : (background Q t).testBit (2 * t + Q) = true := by
+  simp only [background, Nat.testBit_shiftLeft,
+    show decide (2 * t + Q ≥ Q) = true from decide_eq_true (by omega), Bool.true_and]
+  rw [show 2 * t + Q - Q = 2 * t by omega, Rule30UOR.Interfaces.row_testBit,
+    Rule30UOR.Interfaces.rdiag_left_edge]
+
+/-- The later left edge survives in the aligned defect above the earlier copy. -/
+theorem aligned_defect_top_bit (Q t : Nat) (hQ : 0 < Q) :
+    (alignedDefect Q t).testBit (2 * (t + Q)) = true := by
+  simp only [alignedDefect, background, Nat.testBit_xor, Nat.testBit_shiftLeft,
+    show decide (2 * (t + Q) ≥ Q) = true from decide_eq_true (by omega), Bool.true_and]
+  rw [Rule30UOR.Interfaces.row_testBit, Rule30UOR.Interfaces.rdiag_left_edge,
+    Rule30UOR.Interfaces.row_testBit, Rule30UOR.Interfaces.rdiag_gt_two_mul t _ (by omega)]
+  rfl
+
+/-- No defect bit lies above the later seed cone. -/
+theorem aligned_defect_above_top (Q t j : Nat) (hj : 2 * (t + Q) < j) :
+    (alignedDefect Q t).testBit j = false := by
+  simp only [alignedDefect, background, Nat.testBit_xor, Nat.testBit_shiftLeft,
+    show decide (j ≥ Q) = true from decide_eq_true (by omega), Bool.true_and]
+  rw [Rule30UOR.Interfaces.row_testBit, Rule30UOR.Interfaces.rdiag_gt_two_mul (t + Q) j hj,
+    Rule30UOR.Interfaces.row_testBit, Rule30UOR.Interfaces.rdiag_gt_two_mul t (j - Q) (by omega)]
+  rfl
+
+/-- Exact Archimedean magnitude interval of the nonzero seeded defect. -/
+theorem aligned_defect_magnitude (Q t : Nat) (hQ : 0 < Q) :
+    Rule30UOR.Core.twopow (2 * (t + Q)) ≤ alignedDefect Q t ∧
+      alignedDefect Q t < Rule30UOR.Core.twopow (2 * (t + Q) + 1) := by
+  simp only [Rule30UOR.Interfaces.twopow_eq_pow]
+  exact ⟨Nat.ge_two_pow_of_testBit (aligned_defect_top_bit Q t hQ),
+    Nat.lt_pow_two_of_testBit _ (fun j hj => aligned_defect_above_top Q t j (by omega))⟩
+
+/-- Below the alignment shift the entire later low prefix survives unchanged. -/
+theorem aligned_defect_low_prefix (Q t j : Nat) (hj : j < Q) :
+    (alignedDefect Q t).testBit j = (row (t + Q)).testBit j := by
+  simp only [alignedDefect, background, Nat.testBit_xor, Nat.testBit_shiftLeft,
+    show decide (j ≥ Q) = false from decide_eq_false (by omega), Bool.false_and, Bool.xor_false]
+
+/-- The exact polynomial update retains both quadratic carry contributions. -/
+theorem defect_step_linear (b d : Nat) :
+    defectStep b d = Rule30UOR.Core.phiLinear d ^^^
+      ((Rule30UOR.Core.carry d ^^^ crossCarry b d) <<< 1) := by
+  simp only [defectStep, Rule30UOR.Core.phi_split, Nat.shiftLeft_xor_distrib]
+  exact Nat.xor_assoc _ _ _
+
+/-- The unshifted low edge is unchanged by every exact pair update. -/
+theorem defect_step_low_bit (b d : Nat) : (defectStep b d).testBit 0 = d.testBit 0 := by
+  simp [defectStep, Rule30UOR.Core.phi]
+
+private theorem defect_step_val (b d : Nat) :
+    Rule30UOR.Interfaces.val (defectStep b d) =
+      Rule30UOR.Interfaces.mulω (Rule30UOR.Interfaces.val (Rule30UOR.Core.carry d ^^^ crossCarry b d)) := by
+  unfold defectStep
+  rw [Rule30UOR.Interfaces.val_xor, Rule30UOR.Interfaces.val_phi,
+    Rule30UOR.Interfaces.val_shl, Rule30UOR.Interfaces.val_xor]
+  simp only [Rule30UOR.Interfaces.add4, Rule30UOR.Interfaces.mulω]
+  cases (Rule30UOR.Interfaces.val (Rule30UOR.Core.carry d)).1 <;>
+    cases (Rule30UOR.Interfaces.val (Rule30UOR.Core.carry d)).2 <;>
+    cases (Rule30UOR.Interfaces.val (crossCarry b d)).1 <;>
+    cases (Rule30UOR.Interfaces.val (crossCarry b d)).2 <;> rfl
+
+/-- The two F4 coordinates of the same nonlinear pair update. -/
+theorem defect_step_val_coordinates (b d : Nat) :
+    Rule30UOR.Interfaces.valA (defectStep b d) =
+      Rule30UOR.Interfaces.valB (Rule30UOR.Core.carry d ^^^ crossCarry b d) ∧
+    Rule30UOR.Interfaces.valB (defectStep b d) = Rule30UOR.Core.bxor
+      (Rule30UOR.Interfaces.valA (Rule30UOR.Core.carry d ^^^ crossCarry b d))
+      (Rule30UOR.Interfaces.valB (Rule30UOR.Core.carry d ^^^ crossCarry b d)) := by
+  constructor
+  · unfold Rule30UOR.Interfaces.valA Rule30UOR.Interfaces.valB
+    rw [defect_step_val]
+    rfl
+  · unfold Rule30UOR.Interfaces.valA Rule30UOR.Interfaces.valB
+    rw [defect_step_val, Rule30UOR.Scale.bxor_eq]
+    rfl
+
+private theorem edge_val_unit : ∀ j : Nat,
+    Rule30UOR.Interfaces.val (1 <<< j) = (true, false) ∨
+      Rule30UOR.Interfaces.val (1 <<< j) = (false, true) ∨
+      Rule30UOR.Interfaces.val (1 <<< j) = (true, true) := by
+  intro j
+  induction j with
+  | zero => decide +kernel
+  | succ j ih =>
+    rw [Nat.shiftLeft_add, Rule30UOR.Interfaces.val_shl]
+    rcases ih with h | h | h <;> rw [h] <;> decide +kernel
+
+/-- An isolated edge has nonzero F4 value cycling with its exponent modulo 3.
+This is not a nonvanishing assertion about the sum of all defect bits. -/
+theorem edge_val_coordinates (j : Nat) :
+    Rule30UOR.Interfaces.valA (1 <<< (j + 3)) = Rule30UOR.Interfaces.valA (1 <<< j) ∧
+      Rule30UOR.Interfaces.valB (1 <<< (j + 3)) = Rule30UOR.Interfaces.valB (1 <<< j) ∧
+      (Rule30UOR.Interfaces.valA (1 <<< j) = true ∨ Rule30UOR.Interfaces.valB (1 <<< j) = true) := by
+  have shift : 1 <<< (j + 3) = (((1 <<< j) <<< 1) <<< 1) <<< 1 := by
+    simp only [← Nat.shiftLeft_add]
+  have cycle : Rule30UOR.Interfaces.val (1 <<< (j + 3)) = Rule30UOR.Interfaces.val (1 <<< j) := by
+    rw [shift, Rule30UOR.Interfaces.val_shl, Rule30UOR.Interfaces.val_shl, Rule30UOR.Interfaces.val_shl]
+    simp only [Rule30UOR.Interfaces.mulω]
+    cases hv : Rule30UOR.Interfaces.val (1 <<< j) with
+    | mk a b => cases a <;> cases b <;> rfl
+  unfold Rule30UOR.Interfaces.valA Rule30UOR.Interfaces.valB
+  rw [cycle]
+  refine ⟨rfl, rfl, ?_⟩
+  rcases edge_val_unit j with h | h | h <;> rw [h] <;> decide +kernel
+
+/-- A dyadic Witt window and a physically aligned defect differ by two outer
+copies. This Nat identity may be evaluated in every reading. -/
+theorem aligned_defect_window (t k : Nat) :
+    alignedDefect (Rule30UOR.Core.twopow k) t =
+      Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k) ^^^
+        (row t ^^^ (row t <<< (Rule30UOR.Core.twopow k + Rule30UOR.Core.twopow k))) := by
+  rw [alignedDefect, background, Rule30UOR.Interfaces.row_scale]
+  change ((((row t ^^^ (row t <<< Rule30UOR.Core.twopow k)) ^^^
+      (row t <<< (Rule30UOR.Core.twopow k + Rule30UOR.Core.twopow k))) ^^^
+      Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k)) ^^^
+      (row t <<< Rule30UOR.Core.twopow k)) =
+    Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k) ^^^
+      (row t ^^^ (row t <<< (Rule30UOR.Core.twopow k + Rule30UOR.Core.twopow k)))
+  apply Nat.eq_of_testBit_eq
+  intro j
+  simp only [Nat.testBit_xor]
+  cases (row t).testBit j <;>
+    cases (row t <<< Rule30UOR.Core.twopow k).testBit j <;>
+    cases (row t <<< (Rule30UOR.Core.twopow k + Rule30UOR.Core.twopow k)).testBit j <;>
+    cases (Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k)).testBit j <;> rfl
+
+private theorem aligned_window_center (t k : Nat) (ht : t < Rule30UOR.Core.twopow k) :
+    (alignedDefect (Rule30UOR.Core.twopow k) t).testBit (t + Rule30UOR.Core.twopow k) =
+      (Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k)).testBit (t + Rule30UOR.Core.twopow k) := by
+  have low : (row t).testBit (t + Rule30UOR.Core.twopow k) = false := by
+    rw [Rule30UOR.Interfaces.row_testBit]
+    exact Rule30UOR.Interfaces.rdiag_gt_two_mul t _ (by omega)
+  rw [aligned_defect_window, Nat.testBit_xor, Nat.testBit_xor, low, Nat.testBit_shiftLeft]
+  rw [show decide (t + Rule30UOR.Core.twopow k ≥ Rule30UOR.Core.twopow k + Rule30UOR.Core.twopow k) = false
+    from decide_eq_false (by omega)]
+  simp
+
+/-- Audit of both outer edges, the cyclotomic evaluation, and the center bit
+on the same dyadic window. The two objects agree at the center in this cone,
+while their top and low edge bits differ. -/
+theorem dyadic_window_readings (t k : Nat) (ht : t < Rule30UOR.Core.twopow k) :
+    (alignedDefect (Rule30UOR.Core.twopow k) t).testBit 0 = true ∧
+      (Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k)).testBit 0 = false ∧
+      (alignedDefect (Rule30UOR.Core.twopow k) t).testBit (2 * (t + Rule30UOR.Core.twopow k)) = true ∧
+      (Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k)).testBit (2 * (t + Rule30UOR.Core.twopow k)) = false ∧
+      Rule30UOR.Interfaces.valA (Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k)) =
+        Rule30UOR.Interfaces.valA (row (t + Rule30UOR.Core.twopow k)) ∧
+      Rule30UOR.Interfaces.valB (Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k)) =
+        Rule30UOR.Interfaces.valB (row (t + Rule30UOR.Core.twopow k)) ∧
+      (alignedDefect (Rule30UOR.Core.twopow k) t).testBit (t + Rule30UOR.Core.twopow k) =
+        (Rule30UOR.Core.winWitt t (Rule30UOR.Core.twopow k)).testBit (t + Rule30UOR.Core.twopow k) := by
+  have positive : 0 < Rule30UOR.Core.twopow k := by
+    rw [Rule30UOR.Interfaces.twopow_eq_pow]
+    exact Nat.two_pow_pos k
+  exact ⟨alignedDefect_bit_zero _ t positive,
+    Rule30UOR.Interfaces.winWitt_testBit_low t k 0 (by omega),
+    aligned_defect_top_bit _ t positive,
+    by simpa only [Rule30UOR.Core.twopow_succ, Nat.two_mul, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
+      using Rule30UOR.Interfaces.winWitt_testBit_top_edge_zero t k ht,
+    Rule30UOR.Interfaces.valA_winWitt t k, Rule30UOR.Interfaces.valB_winWitt t k,
+    aligned_window_center t k ht⟩
+
+private theorem defect_step_succ_bit (b d n : Nat) :
+    (defectStep b d).testBit (n + 1) =
+      xor ((phi d).testBit (n + 1)) ((crossCarry b d).testBit n) := by
+  simp only [defectStep, Nat.testBit_xor, Nat.testBit_shiftLeft,
+    show decide (n + 1 ≥ 1) = true from decide_eq_true (by omega), Bool.true_and, Nat.add_sub_cancel]
+
+/-- The periodic-center requirement is imposed at bit `t+Q+1` of the next
+pair update, hence at bit `t+Q` of the cross-carry. No global F4 value or
+outer-edge magnitude is substituted for this particular coefficient. -/
+theorem periodic_center_cross_carry (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    (phi (alignedDefect (m * P) t)).testBit (t + m * P + 1) =
+      (crossCarry (background (m * P) t) (alignedDefect (m * P) t)).testBit (t + m * P) := by
+  have same := Rule30UOR.Scale.center_mul hc m (t + 1) (by omega)
+  have hz : (alignedDefect (m * P) (t + 1)).testBit ((t + 1) + m * P) = false := by
+    rw [alignedDefect_center]
+    apply (difference_eq_false_iff center (m * P) (t + 1)).2
+    simpa only [Rule30UOR.Scale.center_eq_kit] using same
+  rw [show (t + 1) + m * P = (t + m * P) + 1 by omega,
+    alignedDefect_step, defect_step_succ_bit] at hz
+  have xor_false : ∀ a b : Bool, xor a b = false → a = b := by decide +kernel
+  exact xor_false _ _ hz
+
+/-- The same actual lag-1 seed defect loses its nonzero F4 value while both
+outer edges survive. Zero F4 value occurs with either center-bit value. -/
+theorem seed_val_cancellation :
+    alignedDefect 1 0 = 5 ∧ Rule30UOR.Interfaces.valA (alignedDefect 1 0) = false ∧
+      Rule30UOR.Interfaces.valB (alignedDefect 1 0) = true ∧
+      alignedDefect 1 2 = 93 ∧ Rule30UOR.Interfaces.valA (alignedDefect 1 2) = false ∧
+      Rule30UOR.Interfaces.valB (alignedDefect 1 2) = false ∧ (alignedDefect 1 2).testBit 3 = true ∧
+      alignedDefect 4 0 = 385 ∧ Rule30UOR.Interfaces.valA (alignedDefect 4 0) = false ∧
+      Rule30UOR.Interfaces.valB (alignedDefect 4 0) = false ∧ (alignedDefect 4 0).testBit 4 = false := by
+  decide +kernel
+
+/-- A Phi_3 block centered at a chosen coefficient. -/
+def centerFlipMask (n : Nat) : Nat := 7 <<< n
+
+private theorem mask_val_zero : ∀ n : Nat,
+    Rule30UOR.Interfaces.val (centerFlipMask n) = (false, false) := by
+  intro n
+  induction n with
+  | zero => decide +kernel
+  | succ n ih =>
+    unfold centerFlipMask at ih ⊢
+    rw [Nat.shiftLeft_add, Rule30UOR.Interfaces.val_shl, ih]
+    rfl
+
+/-- The F4 coordinates and every bit outside `[n,n+2]` fail to distinguish a
+center flip. This is a projection statement about Nat words, not a claim
+that masking preserves the seeded orbit or its nonlinear update. -/
+theorem center_flip_mask_invisible (d n j : Nat) (hj : j < n ∨ n + 2 < j) :
+    (d ^^^ centerFlipMask n).testBit n = !(d.testBit n) ∧
+      (d ^^^ centerFlipMask n).testBit j = d.testBit j ∧
+      Rule30UOR.Interfaces.valA (d ^^^ centerFlipMask n) = Rule30UOR.Interfaces.valA d ∧
+      Rule30UOR.Interfaces.valB (d ^^^ centerFlipMask n) = Rule30UOR.Interfaces.valB d := by
+  have bit7 (i : Nat) : (7 : Nat).testBit i = decide (i < 3) := by
+    rw [show (7 : Nat) = 2 ^ 3 - 1 by decide, Nat.testBit_two_pow_sub_one]
+  have mn : (centerFlipMask n).testBit n = true := by
+    simp [centerFlipMask, Nat.testBit_shiftLeft]
+  have mj : (centerFlipMask n).testBit j = false := by
+    simp only [centerFlipMask, Nat.testBit_shiftLeft, bit7]
+    by_cases hn : j ≥ n
+    · rw [show decide (j ≥ n) = true from decide_eq_true hn, Bool.true_and]
+      exact decide_eq_false (by omega)
+    · rw [show decide (j ≥ n) = false from decide_eq_false hn, Bool.false_and]
+  have vv : Rule30UOR.Interfaces.val (d ^^^ centerFlipMask n) = Rule30UOR.Interfaces.val d := by
+    rw [Rule30UOR.Interfaces.val_xor, mask_val_zero]
+    simp only [Rule30UOR.Interfaces.add4]
+    cases hv : Rule30UOR.Interfaces.val d with
+    | mk a b => cases a <;> cases b <;> rfl
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rw [Nat.testBit_xor, mn]
+    cases d.testBit n <;> rfl
+  · rw [Nat.testBit_xor, mj, Bool.xor_false]
+  · exact congrArg Prod.fst vv
+  · exact congrArg Prod.snd vv
+
 end Rule30UOR.WittDefect
