@@ -137,6 +137,121 @@ theorem leading_first_erasure (Q t k : Nat) (hl : LeadingAdvance Q t k)
       simp_all [gateCase]
   exact ⟨hf, he, hg, by simpa only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using hw⟩
 
+/-! A shared black cell ahead of a leading front forces a black center phase
+before that front can arrive and erase. This is a finite observability statement. -/
+
+private theorem white_prefix_of_traces : ∀ n t : Nat,
+    (∀ s : Nat, s ≤ n + 1 → cell (t + s) 0 = false) →
+    (∀ s : Nat, s ≤ n → cell (t + s) (-1) = false) →
+    ∀ d : Nat, d ≤ n + 1 → cell t (-(d : Int)) = false := by
+  intro n
+  induction n with
+  | zero =>
+    intro t hw hl d hd
+    have he : d = 0 ∨ d = 1 := by omega
+    rcases he with rfl | rfl
+    · simpa only [Nat.add_zero, Int.natCast_zero, Int.neg_zero] using hw 0 (by omega)
+    · simpa only [Nat.add_zero, show -((1 : Nat) : Int) = -(1 : Int) by omega]
+        using hl 0 (by omega)
+  | succ n ih =>
+    intro t hw hl
+    have prev := ih t (fun s hs => hw s (by omega)) (fun s hs => hl s (by omega))
+    have next := ih (t + 1) (fun s hs => by
+      simpa only [show t + 1 + s = t + (s + 1) by omega] using hw (s + 1) (by omega))
+      (fun s hs => by
+        simpa only [show t + 1 + s = t + (s + 1) by omega] using hl (s + 1) (by omega))
+    intro d hd
+    by_cases hprev : d ≤ n + 1
+    · exact prev d hprev
+    · have he : d = n + 2 := by omega
+      rw [he]
+      have hh := cell_left t (-((n + 1 : Nat) : Int))
+      rw [show -((n + 1 : Nat) : Int) - 1 = -((n + 2 : Nat) : Int) by omega,
+        show -((n + 1 : Nat) : Int) + 1 = -(n : Int) by omega,
+        next (n + 1) (Nat.le_refl _), prev (n + 1) (Nat.le_refl _), prev n (by omega)] at hh
+      simpa using hh
+
+private theorem white_right_persists (t : Nat) : ∀ n : Nat,
+    (∀ s : Nat, s < n → cell (t + s) 0 = false) → cell t 1 = true → cell (t + n) 1 = true := by
+  intro n
+  induction n with
+  | zero => intro _ hb; simpa using hb
+  | succ n ih =>
+    intro hw hb
+    have hp := ih (fun s hs => hw s (by omega)) hb
+    rw [show t + (n + 1) = t + n + 1 by omega]
+    change rule (cell (t + n) 0) (cell (t + n) 1) (cell (t + n) 2) = true
+    rw [hw n (by omega), hp]
+    rfl
+
+private theorem black_left_saturates_right (t n : Nat)
+    (hw : ∀ s : Nat, s ≤ n + 1 → cell (t + s) 0 = false)
+    (hb : cell t (-((n + 1 : Nat) : Int)) = true) : cell (t + (n + 1)) 1 = true := by
+  cases he : cell (t + (n + 1)) 1
+  · have hr : ∀ s : Nat, s ≤ n + 1 → cell (t + s) 1 = false := by
+      intro s hs
+      cases hc : cell (t + s) 1
+      · rfl
+      · have hh := white_right_persists (t + s) ((n + 1) - s) (fun j hj => by
+          simpa only [Nat.add_assoc] using hw (s + j) (by omega)) hc
+        rw [show t + s + ((n + 1) - s) = t + (n + 1) by omega, he] at hh
+        contradiction
+    have hl : ∀ s : Nat, s ≤ n → cell (t + s) (-1) = false := by
+      intro s hs
+      have hh := cell_left (t + s) 0
+      simp only [show (0 : Int) - 1 = -1 by omega, show (0 : Int) + 1 = 1 by omega,
+        show t + s + 1 = t + (s + 1) by omega, hw (s + 1) (by omega), hw s (by omega),
+        hr s (by omega)] at hh
+      simpa using hh
+    have hh := white_prefix_of_traces n t hw hl (n + 1) (Nat.le_refl _)
+    rw [hb] at hh
+    contradiction
+  · rfl
+
+/-- The black right endpoint of a leading source must be observed by a black
+center phase before arrival. An entirely white center run would saturate both
+right-neighbor histories, making the required center erasure impossible. -/
+theorem leading_black_before_arrival (Q t k : Nat) (hl : LeadingAdvance Q t k)
+    (hc : CenterCleanThrough Q t k) :
+    ∃ s : Nat, s + 1 < k ∧ Rule30UOR.Core.center (t + s) = true := by
+  obtain ⟨_hf, _he, hg, hwfinal⟩ := leading_first_erasure Q t k hl hc
+  have hk := hl.1
+  apply Classical.byContradiction
+  intro hn
+  have hw : ∀ s : Nat, s ≤ k - 1 → cell (t + s) 0 = false := by
+    intro s hs
+    by_cases hbefore : s + 1 < k
+    · cases hb : cell (t + s) 0
+      · rfl
+      · exact (hn ⟨s, hbefore, by
+          simpa only [Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using hb⟩).elim
+    · have hlast : s = k - 1 := by omega
+      simpa only [hlast, Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using hwfinal
+  have hw' : ∀ s : Nat, s ≤ k - 1 → cell (t + Q + s) 0 = false := by
+    intro s hs
+    have heq := (difference_eq_false_iff (fun u => cell u 0) Q (t + s)).1 (by
+      simpa only [leftDefect, defect, Int.natCast_zero, Int.neg_zero] using hc s (by omega))
+    have hh := heq.trans (hw s hs)
+    simpa only [show t + Q + s = t + s + Q by omega] using hh
+  have ha := hl.2.1
+  rcases ha with ⟨_hd, hb, hb'⟩
+  have hr := black_left_saturates_right t (k - 2) (fun s hs => hw s (by omega)) (by
+    simpa only [show -((k - 2 + 1 : Nat) : Int) = -(k : Int) + 1 by omega] using hb)
+  have hr' := black_left_saturates_right (t + Q) (k - 2) (fun s hs => hw' s (by omega)) (by
+    simpa only [show -((k - 2 + 1 : Nat) : Int) = -(k : Int) + 1 by omega] using hb')
+  have r0 : cell (t + (k - 1)) 1 = true := by
+    simpa only [show k - 2 + 1 = k - 1 by omega] using hr
+  have r1 : cell (t + (k - 1) + Q) 1 = true := by
+    simpa only [show t + Q + (k - 2 + 1) = t + (k - 1) + Q by omega] using hr'
+  have hc0 := hw (k - 1) (Nat.le_refl _)
+  have hc1 : cell (t + (k - 1) + Q) 0 = false := by
+    simpa only [show t + Q + (k - 1) = t + (k - 1) + Q by omega] using
+      hw' (k - 1) (Nat.le_refl _)
+  have hzero : gateCode Q (t + (k - 1)) 0 = 0 := by
+    simp only [gateCode, Int.natCast_zero, Int.neg_zero, Int.zero_add, hc0, hc1, r0, r1, gateCase]
+  rw [hzero] at hg
+  omega
+
 private theorem first_drop : ∀ n : Nat, ∀ f : Nat → Bool, f 0 = true → f n = false →
     ∃ j : Nat, j < n ∧ (∀ i : Nat, i ≤ j → f i = true) ∧ f (j + 1) = false := by
   intro n
@@ -380,6 +495,41 @@ theorem black_window_forces_leading_source (Q b r : Nat) (hr : 0 < r)
     contradiction
   refine ⟨s, k - s, by omega, by omega, by omega, by omega, ?_, prof⟩
   simpa only [advancingAtDepth, hxfront] using hadv
+
+/-- The center is white after the initial boundary phase throughout a finite gap. -/
+def WhiteCenterGap (b r : Nat) : Prop :=
+  ∀ j : Nat, 0 < j → j ≤ r → Rule30UOR.Core.center (b + j) = false
+
+/-- In a black-then-white gap the cone witness has time offset zero: a leading
+source occurring later would need another black center before its arrival. -/
+theorem black_gap_forces_initial_leading (Q b r : Nat) (hr : 0 < r)
+    (hc : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + Q) (r + 1))
+    (hb : Rule30UOR.Core.center b = true) (hw : WhiteCenterGap b r)
+    (hd : leftAdjacentDefect Q (b + r) = true) :
+    ∃ k : Nat, k ≤ r + 1 ∧ LeadingAdvance Q b k := by
+  obtain ⟨s, k, _hs, _hsr, hks, hl⟩ := black_window_forces_leading_source Q b r hr hc hb hd
+  have clean := window_clean Q b (r + 1) hc
+  have source_clean : CenterCleanThrough Q (b + s) k := by
+    intro j hj
+    simpa only [Nat.add_assoc] using clean (s + j) (by omega)
+  obtain ⟨j, hj, hblack⟩ := leading_black_before_arrival Q (b + s) k hl source_clean
+  have hs0 : s = 0 := by
+    apply Classical.byContradiction
+    intro hn
+    have hwhite := hw (s + j) (by omega) (by omega)
+    have hh : Rule30UOR.Core.center (b + (s + j)) = true := by
+      simpa only [Nat.add_assoc] using hblack
+    rw [hwhite] at hh
+    contradiction
+  exact ⟨k, by omega, by simpa only [hs0, Nat.add_zero] using hl⟩
+
+/-- At depth two there is no intermediate phase available: the source center
+itself must be black. -/
+theorem leading_depth_two_black (Q t : Nat) (hl : LeadingAdvance Q t 2)
+    (hc : CenterCleanThrough Q t 2) : Rule30UOR.Core.center t = true := by
+  obtain ⟨s, hs, hb⟩ := leading_black_before_arrival Q t 2 hl hc
+  have he : s = 0 := by omega
+  simpa only [he, Nat.add_zero] using hb
 
 /-- Forgetting the clean prefix recovers the finite advancing-collision interface. -/
 theorem black_window_forces_advancing_collision (Q b r : Nat) (hr : 0 < r)

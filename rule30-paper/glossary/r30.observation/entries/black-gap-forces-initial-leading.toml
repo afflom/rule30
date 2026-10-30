@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "black-gap-forces-initial-leading"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit hr (app (const lexlean.std.nat::lt) (nat 0) (local r))) (explicit hc (app (const r30.observation::center-window-agree) (local b) (app (const lexlean.std.nat::add) (local b) (local Q)) (app (const lexlean.std.nat::add) (local r) (nat 1)))) (explicit hb (app (const lexlean.core::eq) (app (const r30.scale::center) (local b)) (const lexlean.std.bool::true))) (explicit hw (app (const r30.observation::white-center-gap) (local b) (local r))) (explicit hd (app (const lexlean.core::eq) (app (const r30.observation::left-adjacent-defect) (local Q) (app (const lexlean.std.nat::add) (local b) (local r))) (const lexlean.std.bool::true)))) (app (const lexlean.core::exists-op) (lam ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local k) (app (const lexlean.std.nat::add) (local r) (nat 1))) (app (const r30.observation::leading-advance) (local Q) (local b) (local k)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.black_gap_forces_initial_leading"
+
+[[form]]
+id = "black-gap-forces-initial-leading"
+channel = "math"
+surface = "blackgapforcesinitialleading"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name blackgapforcesinitialleading) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

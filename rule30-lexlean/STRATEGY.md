@@ -437,6 +437,33 @@ black resets while remaining tied to the full seeded background. That global
 exclusion remains unproved; Problem 1 remains open.
 
 
+### A finite black-phase observability bridge
+
+`leading_black_before_arrival` strengthens the space-time geometry: a leading
+source at time `t`, depth `k`, under center agreement through its arrival must
+have a black center at some `t+s` with `s+1<k`. The source's common-black right
+endpoint cannot remain hidden throughout an entirely white-center run.
+
+The finite proof couples both halves. If the center stays white, its right
+neighbor is monotone. A black cell at depth `n+1` on the left then forces the
+right neighbor to be black by time `n+1`: otherwise backwards reconstruction
+from the two white center-adjacent traces would make that initial left cell
+white. Apply this to both histories at the leading source's shared black
+endpoint. Both right neighbors would be black at arrival, contradicting the
+required erasure gate mismatch. No asymptotic or measured input is used.
+
+`black_gap_forces_initial_leading` applies this obstruction inside a finite
+black-then-white center window. The oriented cone's selected source must have
+time offset zero, so it is already present at the initial black time. At depth
+two, `leading_depth_two_black` forces the source center itself to be black.
+General leading sources may start at a white time and encounter a black phase
+later; the theorem does not forbid those sources.
+
+This supplies a physical connection between the shared-black endpoint and the
+center phase. It has not excluded repeated black-boundary sources followed by
+white-center erasures. The global seed-specific obstruction remains unproved.
+
+
 ## Method: orthogonal facets, joint statements
 No facet is reduced to another, and no simple relation between facets is assumed. Each facet owns
 its vocabulary (one LexLean glossary package per facet, acyclic imports, one owner per surface,

@@ -748,5 +748,29 @@ Close the goal with \(\lexeme{r30.observation::periodic-erasure-orientation}(T, 
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{leading-black-before-arrival}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leadingadvance(Q, t, k)\), then if \(centercleanthrough(Q, t, k)\), then there exists a natural number \(s\) such that \(s + 1 < k ∧ center(t + s) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::leading-black-before-arrival}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{black-gap-forces-initial-leading}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(whitecentergap(b, r)\), then if \(leftadjacentdefect(Q, b + r) = true\), then there exists a natural number \(k\) such that \(k ≤ r + 1 ∧ leadingadvance(Q, b, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::black-gap-forces-initial-leading}(Q, b, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{leading-depth-two-black}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(leadingadvance(Q, t, 2)\), then if \(centercleanthrough(Q, t, 2)\), then \(center(t) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::leading-depth-two-black}(Q, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}
