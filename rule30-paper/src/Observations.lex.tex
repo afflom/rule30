@@ -1126,5 +1126,37 @@ Close the goal with \(\lexeme{r30.observation::coupled-forced-white-staircase}(Q
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{depth-two-cancellation-cases}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(start\), if \(leadingadvance(Q, b, 2)\), then if \(centercleanthrough(Q, b, 2)\), then if \(headimportpath(Q, start, b + 1)\), then \(center(b) = true ∧ center(b + 1) = false ∧ ((start < b ∧ rightdefect(Q, b, 1) = true ∧ rightimportdifference(Q, b) = false ∧ leftphase(Q, b, 2) = (1 intminus 2 inttimes bitvalue(center(b + 2))) inttimes rightphase(Q, b, 1)) ∨ (start = b ∧ rightdefect(Q, b, 1) = false ∧ rightcell(b, 1) = false ∧ rightcell(b + Q, 1) = false ∧ rightdefect(Q, b, 2) = true ∧ rightimportdifference(Q, b) = true ∧ leftphase(Q, b, 2) = (1 intminus 2 inttimes bitvalue(center(b + 2))) inttimes rightphase(Q, b, 2)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::depth-two-cancellation-cases}(Q, b, start)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{coupled-import-birth-or-depth-two-survival}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\), if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then \(start = b + (k - 2) ∨ (k = 2 ∧ start < b ∧ rightdefect(Q, b, 1) = true)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::coupled-import-birth-or-depth-two-survival}(Q, b, k, start)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{coupled-black-root-prefix}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\) and natural number \(q\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(center(b) = true\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then if \(q + 2 < k\), then \(rightcell(b, q) = true ∧ rightcell(b + Q, q) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::coupled-black-root-prefix}(Q, b, k, start, q)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{seed-depth-two-survival}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+\(leadingadvance(4, 5, 2) ∧ centercleanthrough(4, 5, 2) ∧ headimportpath(4, 2, 6) ∧ rightdefect(4, 5, 1) = true ∧ rightimportdifference(4, 5) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::seed-depth-two-survival}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

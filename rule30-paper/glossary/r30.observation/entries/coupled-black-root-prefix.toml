@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "coupled-black-root-prefix"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit start (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q))) (explicit h3 (app (const lexlean.std.nat::le) (nat 3) (local k))) (explicit hl (app (const r30.observation::leading-advance) (local Q) (local b) (local k))) (explicit hc (app (const r30.observation::center-clean-through) (local Q) (local b) (local k))) (explicit hb (app (const lexlean.core::eq) (app (const r30.scale::center) (local b)) (const lexlean.std.bool::true))) (explicit hw (app (const r30.observation::white-center-gap) (local b) (app (const lexlean.std.nat::sub) (local k) (nat 1)))) (explicit hp (app (const r30.observation::head-import-path) (local Q) (local start) (app (const lexlean.std.nat::add) (local b) (app (const lexlean.std.nat::sub) (local k) (nat 1))))) (explicit hq (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local q) (nat 2)) (local k)))) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::right-cell) (local b) (local q)) (const lexlean.std.bool::true)) (app (const lexlean.core::eq) (app (const r30.observation::right-cell) (app (const lexlean.std.nat::add) (local b) (local Q)) (local q)) (const lexlean.std.bool::true)))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.coupled_black_root_prefix"
+
+[[form]]
+id = "coupled-black-root-prefix"
+channel = "math"
+surface = "coupledblackrootprefix"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name coupledblackrootprefix) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

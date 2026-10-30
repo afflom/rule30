@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "seed-depth-two-survival"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const r30.observation::leading-advance) (nat 4) (nat 5) (nat 2)) (app (const lexlean.core::land) (app (const r30.observation::center-clean-through) (nat 4) (nat 5) (nat 2)) (app (const lexlean.core::land) (app (const r30.observation::head-import-path) (nat 4) (nat 2) (nat 6)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (nat 4) (nat 5) (nat 1)) (const lexlean.std.bool::true)) (app (const lexlean.core::eq) (app (const r30.observation::right-import-difference) (nat 4) (nat 5)) (const lexlean.std.bool::false))))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.seed_depth_two_survival"
+
+[[form]]
+id = "seed-depth-two-survival"
+channel = "math"
+surface = "seeddepthtwosurvival"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name seeddepthtwosurvival)"

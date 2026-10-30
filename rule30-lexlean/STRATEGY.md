@@ -2095,3 +2095,34 @@ These statements use the given physical coupled witness, not independently
 selected recurrence times or a measured pattern. They constrain each
 cancellation window but still do not exclude a seeded sequence of such
 windows across successive black resets.
+
+### Complete birth timing and the background before a black reset
+
+`depth_two_cancellation_cases` covers the small-gap case excluded by the
+fresh-import theorem for `k ≥ 3`. At a depth-two source the center is black
+and the erasure center one step later is white. Either an existing right
+head defect survives the reset (its import path starts before the root,
+and the current import difference is zero), or a new defect is imported
+at the root through common white heads from column 2. The left source
+phase equals the corresponding upstream head/column-2 phase times the
+actual center-reset sign. These constraints follow from the exact physical
+updates and endpoint agreement; they are not an independent seeded sign
+obstruction. `coupled_import_birth_or_depth_two_survival` retains the
+complete timing alternative for all source depths.
+
+The existing lag-4, time-5 seed source realizes the survival branch:
+its head-import path starts at time 2 and persists to the erasure at 6.
+`seed_depth_two_survival` is a finite kernel certificate, without an
+infinite periodic-center hypothesis. It rules out treating every local
+depth-two cancellation as a fresh import, but says nothing about whether
+the branch recurs under a hypothetical eventual center period.
+
+`coupled_black_root_prefix` constrains the rows entering longer-gap
+resets. A white right prefix of length `L` immediately after a black
+center forces a black prefix of length `L-1` beforehand: two adjacent
+white outputs propagate an initial black bit one place to the right.
+Thus the forced white prefix `1 .. k-2` of a coupled mirror window needs
+common black cells `0 .. k-3` at its root. No growth or descent of this
+prefix length across distinct windows has been established. Excluding a
+seeded infinite sequence of these fully classified windows remains the
+missing mathematical step for Problem 1.

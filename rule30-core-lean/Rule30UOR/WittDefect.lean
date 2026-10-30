@@ -2389,4 +2389,173 @@ theorem coupled_forced_white_staircase (Q b k start i : Nat) (hQ : 0 < Q) (h3 : 
         cases c : rightCell (b + i + Q) (k - i - 1) <;> simp_all
     exact ⟨stair.1, stair.2, same.trans stair.2⟩
 
+/-! ## The depth-two branch and the background entering a black reset
+
+A depth-two erasure may carry an older head defect across its black root.
+The alternative is a new column-2 import at that root. In both branches the
+left source is coupled to the corresponding upstream phase with the actual
+next-center sign. Longer gaps instead force the previously proved mirror
+staircase. No bound on the number of such windows is inferred.
+-/
+
+/-- Complete upstream phase and birth-time classification at depth two. -/
+theorem depth_two_cancellation_cases (Q b start : Nat)
+    (hl : LeadingAdvance Q b 2) (hc : CenterCleanThrough Q b 2)
+    (hp : HeadImportPath Q start (b + 1)) :
+    Rule30UOR.Core.center b = true ∧ Rule30UOR.Core.center (b + 1) = false ∧
+      ((start < b ∧ rightDefect Q b 1 = true ∧ rightImportDifference Q b = false ∧
+          leftPhase Q b 2 = (1 - 2 * bitValue (Rule30UOR.Core.center (b + 2))) * rightPhase Q b 1) ∨
+       (start = b ∧ rightDefect Q b 1 = false ∧ rightCell b 1 = false ∧
+          rightCell (b + Q) 1 = false ∧ rightDefect Q b 2 = true ∧ rightImportDifference Q b = true ∧
+          leftPhase Q b 2 = (1 - 2 * bitValue (Rule30UOR.Core.center (b + 2))) * rightPhase Q b 2)) := by
+  have hb := leading_depth_two_black Q b hl hc
+  have hw : Rule30UOR.Core.center (b + 1) = false := (leading_first_erasure Q b 2 hl hc).2.2.2
+  have ce : Rule30UOR.Core.center (b + Q) = Rule30UOR.Core.center b := by
+    simpa only [Nat.add_zero] using clean_center_core Q b 2 hc 0 (by omega)
+  have hb' := ce.trans hb
+  have hn := hp.2.2.2.2.2.2 (b + 1) hp.1 (Nat.le_refl _)
+  have advance : leftPhase Q (b + 1) 1 = -leftPhase Q b 2 :=
+    advancing_phase_flip Q b 2 (by omega) hl.2.1
+  have matched := white_center_phase_matching Q (b + 1) (hc 1 (by omega)) (hc 2 (by omega)) hw
+  rw [show b + 1 + 1 = b + 2 by omega] at matched
+  have balance := right_defect_import_balance Q b ce
+  refine ⟨hb, hw, ?_⟩
+  cases hd : rightDefect Q b 1 with
+  | false =>
+    have born := right_head_birth Q b ce hd hn
+    have reset := black_reset_import Q b hb hb' hd hn
+    have hs : start = b := by
+      apply Classical.byContradiction
+      intro hne
+      have hlt : start < b := by have := hp.1; omega
+      have bad := hp.2.2.2.2.2.2 b hlt (by omega)
+      rw [hd] at bad
+      cases bad
+    have phase_eq : leftPhase Q b 2 =
+        (1 - 2 * bitValue (Rule30UOR.Core.center (b + 2))) * rightPhase Q b 2 := by
+      rw [advance, reset.2.2.2] at matched
+      simp only [Int.mul_neg] at matched
+      omega
+    exact Or.inr ⟨hs, rfl, born.1, born.2.1, born.2.2.1, born.2.2.2.1, phase_eq⟩
+  | true =>
+    have reset := black_reset_survival Q b hb hb' hd hn
+    have hs : start < b := by
+      have hne : start ≠ b := by
+        intro he
+        have bad := hp.2.1
+        rw [he, hd] at bad
+        cases bad
+      have := hp.1
+      omega
+    have no_import : rightImportDifference Q b = false := by
+      rw [hn, hd] at balance
+      cases hi : rightImportDifference Q b with
+      | false => rfl
+      | true =>
+        have bad : (true : Bool) = false := by
+          simpa [hi, Rule30UOR.Core.bxor] using balance
+        cases bad
+    have phase_eq : leftPhase Q b 2 =
+        (1 - 2 * bitValue (Rule30UOR.Core.center (b + 2))) * rightPhase Q b 1 := by
+      rw [advance, reset] at matched
+      simp only [Int.mul_neg] at matched
+      omega
+    exact Or.inl ⟨hs, rfl, no_import, phase_eq⟩
+
+/-- Every coupled import is born one step before erasure, except for the
+explicit depth-two branch that survives from before the black source. -/
+theorem coupled_import_birth_or_depth_two_survival (Q b k start : Nat)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hw : WhiteCenterGap b (k - 1)) (hp : HeadImportPath Q start (b + (k - 1))) :
+    start = b + (k - 2) ∨ (k = 2 ∧ start < b ∧ rightDefect Q b 1 = true) := by
+  by_cases h3 : 3 ≤ k
+  · exact Or.inl (coupled_import_born_at_arrival Q b k start h3 hl hc hw hp)
+  · have hk : k = 2 := by have := hl.1; omega
+    subst k
+    rcases (depth_two_cancellation_cases Q b start hl hc hp).2.2 with carry | born
+    · exact Or.inr ⟨rfl, carry.1, carry.2.1⟩
+    · exact Or.inl (by simpa only [Nat.sub_self, Nat.add_zero] using born.1)
+
+private theorem two_white_outputs (a b c d : Bool)
+    (ha : a = true) (h0 : rule a b c = false) (h1 : rule b c d = false) : b = true := by
+  cases a <;> cases b <;> cases c <;> cases d <;> simp_all [rule]
+
+private theorem right_cell_step (t p : Nat) :
+    rightCell (t + 1) (p + 1) =
+      rule (rightCell t p) (rightCell t (p + 1)) (rightCell t (p + 2)) := by
+  have step := Rule30UOR.Interfaces.rhCenter_step_succ t p
+  simp only [← right_cell_rh, Rule30UOR.Scale.bxor_eq] at step
+  have gate : xor (rightCell t p) (rightCell t (p + 1) || rightCell t (p + 2)) =
+      rule (rightCell t p) (rightCell t (p + 1)) (rightCell t (p + 2)) := by
+    cases rightCell t p <;> cases rightCell t (p + 1) <;> cases rightCell t (p + 2) <;> rfl
+  exact step.trans gate
+
+private theorem white_prefix_black_predecessor (t n : Nat)
+    (hb : Rule30UOR.Core.center t = true)
+    (hw : ∀ q : Nat, 1 ≤ q → q ≤ n + 1 → rightCell (t + 1) q = false) :
+    ∀ q : Nat, q ≤ n → rightCell t q = true := by
+  intro q
+  induction q with
+  | zero =>
+    intro _
+    simpa only [rightCell, Int.natCast_zero, Rule30UOR.Scale.center_eq_kit, Rule30Prize.center] using hb
+  | succ q ih =>
+    intro hq
+    exact two_white_outputs (rightCell t q) (rightCell t (q + 1))
+      (rightCell t (q + 2)) (rightCell t (q + 3)) (ih (by omega))
+      ((right_cell_step t q).symm.trans (hw (q + 1) (by omega) (by omega)))
+      ((right_cell_step t (q + 1)).symm.trans (hw (q + 2) (by omega) (by omega)))
+
+/-- A coupled white gap also fixes the backgrounds entering the reset:
+columns `0 .. k-3` are black in both histories at the black source time. -/
+theorem coupled_black_root_prefix (Q b k start q : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
+    (hl : LeadingAdvance Q b k) (hc : CenterCleanThrough Q b k)
+    (hb : Rule30UOR.Core.center b = true) (hw : WhiteCenterGap b (k - 1))
+    (hp : HeadImportPath Q start (b + (k - 1))) (hq : q + 2 < k) :
+    rightCell b q = true ∧ rightCell (b + Q) q = true := by
+  have data := (coupled_right_front_and_prefix Q b k start hQ h3 hl hc hw hp).2
+  have hb' : Rule30UOR.Core.center (b + Q) = true := by
+    have same := clean_center_core Q b k hc 0 (by omega)
+    simpa only [Nat.add_zero] using same.trans hb
+  have p0 := white_prefix_black_predecessor b (k - 3) hb (fun j hj1 hj =>
+    (data j hj1 (by omega)).1)
+  have p1 := white_prefix_black_predecessor (b + Q) (k - 3) hb' (fun j hj1 hj => by
+    have white := (data j hj1 (by omega)).2
+    simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using white)
+  exact ⟨p0 q (by omega), p1 q (by omega)⟩
+
+/-- The actual seed realizes the depth-two survival branch. This finite
+certificate refutes an unconditional fresh-birth interpretation of that case;
+it is not a periodic-center premise or an unbounded recurrence assertion. -/
+theorem seed_depth_two_survival :
+    LeadingAdvance 4 5 2 ∧ CenterCleanThrough 4 5 2 ∧ HeadImportPath 4 2 6 ∧
+      rightDefect 4 5 1 = true ∧ rightImportDifference 4 5 = false := by
+  obtain ⟨hl, hc, _hg⟩ := seed_leading_gate_five
+  have data : rightCell 2 1 = false ∧ rightCell 6 1 = false ∧
+      rightCell 2 2 = true ∧ rightCell 6 2 = false ∧
+      rightDefect 4 3 1 = true ∧ rightDefect 4 4 1 = true ∧
+      rightDefect 4 5 1 = true ∧ rightDefect 4 6 1 = true ∧ rightImportDifference 4 5 = false := by
+    unfold rightDefect rightImportDifference rightImport difference rightCell
+    simp only [Int.natCast_one, show ((2 : Nat) : Int) = 2 by omega]
+    rw [cell_as_row 2 1 (by omega), cell_as_row 6 1 (by omega),
+      cell_as_row 2 2 (by omega), cell_as_row 6 2 (by omega),
+      cell_as_row 3 1 (by omega), cell_as_row 7 1 (by omega),
+      cell_as_row 4 1 (by omega), cell_as_row 8 1 (by omega),
+      cell_as_row 5 1 (by omega), cell_as_row 9 1 (by omega),
+      cell_as_row 5 2 (by omega), cell_as_row 9 2 (by omega), cell_as_row 10 1 (by omega)]
+    decide +kernel
+  obtain ⟨a, b, c, d, h3, h4, h5, h6, hI⟩ := data
+  have hd : rightDefect 4 2 1 = false := by simp [rightDefect, a, b]
+  have hr : rightDefect 4 2 2 = true := by simp [rightDefect, c, d]
+  have hi : rightImportDifference 4 2 = true := by
+    simp [rightImportDifference, difference, rightImport, a, b, c, d]
+  refine ⟨hl, hc, ⟨by omega, hd, a, b, hr, hi, ?_⟩, h5, hI⟩
+  intro s hs hle
+  have cases_s : s = 3 ∨ s = 4 ∨ s = 5 ∨ s = 6 := by omega
+  rcases cases_s with rfl | rfl | rfl | rfl
+  · exact h3
+  · exact h4
+  · exact h5
+  · exact h6
+
 end Rule30UOR.WittDefect
