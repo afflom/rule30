@@ -30,7 +30,9 @@ structure{
     {name: trigger, type: String},
     {name: artifactName, type: String},
     {name: command, type: String},
-    {name: timeoutMinutes, type: Nat}
+    {name: timeoutMinutes, type: Nat},
+    {name: environment, type: String},
+    {name: url, type: String}
   ]
 }
 
@@ -57,7 +59,7 @@ definition{
   name: publication,
   parameters: [],
   result: Publication,
-  body: (record Publication {workflow := ".github/workflows/view.yml", trigger := "push to main", artifactName := "rule30-current-view", command := "view_render", timeoutMinutes := 5}),
+  body: (record Publication {workflow := ".github/workflows/view.yml", trigger := "push to main", artifactName := "rule30-current-view", command := "view_render", timeoutMinutes := 5, environment := "github-pages", url := "https://afflom.github.io/rule30/"}),
   axioms: []
 }
 
@@ -113,6 +115,17 @@ definition{
   recursive_argument: xs
 }
 
+definition{
+  name: claimStatus,
+  parameters: [key : String, xs : (List Register::Claim)],
+  result: String,
+  body: (match xs
+    | List.nil => ""
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head status) else (claimStatus key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
 theorem{
   name: entryIsPublished,
   parameters: [],
@@ -133,6 +146,22 @@ theorem{
   name: publicationCommandExists,
   parameters: [],
   statement: ((memberString (project (publication) command) (Architecture::commandNames (Api::commands))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: publicationIsTheApplicationWorkflow,
+  parameters: [],
+  statement: ((prim equal (project (publication) workflow) (project (application) workflow) : Bool) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: obligationIsOpen,
+  parameters: [],
+  statement: ((prim equal (claimStatus (Presentation::obligation) (Register::claims)) "open" : Bool) = true),
   proof: decide{},
   axioms: []
 }

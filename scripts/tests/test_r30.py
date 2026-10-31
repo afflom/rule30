@@ -333,6 +333,82 @@ class ApiModelTests(unittest.TestCase):
         self.assertIn('(Architecture::measureThreshold "ci-render-time" (Architecture::measures))', text)
         self.assertEqual({m["status"] for m in pm.STATUS_MARKS}, set(frontier.STATUSES))
 
+    def test_observer_module_is_current_and_its_quadruples_are_the_journeys(self):
+        """The data the kernel decides over, checked here first so a failure
+        names the row before `lexlean verify` reports a false `decide`."""
+        from tools.r30 import observermodel as om, presentationmodel as pm, archmodel
+        r = om.check()
+        self.assertTrue(r["ok"], r["reason"])
+        d = om.data()
+        self.assertEqual(om.problems(d), [])
+        claims = {c["id"]: c for c in d["claims"]}
+        proved = {i for i, c in claims.items() if c["status"] == "proved"}
+        opened = {i for i, c in claims.items() if c["status"] == "open"}
+        panels = {p["id"] for p in pm.PANELS}
+        self.assertEqual([q["sensualObject"] for q in d["quadruples"]], [j["id"] for j in pm.JOURNEYS])
+        for q, j in zip(d["quadruples"], pm.JOURNEYS):
+            self.assertEqual(q["object"], archmodel.CONCEPTUAL_MODEL["id"])
+            self.assertEqual(q["realObject"], om.REAL_OBJECT)
+            self.assertEqual(q["sensualQualities"], j["panels"])
+            self.assertTrue(set(q["realQualities"]) <= proved, q["sensualObject"])
+            self.assertTrue(q["realQualities"], q["sensualObject"])
+            self.assertEqual(set(q["withdrawn"]), opened)
+            self.assertIn(om.WITHDRAWN_CORE, q["withdrawn"])
+            self.assertTrue(set(q["sensualQualities"]) <= panels)
+        # withdrawal: no overlap is a withdrawn claim; the overlaps are the real qualities
+        self.assertEqual({(o["vantage"], o["claim"]) for o in d["overlaps"]},
+                         {(q["sensualObject"], c) for q in d["quadruples"] for c in q["realQualities"]})
+        self.assertFalse({o["claim"] for o in d["overlaps"]} & opened)
+        # interactions: symmetric, through shared panels
+        by_vantage = {q["sensualObject"]: set(q["sensualQualities"]) for q in d["quadruples"]}
+        pairs = {(i["source"], i["target"], frozenset(i["viaPanels"])) for i in d["interactions"]}
+        for source, target, via in pairs:
+            self.assertIn((target, source, via), pairs)
+            self.assertTrue(via <= by_vantage[source] & by_vantage[target])
+            self.assertTrue(via)
+        # the facets of the proof
+        pole_of = {f["facet"]: f["pole"] for f in d["facets"]}
+        self.assertEqual({f["pole"] for f in d["facets"]} - set(om.POLES), set())
+        self.assertEqual({f["vantage"] for f in d["facets"]} - set(om.VANTAGES), set())
+        for f in om.REGULAR_SIDE:
+            self.assertEqual(pole_of[f["facet"]], "sensual-quality")
+            self.assertIn(f["facet"], proved)
+        self.assertEqual(pole_of[om.WITHDRAWN_CORE], "withdrawn")
+        self.assertEqual({f["facet"] for f in d["facets"] if f["pole"] == "real-quality"},
+                         {i for i in proved if claims[i].get("depends", []) == [om.REAL_OBJECT]})
+        text = om.render(d)
+        for name in ("withdrawal", "everyVantageSeesTheObject", "interactionsAreSymmetric", "vantagesAreJourneys",
+                     "objectIsTheProblem", "realQualitiesAreProved", "withdrawnAreOpen", "gaugeKeepsRealQualities",
+                     "gaugeTransformsSensualQualities"):
+            self.assertIn(f"name: {name},", text)
+        self.assertIn("\\importmodule{Presentation}", text)
+        self.assertIn('(claimsWithStatus "proved" (Register::claims))', text)
+        self.assertIn('(project (Architecture::conceptualModel) id)', text)
+
+    def test_observer_rendering_rules_follow_the_artifacts_and_refuse_a_blind_vantage(self):
+        from tools.r30 import observermodel as om, presentationmodel as pm
+        claims = [{"id": "root", "status": "open", "depends": []},
+                  {"id": "a", "status": "proved", "lean": "X.a", "depends": ["root"]},
+                  {"id": "b", "status": "proved", "lean": "X.b", "depends": ["a"]},
+                  {"id": "leaf", "status": "open", "depends": ["b"]},
+                  {"id": "aside", "status": "proved", "lean": "X.c", "depends": ["root"]}]
+        tree = next(p for p in pm.PANELS if p["artifact"] == "chain")
+        sheets = next(p for p in pm.PANELS if p["artifact"] == "interfaces")
+        leaves = next(p for p in pm.PANELS if p["id"] in om.LEAVES_PANELS)
+        modules = next(p for p in pm.PANELS if p["id"] == "modules")
+        self.assertEqual(om.rendered(tree, claims), ["a", "b", "aside"])
+        self.assertEqual(om.rendered(sheets, claims), ["a", "b"])
+        self.assertEqual(om.rendered(leaves, claims), [])
+        self.assertEqual(om.rendered(modules, claims), ["a", "b", "aside"])
+        self.assertEqual(om.rendered({"id": "picture", "artifact": "logo"}, claims), [])
+        blind = [{"id": "glance", "stakeholder": "community", "panels": ["open-leaves"]}]
+        d = om.data(journeys=blind)
+        self.assertEqual([p for p in om.problems(d) if "glance" in p],
+                         ["vantage glance sees no proved claim: give the journey a panel that renders the register"])
+        with self.assertRaisesRegex(ValueError, "glance"):
+            om.render(d)
+        self.assertIn("[[quadruple]]", om.register_toml(om.data()))
+
     def test_register_module_matches_frontier_and_states_well_formedness(self):
         from tools.r30 import registermodel
         r = registermodel.check()
@@ -586,6 +662,95 @@ class SiteTests(unittest.TestCase):
         for forbidden in ("lake", "lexlean", "unittest", "pytest"):
             self.assertNotIn(forbidden + " ", text.replace("no Lean, no lexlean", ""), forbidden)
         self.assertEqual(pm.APPLICATION_RECORD["workflow"], pm.PUBLICATION["workflow"])
+        # GitHub Pages: the rendered view is uploaded as the Pages artifact and
+        # deployed in the named environment with the permissions a deployment
+        # needs, under one concurrency group, and the deployed page is checked
+        # to serve the commit it was rendered from (the site embeds it)
+        self.assertIn("actions/upload-pages-artifact@v", text)
+        self.assertIn("actions/deploy-pages@v", text)
+        self.assertIn(f"name: {pm.PUBLICATION['environment']}", text)
+        for permission in ("contents: read", "pages: write", "id-token: write"):
+            self.assertIn(permission, text)
+        self.assertIn("group: pages", text)
+        self.assertIn('grep -qF "\\"commit\\": \\"$GITHUB_SHA\\""', text)
+        self.assertTrue(pm.PUBLICATION["url"].startswith("https://") and pm.PUBLICATION["url"].endswith("/"))
+        self.assertIn(pm.PUBLICATION["url"], text)
+
+    def test_mathematician_and_layperson_views_are_modeled_and_rendered(self):
+        """The two reading stakeholders: each holds the concern its viewpoint
+        frames, each viewpoint governs a view and panels, each has a journey,
+        and the explainer is plain language (no formal vocabulary) declared as
+        data with distinct ids."""
+        from tools.r30 import archmodel, presentationmodel as pm, site
+        held = {s["id"]: set(s["concerns"]) for s in archmodel.STAKEHOLDERS}
+        self.assertIn("mathematics", held["mathematician"]); self.assertIn("plain-language", held["layperson"])
+        viewpoints = {vp["id"]: vp for vp in archmodel.VIEWPOINTS}
+        self.assertEqual((viewpoints["paper"]["stakeholder"], viewpoints["paper"]["concern"]), ("mathematician", "mathematics"))
+        self.assertEqual((viewpoints["plain"]["stakeholder"], viewpoints["plain"]["concern"]), ("layperson", "plain-language"))
+        panels = {p["id"]: p for p in pm.PANELS}
+        self.assertEqual({p for p, x in panels.items() if x["viewpoint"] == "paper"}, {"paper", "obligation", "refutations"})
+        self.assertEqual({p for p, x in panels.items() if x["viewpoint"] == "plain"}, {"picture", "explainer"})
+        journeys = {j["id"]: j for j in pm.JOURNEYS}
+        self.assertEqual(journeys["mathematics"]["stakeholder"], "mathematician")
+        self.assertEqual(journeys["mathematics"]["panels"], ["paper", "reduction-tree", "obligation", "refutations", "register"])
+        self.assertEqual((journeys["first-visit"]["stakeholder"], journeys["first-visit"]["panels"]), ("layperson", ["picture", "explainer", "reduction-tree"]))
+        self.assertEqual(len({e["id"] for e in pm.EXPLAINER}), len(pm.EXPLAINER))
+        for e in pm.EXPLAINER:
+            self.assertTrue(e["title"] and e["text"], e["id"])
+            for jargon in ("LexLean", "lexeme", "propext", "Quot.sound", "bxor", "twopow", "2-kernel", "automatic"):
+                self.assertNotIn(jargon, e["text"], f"{e['id']} uses {jargon}")
+        # the explainer's center column is Rule 30's
+        words = {1: "black", 0: "white"}
+        column = ", ".join(words[r[len(r) // 2]] for r in site.rule30_rows(16))
+        self.assertIn(column, next(e["text"] for e in pm.EXPLAINER if e["id"] == "center-column"))
+        self.assertEqual(next(c["status"] for c in frontier.list_claims() if c["id"] == pm.OBLIGATION), "open")
+        text = pm.render_presentation()
+        for name in ("Paragraph", "explainer", "obligation", "paragraphIdsDistinct"):
+            self.assertIn(f"name: {name}", text)
+        app = pm.render_application()
+        for name in ("obligationIsOpen", "publicationIsTheApplicationWorkflow"):
+            self.assertIn(f"name: {name}", app)
+        self.assertIn(f'url := "{pm.PUBLICATION["url"]}"', app)
+
+    def test_statements_picture_and_explainer_artifacts(self):
+        """statements.json carries every theorem, lemma and corollary of
+        Observations.lex.tex with its Lean name and lexeme from the glossary,
+        the attested PDFs with the manifest's digests and the attestation; the
+        picture is Rule 30 with the center column in the accent colour."""
+        import json
+        import xml.etree.ElementTree as ET
+        from tools.r30 import site, presentationmodel as pm
+        st = site.statements()
+        text = site.PAPER_MODULE.read_text()
+        self.assertEqual(len(st["statements"]), sum(text.count(f"\\begin{{{k}}}") for k in ("theorem", "lemma", "corollary")))
+        for r in st["statements"]:
+            self.assertTrue(r["lean"] and r["lexeme"] and r["section"] and r["statement"], r["id"])
+            self.assertIn(r["kind"], ("theorem", "lemma", "corollary"))
+            self.assertNotIn("\\allowaxioms", r["statement"])
+        self.assertEqual({s["id"] for s in st["sections"]}, {r["section"] for r in st["statements"]})
+        manifest = json.loads((ROOT / "pdf-manifest.json").read_text())
+        self.assertEqual({d["name"]: d["pdfSha256"] for d in st["pdfs"]["documents"]},
+                         {k: v["pdf_sha256"] for k, v in manifest["documents"].items()})
+        published = {a["path"] for a in pm.ARTIFACTS}
+        for d in st["pdfs"]["documents"]:
+            self.assertIn(d["path"], published, d["name"])
+        self.assertTrue(st["attestation"] and len(st["attestation"]["id"]) == 64)
+        svg = site.picture_svg(rows=20)
+        root = ET.fromstring(svg)
+        rects = [r for r in root if r.tag.endswith("rect")]
+        self.assertEqual(len([r for r in rects if r.get("fill") == site.ACCENT]), sum(r[len(r) // 2] for r in site.rule30_rows(20)))
+        self.assertIn('fill="var(--accent)"', site.picture_svg(rows=4, ink="var(--ink)", accent="var(--accent)", background=None))
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "view"
+            site.render_view(out)
+            self.assertEqual(json.loads((out / "statements.json").read_text())["statements"], st["statements"])
+            self.assertEqual(json.loads((out / "explainer.json").read_text()), pm.EXPLAINER)
+            self.assertTrue((out / "rule30.svg").read_text().startswith("<svg"))
+            self.assertTrue((out / "Rule30-Paper.pdf").read_bytes().startswith(b"%PDF-"))
+            html = (out / "index.html").read_text()
+            self.assertIn('"commit": "', html)
+            for panel in pm.PANELS:
+                self.assertIn(f'"id": "{panel["id"]}"', html)
 
 
 class ProductionTests(unittest.TestCase):
@@ -881,9 +1046,15 @@ class AccessibilityTests(unittest.TestCase):
 
     def test_readme_points_to_the_view_and_the_api(self):
         text = (ROOT / "README.md").read_text()
+        from tools.r30 import presentationmodel as pm
         self.assertIn("## Centerline: the current view and the API modules", text)
-        for needle in ("bin/r30 view render", "bin/r30 api check", "src/Api.lex.tex", "rule30-current-view", "bin/r30 api production"):
+        for needle in ("bin/r30 view render", "bin/r30 api check", "src/Api.lex.tex", "rule30-current-view", "bin/r30 api production",
+                       pm.PUBLICATION["url"]):
             self.assertIn(needle, text)
+        api = (ROOT / "rule30-api" / "README.md").read_text()
+        for needle in ("## The views and the Pages deployment", pm.PUBLICATION["url"], "statements.json", "explainer.json",
+                       "actions/deploy-pages", "github-pages"):
+            self.assertIn(needle, api)
 
 
 if __name__ == "__main__":

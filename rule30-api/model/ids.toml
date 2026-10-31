@@ -253,6 +253,12 @@ suite = "register"
 statement = "The chaotic-side edge is regular for a few cells (ldiag 2 = 0, ldiag 3 = timeParity, ldiag 4 = 1, ldiag 5 = ldiag 6 = timeParity, ldiag 7 = 0), so the carries on the left diagonals 3..5 are [m odd] for m >= 5 (plus one event at row 3) and contribute not timeParity t XOR trailingParity (t-4) XOR trailingParity ((t-4)/2): for t >= 6, center t = rulerBackground t XOR interiorEightDiagonal t, with both edge bands stripped, and Problem 1 iff EightAperiodic."
 
 [[id]]
+id = "kernel-law"
+level = "build"
+suite = "register"
+statement = "The freezing law of the linear transport: for a row m < 2^k and a time 2^k u + r (r < 2^k, u >= 1), rowTerm (2^k u + r) m = frozen k r m XOR trailingParity (u-1) AND second k r m, with frozen and second read off the row's contributions at u = 1 and u = 2. Hence every 2-kernel sequence of the center is explicit up to the rows at or above the scale: center (2^k u + r) = not (timeParity r XOR frozenPrefix k r XOR trailingParity (u-1) AND secondPrefix k r XOR lateTail k r u); the fixed dyadic row, the class renormalization and the band rulers are its instances, and a block of rows [2^j, 2^(j+1)) influences every later time only through its influence on the next two block-spans, modulated by the ruler."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"
@@ -271,7 +277,13 @@ suite = "api"
 statement = "The production roots of Api.lex.tex (commands, commandCount) export to certified Rust packages through lexlean production build, kernel-checked under its stated axioms, and the published bundle replays with verify-artifact."
 
 [[id]]
+id = "observer"
+level = "build"
+suite = "api"
+statement = "Observer.lex.tex records the object quadruple of every stakeholder vantage (the proof as the real object, the journey as the sensual object, the proved claims its panels render as real qualities, the panels as sensual qualities, the open claims as withdrawn) and the kernel decides withdrawal, nonempty overlap, symmetric interaction and gauge covariance over the register and the presentation."
+
+[[id]]
 id = "current-view"
 level = "build"
 suite = "api"
-statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured."
+statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured."

@@ -82,18 +82,19 @@ def cmd_interface(args):
 
 def cmd_api(args):
     """The API as a LexLean semantic module (rule30-api/src/Api.lex.tex)."""
-    from . import apimodel, registermodel, archmodel, presentationmodel, convertmodel, prismmodel, site
+    from . import apimodel, registermodel, archmodel, presentationmodel, observermodel, convertmodel, prismmodel, site
     if args.sub == "sync":
         a, r, h, p = apimodel.sync(), registermodel.sync(), archmodel.sync(), presentationmodel.sync()
-        c, m, g = convertmodel.sync(fixtures=args.fixtures), prismmodel.sync(), site.sync_logo()
-        if a["changed"] or r["changed"] or h["changed"] or p["changed"] or c["changed"]:
+        o, c, m, g = observermodel.sync(), convertmodel.sync(fixtures=args.fixtures), prismmodel.sync(), site.sync_logo()
+        if a["changed"] or r["changed"] or h["changed"] or p["changed"] or o["changed"] or c["changed"]:
             checks.lock("api")
         state = lambda x: " (rewritten)" if x["changed"] else " (current)"
-        out(args, {"api": a, "register": r, "architecture": h, "presentation": p, "convert": c, "model": m, "logo": g},
+        out(args, {"api": a, "register": r, "architecture": h, "presentation": p, "observer": o, "convert": c, "model": m, "logo": g},
             f"{a['module']}: {a['commands']} commands" + state(a) +
             f"\n{r['module']}: {r['claims']} claims" + state(r) +
             f"\n{h['module']}: {h['stakeholders']} stakeholders" + state(h) +
             f"\n{p['module']}: {p['panels']} panels" + state(p) +
+            f"\n{o['module']}: {o['quadruples']} quadruples" + state(o) +
             f"\n{c['module']}: {c['fixtures']} fixtures" + state(c) +
             f"\n{m['model']}: {m['claims']} claims, {m['registers']} registers" + state(m) +
             f"\n{g['logo']}" + state(g))
@@ -109,10 +110,12 @@ def cmd_api(args):
             fail("R306002" if r["stage"] == "replay" else "R306001", f"see the report above ({r['stage']})")
     else:
         results = {"api": apimodel.check(), "register": registermodel.check(), "architecture": archmodel.check(),
-                   "presentation": presentationmodel.check(), "convert": convertmodel.check(), "model": prismmodel.check(),
+                   "presentation": presentationmodel.check(), "observer": observermodel.check(),
+                   "convert": convertmodel.check(), "model": prismmodel.check(),
                    "logo": site.check_logo()}
         names = {"api": "Api.lex.tex matches the CLI", "register": "Register.lex.tex matches frontier.toml",
                  "architecture": "Architecture.lex.tex is current", "presentation": "Presentation.lex.tex and Application.lex.tex are current",
+                 "observer": "Observer.lex.tex matches the register and the presentation",
                  "convert": "Convert.lex.tex matches convert.py, the glossary and the fixtures",
                  "model": "model/ registers, schemas, features and CONFORMANCE.md are current", "logo": "site/logo.svg is current"}
         out(args, results, "\n".join(names[k] if v["ok"] else v["reason"] for k, v in results.items()))

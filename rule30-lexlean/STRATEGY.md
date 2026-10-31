@@ -3140,4 +3140,53 @@ bulk carries are read against rulers at two scales. Rejected as routes though tr
 law along `t = 2^j u + P + 1` (a restatement of dyadic stability), and the odd-period class split
 (a corollary of `dyadic-renormalization`).
 
+**The Observer (2026-10-31; from the UOR formalization of the OOO quadruple, Harman).** An object has
+four poles: the real object `RO` (a withdrawn core, an idempotent that does not commute with much of
+the algebra), the sensual object `SO` (the object as it appears from a vantage, an idempotent of a
+subalgebra), the real qualities `RQ` (invariants, in the commutant of `RO`) and the sensual qualities
+`SQ` (vantage-dependent features); the overlap `RO·SO` is what a vantage reveals, and objects
+interact only vicariously, through each other's appearances. Here the Observer is implemented, not
+only described: the proof is the real object and its withdrawn core is the open obligation (no
+view renders a proof of `aperiodic-compensation`); each stakeholder journey of the site is a sensual
+object (a vantage); the proved claims of the register are the real qualities (the same kernel-checked
+set from every vantage, invariant under re-presentation); the panels are the sensual qualities. The
+same split runs through the automaton. From the vantage of the regular side the center shows its
+sensual qualities exactly: the edge parity (`edge-parity`), the three-diagonal ruler
+(`three-diagonal-band`), the left band's rulers (`left-band`), each an explicit automatic sequence;
+its withdrawn core is the deep interior, whose non-collapse beyond the bands is measured
+(`diagonals 3..15`) and whose aperiodicity against the rulers is Problem 1. Withdrawal is exact in
+the carry split too: the characteristic-2 part commutes with the shift and the Frobenius
+(`phiLin_phiLin`, the gasket), the characteristic-1 carry does not, and the center reads the two
+through `center t = rulerBackground t ⊕ interiorEightDiagonal t`. The mathematician and layperson
+views are two further vantages, modeled in `Architecture.lex.tex` and `Presentation.lex.tex` and
+rendered by the same runtime (`Rule30UOR` is the real object; `rule30-api/src/Observer.lex.tex` is
+the quadruple as data with decided theorems). This is a reading, recorded so that the facets are
+cross-correlated in one place; it adds no theorem about the automaton.
+
+**The freezing law and the block tables (2026-10-31, the extrapolation of the dyadic results).**
+All the dyadic facts are one law of the linear transport. For a row `m < 2^k` and a time
+`t = 2^k u + r` (`r < 2^k`, `u ≥ 1`), `q^{t−1−m} = q^{2^k(u−1)} · q^{2^k+r−1−m}` and the first factor
+is the Frobenius spread `q^{u−1}(X^{2^k})`, sparse at stride `2^k`; the second factor times the row's
+carries has degree below `3·2^k`, so only the central coefficient `trinomialParity (u−1) (u−1) = 1`
+and its two neighbours `trinomialParity (u−1) (u−1 ± 1) = trailingParity (u−1)` reach bit `t`:
+`rowTerm (2^k u + r) m = F(k,r,m) ⊕ trailingParity (u−1) · S(k,r,m)` (`Rule30UOR.KernelLaw`, in
+progress). Consequences: every 2-kernel sequence of the center is explicit up to the rows at or
+above the scale, `center (2^k u + r) = ¬(timeParity r ⊕ frozen(k,r) ⊕ trailingParity (u−1) ·
+second(k,r) ⊕ tail(k,r,u))`; the fixed dyadic row (`r = 0`), the class renormalization (`r = 1`)
+and the band rulers are its instances. Put `u = 1, 2`: `F = rowTerm (2^k + r) m` and
+`S = rowTerm (2^{k+1} + r) m ⊕ rowTerm (2^k + r) m`. Hence, for the block of rows
+`[2^j, 2^{j+1})` with `k = j + 1`: **a block's influence on every later time is determined by its
+influence on the next two block-spans**, `[2^{j+1}, 2^{j+2})` and `[2^{j+2}, 2^{j+3})`, modulated by
+the ruler of the span index: two tables `B_j, B'_j : Z/2^{j+1} → Bool` of `2^{j+2}` bits in all,
+where the block holds about `2^{2j+1}` carry bits. The center at time `t` is therefore the XOR of
+the completed blocks' table values at `t`'s residues, with the ruler of each quotient, plus the
+light-cone carries of the top (incomplete) block; the far future sees each block through a table
+linear in its width. This is exact and will be in the register; it is not a closing argument: the
+tables are not free (they are determined by the carries), and a periodic center is consistent
+with them as long as the block responses conspire. What it does fix is where a closing argument
+must live: in a relation between a block's two spans (its tables) and the light-cone carries of
+the next block, which is the one place the nonlinear rule acts; the register's only nonlinear
+facts (left-defect sourcing from column one, the coupling law `leftDefect = ¬center ∧ rightDefect`,
+black-center absorption) are statements about exactly that window.
+
 Problem 1 remains unproved.

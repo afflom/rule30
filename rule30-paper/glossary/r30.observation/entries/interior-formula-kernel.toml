@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-formula-kernel"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat))) (pi ((explicit hr (app (const lexlean.std.nat::lt) (local r) (app (const r30.scale::twopow) (local k)))) (explicit hu (app (const lexlean.std.nat::le) (nat 1) (local u)))) (app (const lexlean.core::eq) (app (const r30.observation::interior-formula) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local k)) (local u)) (local r)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local k)) (local u)) (local r))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.observation::frozen-prefix) (local k) (local r)) (app (const lexlean.std.bool::and) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::sub) (local u) (nat 1))) (app (const r30.observation::second-prefix) (local k) (local r)))) (app (const r30.observation::late-tail) (local k) (local r) (local u))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelLaw"
+name = "Rule30UOR.KernelLaw.interiorFormula_kernel"
+
+[[form]]
+id = "interior-formula-kernel"
+channel = "math"
+surface = "interiorformulakernel"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiorformulakernel) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

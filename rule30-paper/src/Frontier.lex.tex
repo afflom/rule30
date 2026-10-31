@@ -212,6 +212,14 @@ Close the goal with \(\lexeme{r30.observation::center-eq-ruler-background-bxor-e
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-kernel-law}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(u\) and natural number \(m\), if \(m < twopow(k)\), then if \(r < twopow(k)\), then if \(1 ≤ u\), then \(rowterm(twopow(k) * u + r, m) = bxor(frozen(k, r, m), trailingparity(u - 1) band second(k, r, m))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-kernel-law}(k, r, u, m)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

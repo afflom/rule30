@@ -72,6 +72,31 @@ type_name = "Journey"
 target = "journeys"
 
 [[entity]]
+module = "Presentation"
+type_name = "Paragraph"
+target = "explainer"
+
+[[entity]]
 module = "Application"
 type_name = "StatusMark"
 target = "statusMarks"
+
+[[entity]]
+module = "Observer"
+type_name = "Quadruple"
+target = "quadruples"
+
+[[entity]]
+module = "Observer"
+type_name = "Overlap"
+target = "overlaps"
+
+[[entity]]
+module = "Observer"
+type_name = "Interaction"
+target = "interactions"
+
+[[entity]]
+module = "Observer"
+type_name = "Facet"
+target = "facets"

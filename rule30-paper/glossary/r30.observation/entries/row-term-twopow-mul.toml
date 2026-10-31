@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "row-term-twopow-mul"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit u (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (pi ((explicit hm (app (const lexlean.std.nat::lt) (local m) (app (const r30.scale::twopow) (local k)))) (explicit hu (app (const lexlean.std.nat::le) (nat 1) (local u)))) (app (const lexlean.core::eq) (app (const r30.observation::row-term) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local k)) (local u)) (local m)) (app (const r30.observation::dyadic-row) (local m)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelLaw"
+name = "Rule30UOR.KernelLaw.rowTerm_twopow_mul"
+
+[[form]]
+id = "row-term-twopow-mul"
+channel = "math"
+surface = "rowtermtwopowmul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rowtermtwopowmul) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

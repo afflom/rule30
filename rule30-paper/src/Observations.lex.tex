@@ -3753,5 +3753,93 @@ Close the goal with \(\lexeme{r30.observation::problem1-of-eight-aperiodic}(h)\)
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{row-term-kernel-law}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(u\) and natural number \(m\), if \(m < twopow(k)\), then if \(r < twopow(k)\), then if \(1 ≤ u\), then \(rowterm(twopow(k) * u + r, m) = bxor(frozen(k, r, m), trailingparity(u - 1) band second(k, r, m))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-kernel-law}(k, r, u, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{interior-formula-kernel}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(u\), if \(r < twopow(k)\), then if \(1 ≤ u\), then \(interiorformula(twopow(k) * u + r, twopow(k) * u + r) = bxor(bxor(frozenprefix(k, r), trailingparity(u - 1) band secondprefix(k, r)), latetail(k, r, u))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-formula-kernel}(k, r, u)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{kernel-seq-explicit}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(u\), if \(r < twopow(k)\), then if \(1 ≤ u\), then if \(1 ≤ k\), then \(kernelseq(k, r, u) = not(bxor(timeparity(r), bxor(bxor(frozenprefix(k, r), trailingparity(u - 1) band secondprefix(k, r)), latetail(k, r, u))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::kernel-seq-explicit}(k, r, u)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{row-term-twopow-mul}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(u\) and natural number \(m\), if \(m < twopow(k)\), then if \(1 ≤ u\), then \(rowterm(twopow(k) * u, m) = dyadicrow(m)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-twopow-mul}(k, u, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-twopow-mul}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(u\), if \(1 ≤ k\), then if \(1 ≤ u\), then \(center(twopow(k) * u) = bxor(center(twopow(k)), latetail(k, 0, u))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-twopow-mul}(k, u)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-twopow-mul-add-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(u\), if \(1 ≤ k\), then if \(1 ≤ u\), then \(center(twopow(k) * u + 1) = bxor(center(twopow(k) + 1), bxor(latetail(k, 1, 1), latetail(k, 1, u)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-twopow-mul-add-one}(k, u)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-succ-self}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(trinomialparity(s, s + 1) = trailingparity(s)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-succ-self}(s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-pred-self}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), if \(1 ≤ s\), then \(trinomialparity(s, s - 1) = trailingparity(s)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-pred-self}(s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{time-parity-twopow-mul-add}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(u\) and natural number \(r\), if \(1 ≤ k\), then \(timeparity(twopow(k) * u + r) = timeparity(r)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::time-parity-twopow-mul-add}(k, u, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{second-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(m\), if \(1 ≤ k\), then if \(m < twopow(k)\), then \(second(k, 1, m) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::second-one}(k, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{second-prefix-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), if \(1 ≤ k\), then \(secondprefix(k, 1) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::second-prefix-one}(k)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

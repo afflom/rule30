@@ -53,11 +53,22 @@ structure{
   ]
 }
 
+structure{
+  name: Paragraph,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: title, type: String},
+    {name: text, type: String}
+  ]
+}
+
 definition{
   name: brand,
   parameters: [],
   result: Brand,
-  body: (record Brand {name := "Centerline", tagline := "Every arrow a theorem.", description := "The current view of Wolfram's Rule 30 Prize, Problem 1: the reduction tree, the register, the interface sheets and the open leaves, rendered from the kernel-checked register on every push.", logo := "logo.svg"}),
+  body: (record Brand {name := "Centerline", tagline := "Every arrow a theorem.", description := "The current view of Wolfram's Rule 30 Prize, Problem 1: what is proved, what is open and what was refuted, rendered from the kernel-checked register on every push, with the paper's statements for the mathematician and a plain-language guide for everyone else.", logo := "logo.svg"}),
   axioms: []
 }
 
@@ -65,7 +76,7 @@ definition{
   name: artifacts,
   parameters: [],
   result: (List Artifact),
-  body: (cons (record Artifact {id := "chain", path := "chain.txt", mediaType := "text/plain", command := "chain"}) (cons (record Artifact {id := "register-json", path := "register.json", mediaType := "application/json", command := "frontier_list"}) (cons (record Artifact {id := "register-text", path := "register.txt", mediaType := "text/plain", command := "frontier_list"}) (cons (record Artifact {id := "frontier", path := "frontier.toml", mediaType := "application/toml", command := "view_render"}) (cons (record Artifact {id := "interfaces", path := "interfaces", mediaType := "text/markdown", command := "interface"}) (cons (record Artifact {id := "api-module", path := "Api.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "register-module", path := "Register.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "architecture-module", path := "Architecture.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "presentation-module", path := "Presentation.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "application-module", path := "Application.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "frontier-module", path := "Frontier.lex.tex", mediaType := "text/x-lexlean", command := "frontier_render"}) (cons (record Artifact {id := "agents", path := "AGENTS.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "strategy", path := "STRATEGY.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "readme", path := "README.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "logo", path := "logo.svg", mediaType := "image/svg+xml", command := "api_sync"}) (cons (record Artifact {id := "site", path := "index.html", mediaType := "text/html", command := "view_render"}) (nil Artifact))))))))))))))))),
+  body: (cons (record Artifact {id := "chain", path := "chain.txt", mediaType := "text/plain", command := "chain"}) (cons (record Artifact {id := "register-json", path := "register.json", mediaType := "application/json", command := "frontier_list"}) (cons (record Artifact {id := "register-text", path := "register.txt", mediaType := "text/plain", command := "frontier_list"}) (cons (record Artifact {id := "frontier", path := "frontier.toml", mediaType := "application/toml", command := "view_render"}) (cons (record Artifact {id := "interfaces", path := "interfaces", mediaType := "text/markdown", command := "interface"}) (cons (record Artifact {id := "statements", path := "statements.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "explainer", path := "explainer.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "picture", path := "rule30.svg", mediaType := "image/svg+xml", command := "view_render"}) (cons (record Artifact {id := "paper-pdf", path := "Rule30-Paper.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "observations-pdf", path := "Rule30-Observations.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "core-pdf", path := "Rule30-Core.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "pdf-manifest", path := "pdf-manifest.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "api-module", path := "Api.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "register-module", path := "Register.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "architecture-module", path := "Architecture.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "presentation-module", path := "Presentation.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "application-module", path := "Application.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "frontier-module", path := "Frontier.lex.tex", mediaType := "text/x-lexlean", command := "frontier_render"}) (cons (record Artifact {id := "agents", path := "AGENTS.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "strategy", path := "STRATEGY.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "readme", path := "README.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "logo", path := "logo.svg", mediaType := "image/svg+xml", command := "api_sync"}) (cons (record Artifact {id := "site", path := "index.html", mediaType := "text/html", command := "view_render"}) (nil Artifact)))))))))))))))))))))))),
   axioms: []
 }
 
@@ -73,7 +84,7 @@ definition{
   name: panels,
   parameters: [],
   result: (List Panel),
-  body: (cons (record Panel {id := "reduction-tree", title := "Reduction tree", viewpoint := "reduction", artifact := "chain", statement := "The register as a tree from problem1: proved arrows, open leaves, refuted routes."}) (cons (record Panel {id := "register", title := "Register", viewpoint := "evidence", artifact := "register-json", statement := "Every claim with its status, statement, Lean name and lexeme; filter by status, search by notion."}) (cons (record Panel {id := "open-leaves", title := "Open leaves", viewpoint := "reduction", artifact := "register-json", statement := "The open claims no open claim rests on: each is a sufficient condition for Problem 1 once the proved arrows above it are read upward."}) (cons (record Panel {id := "interface-sheets", title := "Interface sheets", viewpoint := "comprehension", artifact := "interfaces", statement := "The labeled sheet of the selected claim: chain, notions, exact facts, handles."}) (cons (record Panel {id := "modules", title := "LexLean modules", viewpoint := "stdlib", artifact := "api-module", statement := "The command surface, the register, the architecture and this presentation as verified semantic modules."}) (cons (record Panel {id := "quality", title := "Quality", viewpoint := "optimal", artifact := "architecture-module", statement := "The measures of an optimal implementation, each with its threshold and the command that reports it."}) (nil Panel))))))),
+  body: (cons (record Panel {id := "picture", title := "Rule 30", viewpoint := "plain", artifact := "picture", statement := "The first rows of Rule 30 from a single black cell; the center column, the object of Problem 1, in amber."}) (cons (record Panel {id := "explainer", title := "In plain words", viewpoint := "plain", artifact := "explainer", statement := "What Rule 30 is, what Problem 1 asks, what is proved here, what remains open, what kernel-checked means, and how to read the rest."}) (cons (record Panel {id := "reduction-tree", title := "Reduction tree", viewpoint := "reduction", artifact := "chain", statement := "The register as a tree from problem1: proved arrows, open leaves, refuted routes."}) (cons (record Panel {id := "register", title := "Register", viewpoint := "evidence", artifact := "register-json", statement := "Every claim with its status, statement, Lean name and lexeme; filter by status, search by notion."}) (cons (record Panel {id := "open-leaves", title := "Open leaves", viewpoint := "reduction", artifact := "register-json", statement := "The open claims no open claim rests on: each is a sufficient condition for Problem 1 once the proved arrows above it are read upward."}) (cons (record Panel {id := "paper", title := "Paper", viewpoint := "paper", artifact := "statements", statement := "Every published theorem of Observations.lex.tex in the paper's controlled English with its Lean name, lexeme and section; the attested PDFs with their digests."}) (cons (record Panel {id := "obligation", title := "Open obligation", viewpoint := "paper", artifact := "register-json", statement := "The open claim every proved reduction ends at, in full: statement, Lean predicate, exact forms, the chain to Problem 1 and what rests on it."}) (cons (record Panel {id := "refutations", title := "Refuted routes", viewpoint := "paper", artifact := "register-json", statement := "Each refuted claim with the Lean refutation or the experiment that refutes it."}) (cons (record Panel {id := "interface-sheets", title := "Interface sheets", viewpoint := "comprehension", artifact := "interfaces", statement := "The labeled sheet of the selected claim: chain, notions, exact facts, handles."}) (cons (record Panel {id := "modules", title := "LexLean modules", viewpoint := "stdlib", artifact := "api-module", statement := "The command surface, the register, the architecture and this presentation as verified semantic modules."}) (cons (record Panel {id := "quality", title := "Quality", viewpoint := "optimal", artifact := "architecture-module", statement := "The measures of an optimal implementation, each with its threshold and the command that reports it."}) (nil Panel)))))))))))),
   axioms: []
 }
 
@@ -81,7 +92,23 @@ definition{
   name: journeys,
   parameters: [],
   result: (List Journey),
-  body: (cons (record Journey {id := "prize-review", stakeholder := "wolfram", panels := (cons "reduction-tree" (cons "register" (cons "open-leaves" (nil String))))}) (cons (record Journey {id := "research-session", stakeholder := "researcher", panels := (cons "open-leaves" (cons "interface-sheets" (cons "quality" (nil String))))}) (cons (record Journey {id := "reading", stakeholder := "community", panels := (cons "reduction-tree" (cons "interface-sheets" (cons "register" (nil String))))}) (cons (record Journey {id := "stdlib-feedback", stakeholder := "uor-foundation", panels := (cons "modules" (cons "quality" (nil String)))}) (nil Journey))))),
+  body: (cons (record Journey {id := "prize-review", stakeholder := "wolfram", panels := (cons "reduction-tree" (cons "register" (cons "open-leaves" (nil String))))}) (cons (record Journey {id := "research-session", stakeholder := "researcher", panels := (cons "open-leaves" (cons "interface-sheets" (cons "quality" (nil String))))}) (cons (record Journey {id := "reading", stakeholder := "community", panels := (cons "reduction-tree" (cons "interface-sheets" (cons "register" (nil String))))}) (cons (record Journey {id := "stdlib-feedback", stakeholder := "uor-foundation", panels := (cons "modules" (cons "quality" (nil String)))}) (cons (record Journey {id := "mathematics", stakeholder := "mathematician", panels := (cons "paper" (cons "reduction-tree" (cons "obligation" (cons "refutations" (cons "register" (nil String))))))}) (cons (record Journey {id := "first-visit", stakeholder := "layperson", panels := (cons "picture" (cons "explainer" (cons "reduction-tree" (nil String))))}) (nil Journey))))))),
+  axioms: []
+}
+
+definition{
+  name: explainer,
+  parameters: [],
+  result: (List Paragraph),
+  body: (cons (record Paragraph {id := "rule-30", title := "What Rule 30 is", text := "Rule 30 is a one-line machine. Start with a row of cells, all white except one black cell in the middle. To make the next row, look at each cell together with its left and right neighbours. If the left neighbour is black, the cell below turns black only when the cell and its right neighbour are both white; if the left neighbour is white, the cell below turns black when the cell or its right neighbour is black. Repeat, row after row, forever. The picture above shows the first rows: a regular pattern grows on the left and a tangled one on the right."}) (cons (record Paragraph {id := "center-column", title := "The center column", text := "Read the cells straight down from the first black cell: black, black, white, black, black, black, white, white, black, black, white, white, white, black, white, black, and so on. This list of blacks and whites is the center column. It looks random. Nobody has found a pattern in it, and nobody has proved that there is none."}) (cons (record Paragraph {id := "problem-1", title := "What Problem 1 asks", text := "Stephen Wolfram's Rule 30 Prize asks three questions about the center column. Problem 1 asks whether it ever settles into a repeating pattern: whether there is a point after which the same block of blacks and whites repeats forever. The statement to be proved is that it never does."}) (cons (record Paragraph {id := "what-is-proved", title := "What is proved here", text := "This work has not solved Problem 1. What it has done is prove, in a form a computer checks, that Problem 1 is the same question as several other, more concrete questions. Each proved arrow in the reduction tree below says: if you could prove the statement at the arrow's end, Problem 1 would follow. The main ones are these."}) (cons (record Paragraph {id := "reduction-collisions", title := "Collisions at the center", text := "If the center column repeated with some period, disturbances travelling in from the left and from the right would have to keep meeting at the center forever, in a band of fixed width. Problem 1 is the same as saying that they cannot keep meeting."}) (cons (record Paragraph {id := "reduction-edges", title := "The edges are simple", text := "The center column is the exact combination of two parts: one coming from the two straight edges of the triangle and one from its interior. The edge part turns out to be nothing but whether the row number is even or odd. So Problem 1 is the same as saying that the interior part never settles into a repeating pattern."}) (cons (record Paragraph {id := "reduction-bands", title := "Stripping the bands", text := "A few diagonals next to each edge carry known, regular rhythms, and they can be removed exactly. What is left is the deep interior. Problem 1 is the same as saying that the deep interior is never a simple ruler-like rhythm plus a repeating pattern. That last statement is the remaining obligation."}) (cons (record Paragraph {id := "reduction-sparse", title := "A sparser sequence is enough", text := "If the center column repeated, then the column read only at rows 1, 2, 4, 8, 16 and so on would also eventually repeat. So it is enough to show that this far sparser sequence does not, and the same holds for the responses read along that diagonal. These are the open leaves on the right of the tree."}) (cons (record Paragraph {id := "reduction-horizon", title := "A checked certificate", text := "For every candidate starting point up to 512 and every candidate period up to 128, the computer checked that the center column breaks the pattern within 32 rows. This does not settle Problem 1, which asks about every starting point and every period, but it is a verified fact about the ranges it covers."}) (cons (record Paragraph {id := "what-is-open", title := "What remains open", text := "The register names one remaining obligation, aperiodic-compensation. Roughly: the deep interior of the triangle, with the bands next to both edges stripped away, never settles into a ruler-like rhythm plus a repeating pattern. Proving it would close Problem 1, and so would proving any other open leaf of the tree, such as the sparser sequences above. Nobody knows how yet. Several tempting routes were tried and shown not to work; those are the refuted routes, kept so that nobody walks them again."}) (cons (record Paragraph {id := "kernel-checked", title := "What kernel-checked means", text := "Every proved statement here was written in a proof language called Lean and checked by its kernel, a small program that accepts a proof only when every step follows from the rules. A reader can misread a long argument; the kernel does not. Kernel-checked means the proof passed that check, using only two standard logical principles and no extra assumptions. The statements are also written in a controlled English that is itself translated to Lean and checked, so the sentence you read and the theorem the kernel checked are the same thing."}) (cons (record Paragraph {id := "how-to-read", title := "How to read this site", text := "The reduction tree is the map: Problem 1 at the top and, below it, the statements it has been reduced to. A check mark is a proved arrow, a question mark an open statement, a cross a route that was tried and refuted. The register lists every statement with its status; select one for its details. The open leaves are where work continues. The paper panel has every published theorem in full, with the PDFs. The other panels are for people working on the proof or on its tooling."}) (nil Paragraph))))))))))))),
+  axioms: []
+}
+
+definition{
+  name: obligation,
+  parameters: [],
+  result: String,
+  body: "aperiodic-compensation",
   axioms: []
 }
 
@@ -196,6 +223,17 @@ definition{
 }
 
 definition{
+  name: paragraphIds,
+  parameters: [xs : (List Paragraph)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (paragraphIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
   name: appendStrings,
   parameters: [xs : (List String), ys : (List String)],
   result: (List String),
@@ -277,6 +315,14 @@ theorem{
   name: artifactIdsDistinct,
   parameters: [],
   statement: ((distinctStrings (artifactIds (artifacts))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: paragraphIdsDistinct,
+  parameters: [],
+  statement: ((distinctStrings (paragraphIds (explainer))) = true),
   proof: decide{},
   axioms: []
 }

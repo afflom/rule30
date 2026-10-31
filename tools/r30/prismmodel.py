@@ -30,6 +30,9 @@ shapes of UOR-Foundation/template and PrismPM:
   `production/request.json`: the production roots `lexlean production`
   exports to Rust (`production.py`);
 - `stdlib-package.toml` (`prismpm/stdlib-package/1`): the vendored stdlib;
+- `observer.toml` (`r30/observer/1`): the rows of `Observer.lex.tex` (the
+  quadruple of each vantage, the overlaps, the interactions, the facets of
+  the proof), from `observermodel`;
 - `features/suites/<suite>.feature` and `CONFORMANCE.md`: one Gherkin
   scenario per id of `ids.toml`, worded by its level, and the conformance
   document generated from the register (template rules R1 and R3).
@@ -83,8 +86,11 @@ API_IDS = [
     {"id": "rust-emission", "level": "build", "suite": "api",
      "statement": "The production roots of Api.lex.tex (commands, commandCount) export to certified Rust packages through lexlean production build, kernel-checked under its stated axioms, and the published bundle replays with verify-artifact.",
      "feature": "rule30-api/production/request.json", "evidence": "bin/r30 api production; scripts/tests/test_r30.py"},
+    {"id": "observer", "level": "build", "suite": "api",
+     "statement": "Observer.lex.tex records the object quadruple of every stakeholder vantage (the proof as the real object, the journey as the sensual object, the proved claims its panels render as real qualities, the panels as sensual qualities, the open claims as withdrawn) and the kernel decides withdrawal, nonempty overlap, symmetric interaction and gauge covariance over the register and the presentation.",
+     "feature": "rule30-api/src/Observer.lex.tex", "evidence": "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check"},
     {"id": "current-view", "level": "build", "suite": "api",
-     "statement": "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.",
+     "statement": "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.",
      "feature": ".github/workflows/view.yml", "evidence": "bin/r30 view render; scripts/tests/test_r30.py"},
 ]
 
@@ -133,7 +139,12 @@ PROJECTION = {
         {"module": "Presentation", "type_name": "Artifact", "target": "artifacts"},
         {"module": "Presentation", "type_name": "Panel", "target": "panels"},
         {"module": "Presentation", "type_name": "Journey", "target": "journeys"},
+        {"module": "Presentation", "type_name": "Paragraph", "target": "explainer"},
         {"module": "Application", "type_name": "StatusMark", "target": "statusMarks"},
+        {"module": "Observer", "type_name": "Quadruple", "target": "quadruples"},
+        {"module": "Observer", "type_name": "Overlap", "target": "overlaps"},
+        {"module": "Observer", "type_name": "Interaction", "target": "interactions"},
+        {"module": "Observer", "type_name": "Facet", "target": "facets"},
     ],
 }
 
@@ -438,7 +449,7 @@ def conformance(claims):
 
 def files(claims):
     """Every generated file of the model: path -> text."""
-    from . import production, schema
+    from . import observermodel, production, schema
     out = {
         MODEL / "authorities.toml": authorities(claims),
         MODEL / "ids.toml": ids(claims),
@@ -450,6 +461,7 @@ def files(claims):
         MODEL / "errors.toml": errors(),
         MODEL / "dependencies.toml": dependencies(),
         MODEL / "stdlib-package.toml": stdlib_package(),
+        MODEL / "observer.toml": observermodel.register_toml(observermodel.data()),
         SCHEMAS / "register.schema.json": json.dumps(REGISTER_SCHEMA, indent=1) + "\n",
         SCHEMAS / "interface-sheet.schema.json": json.dumps(SHEET_SCHEMA, indent=1) + "\n",
         API / "prismpm.toml": PRISMPM,
@@ -463,7 +475,7 @@ def files(claims):
     return out
 
 
-REGISTERS = 11  # the model/*.toml files `files` writes
+REGISTERS = 12  # the model/*.toml files `files` writes
 
 
 def sync():

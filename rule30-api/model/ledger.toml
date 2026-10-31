@@ -295,6 +295,13 @@ feature = "interfaces/left-band.md"
 evidence = "frontier check: Rule30UOR.LeftBand.center_eq_rulerBackground_bxor_eight kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "kernel-law"
+level = "build"
+statement = "The freezing law of the linear transport: for a row m < 2^k and a time 2^k u + r (r < 2^k, u >= 1), rowTerm (2^k u + r) m = frozen k r m XOR trailingParity (u-1) AND second k r m, with frozen and second read off the row's contributions at u = 1 and u = 2. Hence every 2-kernel sequence of the center is explicit up to the rows at or above the scale: center (2^k u + r) = not (timeParity r XOR frozenPrefix k r XOR trailingParity (u-1) AND secondPrefix k r XOR lateTail k r u); the fixed dyadic row, the class renormalization and the band rulers are its instances, and a block of rows [2^j, 2^(j+1)) influences every later time only through its influence on the next two block-spans, modulated by the ruler."
+feature = "interfaces/kernel-law.md"
+evidence = "frontier check: Rule30UOR.KernelLaw.rowTerm_kernel_law kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."
@@ -316,8 +323,15 @@ feature = "rule30-api/production/request.json"
 evidence = "bin/r30 api production; scripts/tests/test_r30.py"
 
 [[claim]]
+id = "observer"
+level = "build"
+statement = "Observer.lex.tex records the object quadruple of every stakeholder vantage (the proof as the real object, the journey as the sensual object, the proved claims its panels render as real qualities, the panels as sensual qualities, the open claims as withdrawn) and the kernel decides withdrawal, nonempty overlap, symmetric interaction and gauge covariance over the register and the presentation."
+feature = "rule30-api/src/Observer.lex.tex"
+evidence = "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check"
+
+[[claim]]
 id = "current-view"
 level = "build"
-statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured."
+statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured."
 feature = ".github/workflows/view.yml"
 evidence = "bin/r30 view render; scripts/tests/test_r30.py"

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Centerline</title>
-<meta name="description" content="The current view of Wolfram's Rule 30 Prize, Problem 1: the reduction tree, the register, the interface sheets and the open leaves, rendered from the kernel-checked register.">
+<meta name="description" content="The current view of Wolfram's Rule 30 Prize, Problem 1: what is proved, what is open and what was refuted, with the paper's statements and a plain-language guide, rendered from the kernel-checked register.">
 <link rel="icon" href="logo.svg" type="image/svg+xml">
 <style>
 :root {
@@ -104,6 +104,26 @@ pre.sheet { background: var(--panel); border: 1px solid var(--line); border-radi
 .journey { display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline; font-size: 0.92rem; }
 .journey .who { font-weight: 600; min-width: 11em; }
 .journey .step { background: var(--soft); border-radius: 6px; padding: 1px 8px; text-decoration: none; color: var(--ink); font-size: 0.86rem; }
+.picture { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+.picture svg { display: block; width: 100%; height: auto; }
+.picture p { margin: 8px 0 0; color: var(--muted); font-size: 0.86rem; }
+.prose { max-width: 68ch; }
+.prose h3 { font: 600 1.08rem/1.25 var(--serif); margin: 18px 0 4px; }
+.prose p { margin: 0 0 6px; font-size: 1.02rem; line-height: 1.6; }
+.docs { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin: 0 0 14px; }
+.docs .card .k { word-break: break-all; }
+.stmts { display: grid; gap: 6px; }
+.stmt { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font-size: 0.92rem; }
+.stmt .head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.stmt .kind { color: var(--muted); font: 600 0.74rem/1.6 var(--mono); text-transform: uppercase; letter-spacing: 0.04em; }
+.stmt .id { font-weight: 600; }
+.stmt .st { margin: 4px 0 0; }
+.stmt .lean { color: var(--muted); font-size: 0.78rem; margin-top: 4px; word-break: break-all; }
+code.m { background: var(--soft); padding: 0 4px; border-radius: 4px; font-size: 0.88em; }
+.paper details { margin: 0 0 8px; }
+.paper summary { cursor: pointer; padding: 6px 0; }
+.paper summary h3 { display: inline; font: 600 1.05rem/1.2 var(--serif); margin: 0; }
+.paper .stmts { margin: 8px 0 0; }
 .notice { background: var(--open-bg); color: var(--ink); border: 1px solid var(--open); border-radius: 12px; padding: 12px 14px; margin: 0 0 20px; }
 footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.82rem; padding: 18px 0 32px; }
 footer p { margin: 4px 0; }
@@ -145,6 +165,7 @@ footer p { margin: 4px 0; }
 <footer>
   <div class="wrap">
     <p><strong id="foot-name">Centerline</strong> is the stakeholder view of <a id="foot-repo" href="#">the Rule 30 Problem 1 formalization</a>, rendered by <code>bin/r30 view render</code> from <code>frontier.toml</code>; the register is the source and the kernel is the judge.</p>
+    <p id="foot-pages" hidden></p>
     <p>An independent research effort; not affiliated with, endorsed by, or imitating Wolfram Research or the Rule 30 Prize. Logo: the first twelve rows of Rule 30 from a single black cell.</p>
   </div>
 </footer>
@@ -189,6 +210,7 @@ footer p { margin: 4px 0; }
         rs[0].forEach(function (c) { (c.depends || []).forEach(function (d) { depended[d] = true; }); });
         return { register: rs[0], chain: parseChain(rs[1]), openLeaves: rs[0].filter(function (c) { return c.status === "open" && !depended[c.id]; }).map(function (c) { return c.id; }),
                  sheets: [], panels: [], journeys: [], measures: [], stakeholders: [], viewpoints: [], views: [], artifacts: [], statusMarks: [],
+                 explainer: [], statements: null, picture: "", obligation: null, publication: null,
                  brand: { name: "Centerline", tagline: "Every arrow a theorem.", description: "" }, application: { repository: "#" } };
       });
   }
@@ -206,6 +228,10 @@ footer p { margin: 4px 0; }
     $("brand-tagline").textContent = d.brand.tagline;
     $("lede").textContent = d.brand.description || "";
     $("foot-repo").href = (d.application && d.application.repository) || "#";
+    if (d.publication && d.publication.url) {
+      var fp = $("foot-pages"); fp.hidden = false;
+      fp.innerHTML = "Published at <a href='" + esc(d.publication.url) + "'>" + esc(d.publication.url) + "</a> by <code>" + esc(d.publication.workflow) + "</code> on every push to main.";
+    }
     document.title = d.brand.name + " · Rule 30 Problem 1";
     $("meta-commit").innerHTML = d.commit ? "commit <code>" + esc(d.commit.slice(0, 12)) + "</code>" : "";
     $("meta-generated").textContent = d.generated ? "rendered " + d.generated : "";
@@ -227,6 +253,21 @@ footer p { margin: 4px 0; }
     if (d.journeys && d.journeys.length) html += '<section id="journeys"><h2>Journeys</h2><p class="sub">Each stakeholder’s way through the panels, as Presentation.lex.tex declares it.</p><div class="journeys" id="body-journeys"></div></section>';
     $("sections").innerHTML = html;
 
+    // a statement in the paper's controlled English: the math islands \( ... \) as code
+    var math = function (s) { return esc(s).replace(/\\\((.*?)\\\)/g, function (_, m) { return '<code class="m">' + m + "</code>"; }); };
+
+    // the picture: Rule 30 itself, generated by site.py with the page's colour tokens
+    var picBody = $("body-picture");
+    if (picBody && d.picture) picBody.innerHTML = '<div class="picture">' + d.picture + "<p>Rows 0 to 47 from a single black cell. The amber cells are the center column: Problem 1 asks whether this column ever becomes periodic.</p></div>";
+
+    // the explainer: the paragraphs Presentation.lex.tex declares as data
+    var exBody = $("body-explainer");
+    if (exBody && d.explainer && d.explainer.length) {
+      exBody.innerHTML = '<div class="prose">' + d.explainer.map(function (e) {
+        return '<h3 id="explainer-' + esc(e.id) + '">' + esc(e.title) + "</h3><p>" + esc(e.text) + "</p>"; }).join("") +
+        (d.statusMarks && d.statusMarks.length ? '<p class="legend">' + d.statusMarks.map(function (m) { return "<span>" + badge(m.status) + " " + esc(m.label) + "</span>"; }).join("") + "</p>" : "") + "</div>";
+    }
+
     // reduction tree
     function treeHtml(rows) {
       // depth is the depth of the li currently open (-1: none); a deeper row
@@ -247,7 +288,7 @@ footer p { margin: 4px 0; }
     }
     var treeBody = $("body-reduction-tree");
     if (treeBody) treeBody.innerHTML = '<div class="tree">' + treeHtml(d.chain) + "</div>" +
-      '<p class="legend">' + (d.statusMarks && d.statusMarks.length ? d.statusMarks.map(function (m) { return badge(m.status) + " " + esc(m.label); }).join("") :
+      '<p class="legend">' + (d.statusMarks && d.statusMarks.length ? d.statusMarks.map(function (m) { return "<span>" + badge(m.status) + " " + esc(m.label) + "</span>"; }).join("") :
       "open leaves are sufficient conditions once every proved arrow above them is read upward; a refuted node is a route not to be walked again.") + "</p>";
 
     // register
@@ -293,6 +334,72 @@ footer p { margin: 4px 0; }
         (c.lean ? '<p class="k mono">' + esc(c.lean) + "</p>" : "") +
         '<p><a href="#" data-select="' + esc(id) + '">detail</a>' + (sheets[id] ? ' · <a href="interfaces/' + esc(id) + '.md">sheet</a>' : "") + "</p></div>";
     }).join("") + "</div>";
+
+    // the paper: every published statement, the attested PDFs, the attestation
+    var paperBody = $("body-paper");
+    var pq = "";
+    function renderPaper() {
+      if (!paperBody || !d.statements) return;
+      var st = d.statements, q = pq.toLowerCase();
+      var docs = (st.pdfs && st.pdfs.documents) || [];
+      var att = st.attestation;
+      var head = '<div class="docs">' + docs.map(function (x) {
+        return '<div class="card"><h3><a href="' + esc(x.path) + '">' + esc(x.name) + ".pdf</a></h3>" +
+          '<p class="k">sha256 <span class="mono" title="' + esc(x.pdfSha256) + '">' + esc((x.pdfSha256 || "").slice(0, 16)) + "…</span></p>" +
+          '<p class="k">source .tex sha256 <span class="mono" title="' + esc(x.texSha256) + '">' + esc((x.texSha256 || "").slice(0, 16)) + "…</span></p></div>"; }).join("") +
+        (att ? '<div class="card"><h3>Attestation</h3><p class="k">' + esc(att.spec) + ' <span class="mono" title="' + esc(att.id) + '">' + esc((att.id || "").slice(0, 16)) + "…</span></p>" +
+          '<p class="k">' + esc(att.declarations) + " declarations verified by lexlean " + esc(att.lexlean) + '; source <span class="mono" title="' + esc(att.sourceId) + '">' + esc((att.sourceId || "").slice(0, 16)) + "…</span></p>" +
+          '<p class="k"><a href="pdf-manifest.json">pdf-manifest.json</a> · <a href="statements.json">statements.json</a></p></div>' : "") + "</div>";
+      var rows = st.statements.filter(function (r) { return !q || (r.id + " " + r.statement + " " + (r.lean || "") + " " + (r.lexeme || "")).toLowerCase().indexOf(q) >= 0; });
+      var bySection = {};
+      rows.forEach(function (r) { (bySection[r.section] = bySection[r.section] || []).push(r); });
+      var body = (st.sections || []).filter(function (s) { return bySection[s.id]; }).map(function (s) {
+        return '<details class="section" id="paper-' + esc(s.id) + '"' + (q ? " open" : "") + "><summary><h3>" + esc(s.heading) + ' <span class="k" style="color:var(--muted);font-weight:400;font-size:.8rem">' + bySection[s.id].length + "</span></h3></summary>" +
+          '<div class="stmts">' + bySection[s.id].map(function (r) {
+            return '<div class="stmt" id="stmt-' + esc(r.id) + '"><div class="head"><span class="kind">' + esc(r.kind) + '</span><span class="id">' + esc(r.id) + "</span></div>" +
+              '<p class="st">' + math(r.statement) + "</p>" +
+              '<div class="lean mono">' + (r.lean ? esc(r.lean) : "") + (r.lexeme ? " · " + esc(r.lexeme) : "") + "</div></div>"; }).join("") + "</div></details>"; }).join("");
+      paperBody.innerHTML = '<div class="paper">' + head +
+        '<p class="sub">' + esc(st.module) + ": " + st.statements.length + " published statements (" + esc(st.title) + "), each closed by the lexeme of its Lean theorem; the Lean name and the lexeme are under each statement.</p>" +
+        '<div class="filters"><input type="search" id="pq" placeholder="search statement, id, Lean name" value="' + esc(pq) + '" aria-label="Search the published statements"></div>' +
+        body + (rows.length ? "" : '<p style="color:var(--muted)">No statement matches.</p>') + "</div>";
+      var pq$ = $("pq");
+      pq$.addEventListener("input", function () { pq = pq$.value; var pos = pq$.selectionStart; renderPaper(); var n = $("pq"); n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) {} });
+    }
+    renderPaper();
+
+    // the open obligation, in full, from the register
+    var obBody = $("body-obligation");
+    if (obBody && d.obligation && byId[d.obligation]) {
+      var ob = byId[d.obligation];
+      var chain = [], seen = {}, todo = (ob.depends || []).slice();
+      while (todo.length) { var x = todo.shift(); if (seen[x]) continue; seen[x] = true; chain.push(x); todo = todo.concat((byId[x] || {}).depends || []); }
+      var chip = function (x) { return '<a href="#" data-select="' + esc(x) + '">' + badge((byId[x] || {}).status || "open") + " " + esc(x) + "</a>"; };
+      obBody.innerHTML = '<div class="detail"><h3>' + badge(ob.status) + " " + esc(ob.id) + "</h3><p>" + esc(ob.statement) + "</p><dl>" +
+        (ob.lean ? "<dt>Lean predicate</dt><dd><code>" + esc(ob.lean) + "</code></dd>" : "") +
+        (ob.lexeme ? "<dt>lexeme</dt><dd><code>" + esc(ob.lexeme) + "</code></dd>" : "") +
+        (ob.since ? "<dt>since</dt><dd>" + esc(ob.since) + "</dd>" : "") +
+        (chain.length ? '<dt>chain to Problem 1</dt><dd class="chips">' + chain.map(chip).join("") + "</dd>" : "") +
+        '<dt>rests on it</dt><dd class="chips">' + (dependents[ob.id] || []).map(chip).join("") + "</dd>" +
+        "<dt>sheet</dt><dd>" + (sheets[ob.id] ? '<a href="interfaces/' + esc(ob.id) + '.md">interfaces/' + esc(ob.id) + ".md</a>" : "<span style='color:var(--muted)'>not written yet</span>") + "</dd></dl>" +
+        (ob.note ? '<div class="note"><strong>Exact forms and what is known.</strong> ' + esc(ob.note) + "</div>" : "") + "</div>";
+    }
+
+    // the refuted routes with their refutations
+    var rfBody = $("body-refutations");
+    if (rfBody) {
+      var refuted = d.register.filter(function (c) { return c.status === "refuted"; });
+      rfBody.innerHTML = '<div class="claims">' + refuted.map(function (c) {
+        var exp = /experiments\/[A-Za-z0-9_./-]+/.exec(c.note || "");
+        var how = c.lean ? "Lean refutation <code>" + esc(c.lean) + "</code>" + (c.lexeme ? " (lexeme <code>" + esc(c.lexeme) + "</code>)" : "") :
+                  exp ? "experiment <code>" + esc(exp[0]) + "</code>" : "see the note";
+        return '<div class="claim" data-id="' + esc(c.id) + '" role="button" tabindex="0" aria-pressed="false" aria-label="' + esc(c.id) + ', refuted"><div class="head">' + badge("refuted") +
+          '<span class="id">' + esc(c.id) + "</span>" + (c.since ? '<span class="k mono" style="color:var(--muted);font-size:.78rem">' + esc(c.since) + "</span>" : "") + "</div>" +
+          '<p class="st">' + esc(c.statement) + "</p><p class='st'>Refuted by " + how + ".</p>" +
+          (c.note ? '<div class="note" style="font-size:.88rem;border-left:3px solid var(--line);padding-left:10px;margin-top:6px">' + esc(c.note) + "</div>" : "") +
+          (c.depends && c.depends.length ? '<p class="k" style="color:var(--muted);font-size:.8rem">a route toward ' + c.depends.map(esc).join(", ") + "</p>" : "") + "</div>"; }).join("") +
+        (refuted.length ? "" : '<p style="color:var(--muted)">No refuted route in the register.</p>') + "</div>";
+    }
 
     // interface sheets
     var sheetBody = $("body-interface-sheets");

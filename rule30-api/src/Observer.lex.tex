@@ -1,0 +1,771 @@
+\begin{lexlean}{Observer}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Architecture}
+\importmodule{Presentation}
+\importmodule{Register}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+  name: Quadruple,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: object, type: String},
+    {name: realObject, type: String},
+    {name: sensualObject, type: String},
+    {name: realQualities, type: (List String)},
+    {name: sensualQualities, type: (List String)},
+    {name: withdrawn, type: (List String)}
+  ]
+}
+
+structure{
+  name: Overlap,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: vantage, type: String},
+    {name: claim, type: String}
+  ]
+}
+
+structure{
+  name: Interaction,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: source, type: String},
+    {name: target, type: String},
+    {name: viaPanels, type: (List String)}
+  ]
+}
+
+structure{
+  name: Facet,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: facet, type: String},
+    {name: pole, type: String},
+    {name: vantage, type: String},
+    {name: basis, type: String}
+  ]
+}
+
+structure{
+  name: Renaming,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: panel, type: String},
+    {name: image, type: String}
+  ]
+}
+
+definition{
+  name: realObject,
+  parameters: [],
+  result: String,
+  body: "problem1",
+  axioms: []
+}
+
+definition{
+  name: withdrawnCore,
+  parameters: [],
+  result: String,
+  body: "aperiodic-compensation",
+  axioms: []
+}
+
+definition{
+  name: poles,
+  parameters: [],
+  result: (List String),
+  body: (cons "sensual-quality" (cons "withdrawn" (cons "real-quality" (nil String)))),
+  axioms: []
+}
+
+definition{
+  name: vantages,
+  parameters: [],
+  result: (List String),
+  body: (cons "regular-side" (cons "chaotic-side" (cons "kernel" (nil String)))),
+  axioms: []
+}
+
+definition{
+  name: quadruples,
+  parameters: [],
+  result: (List Quadruple),
+  body: (cons (record Quadruple {object := "rule30-problem-1", realObject := "problem1", sensualObject := "prize-review", realQualities := (cons "coupling-law" (cons "recurrent-central-collision" (cons "horizon-certificate" (cons "left-defect-sourcing" (cons "ledger-diagonal" (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "all-rules-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (cons "interior-kernel-reduction" (cons "characteristic-one-facet" (cons "three-diagonal-band" (cons "stable-kernel" (cons "dyadic-renormalization" (cons "scale-free-rows" (cons "left-band" (cons "kernel-law" (nil String)))))))))))))))))))))))))), sensualQualities := (cons "reduction-tree" (cons "register" (cons "open-leaves" (nil String)))), withdrawn := (cons "problem1" (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))))}) (cons (record Quadruple {object := "rule30-problem-1", realObject := "problem1", sensualObject := "research-session", realQualities := (cons "coupling-law" (cons "recurrent-central-collision" (cons "horizon-certificate" (cons "left-defect-sourcing" (cons "ledger-diagonal" (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "all-rules-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (cons "interior-kernel-reduction" (cons "characteristic-one-facet" (cons "three-diagonal-band" (cons "stable-kernel" (cons "dyadic-renormalization" (cons "scale-free-rows" (cons "left-band" (cons "kernel-law" (nil String)))))))))))))))))))))))))), sensualQualities := (cons "open-leaves" (cons "interface-sheets" (cons "quality" (nil String)))), withdrawn := (cons "problem1" (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))))}) (cons (record Quadruple {object := "rule30-problem-1", realObject := "problem1", sensualObject := "reading", realQualities := (cons "coupling-law" (cons "recurrent-central-collision" (cons "horizon-certificate" (cons "left-defect-sourcing" (cons "ledger-diagonal" (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "all-rules-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (cons "interior-kernel-reduction" (cons "characteristic-one-facet" (cons "three-diagonal-band" (cons "stable-kernel" (cons "dyadic-renormalization" (cons "scale-free-rows" (cons "left-band" (cons "kernel-law" (nil String)))))))))))))))))))))))))), sensualQualities := (cons "reduction-tree" (cons "interface-sheets" (cons "register" (nil String)))), withdrawn := (cons "problem1" (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))))}) (cons (record Quadruple {object := "rule30-problem-1", realObject := "problem1", sensualObject := "stdlib-feedback", realQualities := (cons "coupling-law" (cons "recurrent-central-collision" (cons "horizon-certificate" (cons "left-defect-sourcing" (cons "ledger-diagonal" (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "all-rules-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (cons "interior-kernel-reduction" (cons "characteristic-one-facet" (cons "three-diagonal-band" (cons "stable-kernel" (cons "dyadic-renormalization" (cons "scale-free-rows" (cons "left-band" (cons "kernel-law" (nil String)))))))))))))))))))))))))), sensualQualities := (cons "modules" (cons "quality" (nil String))), withdrawn := (cons "problem1" (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))))}) (cons (record Quadruple {object := "rule30-problem-1", realObject := "problem1", sensualObject := "mathematics", realQualities := (cons "coupling-law" (cons "recurrent-central-collision" (cons "horizon-certificate" (cons "left-defect-sourcing" (cons "ledger-diagonal" (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "all-rules-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (cons "interior-kernel-reduction" (cons "characteristic-one-facet" (cons "three-diagonal-band" (cons "stable-kernel" (cons "dyadic-renormalization" (cons "scale-free-rows" (cons "left-band" (cons "kernel-law" (nil String)))))))))))))))))))))))))), sensualQualities := (cons "paper" (cons "reduction-tree" (cons "obligation" (cons "refutations" (cons "register" (nil String)))))), withdrawn := (cons "problem1" (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))))}) (cons (record Quadruple {object := "rule30-problem-1", realObject := "problem1", sensualObject := "first-visit", realQualities := (cons "coupling-law" (cons "recurrent-central-collision" (cons "horizon-certificate" (cons "left-defect-sourcing" (cons "ledger-diagonal" (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "all-rules-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (cons "interior-kernel-reduction" (cons "characteristic-one-facet" (cons "three-diagonal-band" (cons "stable-kernel" (cons "dyadic-renormalization" (cons "scale-free-rows" (cons "left-band" (cons "kernel-law" (nil String)))))))))))))))))))))))))), sensualQualities := (cons "picture" (cons "explainer" (cons "reduction-tree" (nil String)))), withdrawn := (cons "problem1" (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))))}) (nil Quadruple))))))),
+  axioms: []
+}
+
+definition{
+  name: overlaps,
+  parameters: [],
+  result: (List Overlap),
+  body: (prim append (cons (record Overlap {vantage := "prize-review", claim := "coupling-law"}) (cons (record Overlap {vantage := "prize-review", claim := "recurrent-central-collision"}) (cons (record Overlap {vantage := "prize-review", claim := "horizon-certificate"}) (cons (record Overlap {vantage := "prize-review", claim := "left-defect-sourcing"}) (cons (record Overlap {vantage := "prize-review", claim := "ledger-diagonal"}) (cons (record Overlap {vantage := "prize-review", claim := "periodic-finite-kernel"}) (cons (record Overlap {vantage := "prize-review", claim := "kernel-self-similarity"}) (cons (record Overlap {vantage := "prize-review", claim := "dilation-reduction"}) (cons (record Overlap {vantage := "prize-review", claim := "base-generic-reduction"}) (cons (record Overlap {vantage := "prize-review", claim := "kappa-collapse"}) (cons (record Overlap {vantage := "prize-review", claim := "dyadic-response-reduction"}) (cons (record Overlap {vantage := "prize-review", claim := "all-rules-facet"}) (cons (record Overlap {vantage := "prize-review", claim := "edge-interior-split"}) (cons (record Overlap {vantage := "prize-review", claim := "edge-diagonal-formula"}) (cons (record Overlap {vantage := "prize-review", claim := "interior-diagonal-formula"}) (cons (record Overlap {vantage := "prize-review", claim := "edge-parity"}) (cons (record Overlap {vantage := "prize-review", claim := "interior-aperiodicity"}) (cons (record Overlap {vantage := "prize-review", claim := "interior-kernel-reduction"}) (cons (record Overlap {vantage := "prize-review", claim := "characteristic-one-facet"}) (cons (record Overlap {vantage := "prize-review", claim := "three-diagonal-band"}) (cons (record Overlap {vantage := "prize-review", claim := "stable-kernel"}) (cons (record Overlap {vantage := "prize-review", claim := "dyadic-renormalization"}) (cons (record Overlap {vantage := "prize-review", claim := "scale-free-rows"}) (cons (record Overlap {vantage := "prize-review", claim := "left-band"}) (cons (record Overlap {vantage := "prize-review", claim := "kernel-law"}) (cons (record Overlap {vantage := "research-session", claim := "coupling-law"}) (cons (record Overlap {vantage := "research-session", claim := "recurrent-central-collision"}) (cons (record Overlap {vantage := "research-session", claim := "horizon-certificate"}) (cons (record Overlap {vantage := "research-session", claim := "left-defect-sourcing"}) (cons (record Overlap {vantage := "research-session", claim := "ledger-diagonal"}) (cons (record Overlap {vantage := "research-session", claim := "periodic-finite-kernel"}) (cons (record Overlap {vantage := "research-session", claim := "kernel-self-similarity"}) (cons (record Overlap {vantage := "research-session", claim := "dilation-reduction"}) (cons (record Overlap {vantage := "research-session", claim := "base-generic-reduction"}) (cons (record Overlap {vantage := "research-session", claim := "kappa-collapse"}) (cons (record Overlap {vantage := "research-session", claim := "dyadic-response-reduction"}) (cons (record Overlap {vantage := "research-session", claim := "all-rules-facet"}) (cons (record Overlap {vantage := "research-session", claim := "edge-interior-split"}) (cons (record Overlap {vantage := "research-session", claim := "edge-diagonal-formula"}) (cons (record Overlap {vantage := "research-session", claim := "interior-diagonal-formula"}) (nil Overlap))))))))))))))))))))))))))))))))))))))))) (prim append (cons (record Overlap {vantage := "research-session", claim := "edge-parity"}) (cons (record Overlap {vantage := "research-session", claim := "interior-aperiodicity"}) (cons (record Overlap {vantage := "research-session", claim := "interior-kernel-reduction"}) (cons (record Overlap {vantage := "research-session", claim := "characteristic-one-facet"}) (cons (record Overlap {vantage := "research-session", claim := "three-diagonal-band"}) (cons (record Overlap {vantage := "research-session", claim := "stable-kernel"}) (cons (record Overlap {vantage := "research-session", claim := "dyadic-renormalization"}) (cons (record Overlap {vantage := "research-session", claim := "scale-free-rows"}) (cons (record Overlap {vantage := "research-session", claim := "left-band"}) (cons (record Overlap {vantage := "research-session", claim := "kernel-law"}) (cons (record Overlap {vantage := "reading", claim := "coupling-law"}) (cons (record Overlap {vantage := "reading", claim := "recurrent-central-collision"}) (cons (record Overlap {vantage := "reading", claim := "horizon-certificate"}) (cons (record Overlap {vantage := "reading", claim := "left-defect-sourcing"}) (cons (record Overlap {vantage := "reading", claim := "ledger-diagonal"}) (cons (record Overlap {vantage := "reading", claim := "periodic-finite-kernel"}) (cons (record Overlap {vantage := "reading", claim := "kernel-self-similarity"}) (cons (record Overlap {vantage := "reading", claim := "dilation-reduction"}) (cons (record Overlap {vantage := "reading", claim := "base-generic-reduction"}) (cons (record Overlap {vantage := "reading", claim := "kappa-collapse"}) (cons (record Overlap {vantage := "reading", claim := "dyadic-response-reduction"}) (cons (record Overlap {vantage := "reading", claim := "all-rules-facet"}) (cons (record Overlap {vantage := "reading", claim := "edge-interior-split"}) (cons (record Overlap {vantage := "reading", claim := "edge-diagonal-formula"}) (cons (record Overlap {vantage := "reading", claim := "interior-diagonal-formula"}) (cons (record Overlap {vantage := "reading", claim := "edge-parity"}) (cons (record Overlap {vantage := "reading", claim := "interior-aperiodicity"}) (cons (record Overlap {vantage := "reading", claim := "interior-kernel-reduction"}) (cons (record Overlap {vantage := "reading", claim := "characteristic-one-facet"}) (cons (record Overlap {vantage := "reading", claim := "three-diagonal-band"}) (cons (record Overlap {vantage := "reading", claim := "stable-kernel"}) (cons (record Overlap {vantage := "reading", claim := "dyadic-renormalization"}) (cons (record Overlap {vantage := "reading", claim := "scale-free-rows"}) (cons (record Overlap {vantage := "reading", claim := "left-band"}) (cons (record Overlap {vantage := "reading", claim := "kernel-law"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "coupling-law"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "recurrent-central-collision"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "horizon-certificate"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "left-defect-sourcing"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "ledger-diagonal"}) (nil Overlap))))))))))))))))))))))))))))))))))))))))) (prim append (cons (record Overlap {vantage := "stdlib-feedback", claim := "periodic-finite-kernel"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "kernel-self-similarity"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "dilation-reduction"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "base-generic-reduction"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "kappa-collapse"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "dyadic-response-reduction"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "all-rules-facet"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "edge-interior-split"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "edge-diagonal-formula"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "interior-diagonal-formula"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "edge-parity"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "interior-aperiodicity"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "interior-kernel-reduction"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "characteristic-one-facet"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "three-diagonal-band"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "stable-kernel"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "dyadic-renormalization"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "scale-free-rows"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "left-band"}) (cons (record Overlap {vantage := "stdlib-feedback", claim := "kernel-law"}) (cons (record Overlap {vantage := "mathematics", claim := "coupling-law"}) (cons (record Overlap {vantage := "mathematics", claim := "recurrent-central-collision"}) (cons (record Overlap {vantage := "mathematics", claim := "horizon-certificate"}) (cons (record Overlap {vantage := "mathematics", claim := "left-defect-sourcing"}) (cons (record Overlap {vantage := "mathematics", claim := "ledger-diagonal"}) (cons (record Overlap {vantage := "mathematics", claim := "periodic-finite-kernel"}) (cons (record Overlap {vantage := "mathematics", claim := "kernel-self-similarity"}) (cons (record Overlap {vantage := "mathematics", claim := "dilation-reduction"}) (cons (record Overlap {vantage := "mathematics", claim := "base-generic-reduction"}) (cons (record Overlap {vantage := "mathematics", claim := "kappa-collapse"}) (cons (record Overlap {vantage := "mathematics", claim := "dyadic-response-reduction"}) (cons (record Overlap {vantage := "mathematics", claim := "all-rules-facet"}) (cons (record Overlap {vantage := "mathematics", claim := "edge-interior-split"}) (cons (record Overlap {vantage := "mathematics", claim := "edge-diagonal-formula"}) (cons (record Overlap {vantage := "mathematics", claim := "interior-diagonal-formula"}) (cons (record Overlap {vantage := "mathematics", claim := "edge-parity"}) (cons (record Overlap {vantage := "mathematics", claim := "interior-aperiodicity"}) (cons (record Overlap {vantage := "mathematics", claim := "interior-kernel-reduction"}) (cons (record Overlap {vantage := "mathematics", claim := "characteristic-one-facet"}) (cons (record Overlap {vantage := "mathematics", claim := "three-diagonal-band"}) (nil Overlap))))))))))))))))))))))))))))))))))))))))) (cons (record Overlap {vantage := "mathematics", claim := "stable-kernel"}) (cons (record Overlap {vantage := "mathematics", claim := "dyadic-renormalization"}) (cons (record Overlap {vantage := "mathematics", claim := "scale-free-rows"}) (cons (record Overlap {vantage := "mathematics", claim := "left-band"}) (cons (record Overlap {vantage := "mathematics", claim := "kernel-law"}) (cons (record Overlap {vantage := "first-visit", claim := "coupling-law"}) (cons (record Overlap {vantage := "first-visit", claim := "recurrent-central-collision"}) (cons (record Overlap {vantage := "first-visit", claim := "horizon-certificate"}) (cons (record Overlap {vantage := "first-visit", claim := "left-defect-sourcing"}) (cons (record Overlap {vantage := "first-visit", claim := "ledger-diagonal"}) (cons (record Overlap {vantage := "first-visit", claim := "periodic-finite-kernel"}) (cons (record Overlap {vantage := "first-visit", claim := "kernel-self-similarity"}) (cons (record Overlap {vantage := "first-visit", claim := "dilation-reduction"}) (cons (record Overlap {vantage := "first-visit", claim := "base-generic-reduction"}) (cons (record Overlap {vantage := "first-visit", claim := "kappa-collapse"}) (cons (record Overlap {vantage := "first-visit", claim := "dyadic-response-reduction"}) (cons (record Overlap {vantage := "first-visit", claim := "all-rules-facet"}) (cons (record Overlap {vantage := "first-visit", claim := "edge-interior-split"}) (cons (record Overlap {vantage := "first-visit", claim := "edge-diagonal-formula"}) (cons (record Overlap {vantage := "first-visit", claim := "interior-diagonal-formula"}) (cons (record Overlap {vantage := "first-visit", claim := "edge-parity"}) (cons (record Overlap {vantage := "first-visit", claim := "interior-aperiodicity"}) (cons (record Overlap {vantage := "first-visit", claim := "interior-kernel-reduction"}) (cons (record Overlap {vantage := "first-visit", claim := "characteristic-one-facet"}) (cons (record Overlap {vantage := "first-visit", claim := "three-diagonal-band"}) (cons (record Overlap {vantage := "first-visit", claim := "stable-kernel"}) (cons (record Overlap {vantage := "first-visit", claim := "dyadic-renormalization"}) (cons (record Overlap {vantage := "first-visit", claim := "scale-free-rows"}) (cons (record Overlap {vantage := "first-visit", claim := "left-band"}) (cons (record Overlap {vantage := "first-visit", claim := "kernel-law"}) (nil Overlap))))))))))))))))))))))))))))))) : (List Overlap)) : (List Overlap)) : (List Overlap)),
+  axioms: []
+}
+
+definition{
+  name: interactions,
+  parameters: [],
+  result: (List Interaction),
+  body: (cons (record Interaction {source := "prize-review", target := "research-session", viaPanels := (cons "open-leaves" (nil String))}) (cons (record Interaction {source := "prize-review", target := "reading", viaPanels := (cons "reduction-tree" (cons "register" (nil String)))}) (cons (record Interaction {source := "prize-review", target := "mathematics", viaPanels := (cons "reduction-tree" (cons "register" (nil String)))}) (cons (record Interaction {source := "prize-review", target := "first-visit", viaPanels := (cons "reduction-tree" (nil String))}) (cons (record Interaction {source := "research-session", target := "prize-review", viaPanels := (cons "open-leaves" (nil String))}) (cons (record Interaction {source := "research-session", target := "reading", viaPanels := (cons "interface-sheets" (nil String))}) (cons (record Interaction {source := "research-session", target := "stdlib-feedback", viaPanels := (cons "quality" (nil String))}) (cons (record Interaction {source := "reading", target := "prize-review", viaPanels := (cons "reduction-tree" (cons "register" (nil String)))}) (cons (record Interaction {source := "reading", target := "research-session", viaPanels := (cons "interface-sheets" (nil String))}) (cons (record Interaction {source := "reading", target := "mathematics", viaPanels := (cons "reduction-tree" (cons "register" (nil String)))}) (cons (record Interaction {source := "reading", target := "first-visit", viaPanels := (cons "reduction-tree" (nil String))}) (cons (record Interaction {source := "stdlib-feedback", target := "research-session", viaPanels := (cons "quality" (nil String))}) (cons (record Interaction {source := "mathematics", target := "prize-review", viaPanels := (cons "reduction-tree" (cons "register" (nil String)))}) (cons (record Interaction {source := "mathematics", target := "reading", viaPanels := (cons "reduction-tree" (cons "register" (nil String)))}) (cons (record Interaction {source := "mathematics", target := "first-visit", viaPanels := (cons "reduction-tree" (nil String))}) (cons (record Interaction {source := "first-visit", target := "prize-review", viaPanels := (cons "reduction-tree" (nil String))}) (cons (record Interaction {source := "first-visit", target := "reading", viaPanels := (cons "reduction-tree" (nil String))}) (cons (record Interaction {source := "first-visit", target := "mathematics", viaPanels := (cons "reduction-tree" (nil String))}) (nil Interaction))))))))))))))))))),
+  axioms: []
+}
+
+definition{
+  name: facets,
+  parameters: [],
+  result: (List Facet),
+  body: (cons (record Facet {facet := "edge-parity", pole := "sensual-quality", vantage := "regular-side", basis := "the edge parity: the edge diagonal of the center is the parity of time"}) (cons (record Facet {facet := "three-diagonal-band", pole := "sensual-quality", vantage := "regular-side", basis := "the ruler of the three-diagonal band"}) (cons (record Facet {facet := "left-band", pole := "sensual-quality", vantage := "regular-side", basis := "the rulers of the left band"}) (cons (record Facet {facet := "aperiodic-compensation", pole := "withdrawn", vantage := "chaotic-side", basis := "the measured non-collapse of the diagonals of index at least three: the deep interior withdraws"}) (cons (record Facet {facet := "coupling-law", pole := "real-quality", vantage := "kernel", basis := "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"}) (cons (record Facet {facet := "recurrent-central-collision", pole := "real-quality", vantage := "kernel", basis := "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"}) (cons (record Facet {facet := "ledger-diagonal", pole := "real-quality", vantage := "kernel", basis := "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"}) (cons (record Facet {facet := "periodic-finite-kernel", pole := "real-quality", vantage := "kernel", basis := "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"}) (nil Facet))))))))),
+  axioms: []
+}
+
+definition{
+  name: gauge,
+  parameters: [],
+  result: (List Renaming),
+  body: (cons (record Renaming {panel := "picture", image := "sq:picture"}) (cons (record Renaming {panel := "explainer", image := "sq:explainer"}) (cons (record Renaming {panel := "reduction-tree", image := "sq:reduction-tree"}) (cons (record Renaming {panel := "register", image := "sq:register"}) (cons (record Renaming {panel := "open-leaves", image := "sq:open-leaves"}) (cons (record Renaming {panel := "paper", image := "sq:paper"}) (cons (record Renaming {panel := "obligation", image := "sq:obligation"}) (cons (record Renaming {panel := "refutations", image := "sq:refutations"}) (cons (record Renaming {panel := "interface-sheets", image := "sq:interface-sheets"}) (cons (record Renaming {panel := "modules", image := "sq:modules"}) (cons (record Renaming {panel := "quality", image := "sq:quality"}) (nil Renaming)))))))))))),
+  axioms: []
+}
+
+definition{
+  name: memberString,
+  parameters: [value : String, values : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => false
+    | List.cons head tail => (if (prim equal value head : Bool) then true else (memberString value tail))),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: allMembers,
+  parameters: [values : (List String), ids : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => true
+    | List.cons head tail => (if (memberString head ids) then (allMembers tail ids) else false)),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: appendStrings,
+  parameters: [xs : (List String), ys : (List String)],
+  result: (List String),
+  body: (match xs
+    | List.nil => ys
+    | List.cons head tail => (cons head (appendStrings tail ys))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: noneMembers,
+  parameters: [xs : (List String), ids : (List String)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (memberString head ids) then false else (noneMembers tail ids))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: sameMembers,
+  parameters: [xs : (List String), ys : (List String)],
+  result: Bool,
+  body: (if (allMembers xs ys) then (allMembers ys xs) else false),
+  axioms: []
+}
+
+definition{
+  name: allEqual,
+  parameters: [xs : (List String), value : String],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (prim equal head value : Bool) then (allEqual tail value) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: claimsWithStatus,
+  parameters: [status : String, cs : (List Register::Claim)],
+  result: (List String),
+  body: (match cs
+    | List.nil => (nil String)
+    | List.cons head tail => (if (prim equal status (project head status) : Bool) then (cons (project head id) (claimsWithStatus status tail)) else (claimsWithStatus status tail))),
+  axioms: [],
+  recursive_argument: cs
+}
+
+definition{
+  name: journeyIds,
+  parameters: [xs : (List Presentation::Journey)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (journeyIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: journeyPanelsOf,
+  parameters: [key : String, xs : (List Presentation::Journey)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head panels) else (journeyPanelsOf key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: quadrupleObjects,
+  parameters: [xs : (List Quadruple)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head object) (quadrupleObjects tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: quadrupleRealObjects,
+  parameters: [xs : (List Quadruple)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head realObject) (quadrupleRealObjects tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: quadrupleSensualObjects,
+  parameters: [xs : (List Quadruple)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head sensualObject) (quadrupleSensualObjects tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: quadrupleRealQualities,
+  parameters: [qs : (List Quadruple)],
+  result: (List String),
+  body: (match qs
+    | List.nil => (nil String)
+    | List.cons head tail => (appendStrings (project head realQualities) (quadrupleRealQualities tail))),
+  axioms: [],
+  recursive_argument: qs
+}
+
+definition{
+  name: quadrupleSensualQualities,
+  parameters: [qs : (List Quadruple)],
+  result: (List String),
+  body: (match qs
+    | List.nil => (nil String)
+    | List.cons head tail => (appendStrings (project head sensualQualities) (quadrupleSensualQualities tail))),
+  axioms: [],
+  recursive_argument: qs
+}
+
+definition{
+  name: quadrupleWithdrawn,
+  parameters: [qs : (List Quadruple)],
+  result: (List String),
+  body: (match qs
+    | List.nil => (nil String)
+    | List.cons head tail => (appendStrings (project head withdrawn) (quadrupleWithdrawn tail))),
+  axioms: [],
+  recursive_argument: qs
+}
+
+definition{
+  name: realQualitiesOf,
+  parameters: [key : String, xs : (List Quadruple)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (if (prim equal key (project head sensualObject) : Bool) then (project head realQualities) else (realQualitiesOf key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: sensualQualitiesOf,
+  parameters: [key : String, xs : (List Quadruple)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (if (prim equal key (project head sensualObject) : Bool) then (project head sensualQualities) else (sensualQualitiesOf key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: sensualQualitiesAreJourneyPanels,
+  parameters: [xs : (List Quadruple), js : (List Presentation::Journey)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (sameMembers (project head sensualQualities) (journeyPanelsOf (project head sensualObject) js)) then (sensualQualitiesAreJourneyPanels tail js) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: everyQuadrupleWithdraws,
+  parameters: [xs : (List Quadruple), claim : String],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (memberString claim (project head withdrawn)) then (everyQuadrupleWithdraws tail claim) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: overlapVantages,
+  parameters: [xs : (List Overlap)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head vantage) (overlapVantages tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: overlapClaims,
+  parameters: [xs : (List Overlap)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head claim) (overlapClaims tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: overlapsInRealQualities,
+  parameters: [xs : (List Overlap), qs : (List Quadruple)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (memberString (project head claim) (realQualitiesOf (project head vantage) qs)) then (overlapsInRealQualities tail qs) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: hasOverlap,
+  parameters: [vantage : String, os : (List Overlap)],
+  result: Bool,
+  body: (match os
+    | List.nil => false
+    | List.cons head tail => (if (prim equal vantage (project head vantage) : Bool) then true else (hasOverlap vantage tail))),
+  axioms: [],
+  recursive_argument: os
+}
+
+definition{
+  name: everyVantageOverlaps,
+  parameters: [xs : (List Quadruple), os : (List Overlap)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (hasOverlap (project head sensualObject) os) then (everyVantageOverlaps tail os) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: interactionSources,
+  parameters: [xs : (List Interaction)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head source) (interactionSources tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: interactionTargets,
+  parameters: [xs : (List Interaction)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head target) (interactionTargets tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: hasReverse,
+  parameters: [source : String, target : String, panels : (List String), rows : (List Interaction)],
+  result: Bool,
+  body: (match rows
+    | List.nil => false
+    | List.cons head tail => (if (prim equal source (project head target) : Bool) then (if (prim equal target (project head source) : Bool) then (if (sameMembers panels (project head viaPanels)) then true else (hasReverse source target panels tail)) else (hasReverse source target panels tail)) else (hasReverse source target panels tail))),
+  axioms: [],
+  recursive_argument: rows
+}
+
+definition{
+  name: symmetric,
+  parameters: [xs : (List Interaction), rows : (List Interaction)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (hasReverse (project head source) (project head target) (project head viaPanels) rows) then (symmetric tail rows) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: interactionsShare,
+  parameters: [xs : (List Interaction), qs : (List Quadruple)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (if (allMembers (project head viaPanels) (sensualQualitiesOf (project head source) qs)) then (allMembers (project head viaPanels) (sensualQualitiesOf (project head target) qs)) else false) then (interactionsShare tail qs) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: facetIds,
+  parameters: [xs : (List Facet)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head facet) (facetIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: facetPoles,
+  parameters: [xs : (List Facet)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head pole) (facetPoles tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: facetVantages,
+  parameters: [xs : (List Facet)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head vantage) (facetVantages tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: facetsOfPole,
+  parameters: [pole : String, fs : (List Facet)],
+  result: (List String),
+  body: (match fs
+    | List.nil => (nil String)
+    | List.cons head tail => (if (prim equal pole (project head pole) : Bool) then (cons (project head facet) (facetsOfPole pole tail)) else (facetsOfPole pole tail))),
+  axioms: [],
+  recursive_argument: fs
+}
+
+definition{
+  name: renameString,
+  parameters: [x : String, rs : (List Renaming)],
+  result: String,
+  body: (match rs
+    | List.nil => x
+    | List.cons head tail => (if (prim equal x (project head panel) : Bool) then (project head image) else (renameString x tail))),
+  axioms: [],
+  recursive_argument: rs
+}
+
+definition{
+  name: renameStrings,
+  parameters: [xs : (List String), rs : (List Renaming)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (renameString head rs) (renameStrings tail rs))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: renameQuadruple,
+  parameters: [q : Quadruple, rs : (List Renaming)],
+  result: Quadruple,
+  body: (record Quadruple {object := (project q object), realObject := (project q realObject), sensualObject := (project q sensualObject), realQualities := (project q realQualities), sensualQualities := (renameStrings (project q sensualQualities) rs), withdrawn := (project q withdrawn)}),
+  axioms: []
+}
+
+definition{
+  name: renameQuadruples,
+  parameters: [qs : (List Quadruple), rs : (List Renaming)],
+  result: (List Quadruple),
+  body: (match qs
+    | List.nil => (nil Quadruple)
+    | List.cons head tail => (cons (renameQuadruple head rs) (renameQuadruples tail rs))),
+  axioms: [],
+  recursive_argument: qs
+}
+
+theorem{
+  name: vantagesAreJourneys,
+  parameters: [],
+  statement: ((allMembers (quadrupleSensualObjects (quadruples)) (journeyIds (Presentation::journeys))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyJourneyIsAVantage,
+  parameters: [],
+  statement: ((allMembers (journeyIds (Presentation::journeys)) (quadrupleSensualObjects (quadruples))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: objectIsTheProblem,
+  parameters: [],
+  statement: ((allEqual (quadrupleObjects (quadruples)) (project (Architecture::conceptualModel) id)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: realObjectIsTheRoot,
+  parameters: [],
+  statement: ((allEqual (quadrupleRealObjects (quadruples)) (realObject)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: realObjectIsAClaim,
+  parameters: [],
+  statement: ((memberString (realObject) (Register::idsOf (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: realQualitiesAreProved,
+  parameters: [],
+  statement: ((allMembers (quadrupleRealQualities (quadruples)) (claimsWithStatus "proved" (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: withdrawnAreOpen,
+  parameters: [],
+  statement: ((allMembers (quadrupleWithdrawn (quadruples)) (claimsWithStatus "open" (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: sensualQualitiesArePanels,
+  parameters: [],
+  statement: ((allMembers (quadrupleSensualQualities (quadruples)) (Presentation::panelIds (Presentation::panels))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: sensualQualitiesAreTheJourney,
+  parameters: [],
+  statement: ((sensualQualitiesAreJourneyPanels (quadruples) (Presentation::journeys)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: withdrawnCoreIsOpen,
+  parameters: [],
+  statement: ((memberString (withdrawnCore) (claimsWithStatus "open" (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: withdrawnCoreIsWithdrawnEverywhere,
+  parameters: [],
+  statement: ((everyQuadrupleWithdraws (quadruples) (withdrawnCore)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: withdrawal,
+  parameters: [],
+  statement: ((noneMembers (overlapClaims (overlaps)) (quadrupleWithdrawn (quadruples))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: overlapsAreRealQualities,
+  parameters: [],
+  statement: ((overlapsInRealQualities (overlaps) (quadruples)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: overlapVantagesAreVantages,
+  parameters: [],
+  statement: ((allMembers (overlapVantages (overlaps)) (quadrupleSensualObjects (quadruples))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyVantageSeesTheObject,
+  parameters: [],
+  statement: ((everyVantageOverlaps (quadruples) (overlaps)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: interactionSourcesAreVantages,
+  parameters: [],
+  statement: ((allMembers (interactionSources (interactions)) (quadrupleSensualObjects (quadruples))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: interactionTargetsAreVantages,
+  parameters: [],
+  statement: ((allMembers (interactionTargets (interactions)) (quadrupleSensualObjects (quadruples))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: interactionsAreSymmetric,
+  parameters: [],
+  statement: ((symmetric (interactions) (interactions)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: interactionsThroughSharedPanels,
+  parameters: [],
+  statement: ((interactionsShare (interactions) (quadruples)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: facetsAreClaims,
+  parameters: [],
+  statement: ((allMembers (facetIds (facets)) (Register::idsOf (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: facetPolesDeclared,
+  parameters: [],
+  statement: ((allMembers (facetPoles (facets)) (poles)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: facetVantagesDeclared,
+  parameters: [],
+  statement: ((allMembers (facetVantages (facets)) (vantages)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: sensualFacetsAreProved,
+  parameters: [],
+  statement: ((allMembers (facetsOfPole "sensual-quality" (facets)) (claimsWithStatus "proved" (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: realFacetsAreProved,
+  parameters: [],
+  statement: ((allMembers (facetsOfPole "real-quality" (facets)) (claimsWithStatus "proved" (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: withdrawnFacetsAreOpen,
+  parameters: [],
+  statement: ((allMembers (facetsOfPole "withdrawn" (facets)) (claimsWithStatus "open" (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: withdrawnCoreIsAFacet,
+  parameters: [],
+  statement: ((memberString (withdrawnCore) (facetsOfPole "withdrawn" (facets))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: gaugeKeepsRealQualities,
+  parameters: [],
+  statement: ((quadrupleRealQualities (renameQuadruples (quadruples) (gauge))) = (quadrupleRealQualities (quadruples))),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: gaugeKeepsWithdrawn,
+  parameters: [],
+  statement: ((quadrupleWithdrawn (renameQuadruples (quadruples) (gauge))) = (quadrupleWithdrawn (quadruples))),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: gaugeTransformsSensualQualities,
+  parameters: [],
+  statement: ((quadrupleSensualQualities (renameQuadruples (quadruples) (gauge))) = (renameStrings (quadrupleSensualQualities (quadruples)) (gauge))),
+  proof: decide{},
+  axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

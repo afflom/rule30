@@ -40,6 +40,10 @@ STAKEHOLDERS = [
      "concerns": ["evidence", "comprehension", "current-view"]},
     {"id": "uor-foundation", "name": "The UOR Foundation (LexLean and prism-stdlib improve through this research)",
      "concerns": ["stdlib", "optimal-implementation", "current-view"]},
+    {"id": "mathematician", "name": "A mathematician reading the proof",
+     "concerns": ["mathematics", "closure", "evidence"]},
+    {"id": "layperson", "name": "A reader with no Lean or LexLean background",
+     "concerns": ["plain-language", "comprehension"]},
 ]
 
 CONCERNS = [
@@ -49,6 +53,8 @@ CONCERNS = [
     {"id": "comprehension", "statement": "The features of the problem and of the solution are labeled and readable from the register."},
     {"id": "current-view", "statement": "Each push publishes the current state of the implementation."},
     {"id": "stdlib", "statement": "What the research needs from LexLean and prism-stdlib is identified and fed back."},
+    {"id": "mathematics", "statement": "The statements are readable as mathematics, each with its Lean name and lexeme, and their proofs are attested."},
+    {"id": "plain-language", "statement": "The problem, the proved facts and the open obligation are explained without formal prerequisites."},
 ]
 
 # ISO 42010: a viewpoint frames one concern for a stakeholder and names the
@@ -68,6 +74,10 @@ VIEWPOINTS = [
      "statement": "The current state of the implementation as a published artifact, rendered from the register on every push."},
     {"id": "stdlib", "stakeholder": "uor-foundation", "concern": "stdlib", "model_kind": "componentModel",
      "statement": "The LexLean modules of the project on the stdlib's types, and what they needed from the language."},
+    {"id": "paper", "stakeholder": "mathematician", "concern": "mathematics", "model_kind": "componentModel",
+     "statement": "The published theorems in the paper's controlled English with their Lean names and lexemes, the attested PDFs with their digests, the open obligation in its exact form, and the refuted routes with their refutations."},
+    {"id": "plain", "stakeholder": "layperson", "concern": "plain-language", "model_kind": "componentModel",
+     "statement": "Rule 30 drawn, and the problem, what is proved, what is open and what kernel-checked means, in plain words, with a guide to the other panels."},
 ]
 
 VIEWS = [
@@ -83,6 +93,10 @@ VIEWS = [
      "statement": "The view workflow renders the tree, the register, the sheets, the API modules and the site on every push to main."},
     {"id": "api-modules", "viewpoint": "stdlib", "command": "api_sync",
      "statement": "The command surface, the register, this architecture and the presentation are LexLean semantic modules on prism-stdlib; what they needed from the language is recorded in AGENTS.md."},
+    {"id": "paper-statements", "viewpoint": "paper", "command": "view_render",
+     "statement": "statements.json: every theorem of Observations.lex.tex with its Lean name, lexeme and section, the attested PDFs with their digests; the obligation and the refuted routes read from the register."},
+    {"id": "explainer", "viewpoint": "plain", "command": "view_render",
+     "statement": "The Rule 30 picture and the plain-language paragraphs Presentation.lex.tex declares as data, rendered by the site."},
 ]
 
 # ISO 25010 product quality, restricted to what "optimal implementation" means

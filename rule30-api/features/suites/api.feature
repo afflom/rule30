@@ -20,8 +20,14 @@ Feature: api
     When the suite exercises rust-emission
     Then its oracle accepts it: bin/r30 api production; scripts/tests/test_r30.py
 
+  @observer @build
+  Scenario: Observer.lex.tex records the object quadruple of every stakeholder vantage (the proof as the real object, the journey as the sensual object, the proved claims its panels render as real qualities, the panels as sensual qualities, the open claims as withdrawn) and the kernel decides withdrawal, nonempty overlap, symmetric interaction and gauge covariance over the register and the presentation.
+    Given rule30-api/src/Observer.lex.tex
+    When the suite exercises observer
+    Then its oracle accepts it: lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check
+
   @current-view @build
-  Scenario: The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.
+  Scenario: The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.
     Given .github/workflows/view.yml
     When the suite exercises current-view
     Then its oracle accepts it: bin/r30 view render; scripts/tests/test_r30.py

@@ -3280,4 +3280,81 @@ If \(\operatorname{eightaperiodic}\), then \(\operatorname{problemone}\).
 Assume \(h\).
 The goal follows from \(\operatorname{problem1ofeightaperiodic}(h)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:row-term-kernel-law}
+For every natural number \(k\) and natural number \(r\) and natural number \(u\) and natural number \(m\), if \(m < \operatorname{twopow}(k)\), then if \(r < \operatorname{twopow}(k)\), then if \(1 \le u\), then \(\operatorname{rowterm}(\operatorname{twopow}(k) \cdot u + r, m) = \operatorname{bxor}(\operatorname{frozen}(k, r, m), \operatorname{trailingparity}(u - 1) \operatorname{and} \operatorname{second}(k, r, m))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rowtermkernellaw}(k, r, u, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:interior-formula-kernel}
+For every natural number \(k\) and natural number \(r\) and natural number \(u\), if \(r < \operatorname{twopow}(k)\), then if \(1 \le u\), then \(\operatorname{interiorformula}(\operatorname{twopow}(k) \cdot u + r, \operatorname{twopow}(k) \cdot u + r) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{frozenprefix}(k, r), \operatorname{trailingparity}(u - 1) \operatorname{and} \operatorname{secondprefix}(k, r)), \operatorname{latetail}(k, r, u))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiorformulakernel}(k, r, u)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:kernel-seq-explicit}
+For every natural number \(k\) and natural number \(r\) and natural number \(u\), if \(r < \operatorname{twopow}(k)\), then if \(1 \le u\), then if \(1 \le k\), then \(\operatorname{kernelseq}(k, r, u) = \operatorname{not}(\operatorname{bxor}(\operatorname{timeparity}(r), \operatorname{bxor}(\operatorname{bxor}(\operatorname{frozenprefix}(k, r), \operatorname{trailingparity}(u - 1) \operatorname{and} \operatorname{secondprefix}(k, r)), \operatorname{latetail}(k, r, u))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{kernelseqexplicit}(k, r, u)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:row-term-twopow-mul}
+For every natural number \(k\) and natural number \(u\) and natural number \(m\), if \(m < \operatorname{twopow}(k)\), then if \(1 \le u\), then \(\operatorname{rowterm}(\operatorname{twopow}(k) \cdot u, m) = \operatorname{dyadicrow}(m)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rowtermtwopowmul}(k, u, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-twopow-mul}
+For every natural number \(k\) and natural number \(u\), if \(1 \le k\), then if \(1 \le u\), then \(\operatorname{center}(\operatorname{twopow}(k) \cdot u) = \operatorname{bxor}(\operatorname{center}(\operatorname{twopow}(k)), \operatorname{latetail}(k, 0, u))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centertwopowmul}(k, u)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-twopow-mul-add-one}
+For every natural number \(k\) and natural number \(u\), if \(1 \le k\), then if \(1 \le u\), then \(\operatorname{center}(\operatorname{twopow}(k) \cdot u + 1) = \operatorname{bxor}(\operatorname{center}(\operatorname{twopow}(k) + 1), \operatorname{bxor}(\operatorname{latetail}(k, 1, 1), \operatorname{latetail}(k, 1, u)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centertwopowmuladdone}(k, u)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-succ-self}
+For every natural number \(s\), \(\operatorname{trinomialparity}(s, s + 1) = \operatorname{trailingparity}(s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparitysuccself}(s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-pred-self}
+For every natural number \(s\), if \(1 \le s\), then \(\operatorname{trinomialparity}(s, s - 1) = \operatorname{trailingparity}(s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparitypredself}(s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:time-parity-twopow-mul-add}
+For every natural number \(k\) and natural number \(u\) and natural number \(r\), if \(1 \le k\), then \(\operatorname{timeparity}(\operatorname{twopow}(k) \cdot u + r) = \operatorname{timeparity}(r)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{timeparitytwopowmuladd}(k, u, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:second-one}
+For every natural number \(k\) and natural number \(m\), if \(1 \le k\), then if \(m < \operatorname{twopow}(k)\), then \(\operatorname{second}(k, 1, m) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{secondone}(k, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:second-prefix-one}
+For every natural number \(k\), if \(1 \le k\), then \(\operatorname{secondprefix}(k, 1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{secondprefixone}(k)\).
+\end{proof}
 \end{document}

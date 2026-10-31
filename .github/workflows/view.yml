@@ -1,12 +1,16 @@
 name: Current view for stakeholders
 
 # Every push to main publishes the current state of the implementation as a
-# light artifact: the reduction tree, the register, the interface sheets, the
-# LexLean API modules and the site that renders them. What is published is
-# what rule30-api/src/Presentation.lex.tex declares; `bin/r30 view render` is
-# its runtime. Validation already happened in the pre-commit gate (every
-# commit on main passed it), so this workflow runs no Lean, no lexlean and no
-# tests: it must never slow the research down.
+# light artifact and as the site at https://afflom.github.io/rule30/: the
+# reduction tree, the register, the interface sheets, the paper's statements
+# with the attested PDFs, the plain-language explainer, the LexLean API
+# modules and the site that renders them. What is published is what
+# rule30-api/src/Presentation.lex.tex declares and Application.lex.tex names
+# as the publication; `bin/r30 view render` is its runtime. Validation already
+# happened in the pre-commit gate (every commit on main passed it), so this
+# workflow runs no Lean, no lexlean and no tests: it must never slow the
+# research down. The one check after the deployment is that the page serves
+# the commit it was rendered from.
 
 on:
   push:
@@ -17,8 +21,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: view-${{ github.ref }}
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   view:
@@ -34,3 +38,49 @@ jobs:
         with:
           name: rule30-current-view
           path: view
+      - name: Upload the Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: view
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: view
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the rendered view
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  verify:
+    name: The deployed page serves this commit
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+    steps:
+      - name: Fetch the page and compare its embedded commit with GITHUB_SHA
+        run: |
+          # the site embeds its view data (`view_data` in tools/r30/site.py),
+          # which carries the commit the view was rendered from; the CDN may
+          # lag the deployment by a few seconds, so retry briefly
+          for attempt in 1 2 3 4 5 6; do
+            if curl -fsSL "$PAGE_URL" | grep -qF "\"commit\": \"$GITHUB_SHA\""; then
+              echo "$PAGE_URL serves commit $GITHUB_SHA"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "$PAGE_URL does not serve commit $GITHUB_SHA" >&2
+          exit 1

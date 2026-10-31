@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "second-one"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (nat 1) (local k))) (explicit hm (app (const lexlean.std.nat::lt) (local m) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.observation::second) (local k) (nat 1) (local m)) (const lexlean.std.bool::false))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelLaw"
+name = "Rule30UOR.KernelLaw.second_one"
+
+[[form]]
+id = "second-one"
+channel = "math"
+surface = "secondone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name secondone) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

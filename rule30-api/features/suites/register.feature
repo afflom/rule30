@@ -253,3 +253,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.LeftBand.center_eq_rulerBackground_bxor_eight for left-band
     When the suite exercises left-band
     Then its oracle accepts it: frontier check: Rule30UOR.LeftBand.center_eq_rulerBackground_bxor_eight kernel-checked under propext and Quot.sound and published
+
+  @kernel-law @build
+  Scenario: The freezing law of the linear transport: for a row m < 2^k and a time 2^k u + r (r < 2^k, u >= 1), rowTerm (2^k u + r) m = frozen k r m XOR trailingParity (u-1) AND second k r m, with frozen and second read off the row's contributions at u = 1 and u = 2. Hence every 2-kernel sequence of the center is explicit up to the rows at or above the scale: center (2^k u + r) = not (timeParity r XOR frozenPrefix k r XOR trailingParity (u-1) AND secondPrefix k r XOR lateTail k r u); the fixed dyadic row, the class renormalization and the band rulers are its instances, and a block of rows [2^j, 2^(j+1)) influences every later time only through its influence on the next two block-spans, modulated by the ruler.
+    Given frontier.toml names Rule30UOR.KernelLaw.rowTerm_kernel_law for kernel-law
+    When the suite exercises kernel-law
+    Then its oracle accepts it: frontier check: Rule30UOR.KernelLaw.rowTerm_kernel_law kernel-checked under propext and Quot.sound and published

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trinomial-parity-succ-self"
+category = "proof-constant"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::trinomial-parity) (local s) (app (const lexlean.std.nat::add) (local s) (nat 1))) (app (const r30.observation::trailing-parity) (local s))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelLaw"
+name = "Rule30UOR.KernelLaw.trinomialParity_succ_self"
+
+[[form]]
+id = "trinomial-parity-succ-self"
+channel = "math"
+surface = "trinomialparitysuccself"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trinomialparitysuccself) (paren (seq (slot 0))))"

@@ -1,0 +1,780 @@
+spec = "r30/observer/1"
+object = "rule30-problem-1"
+real_object = "problem1"
+withdrawn_core = "aperiodic-compensation"
+poles = ["sensual-quality", "withdrawn", "real-quality"]
+vantages = ["regular-side", "chaotic-side", "kernel"]
+
+[[quadruple]]
+vantage = "prize-review"
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law"]
+sensual_qualities = ["reduction-tree", "register", "open-leaves"]
+withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
+
+[[quadruple]]
+vantage = "research-session"
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law"]
+sensual_qualities = ["open-leaves", "interface-sheets", "quality"]
+withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
+
+[[quadruple]]
+vantage = "reading"
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law"]
+sensual_qualities = ["reduction-tree", "interface-sheets", "register"]
+withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
+
+[[quadruple]]
+vantage = "stdlib-feedback"
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law"]
+sensual_qualities = ["modules", "quality"]
+withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
+
+[[quadruple]]
+vantage = "mathematics"
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law"]
+sensual_qualities = ["paper", "reduction-tree", "obligation", "refutations", "register"]
+withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
+
+[[quadruple]]
+vantage = "first-visit"
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law"]
+sensual_qualities = ["picture", "explainer", "reduction-tree"]
+withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
+
+[[overlap]]
+vantage = "prize-review"
+claim = "coupling-law"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "recurrent-central-collision"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "horizon-certificate"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "left-defect-sourcing"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "ledger-diagonal"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "periodic-finite-kernel"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "kernel-self-similarity"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "dilation-reduction"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "base-generic-reduction"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "kappa-collapse"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "dyadic-response-reduction"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "all-rules-facet"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "edge-interior-split"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "edge-diagonal-formula"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "interior-diagonal-formula"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "edge-parity"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "interior-aperiodicity"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "interior-kernel-reduction"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "characteristic-one-facet"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "three-diagonal-band"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "stable-kernel"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "dyadic-renormalization"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "scale-free-rows"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "left-band"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "kernel-law"
+
+[[overlap]]
+vantage = "research-session"
+claim = "coupling-law"
+
+[[overlap]]
+vantage = "research-session"
+claim = "recurrent-central-collision"
+
+[[overlap]]
+vantage = "research-session"
+claim = "horizon-certificate"
+
+[[overlap]]
+vantage = "research-session"
+claim = "left-defect-sourcing"
+
+[[overlap]]
+vantage = "research-session"
+claim = "ledger-diagonal"
+
+[[overlap]]
+vantage = "research-session"
+claim = "periodic-finite-kernel"
+
+[[overlap]]
+vantage = "research-session"
+claim = "kernel-self-similarity"
+
+[[overlap]]
+vantage = "research-session"
+claim = "dilation-reduction"
+
+[[overlap]]
+vantage = "research-session"
+claim = "base-generic-reduction"
+
+[[overlap]]
+vantage = "research-session"
+claim = "kappa-collapse"
+
+[[overlap]]
+vantage = "research-session"
+claim = "dyadic-response-reduction"
+
+[[overlap]]
+vantage = "research-session"
+claim = "all-rules-facet"
+
+[[overlap]]
+vantage = "research-session"
+claim = "edge-interior-split"
+
+[[overlap]]
+vantage = "research-session"
+claim = "edge-diagonal-formula"
+
+[[overlap]]
+vantage = "research-session"
+claim = "interior-diagonal-formula"
+
+[[overlap]]
+vantage = "research-session"
+claim = "edge-parity"
+
+[[overlap]]
+vantage = "research-session"
+claim = "interior-aperiodicity"
+
+[[overlap]]
+vantage = "research-session"
+claim = "interior-kernel-reduction"
+
+[[overlap]]
+vantage = "research-session"
+claim = "characteristic-one-facet"
+
+[[overlap]]
+vantage = "research-session"
+claim = "three-diagonal-band"
+
+[[overlap]]
+vantage = "research-session"
+claim = "stable-kernel"
+
+[[overlap]]
+vantage = "research-session"
+claim = "dyadic-renormalization"
+
+[[overlap]]
+vantage = "research-session"
+claim = "scale-free-rows"
+
+[[overlap]]
+vantage = "research-session"
+claim = "left-band"
+
+[[overlap]]
+vantage = "research-session"
+claim = "kernel-law"
+
+[[overlap]]
+vantage = "reading"
+claim = "coupling-law"
+
+[[overlap]]
+vantage = "reading"
+claim = "recurrent-central-collision"
+
+[[overlap]]
+vantage = "reading"
+claim = "horizon-certificate"
+
+[[overlap]]
+vantage = "reading"
+claim = "left-defect-sourcing"
+
+[[overlap]]
+vantage = "reading"
+claim = "ledger-diagonal"
+
+[[overlap]]
+vantage = "reading"
+claim = "periodic-finite-kernel"
+
+[[overlap]]
+vantage = "reading"
+claim = "kernel-self-similarity"
+
+[[overlap]]
+vantage = "reading"
+claim = "dilation-reduction"
+
+[[overlap]]
+vantage = "reading"
+claim = "base-generic-reduction"
+
+[[overlap]]
+vantage = "reading"
+claim = "kappa-collapse"
+
+[[overlap]]
+vantage = "reading"
+claim = "dyadic-response-reduction"
+
+[[overlap]]
+vantage = "reading"
+claim = "all-rules-facet"
+
+[[overlap]]
+vantage = "reading"
+claim = "edge-interior-split"
+
+[[overlap]]
+vantage = "reading"
+claim = "edge-diagonal-formula"
+
+[[overlap]]
+vantage = "reading"
+claim = "interior-diagonal-formula"
+
+[[overlap]]
+vantage = "reading"
+claim = "edge-parity"
+
+[[overlap]]
+vantage = "reading"
+claim = "interior-aperiodicity"
+
+[[overlap]]
+vantage = "reading"
+claim = "interior-kernel-reduction"
+
+[[overlap]]
+vantage = "reading"
+claim = "characteristic-one-facet"
+
+[[overlap]]
+vantage = "reading"
+claim = "three-diagonal-band"
+
+[[overlap]]
+vantage = "reading"
+claim = "stable-kernel"
+
+[[overlap]]
+vantage = "reading"
+claim = "dyadic-renormalization"
+
+[[overlap]]
+vantage = "reading"
+claim = "scale-free-rows"
+
+[[overlap]]
+vantage = "reading"
+claim = "left-band"
+
+[[overlap]]
+vantage = "reading"
+claim = "kernel-law"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "coupling-law"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "recurrent-central-collision"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "horizon-certificate"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "left-defect-sourcing"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "ledger-diagonal"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "periodic-finite-kernel"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "kernel-self-similarity"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "dilation-reduction"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "base-generic-reduction"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "kappa-collapse"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "dyadic-response-reduction"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "all-rules-facet"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "edge-interior-split"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "edge-diagonal-formula"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "interior-diagonal-formula"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "edge-parity"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "interior-aperiodicity"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "interior-kernel-reduction"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "characteristic-one-facet"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "three-diagonal-band"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "stable-kernel"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "dyadic-renormalization"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "scale-free-rows"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "left-band"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "kernel-law"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "coupling-law"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "recurrent-central-collision"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "horizon-certificate"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "left-defect-sourcing"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "ledger-diagonal"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "periodic-finite-kernel"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "kernel-self-similarity"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "dilation-reduction"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "base-generic-reduction"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "kappa-collapse"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "dyadic-response-reduction"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "all-rules-facet"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "edge-interior-split"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "edge-diagonal-formula"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "interior-diagonal-formula"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "edge-parity"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "interior-aperiodicity"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "interior-kernel-reduction"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "characteristic-one-facet"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "three-diagonal-band"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "stable-kernel"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "dyadic-renormalization"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "scale-free-rows"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "left-band"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "kernel-law"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "coupling-law"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "recurrent-central-collision"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "horizon-certificate"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "left-defect-sourcing"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "ledger-diagonal"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "periodic-finite-kernel"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "kernel-self-similarity"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "dilation-reduction"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "base-generic-reduction"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "kappa-collapse"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "dyadic-response-reduction"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "all-rules-facet"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "edge-interior-split"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "edge-diagonal-formula"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "interior-diagonal-formula"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "edge-parity"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "interior-aperiodicity"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "interior-kernel-reduction"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "characteristic-one-facet"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "three-diagonal-band"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "stable-kernel"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "dyadic-renormalization"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "scale-free-rows"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "left-band"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "kernel-law"
+
+[[interaction]]
+source = "prize-review"
+target = "research-session"
+via_panels = ["open-leaves"]
+
+[[interaction]]
+source = "prize-review"
+target = "reading"
+via_panels = ["reduction-tree", "register"]
+
+[[interaction]]
+source = "prize-review"
+target = "mathematics"
+via_panels = ["reduction-tree", "register"]
+
+[[interaction]]
+source = "prize-review"
+target = "first-visit"
+via_panels = ["reduction-tree"]
+
+[[interaction]]
+source = "research-session"
+target = "prize-review"
+via_panels = ["open-leaves"]
+
+[[interaction]]
+source = "research-session"
+target = "reading"
+via_panels = ["interface-sheets"]
+
+[[interaction]]
+source = "research-session"
+target = "stdlib-feedback"
+via_panels = ["quality"]
+
+[[interaction]]
+source = "reading"
+target = "prize-review"
+via_panels = ["reduction-tree", "register"]
+
+[[interaction]]
+source = "reading"
+target = "research-session"
+via_panels = ["interface-sheets"]
+
+[[interaction]]
+source = "reading"
+target = "mathematics"
+via_panels = ["reduction-tree", "register"]
+
+[[interaction]]
+source = "reading"
+target = "first-visit"
+via_panels = ["reduction-tree"]
+
+[[interaction]]
+source = "stdlib-feedback"
+target = "research-session"
+via_panels = ["quality"]
+
+[[interaction]]
+source = "mathematics"
+target = "prize-review"
+via_panels = ["reduction-tree", "register"]
+
+[[interaction]]
+source = "mathematics"
+target = "reading"
+via_panels = ["reduction-tree", "register"]
+
+[[interaction]]
+source = "mathematics"
+target = "first-visit"
+via_panels = ["reduction-tree"]
+
+[[interaction]]
+source = "first-visit"
+target = "prize-review"
+via_panels = ["reduction-tree"]
+
+[[interaction]]
+source = "first-visit"
+target = "reading"
+via_panels = ["reduction-tree"]
+
+[[interaction]]
+source = "first-visit"
+target = "mathematics"
+via_panels = ["reduction-tree"]
+
+[[facet]]
+facet = "edge-parity"
+pole = "sensual-quality"
+vantage = "regular-side"
+basis = "the edge parity: the edge diagonal of the center is the parity of time"
+
+[[facet]]
+facet = "three-diagonal-band"
+pole = "sensual-quality"
+vantage = "regular-side"
+basis = "the ruler of the three-diagonal band"
+
+[[facet]]
+facet = "left-band"
+pole = "sensual-quality"
+vantage = "regular-side"
+basis = "the rulers of the left band"
+
+[[facet]]
+facet = "aperiodic-compensation"
+pole = "withdrawn"
+vantage = "chaotic-side"
+basis = "the measured non-collapse of the diagonals of index at least three: the deep interior withdraws"
+
+[[facet]]
+facet = "coupling-law"
+pole = "real-quality"
+vantage = "kernel"
+basis = "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"
+
+[[facet]]
+facet = "recurrent-central-collision"
+pole = "real-quality"
+vantage = "kernel"
+basis = "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"
+
+[[facet]]
+facet = "ledger-diagonal"
+pole = "real-quality"
+vantage = "kernel"
+basis = "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"
+
+[[facet]]
+facet = "periodic-finite-kernel"
+pole = "real-quality"
+vantage = "kernel"
+basis = "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"

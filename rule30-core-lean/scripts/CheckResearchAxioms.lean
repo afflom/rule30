@@ -51,6 +51,7 @@ import Rule30UOR.Band
 import Rule30UOR.StableKernel
 import Rule30UOR.DyadicRow
 import Rule30UOR.LeftBand
+import Rule30UOR.KernelLaw
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

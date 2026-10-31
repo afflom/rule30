@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trinomial-parity-pred-self"
+category = "proof-constant"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::le) (nat 1) (local s)))) (app (const lexlean.core::eq) (app (const r30.observation::trinomial-parity) (local s) (app (const lexlean.std.nat::sub) (local s) (nat 1))) (app (const r30.observation::trailing-parity) (local s)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelLaw"
+name = "Rule30UOR.KernelLaw.trinomialParity_pred_self"
+
+[[form]]
+id = "trinomial-parity-pred-self"
+channel = "math"
+surface = "trinomialparitypredself"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trinomialparitypredself) (paren (seq (slot 0))))"
