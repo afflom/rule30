@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cell-left-eq-paper"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.time::cell) (local t) (app (const lexlean.std.int::neg) (nat 1))) (app (const r30.local::bxor) (app (const r30.observation::trailing-parity) (local t)) (app (const r30.observation::ledger-bit) (local t) (app (const lexlean.std.nat::add) (local t) (nat 1))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.cell_left_eq_paper"
+
+[[form]]
+id = "cell-left-eq-paper"
+channel = "math"
+surface = "celllefteqpaper"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name celllefteqpaper) (paren (seq (slot 0))))"

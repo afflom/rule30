@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-succ-ledger-paper"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 1) (local t)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (nat 1))) (app (const r30.local::rule) (app (const r30.local::bxor) (app (const r30.observation::trailing-parity) (local t)) (app (const r30.observation::ledger-bit) (local t) (app (const lexlean.std.nat::add) (local t) (nat 1)))) (app (const lexlean.std.bool::not) (app (const r30.observation::ledger-bit) (local t) (local t))) (app (const r30.local::bxor) (app (const r30.observation::trailing-parity) (local t)) (app (const r30.observation::ledger-bit) (local t) (app (const lexlean.std.nat::sub) (local t) (nat 1))))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.center_succ_ledger_paper"
+
+[[form]]
+id = "center-succ-ledger-paper"
+channel = "math"
+surface = "centersuccledgerpaper"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centersuccledgerpaper) (paren (seq (slot 0))))"

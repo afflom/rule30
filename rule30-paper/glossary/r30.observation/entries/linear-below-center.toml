@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "linear-below-center"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit h1 (app (const lexlean.std.nat::le) (nat 1) (local t)))) (app (const lexlean.core::eq) (app (const r30.observation::row-bit) (app (const r30.observation::phi-lin-pow) (nat 1) (local t) (nat 1)) (app (const lexlean.std.nat::sub) (local t) (nat 1))) (app (const r30.observation::trailing-parity) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.linear_below_center"
+
+[[form]]
+id = "linear-below-center"
+channel = "math"
+surface = "linearbelowcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name linearbelowcenter) (paren (seq (slot 0))))"

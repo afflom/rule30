@@ -505,6 +505,13 @@ For every natural number \(t\), \(\operatorname{ledgerdiagonal}(t) = \operatorna
 \begin{proof}
 The goal follows from \(\operatorname{ledgerdiagonaldefinition}(t)\).
 \end{proof}
+\begin{lemma}
+\label{ll:observations:ledger-bit-definition}
+For every natural number \(t\) and natural number \(j\), \(\operatorname{ledgerbit}(t, j) = \operatorname{rowbit}(\operatorname{wittwin}(0, t), j)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{ledgerbitdefinition}(t, j)\).
+\end{proof}
 \section{Masked observations}
 \label{ll:observations:masked-observations}
 \begin{theorem}
@@ -2241,5 +2248,89 @@ For every natural number \(a\) and natural number \(b\), \(\operatorname{wittlin
 \end{theorem}
 \begin{proof}
 The goal follows from \(\operatorname{philinearxor}(a, b)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trailing-parity-even}
+For every natural number \(m\), \(\operatorname{trailingparity}(2 \cdot m) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trailingparityeven}(m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trailing-parity-odd}
+For every natural number \(m\), \(\operatorname{trailingparity}(2 \cdot m + 1) = \operatorname{not}(\operatorname{trailingparity}(m))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trailingparityodd}(m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-center}
+For every natural number \(t\), \(\operatorname{rowbit}(\operatorname{philinpow}(1, t, 1), t) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{linearcenter}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-above-center}
+For every natural number \(t\), \(\operatorname{rowbit}(\operatorname{philinpow}(1, t, 1), t + 1) = \operatorname{trailingparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{linearabovecenter}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-below-center}
+For every natural number \(t\), if \(1 \le t\), then \(\operatorname{rowbit}(\operatorname{philinpow}(1, t, 1), t - 1) = \operatorname{trailingparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{linearbelowcenter}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phi-lin-phi-lin}
+For every natural number \(s\) and natural number \(y\), \(\operatorname{philin}(s, \operatorname{philin}(s, y)) = \operatorname{philin}(2 \cdot s, y)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{philinphilin}(s, y)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phi-lin-pow-two-mul}
+For every natural number \(m\) and natural number \(y\), \(\operatorname{philinpow}(1, 2 \cdot m, y) = \operatorname{philinpow}(2, m, y)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{philinpowtwomul}(m, y)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phi-linear-pow-eq-phi-lin-pow}
+For every natural number \(m\) and natural number \(y\), \(\operatorname{wittlinpow}(m, y) = \operatorname{philinpow}(1, m, y)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{philinearpoweqphilinpow}(m, y)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-succ-ledger-paper}
+For every natural number \(t\), if \(1 \le t\), then \(\operatorname{center}(t + 1) = \operatorname{rule}(\operatorname{bxor}(\operatorname{trailingparity}(t), \operatorname{ledgerbit}(t, t + 1)), \operatorname{not}(\operatorname{ledgerbit}(t, t)), \operatorname{bxor}(\operatorname{trailingparity}(t), \operatorname{ledgerbit}(t, t - 1)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centersuccledgerpaper}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag-eq-linear-bxor-ledger}
+For every natural number \(j\) and natural number \(t\), \(\operatorname{rdiag}(j, t) = \operatorname{bxor}(\operatorname{rowbit}(\operatorname{philinpow}(1, t, 1), j), \operatorname{ledgerbit}(t, j))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiageqlinearbxorledger}(j, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:cell-left-eq-paper}
+For every natural number \(t\), \(\operatorname{cell}(t, -1) = \operatorname{bxor}(\operatorname{trailingparity}(t), \operatorname{ledgerbit}(t, t + 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{celllefteqpaper}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:cell-right-eq-paper}
+For every natural number \(t\), if \(1 \le t\), then \(\operatorname{cell}(t, 1) = \operatorname{bxor}(\operatorname{trailingparity}(t), \operatorname{ledgerbit}(t, t - 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{cellrighteqpaper}(t)\).
 \end{proof}
 \end{document}

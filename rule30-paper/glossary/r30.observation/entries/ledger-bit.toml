@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ledger-bit"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.ledgerBit"
+
+[[form]]
+id = "ledger-bit"
+channel = "math"
+surface = "ledgerbit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ledgerbit) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

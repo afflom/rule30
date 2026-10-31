@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trailing-parity-even"
+category = "proof-constant"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::mul) (nat 2) (local m))) (const lexlean.std.bool::false)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.trailingParity_even"
+
+[[form]]
+id = "trailing-parity-even"
+channel = "math"
+surface = "trailingparityeven"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trailingparityeven) (paren (seq (slot 0))))"

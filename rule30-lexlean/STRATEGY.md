@@ -2766,4 +2766,23 @@ resonance `2^P ≡ 1 (mod g)` of the 2-adic number `Σ center(t)·2^t`, which wo
 ledger form says which digits that rationality would constrain: the carries of the orbit, read
 along the diagonal of the Witt tower.
 
+**The center's update in ledger coordinates.** The coefficients of `q^t` beside the center are
+the trailing-ones parity `a(t)` of `t` (`linear_above_center`, `linear_below_center`; `a(2m) = 0`,
+`a(2m+1) = ¬a(m)`, proved by the same Frobenius spread as `linear_center`). Every cell is a
+coefficient of `q^t` XOR a ledger bit (`rdiag_eq_linear_xor_ledger`), so the self-referential
+equation of the orbit, read at the center, is (`center_succ_ledger`, `t ≥ 1`)
+
+    center (t+1) = rule (a t ⊕ ℓ(t, t+1)) (¬ ℓ(t, t)) (a t ⊕ ℓ(t, t−1)),   ℓ(t, j) = bit j of winWitt 0 t.
+
+The 2-automatic coefficient `a` is the whole contribution of the linear part at the center; the
+rest is three ledger bits, and the ledger itself evolves by `q` XOR the shifted carry of the row.
+
+**SpiralCore (Zenodo 10.5281/zenodo.23584719) as conceptual content.** The code runs Rule 30 (and
+184, 110) on a 48-cell ring with "counterfactual" rows that are bitwise complements, merges
+`3^(v_3 N)` list entries at 3-adic valuations of the tick, and drives Kuramoto phases; its only
+exact invariant is rule 184's particle conservation. Nothing in it reads a sequence across levels
+or concerns periodicity, so it contributes no identity here; the one resonance with the orbit is
+the order-3 cyclotomic structure of the linear part, `q·(1+X) = 1+X³`, which the repository already
+uses for its `3·2^a` pages. Recorded so it is not walked again.
+
 Problem 1 remains unproved.

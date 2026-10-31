@@ -574,6 +574,14 @@ Close the goal with \(\lexeme{r30.observation::ledger-diagonal-definition}(t)\).
 \end{proof}
 \end{lemma}
 
+\begin{lemma}{ledger-bit-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and natural number \(j\), \(ledgerbit(t, j) = rowbit(wittwin(0, t), j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ledger-bit-definition}(t, j)\).
+\end{proof}
+\end{lemma}
+
 \end{section}
 
 \begin{section}{masked-observations}
@@ -2566,6 +2574,102 @@ Close the goal with \(\lexeme{r30.observation::phi-eq-linear-xor-carry}(y)\).
 For every natural number \(a\) and natural number \(b\), \(wittlinear(wittxor(a, b)) = wittxor(wittlinear(a), wittlinear(b))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::phi-linear-xor}(a, b)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trailing-parity-even}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\), \(trailingparity(2 * m) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trailing-parity-even}(m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trailing-parity-odd}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\), \(trailingparity(2 * m + 1) = not(trailingparity(m))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trailing-parity-odd}(m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{linear-center}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rowbit(philinpow(1, t, 1), t) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::linear-center}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{linear-above-center}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rowbit(philinpow(1, t, 1), t + 1) = trailingparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::linear-above-center}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{linear-below-center}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(1 ≤ t\), then \(rowbit(philinpow(1, t, 1), t - 1) = trailingparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::linear-below-center}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phi-lin-phi-lin}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\) and natural number \(y\), \(philin(s, philin(s, y)) = philin(2 * s, y)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-lin-phi-lin}(s, y)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phi-lin-pow-two-mul}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(y\), \(philinpow(1, 2 * m, y) = philinpow(2, m, y)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-lin-pow-two-mul}(m, y)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phi-linear-pow-eq-phi-lin-pow}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(y\), \(wittlinpow(m, y) = philinpow(1, m, y)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-linear-pow-eq-phi-lin-pow}(m, y)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-succ-ledger-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(1 ≤ t\), then \(center(t + 1) = rule(bxor(trailingparity(t), ledgerbit(t, t + 1)), not(ledgerbit(t, t)), bxor(trailingparity(t), ledgerbit(t, t - 1)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-succ-ledger-paper}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag-eq-linear-bxor-ledger}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(t\), \(rdiag(j, t) = bxor(rowbit(philinpow(1, t, 1), j), ledgerbit(t, j))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-eq-linear-bxor-ledger}(j, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{cell-left-eq-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(cell(t, intneg 1) = bxor(trailingparity(t), ledgerbit(t, t + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::cell-left-eq-paper}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{cell-right-eq-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(1 ≤ t\), then \(cell(t, 1) = bxor(trailingparity(t), ledgerbit(t, t - 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::cell-right-eq-paper}(t)\).
 \end{proof}
 \end{theorem}
 

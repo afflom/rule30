@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "phi-lin-pow-two-mul"
+category = "proof-constant"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::phi-lin-pow) (nat 1) (app (const lexlean.std.nat::mul) (nat 2) (local m)) (local y)) (app (const r30.observation::phi-lin-pow) (nat 2) (local m) (local y))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.phiLinPow_two_mul"
+
+[[form]]
+id = "phi-lin-pow-two-mul"
+channel = "math"
+surface = "philinpowtwomul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name philinpowtwomul) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "phi-lin-pow"
+category = "function"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat)) (explicit h1 (const lexlean.std.nat::nat)) (explicit h2 (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.phiLinPow"
+
+[[form]]
+id = "phi-lin-pow"
+channel = "math"
+surface = "philinpow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name philinpow) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

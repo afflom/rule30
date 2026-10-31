@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "phi-lin-phi-lin"
+category = "proof-constant"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::phi-lin) (local s) (app (const r30.observation::phi-lin) (local s) (local y))) (app (const r30.observation::phi-lin) (app (const lexlean.std.nat::mul) (nat 2) (local s)) (local y))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.phiLin_phiLin"
+
+[[form]]
+id = "phi-lin-phi-lin"
+channel = "math"
+surface = "philinphilin"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name philinphilin) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

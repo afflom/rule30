@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-eq-linear-bxor-ledger"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (local j) (local t)) (app (const r30.local::bxor) (app (const r30.observation::row-bit) (app (const r30.observation::phi-lin-pow) (nat 1) (local t) (nat 1)) (local j)) (app (const r30.observation::ledger-bit) (local t) (local j)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.rdiag_eq_linear_bxor_ledger"
+
+[[form]]
+id = "rdiag-eq-linear-bxor-ledger"
+channel = "math"
+surface = "rdiageqlinearbxorledger"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiageqlinearbxorledger) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

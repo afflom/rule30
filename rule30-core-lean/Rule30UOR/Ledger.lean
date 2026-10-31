@@ -271,4 +271,172 @@ theorem centerPeriodic_iff_ledgerPeriodic (T P : Nat) :
   · intro h t ht
     rw [center_eq_not_ledgerDiagonal, center_eq_not_ledgerDiagonal, h t ht]
 
+/-! ## The linear part beside the center
+
+The coefficients of `q^t` at `t ± 1` are the parity of the number of trailing
+ones of `t`: `a(2m) = 0`, `a(2m+1) = ¬a(m)`. With `linear_center` this gives the
+three coefficients of the linear part that the center's update reads. -/
+
+def trailingParityFuel : Nat → Nat → Bool
+  | 0, _ => false
+  | f + 1, t => if t % 2 = 0 then false else !trailingParityFuel f (t / 2)
+
+/-- The parity of the number of trailing ones in the binary expansion of `t`. -/
+def trailingParity (t : Nat) : Bool := trailingParityFuel t t
+
+theorem trailingParityFuel_congr : ∀ f g t, t ≤ f → t ≤ g →
+    trailingParityFuel f t = trailingParityFuel g t
+  | 0, g, t, hf, _ => by
+    have : t = 0 := by cfomega
+    subst this
+    cases g <;> rfl
+  | f + 1, 0, t, _, hg => by
+    have : t = 0 := by cfomega
+    subst this
+    rfl
+  | f + 1, g + 1, t, hf, hg => by
+    rcases Nat.eq_zero_or_pos t with h0 | hpos
+    · subst h0; rfl
+    · obtain ⟨u, rfl⟩ : ∃ u, t = u + 1 := ⟨t - 1, by cfomega⟩
+      show (if (u + 1) % 2 = 0 then false else !trailingParityFuel f ((u + 1) / 2)) =
+        (if (u + 1) % 2 = 0 then false else !trailingParityFuel g ((u + 1) / 2))
+      rw [trailingParityFuel_congr f g ((u + 1) / 2) (by cfomega) (by cfomega)]
+
+theorem trailingParity_even (m : Nat) : trailingParity (2 * m) = false := by
+  unfold trailingParity
+  rcases Nat.eq_zero_or_pos m with h0 | hpos
+  · subst h0; rfl
+  · obtain ⟨u, hu⟩ : ∃ u, 2 * m = u + 1 := ⟨2 * m - 1, by cfomega⟩
+    rw [hu]
+    show (if (u + 1) % 2 = 0 then false else _) = false
+    have : (u + 1) % 2 = 0 := by cfomega
+    simp [this]
+
+theorem trailingParity_odd (m : Nat) : trailingParity (2 * m + 1) = !trailingParity m := by
+  unfold trailingParity
+  show (if (2 * m + 1) % 2 = 0 then false else !trailingParityFuel (2 * m) ((2 * m + 1) / 2)) = _
+  have h1 : ¬ ((2 * m + 1) % 2 = 0) := by cfomega
+  have h2 : (2 * m + 1) / 2 = m := by cfomega
+  rw [if_neg h1, h2, trailingParityFuel_congr (2 * m) m m (by cfomega) (Nat.le_refl m)]
+
+/-- Bit `t + 1` of `q^t · 1` is the trailing-ones parity of `t`. -/
+theorem linear_above_center : ∀ t, (phiLinPow 1 t 1).testBit (t + 1) = trailingParity t := by
+  intro t
+  induction t using Nat.strongRecOn with
+  | ind t ih =>
+    rcases Nat.mod_two_eq_zero_or_one t with h | h
+    · have ht : t = 2 * (t / 2) := by cfomega
+      rw [ht, phiLinPow_two_mul, trailingParity_even]
+      have hs := phiLinPow_spread 2 (by decide) (t / 2) (t / 2) 1 (by decide)
+      rw [hs]
+      rfl
+    · have ht : t = 2 * (t / 2) + 1 := by cfomega
+      rw [ht, trailingParity_odd]
+      show (phiLin 1 (phiLinPow 1 (2 * (t / 2)) 1)).testBit (2 * (t / 2) + 1 + 1) = _
+      rw [phiLinPow_two_mul, testBit_phiLin]
+      have e0 : 2 * (t / 2) + 1 + 1 = 2 * (t / 2 + 1) + 0 := by cfomega
+      have e1 : 2 * (t / 2) + 1 + 1 - 1 = 2 * (t / 2) + 1 := by cfomega
+      have e2 : 2 * (t / 2) + 1 + 1 - 2 * 1 = 2 * (t / 2) + 0 := by cfomega
+      have g1 : 2 * (t / 2) + 1 + 1 ≥ 1 := by cfomega
+      have g2 : 2 * (t / 2) + 1 + 1 ≥ 2 * 1 := by cfomega
+      rw [e1, e2, e0, phiLinPow_spread 2 (by decide) (t / 2) (t / 2 + 1) 0 (by decide),
+        phiLinPow_spread 2 (by decide) (t / 2) (t / 2) 1 (by decide),
+        phiLinPow_spread 2 (by decide) (t / 2) (t / 2) 0 (by decide),
+        ih (t / 2) (by cfomega), linear_center]
+      have g3 : 2 ≤ 2 * (t / 2 + 1) := by cfomega
+      simp [g1, g2, g3]
+
+/-- Bit `t - 1` of `q^t · 1` is the trailing-ones parity of `t`, for `t ≥ 1`. -/
+theorem linear_below_center : ∀ t, 1 ≤ t → (phiLinPow 1 t 1).testBit (t - 1) = trailingParity t := by
+  intro t
+  induction t using Nat.strongRecOn with
+  | ind t ih =>
+    intro ht1
+    rcases Nat.mod_two_eq_zero_or_one t with h | h
+    · have ht : t = 2 * (t / 2) := by cfomega
+      rw [ht, phiLinPow_two_mul, trailingParity_even]
+      have e : 2 * (t / 2) - 1 = 2 * (t / 2 - 1) + 1 := by cfomega
+      rw [e, phiLinPow_spread 2 (by decide) (t / 2) (t / 2 - 1) 1 (by decide)]
+      rfl
+    · have ht : t = 2 * (t / 2) + 1 := by cfomega
+      rw [ht, trailingParity_odd]
+      show (phiLin 1 (phiLinPow 1 (2 * (t / 2)) 1)).testBit (2 * (t / 2) + 1 - 1) = _
+      rw [phiLinPow_two_mul, testBit_phiLin]
+      have e0 : 2 * (t / 2) + 1 - 1 = 2 * (t / 2) + 0 := by cfomega
+      rw [e0, phiLinPow_spread 2 (by decide) (t / 2) (t / 2) 0 (by decide), linear_center]
+      rcases Nat.eq_zero_or_pos (t / 2) with hm | hm
+      · rw [hm]
+        decide
+      · have g1 : 2 * (t / 2) + 0 ≥ 1 := by cfomega
+        have g2 : 2 * (t / 2) + 0 ≥ 2 * 1 := by cfomega
+        have e1 : 2 * (t / 2) + 0 - 1 = 2 * (t / 2 - 1) + 1 := by cfomega
+        have e2 : 2 * (t / 2) + 0 - 2 * 1 = 2 * (t / 2 - 1) + 0 := by cfomega
+        rw [e1, e2, phiLinPow_spread 2 (by decide) (t / 2) (t / 2 - 1) 1 (by decide),
+          phiLinPow_spread 2 (by decide) (t / 2) (t / 2 - 1) 0 (by decide), ih (t / 2) (by cfomega) hm]
+        have g3 : ¬ (2 * (t / 2) < 2) := by cfomega
+        simp [g1, g2, g3]
+
+/-! ## The center's update in ledger coordinates
+
+Every cell is a coefficient of `q^t` XOR a ledger bit. The three cells the
+center's update reads are, in the linear part, `a(t)`, `1`, `a(t)` with
+`a = trailingParity`; so the self-referential equation of the orbit, read at
+the center, is an update of ledger bits with a 2-automatic coefficient. -/
+
+/-- Bit `j` of the ledger at time `t`. -/
+def ledgerBit (t j : Nat) : Bool := (winWitt 0 t).testBit j
+
+theorem rdiag_eq_linear_xor_ledger (j t : Nat) :
+    rdiag j t = ((phiLinPow 1 t 1).testBit j ^^ ledgerBit t j) := by
+  rw [← Rule30UOR.Interfaces.row_testBit, row_eq_linear_xor_ledger, Nat.testBit_xor,
+    phiLinearPow_eq_phiLinPow]
+  rfl
+
+theorem cell_eq_rdiag (t j : Nat) (p : Int) (h : (t : Int) - j = p) : cell t p = rdiag j t := by
+  rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Scale.cell_eq_kit]
+  unfold Ruliology.CellularAutomata.Rule30Diagonals.R
+  rw [h]
+
+theorem cell_left_eq (t : Nat) : cell t (-1) = (trailingParity t ^^ ledgerBit t (t + 1)) := by
+  rw [cell_eq_rdiag t (t + 1) (-1) (by push_cast; cfomega), rdiag_eq_linear_xor_ledger,
+    linear_above_center]
+
+theorem cell_right_eq (t : Nat) (ht : 1 ≤ t) :
+    cell t 1 = (trailingParity t ^^ ledgerBit t (t - 1)) := by
+  rw [cell_eq_rdiag t (t - 1) 1 (by push_cast [ht]; cfomega), rdiag_eq_linear_xor_ledger,
+    linear_below_center t ht]
+
+theorem center_eq_ledgerBit (t : Nat) : center t = !ledgerBit t t :=
+  center_eq_not_ledgerDiagonal t
+
+/-- The self-referential equation at the center, in ledger coordinates: for
+`t ≥ 1`, `center (t+1) = rule (a t ⊕ ℓ(t, t+1)) (¬ ℓ(t, t)) (a t ⊕ ℓ(t, t−1))`
+with `a` the trailing-ones parity and `ℓ` the ledger bits. -/
+theorem center_succ_ledger (t : Nat) (ht : 1 ≤ t) :
+    center (t + 1) = rule (trailingParity t ^^ ledgerBit t (t + 1)) (!ledgerBit t t)
+      (trailingParity t ^^ ledgerBit t (t - 1)) := by
+  rw [← cell_left_eq, ← center_eq_ledgerBit, ← cell_right_eq t ht]
+  show cell (Nat.succ t) 0 = rule (cell t (-1)) (cell t 0) (cell t 1)
+  rw [cell_succ]
+  rfl
+
+/-! ### Paper-facing forms (`bxor` for `xor`) -/
+
+theorem rdiag_eq_linear_bxor_ledger (j t : Nat) :
+    rdiag j t = bxor ((phiLinPow 1 t 1).testBit j) (ledgerBit t j) := by
+  rw [Rule30UOR.Scale.bxor_eq]; exact rdiag_eq_linear_xor_ledger j t
+
+theorem cell_left_eq_paper (t : Nat) : cell t (-1) = bxor (trailingParity t) (ledgerBit t (t + 1)) := by
+  rw [Rule30UOR.Scale.bxor_eq]; exact cell_left_eq t
+
+theorem cell_right_eq_paper (t : Nat) (ht : 1 ≤ t) :
+    cell t 1 = bxor (trailingParity t) (ledgerBit t (t - 1)) := by
+  rw [Rule30UOR.Scale.bxor_eq]; exact cell_right_eq t ht
+
+/-- The center's update in ledger coordinates (paper form). -/
+theorem center_succ_ledger_paper (t : Nat) (ht : 1 ≤ t) :
+    center (t + 1) = rule (bxor (trailingParity t) (ledgerBit t (t + 1))) (!ledgerBit t t)
+      (bxor (trailingParity t) (ledgerBit t (t - 1))) := by
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]; exact center_succ_ledger t ht
+
 end Rule30UOR.Ledger
