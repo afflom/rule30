@@ -23,7 +23,7 @@ id = "aperiodic-compensation"
 status = "open"
 statement = "Under a hypothetical center period, the two column-one defects (each aperiodic by Jen) cannot satisfy the gated mirror forever. This is the remaining obligation."
 since = "2026-10-28"
-note = "Every proved reduction ends here. A closing argument needs an invariant of the single-seed orbit that the gated mirror violates. Shape fixed by left-defect-sourcing (2026-10-31): under a periodic center the entire left defect field is a function of the right column-one defect sequence and the center, so the obstruction must be an invariant of the right column-one sequence, which the right half produces autonomously from row T with the periodic center as its only boundary input."
+note = "Every proved reduction ends here. Shape fixed by left-defect-sourcing (2026-10-31): under a periodic center the entire left defect field is a function of the right column-one defect sequence and the center, so an obstruction must be an invariant of the right column-one sequence, which the right half produces autonomously from row T with the periodic center as its only boundary input. The closing statement is that the orbit's self-referential equation (right half the triangular image of the center; left half its left-permutive reconstruction; left edge white) has no periodic solution. Decision point first-failure-2adic (refuted): the first failing comparison of any (T, P) is fair-bit random in every 2-adic class, so the obstruction is not visible as a first-failure invariant; it must be exact. No closing argument is known."
 
 [[claim]]
 id = "q-adic-descent"
@@ -105,3 +105,10 @@ statement = "Under a periodic center, a left defect at depth k at time t is sour
 lean = "Rule30UOR.LeftCone.left_defect_sourced"
 since = "2026-10-31"
 note = "Rule30UOR.LeftCone: left-permutivity on temporal defects (defect_left_of_agree, from defect_step_linear) iterated from the center; the center hypothesis is free under CenterPeriodic (left_cone_of_right_agrees, hypothesis RightAgrees decidable); the witness is a bounded search, no choice. The coupling law at every depth: the left defect field at times >= T is a function of the right column-one defect sequence and the periodic center."
+
+[[claim]]
+id = "first-failure-2adic"
+status = "refuted"
+statement = "The first time a hypothetical center period (T, P) fails is governed by the 2-adic data of P and T (the scale mismatch between the periodically seeded right half and the doubling-time reconstruction of the left edge), so the closing invariant can be read off the first failing comparison."
+since = "2026-10-31"
+note = "experiments/first_failure.py (2026-10-31): over T in [256, 4352) and P in [1, 256], delay(T, P) = first d with center(T+d+P) != center(T+d) follows the fair-bit law Pr[d >= k] = 2^-k to within 0.3% for k <= 10 in every class by v2(P), P mod 8, T mod 8, and for P = 2^k by T mod P (residue means 0.73 to 1.23 at P = 32 over 128 samples each, noise). The first failure carries no 2-adic signature; an obstruction, if any, is exact and not statistical, and cannot be read from where a period first breaks."
