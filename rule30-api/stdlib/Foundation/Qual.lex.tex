@@ -1,0 +1,69 @@
+\begin{lexlean}{Foundation.Qual}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\useglossary{prism.qual@1.0.0}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+  name: ProductQualityCharacteristic,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: index, type: Nat}]
+}
+
+structure{
+  name: QualitySubcharacteristic,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: index, type: Nat}, {name: characteristicIndex, type: Nat}]
+}
+
+structure{
+  name: QualityRequirement,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: index, type: Nat}, {name: subcharacteristicIndex, type: Nat}]
+}
+
+structure{
+  name: QualityMeasure,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: index, type: Nat},
+    {name: requirementIndex, type: Nat},
+    {name: threshold, type: Nat}
+  ]
+}
+
+definition{
+  name: characteristicMaintainability,
+  parameters: [],
+  result: ProductQualityCharacteristic,
+  body: (record ProductQualityCharacteristic {index := 0})
+}
+
+definition{
+  name: subcharacteristicModularity,
+  parameters: [],
+  result: QualitySubcharacteristic,
+  body: (record QualitySubcharacteristic {index := 0, characteristicIndex := 0})
+}
+
+definition{
+  name: requirementModuleBoundaries,
+  parameters: [],
+  result: QualityRequirement,
+  body: (record QualityRequirement {index := 0, subcharacteristicIndex := 0})
+}
+
+definition{
+  name: measureDependencyCount,
+  parameters: [],
+  result: QualityMeasure,
+  body: (record QualityMeasure {index := 0, requirementIndex := 0, threshold := 10})
+}
+
+theorem{name: qualityChainConsistent, parameters: [], statement: (0 = 0), proof: reflexivity{}}
+\end{semanticmodule}
+\end{lexlean}

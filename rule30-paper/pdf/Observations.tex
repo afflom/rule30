@@ -2699,4 +2699,25 @@ For every natural number \(Q\) and natural number \(z\) and natural number \(t\)
 \begin{proof}
 The goal follows from \(\operatorname{diagonalresetsuminvariant}(Q, z, t)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-eq-false-of-gt}
+For every natural number \(n\) and natural number \(d\), if \(2 \cdot n < d\), then \(\operatorname{trinomialparity}(n, d) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparityeqfalseofgt}(n, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:edge-diagonal-half}
+For every natural number \(t\), \(\operatorname{edgediagonal}(t) = \operatorname{edgeformula}(t, t / 2 + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{edgediagonalhalf}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-black-ledger-absorbs}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{center}(t) = \operatorname{true}\), then \(\operatorname{bxor}(\operatorname{ledgerbit}(t + P, t + P + 1), \operatorname{ledgerbit}(t, t + 1)) = \operatorname{bxor}(\operatorname{trailingparity}(t + P), \operatorname{trailingparity}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicblackledgerabsorbs}(T, P, t)\).
+\end{proof}
 \end{document}

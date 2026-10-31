@@ -202,4 +202,16 @@ statement = "Route B (reset flux jump): between the doubling diagonal z+1 at tim
 id = "api-modules"
 level = "build"
 suite = "api"
-statement = "The command surface, the register and the architecture are LexLean semantic modules verified by the gate."
+statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."
+
+[[id]]
+id = "prism-model"
+level = "build"
+suite = "api"
+statement = "The model registers (authorities, ids, ledger, commands, standards, projection, contracts) are generated from the register, the parser and the architecture, and drift is refused."
+
+[[id]]
+id = "current-view"
+level = "build"
+suite = "api"
+statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, and runs no validation."

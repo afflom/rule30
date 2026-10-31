@@ -2988,4 +2988,18 @@ right staircase, cyclotomic transport) are all proved and in the register; what 
 contains is a witness against the interior parity, and the routes that claimed one were
 arithmetic or vacuous. The register is unchanged in its open leaves.
 
+**Two exact levers on `InteriorAgainstEdge` (2026-10-31).** (1) *The causal horizon.* `q^n` has
+degree `2n`, so `trinomialParity n d = false` for `d > 2n` (`trinomialParity_eq_false_of_gt`), and
+both edge terms of row `m` at time `t` need `2m ≤ t`: the edge background at time `t` depends only
+on the first half of the history, `edgeDiagonal t = edgeFormula t (t/2 + 1)` (`edgeDiagonal_half`),
+while the interior ledger receives the carries of every row up to `t − 1`. Under a period `P` from
+`T`, for `t ≥ 2T` the rows `t/2 < m < t` that feed only the interior side are all in the periodic
+regime. (2) *Black-center absorption.* No left defect arrives at a black center
+(`periodic_black_no_arrival`), so at black-center times the ledger bit at position `−1` flips across
+the period exactly when the trailing-ones parity flips,
+`ℓ(t+P, t+P+1) ⊕ ℓ(t, t+1) = a(t+P) ⊕ a(t)` (`periodic_black_ledger_absorbs`): the ledger must
+absorb the 2-adic signal of the linear part; at white centers the mirror cancels `a` on both
+sides and no such constraint appears. Neither lever is a witness; both are exact constraints a
+periodic interior parity would have to satisfy, and they are now in the register's vocabulary.
+
 Problem 1 remains unproved.

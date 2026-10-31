@@ -1,0 +1,25 @@
+spec = "prismpm/contracts/1"
+
+[[contract]]
+schema = "r30/register/1"
+path = "schemas/register.schema.json"
+media_type = "application/vnd.r30.register.v1+json"
+identity = "sha256-canonical-json"
+maximum_bytes = 1048576
+maximum_items = 4096
+extension_policy = "closed"
+compatibility = "exact-major"
+produced_by = "frontier_list"
+artifact = "register.json"
+
+[[contract]]
+schema = "r30/interface-sheet/1"
+path = "schemas/interface-sheet.schema.json"
+media_type = "application/vnd.r30.interface-sheet.v1+json"
+identity = "sha256-canonical-json"
+maximum_bytes = 1048576
+maximum_items = 4096
+extension_policy = "closed"
+compatibility = "exact-major"
+produced_by = "interface"
+artifact = "interfaces"

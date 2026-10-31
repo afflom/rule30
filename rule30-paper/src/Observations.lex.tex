@@ -3090,5 +3090,29 @@ Close the goal with \(\lexeme{r30.observation::diagonal-reset-sum-invariant}(Q, 
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{trinomial-parity-eq-false-of-gt}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(d\), if \(2 * n < d\), then \(trinomialparity(n, d) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-eq-false-of-gt}(n, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{edge-diagonal-half}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(edgediagonal(t) = edgeformula(t, t / 2 + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::edge-diagonal-half}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-black-ledger-absorbs}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = true\), then \(bxor(ledgerbit(t + P, t + P + 1), ledgerbit(t, t + 1)) = bxor(trailingparity(t + P), trailingparity(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-black-ledger-absorbs}(T, P, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

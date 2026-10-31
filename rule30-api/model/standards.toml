@@ -1,0 +1,29 @@
+spec = "prismpm/standards/1"
+
+[[standard]]
+id = "ISO-42010-2022"
+name = "ISO/IEC/IEEE 42010:2022"
+edition = "2022"
+reference = "https://www.iso.org/standard/74393.html"
+basis = "public-catalog"
+scope = "Architecture description conceptual foundations and view/viewpoint framework"
+provenance = "ISO/IEC/IEEE international standard catalog entry"
+interpretation = "The architecture of the proof effort is stakeholders, concerns, viewpoints and views on Foundation.Arch; every entry carries a stdlib entity and Architecture.lex.tex decides that the indices agree with the labels."
+facet_package = "prism.arch"
+facet_entries = ["arch-concern", "arch-model-kind", "arch-stakeholder", "arch-view", "arch-viewpoint"]
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "ISO-25010-2023"
+name = "ISO/IEC 25010:2023"
+edition = "2023"
+reference = "https://www.iso.org/standard/78176.html"
+basis = "public-catalog"
+scope = "System and software product quality model"
+provenance = "ISO/IEC international standard catalog entry"
+interpretation = "What an optimal implementation is here: characteristics, subcharacteristics, requirements and measures with thresholds on Foundation.Qual, each measure naming the r30 command that reports it."
+facet_package = "prism.qual"
+facet_entries = ["qual-characteristic", "qual-measure", "qual-requirement", "qual-subcharacteristic"]
+coverage_state = "implemented"
+release_scope = true

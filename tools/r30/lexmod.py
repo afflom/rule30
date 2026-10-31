@@ -1,13 +1,25 @@
 """The language-1.2 authoring notation of LexLean semantic modules (SPEC.md
 §17.21), emitted from the data form (`lexlean/semantic-module/1`). The
 notation is what `lexlean migrate --to 1.2` writes; the API modules are
-generated in it directly."""
+generated in it directly.
+
+A member of an imported module is written `Module::name` (a type
+`Foundation.Arch::Stakeholder`, a call `(Foundation.Arch::stakeholderOperator)`,
+a constructor `Foundation.Arch::ModelKind.qualityModel`); the data form carries
+the module in the member's `module` field, which `qualified` renders."""
 
 import json
 
 
 def lit(s):
     return json.dumps(s)
+
+
+def qualified(member):
+    """`{name, module?}` as the notation spells a member reference."""
+    if member.get("module"):
+        return f"{member['module']}::{member['name']}"
+    return member["name"]
 
 
 def type_(t):
@@ -21,8 +33,12 @@ def type_(t):
     if k == "list":
         return f"(List {type_(t['element'])})"
     if k == "named":
-        return t["member"]["name"]
+        return qualified(t["member"])
     raise ValueError(f"no notation for type {k}")
+
+
+_INFIX = {"add": "+", "eq": "=", "le": "<=", "lt": "<", "beq": "=?", "ble": "<=?", "blt": "<?",
+          "and": "&&", "or": "||"}
 
 
 def expr(node, indent="    "):
@@ -41,15 +57,22 @@ def expr(node, indent="    "):
         return f"(cons {expr(node['head'], indent)} {expr(node['tail'], indent)})"
     if k == "record":
         fields = ", ".join(f"{f['field']} := {expr(f['value'], indent)}" for f in node["fields"])
-        return f"(record {node['type']['name']} {{{fields}}})"
+        return f"(record {qualified(node['type'])} {{{fields}}})"
     if k == "project":
         return f"(project {expr(node['value'], indent)} {node['field']})"
     if k == "call":
         args = " ".join(expr(a, indent) for a in node["arguments"])
-        return f"({node['function']['name']}{(' ' + args) if args else ''})"
+        return f"({qualified(node['function'])}{(' ' + args) if args else ''})"
+    if k == "constructor":
+        args = " ".join(expr(a, indent) for a in node.get("arguments", []))
+        return f"(ctor {qualified(node['constructor'])}{(' ' + args) if args else ''})"
     if k == "primitive":
         args = " ".join(expr(a, indent) for a in node["arguments"])
         return f"(prim {node['operation']} {args} : {type_(node['result'])})"
+    if k in _INFIX:
+        return f"({expr(node['left'], indent)} {_INFIX[k]} {expr(node['right'], indent)})"
+    if k == "not":
+        return f"(not {expr(node['value'], indent)})"
     if k == "if":
         return (f"(if {expr(node['condition'], indent)} then {expr(node['then_value'], indent)} "
                 f"else {expr(node['else_value'], indent)})")
@@ -57,7 +80,7 @@ def expr(node, indent="    "):
         arms = []
         for b in node["branches"]:
             binders = (" " + " ".join(b["binders"])) if b["binders"] else ""
-            arms.append(f"\n{indent}| {b['constructor']['name']}{binders} => {expr(b['body'], indent)}")
+            arms.append(f"\n{indent}| {qualified(b['constructor'])}{binders} => {expr(b['body'], indent)}")
         return f"(match {expr(node['scrutinee'], indent)}{''.join(arms)})"
     raise ValueError(f"no notation for {k}")
 
@@ -82,8 +105,14 @@ def decl(d):
     raise ValueError(k)
 
 
-def module(name, declarations, title="Boolean"):
-    header = (f"\\begin{{lexlean}}{{{name}}}\n\\useglossary{{lexlean.std.bool@1.2.0}}\n"
-              f"\\useglossary{{lexlean.std.nat@1.2.0}}\n\\title{{{title}}}\n\\begin{{semanticmodule}}")
+def module(name, declarations, title="Boolean", imports=(), glossaries=()):
+    """A module in the notation. `imports` are project modules (`\\importmodule`,
+    sorted as `fmt` sorts them); `glossaries` are lexicon packages beyond the
+    two builtin ones (`package@version`)."""
+    packages = sorted({"lexlean.std.bool@1.2.0", "lexlean.std.nat@1.2.0", *glossaries})
+    header = [f"\\begin{{lexlean}}{{{name}}}"]
+    header += [f"\\useglossary{{{p}}}" for p in packages]
+    header += [f"\\importmodule{{{m}}}" for m in sorted(imports)]
+    header += [f"\\title{{{title}}}", "\\begin{semanticmodule}"]
     body = "\n\n".join(decl(d) for d in declarations)
-    return header + "\n" + body + "\n\\end{semanticmodule}\n\\end{lexlean}\n"
+    return "\n".join(header) + "\n" + body + "\n\\end{semanticmodule}\n\\end{lexlean}\n"

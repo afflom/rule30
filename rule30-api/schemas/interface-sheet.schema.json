@@ -1,0 +1,102 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/interface-sheet/1",
+ "title": "The interface sheet of a claim (interface --json)",
+ "type": "object",
+ "required": [
+  "id",
+  "status",
+  "statement",
+  "chain",
+  "notions"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "id": {
+   "type": "string"
+  },
+  "status": {
+   "type": "string",
+   "enum": [
+    "open",
+    "proved",
+    "refuted",
+    "retired"
+   ]
+  },
+  "statement": {
+   "type": "string"
+  },
+  "lean": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "note": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "chain": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "status"
+    ],
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string"
+     },
+     "lean": {
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    }
+   }
+  },
+  "notions": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "lean"
+    ],
+    "properties": {
+     "lean": {
+      "type": "string"
+     },
+     "lexeme": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "definition": {
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    }
+   }
+  },
+  "related": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  }
+ }
+}

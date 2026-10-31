@@ -2,8 +2,8 @@ spec = "lexlean/project/1"
 name = "rule30-api"
 language = "1.2"
 module_prefix = "Rule30Api"
-source_roots = ["src"]
-entrypoints = ["src/Api.lex.tex", "src/Architecture.lex.tex", "src/Register.lex.tex"]
+source_roots = ["src", "stdlib"]
+entrypoints = ["src/Api.lex.tex", "src/Application.lex.tex", "src/Architecture.lex.tex", "src/Presentation.lex.tex", "src/Register.lex.tex"]
 build_root = ".lexlean"
 lockfile = "lexlean.lock"
 lean_workspace = "."
@@ -16,6 +16,17 @@ kind = "builtin"
 [[lexicon_source]]
 package = "lexlean.std.nat"
 kind = "builtin"
+
+[[lexicon_source]]
+package = "prism.arch"
+kind = "path"
+path = "language/prism.arch"
+
+[[lexicon_source]]
+package = "prism.qual"
+kind = "path"
+path = "language/prism.qual"
+
 [limits]
 max_file_bytes = 4194304
 max_total_source_bytes = 67108864

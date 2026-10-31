@@ -6,6 +6,7 @@ an agent can act on it without reading build logs.
 
 import argparse
 import json
+from pathlib import Path
 import subprocess
 import sys
 import time
@@ -80,57 +81,45 @@ def cmd_interface(args):
 
 def cmd_api(args):
     """The API as a LexLean semantic module (rule30-api/src/Api.lex.tex)."""
-    from . import apimodel, registermodel, archmodel, prismmodel
+    from . import apimodel, registermodel, archmodel, presentationmodel, prismmodel, site
     if args.sub == "sync":
-        a, r, h = apimodel.sync(), registermodel.sync(), archmodel.sync()
-        m = prismmodel.sync()
-        if a["changed"] or r["changed"] or h["changed"]:
+        a, r, h, p = apimodel.sync(), registermodel.sync(), archmodel.sync(), presentationmodel.sync()
+        m, g = prismmodel.sync(), site.sync_logo()
+        if a["changed"] or r["changed"] or h["changed"] or p["changed"]:
             checks.lock("api")
-        out(args, {"api": a, "register": r, "architecture": h},
-            f"{a['module']}: {a['commands']} commands" + (" (rewritten)" if a["changed"] else " (current)") +
-            f"\n{r['module']}: {r['claims']} claims" + (" (rewritten)" if r["changed"] else " (current)") +
-            f"\n{h['module']}: {h['stakeholders']} stakeholders" + (" (rewritten)" if h["changed"] else " (current)") +
-            f"\n{m['model']}: {m['claims']} claims" + (" (rewritten)" if m["changed"] else " (current)"))
+        state = lambda x: " (rewritten)" if x["changed"] else " (current)"
+        out(args, {"api": a, "register": r, "architecture": h, "presentation": p, "model": m, "logo": g},
+            f"{a['module']}: {a['commands']} commands" + state(a) +
+            f"\n{r['module']}: {r['claims']} claims" + state(r) +
+            f"\n{h['module']}: {h['stakeholders']} stakeholders" + state(h) +
+            f"\n{p['module']}: {p['panels']} panels" + state(p) +
+            f"\n{m['model']}: {m['claims']} claims, {m['registers']} registers" + state(m) +
+            f"\n{g['logo']}" + state(g))
     else:
-        a, r, h = apimodel.check(), registermodel.check(), archmodel.check()
-        m = prismmodel.check()
-        if not m["ok"]:
-            print(m["reason"]); sys.exit(1)
-        out(args, {"api": a, "register": r, "architecture": h},
-            ("Api.lex.tex matches the CLI" if a["ok"] else a["reason"]) + "\n" +
-            ("Register.lex.tex matches frontier.toml" if r["ok"] else r["reason"]) + "\n" +
-            ("Architecture.lex.tex is current" if h["ok"] else h["reason"]))
-        if not (a["ok"] and r["ok"] and h["ok"]):
+        results = {"api": apimodel.check(), "register": registermodel.check(), "architecture": archmodel.check(),
+                   "presentation": presentationmodel.check(), "model": prismmodel.check(), "logo": site.check_logo()}
+        names = {"api": "Api.lex.tex matches the CLI", "register": "Register.lex.tex matches frontier.toml",
+                 "architecture": "Architecture.lex.tex is current", "presentation": "Presentation.lex.tex and Application.lex.tex are current",
+                 "model": "model/ registers are current", "logo": "site/logo.svg is current"}
+        out(args, results, "\n".join(names[k] if v["ok"] else v["reason"] for k, v in results.items()))
+        if not all(v["ok"] for v in results.values()):
             sys.exit(1)
 
 
 def cmd_chain(args):
     """The reduction tree: from each root claim, the claims that rest on it
     (`depends`), with status and Lean name, so the proof plan is read as a DAG."""
-    claims = frontier.load()["claim"]
-    by_id = {c["id"]: c for c in claims}
-    children = {c["id"]: [] for c in claims}
-    for c in claims:
-        for d in c.get("depends", []):
-            children.setdefault(d, []).append(c["id"])
-    roots = [c["id"] for c in claims if not c.get("depends")]
-    mark = {"open": "?", "proved": "✓", "refuted": "✗", "retired": "-"}
-    lines, rows = [], []
+    rows, text = frontier.chain()
+    out(args, rows, text)
 
-    def walk(cid, depth, seen):
-        c = by_id[cid]
-        rows.append({"id": cid, "depth": depth, "status": c["status"], "lean": c.get("lean")})
-        lines.append("  " * depth + f"[{mark[c['status']]}] {cid}" + (f"  ({c['lean']})" if c.get("lean") else ""))
-        if cid in seen:
-            return
-        for k in children.get(cid, []):
-            walk(k, depth + 1, seen | {cid})
-    for r in roots:
-        walk(r, 0, set())
-    lines.append("")
-    lines.append("open leaves are sufficient conditions once every proved arrow above them is read upward;")
-    lines.append("a refuted node is a route not to be walked again.")
-    out(args, rows, "\n".join(lines))
+
+def cmd_view(args):
+    """The current view for stakeholders: the artifacts `Presentation.lex.tex`
+    declares (tree, register, sheets, modules, site with the data embedded)
+    written into a directory; the view workflow publishes that directory."""
+    from . import site
+    r = site.render_view(Path(args.out))
+    out(args, r, f"{r['out']}: {len(r['written'])} artifacts" + (f" at {r['commit'][:12]}" if r.get("commit") else ""))
 
 
 def cmd_claim(args):
@@ -480,6 +469,9 @@ def build_parser():
     api = sp.add_parser("api", help="the API as a LexLean semantic module: sync regenerates it from the CLI, check compares").add_subparsers(dest="sub", required=True)
     api.add_parser("sync", help="regenerate rule30-api/src/Api.lex.tex from the CLI parser and lock").set_defaults(fn=cmd_api)
     api.add_parser("check", help="refuse a CLI that drifted from Api.lex.tex").set_defaults(fn=cmd_api)
+    vw = sp.add_parser("view", help="the current view for stakeholders, as Presentation.lex.tex declares it").add_subparsers(dest="sub", required=True)
+    s = vw.add_parser("render", help="write the view artifacts (tree, register, sheets, modules, site) into a directory")
+    s.add_argument("--out", default="view", help="the directory to write (default: view)"); s.set_defaults(fn=cmd_view)
     s = sp.add_parser("interface", help="the labeled interface sheet of a claim: chain, notions, exact facts, handles")
     s.add_argument("id"); s.add_argument("--write", action="store_true", help="also write interfaces/<id>.md")
     s.add_argument("--no-related", action="store_true"); s.set_defaults(fn=cmd_interface)

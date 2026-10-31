@@ -1,0 +1,253 @@
+spec = "prismpm/command-contract/1"
+
+[[command]]
+name = "status"
+path = ["status"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/status-result/1"
+
+[[command]]
+name = "brief"
+path = ["brief"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/brief-result/1"
+
+[[command]]
+name = "chain"
+path = ["chain"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/chain-result/1"
+
+[[command]]
+name = "api_sync"
+path = ["api", "sync"]
+mutates = "api-modules-and-model"
+requires_digest = false
+result_schema = "r30/api-sync-result/1"
+
+[[command]]
+name = "api_check"
+path = ["api", "check"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/api-check-result/1"
+
+[[command]]
+name = "view_render"
+path = ["view", "render"]
+mutates = "view-directory"
+requires_digest = false
+result_schema = "r30/view-render-result/1"
+
+[[command]]
+name = "interface"
+path = ["interface"]
+mutates = "interface-sheets"
+requires_digest = false
+result_schema = "r30/interface-result/1"
+
+[[command]]
+name = "claim"
+path = ["claim"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/claim-result/1"
+
+[[command]]
+name = "gate"
+path = ["gate"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/gate-result/1"
+
+[[command]]
+name = "lexicon_search"
+path = ["lexicon", "search"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/lexicon-search-result/1"
+
+[[command]]
+name = "lexicon_show"
+path = ["lexicon", "show"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/lexicon-show-result/1"
+
+[[command]]
+name = "lexicon_packages"
+path = ["lexicon", "packages"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/lexicon-packages-result/1"
+
+[[command]]
+name = "sig"
+path = ["sig"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/sig-result/1"
+
+[[command]]
+name = "mentions"
+path = ["mentions"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/mentions-result/1"
+
+[[command]]
+name = "theorem_preview"
+path = ["theorem", "preview"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/theorem-preview-result/1"
+
+[[command]]
+name = "theorem_add"
+path = ["theorem", "add"]
+mutates = "paper-modules-and-glossary"
+requires_digest = false
+result_schema = "r30/theorem-add-result/1"
+
+[[command]]
+name = "theorem_remove"
+path = ["theorem", "remove"]
+mutates = "paper-modules-and-glossary"
+requires_digest = false
+result_schema = "r30/theorem-remove-result/1"
+
+[[command]]
+name = "define"
+path = ["define"]
+mutates = "paper-modules-and-glossary"
+requires_digest = false
+result_schema = "r30/define-result/1"
+
+[[command]]
+name = "check"
+path = ["check"]
+mutates = "lexlean-build"
+requires_digest = false
+result_schema = "r30/check-result/1"
+
+[[command]]
+name = "unpublished"
+path = ["unpublished"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/unpublished-result/1"
+
+[[command]]
+name = "selfcheck"
+path = ["selfcheck"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/selfcheck-result/1"
+
+[[command]]
+name = "verify"
+path = ["verify"]
+mutates = "lexlean-build"
+requires_digest = false
+result_schema = "r30/verify-result/1"
+
+[[command]]
+name = "probe"
+path = ["probe"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/probe-result/1"
+
+[[command]]
+name = "axioms"
+path = ["axioms"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/axioms-result/1"
+
+[[command]]
+name = "choice_audit"
+path = ["choice-audit"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/choice-audit-result/1"
+
+[[command]]
+name = "frontier_list"
+path = ["frontier", "list"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/frontier-list-result/1"
+
+[[command]]
+name = "frontier_add"
+path = ["frontier", "add"]
+mutates = "register"
+requires_digest = false
+result_schema = "r30/frontier-add-result/1"
+
+[[command]]
+name = "frontier_set"
+path = ["frontier", "set"]
+mutates = "register"
+requires_digest = false
+result_schema = "r30/frontier-set-result/1"
+
+[[command]]
+name = "frontier_check"
+path = ["frontier", "check"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/frontier-check-result/1"
+
+[[command]]
+name = "frontier_render"
+path = ["frontier", "render"]
+mutates = "paper-modules"
+requires_digest = false
+result_schema = "r30/frontier-render-result/1"
+
+[[command]]
+name = "commit"
+path = ["commit"]
+mutates = "repository"
+requires_digest = false
+result_schema = "r30/commit-result/1"
+
+[[command]]
+name = "module_list"
+path = ["module", "list"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/module-list-result/1"
+
+[[command]]
+name = "module_add"
+path = ["module", "add"]
+mutates = "lean-workspace"
+requires_digest = false
+result_schema = "r30/module-add-result/1"
+
+[[command]]
+name = "module_build"
+path = ["module", "build"]
+mutates = "lake-build"
+requires_digest = false
+result_schema = "r30/module-build-result/1"
+
+[[command]]
+name = "experiment_list"
+path = ["experiment", "list"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/experiment-list-result/1"
+
+[[command]]
+name = "experiment_run"
+path = ["experiment", "run"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/experiment-run-result/1"

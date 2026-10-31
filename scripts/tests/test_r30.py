@@ -275,14 +275,63 @@ class ApiModelTests(unittest.TestCase):
         self.assertTrue(r["ok"], r["reason"])
 
     def test_architecture_module_is_current_and_closes_its_concerns(self):
-        from tools.r30 import archmodel
+        """The data the kernel decides over is also checked here, so a test
+        failure names the entry before `lexlean verify` reports a false `decide`."""
+        from tools.r30 import archmodel, apimodel
         r = archmodel.check()
         self.assertTrue(r["ok"], r["reason"])
         concern_ids = {c["id"] for c in archmodel.CONCERNS}
+        held = {s["id"]: set(s["concerns"]) for s in archmodel.STAKEHOLDERS}
         for s in archmodel.STAKEHOLDERS:
-            self.assertTrue(set(s["concerns"]) <= concern_ids, s["id"])
-        self.assertEqual(concern_ids, {v["concern"] for v in archmodel.VIEWS})
-        self.assertIn("name: everyConcernAddressed", archmodel.render())
+            self.assertTrue(held[s["id"]] <= concern_ids, s["id"])
+        for vp in archmodel.VIEWPOINTS:
+            self.assertIn(vp["concern"], held[vp["stakeholder"]], vp["id"])
+            self.assertIn(vp["model_kind"], archmodel.MODEL_KINDS)
+        self.assertEqual(concern_ids, {vp["concern"] for vp in archmodel.VIEWPOINTS})
+        self.assertEqual({vp["id"] for vp in archmodel.VIEWPOINTS}, {v["viewpoint"] for v in archmodel.VIEWS})
+        commands = {row["name"] for row in apimodel.surface()}
+        for v in archmodel.VIEWS:
+            self.assertIn(v["command"], commands, v["id"])
+        for m in archmodel.MEASURES:
+            self.assertIn(m["command"], commands, m["id"])
+            self.assertIn(m["requirement"], {q["id"] for q in archmodel.REQUIREMENTS})
+        self.assertEqual({q["id"] for q in archmodel.REQUIREMENTS}, {m["requirement"] for m in archmodel.MEASURES})
+        text = archmodel.render()
+        self.assertIn("\\importmodule{Foundation.Arch}", text)
+        self.assertIn("{name: entity, type: Foundation.Arch::Stakeholder}", text)
+        self.assertIn("(record Foundation.Qual::QualityMeasure {index := 0, requirementIndex := 0, threshold := 60})", text)
+        for name in ("everyConcernFramed", "viewpointStakeholdersIndexed", "everyMeasureCommandExists", "optimalViewpointIsQualityModel"):
+            self.assertIn(f"name: {name}", text)
+
+    def test_presentation_and_application_modules_are_current_and_consistent(self):
+        from tools.r30 import presentationmodel as pm, archmodel, apimodel
+        r = pm.check()
+        self.assertTrue(r["ok"], r["reason"])
+        viewpoints = {vp["id"] for vp in archmodel.VIEWPOINTS}
+        artifacts = {a["id"] for a in pm.ARTIFACTS}
+        panels = {p["id"] for p in pm.PANELS}
+        commands = {row["name"] for row in apimodel.surface()}
+        for p in pm.PANELS:
+            self.assertIn(p["viewpoint"], viewpoints, p["id"])
+            self.assertIn(p["artifact"], artifacts, p["id"])
+        for j in pm.JOURNEYS:
+            self.assertIn(j["stakeholder"], {s["id"] for s in archmodel.STAKEHOLDERS}, j["id"])
+            self.assertTrue(set(j["panels"]) <= panels, j["id"])
+        self.assertEqual(panels, {p for j in pm.JOURNEYS for p in j["panels"]})
+        for a in pm.ARTIFACTS:
+            self.assertIn(a["command"], commands, a["id"])
+            if a["source"]:
+                self.assertTrue((repo.ROOT / a["source"]).exists(), a["source"])
+        self.assertEqual(len({a["path"] for a in pm.ARTIFACTS}), len(pm.ARTIFACTS))
+        self.assertIn(pm.APPLICATION_RECORD["entry"], {a["path"] for a in pm.ARTIFACTS})
+        self.assertIn(pm.PUBLICATION["command"], commands)
+        self.assertLessEqual(pm.PUBLICATION["timeoutMinutes"],
+                             next(m["threshold"] for m in archmodel.MEASURES if m["id"] == "ci-render-time"))
+        text = pm.render_application()
+        self.assertIn("\\importmodule{Presentation}", text)
+        self.assertIn("name: publicationWithinBudget", text)
+        self.assertIn('(Architecture::measureThreshold "ci-render-time" (Architecture::measures))', text)
+        self.assertEqual({m["status"] for m in pm.STATUS_MARKS}, set(frontier.STATUSES))
 
     def test_register_module_matches_frontier_and_states_well_formedness(self):
         from tools.r30 import registermodel
@@ -326,6 +375,155 @@ class McpTests(unittest.TestCase):
             except SystemExit as e:
                 self.fail(f"{tool['name']}: argv {argv} rejected by the CLI parser ({e})")
             self.assertTrue(callable(ns.fn))
+
+
+class NotationTests(unittest.TestCase):
+    """`lexmod` writes the language-1.2 authoring notation; members of an
+    imported module are `Module::name` (SPEC §17.21.4)."""
+
+    def test_qualified_members_types_calls_and_constructors(self):
+        from tools.r30 import lexmod
+        from tools.r30.semantic import ble, call, ctor, n, named, record, s
+        self.assertEqual(lexmod.type_(named("Stakeholder", "Foundation.Arch")), "Foundation.Arch::Stakeholder")
+        self.assertEqual(lexmod.type_({"kind": "list", "element": named("Command", "Api")}), "(List Api::Command)")
+        self.assertEqual(lexmod.expr(call("commands", module="Api")), "(Api::commands)")
+        self.assertEqual(lexmod.expr(ctor("ModelKind.qualityModel", "Foundation.Arch")), "(ctor Foundation.Arch::ModelKind.qualityModel)")
+        self.assertEqual(lexmod.expr(record("Concern", "Foundation.Arch", index=n(2))), "(record Foundation.Arch::Concern {index := 2})")
+        self.assertEqual(lexmod.expr(ble(n(5), call("measureThreshold", s("ci-render-time"), call("measures")))),
+                         '(5 <=? (measureThreshold "ci-render-time" (measures)))')
+        text = lexmod.module("M", [], imports=["Zeta", "Alpha"], glossaries=["prism.arch@1.0.0"])
+        self.assertIn("\\useglossary{lexlean.std.bool@1.2.0}\n\\useglossary{lexlean.std.nat@1.2.0}\n\\useglossary{prism.arch@1.0.0}\n"
+                      "\\importmodule{Alpha}\n\\importmodule{Zeta}\n\\title{Boolean}", text)
+
+    def test_vendored_stdlib_is_language_1_2_and_declares_the_arch_entities(self):
+        api = repo.PROJECTS["api"]
+        arch = (api / "stdlib" / "Foundation" / "Arch.lex.tex").read_text()
+        self.assertIn("\\useglossary{prism.arch@1.0.0}", arch)
+        self.assertNotIn("\\semanticdata", arch)
+        for name in ("Stakeholder", "Concern", "Viewpoint", "View", "ModelKind"):
+            self.assertIn(f"name: {name},", arch)
+        import tomllib
+        project = tomllib.loads((api / "lexlean.toml").read_text())
+        self.assertEqual(project["source_roots"], ["src", "stdlib"])
+        self.assertEqual({x["package"] for x in project["lexicon_source"] if x["kind"] == "path"}, {"prism.arch", "prism.qual"})
+        self.assertEqual(project["entrypoints"], sorted(project["entrypoints"]))
+        for lic in ("stdlib/LICENSE-APACHE", "stdlib/LICENSE-MIT", "language/LICENSE-APACHE", "language/LICENSE-MIT"):
+            self.assertTrue((api / lic).exists(), lic)
+
+
+class PrismModelTests(unittest.TestCase):
+    """The PrismPM registers are generated from the register, the parser and
+    the architecture; every command of the parser has a row, every standard
+    entry is a vendored lexicon entry, and the published JSON fits its schema."""
+
+    def test_model_registers_are_current(self):
+        from tools.r30 import prismmodel
+        r = prismmodel.check()
+        self.assertTrue(r["ok"], r["reason"])
+        for name in ("authorities", "ids", "ledger", "commands", "standards", "projection", "contracts"):
+            self.assertTrue((prismmodel.MODEL / f"{name}.toml").exists(), name)
+
+    def test_commands_register_is_the_parser(self):
+        import tomllib
+        from tools.r30 import prismmodel, apimodel
+        rows = tomllib.loads(prismmodel.commands())["command"]
+        self.assertEqual([r["name"] for r in rows], [r["name"] for r in apimodel.surface()])
+        by_name = {r["name"]: r for r in rows}
+        self.assertEqual(by_name["chain"]["mutates"], "never")
+        self.assertEqual(by_name["view_render"]["mutates"], "view-directory")
+        self.assertEqual(by_name["frontier_set"]["mutates"], "register")
+        self.assertEqual(by_name["api_sync"]["result_schema"], "r30/api-sync-result/1")
+
+    def test_standards_name_vendored_entries_used_by_the_architecture(self):
+        import tomllib
+        from tools.r30 import prismmodel
+        rows = tomllib.loads(prismmodel.standards())["standard"]
+        self.assertEqual({r["facet_package"] for r in rows}, {"prism.arch", "prism.qual"})
+        for r in rows:
+            for e in r["facet_entries"]:
+                self.assertTrue((repo.PROJECTS["api"] / "language" / r["facet_package"] / "entries" / f"{e}.toml").exists(), e)
+
+    def test_projection_targets_declared_types(self):
+        import tomllib
+        from tools.r30 import prismmodel
+        rows = tomllib.loads(prismmodel.projection())
+        src = repo.PROJECTS["api"] / "src"
+        for e in rows["entity"]:
+            self.assertIn(f"name: {e['type_name']},", (src / f"{e['module']}.lex.tex").read_text(), e)
+        self.assertEqual(rows["catalog"][0]["declaration"], "ModelKind")
+
+    def test_register_json_fits_its_contract(self):
+        import tomllib
+        from tools.r30 import prismmodel, apimodel
+        contracts = tomllib.loads(prismmodel.contracts())["contract"]
+        commands = {r["name"] for r in apimodel.surface()}
+        for c in contracts:
+            self.assertIn(c["produced_by"], commands, c["schema"])
+            self.assertTrue((repo.PROJECTS["api"] / c["path"]).exists(), c["path"])
+        schema = prismmodel.REGISTER_SCHEMA["items"]
+        for claim in frontier.list_claims():
+            self.assertTrue(set(schema["required"]) <= set(claim), claim["id"])
+            self.assertTrue(set(claim) <= set(schema["properties"]), claim["id"])
+            self.assertIn(claim["status"], schema["properties"]["status"]["enum"])
+
+
+class SiteTests(unittest.TestCase):
+    """`view render` is the runtime of Presentation.lex.tex: it writes every
+    declared artifact, embeds the data in the site, and the logo is Rule 30."""
+
+    def test_rule30_rows_and_logo(self):
+        from tools.r30 import site
+        import xml.etree.ElementTree as ET
+        rows = site.rule30_rows(4)
+        self.assertEqual(rows, [[1], [1, 1, 1], [1, 1, 0, 0, 1], [1, 1, 0, 1, 1, 1, 1]])
+        svg = site.logo_svg(rows=12)
+        root = ET.fromstring(svg)
+        self.assertEqual(root.tag, "{http://www.w3.org/2000/svg}svg")
+        rects = [r for r in root if r.tag.endswith("rect")]
+        accent = [r for r in rects if r.get("fill") == site.ACCENT]
+        self.assertEqual(len(accent), sum(r[len(r) // 2] for r in site.rule30_rows(12)))
+        self.assertNotIn("<script", svg)
+        r = site.check_logo()
+        self.assertTrue(r["ok"], r["reason"])
+
+    def test_render_view_writes_every_declared_artifact_with_embedded_data(self):
+        import json
+        from tools.r30 import site, presentationmodel as pm
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "view"
+            r = site.render_view(out)
+            self.assertEqual(r["written"], [a["path"] for a in pm.ARTIFACTS])
+            for a in pm.ARTIFACTS:
+                self.assertTrue((out / a["path"]).exists(), a["path"])
+            html = (out / "index.html").read_text()
+            start = html.index(site.DATA_OPEN) + len(site.DATA_OPEN)
+            data = json.loads(html[start:html.index(site.DATA_CLOSE, start)].replace("<\\/", "</"))
+            self.assertEqual([c["id"] for c in data["register"]], [c["id"] for c in frontier.list_claims()])
+            self.assertEqual(data["chain"], frontier.chain()[0])
+            self.assertEqual(data["brand"]["name"], pm.BRAND["name"])
+            self.assertTrue(set(data["openLeaves"]) <= {c["id"] for c in data["register"] if c["status"] == "open"})
+            self.assertEqual((out / "chain.txt").read_text().strip(), frontier.chain()[1].strip())
+            self.assertEqual(json.loads((out / "register.json").read_text()), frontier.list_claims())
+        self.assertIn("</script>", site.embed('<script id="r30-data" type="application/json">null</script>', {"x": "</script>"}))
+        self.assertNotIn("</script>\"", site.embed('<script id="r30-data" type="application/json">null</script>', {"x": "</script>"}))
+
+    def test_open_leaves_are_open_claims_nothing_rests_on(self):
+        claims = frontier.list_claims()
+        depended = {d for c in claims for d in c.get("depends", [])}
+        for leaf in frontier.open_leaves():
+            c = next(x for x in claims if x["id"] == leaf)
+            self.assertEqual(c["status"], "open")
+            self.assertNotIn(leaf, depended)
+
+    def test_view_workflow_is_the_publication_the_application_declares(self):
+        from tools.r30 import presentationmodel as pm
+        text = (repo.ROOT / pm.PUBLICATION["workflow"]).read_text()
+        self.assertIn("python3 -m tools.r30 view render --out view", text)
+        self.assertIn(f"timeout-minutes: {pm.PUBLICATION['timeoutMinutes']}", text)
+        self.assertIn(f"name: {pm.PUBLICATION['artifactName']}", text)
+        for forbidden in ("lake", "lexlean", "unittest", "pytest"):
+            self.assertNotIn(forbidden + " ", text.replace("no Lean, no lexlean", ""), forbidden)
+        self.assertEqual(pm.APPLICATION_RECORD["workflow"], pm.PUBLICATION["workflow"])
 
 
 if __name__ == "__main__":

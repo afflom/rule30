@@ -40,6 +40,45 @@ def list_claims(status=None):
     return claims
 
 
+MARKS = {"open": "?", "proved": "✓", "refuted": "✗", "retired": "-"}
+
+
+def chain():
+    """The reduction tree: from each root claim, the claims that rest on it
+    (`depends`), with status and Lean name. Returns (rows, text): the rows are
+    the pre-order walk with depth, the text is the indented rendering."""
+    claims = load()["claim"]
+    by_id = {c["id"]: c for c in claims}
+    children = {c["id"]: [] for c in claims}
+    for c in claims:
+        for d in c.get("depends", []):
+            children.setdefault(d, []).append(c["id"])
+    roots = [c["id"] for c in claims if not c.get("depends")]
+    lines, rows = [], []
+
+    def walk(cid, depth, seen):
+        c = by_id[cid]
+        rows.append({"id": cid, "depth": depth, "status": c["status"], "lean": c.get("lean")})
+        lines.append("  " * depth + f"[{MARKS[c['status']]}] {cid}" + (f"  ({c['lean']})" if c.get("lean") else ""))
+        if cid in seen:
+            return
+        for k in children.get(cid, []):
+            walk(k, depth + 1, seen | {cid})
+    for r in roots:
+        walk(r, 0, set())
+    lines.append("")
+    lines.append("open leaves are sufficient conditions once every proved arrow above them is read upward;")
+    lines.append("a refuted node is a route not to be walked again.")
+    return rows, "\n".join(lines)
+
+
+def open_leaves():
+    """The open claims no claim rests on: the sufficient conditions of the tree."""
+    claims = load()["claim"]
+    depended = {d for c in claims for d in c.get("depends", [])}
+    return [c["id"] for c in claims if c["status"] == "open" and c["id"] not in depended]
+
+
 def add(id_, statement, status="open", lean=None, lexeme=None, note=None, depends=None):
     if status not in STATUSES:
         raise ValueError(f"status must be one of {STATUSES}")

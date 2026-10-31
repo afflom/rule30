@@ -1,6 +1,7 @@
 module
 public import Rule30UOR.Ledger
 public import Rule30UOR.Interfaces.Part03
+public import Rule30UOR.WittDefect
 set_option autoImplicit false
 set_option maxRecDepth 100000
 set_option maxHeartbeats 1000000000
@@ -413,5 +414,98 @@ theorem centerPeriodic_iff_interiorAgainstEdge (T P : Nat) :
       rcases Bool.eq_false_or_eq_true (interiorFormula t t) with h3 | h3 <;>
       rcases Bool.eq_false_or_eq_true (edgeFormula t t) with h4 | h4 <;>
       rw [h1, h2, h3, h4] at this ⊢ <;> first | rfl | exact absurd this (by decide)
+
+/-! ## The causal horizon of the edge background
+
+`q^n` has degree `2n`, so `trinomialParity n d = false` for `d > 2n`. Both edge
+terms of row `m` at time `t` need `2m ≤ t`: the edge background at time `t`
+depends only on the first half of the history, `m ≤ t/2`, while the interior
+ledger receives the carries of every row up to `t − 1`. -/
+
+theorem phiLinearPow_lt (n : Nat) : phiLinearPow n 1 < 2 ^ (2 * n + 1) := by
+  induction n with
+  | zero => decide
+  | succ n ih =>
+    rw [phiLinearPow_step]
+    show (phiLinearPow n 1 ^^^ (phiLinearPow n 1 <<< 1)) ^^^ (phiLinearPow n 1 <<< 2) < 2 ^ (2 * (n + 1) + 1)
+    have h0 : phiLinearPow n 1 < 2 ^ (2 * (n + 1) + 1) :=
+      Nat.lt_of_lt_of_le ih (Nat.pow_le_pow_right (by decide) (by cfomega))
+    have h1 : phiLinearPow n 1 <<< 1 < 2 ^ (2 * (n + 1) + 1) := by
+      rw [Nat.shiftLeft_eq]
+      have h := Nat.mul_lt_mul_of_pos_right ih (by decide : 0 < 2 ^ 1)
+      rw [← Nat.pow_add] at h
+      exact Nat.lt_of_lt_of_le h (Nat.pow_le_pow_right (by decide) (by cfomega))
+    have h2 : phiLinearPow n 1 <<< 2 < 2 ^ (2 * (n + 1) + 1) := by
+      rw [Nat.shiftLeft_eq]
+      have h := Nat.mul_lt_mul_of_pos_right ih (by decide : 0 < 2 ^ 2)
+      rw [← Nat.pow_add] at h
+      exact Nat.lt_of_lt_of_le h (Nat.pow_le_pow_right (by decide) (by cfomega))
+    exact Nat.xor_lt_two_pow (Nat.xor_lt_two_pow h0 h1) h2
+
+/-- Beyond the degree `2n` the trinomial row is zero. -/
+theorem trinomialParity_eq_false_of_gt (n d : Nat) (h : 2 * n < d) : trinomialParity n d = false := by
+  rw [← testBit_phiLinPow_eq_trinomialParity, ← phiLinearPow_eq_phiLinPow]
+  exact Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le (phiLinearPow_lt n)
+    (Nat.pow_le_pow_right (by decide) (by cfomega)))
+
+/-- Rows after the half-time contribute nothing to the edge background. -/
+theorem edgeTerm_eq_false_of_half (t m : Nat) (hm : m < t) (h : t < 2 * m) : edgeTerm t m = false := by
+  unfold edgeTerm
+  rw [if_neg (by cfomega : ¬ (2 * m + 1 ≤ t))]
+  have h2 : (if 2 ≤ t then trinomialParity (t - 1 - m) (t - 2) else false) = false := by
+    rcases Nat.lt_or_ge t 2 with ht | ht
+    · rw [if_neg (by cfomega)]
+    · rw [if_pos ht, trinomialParity_eq_false_of_gt _ _ (by cfomega)]
+  cases rdiag 1 m
+  · rfl
+  · show bxor false (if 2 ≤ t then trinomialParity (t - 1 - m) (t - 2) else false) = false
+    rw [h2]; rfl
+
+/-- **The causal horizon**: the edge background at time `t` is the XOR over `m ≤ t/2` only. -/
+theorem edgeFormula_half (t : Nat) : ∀ n, t / 2 + 1 ≤ n → n ≤ t → edgeFormula t n = edgeFormula t (t / 2 + 1) := by
+  intro n
+  induction n with
+  | zero => intro h _; cfomega
+  | succ n ih =>
+    intro h1 h2
+    rcases Nat.lt_or_ge (t / 2 + 1) (n + 1) with hlt | hge
+    · show bxor (edgeFormula t n) (edgeTerm t n) = _
+      rw [edgeTerm_eq_false_of_half t n (by cfomega) (by cfomega), ih (by cfomega) (by cfomega)]
+      cases edgeFormula t (t / 2 + 1) <;> rfl
+    · have : n + 1 = t / 2 + 1 := by cfomega
+      rw [this]
+
+theorem edgeDiagonal_half (t : Nat) : edgeDiagonal t = edgeFormula t (t / 2 + 1) := by
+  rw [edgeDiagonal_eq_formula]
+  rcases Nat.lt_or_ge t (t / 2 + 1) with h | h
+  · have : t = 0 := by cfomega
+    subst this; rfl
+  · exact edgeFormula_half t t h (Nat.le_refl t)
+
+/-! ## The black-center absorption of the 2-adic flip
+
+Under a periodic center no left defect arrives at a black center
+(`periodic_black_no_arrival`), so at black-center times the ledger bit at
+position `-1` flips across the period exactly when the trailing-ones parity
+flips: the ledger absorbs the 2-adic signal of the linear part. -/
+
+theorem periodic_black_ledger_absorbs (T P t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) (hb : center t = true) :
+    bxor (ledgerBit (t + P) (t + P + 1)) (ledgerBit t (t + 1)) =
+      bxor (trailingParity (t + P)) (trailingParity t) := by
+  have h := Rule30UOR.WittDefect.periodic_black_no_arrival T P 1 t hc ht hb
+  rw [Nat.one_mul] at h
+  unfold Rule30UOR.Collision.leftDefect Rule30UOR.TemporalDefect.defect Rule30UOR.TemporalDefect.difference at h
+  rw [show (-((1 : Nat) : Int)) = -1 from rfl] at h
+  have h' : xor (Ruliology.CellularAutomata.Rule30Jen.cell (t + P) (-1))
+      (Ruliology.CellularAutomata.Rule30Jen.cell t (-1)) = false := h
+  rw [← Rule30UOR.Scale.cell_eq_kit, ← Rule30UOR.Scale.cell_eq_kit, cell_left_eq, cell_left_eq] at h'
+  clear h
+  have h := h'
+  rcases Bool.eq_false_or_eq_true (trailingParity (t + P)) with h1 | h1 <;>
+    rcases Bool.eq_false_or_eq_true (trailingParity t) with h2 | h2 <;>
+    rcases Bool.eq_false_or_eq_true (ledgerBit (t + P) (t + P + 1)) with h3 | h3 <;>
+    rcases Bool.eq_false_or_eq_true (ledgerBit t (t + 1)) with h4 | h4 <;>
+    rw [h1, h2, h3, h4] at h ⊢ <;> first | rfl | exact absurd h (by decide)
 
 end Rule30UOR.EdgeSplit

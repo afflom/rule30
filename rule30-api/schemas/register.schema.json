@@ -1,0 +1,51 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/register/1",
+ "title": "The claim register (frontier list --json; view/register.json)",
+ "type": "array",
+ "items": {
+  "type": "object",
+  "required": [
+   "id",
+   "status",
+   "statement"
+  ],
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "pattern": "^[a-z][a-z0-9-]*$"
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "open",
+     "proved",
+     "refuted",
+     "retired"
+    ]
+   },
+   "statement": {
+    "type": "string"
+   },
+   "lean": {
+    "type": "string"
+   },
+   "lexeme": {
+    "type": "string"
+   },
+   "since": {
+    "type": "string"
+   },
+   "note": {
+    "type": "string"
+   },
+   "depends": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,77 @@
+spec = "prismpm/projection/1"
+
+[[catalog]]
+module = "Foundation.Arch"
+declaration = "ModelKind"
+facet = "prism.arch@1.0.0"
+target = "model_kinds"
+
+[[entity]]
+module = "Architecture"
+type_name = "StakeholderEntry"
+target = "stakeholders"
+
+[[entity]]
+module = "Architecture"
+type_name = "ConcernEntry"
+target = "concerns"
+
+[[entity]]
+module = "Architecture"
+type_name = "ViewpointEntry"
+target = "viewpoints"
+
+[[entity]]
+module = "Architecture"
+type_name = "ViewEntry"
+target = "views"
+
+[[entity]]
+module = "Architecture"
+type_name = "CharacteristicEntry"
+target = "characteristics"
+
+[[entity]]
+module = "Architecture"
+type_name = "SubcharacteristicEntry"
+target = "subcharacteristics"
+
+[[entity]]
+module = "Architecture"
+type_name = "RequirementEntry"
+target = "requirements"
+
+[[entity]]
+module = "Architecture"
+type_name = "MeasureEntry"
+target = "measures"
+
+[[entity]]
+module = "Register"
+type_name = "Claim"
+target = "register"
+
+[[entity]]
+module = "Api"
+type_name = "Command"
+target = "commands"
+
+[[entity]]
+module = "Presentation"
+type_name = "Artifact"
+target = "artifacts"
+
+[[entity]]
+module = "Presentation"
+type_name = "Panel"
+target = "panels"
+
+[[entity]]
+module = "Presentation"
+type_name = "Journey"
+target = "journeys"
+
+[[entity]]
+module = "Application"
+type_name = "StatusMark"
+target = "statusMarks"

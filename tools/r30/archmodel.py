@@ -1,20 +1,29 @@
-"""The architecture description as a LexLean semantic module.
+"""The architecture description as a LexLean semantic module on prism-stdlib.
 
 `rule30-api/src/Architecture.lex.tex` declares, as data with decided
 theorems, the conceptual model (the Rule 30 Prize, Problem 1), the
-stakeholders of the effort and their concerns, and the views that address
-each concern (the reduction tree, the register, the API modules, the current
-view published on every push). The form follows ISO/IEC 42010 as PrismPM's
-`prism.arch` lexicon models it (stakeholders, concerns, viewpoints, views);
-the module is self-contained so that it needs no pinned SDK, and it is
-checked by the same `lexlean verify` as the paper."""
+stakeholders of the effort, their concerns, the viewpoints that frame each
+concern for a stakeholder, the views governed by those viewpoints (the
+reduction tree, the register, the gate, the interface sheets, the published
+view, the API modules), and the quality model that says what an optimal
+implementation is here. The entities are the stdlib's: `Foundation.Arch`
+(ISO/IEC/IEEE 42010 as PrismPM's `prism.arch` lexicon models it: Stakeholder,
+Concern, Viewpoint, View, ModelKind) and `Foundation.Qual` (ISO/IEC 25010:
+ProductQualityCharacteristic, QualitySubcharacteristic, QualityRequirement,
+QualityMeasure), vendored under `rule30-api/stdlib` and imported. The stdlib
+references entities by index; each labeled entry here carries its stdlib
+entity, and the theorems decide that the indices agree with the labels, that
+every concern is framed and every viewpoint governs a view, and that every
+command a view or a measure names is a command of `Api.lex.tex`."""
 
 from . import repo
+from .semantic import (BOOL, NAT, STR, add, all_members, b, beq, call, ctor, definition, each_indexed,
+                       each_resolves, field_of_each, holds, if_, index_of, list_t, lookup_field, lst,
+                       match_list, member_string, n, named, proj, record, s, strings, structure, theorem, var)
 
 MODULE = repo.ROOT / "rule30-api" / "src" / "Architecture.lex.tex"
-
-STR = {"kind": "string"}
-BOOL = {"kind": "bool"}
+ARCH = "Foundation.Arch"
+QUAL = "Foundation.Qual"
 
 CONCEPTUAL_MODEL = {
     "id": "rule30-problem-1",
@@ -42,146 +51,268 @@ CONCERNS = [
     {"id": "stdlib", "statement": "What the research needs from LexLean and prism-stdlib is identified and fed back."},
 ]
 
+# ISO 42010: a viewpoint frames one concern for a stakeholder and names the
+# kind of model its views are made of (Foundation.Arch.ModelKind).
+MODEL_KINDS = ["componentModel", "securityModel", "qualityModel"]
+
+VIEWPOINTS = [
+    {"id": "reduction", "stakeholder": "wolfram", "concern": "closure", "model_kind": "componentModel",
+     "statement": "The proof as a tree of reductions: what rests on what, which arrows are theorems, which leaves are open."},
+    {"id": "evidence", "stakeholder": "wolfram", "concern": "evidence", "model_kind": "componentModel",
+     "statement": "Every status in the register read against the kernel: a proved claim names a theorem checked under propext and Quot.sound."},
+    {"id": "optimal", "stakeholder": "researcher", "concern": "optimal-implementation", "model_kind": "qualityModel",
+     "statement": "The implementation measured by the quality model below: validation time, regenerability, and correctness thresholds."},
+    {"id": "comprehension", "stakeholder": "community", "concern": "comprehension", "model_kind": "componentModel",
+     "statement": "Each claim with its chain from the root, its notions, the exact facts about them and the handles to continue."},
+    {"id": "current", "stakeholder": "community", "concern": "current-view", "model_kind": "componentModel",
+     "statement": "The current state of the implementation as a published artifact, rendered from the register on every push."},
+    {"id": "stdlib", "stakeholder": "uor-foundation", "concern": "stdlib", "model_kind": "componentModel",
+     "statement": "The LexLean modules of the project on the stdlib's types, and what they needed from the language."},
+]
+
 VIEWS = [
-    {"id": "reduction-tree", "concern": "closure", "command": "chain",
+    {"id": "reduction-tree", "viewpoint": "reduction", "command": "chain",
      "statement": "The register as one DAG from problem1 to the open leaves, every arrow a theorem."},
-    {"id": "register-evidence", "concern": "evidence", "command": "frontier_check",
+    {"id": "register-evidence", "viewpoint": "evidence", "command": "frontier_check",
      "statement": "frontier check: proved claims kernel-checked under propext and Quot.sound and published; Register.lex.tex decided."},
-    {"id": "gate", "concern": "optimal-implementation", "command": "commit",
+    {"id": "gate", "viewpoint": "optimal", "command": "commit",
      "statement": "One validate-and-commit step with cached Lake directories and reused LexLean attestations; CI renders, it does not re-validate."},
-    {"id": "interface-sheets", "concern": "comprehension", "command": "interface",
+    {"id": "interface-sheets", "viewpoint": "comprehension", "command": "interface",
      "statement": "The labeled interface sheet of every claim: chain, notions, exact facts, handles."},
-    {"id": "published-view", "concern": "current-view", "command": "chain",
-     "statement": "The view workflow uploads the tree, the register, the sheets and the API modules on every push to main."},
-    {"id": "api-modules", "concern": "stdlib", "command": "api_sync",
-     "statement": "The command surface, the register and this architecture are LexLean semantic modules; what they needed from the language is recorded in AGENTS.md."},
+    {"id": "published-view", "viewpoint": "current", "command": "view_render",
+     "statement": "The view workflow renders the tree, the register, the sheets, the API modules and the site on every push to main."},
+    {"id": "api-modules", "viewpoint": "stdlib", "command": "api_sync",
+     "statement": "The command surface, the register, this architecture and the presentation are LexLean semantic modules on prism-stdlib; what they needed from the language is recorded in AGENTS.md."},
+]
+
+# ISO 25010 product quality, restricted to what "optimal implementation" means
+# for a proof repository. A measure names the command that reports it and the
+# threshold it must stay within (Foundation.Qual.QualityMeasure.threshold).
+CHARACTERISTICS = [
+    {"id": "performance-efficiency", "statement": "Validation costs time once, in the gate, and never on the research loop."},
+    {"id": "maintainability", "statement": "Every generated module has one generator and one source; nothing is written twice."},
+    {"id": "functional-correctness", "statement": "Nothing unproved is called proved, and no proof uses an axiom beyond propext and Quot.sound."},
+]
+
+SUBCHARACTERISTICS = [
+    {"id": "time-behaviour", "characteristic": "performance-efficiency",
+     "statement": "The inner loop takes seconds, the whole gate minutes, and CI only renders."},
+    {"id": "modularity", "characteristic": "maintainability",
+     "statement": "The LexLean modules are regenerated from the parser, the register and the model data, and drift is refused."},
+    {"id": "reusability", "characteristic": "maintainability",
+     "statement": "The architecture and quality entities are the stdlib's, not private copies."},
+    {"id": "correctness", "characteristic": "functional-correctness",
+     "statement": "The register is read against the kernel on every commit."},
+]
+
+REQUIREMENTS = [
+    {"id": "module-check-seconds", "subcharacteristic": "time-behaviour",
+     "statement": "Checking or verifying one LexLean module takes seconds."},
+    {"id": "api-verify-seconds", "subcharacteristic": "time-behaviour",
+     "statement": "Verifying the whole rule30-api project takes under a minute."},
+    {"id": "ci-render-minutes", "subcharacteristic": "time-behaviour",
+     "statement": "The view workflow renders the current view within its timeout and runs no Lean, no lexlean and no tests."},
+    {"id": "gate-minutes", "subcharacteristic": "time-behaviour",
+     "statement": "The pre-commit gate, reusing accepted Lake directories and LexLean attestations, finishes within half an hour."},
+    {"id": "no-drift", "subcharacteristic": "modularity",
+     "statement": "Every generated module and register matches its generator (api check)."},
+    {"id": "stdlib-entities", "subcharacteristic": "reusability",
+     "statement": "The architecture declares no private stakeholder, concern, viewpoint, view or quality type: each entry carries a stdlib entity."},
+    {"id": "unbacked-claims", "subcharacteristic": "correctness",
+     "statement": "No proved claim lacks a kernel-checked, published Lean theorem (frontier check)."},
+    {"id": "forbidden-axioms", "subcharacteristic": "correctness",
+     "statement": "No theorem depends on an axiom beyond propext and Quot.sound (axioms, choice-audit)."},
+]
+
+MEASURES = [
+    {"id": "module-check-time", "requirement": "module-check-seconds", "threshold": 60, "unit": "seconds", "command": "check",
+     "statement": "Seconds reported by `check` or `verify --modules` for one module."},
+    {"id": "api-verify-time", "requirement": "api-verify-seconds", "threshold": 60, "unit": "seconds", "command": "verify",
+     "statement": "Seconds reported by `verify api`."},
+    {"id": "ci-render-time", "requirement": "ci-render-minutes", "threshold": 5, "unit": "minutes", "command": "view_render",
+     "statement": "The timeout of the view workflow's render job."},
+    {"id": "gate-time", "requirement": "gate-minutes", "threshold": 30, "unit": "minutes", "command": "gate",
+     "statement": "Minutes between the start and the end of the pre-commit gate (`gate` reports the running one)."},
+    {"id": "drifted-modules", "requirement": "no-drift", "threshold": 0, "unit": "modules", "command": "api_check",
+     "statement": "Modules or registers that `api check` reports as drifted."},
+    {"id": "private-entities", "requirement": "stdlib-entities", "threshold": 0, "unit": "structures", "command": "api_check",
+     "statement": "Architecture structures without an `entity` field of a stdlib type."},
+    {"id": "unbacked-proved", "requirement": "unbacked-claims", "threshold": 0, "unit": "claims", "command": "frontier_check",
+     "statement": "Proved claims whose Lean name is not kernel-checked and published."},
+    {"id": "forbidden-axiom-uses", "requirement": "forbidden-axioms", "threshold": 0, "unit": "theorems", "command": "choice_audit",
+     "statement": "Theorems depending on Classical.choice or any axiom beyond propext and Quot.sound."},
 ]
 
 
-def _s(v):
-    return {"kind": "string", "value": v}
+def _ids(rows):
+    return [r["id"] for r in rows]
 
 
-def _b(v):
-    return {"kind": "bool", "value": bool(v)}
+def _index(rows, value):
+    return _ids(rows).index(value)
 
 
-def _var(n):
-    return {"kind": "var", "name": n}
-
-
-def _call(f, *args):
-    return {"kind": "call", "function": {"name": f}, "arguments": list(args)}
-
-
-def _list(elements, element_type):
-    node = {"kind": "nil", "element": element_type}
-    for e in reversed(elements):
-        node = {"kind": "cons", "head": e, "tail": node}
-    return node
-
-
-def _named(name):
-    return {"kind": "named", "member": {"name": name}, "arguments": []}
-
-
-def _list_t(t):
-    return {"kind": "list", "element": t}
-
-
-def _eq(a, b):
-    return {"kind": "primitive", "operation": "equal", "result": BOOL, "arguments": [a, b]}
-
-
-def _if(c, t, e):
-    return {"kind": "if", "condition": c, "then_value": t, "else_value": e}
-
-
-def _match_list(scrutinee, nil_body, head, tail, cons_body):
-    return {"kind": "match", "scrutinee": scrutinee, "branches": [
-        {"constructor": {"name": "List.nil"}, "binders": [], "body": nil_body},
-        {"constructor": {"name": "List.cons"}, "binders": [head, tail], "body": cons_body}]}
-
-
-def _proj(v, f):
-    return {"kind": "project", "value": v, "field": f}
-
-
-def _record(type_name, **fields):
-    return {"kind": "record", "type": {"name": type_name},
-            "fields": [{"field": k, "value": v} for k, v in fields.items()]}
-
-
-def _structure(name, fields):
-    return {"kind": "structure", "name": name, "parameters": [], "type_parameters": [],
-            "fields": [{"name": n, "type": t} for n, t in fields]}
-
-
-def _definition(name, result, body, parameters=(), recursive=None):
-    d = {"kind": "definition", "name": name, "parameters": [{"name": n, "type": t} for n, t in parameters],
-         "result": result, "axioms": [], "body": body}
-    if recursive:
-        d["recursive_argument"] = recursive
-    return d
-
-
-def _theorem(name, left, right, proof="decide"):
-    return {"kind": "theorem", "name": name, "parameters": [], "axioms": [],
-            "statement": {"kind": "eq", "left": left, "right": right}, "proof": {"kind": proof}}
+def model_kind_index(kind):
+    return MODEL_KINDS.index(kind)
 
 
 def declarations():
-    sh_t, co_t, vw_t, cm_t = _named("Stakeholder"), _named("Concern"), _named("View"), _named("ConceptualModel")
+    sh_t, co_t, vp_t, vw_t = named("StakeholderEntry"), named("ConcernEntry"), named("ViewpointEntry"), named("ViewEntry")
+    ch_t, sc_t, rq_t, me_t = (named("CharacteristicEntry"), named("SubcharacteristicEntry"),
+                              named("RequirementEntry"), named("MeasureEntry"))
+    kind_t = named("ModelKind", ARCH)
+    cmd_t = named("Command", "Api")
+
+    stakeholder_entries = [
+        record("StakeholderEntry", entity=record("Stakeholder", ARCH, index=n(i)), id=s(x["id"]), name=s(x["name"]),
+               concerns=strings(x["concerns"])) for i, x in enumerate(STAKEHOLDERS)]
+    concern_entries = [
+        record("ConcernEntry", entity=record("Concern", ARCH, index=n(i)), id=s(x["id"]), statement=s(x["statement"]))
+        for i, x in enumerate(CONCERNS)]
+    viewpoint_entries = [
+        record("ViewpointEntry",
+               entity=record("Viewpoint", ARCH, index=n(i), stakeholderIndex=n(_index(STAKEHOLDERS, x["stakeholder"])),
+                             concernIndex=n(_index(CONCERNS, x["concern"])), modelKindIndex=n(model_kind_index(x["model_kind"]))),
+               id=s(x["id"]), stakeholder=s(x["stakeholder"]), concern=s(x["concern"]),
+               modelKind=ctor(f"ModelKind.{x['model_kind']}", ARCH), statement=s(x["statement"]))
+        for i, x in enumerate(VIEWPOINTS)]
+    view_entries = [
+        record("ViewEntry",
+               entity=record("View", ARCH, index=n(i), viewpointIndex=n(_index(VIEWPOINTS, x["viewpoint"])),
+                             modelKindIndex=n(model_kind_index(VIEWPOINTS[_index(VIEWPOINTS, x["viewpoint"])]["model_kind"]))),
+               id=s(x["id"]), viewpoint=s(x["viewpoint"]), command=s(x["command"]), statement=s(x["statement"]))
+        for i, x in enumerate(VIEWS)]
+    characteristic_entries = [
+        record("CharacteristicEntry", entity=record("ProductQualityCharacteristic", QUAL, index=n(i)),
+               id=s(x["id"]), statement=s(x["statement"])) for i, x in enumerate(CHARACTERISTICS)]
+    subcharacteristic_entries = [
+        record("SubcharacteristicEntry",
+               entity=record("QualitySubcharacteristic", QUAL, index=n(i), characteristicIndex=n(_index(CHARACTERISTICS, x["characteristic"]))),
+               id=s(x["id"]), characteristic=s(x["characteristic"]), statement=s(x["statement"]))
+        for i, x in enumerate(SUBCHARACTERISTICS)]
+    requirement_entries = [
+        record("RequirementEntry",
+               entity=record("QualityRequirement", QUAL, index=n(i), subcharacteristicIndex=n(_index(SUBCHARACTERISTICS, x["subcharacteristic"]))),
+               id=s(x["id"]), subcharacteristic=s(x["subcharacteristic"]), statement=s(x["statement"]))
+        for i, x in enumerate(REQUIREMENTS)]
+    measure_entries = [
+        record("MeasureEntry",
+               entity=record("QualityMeasure", QUAL, index=n(i), requirementIndex=n(_index(REQUIREMENTS, x["requirement"])),
+                             threshold=n(x["threshold"])),
+               id=s(x["id"]), requirement=s(x["requirement"]), unit=s(x["unit"]), command=s(x["command"]),
+               statement=s(x["statement"]))
+        for i, x in enumerate(MEASURES)]
+
+    def kind_branch(kind, i):
+        return {"constructor": {"name": f"ModelKind.{kind}", "module": ARCH}, "binders": [], "body": n(i)}
+
     return [
-        _structure("ConceptualModel", [("id", STR), ("statement", STR), ("citation", STR)]),
-        _structure("Stakeholder", [("id", STR), ("name", STR), ("concerns", _list_t(STR))]),
-        _structure("Concern", [("id", STR), ("statement", STR)]),
-        _structure("View", [("id", STR), ("concern", STR), ("command", STR), ("statement", STR)]),
-        _definition("conceptualModel", cm_t, _record("ConceptualModel", **{k: _s(v) for k, v in CONCEPTUAL_MODEL.items()})),
-        _definition("stakeholders", _list_t(sh_t), _list([
-            _record("Stakeholder", id=_s(s["id"]), name=_s(s["name"]), concerns=_list([_s(c) for c in s["concerns"]], STR))
-            for s in STAKEHOLDERS], sh_t)),
-        _definition("concerns", _list_t(co_t), _list([
-            _record("Concern", id=_s(c["id"]), statement=_s(c["statement"])) for c in CONCERNS], co_t)),
-        _definition("views", _list_t(vw_t), _list([
-            _record("View", id=_s(v["id"]), concern=_s(v["concern"]), command=_s(v["command"]), statement=_s(v["statement"]))
-            for v in VIEWS], vw_t)),
-        _definition("memberString", BOOL,
-                    _match_list(_var("values"), _b(False), "head", "tail",
-                                _if(_eq(_var("value"), _var("head")), _b(True), _call("memberString", _var("value"), _var("tail")))),
-                    parameters=[("value", STR), ("values", _list_t(STR))], recursive="values"),
-        _definition("concernIds", _list_t(STR),
-                    _match_list(_var("cs"), {"kind": "nil", "element": STR}, "head", "tail",
-                                {"kind": "cons", "head": _proj(_var("head"), "id"), "tail": _call("concernIds", _var("tail"))}),
-                    parameters=[("cs", _list_t(co_t))], recursive="cs"),
-        _definition("viewConcerns", _list_t(STR),
-                    _match_list(_var("vs"), {"kind": "nil", "element": STR}, "head", "tail",
-                                {"kind": "cons", "head": _proj(_var("head"), "concern"), "tail": _call("viewConcerns", _var("tail"))}),
-                    parameters=[("vs", _list_t(vw_t))], recursive="vs"),
-        _definition("allMembers", BOOL,
-                    _match_list(_var("values"), _b(True), "head", "tail",
-                                _if(_call("memberString", _var("head"), _var("ids")), _call("allMembers", _var("tail"), _var("ids")), _b(False))),
-                    parameters=[("values", _list_t(STR)), ("ids", _list_t(STR))], recursive="values"),
-        _definition("stakeholderConcernsExist", BOOL,
-                    _match_list(_var("ss"), _b(True), "head", "tail",
-                                _if(_call("allMembers", _proj(_var("head"), "concerns"), _var("ids")),
-                                    _call("stakeholderConcernsExist", _var("tail"), _var("ids")), _b(False))),
-                    parameters=[("ss", _list_t(sh_t)), ("ids", _list_t(STR))], recursive="ss"),
-        # every concern of every stakeholder is a declared concern
-        _theorem("stakeholderConcernsDeclared",
-                 _call("stakeholderConcernsExist", _call("stakeholders"), _call("concernIds", _call("concerns"))), _b(True)),
-        # every declared concern is addressed by some view
-        _theorem("everyConcernAddressed",
-                 _call("allMembers", _call("concernIds", _call("concerns")), _call("viewConcerns", _call("views"))), _b(True)),
-        # every view addresses a declared concern
-        _theorem("everyViewHasConcern",
-                 _call("allMembers", _call("viewConcerns", _call("views")), _call("concernIds", _call("concerns"))), _b(True)),
+        structure("ConceptualModel", [("id", STR), ("statement", STR), ("citation", STR)]),
+        structure("StakeholderEntry", [("entity", named("Stakeholder", ARCH)), ("id", STR), ("name", STR), ("concerns", list_t(STR))]),
+        structure("ConcernEntry", [("entity", named("Concern", ARCH)), ("id", STR), ("statement", STR)]),
+        structure("ViewpointEntry", [("entity", named("Viewpoint", ARCH)), ("id", STR), ("stakeholder", STR), ("concern", STR),
+                                     ("modelKind", kind_t), ("statement", STR)]),
+        structure("ViewEntry", [("entity", named("View", ARCH)), ("id", STR), ("viewpoint", STR), ("command", STR), ("statement", STR)]),
+        structure("CharacteristicEntry", [("entity", named("ProductQualityCharacteristic", QUAL)), ("id", STR), ("statement", STR)]),
+        structure("SubcharacteristicEntry", [("entity", named("QualitySubcharacteristic", QUAL)), ("id", STR),
+                                             ("characteristic", STR), ("statement", STR)]),
+        structure("RequirementEntry", [("entity", named("QualityRequirement", QUAL)), ("id", STR),
+                                       ("subcharacteristic", STR), ("statement", STR)]),
+        structure("MeasureEntry", [("entity", named("QualityMeasure", QUAL)), ("id", STR), ("requirement", STR),
+                                   ("unit", STR), ("command", STR), ("statement", STR)]),
+        definition("conceptualModel", named("ConceptualModel"),
+                   record("ConceptualModel", **{k: s(v) for k, v in CONCEPTUAL_MODEL.items()})),
+        definition("stakeholders", list_t(sh_t), lst(stakeholder_entries, sh_t)),
+        definition("concerns", list_t(co_t), lst(concern_entries, co_t)),
+        definition("viewpoints", list_t(vp_t), lst(viewpoint_entries, vp_t)),
+        definition("views", list_t(vw_t), lst(view_entries, vw_t)),
+        definition("characteristics", list_t(ch_t), lst(characteristic_entries, ch_t)),
+        definition("subcharacteristics", list_t(sc_t), lst(subcharacteristic_entries, sc_t)),
+        definition("requirements", list_t(rq_t), lst(requirement_entries, rq_t)),
+        definition("measures", list_t(me_t), lst(measure_entries, me_t)),
+        # the model kind of a viewpoint as the stdlib indexes it
+        definition("modelKindIndex", NAT,
+                   {"kind": "match", "scrutinee": var("kind"),
+                    "branches": [kind_branch(k, i) for i, k in enumerate(MODEL_KINDS)]},
+                   parameters=[("kind", kind_t)]),
+        member_string(), all_members(), index_of(),
+        field_of_each("stakeholderIds", sh_t, "id"),
+        field_of_each("concernIds", co_t, "id"),
+        field_of_each("viewpointIds", vp_t, "id"),
+        field_of_each("viewIds", vw_t, "id"),
+        field_of_each("viewpointConcerns", vp_t, "concern"),
+        field_of_each("viewViewpoints", vw_t, "viewpoint"),
+        field_of_each("viewCommands", vw_t, "command"),
+        field_of_each("characteristicIds", ch_t, "id"),
+        field_of_each("subcharacteristicIds", sc_t, "id"),
+        field_of_each("requirementIds", rq_t, "id"),
+        field_of_each("measureRequirements", me_t, "requirement"),
+        field_of_each("measureCommands", me_t, "command"),
+        field_of_each("commandNames", cmd_t, "name"),
+        lookup_field("stakeholderConcerns", sh_t, "id", "concerns", list_t(STR), {"kind": "nil", "element": STR}),
+        lookup_field("measureThreshold", me_t, "id", "threshold", NAT, n(0), path=("entity",)),
+        lookup_field("viewpointKind", vp_t, "id", "modelKind", kind_t, ctor("ModelKind.componentModel", ARCH)),
+        definition("stakeholderConcernsExist", BOOL,
+                   match_list(var("ss"), b(True), "head", "tail",
+                              if_(call("allMembers", proj(var("head"), "concerns"), var("ids")),
+                                  call("stakeholderConcernsExist", var("tail"), var("ids")), b(False))),
+                   parameters=[("ss", list_t(sh_t)), ("ids", list_t(STR))], recursive="ss"),
+        # the stakeholder a viewpoint frames a concern for holds that concern
+        definition("viewpointsHeld", BOOL,
+                   match_list(var("vs"), b(True), "head", "tail",
+                              if_(call("memberString", proj(var("head"), "concern"),
+                                       call("stakeholderConcerns", proj(var("head"), "stakeholder"), var("ss"))),
+                                  call("viewpointsHeld", var("tail"), var("ss")), b(False))),
+                   parameters=[("vs", list_t(vp_t)), ("ss", list_t(sh_t))], recursive="vs"),
+        # the stdlib's modelKindIndex of a viewpoint is the index of its model kind
+        definition("viewpointKindsAgree", BOOL,
+                   match_list(var("vs"), b(True), "head", "tail",
+                              if_(beq(proj(proj(var("head"), "entity"), "modelKindIndex"),
+                                      call("modelKindIndex", proj(var("head"), "modelKind"))),
+                                  call("viewpointKindsAgree", var("tail")), b(False))),
+                   parameters=[("vs", list_t(vp_t))], recursive="vs"),
+        each_indexed("stakeholdersIndexed", sh_t),
+        each_indexed("concernsIndexed", co_t),
+        each_indexed("viewpointsIndexed", vp_t),
+        each_indexed("viewsIndexed", vw_t),
+        each_resolves("viewpointStakeholdersResolve", vp_t, "stakeholder", "stakeholderIndex"),
+        each_resolves("viewpointConcernsResolve", vp_t, "concern", "concernIndex"),
+        each_resolves("viewsResolve", vw_t, "viewpoint", "viewpointIndex"),
+        each_resolves("subcharacteristicsResolve", sc_t, "characteristic", "characteristicIndex"),
+        each_resolves("requirementsResolve", rq_t, "subcharacteristic", "subcharacteristicIndex"),
+        each_resolves("measuresResolve", me_t, "requirement", "requirementIndex"),
+        # ISO 42010 well-formedness, decided
+        holds("stakeholderConcernsDeclared", call("stakeholderConcernsExist", call("stakeholders"), call("concernIds", call("concerns")))),
+        holds("stakeholdersAreIndexed", call("stakeholdersIndexed", call("stakeholders"), n(0))),
+        holds("concernsAreIndexed", call("concernsIndexed", call("concerns"), n(0))),
+        holds("viewpointsAreIndexed", call("viewpointsIndexed", call("viewpoints"), n(0))),
+        holds("viewsAreIndexed", call("viewsIndexed", call("views"), n(0))),
+        holds("viewpointStakeholdersIndexed",
+              call("viewpointStakeholdersResolve", call("viewpoints"), call("stakeholderIds", call("stakeholders")))),
+        holds("viewpointConcernsIndexed", call("viewpointConcernsResolve", call("viewpoints"), call("concernIds", call("concerns")))),
+        holds("viewpointsFrameHeldConcerns", call("viewpointsHeld", call("viewpoints"), call("stakeholders"))),
+        holds("viewpointModelKindsIndexed", call("viewpointKindsAgree", call("viewpoints"))),
+        holds("everyConcernFramed", call("allMembers", call("concernIds", call("concerns")), call("viewpointConcerns", call("viewpoints")))),
+        holds("viewsGovernedByViewpoints", call("viewsResolve", call("views"), call("viewpointIds", call("viewpoints")))),
+        holds("everyViewpointGovernsAView", call("allMembers", call("viewpointIds", call("viewpoints")), call("viewViewpoints", call("views")))),
+        holds("everyViewCommandExists", call("allMembers", call("viewCommands", call("views")), call("commandNames", call("commands", module="Api")))),
+        # ISO 25010 chain, decided
+        holds("subcharacteristicsIndexed",
+              call("subcharacteristicsResolve", call("subcharacteristics"), call("characteristicIds", call("characteristics")))),
+        holds("requirementsIndexed", call("requirementsResolve", call("requirements"), call("subcharacteristicIds", call("subcharacteristics")))),
+        holds("measuresIndexed", call("measuresResolve", call("measures"), call("requirementIds", call("requirements")))),
+        holds("everyRequirementMeasured", call("allMembers", call("requirementIds", call("requirements")), call("measureRequirements", call("measures")))),
+        holds("everyMeasureCommandExists", call("allMembers", call("measureCommands", call("measures")), call("commandNames", call("commands", module="Api")))),
+        # the viewpoint of the optimal-implementation concern is made of the quality model
+        theorem("optimalViewpointIsQualityModel",
+                call("modelKindIndex", call("viewpointKind", s("optimal"), call("viewpoints"))),
+                n(model_kind_index("qualityModel"))),
     ]
 
 
 def render():
     from . import lexmod
-    return lexmod.module("Architecture", declarations())
+    return lexmod.module("Architecture", declarations(), imports=["Api", ARCH, QUAL])
 
 
 def sync():

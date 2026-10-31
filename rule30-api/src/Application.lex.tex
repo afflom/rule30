@@ -1,0 +1,156 @@
+\begin{lexlean}{Application}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Api}
+\importmodule{Architecture}
+\importmodule{Presentation}
+\importmodule{Register}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+  name: Application,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: name, type: String},
+    {name: version, type: String},
+    {name: repository, type: String},
+    {name: entry, type: String},
+    {name: logo, type: String},
+    {name: workflow, type: String}
+  ]
+}
+
+structure{
+  name: Publication,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: workflow, type: String},
+    {name: trigger, type: String},
+    {name: artifactName, type: String},
+    {name: command, type: String},
+    {name: timeoutMinutes, type: Nat}
+  ]
+}
+
+structure{
+  name: StatusMark,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: status, type: String},
+    {name: mark, type: String},
+    {name: label, type: String}
+  ]
+}
+
+definition{
+  name: application,
+  parameters: [],
+  result: Application,
+  body: (record Application {name := "rule30-api", version := "0.1.0", repository := "https://github.com/afflom/rule30", entry := "index.html", logo := "logo.svg", workflow := ".github/workflows/view.yml"}),
+  axioms: []
+}
+
+definition{
+  name: publication,
+  parameters: [],
+  result: Publication,
+  body: (record Publication {workflow := ".github/workflows/view.yml", trigger := "push to main", artifactName := "rule30-current-view", command := "view_render", timeoutMinutes := 5}),
+  axioms: []
+}
+
+definition{
+  name: statusMarks,
+  parameters: [],
+  result: (List StatusMark),
+  body: (cons (record StatusMark {status := "open", mark := "?", label := "open: a claim to work on"}) (cons (record StatusMark {status := "proved", mark := "\u2713", label := "proved: kernel-checked under propext and Quot.sound and published"}) (cons (record StatusMark {status := "refuted", mark := "\u2717", label := "refuted: a route not to be walked again"}) (cons (record StatusMark {status := "retired", mark := "-", label := "retired: superseded by an exact restatement"}) (nil StatusMark))))),
+  axioms: []
+}
+
+definition{
+  name: memberString,
+  parameters: [value : String, values : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => false
+    | List.cons head tail => (if (prim equal value head : Bool) then true else (memberString value tail))),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: allMembers,
+  parameters: [values : (List String), ids : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => true
+    | List.cons head tail => (if (memberString head ids) then (allMembers tail ids) else false)),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: markStatuses,
+  parameters: [xs : (List StatusMark)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head status) (markStatuses tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: claimStatuses,
+  parameters: [xs : (List Register::Claim)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head status) (claimStatuses tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+theorem{
+  name: entryIsPublished,
+  parameters: [],
+  statement: ((memberString (project (application) entry) (Presentation::artifactPaths (Presentation::artifacts))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: logoIsPublished,
+  parameters: [],
+  statement: ((memberString (project (application) logo) (Presentation::artifactPaths (Presentation::artifacts))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: publicationCommandExists,
+  parameters: [],
+  statement: ((memberString (project (publication) command) (Architecture::commandNames (Api::commands))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: publicationWithinBudget,
+  parameters: [],
+  statement: (((project (publication) timeoutMinutes) <=? (Architecture::measureThreshold "ci-render-time" (Architecture::measures))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: statusMarksCoverRegister,
+  parameters: [],
+  statement: ((allMembers (claimStatuses (Register::claims)) (markStatuses (statusMarks))) = true),
+  proof: decide{},
+  axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

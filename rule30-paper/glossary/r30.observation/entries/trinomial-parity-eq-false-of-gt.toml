@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trinomial-parity-eq-false-of-gt"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::mul) (nat 2) (local n)) (local d)))) (app (const lexlean.core::eq) (app (const r30.observation::trinomial-parity) (local n) (local d)) (const lexlean.std.bool::false))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.trinomialParity_eq_false_of_gt"
+
+[[form]]
+id = "trinomial-parity-eq-false-of-gt"
+channel = "math"
+surface = "trinomialparityeqfalseofgt"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trinomialparityeqfalseofgt) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

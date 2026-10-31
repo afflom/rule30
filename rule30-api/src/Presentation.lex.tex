@@ -1,0 +1,284 @@
+\begin{lexlean}{Presentation}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Api}
+\importmodule{Architecture}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+  name: Brand,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: name, type: String},
+    {name: tagline, type: String},
+    {name: description, type: String},
+    {name: logo, type: String}
+  ]
+}
+
+structure{
+  name: Artifact,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: path, type: String},
+    {name: mediaType, type: String},
+    {name: command, type: String}
+  ]
+}
+
+structure{
+  name: Panel,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: title, type: String},
+    {name: viewpoint, type: String},
+    {name: artifact, type: String},
+    {name: statement, type: String}
+  ]
+}
+
+structure{
+  name: Journey,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: stakeholder, type: String},
+    {name: panels, type: (List String)}
+  ]
+}
+
+definition{
+  name: brand,
+  parameters: [],
+  result: Brand,
+  body: (record Brand {name := "Centerline", tagline := "Every arrow a theorem.", description := "The current view of Wolfram's Rule 30 Prize, Problem 1: the reduction tree, the register, the interface sheets and the open leaves, rendered from the kernel-checked register on every push.", logo := "logo.svg"}),
+  axioms: []
+}
+
+definition{
+  name: artifacts,
+  parameters: [],
+  result: (List Artifact),
+  body: (cons (record Artifact {id := "chain", path := "chain.txt", mediaType := "text/plain", command := "chain"}) (cons (record Artifact {id := "register-json", path := "register.json", mediaType := "application/json", command := "frontier_list"}) (cons (record Artifact {id := "register-text", path := "register.txt", mediaType := "text/plain", command := "frontier_list"}) (cons (record Artifact {id := "frontier", path := "frontier.toml", mediaType := "application/toml", command := "view_render"}) (cons (record Artifact {id := "interfaces", path := "interfaces", mediaType := "text/markdown", command := "interface"}) (cons (record Artifact {id := "api-module", path := "Api.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "register-module", path := "Register.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "architecture-module", path := "Architecture.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "presentation-module", path := "Presentation.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "application-module", path := "Application.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "frontier-module", path := "Frontier.lex.tex", mediaType := "text/x-lexlean", command := "frontier_render"}) (cons (record Artifact {id := "agents", path := "AGENTS.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "strategy", path := "STRATEGY.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "readme", path := "README.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "logo", path := "logo.svg", mediaType := "image/svg+xml", command := "api_sync"}) (cons (record Artifact {id := "site", path := "index.html", mediaType := "text/html", command := "view_render"}) (nil Artifact))))))))))))))))),
+  axioms: []
+}
+
+definition{
+  name: panels,
+  parameters: [],
+  result: (List Panel),
+  body: (cons (record Panel {id := "reduction-tree", title := "Reduction tree", viewpoint := "reduction", artifact := "chain", statement := "The register as a tree from problem1: proved arrows, open leaves, refuted routes."}) (cons (record Panel {id := "register", title := "Register", viewpoint := "evidence", artifact := "register-json", statement := "Every claim with its status, statement, Lean name and lexeme; filter by status, search by notion."}) (cons (record Panel {id := "open-leaves", title := "Open leaves", viewpoint := "reduction", artifact := "register-json", statement := "The open claims no open claim rests on: each is a sufficient condition for Problem 1 once the proved arrows above it are read upward."}) (cons (record Panel {id := "interface-sheets", title := "Interface sheets", viewpoint := "comprehension", artifact := "interfaces", statement := "The labeled sheet of the selected claim: chain, notions, exact facts, handles."}) (cons (record Panel {id := "modules", title := "LexLean modules", viewpoint := "stdlib", artifact := "api-module", statement := "The command surface, the register, the architecture and this presentation as verified semantic modules."}) (cons (record Panel {id := "quality", title := "Quality", viewpoint := "optimal", artifact := "architecture-module", statement := "The measures of an optimal implementation, each with its threshold and the command that reports it."}) (nil Panel))))))),
+  axioms: []
+}
+
+definition{
+  name: journeys,
+  parameters: [],
+  result: (List Journey),
+  body: (cons (record Journey {id := "prize-review", stakeholder := "wolfram", panels := (cons "reduction-tree" (cons "register" (cons "open-leaves" (nil String))))}) (cons (record Journey {id := "research-session", stakeholder := "researcher", panels := (cons "open-leaves" (cons "interface-sheets" (cons "quality" (nil String))))}) (cons (record Journey {id := "reading", stakeholder := "community", panels := (cons "reduction-tree" (cons "interface-sheets" (cons "register" (nil String))))}) (cons (record Journey {id := "stdlib-feedback", stakeholder := "uor-foundation", panels := (cons "modules" (cons "quality" (nil String)))}) (nil Journey))))),
+  axioms: []
+}
+
+definition{
+  name: memberString,
+  parameters: [value : String, values : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => false
+    | List.cons head tail => (if (prim equal value head : Bool) then true else (memberString value tail))),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: allMembers,
+  parameters: [values : (List String), ids : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => true
+    | List.cons head tail => (if (memberString head ids) then (allMembers tail ids) else false)),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: distinctStrings,
+  parameters: [xs : (List String)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (memberString head tail) then false else (distinctStrings tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: artifactIds,
+  parameters: [xs : (List Artifact)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (artifactIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: artifactPaths,
+  parameters: [xs : (List Artifact)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head path) (artifactPaths tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: artifactCommands,
+  parameters: [xs : (List Artifact)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head command) (artifactCommands tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: panelIds,
+  parameters: [xs : (List Panel)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (panelIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: panelViewpoints,
+  parameters: [xs : (List Panel)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head viewpoint) (panelViewpoints tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: panelArtifacts,
+  parameters: [xs : (List Panel)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head artifact) (panelArtifacts tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: journeyStakeholders,
+  parameters: [xs : (List Journey)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head stakeholder) (journeyStakeholders tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: appendStrings,
+  parameters: [xs : (List String), ys : (List String)],
+  result: (List String),
+  body: (match xs
+    | List.nil => ys
+    | List.cons head tail => (cons head (appendStrings tail ys))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: journeyPanels,
+  parameters: [js : (List Journey)],
+  result: (List String),
+  body: (match js
+    | List.nil => (nil String)
+    | List.cons head tail => (appendStrings (project head panels) (journeyPanels tail))),
+  axioms: [],
+  recursive_argument: js
+}
+
+theorem{
+  name: panelsGovernedByViewpoints,
+  parameters: [],
+  statement: ((allMembers (panelViewpoints (panels)) (Architecture::viewpointIds (Architecture::viewpoints))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: panelsReadArtifacts,
+  parameters: [],
+  statement: ((allMembers (panelArtifacts (panels)) (artifactIds (artifacts))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: journeysOfStakeholders,
+  parameters: [],
+  statement: ((allMembers (journeyStakeholders (journeys)) (Architecture::stakeholderIds (Architecture::stakeholders))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: journeysThroughPanels,
+  parameters: [],
+  statement: ((allMembers (journeyPanels (journeys)) (panelIds (panels))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyPanelInAJourney,
+  parameters: [],
+  statement: ((allMembers (panelIds (panels)) (journeyPanels (journeys))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: artifactsByCommands,
+  parameters: [],
+  statement: ((allMembers (artifactCommands (artifacts)) (Architecture::commandNames (Api::commands))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: artifactPathsDistinct,
+  parameters: [],
+  statement: ((distinctStrings (artifactPaths (artifacts))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: artifactIdsDistinct,
+  parameters: [],
+  statement: ((distinctStrings (artifactIds (artifacts))) = true),
+  proof: decide{},
+  axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}
