@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 # The repository command surface. See tools/r30/cli.py and AGENTS.md.
+# Prefer these processes (and the gate they launch: lake, leanchecker, lexlean) to the
+# editor if the machine runs out of memory: the OOM killer reads this score, children inherit it.
+echo 1000 > /proc/self/oom_score_adj 2>/dev/null || true
 cd "$(dirname "$(readlink -f "$0")")/.." && exec python3 -m tools.r30 "$@"

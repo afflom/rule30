@@ -1,0 +1,114 @@
+[
+ {
+  "lean": "Rule30UOR.EdgeParity.edgeDiagonal_eq_timeParity",
+  "signature": "(pi explicit t (const Nat) (app (const Eq) (const Bool) (app (const Rule30UOR.EdgeSplit.edgeDiagonal) (local t)) (app (const Rule30UOR.EdgeParity.timeParity) (local t))))"
+ },
+ {
+  "lean": "Rule30UOR.Automatic.problem1_of_infinite_kernel",
+  "signature": "(pi explicit h (const Rule30UOR.Automatic.CenterInfiniteKernel) (const Ruliology.CellularAutomata.Rule30Prize.Problem1))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.exists_settledUpTo",
+  "signature": "(pi explicit D (const Nat) (app (const Exists) (const Nat) (lam t (const Nat) (app (const Rule30UOR.Interfaces.SettledUpTo) (local D) (local t)))))"
+ },
+ {
+  "lean": "Rule30UOR.ZeroDiagonals.zero_diagonals_unbounded",
+  "signature": "(pi explicit N (const Nat) (app (const Exists) (const Nat) (lam z (const Nat) (app (const And) (app (const LE.le) (const Nat) (const instLENat) (local N) (local z)) (app (const Rule30UOR.ZeroDiagonals.IsZeroDiag) (local z))))))"
+ },
+ {
+  "lean": "Rule30UOR.WittDefect.q_divides_iff_order",
+  "signature": "(pi explicit r (const Nat) (pi explicit d (const Nat) (pi explicit hd (app (const Ne) (const Nat) (local d) (app (const OfNat.ofNat) (const Nat) (nat 0) (app (const instOfNatNat) (nat 0)))) (app (const Iff) (app (const Rule30UOR.WittDefect.QDivides) (local r) (local d)) (app (const LE.le) (const Nat) (const instLENat) (local r) (app (const Rule30UOR.WittDefect.qOrder) (local d)))))))"
+ },
+ {
+  "lean": "Rule30UOR.KernelParity.centerInfiniteKernel_iff_interior",
+  "signature": "(app (const Iff) (const Rule30UOR.Automatic.CenterInfiniteKernel) (app (const Not) (const Rule30UOR.KernelParity.InteriorKernelFinite)))"
+ },
+ {
+  "lean": "Rule30UOR.Automatic.no_kappaCollapse_of_problem1_paper",
+  "signature": "(pi explicit K (const Nat) (pi explicit h (const Ruliology.CellularAutomata.Rule30Prize.Problem1) (app (const Not) (app (const Rule30UOR.Automatic.KappaCollapse) (local K)))))"
+ },
+ {
+  "lean": "Rule30UOR.KitConstructive.center_not_eventually_constant",
+  "signature": "(app (const Not) (app (const Exists) (const Nat) (lam T (const Nat) (app (const Exists) (const Bool) (lam b (const Bool) (pi explicit t (const Nat) (pi explicit a._@._internal._hyg.0 (app (const LE.le) (const Nat) (const instLENat) (local T) (local t)) (app (const Eq) (const Bool) (app (const Ruliology.CellularAutomata.Rule30Prize.center) (local t)) (local b)))))))))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.crossCarry_self_eq_zero",
+  "signature": "(pi explicit a (const Nat) (app (const Eq) (const Nat) (app (const Rule30UOR.Interfaces.crossCarry) (local a) (local a)) (app (const OfNat.ofNat) (const Nat) (nat 0) (app (const instOfNatNat) (nat 0)))))"
+ },
+ {
+  "lean": "Rule30UOR.Core.phiLinearPow.eq_1",
+  "signature": "(pi explicit x._@.Rule30UOR.Core.3882489211._hygCtx._hyg.8 (const Nat) (app (const Eq) (const Nat) (app (const Rule30UOR.Core.phiLinearPow) (const Nat.zero) (local x._@.Rule30UOR.Core.3882489211._hygCtx._hyg.8)) (local x._@.Rule30UOR.Core.3882489211._hygCtx._hyg.8)))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.settledUpTo_mono",
+  "signature": "(pi explicit D (const Nat) (pi explicit D' (const Nat) (pi explicit t (const Nat) (pi explicit hD (app (const LE.le) (const Nat) (const instLENat) (local D) (local D')) (pi explicit h (app (const Rule30UOR.Interfaces.SettledUpTo) (local D') (local t)) (app (const Rule30UOR.Interfaces.SettledUpTo) (local D) (local t)))))))"
+ },
+ {
+  "lean": "Rule30UOR.Automatic.twopow_ge_succ",
+  "signature": "(pi explicit k (const Nat) (app (const LE.le) (const Nat) (const instLENat) (app (const HAdd.hAdd) (const Nat) (const Nat) (const Nat) (app (const instHAdd) (const Nat) (const instAddNat)) (local k) (app (const OfNat.ofNat) (const Nat) (nat 1) (app (const instOfNatNat) (nat 1)))) (app (const Rule30UOR.Core.twopow) (local k))))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.lhCenter_eq_ldiag",
+  "signature": "(pi explicit t (const Nat) (pi explicit p (const Nat) (pi explicit hp (app (const LE.le) (const Nat) (const instLENat) (local p) (local t)) (app (const Eq) (const Bool) (app (const Rule30UOR.Interfaces.lhCenter) (local t) (local p)) (app (const Rule30UOR.Core.ldiag) (app (const HSub.hSub) (const Nat) (const Nat) (const Nat) (app (const instHSub) (const Nat) (const instSubNat)) (local t) (local p)) (local t))))))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.rdiag_left_edge",
+  "signature": "(pi explicit t (const Nat) (app (const Eq) (const Bool) (app (const Rule30UOR.Core.rdiag) (app (const HMul.hMul) (const Nat) (const Nat) (const Nat) (app (const instHMul) (const Nat) (const instMulNat)) (app (const OfNat.ofNat) (const Nat) (nat 2) (app (const instOfNatNat) (nat 2))) (local t)) (local t)) (const Bool.true)))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.row_testBit_center",
+  "signature": "(pi explicit t (const Nat) (app (const Eq) (const Bool) (app (const Nat.testBit) (app (const Rule30UOR.Core.row) (local t)) (local t)) (app (const Rule30UOR.Core.center) (local t))))"
+ },
+ {
+  "lean": "Rule30UOR.Core.rule_reset",
+  "signature": "(pi explicit a (const Bool) (pi explicit c (const Bool) (app (const Eq) (const Bool) (app (const Rule30UOR.Core.rule) (local a) (const Bool.true) (local c)) (app (const Bool.not) (local a)))))"
+ },
+ {
+  "lean": "Rule30UOR.DefectSource.advancing_right_colour_table",
+  "signature": "(pi explicit Q (const Nat) (pi explicit t (const Nat) (pi explicit k (const Nat) (pi explicit hk (app (const LT.lt) (const Nat) (const instLTNat) (app (const OfNat.ofNat) (const Nat) (nat 0) (app (const instOfNatNat) (nat 0))) (local k)) (app (const And) (pi explicit a._@._internal._hyg.0 (app (const Eq) (const Nat) (app (const Rule30UOR.Collision.collisionCode) (local Q) (local t) (local k)) (app (const OfNat.ofNat) (const Nat) (nat 3) (app (const instOfNatNat) (nat 3)))) (app (const Eq) (const Nat) (app (const Rule30UOR.Collision.leftColour) (local Q) (app (const HAdd.hAdd) (const Nat) (const Nat) (const Nat) (app (const instHAdd) (const Nat) (const instAddNat)) (local t) (app (const OfNat.ofNat) (const Nat) (nat 1) (app (const instOfNatNat) (nat 1)))) (app (const HSub.hSub) (const Nat) (const Nat) (const Nat) (app (const instHSub) (const Nat) (const instSubNat)) (local k) (app (const OfNat.ofNat) (const Nat) (nat 1) (app (const instOfNatNat) (nat 1))))) (app (const OfNat.ofNat) (const Nat) (nat 2) (app (const instOfNatNat) (nat 2))))) (pi explicit a._@._internal._hyg.0 (app (const Eq) (const Nat) (app (const Rule30UOR.Collision.collisionCode) (local Q) (local t) (local k)) (app (const OfNat.ofNat) (const Nat) (nat 5) (app (const instOfNatNat) (nat 5)))) (app (const Eq) (const Nat) (app (const Rule30UOR.Collision.leftColour) (local Q) (app (const HAdd.hAdd) (const Nat) (const Nat) (const Nat) (app (const instHAdd) (const Nat) (const instAddNat)) (local t) (app (const OfNat.ofNat) (const Nat) (nat 1) (app (const instOfNatNat) (nat 1)))) (app (const HSub.hSub) (const Nat) (const Nat) (const Nat) (app (const instHSub) (const Nat) (const instSubNat)) (local k) (app (const OfNat.ofNat) (const Nat) (nat 1) (app (const instOfNatNat) (nat 1))))) (app (const OfNat.ofNat) (const Nat) (nat 1) (app (const instOfNatNat) (nat 1))))))))))"
+ },
+ {
+  "lean": "Rule30UOR.Constructive.nn_pure",
+  "signature": "(pi implicit p (sort 0) (pi explicit h (local p) (app (const Not) (app (const Not) (local p)))))"
+ },
+ {
+  "lean": "Rule30UOR.KernelParity.kernel2Finite_not_of",
+  "signature": "(pi explicit f (pi explicit a._@._internal._hyg.0 (const Nat) (const Bool)) (pi explicit hf (app (const Rule30UOR.Automatic.Kernel2Finite) (local f)) (app (const Rule30UOR.Automatic.Kernel2Finite) (lam t (const Nat) (app (const Bool.not) (app (local f) (local t)))))))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.bxor_eq_xor",
+  "signature": "(pi explicit a (const Bool) (pi explicit b (const Bool) (app (const Eq) (const Bool) (app (const Rule30UOR.Core.bxor) (local a) (local b)) (app (const Bool.xor) (local a) (local b)))))"
+ },
+ {
+  "lean": "Rule30UOR.CentralCollision.no_recurrent_central_collision_of_noPeriod",
+  "signature": "(pi explicit h (const Rule30UOR.Scale.NoPeriod) (const Rule30UOR.CentralCollision.NoRecurrentCentralCollision))"
+ },
+ {
+  "lean": "Rule30UOR.Automatic.no_kappaCollapse_of_problem1",
+  "signature": "(pi explicit h (const Ruliology.CellularAutomata.Rule30Prize.Problem1) (pi explicit K (const Nat) (app (const Not) (app (const Rule30UOR.Automatic.KappaCollapse) (local K)))))"
+ },
+ {
+  "lean": "Rule30UOR.WittDefect.rightDefect_eq_defect",
+  "signature": "(pi explicit Q (const Nat) (pi explicit t (const Nat) (pi explicit j (const Nat) (app (const Eq) (const Bool) (app (const Rule30UOR.WittDefect.rightDefect) (local Q) (local t) (local j)) (app (const Rule30UOR.TemporalDefect.defect) (local Q) (local t) (app (const Nat.cast) (const Int) (const instNatCastInt) (local j)))))))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.eq_zero_iff_testBit",
+  "signature": "(pi explicit n (const Nat) (app (const Iff) (app (const Eq) (const Nat) (local n) (app (const OfNat.ofNat) (const Nat) (nat 0) (app (const instOfNatNat) (nat 0)))) (pi explicit i (const Nat) (app (const Eq) (const Bool) (app (const Nat.testBit) (local n) (local i)) (const Bool.false)))))"
+ },
+ {
+  "lean": "Rule30UOR.Right.leftPos_of_problem1",
+  "signature": "(pi explicit h1 (const Ruliology.CellularAutomata.Rule30Prize.Problem1) (const Rule30UOR.Right.LeftPos))"
+ },
+ {
+  "lean": "Rule30UOR.Interfaces.twopow_eq_pow",
+  "signature": "(pi explicit k (const Nat) (app (const Eq) (const Nat) (app (const Rule30UOR.Core.twopow) (local k)) (app (const HPow.hPow) (const Nat) (const Nat) (const Nat) (app (const instHPow) (const Nat) (const Nat) (app (const instPowNat) (const Nat) (const instNatPowNat))) (app (const OfNat.ofNat) (const Nat) (nat 2) (app (const instOfNatNat) (nat 2))) (local k))))"
+ },
+ {
+  "lean": "Rule30UOR.EdgeSplit.edgeFormula_split",
+  "signature": "(pi explicit t (const Nat) (pi explicit ht (app (const LE.le) (const Nat) (const instLENat) (app (const OfNat.ofNat) (const Nat) (nat 1) (app (const instOfNatNat) (nat 1))) (local t)) (app (const Eq) (const Bool) (app (const Rule30UOR.EdgeSplit.edgeFormula) (local t) (local t)) (app (const Rule30UOR.Core.bxor) (app (const Rule30UOR.EdgeSplit.columnParity) (app (const HSub.hSub) (const Nat) (const Nat) (const Nat) (app (const instHSub) (const Nat) (const instSubNat)) (local t) (app (const OfNat.ofNat) (const Nat) (nat 1) (app (const instOfNatNat) (nat 1))))) (app (const Rule30UOR.EdgeSplit.xorBelow) (app (const Rule30UOR.EdgeSplit.edgeRightTerm) (local t)) (local t))))))"
+ },
+ {
+  "lean": "Rule30UOR.WittDefect.q_divides_bounded",
+  "signature": "(pi explicit r (const Nat) (pi explicit d (const Nat) (app (const Iff) (app (const Rule30UOR.WittDefect.QDivides) (local r) (local d)) (app (const Exists) (const Nat) (lam a (const Nat) (app (const And) (app (const LE.le) (const Nat) (const instLENat) (local a) (local d)) (app (const Eq) (const Nat) (app (const Rule30UOR.Core.phiLinearPow) (local r) (local a)) (local d))))))))"
+ }
+]

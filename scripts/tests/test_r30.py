@@ -344,6 +344,68 @@ class ApiModelTests(unittest.TestCase):
         self.assertIn('(record Claim {id := "b", status := "open", lean := "", depends := (cons "a" (nil String))})', text)
 
 
+class ConvertModelTests(unittest.TestCase):
+    """The converter is a LexLean module: the signature arena, the lexicon as
+    data, `convert` as definitions, and one decided theorem per fixture
+    saying that the module and `convert.py` agree character for character."""
+
+    def test_committed_module_matches_convert_py_the_glossary_and_the_fixtures(self):
+        from tools.r30 import convertmodel
+        r = convertmodel.check()
+        self.assertTrue(r["ok"], r["reason"])
+
+    def test_arena_lays_out_a_binder_type_before_the_binder_before_the_body(self):
+        from tools.r30 import convertmodel
+        nodes, root = convertmodel.encode(sexpr.parse(COUPLING))
+        self.assertEqual(nodes[0]["kind"], "nil")
+        self.assertEqual((nodes[root]["kind"], nodes[root]["atom"], nodes[root]["mode"]), ("pi", "Q", "explicit"))
+        self.assertLess(nodes[root]["left"], root)
+        self.assertGreater(nodes[root]["right"], root)
+        self.assertEqual(nodes[nodes[root]["left"]], {"kind": "const", "atom": "Nat", "mode": "", "left": 0, "right": 0})
+        binders = [n["atom"] for n in nodes if n["kind"] == "pi"]
+        self.assertEqual(binders, ["Q", "t", "h0"])
+
+    def test_fixtures_are_the_named_signatures_with_statements_and_refusals(self):
+        from tools.r30 import convertmodel
+        rows = convertmodel.load_fixtures()
+        self.assertEqual([r["lean"] for r in rows], convertmodel.FIXTURE_NAMES)
+        lx = Lexicon()
+        verdicts = {convertmodel.expected(r["signature"], lx)[0] for r in rows}
+        self.assertEqual(verdicts, {"statement", "refused"})
+        text = convertmodel.MODULE.read_text()
+        self.assertEqual(text.count("proof: decide{}"), len(rows))
+        self.assertIn(f"statement: ((fixtureCount) = {len(rows)})", text)
+
+    def test_lexicon_snapshot_is_the_entries_the_fixtures_resolve(self):
+        """A glossary change outside the snapshot leaves the module unchanged
+        (no re-verification on the proof loop); a change inside it is drift."""
+        from tools.r30 import convertmodel
+        from tools.r30.lexicon import Entry
+        lx = Lexicon()
+        fixtures = [{"lean": "X.y", "signature": COUPLING}]
+        rows, _ = convertmodel.lexemes(fixtures, lx)
+        qids = {r["qid"] for r in rows}
+        self.assertIn("r30.local::bxor", qids)
+        self.assertIn("lexlean.core::eq", qids)
+        self.assertNotIn("r30.observation::edge-diagonal", qids)
+        before = convertmodel.render(fixtures, lx)
+        lx.entries["r30.observation::unrelated-notion"] = Entry("r30.observation::unrelated-notion", "function", "call", 1,
+                                                                 "unrelated", lean_name="Rule30UOR.Nowhere.unrelated", project="paper")
+        self.assertEqual(convertmodel.render(fixtures, lx), before)
+        lx.entries["r30.local::bxor"].surface = "xor"
+        self.assertNotEqual(convertmodel.render(fixtures, lx), before)
+
+    def test_render_states_the_python_statement_as_characters(self):
+        from tools.r30 import convertmodel
+        text = convertmodel.render([{"lean": "X.y", "signature": COUPLING}])
+        verdict, statement = convertmodel.expected(COUPLING)
+        self.assertEqual(verdict, "statement")
+        self.assertTrue(statement.startswith("For every natural number \\(Q\\)"))
+        self.assertIn('(cons "statement" (cons "F" (cons "o" (cons "r" (cons " " ', text)
+        self.assertIn("name: converts1", text)
+        self.assertIn('(record Lexeme {qid := "r30.local::bxor"', text)
+
+
 class McpTests(unittest.TestCase):
     """The MCP tools are derived from the CLI parser: every leaf subcommand is a
     tool, and a tool call rebuilds an argv the parser accepts."""

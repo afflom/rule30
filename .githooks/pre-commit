@@ -2,5 +2,7 @@
 set -euo pipefail
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 cd "$ROOT_DIR"
+# The gate is the first thing to die under memory pressure, never the editor.
+echo 1000 > /proc/self/oom_score_adj 2>/dev/null || true
 ./scripts/check_authoring_policy.sh
 exec python3 ./scripts/validate_git_tree.py

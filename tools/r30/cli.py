@@ -82,18 +82,19 @@ def cmd_interface(args):
 
 def cmd_api(args):
     """The API as a LexLean semantic module (rule30-api/src/Api.lex.tex)."""
-    from . import apimodel, registermodel, archmodel, presentationmodel, prismmodel, site
+    from . import apimodel, registermodel, archmodel, presentationmodel, convertmodel, prismmodel, site
     if args.sub == "sync":
         a, r, h, p = apimodel.sync(), registermodel.sync(), archmodel.sync(), presentationmodel.sync()
-        m, g = prismmodel.sync(), site.sync_logo()
-        if a["changed"] or r["changed"] or h["changed"] or p["changed"]:
+        c, m, g = convertmodel.sync(fixtures=args.fixtures), prismmodel.sync(), site.sync_logo()
+        if a["changed"] or r["changed"] or h["changed"] or p["changed"] or c["changed"]:
             checks.lock("api")
         state = lambda x: " (rewritten)" if x["changed"] else " (current)"
-        out(args, {"api": a, "register": r, "architecture": h, "presentation": p, "model": m, "logo": g},
+        out(args, {"api": a, "register": r, "architecture": h, "presentation": p, "convert": c, "model": m, "logo": g},
             f"{a['module']}: {a['commands']} commands" + state(a) +
             f"\n{r['module']}: {r['claims']} claims" + state(r) +
             f"\n{h['module']}: {h['stakeholders']} stakeholders" + state(h) +
             f"\n{p['module']}: {p['panels']} panels" + state(p) +
+            f"\n{c['module']}: {c['fixtures']} fixtures" + state(c) +
             f"\n{m['model']}: {m['claims']} claims, {m['registers']} registers" + state(m) +
             f"\n{g['logo']}" + state(g))
     elif args.sub == "production":
@@ -108,9 +109,11 @@ def cmd_api(args):
             fail("R306002" if r["stage"] == "replay" else "R306001", f"see the report above ({r['stage']})")
     else:
         results = {"api": apimodel.check(), "register": registermodel.check(), "architecture": archmodel.check(),
-                   "presentation": presentationmodel.check(), "model": prismmodel.check(), "logo": site.check_logo()}
+                   "presentation": presentationmodel.check(), "convert": convertmodel.check(), "model": prismmodel.check(),
+                   "logo": site.check_logo()}
         names = {"api": "Api.lex.tex matches the CLI", "register": "Register.lex.tex matches frontier.toml",
                  "architecture": "Architecture.lex.tex is current", "presentation": "Presentation.lex.tex and Application.lex.tex are current",
+                 "convert": "Convert.lex.tex matches convert.py, the glossary and the fixtures",
                  "model": "model/ registers, schemas, features and CONFORMANCE.md are current", "logo": "site/logo.svg is current"}
         out(args, results, "\n".join(names[k] if v["ok"] else v["reason"] for k, v in results.items()))
         if not all(v["ok"] for v in results.values()):
@@ -486,7 +489,9 @@ def build_parser():
     sp.add_parser("brief", help="the one-screen briefing to start a session").set_defaults(fn=cmd_brief)
     sp.add_parser("chain", help="the reduction tree of the register (depends), with status and Lean names").set_defaults(fn=cmd_chain)
     api = sp.add_parser("api", help="the API as a LexLean semantic module: sync regenerates it from the CLI, check compares").add_subparsers(dest="sub", required=True)
-    api.add_parser("sync", help="regenerate rule30-api/src/Api.lex.tex from the CLI parser and lock").set_defaults(fn=cmd_api)
+    s = api.add_parser("sync", help="regenerate rule30-api/src/Api.lex.tex from the CLI parser and lock")
+    s.add_argument("--fixtures", action="store_true", help="re-capture the converter fixtures (Convert.lex.tex) from Lean first")
+    s.set_defaults(fn=cmd_api)
     api.add_parser("check", help="refuse a CLI that drifted from Api.lex.tex").set_defaults(fn=cmd_api)
     s = api.add_parser("production", help="export the production roots of Api.lex.tex to certified Rust packages (lexlean production build) and replay the bundle")
     s.add_argument("--targets", action="store_true", help="only print the compiler's target descriptors (id and digest)")

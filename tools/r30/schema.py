@@ -75,8 +75,8 @@ RESULTS = {
     "api-check-result": {
         "title": "api check --json: whether each generated surface of rule30-api matches its sources",
         "type": "object", "additionalProperties": False,
-        "required": ["api", "register", "architecture", "presentation", "model", "logo"],
-        "properties": {k: OK for k in ("api", "register", "architecture", "presentation", "model", "logo")},
+        "required": ["api", "register", "architecture", "presentation", "convert", "model", "logo"],
+        "properties": {k: OK for k in ("api", "register", "architecture", "presentation", "convert", "model", "logo")},
     },
     "api-production-result": {
         "title": "api production --json: the certified Rust bundle lexlean production published, or the stage that failed",

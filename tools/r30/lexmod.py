@@ -32,6 +32,8 @@ def type_(t):
         return "Nat"
     if k == "list":
         return f"(List {type_(t['element'])})"
+    if k == "option":
+        return f"(Option {type_(t['value'])})"
     if k == "named":
         return qualified(t["member"])
     raise ValueError(f"no notation for type {k}")

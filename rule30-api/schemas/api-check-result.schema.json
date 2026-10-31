@@ -9,6 +9,7 @@
   "register",
   "architecture",
   "presentation",
+  "convert",
   "model",
   "logo"
  ],
@@ -71,6 +72,25 @@
    }
   },
   "presentation": {
+   "type": "object",
+   "required": [
+    "ok",
+    "reason"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "ok": {
+     "type": "boolean"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   }
+  },
+  "convert": {
    "type": "object",
    "required": [
     "ok",

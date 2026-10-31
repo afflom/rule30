@@ -21,6 +21,61 @@ sheets and the open leaves, published on every push to `main`.
 | `Architecture.lex.tex` | the conceptual model, stakeholders, concerns, viewpoints, views and the quality model, on prism-stdlib's `Foundation.Arch` and `Foundation.Qual` | the stdlib's index references agree with the labeled ids; every concern is framed by a viewpoint of a stakeholder who holds it; every viewpoint governs a view; every command a view or a measure names is a command of `Api` |
 | `Presentation.lex.tex` | the brand, the published artifacts, the panels of the site, the journey of each stakeholder | panels are governed by `Architecture` viewpoints; journeys belong to declared stakeholders; artifacts come from `Api` commands; published paths are distinct |
 | `Application.lex.tex` | the application and its publication (the view workflow) | the entry page and the logo are published artifacts; the workflow's timeout is within the quality threshold; the status marks cover every status of `Register` |
+| `Convert.lex.tex` | the converter from Lean signatures to LexLean statements (`tools/r30/convert.py`): the signature language (`Node`, `Signature`), a snapshot of the glossary entries the fixtures resolve (`Lexeme`), the operator-class, hint and rewrite tables, and `convert` (`check`, `prop`, `math`, binder naming) as definitions | on 28 real signatures of the research modules (`tools/r30/convert_fixtures.json`), `convert` yields exactly the statement, or the refusal, the Python converter produces; the fixture count |
+
+## The converter in LexLean, and what stays in Python
+
+`Convert.lex.tex` is `convert.py` restated: a Lean type as `bin/r30 sig`
+prints it, encoded as a node arena (a binder's type precedes the binder,
+which precedes the body, so a binder's name is a pure function of the arena
+prefix: `nameAt`), a snapshot of the glossary as `Lexeme` rows (surface,
+frame, arity, precedence, associativity, result sort, visibility from
+`r30.observation`, the target of `theorem add`): the core connectives and
+sorts, and exactly the entries `convert.py` resolves on the fixtures, so
+that `theorem add` elsewhere in the glossary never changes the module and
+the gate never re-verifies it on the proof loop; and the converter as first-order definitions
+with structural recursion on a fuel: `check` raises the refusals of the
+first pass in the order Python raises them, `prop` writes the controlled
+English, `math` the islands with precedence-aware parentheses. `convert`
+returns `Out {ok, text}`, `text` the statement or the refusal as a list of
+characters, and `convertsN` decides for each fixture that
+`outcome (convert signatureN)` is `"statement"` or `"refused"` followed by
+the characters of what `convert.py` says. `bin/r30 api sync --fixtures`
+re-captures the fixtures from Lean; `api sync` is the only regenerator, and
+`api check` refuses drift: a change to `convert.py`, to a fixture's
+statement, or to a glossary entry the fixtures resolve (qid, surface, frame,
+arity, precedence, visibility) makes the committed module differ from the
+one `api sync` would write.
+
+The boundary, what the pinned LexLean (0.4.0, language 1.2) cannot carry and
+Python keeps as the interim runtime:
+
+- **string concatenation.** No constructed `String` is decidable by the
+  kernel: `join`, the only string-building primitive, lowers to
+  `String.intercalate`, which Lean's module system leaves opaque to
+  `decide` and `rfl` (literal strings compare fine). The module therefore
+  emits the statement as a list of one-character strings; `convert.py`'s
+  `"".join` is the only step between `Out.text` and the statement.
+- **reading the s-expression** into the arena (`convertmodel.encode`) and
+  the `similar:` candidates of a `no lexeme denotes` refusal, which need
+  lower-casing; the quoted excerpt of two refusals (`application of a
+  non-constant head`, `cannot translate`); and, in binder names, the
+  deletion of characters other than `_`, `✝` and the alphanumerics (`'`
+  becomes `prime` in both).
+- **the glossary** is in the module only as the snapshot above (a lookup
+  of a constant outside it is a `no lexeme denotes` refusal in LexLean
+  where Python might resolve it), and the module is specialized to the
+  `r30.observation` target.
+
+`convert` is not a production root. The pinned compiler links it as one
+(every definition marked `executable`, the root admitting `allocation`,
+`overflow` and `recursion`), but `lexlean production build` then stops:
+certificate A of the root is 7.3 MB, beyond the project's 4 MB
+`max_file_bytes`, and with that limit raised the compiler's own package
+manifest exceeds its canonical-JSON recursion limit (LLI9001, after nine
+minutes of certification), the module's data being nested lists. Until the
+compiler canonicalizes such a manifest, the Python converter stays the
+runtime and the module is the kernel-checked specification.
 
 `stdlib/Foundation/{Arch,Qual}.lex.tex` and `language/prism.{arch,qual}` are
 UOR-Foundation/PrismPM sources (prism-stdlib 0.2.0), migrated to language 1.2
@@ -33,7 +88,7 @@ dependency.
 
 `Architecture.lex.tex` carries an ISO/IEC 25010 quality model on
 `Foundation.Qual`: validation costs time once, in the gate, and never on the
-research loop (one module checks in seconds, `verify api` under a minute, CI
+research loop (one module checks in seconds, `verify api` a few minutes, CI
 renders within five minutes, the gate within half an hour); every module has
 one generator and drift is refused (`api check`); nothing unproved is called
 proved and no theorem uses an axiom beyond `propext` and `Quot.sound`. Each
@@ -108,6 +163,6 @@ bin/r30 api sync                   # regenerate every module, register, schema, 
 bin/r30 api check                  # refuse drift (run by the tests and the gate)
 bin/r30 api production             # export the production roots to certified Rust and replay the bundle (about a minute)
 bin/r30 api production --targets   # the compiler's target descriptors
-bin/r30 verify api                 # lexlean verify of the seven modules (about 25 s)
+bin/r30 verify api                 # lexlean verify of the eight modules (about five minutes; Convert.lex.tex decides 28 conversions)
 bin/r30 view render [--out DIR]    # the current view
 ```
