@@ -566,6 +566,14 @@ Close the goal with \(\lexeme{r30.observation::phi-scale-definition}(k, y)\).
 \end{proof}
 \end{lemma}
 
+\begin{lemma}{ledger-diagonal-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ledgerdiagonal(t) = rowbit(wittwin(0, t), t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ledger-diagonal-definition}(t)\).
+\end{proof}
+\end{lemma}
+
 \end{section}
 
 \begin{section}{masked-observations}
@@ -2518,6 +2526,46 @@ Close the goal with \(\lexeme{r30.observation::not-center-periodic-of-checker}(T
 For every natural number \(Q\) and natural number \(t\), \(rightdefect(Q, t, 1) = defect(Q, t, 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-defect-eq-defect}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-not-ledger-diagonal}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = not(ledgerdiagonal(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-ledger-diagonal}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-periodic-iff-ledger-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), \(centerperiodic(T, P) ↔ ledgerperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-iff-ledger-periodic}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{row-eq-linear-xor-ledger}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(wittrow(t) = wittxor(wittlinpow(t, 1), wittwin(0, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-eq-linear-xor-ledger}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phi-eq-linear-xor-carry}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(y\), \(wittphi(y) = wittxor(wittlinear(y), wittshl(wittcarry(y), 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-eq-linear-xor-carry}(y)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phi-linear-xor}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\), \(wittlinear(wittxor(a, b)) = wittxor(wittlinear(a), wittlinear(b))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-linear-xor}(a, b)\).
 \end{proof}
 \end{theorem}
 

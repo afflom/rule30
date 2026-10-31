@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-not-ledger-diagonal"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const lexlean.std.bool::not) (app (const r30.observation::ledger-diagonal) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.center_eq_not_ledgerDiagonal"
+
+[[form]]
+id = "center-eq-not-ledger-diagonal"
+channel = "math"
+surface = "centereqnotledgerdiagonal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqnotledgerdiagonal) (paren (seq (slot 0))))"

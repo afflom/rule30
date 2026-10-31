@@ -2742,4 +2742,28 @@ only masks the right column-one defect sequence by the periodic white-center ind
 conserves nothing a periodic mask could violate. The reading adds no identity the register lacks
 and is recorded here so that it is not walked again.
 
+**UOR-Framework, lexlean-matmul, and the ledger readout (2026-10-31).** The UOR-Framework
+ontology's precise content is the ring `Z/2^n`, the carry algebra, the identification of bits with
+Witt coordinates of `W_n(F_2)` (Verschiebung `V = 2x`, `δ(x) = (x − x²)/2`), the projections
+between levels, and "resonance" as the multiplicative order of 2 modulo an odd `g`; it contains no
+diagonal readout, automaton, or periodicity statement. `lexlean-matmul` contributes the method
+"decode the code, accumulate exactly, encode once" (exact accumulation, a single terminal
+encoding) and the non-adjacent-form / valuation / carry-ledger techniques, with no 2-adic theory
+beyond concrete carry instances. Read against the orbit, both pick out the same exact object, now
+proved in `Rule30UOR.Ledger`: `phi y = phiLinear y XOR (carry y << 1)` exactly, hence
+`row t = q^t · 1 XOR winWitt 0 t` (the linear evolution of the seed XOR the accumulated carries,
+the ledger), and the central trinomial coefficient of `q^t` is odd for every `t` (`linear_center`,
+by Frobenius `q^(2m) = q(X²)^m` and the spread lemma `phiLinPow_spread`, no binomial sums). So
+
+    center t = ¬ ledgerDiagonal t,   ledgerDiagonal t = bit t of winWitt 0 t,
+
+and `CenterPeriodic T P ↔ LedgerPeriodic T P` (`centerPeriodic_iff_ledgerPeriodic`, registered as
+`ledger-diagonal`). The linear part of Rule 30 contributes the constant 1 to the center; every
+bit of the center's variation is a carry read once, at the diagonal, which is the single
+level-crossing operation. `aperiodic-compensation` is therefore the statement that the diagonal
+of the carry ledger is not eventually periodic. In the UOR vocabulary a center period is the
+resonance `2^P ≡ 1 (mod g)` of the 2-adic number `Σ center(t)·2^t`, which would be rational; the
+ledger form says which digits that rationality would constrain: the carries of the orbit, read
+along the diagonal of the Witt tower.
+
 Problem 1 remains unproved.

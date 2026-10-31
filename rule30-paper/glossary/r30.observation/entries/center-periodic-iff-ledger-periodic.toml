@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-periodic-iff-ledger-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const r30.scale::center-periodic) (local T) (local P)) (app (const r30.observation::ledger-periodic) (local T) (local P))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.centerPeriodic_iff_ledgerPeriodic"
+
+[[form]]
+id = "center-periodic-iff-ledger-periodic"
+channel = "math"
+surface = "centerperiodiciffledgerperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerperiodiciffledgerperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

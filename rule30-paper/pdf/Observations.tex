@@ -498,6 +498,13 @@ For every natural number \(k\) and natural number \(y\), \(\operatorname{wittsca
 \begin{proof}
 The goal follows from \(\operatorname{phiscaledefinition}(k, y)\).
 \end{proof}
+\begin{lemma}
+\label{ll:observations:ledger-diagonal-definition}
+For every natural number \(t\), \(\operatorname{ledgerdiagonal}(t) = \operatorname{rowbit}(\operatorname{wittwin}(0, t), t)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{ledgerdiagonaldefinition}(t)\).
+\end{proof}
 \section{Masked observations}
 \label{ll:observations:masked-observations}
 \begin{theorem}
@@ -2199,5 +2206,40 @@ For every natural number \(Q\) and natural number \(t\), \(\operatorname{rightde
 \end{theorem}
 \begin{proof}
 The goal follows from \(\operatorname{rightdefecteqdefect}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-not-ledger-diagonal}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{not}(\operatorname{ledgerdiagonal}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqnotledgerdiagonal}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-periodic-iff-ledger-periodic}
+For every natural number \(T\) and natural number \(P\), \(\operatorname{centerperiodic}(T, P)\) if and only if \(\operatorname{ledgerperiodic}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerperiodiciffledgerperiodic}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:row-eq-linear-xor-ledger}
+For every natural number \(t\), \(\operatorname{wittrow}(t) = \operatorname{wittxor}(\operatorname{wittlinpow}(t, 1), \operatorname{wittwin}(0, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{roweqlinearxorledger}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phi-eq-linear-xor-carry}
+For every natural number \(y\), \(\operatorname{wittphi}(y) = \operatorname{wittxor}(\operatorname{wittlinear}(y), \operatorname{wittshl}(\operatorname{wittcarry}(y), 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{phieqlinearxorcarry}(y)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phi-linear-xor}
+For every natural number \(a\) and natural number \(b\), \(\operatorname{wittlinear}(\operatorname{wittxor}(a, b)) = \operatorname{wittxor}(\operatorname{wittlinear}(a), \operatorname{wittlinear}(b))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{philinearxor}(a, b)\).
 \end{proof}
 \end{document}
