@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-band-ledger"
+category = "function"
+signature = "(pi ((explicit h1 (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.leftBandLedger"
+
+[[form]]
+id = "left-band-ledger"
+channel = "math"
+surface = "leftbandledger"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftbandledger) (paren (seq (slot 0))))"

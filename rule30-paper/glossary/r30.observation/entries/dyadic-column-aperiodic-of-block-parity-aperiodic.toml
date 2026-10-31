@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dyadic-column-aperiodic-of-block-parity-aperiodic"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.observation::block-parity-aperiodic))) (const r30.observation::dyadic-column-aperiodic))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.dyadicColumnAperiodic_of_blockParityAperiodic"
+
+[[form]]
+id = "dyadic-column-aperiodic-of-block-parity-aperiodic"
+channel = "math"
+surface = "dyadiccolumnaperiodicofblockparityaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name dyadiccolumnaperiodicofblockparityaperiodic) (paren (seq (slot 0))))"

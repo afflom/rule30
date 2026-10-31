@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-of-block-parity-aperiodic"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.observation::block-parity-aperiodic))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.problem1_of_blockParityAperiodic"
+
+[[form]]
+id = "problem1-of-block-parity-aperiodic"
+channel = "math"
+surface = "problem1ofblockparityaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problem1ofblockparityaperiodic) (paren (seq (slot 0))))"

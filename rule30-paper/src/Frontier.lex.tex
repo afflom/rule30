@@ -196,6 +196,22 @@ Close the goal with \(\lexeme{r30.observation::three-class-of-center-periodic}(T
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-scale-free-rows}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), if \(1 ≤ j\), then \(center(twopow(j + 1)) = bxor(center(twopow(j)), blockparity(j))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-twopow-succ-eq}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-left-band}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(6 ≤ t\), then \(center(t) = bxor(rulerbackground(t), interioreightdiagonal(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-ruler-background-bxor-eight}(t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

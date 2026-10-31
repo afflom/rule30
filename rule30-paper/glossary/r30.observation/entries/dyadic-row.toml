@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dyadic-row"
+category = "function"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.dyadicRow"
+
+[[form]]
+id = "dyadic-row"
+channel = "math"
+surface = "dyadicrow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name dyadicrow) (paren (seq (slot 0))))"

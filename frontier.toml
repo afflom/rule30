@@ -22,10 +22,10 @@ depends = ["problem1"]
 [[claim]]
 id = "aperiodic-compensation"
 status = "open"
-statement = "The deep-interior diagonal (the gasket parity of the carries on diagonals >= 3) is never the period-doubling sequence trailingParity (t-2) plus a periodic sequence: ThreeAperiodic. Equivalent to Problem 1 (three-diagonal-band), and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation."
-lean = "Rule30UOR.Band.ThreeAperiodic"
+statement = "The bulk carries, with both edge bands stripped (interiorEightDiagonal: diagonals >= 3 on the regular side and >= 6 on the chaotic side), are never the ruler background trailingParity (t-2) XOR not timeParity t XOR trailingParity (t-4) XOR trailingParity ((t-4)/2) plus a periodic sequence: EightAperiodic. Equivalent to Problem 1 (left-band), to ThreeAperiodic (three-diagonal-band) and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation."
+lean = "Rule30UOR.LeftBand.EightAperiodic"
 since = "2026-10-28"
-note = "Every proved reduction ends here. Exact form (ledger-diagonal, edge-interior-split, edge-parity, three-diagonal-band): center t = trailingParity (t-2) XOR interiorThreeDiagonal t for t >= 2; CenterPeriodic T P iff ThreeAgainstTrailing T P. The period-doubling sequence has no eventual period (trailingParity_not_periodic), so under a center period the deep interior is itself non-periodic (interiorThree_aperiodic_of_centerPeriodic), in the exact automatic way the regular band dictates. Dyadic form: center (2^j) = not stableFormula j (stable-kernel). Black-center absorption (periodic_black_ledger_absorbs) remains the constraint at black-center times. Shape fixed by left-defect-sourcing. first-failure-2adic (refuted): the obstruction is exact, not statistical. Routes A, B, C refuted by the kernel (Rule30UOR.Routes). Measured non-routes: individual regular-side diagonals >= 3 contribute non-periodic automatic sequences; the linear self-carry diagonal is a nontrivial automatic sequence. No closing argument is known."
+note = "Every proved reduction ends here. Exact forms: center t = trailingParity (t-2) XOR interiorThreeDiagonal t (t >= 2) and center t = rulerBackground t XOR interiorEightDiagonal t (t >= 6). Under a center period the deep interior has no eventual period at all (not_threePeriodic_of_centerPeriodic) and the obligation renormalizes with the same period on every dyadic class (dyadic-renormalization). Dyadic form: center (2^j) = not prefix parity of the fixed sequence dyadicRow (scale-free-rows); Problem 1 follows if its block parities are not eventually periodic. Black-center absorption remains the constraint at black-center times. Shape fixed by left-defect-sourcing. first-failure-2adic (refuted): the obstruction is exact, not statistical. Routes A, B, C refuted by the kernel (Rule30UOR.Routes). Measured non-routes: diagonals 3..15 of the regular side contribute non-periodic automatic sequences singly and cumulatively; the linear self-carry diagonal is a nontrivial automatic sequence. No closing argument is known."
 depends = ["recurrent-central-collision", "coupling-law"]
 
 [[claim]]
@@ -228,7 +228,7 @@ status = "open"
 statement = "The responses on the dyadic diagonal, j -> response(2^j, j) (the window [2^j, 2^(j+1)) read at the center), are not eventually periodic."
 lean = "Rule30UOR.Automatic.DyadicResponseAperiodic"
 since = "2026-10-31"
-note = "Equivalent to dyadic-column-aperiodic (dyadicColumnAperiodic_iff_response): unflipping the column, v(j) = center(2^j) XOR [j odd] is the running XOR of the responses, so a period d of the responses is a period 2d of the column. response(2^j, j) = window60 (2^j) (2^j) 0 is out of the cone; by wittRespBool_xor_response_ge it is the complement of wittRespBool(2^j, j), the ledger of the second dyadic block read at the diagonal. Exact handles: duhamel, freshman, Lpow_add, window60_shift, window60_add and dyadic_response_halves (Gasket): the response is the Rule-60 (Sierpinski) propagation of the carry masks of the block [2^j, 2^(j+1)) read at the center, the parity of the carry-mask events on the gasket of the block. The 2-adic continuity caveat here reads: if response(2^j, j) were eventually 1 the column would be eventually constant. The theorem required: this parity is not eventually periodic in j. Not known."
+note = "Named row by row by scale-free-rows: the response of the block [2^j, 2^(j+1)) is blockParity j, the XOR of the scale-free bits dyadicRow m over the block; Problem 1 follows if j -> blockParity j is not eventually periodic (problem1_of_blockParityAperiodic)."
 depends = ["dyadic-response-reduction"]
 
 [[claim]]
@@ -355,4 +355,22 @@ statement = "The obligation renormalizes: the ruler trailingParity moves across 
 lean = "Rule30UOR.Band.threeClass_of_centerPeriodic"
 since = "2026-10-31"
 note = "Rule30UOR.Band: trailingParity_add_twopow_mul, trailingParity_twopow_mul_sub_one, centerPeriodic_twopow_mul, ThreeOffClassPeriodic, threeOffClass_of_centerPeriodic (the sparsity of Path 1 made exact: the difference across 2^k P vanishes on windows of length 2^k - 1), ThreeClassAgainstTrailing, threeClass_of_centerPeriodic (a periodic center is a fixed point of dyadic renormalization of the obligation). With kernel finiteness the class sequences u -> center (2^k u + 1) repeat across scales, so the sampled deep interiors at two scales differ by a constant. Exact structure; no contradiction derived."
+depends = ["three-diagonal-band"]
+
+[[claim]]
+id = "scale-free-rows"
+status = "proved"
+statement = "Each row's contribution to the dyadic column is the same at every scale above the row (rowTerm (2^(j+1)) m = rowTerm (2^j) m for m < 2^j), so the dyadic column is the prefix parity of one fixed sequence dyadicRow and the block response is its block parity: center (2^(j+1)) = center (2^j) XOR blockParity j, wittRespBool (2^j) j = blockParity j. Problem 1 follows if the block parities of dyadicRow are not eventually periodic in j."
+lean = "Rule30UOR.DyadicRow.center_twopow_succ_eq"
+since = "2026-10-31"
+note = "Rule30UOR.DyadicRow: rowTerm, rowTerm_eq_conv, interiorFormula_eq_xorBelow_rowTerm, interior_lt, phiLinearPow_lt_of_lt, phiScale_testBit_double, rowTerm_twopow_succ (Frobenius q^(2^j)(X) = q(X^(2^j)) and the row's cone), rowTerm_twopow_iter, dyadicRow, rowTerm_twopow_eq_dyadicRow, stableFormula_eq_xorBelow, center_twopow_eq_prefix (center (2^j) = not prefix parity of dyadicRow below 2^j), xorBelow_add, blockParity, center_twopow_succ_eq, wittRespBool_twopow_eq_blockParity, response_twopow_eq_not_blockParity, BlockParityPeriodic, BlockParityAperiodic, blockParityPeriodic_of_dilationPeriodic, dyadicColumnAperiodic_of_blockParityAperiodic, problem1_of_blockParityAperiodic. dyadic-response-aperiodic named row by row: the response of the block [2^j, 2^(j+1)) is the XOR of the scale-free bits dyadicRow m over the block."
+depends = ["stable-kernel", "dyadic-response-reduction"]
+
+[[claim]]
+id = "left-band"
+status = "proved"
+statement = "The chaotic-side edge is regular for a few cells (ldiag 2 = 0, ldiag 3 = timeParity, ldiag 4 = 1, ldiag 5 = ldiag 6 = timeParity, ldiag 7 = 0), so the carries on the left diagonals 3..5 are [m odd] for m >= 5 (plus one event at row 3) and contribute not timeParity t XOR trailingParity (t-4) XOR trailingParity ((t-4)/2): for t >= 6, center t = rulerBackground t XOR interiorEightDiagonal t, with both edge bands stripped, and Problem 1 iff EightAperiodic."
+lean = "Rule30UOR.LeftBand.center_eq_rulerBackground_bxor_eight"
+since = "2026-10-31"
+note = "Rule30UOR.LeftBand: ldiag_two_eq .. ldiag_seven_eq, rdiag_eq_ldiag, carry_row_testBit_band, carry_left_six_seven, leftBandSource (honest: 8 at row 3, 7 << (2m-5) for odd m >= 5), interiorEight, leftBandLedger, interiorEightLedger, interiorThreeLedger_split_eight, leftBandDiagonal, interiorEightDiagonal, parityColumn, columnParity_split, trinomialParity_below_two (trinomialParity (n+2) n = trailingParity ((n+2)/2)), leftBandDiagonal_eq, center_eq_left_band, rulerBackground, center_eq_rulerBackground_bxor_eight, EightAgainstRulers, centerPeriodic_iff_eightAgainstRulers, EightAperiodic, problem1_iff_eightAperiodic, problem1_of_eightAperiodic. A first version claimed the left band collapses to the time parity alone; a skeptic found it double-counted the right-edge pair at row 3, and the honest closed form carries two further ruler terms."
 depends = ["three-diagonal-band"]

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "block-parity"
+category = "function"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.blockParity"
+
+[[form]]
+id = "block-parity"
+channel = "math"
+surface = "blockparity"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name blockparity) (paren (seq (slot 0))))"

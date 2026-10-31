@@ -3117,4 +3117,27 @@ automatic sequence, so peeling it does not change the obligation's nature unless
 proved, which would move the obligation to the cross and ledger terms alone. Path 3 (telescoping
 `stableFormula`) is `dyadic_column_step` in the stable vocabulary and is not re-proved.
 
+**Second round of four lenses (2026-10-31): no route, two facets mechanized.** *Scale-free row
+terms* (`Rule30UOR.DyadicRow`): each row's contribution to the dyadic column is the same at every
+scale above the row, `rowTerm (2^{j+1}) m = rowTerm (2^j) m` for `m < 2^j` (Frobenius
+`q^{2^j}(X) = q(X^{2^j})` and the row's cone), so the dyadic column is the prefix parity of **one
+fixed sequence** `dyadicRow`: `center (2^j) = ¬ ⊕_{m < 2^j} dyadicRow m`, and the block response is its
+block parity, `wittRespBool (2^j) j = blockParity j = ⊕_{m ∈ [2^j, 2^{j+1})} dyadicRow m`,
+`center (2^{j+1}) = center (2^j) ⊕ blockParity j`. Problem 1 follows if the block parities of one
+fixed 0/1 sequence are not eventually periodic in `j` (`problem1_of_blockParityAperiodic`); this is
+`dyadic-response-aperiodic` with the response named row by row. *The honest left band*
+(`Rule30UOR.LeftBand`): the chaotic-side edge is regular for a few cells too
+(`ldiag 2 = 0`, `ldiag 3 = timeParity`, `ldiag 4 = 1`, `ldiag 5 = ldiag 6 = timeParity`,
+`ldiag 7 = 0`), so the carries on the left diagonals `3..5` are `[m odd]` for `m ≥ 5` (plus the single
+event of row 3, which the first version double-counted with the right-edge pair, caught by a
+skeptic); their gasket contribution is **not** the time parity alone but
+`¬timeParity t ⊕ trailingParity (t−4) ⊕ trailingParity ((t−4)/2)` (`leftBandDiagonal_eq`, via
+`trinomialParity (n+2) n = trailingParity ((n+2)/2)`), so for `t ≥ 6`
+`center t = rulerBackground t ⊕ interiorEightDiagonal t` with `rulerBackground t =
+trailingParity (t−2) ⊕ ¬timeParity t ⊕ trailingParity (t−4) ⊕ trailingParity ((t−4)/2)`, and
+**Problem 1 ⟺ EightAperiodic** (`problem1_iff_eightAperiodic`): both edge bands stripped, the
+bulk carries are read against rulers at two scales. Rejected as routes though true: the ray-kernel
+law along `t = 2^j u + P + 1` (a restatement of dyadic stability), and the odd-period class split
+(a corollary of `dyadic-renormalization`).
+
 Problem 1 remains unproved.

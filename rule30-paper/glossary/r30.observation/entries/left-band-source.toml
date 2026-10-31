@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-band-source"
+category = "function"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.leftBandSource"
+
+[[form]]
+id = "left-band-source"
+channel = "math"
+surface = "leftbandsource"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftbandsource) (paren (seq (slot 0))))"

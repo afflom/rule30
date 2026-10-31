@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "row-term-twopow-succ"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (pi ((explicit hm (app (const lexlean.std.nat::lt) (local m) (app (const r30.scale::twopow) (local j))))) (app (const lexlean.core::eq) (app (const r30.observation::row-term) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local j) (nat 1))) (local m)) (app (const r30.observation::row-term) (app (const r30.scale::twopow) (local j)) (local m)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.rowTerm_twopow_succ"
+
+[[form]]
+id = "row-term-twopow-succ"
+channel = "math"
+surface = "rowtermtwopowsucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rowtermtwopowsucc) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

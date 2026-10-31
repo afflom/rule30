@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ruler-background"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.rulerBackground"
+
+[[form]]
+id = "ruler-background"
+channel = "math"
+surface = "rulerbackground"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rulerbackground) (paren (seq (slot 0))))"

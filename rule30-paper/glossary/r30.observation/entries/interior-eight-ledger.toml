@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-eight-ledger"
+category = "function"
+signature = "(pi ((explicit h1 (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.interiorEightLedger"
+
+[[form]]
+id = "interior-eight-ledger"
+channel = "math"
+surface = "interioreightledger"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interioreightledger) (paren (seq (slot 0))))"

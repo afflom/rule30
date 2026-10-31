@@ -15,8 +15,8 @@ Feature: register
     Then its oracle accepts it: frontier check: Rule30UOR.WittDefect.center_periodic_of_coupling kernel-checked under propext and Quot.sound and published
 
   @aperiodic-compensation @open
-  Scenario: The deep-interior diagonal (the gasket parity of the carries on diagonals >= 3) is never the period-doubling sequence trailingParity (t-2) plus a periodic sequence: ThreeAperiodic. Equivalent to Problem 1 (three-diagonal-band), and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation.
-    Given the register entry aperiodic-compensation (Rule30UOR.Band.ThreeAperiodic)
+  Scenario: The bulk carries, with both edge bands stripped (interiorEightDiagonal: diagonals >= 3 on the regular side and >= 6 on the chaotic side), are never the ruler background trailingParity (t-2) XOR not timeParity t XOR trailingParity (t-4) XOR trailingParity ((t-4)/2) plus a periodic sequence: EightAperiodic. Equivalent to Problem 1 (left-band), to ThreeAperiodic (three-diagonal-band) and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation.
+    Given the register entry aperiodic-compensation (Rule30UOR.LeftBand.EightAperiodic)
     When the suite measures aperiodic-compensation
     Then the claim is reported open and never asserted
 
@@ -241,3 +241,15 @@ Feature: register
     Given frontier.toml names Rule30UOR.Band.threeClass_of_centerPeriodic for dyadic-renormalization
     When the suite exercises dyadic-renormalization
     Then its oracle accepts it: frontier check: Rule30UOR.Band.threeClass_of_centerPeriodic kernel-checked under propext and Quot.sound and published
+
+  @scale-free-rows @build
+  Scenario: Each row's contribution to the dyadic column is the same at every scale above the row (rowTerm (2^(j+1)) m = rowTerm (2^j) m for m < 2^j), so the dyadic column is the prefix parity of one fixed sequence dyadicRow and the block response is its block parity: center (2^(j+1)) = center (2^j) XOR blockParity j, wittRespBool (2^j) j = blockParity j. Problem 1 follows if the block parities of dyadicRow are not eventually periodic in j.
+    Given frontier.toml names Rule30UOR.DyadicRow.center_twopow_succ_eq for scale-free-rows
+    When the suite exercises scale-free-rows
+    Then its oracle accepts it: frontier check: Rule30UOR.DyadicRow.center_twopow_succ_eq kernel-checked under propext and Quot.sound and published
+
+  @left-band @build
+  Scenario: The chaotic-side edge is regular for a few cells (ldiag 2 = 0, ldiag 3 = timeParity, ldiag 4 = 1, ldiag 5 = ldiag 6 = timeParity, ldiag 7 = 0), so the carries on the left diagonals 3..5 are [m odd] for m >= 5 (plus one event at row 3) and contribute not timeParity t XOR trailingParity (t-4) XOR trailingParity ((t-4)/2): for t >= 6, center t = rulerBackground t XOR interiorEightDiagonal t, with both edge bands stripped, and Problem 1 iff EightAperiodic.
+    Given frontier.toml names Rule30UOR.LeftBand.center_eq_rulerBackground_bxor_eight for left-band
+    When the suite exercises left-band
+    Then its oracle accepts it: frontier check: Rule30UOR.LeftBand.center_eq_rulerBackground_bxor_eight kernel-checked under propext and Quot.sound and published

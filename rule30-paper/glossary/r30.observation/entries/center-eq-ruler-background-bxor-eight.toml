@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-ruler-background-bxor-eight"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 6) (local t)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const r30.local::bxor) (app (const r30.observation::ruler-background) (local t)) (app (const r30.observation::interior-eight-diagonal) (local t))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.center_eq_rulerBackground_bxor_eight"
+
+[[form]]
+id = "center-eq-ruler-background-bxor-eight"
+channel = "math"
+surface = "centereqrulerbackgroundbxoreight"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqrulerbackgroundbxoreight) (paren (seq (slot 0))))"

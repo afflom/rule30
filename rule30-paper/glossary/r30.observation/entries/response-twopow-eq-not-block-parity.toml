@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "response-twopow-eq-not-block-parity"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::le) (nat 1) (local j)))) (app (const lexlean.core::eq) (app (const r30.scale::response) (app (const r30.scale::twopow) (local j)) (local j)) (app (const lexlean.std.bool::not) (app (const r30.observation::block-parity) (local j))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.response_twopow_eq_not_blockParity"
+
+[[form]]
+id = "response-twopow-eq-not-block-parity"
+channel = "math"
+surface = "responsetwopoweqnotblockparity"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name responsetwopoweqnotblockparity) (paren (seq (slot 0))))"

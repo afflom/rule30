@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-two-eq"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 2) (local t)))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (nat 2) (local t)) (const lexlean.std.bool::false))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.ldiag_two_eq"
+
+[[form]]
+id = "ldiag-two-eq"
+channel = "math"
+surface = "ldiagtwoeq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagtwoeq) (paren (seq (slot 0))))"

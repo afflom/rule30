@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-four-eq"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 2) (local t)))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (nat 4) (local t)) (const lexlean.std.bool::true))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.ldiag_four_eq"
+
+[[form]]
+id = "ldiag-four-eq"
+channel = "math"
+surface = "ldiagfoureq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagfoureq) (paren (seq (slot 0))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-left-band"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 6) (local t)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const r30.local::bxor) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::sub) (local t) (nat 2))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const lexlean.std.bool::not) (app (const r30.observation::time-parity) (local t))) (app (const r30.local::bxor) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::sub) (local t) (nat 4))) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::div) (app (const lexlean.std.nat::sub) (local t) (nat 4)) (nat 2))))) (app (const r30.observation::interior-eight-diagonal) (local t)))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.center_eq_left_band"
+
+[[form]]
+id = "center-eq-left-band"
+channel = "math"
+surface = "centereqleftband"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqleftband) (paren (seq (slot 0))))"

@@ -3574,5 +3574,184 @@ Close the goal with \(\lexeme{r30.observation::carry-row-split}(m)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{row-term-twopow-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(m\), if \(m < twopow(j)\), then \(rowterm(twopow(j + 1), m) = rowterm(twopow(j), m)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-twopow-succ}(j, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{row-term-twopow-eq-dyadic-row}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(m\), if \(m < twopow(j)\), then \(rowterm(twopow(j), m) = dyadicrow(m)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-twopow-eq-dyadic-row}(j, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-twopow-succ-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), if \(1 ≤ j\), then \(center(twopow(j + 1)) = bxor(center(twopow(j)), blockparity(j))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-twopow-succ-eq}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{witt-resp-bool-twopow-eq-block-parity}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), if \(1 ≤ j\), then \(wittresp(twopow(j), j) = blockparity(j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::witt-resp-bool-twopow-eq-block-parity}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{response-twopow-eq-not-block-parity}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), if \(1 ≤ j\), then \(response(twopow(j), j) = not(blockparity(j))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::response-twopow-eq-not-block-parity}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{block-parity-periodic-of-dilation-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\) and natural number \(d\), if \(dilationperiodic(1, K, d)\), then \(blockparityperiodic(K + 1, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::block-parity-periodic-of-dilation-periodic}(K, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{dyadic-column-aperiodic-of-block-parity-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(blockparityaperiodic\), then \(dyadiccolumnaperiodic\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::dyadic-column-aperiodic-of-block-parity-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-block-parity-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(blockparityaperiodic\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-block-parity-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-two-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(ldiag(2, t) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-two-eq}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-three-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(ldiag(3, t) = timeparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-three-eq}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-four-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(ldiag(4, t) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-four-eq}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-five-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(3 ≤ t\), then \(ldiag(5, t) = timeparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-five-eq}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-six-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(3 ≤ t\), then \(ldiag(6, t) = timeparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-six-eq}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-seven-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(7, t) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-seven-eq}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-below-two}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(trinomialparity(n + 2, n) = trailingparity((n + 2) / 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-below-two}(n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{interior-three-ledger-split-eight}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(interiorthreeledger(t) = wittxor(leftbandledger(t), interioreightledger(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-three-ledger-split-eight}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-band-diagonal-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(6 ≤ t\), then \(leftbanddiagonal(t) = bxor(not(timeparity(t)), bxor(trailingparity(t - 4), trailingparity((t - 4) / 2)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-band-diagonal-eq}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-left-band}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(6 ≤ t\), then \(center(t) = bxor(trailingparity(t - 2), bxor(bxor(not(timeparity(t)), bxor(trailingparity(t - 4), trailingparity((t - 4) / 2))), interioreightdiagonal(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-left-band}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-ruler-background-bxor-eight}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(6 ≤ t\), then \(center(t) = bxor(rulerbackground(t), interioreightdiagonal(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-ruler-background-bxor-eight}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-periodic-iff-eight-against-rulers}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(6 ≤ T\), then \(centerperiodic(T, P) ↔ eightagainstrulers(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-iff-eight-against-rulers}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-iff-eight-aperiodic}
+\allowaxioms{Quot.sound;propext}
+\(problemone ↔ eightaperiodic\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::problem1-iff-eight-aperiodic}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-eight-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(eightaperiodic\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-eight-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

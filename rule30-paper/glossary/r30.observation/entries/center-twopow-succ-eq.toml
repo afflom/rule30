@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-twopow-succ-eq"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::le) (nat 1) (local j)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local j) (nat 1)))) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const r30.scale::twopow) (local j))) (app (const r30.observation::block-parity) (local j))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.center_twopow_succ_eq"
+
+[[form]]
+id = "center-twopow-succ-eq"
+channel = "math"
+surface = "centertwopowsucceq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centertwopowsucceq) (paren (seq (slot 0))))"

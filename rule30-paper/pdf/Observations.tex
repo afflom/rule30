@@ -3123,4 +3123,161 @@ For every natural number \(m\), \(\operatorname{wittcarry}(\operatorname{wittrow
 \begin{proof}
 The goal follows from \(\operatorname{carryrowsplit}(m)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:row-term-twopow-succ}
+For every natural number \(j\) and natural number \(m\), if \(m < \operatorname{twopow}(j)\), then \(\operatorname{rowterm}(\operatorname{twopow}(j + 1), m) = \operatorname{rowterm}(\operatorname{twopow}(j), m)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rowtermtwopowsucc}(j, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:row-term-twopow-eq-dyadic-row}
+For every natural number \(j\) and natural number \(m\), if \(m < \operatorname{twopow}(j)\), then \(\operatorname{rowterm}(\operatorname{twopow}(j), m) = \operatorname{dyadicrow}(m)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rowtermtwopoweqdyadicrow}(j, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-twopow-succ-eq}
+For every natural number \(j\), if \(1 \le j\), then \(\operatorname{center}(\operatorname{twopow}(j + 1)) = \operatorname{bxor}(\operatorname{center}(\operatorname{twopow}(j)), \operatorname{blockparity}(j))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centertwopowsucceq}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:witt-resp-bool-twopow-eq-block-parity}
+For every natural number \(j\), if \(1 \le j\), then \(\operatorname{wittresp}(\operatorname{twopow}(j), j) = \operatorname{blockparity}(j)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wittrespbooltwopoweqblockparity}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:response-twopow-eq-not-block-parity}
+For every natural number \(j\), if \(1 \le j\), then \(\operatorname{response}(\operatorname{twopow}(j), j) = \operatorname{not}(\operatorname{blockparity}(j))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{responsetwopoweqnotblockparity}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:block-parity-periodic-of-dilation-periodic}
+For every natural number \(K\) and natural number \(d\), if \(\operatorname{dilationperiodic}(1, K, d)\), then \(\operatorname{blockparityperiodic}(K + 1, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{blockparityperiodicofdilationperiodic}(K, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:dyadic-column-aperiodic-of-block-parity-aperiodic}
+If \(\operatorname{blockparityaperiodic}\), then \(\operatorname{dyadiccolumnaperiodic}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{dyadiccolumnaperiodicofblockparityaperiodic}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-block-parity-aperiodic}
+If \(\operatorname{blockparityaperiodic}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofblockparityaperiodic}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-two-eq}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{ldiag}(2, t) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagtwoeq}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-three-eq}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{ldiag}(3, t) = \operatorname{timeparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagthreeeq}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-four-eq}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{ldiag}(4, t) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagfoureq}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-five-eq}
+For every natural number \(t\), if \(3 \le t\), then \(\operatorname{ldiag}(5, t) = \operatorname{timeparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagfiveeq}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-six-eq}
+For every natural number \(t\), if \(3 \le t\), then \(\operatorname{ldiag}(6, t) = \operatorname{timeparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagsixeq}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-seven-eq}
+For every natural number \(t\), \(\operatorname{ldiag}(7, t) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagseveneq}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-below-two}
+For every natural number \(n\), \(\operatorname{trinomialparity}(n + 2, n) = \operatorname{trailingparity}((n + 2) / 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparitybelowtwo}(n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:interior-three-ledger-split-eight}
+For every natural number \(t\), \(\operatorname{interiorthreeledger}(t) = \operatorname{wittxor}(\operatorname{leftbandledger}(t), \operatorname{interioreightledger}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiorthreeledgerspliteight}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-band-diagonal-eq}
+For every natural number \(t\), if \(6 \le t\), then \(\operatorname{leftbanddiagonal}(t) = \operatorname{bxor}(\operatorname{not}(\operatorname{timeparity}(t)), \operatorname{bxor}(\operatorname{trailingparity}(t - 4), \operatorname{trailingparity}((t - 4) / 2)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftbanddiagonaleq}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-left-band}
+For every natural number \(t\), if \(6 \le t\), then \(\operatorname{center}(t) = \operatorname{bxor}(\operatorname{trailingparity}(t - 2), \operatorname{bxor}(\operatorname{bxor}(\operatorname{not}(\operatorname{timeparity}(t)), \operatorname{bxor}(\operatorname{trailingparity}(t - 4), \operatorname{trailingparity}((t - 4) / 2))), \operatorname{interioreightdiagonal}(t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqleftband}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-ruler-background-bxor-eight}
+For every natural number \(t\), if \(6 \le t\), then \(\operatorname{center}(t) = \operatorname{bxor}(\operatorname{rulerbackground}(t), \operatorname{interioreightdiagonal}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqrulerbackgroundbxoreight}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-periodic-iff-eight-against-rulers}
+For every natural number \(T\) and natural number \(P\), if \(6 \le T\), then \(\operatorname{centerperiodic}(T, P)\) if and only if \(\operatorname{eightagainstrulers}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerperiodiciffeightagainstrulers}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-iff-eight-aperiodic}
+\(\operatorname{problemone}\) if and only if \(\operatorname{eightaperiodic}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{problem1iffeightaperiodic}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-eight-aperiodic}
+If \(\operatorname{eightaperiodic}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofeightaperiodic}(h)\).
+\end{proof}
 \end{document}

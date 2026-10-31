@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "block-parity-periodic"
+category = "function"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.BlockParityPeriodic"
+
+[[form]]
+id = "block-parity-periodic"
+channel = "math"
+surface = "blockparityperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name blockparityperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

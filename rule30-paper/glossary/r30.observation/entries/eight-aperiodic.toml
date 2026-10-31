@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "eight-aperiodic"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.EightAperiodic"
+
+[[form]]
+id = "eight-aperiodic"
+channel = "math"
+surface = "eightaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name eightaperiodic)"

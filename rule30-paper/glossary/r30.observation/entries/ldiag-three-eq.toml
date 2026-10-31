@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-three-eq"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 2) (local t)))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (nat 3) (local t)) (app (const r30.observation::time-parity) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.ldiag_three_eq"
+
+[[form]]
+id = "ldiag-three-eq"
+channel = "math"
+surface = "ldiagthreeeq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagthreeeq) (paren (seq (slot 0))))"

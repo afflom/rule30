@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-seven-eq"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (nat 7) (local t)) (const lexlean.std.bool::false)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.ldiag_seven_eq"
+
+[[form]]
+id = "ldiag-seven-eq"
+channel = "math"
+surface = "ldiagseveneq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagseveneq) (paren (seq (slot 0))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "row-term-twopow-eq-dyadic-row"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (pi ((explicit hm (app (const lexlean.std.nat::lt) (local m) (app (const r30.scale::twopow) (local j))))) (app (const lexlean.core::eq) (app (const r30.observation::row-term) (app (const r30.scale::twopow) (local j)) (local m)) (app (const r30.observation::dyadic-row) (local m)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DyadicRow"
+name = "Rule30UOR.DyadicRow.rowTerm_twopow_eq_dyadicRow"
+
+[[form]]
+id = "row-term-twopow-eq-dyadic-row"
+channel = "math"
+surface = "rowtermtwopoweqdyadicrow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rowtermtwopoweqdyadicrow) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

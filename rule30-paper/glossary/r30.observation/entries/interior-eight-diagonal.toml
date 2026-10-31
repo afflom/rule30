@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-eight-diagonal"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftBand"
+name = "Rule30UOR.LeftBand.interiorEightDiagonal"
+
+[[form]]
+id = "interior-eight-diagonal"
+channel = "math"
+surface = "interioreightdiagonal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interioreightdiagonal) (paren (seq (slot 0))))"

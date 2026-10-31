@@ -17,9 +17,9 @@ evidence = "frontier check: Rule30UOR.WittDefect.center_periodic_of_coupling ker
 [[claim]]
 id = "aperiodic-compensation"
 level = "open"
-statement = "The deep-interior diagonal (the gasket parity of the carries on diagonals >= 3) is never the period-doubling sequence trailingParity (t-2) plus a periodic sequence: ThreeAperiodic. Equivalent to Problem 1 (three-diagonal-band), and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation."
+statement = "The bulk carries, with both edge bands stripped (interiorEightDiagonal: diagonals >= 3 on the regular side and >= 6 on the chaotic side), are never the ruler background trailingParity (t-2) XOR not timeParity t XOR trailingParity (t-4) XOR trailingParity ((t-4)/2) plus a periodic sequence: EightAperiodic. Equivalent to Problem 1 (left-band), to ThreeAperiodic (three-diagonal-band) and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation."
 feature = "interfaces/aperiodic-compensation.md"
-evidence = "register: open (Rule30UOR.Band.ThreeAperiodic)"
+evidence = "register: open (Rule30UOR.LeftBand.EightAperiodic)"
 
 [[claim]]
 id = "q-adic-descent"
@@ -279,6 +279,20 @@ level = "build"
 statement = "The obligation renormalizes: the ruler trailingParity moves across 2^k P only on the class n = -1 mod 2^k, where it is the ruler one scale up twisted by [k odd]. Under a center period P the deep interior is exactly 2^k P-periodic off the class t = 1 mod 2^k, and on the class the sampled sequence u -> interiorThreeDiagonal (2^k u + 1) satisfies the same equation against the ruler with the same period P, for every k."
 feature = "interfaces/dyadic-renormalization.md"
 evidence = "frontier check: Rule30UOR.Band.threeClass_of_centerPeriodic kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "scale-free-rows"
+level = "build"
+statement = "Each row's contribution to the dyadic column is the same at every scale above the row (rowTerm (2^(j+1)) m = rowTerm (2^j) m for m < 2^j), so the dyadic column is the prefix parity of one fixed sequence dyadicRow and the block response is its block parity: center (2^(j+1)) = center (2^j) XOR blockParity j, wittRespBool (2^j) j = blockParity j. Problem 1 follows if the block parities of dyadicRow are not eventually periodic in j."
+feature = "interfaces/scale-free-rows.md"
+evidence = "frontier check: Rule30UOR.DyadicRow.center_twopow_succ_eq kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "left-band"
+level = "build"
+statement = "The chaotic-side edge is regular for a few cells (ldiag 2 = 0, ldiag 3 = timeParity, ldiag 4 = 1, ldiag 5 = ldiag 6 = timeParity, ldiag 7 = 0), so the carries on the left diagonals 3..5 are [m odd] for m >= 5 (plus one event at row 3) and contribute not timeParity t XOR trailingParity (t-4) XOR trailingParity ((t-4)/2): for t >= 6, center t = rulerBackground t XOR interiorEightDiagonal t, with both edge bands stripped, and Problem 1 iff EightAperiodic."
+feature = "interfaces/left-band.md"
+evidence = "frontier check: Rule30UOR.LeftBand.center_eq_rulerBackground_bxor_eight kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
 id = "api-modules"
