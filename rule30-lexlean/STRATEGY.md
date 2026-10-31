@@ -2569,3 +2569,50 @@ descent quantities. These are diagnostics only, not theorem premises.
 Problem 1 remains unproved. Any closing argument must produce an invariant of
 the single-seed orbit that the gated mirror would violate; the four families
 above are now excluded as that invariant.
+
+### The observer source through the gate, and a proposed chain audited
+
+The coupling law identifies the observer source's boundary term with the
+center gate: `periodic_observer_source_center_gate`. On a black phase the
+source is the bare carry difference (`periodic_black_observer_source`); on a
+white phase its boundary term is the right column-one defect
+(`periodic_white_observer_source`). Along a rightmost left front of depth `k`
+starting at `b >= T`, `periodic_front_gap_observer_source` proves the boundary
+term is silent for `s + 1 < k`, and `periodic_front_arrival_observer_source`
+proves that at `b + (k - 1)` the front is at depth one, the center is white,
+the right column-one defect is present, and the boundary term is exactly one.
+The white center and the right defect at arrival are consequences of the
+coupling; the window predicates `WhiteCenterGap` and `HeadImportPath` are not
+needed as hypotheses for these statements.
+
+A proposed closing chain (statements 3.54-3.68 and 9.1582-9.1599 in a drafted
+paper fragment) was audited against this repository. Its 3.54-3.58 are the five
+theorems above. Its 3.63 asserts, for every `N`, a coupled window beyond `N`
+with a definite sign opposition between the gate phase at arrival and the
+seed-ancestry right phase; its 3.64 derives `not centerperiodic` from that.
+Neither has a proof here. 3.63 is the recurring admissible successor window
+that every earlier section names as the open obligation, now with a sign
+condition attached. The 9.1587-9.1589 steps reuse the batch-86 band-agreement
+bundles; batch 86 proves those bundles imply `False` with no periodicity
+premise, so an engine built on them is vacuous, exactly as the frontier note
+warns. `problem1_iff_engine_input` is an equivalence, not a discharge. The
+chain's terminal `problemone` therefore rests on 3.63 and 3.64, which are
+unproved. Problem 1 remains unproved.
+
+**The sign in 3.63, decided by the kernel.** The drafted chain's 3.63 asserts,
+at a coupled arrival, `leftGatePhase = - centerSign * rightPhase(start, 2)`.
+That is the negative-sign claim this file already addresses:
+`head_import_path_gate_phase` proves the identity with a plus sign on every
+admissible window, `head_import_path_rejects_negative_gate` proves the minus
+sign is incompatible with the nonzero physical path with no periodicity
+premise, and `periodic_coupled_gate_phase_sign` exports the positive version
+with the recurring source under a hypothetical period. On all 167 finite
+coupled windows of the seed the two sides of 3.63 are negatives of each other.
+`coupled_arrival_gate_phase` adds the one-step special case with minimal
+hypotheses: white centers at `start`, `start + Q`, `start + 1`, `start + 1 + Q`
+and empty heads at `start`, `start + Q` already force the head to pass column
+two unchanged, so the arrival's gate phase is the earlier right phase at
+column two and `centerSign start 1 = 1`. The chain's 3.63 is therefore not a
+lemma awaiting proof; under a periodic center it is false on every window
+`periodic_coupled_cancellation` produces, so 3.64 cannot use it. Problem 1
+remains unproved.

@@ -1772,5 +1772,53 @@ Close the goal with \(\lexeme{r30.observation::center-periodic-of-coupling}(T, P
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{periodic-observer-source-center-gate}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(observersource(m * P, t) = wittxor(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t))), naturalbit(centergate(m * P, t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-source-center-gate}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-black-observer-source}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = true\), then \(observersource(m * P, t) = wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-black-observer-source}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-white-observer-source}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = false\), then \(observersource(m * P, t) = wittxor(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t))), naturalbit(rightdefect(m * P, t, 1)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-white-observer-source}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-front-gap-observer-source}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(centerperiodic(T, P)\), then if \(T ≤ b\), then if \(rightmostleft(m * P, b, k)\), then if \(s + 1 < k\), then \(leftdefect(m * P, b + s, 1) = false ∧ observersource(m * P, b + s) = wittxor(wittcarry(observercode(b + s + m * P)), wittcarry(observercode(b + s)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-front-gap-observer-source}(T, P, m, b, k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-front-arrival-observer-source}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ b\), then if \(rightmostleft(m * P, b, k)\), then \(leftdefect(m * P, b + (k - 1), 1) = true ∧ center(b + (k - 1)) = false ∧ rightdefect(m * P, b + (k - 1), 1) = true ∧ observersource(m * P, b + (k - 1)) = wittxor(wittxor(wittcarry(observercode(b + (k - 1) + m * P)), wittcarry(observercode(b + (k - 1)))), 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-front-arrival-observer-source}(T, P, m, b, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{coupled-arrival-gate-phase}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(start\), if \(center(start) = false\), then if \(center(start + Q) = false\), then if \(center(start + 1) = false\), then if \(center(start + 1 + Q) = false\), then if \(rightcell(start, 1) = false\), then if \(rightcell(start + Q, 1) = false\), then \(leftgatephase(Q, start + 1, 0) = rightphase(Q, start, 2) ∧ leftgatephase(Q, start + 1, 0) = centersign(start, 1) inttimes rightphase(Q, start, 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::coupled-arrival-gate-phase}(Q, start)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

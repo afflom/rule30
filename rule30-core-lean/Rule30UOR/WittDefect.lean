@@ -4287,4 +4287,142 @@ theorem center_periodic_of_coupling (T P : Nat)
     Rule30UOR.Scale.CenterPeriodic T P :=
   (center_periodic_iff_coupling T P).2 ⟨hbase, hcouple⟩
 
+/-! ## The observer source through the center gate
+
+The boundary term of the observer source is the column-minus-one defect, which
+the coupling law identifies with the gated right column-one defect. Along a
+rightmost left front the boundary term is silent until the arrival step, where
+it is exactly one. The white center and the right column-one defect at the
+arrival are consequences of the coupling, not hypotheses. -/
+
+/-- Under a hypothetical center period the observer source boundary term is the
+center gate. -/
+theorem periodic_observer_source_center_gate (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    observerSource (m * P) t =
+      (carry (observerCode (t + m * P)) ^^^ carry (observerCode t)) ^^^
+        (centerGate (m * P) t).toNat := by
+  rw [periodic_observer_source T P m t hc ht, periodic_center_coupling T P m t hc ht]
+
+/-- On a black phase the observer source is the bare carry difference. -/
+theorem periodic_black_observer_source (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
+    (hb : Rule30UOR.Core.center t = true) :
+    observerSource (m * P) t =
+      carry (observerCode (t + m * P)) ^^^ carry (observerCode t) := by
+  rw [periodic_observer_source T P m t hc ht, periodic_black_no_arrival T P m t hc ht hb]
+  simp
+
+/-- On a white phase the boundary term is the right column-one defect. -/
+theorem periodic_white_observer_source (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
+    (hw : Rule30UOR.Core.center t = false) :
+    observerSource (m * P) t =
+      (carry (observerCode (t + m * P)) ^^^ carry (observerCode t)) ^^^
+        (rightDefect (m * P) t 1).toNat := by
+  rw [periodic_observer_source T P m t hc ht, periodic_white_mirror T P m t hc ht hw]
+
+private theorem periodic_center_clean_through (T P m b k : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hb : T ≤ b) :
+    CenterCleanThrough (m * P) b k := by
+  intro j _
+  simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
+    Rule30UOR.DefectFront.center_defect_zero (kit_periodic hc) m (b + j) (by omega)
+
+/-- **Silent gap.** Before a rightmost left front of depth `k` arrives, the
+boundary term vanishes and the observer source is the bare carry difference. -/
+theorem periodic_front_gap_observer_source (T P m b k s : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hb : T ≤ b)
+    (hr : RightmostLeft (m * P) b k) (hs : s + 1 < k) :
+    leftDefect (m * P) (b + s) 1 = false ∧
+      observerSource (m * P) (b + s) =
+        carry (observerCode (b + s + m * P)) ^^^ carry (observerCode (b + s)) := by
+  have prof := rightmost_left_profile (m * P) b k s hr (by omega)
+    (fun j hj => periodic_center_clean_through T P m b k hc hb j (by omega))
+  have hl : leftDefect (m * P) (b + s) 1 = false := prof.2.2 1 (by omega)
+  refine ⟨hl, ?_⟩
+  rw [periodic_observer_source T P m (b + s) hc (by omega), hl]
+  simp
+
+/-- **Arrival.** When the front reaches depth one, the coupling forces a white
+center and a right column-one defect, and the boundary term is exactly one. -/
+theorem periodic_front_arrival_observer_source (T P m b k : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hb : T ≤ b)
+    (hr : RightmostLeft (m * P) b k) :
+    leftDefect (m * P) (b + (k - 1)) 1 = true ∧
+      Rule30UOR.Core.center (b + (k - 1)) = false ∧
+      rightDefect (m * P) (b + (k - 1)) 1 = true ∧
+      observerSource (m * P) (b + (k - 1)) =
+        (carry (observerCode (b + (k - 1) + m * P)) ^^^ carry (observerCode (b + (k - 1)))) ^^^ 1 := by
+  have hk : 0 < k := hr.1
+  have prof := rightmost_left_profile (m * P) b k (k - 1) hr (by omega)
+    (fun j hj => periodic_center_clean_through T P m b k hc hb j (by omega))
+  have hl : leftDefect (m * P) (b + (k - 1)) 1 = true := by
+    have := prof.2.1
+    rwa [show k - (k - 1) = 1 by omega] at this
+  have hg := periodic_center_coupling T P m (b + (k - 1)) hc (by omega)
+  rw [hl] at hg
+  have hgate : centerGate (m * P) (b + (k - 1)) = true := hg.symm
+  unfold centerGate at hgate
+  have hw : Rule30UOR.Core.center (b + (k - 1)) = false := by
+    revert hgate
+    cases Rule30UOR.Core.center (b + (k - 1)) <;> cases rightDefect (m * P) (b + (k - 1)) 1 <;>
+      decide
+  have hrd : rightDefect (m * P) (b + (k - 1)) 1 = true := by
+    revert hgate
+    cases Rule30UOR.Core.center (b + (k - 1)) <;> cases rightDefect (m * P) (b + (k - 1)) 1 <;>
+      decide
+  refine ⟨hl, hw, hrd, ?_⟩
+  rw [periodic_observer_source T P m (b + (k - 1)) hc (by omega), hl]
+  rfl
+
+/-! ## The gate phase at a coupled arrival
+
+At a head import from column two through a white, empty head, the arrival's
+gate phase at the center is the right phase at column two one step earlier.
+The sign is positive. A proposed closing chain asserted the opposite sign; on
+every finite coupled window of the seed the signs agree, and this theorem
+shows the agreement is a one-step consequence of the rule. There is no
+opposition from which to derive a contradiction. -/
+
+private theorem head_passes_import (t : Nat) (hw : Rule30UOR.Core.center t = false)
+    (h1 : rightCell t 1 = false) : rightCell (t + 1) 1 = rightCell t 2 := by
+  rw [right_import_step, hw, h1]
+  simp [rightImport, h1, Rule30UOR.Scale.bxor_eq]
+
+private theorem gate_phase_zero_white (Q t : Nat)
+    (hw : Rule30UOR.Core.center t = false) (hw' : Rule30UOR.Core.center (t + Q) = false) :
+    leftGatePhase Q t 0 = rightPhase Q t 1 := by
+  rw [Rule30UOR.Scale.center_eq_kit] at hw hw'
+  simp only [leftGatePhase, gatePhase, rightPhase, rightCell, Int.natCast_zero, Int.neg_zero,
+    Int.natCast_one, show (0 : Int) + 1 = 1 by omega]
+  change bitValue (cell (t + Q) 0 || cell (t + Q) 1) - bitValue (cell t 0 || cell t 1) = _
+  have e1 : cell t 0 = false := hw
+  have e2 : cell (t + Q) 0 = false := hw'
+  rw [e1, e2]
+  simp
+
+/-- **Coupled arrival phase.** With white centers at `start`, `start + Q`,
+`start + 1`, `start + 1 + Q` and empty heads at `start`, `start + Q`, the gate
+phase at the arrival `start + 1` equals the right phase at column two at
+`start`, with the seed-ancestry sign `centerSign start 1 = 1`. -/
+theorem coupled_arrival_gate_phase (Q start : Nat)
+    (hw0 : Rule30UOR.Core.center start = false)
+    (hw0' : Rule30UOR.Core.center (start + Q) = false)
+    (hw1 : Rule30UOR.Core.center (start + 1) = false)
+    (hw1' : Rule30UOR.Core.center (start + 1 + Q) = false)
+    (h1 : rightCell start 1 = false) (h1' : rightCell (start + Q) 1 = false) :
+    leftGatePhase Q (start + 1) 0 = rightPhase Q start 2 ∧
+      leftGatePhase Q (start + 1) 0 = centerSign start 1 * rightPhase Q start 2 := by
+  have hg := gate_phase_zero_white Q (start + 1) hw1 hw1'
+  have ha := head_passes_import start hw0 h1
+  have hb := head_passes_import (start + Q) hw0' h1'
+  have hq : leftGatePhase Q (start + 1) 0 = rightPhase Q start 2 := by
+    rw [hg]
+    simp only [rightPhase]
+    rw [show start + 1 + Q = start + Q + 1 by omega, ha, hb]
+  refine ⟨hq, ?_⟩
+  rw [hq]
+  simp [centerSign, hw0, bitValue]
+
 end Rule30UOR.WittDefect

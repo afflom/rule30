@@ -1547,4 +1547,46 @@ For every natural number \(T\) and natural number \(P\), if \(\operatorname{cent
 \begin{proof}
 The goal follows from \(\operatorname{centerperiodicofcoupling}(T, P)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-source-center-gate}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{observersource}(m \cdot P, t) = \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observercode}(t + m \cdot P)), \operatorname{wittcarry}(\operatorname{observercode}(t))), \operatorname{naturalbit}(\operatorname{centergate}(m \cdot P, t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserversourcecentergate}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-black-observer-source}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{center}(t) = \operatorname{true}\), then \(\operatorname{observersource}(m \cdot P, t) = \operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observercode}(t + m \cdot P)), \operatorname{wittcarry}(\operatorname{observercode}(t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicblackobserversource}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-white-observer-source}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{center}(t) = \operatorname{false}\), then \(\operatorname{observersource}(m \cdot P, t) = \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observercode}(t + m \cdot P)), \operatorname{wittcarry}(\operatorname{observercode}(t))), \operatorname{naturalbit}(\operatorname{rightdefect}(m \cdot P, t, 1)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicwhiteobserversource}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-front-gap-observer-source}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le b\), then if \(\operatorname{rightmostleft}(m \cdot P, b, k)\), then if \(s + 1 < k\), then \(\operatorname{leftdefect}(m \cdot P, b + s, 1) = \operatorname{false}\) and \(\operatorname{observersource}(m \cdot P, b + s) = \operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observercode}(b + s + m \cdot P)), \operatorname{wittcarry}(\operatorname{observercode}(b + s)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicfrontgapobserversource}(T, P, m, b, k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-front-arrival-observer-source}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le b\), then if \(\operatorname{rightmostleft}(m \cdot P, b, k)\), then \(\operatorname{leftdefect}(m \cdot P, b + (k - 1), 1) = \operatorname{true}\) and \(\operatorname{center}(b + (k - 1)) = \operatorname{false} \land \operatorname{rightdefect}(m \cdot P, b + (k - 1), 1) = \operatorname{true} \land \operatorname{observersource}(m \cdot P, b + (k - 1)) = \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observercode}(b + (k - 1) + m \cdot P)), \operatorname{wittcarry}(\operatorname{observercode}(b + (k - 1)))), 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicfrontarrivalobserversource}(T, P, m, b, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:coupled-arrival-gate-phase}
+For every natural number \(Q\) and natural number \(start\), if \(\operatorname{center}(start) = \operatorname{false}\), then if \(\operatorname{center}(start + Q) = \operatorname{false}\), then if \(\operatorname{center}(start + 1) = \operatorname{false}\), then if \(\operatorname{center}(start + 1 + Q) = \operatorname{false}\), then if \(\operatorname{rightcell}(start, 1) = \operatorname{false}\), then if \(\operatorname{rightcell}(start + Q, 1) = \operatorname{false}\), then \(\operatorname{leftgatephase}(Q, start + 1, 0) = \operatorname{rightphase}(Q, start, 2)\) and \(\operatorname{leftgatephase}(Q, start + 1, 0) = \operatorname{centersign}(start, 1) \cdot \operatorname{rightphase}(Q, start, 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{coupledarrivalgatephase}(Q, start)\).
+\end{proof}
 \end{document}
