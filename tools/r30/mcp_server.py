@@ -19,7 +19,8 @@ from . import cli, repo
 PROTOCOL = "2025-06-18"
 
 TOOLS = [
-    ("status", "Repository status: HEAD, dirty files, frontier counts.", {}),
+    ("status", "Repository status: HEAD, dirty files, frontier counts, whether a gate is running.", {}),
+    ("gate", "Is the pre-commit gate running, its last stage and log tail.", {}),
     ("lexicon_search", "Find lexemes by id, surface or Lean name.",
      {"query": "string", "limit": "integer"}),
     ("lexicon_show", "Show one lexeme (by qualified id or Lean name).", {"id": "string"}),
@@ -42,6 +43,7 @@ TOOLS = [
                                       "lean": "string", "lexeme": "string", "note": "string"}),
     ("frontier_set", "Update a claim.", {"id": "string", "status": "string", "lean": "string",
                                          "lexeme": "string", "note": "string"}),
+    ("frontier_check", "Check frontier.toml against the kernel: proved claims are checked and published.", {}),
     ("commit", "Commit through the pre-commit gate in the background; returns a log path.",
      {"message": "string", "push": "boolean", "paths": "array"}),
     ("tail_log", "Last lines of a log file under .r30/.", {"path": "string", "lines": "integer"}),
@@ -63,6 +65,8 @@ def argv_for(name, a):
     names = list(g("names", []) or [])
     if name == "status":
         return ["status"]
+    if name == "gate":
+        return ["gate"]
     if name == "lexicon_search":
         return ["lexicon", "search", g("query", ""), "--limit", str(g("limit", 40))]
     if name == "lexicon_show":
@@ -99,6 +103,8 @@ def argv_for(name, a):
             if g(k):
                 argv += ["--" + k, g(k)]
         return argv
+    if name == "frontier_check":
+        return ["frontier", "check"]
     if name == "commit":
         return ["commit", "-m", g("message", "")] + (["--push"] if g("push") else []) + list(g("paths") or [])
     if name == "experiment_run":

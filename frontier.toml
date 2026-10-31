@@ -13,10 +13,10 @@ note = "Root claim. Every other claim is a reduction, an obstruction, or a refut
 id = "coupling-law"
 status = "proved"
 statement = "With the center agreeing at t, the next center defect is leftDefect(t,1) XOR ((not center t) AND rightDefect(t,1)); a center period is exactly this coupling at every later time."
-lean = "Rule30UOR.WittDefect.center_periodic_iff_coupling"
-lexeme = "r30.observation::center-defect-coupling"
+lean = "Rule30UOR.WittDefect.center_periodic_of_coupling"
+lexeme = "r30.observation::center-periodic-of-coupling"
 since = "2026-10-30"
-note = "Exact restatement of the lag-P difference of the fixed-point equation. Not a refutation."
+note = "Published as center-defect-coupling (the step) and center-periodic-of-coupling (the converse); the iff center_periodic_iff_coupling is host Lean only because LexLean cannot state a quantifier inside an iff. Exact restatement of the lag-P fixed-point difference, not a refutation."
 
 [[claim]]
 id = "aperiodic-compensation"
@@ -45,7 +45,7 @@ id = "evaluation-point"
 status = "refuted"
 statement = "Evaluating the observer polynomial at a constant point (0, 1, omega, omega^2) constrains the center."
 since = "2026-10-30"
-note = "0 is the center itself, 1 is a coin, omega and omega^2 are conjugate and random-polynomial noise."
+note = "0 is the center itself, 1 is a coin (parity table in experiments/diagnose_front_coupling.py), omega and omega^2 are conjugate and give the q-order histogram of the same script."
 
 [[claim]]
 id = "gate-phase-opposition"
@@ -68,7 +68,7 @@ note = "Batch 86: the bundles imply False with no periodicity premise, so they a
 id = "recurrent-central-collision"
 status = "proved"
 statement = "Problem 1 is equivalent to: under every hypothetical center period, central collisions do not occur arbitrarily late in the band of width 2P."
-lean = "Rule30UOR.CentralCollision.problem1_iff_no_recurrent_central_collision"
+lean = "Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision"
 lexeme = "r30.frontier::problem-one-iff-no-recurrent-central-collision"
 since = "2026-10-27"
 note = "Band form since the choice elimination; the fixed-column form needs the infinite pigeonhole principle."

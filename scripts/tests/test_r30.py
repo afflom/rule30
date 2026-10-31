@@ -123,6 +123,52 @@ class FrontierTests(unittest.TestCase):
         self.assertEqual(frontier.summary()["counts"]["proved"], 1)
 
 
+class FrontierCheckTests(unittest.TestCase):
+    """`frontier check` against a fake kernel and lexicon."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.old = repo.FRONTIER
+        repo.FRONTIER = Path(self.tmp.name) / "frontier.toml"
+        self.addCleanup(lambda: setattr(repo, "FRONTIER", self.old))
+
+    class FakeLean:
+        def __init__(self, table):
+            self.table = table
+
+        def axioms(self, names):
+            return {n: self.table.get(n) for n in names}
+
+    class FakeLexicon:
+        def __init__(self, published):
+            self.published = published
+
+        def get(self, qid):
+            return qid in self.published.values() or None
+
+        def for_lean(self, name, visible=None):
+            qid = self.published.get(name)
+            return type("E", (), {"qid": qid})() if qid else None
+
+    def test_proved_needs_kernel_and_lexeme(self):
+        frontier.add("ok", "fine", status="proved", lean="A.good")
+        frontier.add("unpub", "no lexeme", status="proved", lean="A.hidden")
+        frontier.add("choice", "uses choice", status="proved", lean="A.classical")
+        frontier.add("noexp", "refuted by nothing", status="refuted")
+        frontier.add("dep", "depends on ghost", status="open", depends=["ghost"])
+        lean = self.FakeLean({"A.good": ["propext"], "A.hidden": ["propext"],
+                              "A.classical": ["propext", "Classical.choice"]})
+        lx = self.FakeLexicon({"A.good": "p::good"})
+        problems = frontier.check(lx, lean)
+        joined = "\n".join(problems)
+        self.assertNotIn("ok:", joined)
+        self.assertIn("unpub: proved but unpublished", joined)
+        self.assertIn("Classical.choice", joined)
+        self.assertIn("noexp: refuted without", joined)
+        self.assertIn("dep: depends on unknown claim ghost", joined)
+
+
 class McpTests(unittest.TestCase):
     def test_every_tool_maps_to_argv(self):
         for tool in tool_list():

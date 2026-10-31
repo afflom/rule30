@@ -23,11 +23,13 @@ def cmd_status(args):
     _, st, _ = repo.run(["git", "status", "--short"])
     _, ahead, _ = repo.run(["git", "rev-list", "--count", "origin/main..main"])
     fr = frontier.summary()
+    gate = gate_state()
     data = {"head": log.strip().splitlines()[:1], "dirty": len(st.strip().splitlines()),
             "ahead_of_origin": int(ahead.strip() or 0), "frontier": fr,
-            "lexlean": repo.lexlean_bin()}
+            "lexlean": repo.lexlean_bin(), "gate_running": bool(gate and gate["running"])}
     text = (f"HEAD {data['head'][0] if data['head'] else '?'}\n"
-            f"dirty files: {data['dirty']}; ahead of origin: {data['ahead_of_origin']}\n"
+            f"dirty files: {data['dirty']}; ahead of origin: {data['ahead_of_origin']}"
+            + ("; GATE RUNNING" if data["gate_running"] else "") + "\n"
             f"frontier: {fr['counts']}; open: {', '.join(fr['open']) or '-'}")
     out(args, data, text)
 
@@ -159,16 +161,66 @@ def cmd_frontier(args):
         out(args, rows, "\n".join(f"[{c['status']:7s}] {c['id']}: {c['statement']}"
                                   + (f"  ({c['lean']})" if c.get('lean') else "") for c in rows) or "empty")
     elif args.sub == "add":
-        c = frontier.add(args.id, args.statement, args.status, args.lean, args.lexeme, args.note)
+        c = frontier.add(args.id, args.statement, args.status, args.lean, args.lexeme, args.note, args.depends)
         out(args, c, f"added {c['id']} [{c['status']}]")
     elif args.sub == "set":
-        c = frontier.update(args.id, status=args.status, lean=args.lean, lexeme=args.lexeme, note=args.note)
+        c = frontier.update(args.id, status=args.status, lean=args.lean, lexeme=args.lexeme, note=args.note,
+                            depends=args.depends)
         out(args, c, f"updated {c['id']} [{c['status']}]")
+    elif args.sub == "check":
+        problems = frontier.check()
+        out(args, problems, "frontier register is consistent with the kernel" if not problems
+            else "frontier register problems:\n  " + "\n  ".join(problems))
+        sys.exit(1 if problems else 0)
+
+
+def _gate_process_alive():
+    """A gate process has `scripts/validate_git_tree.py` or `check_ci.sh` as an
+    argument of its own (not inside a shell wrapper's -c string)."""
+    import os
+    for pid in os.listdir("/proc"):
+        if not pid.isdigit():
+            continue
+        try:
+            argv = open(f"/proc/{pid}/cmdline", "rb").read().split(b"\0")
+        except OSError:
+            continue
+        if any(a.endswith((b"validate_git_tree.py", b"check_ci.sh")) for a in argv[1:3]):
+            return True
+    return False
+
+
+def gate_state():
+    """The most recent gate log and whether its process is still running."""
+    logs = sorted(repo.scratch_dir().glob("commit-*.log"))
+    if not logs:
+        return None
+    log = logs[-1]
+    running = _gate_process_alive()
+    tail = log.read_text().splitlines()[-3:]
+    if tail and tail[-1].startswith(("   ", "Everything up-to-date")) and "->" in tail[-1]:
+        running = False  # the push line is the gate's last word
+    stage = next((l for l in reversed(log.read_text().splitlines())
+                  if l.startswith(("make", "./scripts", "python3 scripts", "Validation already", "To https"))), "")
+    return {"log": str(log), "running": running, "stage": stage[:120], "tail": [t[:160] for t in tail]}
+
+
+def cmd_gate(args):
+    st = gate_state()
+    if st is None:
+        out(args, {}, "no gate has run from this checkout")
+        return
+    text = (f"{'RUNNING' if st['running'] else 'finished'}: {st['log']}\n"
+            f"last stage: {st['stage'] or '?'}\n" + "\n".join("  " + t for t in st["tail"]))
+    out(args, st, text)
 
 
 def cmd_commit(args):
     """Stage the given paths (default: all tracked changes plus new entries) and
     commit through the pre-commit gate in the background; optionally push."""
+    st = gate_state()
+    if st and st["running"]:
+        sys.exit(f"a gate is already running ({st['log']}); wait for it: bin/r30 gate")
     paths = args.paths or ["-A"]
     repo.run(["git", "add", *paths])
     log = repo.scratch_dir() / f"commit-{int(time.time())}.log"
@@ -198,6 +250,7 @@ def main(argv=None):
     sp = ap.add_subparsers(dest="cmd", required=True)
 
     sp.add_parser("status").set_defaults(fn=cmd_status)
+    sp.add_parser("gate", help="is the pre-commit gate running, and where is it").set_defaults(fn=cmd_gate)
 
     lex = sp.add_parser("lexicon").add_subparsers(dest="sub", required=True)
     s = lex.add_parser("search"); s.add_argument("query"); s.add_argument("--limit", type=int, default=40)
@@ -236,9 +289,10 @@ def main(argv=None):
     s = fr.add_parser("list"); s.add_argument("--status"); s.set_defaults(fn=cmd_frontier)
     s = fr.add_parser("add"); s.add_argument("id"); s.add_argument("statement")
     s.add_argument("--status", default="open"); s.add_argument("--lean"); s.add_argument("--lexeme"); s.add_argument("--note")
-    s.set_defaults(fn=cmd_frontier)
+    s.add_argument("--depends", nargs="*"); s.set_defaults(fn=cmd_frontier)
     s = fr.add_parser("set"); s.add_argument("id"); s.add_argument("--status"); s.add_argument("--lean")
-    s.add_argument("--lexeme"); s.add_argument("--note"); s.set_defaults(fn=cmd_frontier)
+    s.add_argument("--lexeme"); s.add_argument("--note"); s.add_argument("--depends", nargs="*"); s.set_defaults(fn=cmd_frontier)
+    fr.add_parser("check").set_defaults(fn=cmd_frontier)
 
     s = sp.add_parser("commit"); s.add_argument("-m", "--message", required=True)
     s.add_argument("--push", action="store_true"); s.add_argument("paths", nargs="*")

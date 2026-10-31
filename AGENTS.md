@@ -33,8 +33,10 @@ bin/r30 theorem add <Lean names>       # write entry + statement, lock, check th
 bin/r30 check paper --modules src/Observations.lex.tex   # seconds
 bin/r30 verify paper --modules src/Observations.lex.tex  # seconds; the real probe
 bin/r30 axioms <Lean names>            # must print only propext, Quot.sound
+bin/r30 frontier check                 # the register against the kernel (also run by the gate)
 bin/r30 choice-audit                   # theorems depending on Classical.choice (must be none)
 bin/r30 commit -m "..." [--push]       # commit through the pre-commit gate, in the background
+bin/r30 gate                           # is that gate still running; its last stage and log tail
 bin/r30 experiment run <name> [args]   # a finite diagnostic on the seed
 ```
 
@@ -63,6 +65,23 @@ available as MCP tools: `claude mcp add r30 -- python3 <repo>/tools/r30/mcp_serv
    `rule30-lexlean/STRATEGY.md` if it changes the strategy. Negative results
    are recorded too; see the refuted claims in `frontier.toml`.
 5. `bin/r30 commit -m "..." --push`. The gate refreshes the PDFs into the commit.
+
+## The register is the plan
+
+`frontier.toml` is where the proof is planned and where it is not allowed to
+drift. Every claim has a status and, when it is `proved`, a Lean name that
+`frontier check` confirms is kernel-checked under `{propext, Quot.sound}` and
+published as a lexeme; a `refuted` claim names its Lean refutation or the
+experiment that refutes it; `depends` records which claims a claim rests on.
+`make check-research` runs the check, so a commit cannot carry an unbacked
+"proved". Work happens only on `open` claims; a new route is an `open` claim
+before it is a theorem, and a dead route stays in the file as `refuted` so it is
+not walked again. This is the one idea taken from PrismPM's model registers
+(every registered capability covered by a fixture): every registered claim is
+covered by kernel evidence. PrismPM itself compiles LexLean application models
+into Cargo, Wasm and Hologram artifacts behind a Rust and devcontainer
+toolchain; nothing in a proof repository needs those artifacts, so it is not a
+dependency here.
 
 ## Layout
 
