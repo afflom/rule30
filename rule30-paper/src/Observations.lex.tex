@@ -2673,5 +2673,30 @@ Close the goal with \(\lexeme{r30.observation::cell-right-eq-paper}(t)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{center-kernel-finite-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then \(centerkernelfinite\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-kernel-finite-of-center-periodic}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{not-center-periodic-of-infinite-kernel}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(centerinfinitekernel\), then if \(0 < P\), then \(¬ centerperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::not-center-periodic-of-infinite-kernel}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-infinite-kernel}
+\allowaxioms{Quot.sound;propext}
+if \(centerinfinitekernel\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-infinite-kernel}(h)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

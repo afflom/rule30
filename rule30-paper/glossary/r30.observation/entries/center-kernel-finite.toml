@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-kernel-finite"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.CenterKernelFinite"
+
+[[form]]
+id = "center-kernel-finite"
+channel = "math"
+surface = "centerkernelfinite"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name centerkernelfinite)"

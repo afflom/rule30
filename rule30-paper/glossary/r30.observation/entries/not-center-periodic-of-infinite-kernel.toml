@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-center-periodic-of-infinite-kernel"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit h (const r30.observation::center-infinite-kernel)) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P)))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.not_centerPeriodic_of_infinite_kernel"
+
+[[form]]
+id = "not-center-periodic-of-infinite-kernel"
+channel = "math"
+surface = "notcenterperiodicofinfinitekernel"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notcenterperiodicofinfinitekernel) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

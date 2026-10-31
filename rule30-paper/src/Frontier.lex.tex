@@ -57,6 +57,14 @@ Close the goal with \(\lexeme{r30.observation::center-periodic-iff-ledger-period
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-periodic-finite-kernel}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then \(centerkernelfinite\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-kernel-finite-of-center-periodic}(T, P)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

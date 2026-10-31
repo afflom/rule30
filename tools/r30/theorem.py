@@ -92,6 +92,8 @@ def prepare(lean_name, package, slug=None, lexicon=None, allow_existing=False):
     if qid in lx.entries and not allow_existing:
         raise Unsupported(f"{qid} already exists ({lx.entries[qid].lean_name})")
     category = "proof-constant" if sig["kind"] == "theorem" else "function"
+    if category == "function" and term.kind != "pi":
+        category = "term-constant"  # an arity-0 notion: LexLean permits the atom frame only here
     if category == "function":
         # a definition's signature is its type; arity counts all binders
         args = [n for n, _ in term.binders] if term.kind == "pi" else []

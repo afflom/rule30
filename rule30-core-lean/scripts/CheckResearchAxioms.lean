@@ -39,6 +39,7 @@ import Rule30UOR.ZeroDiagonals
 import Rule30UOR.Horizon
 import Rule30UOR.LeftCone
 import Rule30UOR.Ledger
+import Rule30UOR.Automatic
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
