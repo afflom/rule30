@@ -512,6 +512,27 @@ For every natural number \(t\) and natural number \(j\), \(\operatorname{ledgerb
 \begin{proof}
 The goal follows from \(\operatorname{ledgerbitdefinition}(t, j)\).
 \end{proof}
+\begin{lemma}
+\label{ll:observations:edge-diagonal-definition}
+For every natural number \(t\), \(\operatorname{edgediagonal}(t) = \operatorname{rowbit}(\operatorname{edgeledger}(t), t)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{edgediagonaldefinition}(t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:interior-diagonal-definition}
+For every natural number \(t\), \(\operatorname{interiordiagonal}(t) = \operatorname{rowbit}(\operatorname{interiorledger}(t), t)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{interiordiagonaldefinition}(t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:interior-definition}
+For every natural number \(t\), \(\operatorname{interior}(t) = \operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{wittrow}(t)), \operatorname{edgesource}(t))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{interiordefinition}(t)\).
+\end{proof}
 \section{Masked observations}
 \label{ll:observations:masked-observations}
 \begin{theorem}
@@ -2600,5 +2621,40 @@ For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(\oper
 \end{theorem}
 \begin{proof}
 The goal follows from \(\operatorname{ruleeqlinearxorcarry}(a, b, c)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:carry-split}
+For every natural number \(t\), \(\operatorname{wittcarry}(\operatorname{wittrow}(t)) = \operatorname{wittxor}(\operatorname{edgesource}(t), \operatorname{interior}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{carrysplit}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:carry-row-right-pair}
+For every natural number \(t\), \(\operatorname{rowbit}(\operatorname{wittcarry}(\operatorname{wittrow}(t)), 1) = \operatorname{rdiag}(1, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{carryrowrightpair}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ledger-split}
+For every natural number \(t\), \(\operatorname{wittwin}(0, t) = \operatorname{wittxor}(\operatorname{edgeledger}(t), \operatorname{interiorledger}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ledgersplit}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-not-bxor-diagonals}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{not}(\operatorname{bxor}(\operatorname{edgediagonal}(t), \operatorname{interiordiagonal}(t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqnotbxordiagonals}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:test-bit-phi-lin-pow-eq-trinomial-parity}
+For every natural number \(n\) and natural number \(d\), \(\operatorname{rowbit}(\operatorname{philinpow}(1, n, 1), d) = \operatorname{trinomialparity}(n, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{testbitphilinpoweqtrinomialparity}(n, d)\).
 \end{proof}
 \end{document}

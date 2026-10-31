@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "edge-ledger"
+category = "function"
+signature = "(pi ((explicit h1 (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.edgeLedger"
+
+[[form]]
+id = "edge-ledger"
+channel = "math"
+surface = "edgeledger"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name edgeledger) (paren (seq (slot 0))))"

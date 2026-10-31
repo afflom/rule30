@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "test-bit-phi-lin-pow-eq-trinomial-parity"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::row-bit) (app (const r30.observation::phi-lin-pow) (nat 1) (local n) (nat 1)) (local d)) (app (const r30.observation::trinomial-parity) (local n) (local d))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Ledger"
+name = "Rule30UOR.Ledger.testBit_phiLinPow_eq_trinomialParity"
+
+[[form]]
+id = "test-bit-phi-lin-pow-eq-trinomial-parity"
+channel = "math"
+surface = "testbitphilinpoweqtrinomialparity"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name testbitphilinpoweqtrinomialparity) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

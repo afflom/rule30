@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "edge-diagonal"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.edgeDiagonal"
+
+[[form]]
+id = "edge-diagonal"
+channel = "math"
+surface = "edgediagonal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name edgediagonal) (paren (seq (slot 0))))"

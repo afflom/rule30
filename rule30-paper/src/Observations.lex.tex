@@ -582,6 +582,30 @@ Close the goal with \(\lexeme{r30.observation::ledger-bit-definition}(t, j)\).
 \end{proof}
 \end{lemma}
 
+\begin{lemma}{edge-diagonal-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(edgediagonal(t) = rowbit(edgeledger(t), t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::edge-diagonal-definition}(t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{interior-diagonal-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(interiordiagonal(t) = rowbit(interiorledger(t), t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-diagonal-definition}(t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{interior-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(interior(t) = wittxor(wittcarry(wittrow(t)), edgesource(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-definition}(t)\).
+\end{proof}
+\end{lemma}
+
 \end{section}
 
 \begin{section}{masked-observations}
@@ -2975,6 +2999,46 @@ Close the goal with \(\lexeme{r30.observation::rule-eq-wolfram-thirty}(a, b, c)\
 For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(rule(a, b, c) = bxor(bxor(bxor(a, b), c), b band c)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::rule-eq-linear-xor-carry}(a, b, c)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{carry-split}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(wittcarry(wittrow(t)) = wittxor(edgesource(t), interior(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::carry-split}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{carry-row-right-pair}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rowbit(wittcarry(wittrow(t)), 1) = rdiag(1, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::carry-row-right-pair}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ledger-split}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(wittwin(0, t) = wittxor(edgeledger(t), interiorledger(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ledger-split}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-not-bxor-diagonals}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = not(bxor(edgediagonal(t), interiordiagonal(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-bxor-diagonals}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{test-bit-phi-lin-pow-eq-trinomial-parity}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(d\), \(rowbit(philinpow(1, n, 1), d) = trinomialparity(n, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::test-bit-phi-lin-pow-eq-trinomial-parity}(n, d)\).
 \end{proof}
 \end{theorem}
 

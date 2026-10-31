@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-diagonal"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.interiorDiagonal"
+
+[[form]]
+id = "interior-diagonal"
+channel = "math"
+surface = "interiordiagonal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiordiagonal) (paren (seq (slot 0))))"

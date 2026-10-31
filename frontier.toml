@@ -238,3 +238,12 @@ lean = "Rule30UOR.Rules.rule_eq_linear_xor_carry"
 since = "2026-10-31"
 note = "Rule30UOR.Rules: wolfram n (code n), ANF with Moebius transform anfOf, wolfram_eq_anf (all 256 codes, decide), ANF.eval_split, anf_thirty, thirty_unique_carry_rule, 16 left-permutive codes (leftPermutiveCodes_count) with 30 among them. The coherence of all rules is not the solution: rules with periodic centers share the decomposition; what is specific to Rule 30 is the carry bc and left-permutivity (bijective row map, backward determinacy, Jen). Published: wolfram, rule_eq_wolfram_thirty, rule_eq_linear_xor_carry; the all-codes theorems are host-level (structures and lists are outside LexLean's first-order surface)."
 depends = ["ledger-diagonal"]
+
+[[claim]]
+id = "edge-interior-split"
+status = "proved"
+statement = "Two carry events of every row are explicit (the left edge pair and the right pair at the right edge); removing them splits the ledger by linearity into an edge-sourced ledger, the Rule-150 evolution of a periodic source, and the ledger of the interior carries, and center t = not (edgeDiagonal t XOR interiorDiagonal t)."
+lean = "Rule30UOR.EdgeSplit.center_eq_not_bxor_diagonals"
+since = "2026-10-31"
+note = "Rule30UOR.EdgeSplit: carry_row_left_edge (bit 2t of the carry is set), carry_row_right_pair (bit 1 is rdiag 1 t), carry_split, ledger_split, center_eq_not_bxor_diagonals; interior_testBit_* show the interior mask carries no edge event. Next exact step: the edge diagonal in closed form (linear CA readout of a periodic source, 2-automatic), after which aperiodic-compensation reads: the interior diagonal is not eventually periodic against that background."
+depends = ["ledger-diagonal", "all-rules-facet"]

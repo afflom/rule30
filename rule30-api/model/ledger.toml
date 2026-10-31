@@ -190,6 +190,13 @@ feature = "interfaces/all-rules-facet.md"
 evidence = "frontier check: Rule30UOR.Rules.rule_eq_linear_xor_carry kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "edge-interior-split"
+level = "build"
+statement = "Two carry events of every row are explicit (the left edge pair and the right pair at the right edge); removing them splits the ledger by linearity into an edge-sourced ledger, the Rule-150 evolution of a periodic source, and the ledger of the interior carries, and center t = not (edgeDiagonal t XOR interiorDiagonal t)."
+feature = "interfaces/edge-interior-split.md"
+evidence = "frontier check: Rule30UOR.EdgeSplit.center_eq_not_bxor_diagonals kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register and the architecture are LexLean semantic modules verified by the gate."

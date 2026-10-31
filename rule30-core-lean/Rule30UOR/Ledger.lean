@@ -439,4 +439,95 @@ theorem center_succ_ledger_paper (t : Nat) (ht : 1 ≤ t) :
       (bxor (trailingParity t) (ledgerBit t (t - 1))) := by
   rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]; exact center_succ_ledger t ht
 
+/-! ## The trinomial triangle is 2-automatic
+
+The coefficient of `X^d` in `q^n` is computed by reading the binary digits of
+`n` and `d` together: `q^(2n') = q(X²)^n'` has coefficients only at even
+positions, and `q^(2n'+1) = q · q(X²)^n'` adds the two neighbours. The
+recursion `trinomialParity` is a 2-automaton on the pair `(n, d)`, and
+`testBit_phiLinPow_eq_trinomialParity` identifies it with the linear part of
+every row: the automatic background of the center is this sequence. -/
+
+/-- Coefficient parity of `X^d` in `(1 + X + X²)^n`, by binary digits (with fuel `f ≥ n`). -/
+def trinomialParityFuel : Nat → Nat → Nat → Bool
+  | 0, _, d => decide (d = 0)
+  | f + 1, n, d =>
+    if n = 0 then decide (d = 0)
+    else if n % 2 = 0 then
+      (if d % 2 = 0 then trinomialParityFuel f (n / 2) (d / 2) else false)
+    else
+      bxor (bxor (if d % 2 = 0 then trinomialParityFuel f (n / 2) (d / 2) else false)
+        (if 1 ≤ d then (if (d - 1) % 2 = 0 then trinomialParityFuel f (n / 2) ((d - 1) / 2) else false) else false))
+        (if 2 ≤ d then (if (d - 2) % 2 = 0 then trinomialParityFuel f (n / 2) ((d - 2) / 2) else false) else false)
+
+def trinomialParity (n d : Nat) : Bool := trinomialParityFuel n n d
+
+/-- The spread coefficients of `q(X²)^m`: nonzero only at even positions. -/
+theorem testBit_phiLinPow_two (m d : Nat) :
+    (phiLinPow 2 m 1).testBit d = (if d % 2 = 0 then (phiLinPow 1 m 1).testBit (d / 2) else false) := by
+  have h := phiLinPow_spread 2 (by decide) m (d / 2) (d % 2) (Nat.mod_lt d (by decide))
+  rw [show 2 * (d / 2) + d % 2 = d by cfomega] at h
+  rw [h]
+  rcases Nat.mod_two_eq_zero_or_one d with hd | hd <;> rw [hd] <;> simp
+
+theorem trinomialParityFuel_congr : ∀ f g n d, n ≤ f → n ≤ g →
+    trinomialParityFuel f n d = trinomialParityFuel g n d
+  | 0, g, n, d, hf, _ => by
+    have : n = 0 := by cfomega
+    subst this
+    cases g <;> rfl
+  | f + 1, 0, n, d, _, hg => by
+    have : n = 0 := by cfomega
+    subst this
+    rfl
+  | f + 1, g + 1, n, d, hf, hg => by
+    show (if n = 0 then decide (d = 0) else _) = (if n = 0 then decide (d = 0) else _)
+    by_cases hn : n = 0
+    · rw [if_pos hn, if_pos hn]
+    · rw [if_neg hn, if_neg hn]
+      have h1 := trinomialParityFuel_congr f g (n / 2) (d / 2) (by cfomega) (by cfomega)
+      have h2 := trinomialParityFuel_congr f g (n / 2) ((d - 1) / 2) (by cfomega) (by cfomega)
+      have h3 := trinomialParityFuel_congr f g (n / 2) ((d - 2) / 2) (by cfomega) (by cfomega)
+      rw [h1, h2, h3]
+
+/-- **The linear part is the trinomial automaton.** -/
+theorem testBit_phiLinPow_eq_trinomialParity : ∀ n d, (phiLinPow 1 n 1).testBit d = trinomialParity n d := by
+  intro n
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    intro d
+    rcases Nat.eq_zero_or_pos n with h0 | hpos
+    · subst h0
+      show (1 : Nat).testBit d = decide (d = 0)
+      rw [show (1 : Nat) = 2 ^ 0 from rfl, Nat.testBit_two_pow]
+      cases d <;> rfl
+    · unfold trinomialParity
+      obtain ⟨f, rfl⟩ : ∃ f, n = f + 1 := ⟨n - 1, by cfomega⟩
+      show (phiLinPow 1 (f + 1) 1).testBit d = (if f + 1 = 0 then decide (d = 0) else _)
+      rw [if_neg (by cfomega)]
+      have hrec : ∀ e, trinomialParityFuel f ((f + 1) / 2) e = trinomialParity ((f + 1) / 2) e := fun e =>
+        trinomialParityFuel_congr f ((f + 1) / 2) ((f + 1) / 2) e (by cfomega) (Nat.le_refl _)
+      rcases Nat.mod_two_eq_zero_or_one (f + 1) with he | he
+      · rw [if_pos he]
+        have hn : f + 1 = 2 * ((f + 1) / 2) := by cfomega
+        rw [hn, phiLinPow_two_mul, testBit_phiLinPow_two, ← hn, hrec, ih ((f + 1) / 2) (by cfomega)]
+      · rw [if_neg (by cfomega)]
+        have hn : f + 1 = 2 * ((f + 1) / 2) + 1 := by cfomega
+        rw [hn]
+        show (phiLin 1 (phiLinPow 1 (2 * ((f + 1) / 2)) 1)).testBit d = _
+        rw [phiLinPow_two_mul, testBit_phiLin, testBit_phiLinPow_two, ← hn]
+        rw [show 2 * 1 = 2 from rfl]
+        have e1 : ∀ b : Bool, (decide (d ≥ 1) && b) = (if 1 ≤ d then b else false) := by
+          intro b
+          rcases Nat.lt_or_ge d 1 with h | h
+          · rw [decide_eq_false (by cfomega), if_neg (by cfomega)]; rfl
+          · rw [decide_eq_true h, if_pos h]; rfl
+        have e2 : ∀ b : Bool, (decide (d ≥ 2) && b) = (if 2 ≤ d then b else false) := by
+          intro b
+          rcases Nat.lt_or_ge d 2 with h | h
+          · rw [decide_eq_false (by cfomega), if_neg (by cfomega)]; rfl
+          · rw [decide_eq_true h, if_pos h]; rfl
+        rw [testBit_phiLinPow_two, testBit_phiLinPow_two, e1, e2, hrec, hrec, hrec]
+        simp only [ih ((f + 1) / 2) (by cfomega), Rule30UOR.Scale.bxor_eq]
+
 end Rule30UOR.Ledger

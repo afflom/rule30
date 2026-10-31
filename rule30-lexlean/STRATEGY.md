@@ -2907,4 +2907,26 @@ backward determinacy of the center's past, and Jen's theorem. What has to be pro
 property of this one nonlinear term, the carry `bc`, under this one linear part, `q = 1 + X + X²`:
 that its ledger, read on the dyadic diagonal, never becomes periodic.
 
+**Edge and interior carries (`Rule30UOR.EdgeSplit`).** Two carry events of every row are
+explicit: the left edge pair `(-t, -t+1)` (both edge diagonals black, bit `2t` of the carry,
+`carry_row_left_edge`) and the right pair `(0, 1)` at the right edge (bit `1`, equal to
+`rdiag 1 t`, `carry_row_right_pair`). Removing them from the carry mask (`interior`) splits the
+ledger by linearity, `winWitt 0 t = edgeLedger t ⊕ interiorLedger t` (`ledger_split`), into the
+Rule-150 evolution of an explicit periodic source and the ledger of the bulk carries, and
+`center t = ¬(edgeDiagonal t ⊕ interiorDiagonal t)` (`center_eq_not_bxor_diagonals`). The edge
+source is periodic (`rdiag 1` alternates), so its diagonal is a linear-CA readout of a periodic
+input; the solution sits in the interior diagonal, the bulk carries propagated by the trinomial
+kernel to the center. Next exact step: the edge diagonal in closed form (a 2-automatic
+sequence), after which `aperiodic-compensation` reads: the interior diagonal is not eventually
+periodic against that background.
+
+**The trinomial triangle is 2-automatic (`Ledger.trinomialParity`).** The coefficient of `X^d` in
+`q^n` is computed by reading the binary digits of `n` and `d` together (`q^(2n') = q(X²)^n'` has
+coefficients only at even positions; `q^(2n'+1) = q · q(X²)^n'` adds the two neighbours), and
+`testBit_phiLinPow_eq_trinomialParity` identifies this 2-automaton on `(n, d)` with the linear part
+of every row. Every propagated carry therefore reaches the center through an explicitly automatic
+kernel: the edge diagonal is a finite XOR of `trinomialParity` values, and the interior diagonal is
+the same XOR over the bulk carry events. The automatic background is now exact; what remains is
+the bulk.
+
 Problem 1 remains unproved.

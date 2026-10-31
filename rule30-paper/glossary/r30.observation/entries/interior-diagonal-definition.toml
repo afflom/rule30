@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-diagonal-definition"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::interior-diagonal) (local t)) (app (const r30.observation::row-bit) (app (const r30.observation::interior-ledger) (local t)) (local t))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.interiorDiagonal.eq_1"
+
+[[form]]
+id = "interior-diagonal-definition"
+channel = "math"
+surface = "interiordiagonaldefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiordiagonaldefinition) (paren (seq (slot 0))))"

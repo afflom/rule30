@@ -116,6 +116,14 @@ Close the goal with \(\lexeme{r30.observation::rule-eq-linear-xor-carry}(a, b, c
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-edge-interior-split}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = not(bxor(edgediagonal(t), interiordiagonal(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-bxor-diagonals}(t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

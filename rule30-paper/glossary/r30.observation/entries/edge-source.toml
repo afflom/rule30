@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "edge-source"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.edgeSource"
+
+[[form]]
+id = "edge-source"
+channel = "math"
+surface = "edgesource"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name edgesource) (paren (seq (slot 0))))"

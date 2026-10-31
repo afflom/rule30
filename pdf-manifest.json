@@ -1,18 +1,18 @@
 {
   "documents": {
     "Core": {
-      "pdf_sha256": "e02baf8a7882dbdfb5a7e052776c8ff6ac7e200e483d5d1df5970f89ff9900d9",
+      "pdf_sha256": "8300b2a6ac5f3b61e8bbda88af60fbdf14fcc07ddbba5cc12fda163d67d45251",
       "tex_sha256": "a7cd1807077baa1d1ca34015faf500a24477991859427f4db646e5f230fe54e2"
     },
     "Observations": {
-      "pdf_sha256": "be31c8387747047c24f4d3092978db66ff7ab0a3a1dae18811da90e2a62acd44",
-      "tex_sha256": "29458320bf591e22d18ef1a4d89778570f8fe6dae4461685c42edc7cd3260b97"
+      "pdf_sha256": "6c053108ddef6b6309afa771c65df52216236cb07f7118eeb54ddfd9e4ca89c6",
+      "tex_sha256": "5cae3f91a938f0c6d97f1424422296bdac9fbe71d2a6355258bc8d1981877b4d"
     },
     "Paper": {
-      "pdf_sha256": "245217a356c39f1476cc458372a87db5df6ffc5abba843a1ac063c64b5847b34",
+      "pdf_sha256": "749b25abb8e83a92ee348178e20a2ec1d2aee277de8564ae3fecad4aa19aa8c1",
       "tex_sha256": "875dbbcf8432f4bbdb28bbfac846712a8c06a85bbc0f4691729f8cdfe3841653"
     }
   },
-  "generated_at_utc": "2026-10-31T18:29:25.775225+00:00",
-  "source_digest": "b46e1118bbe34644f874f4c92123dae8432eb5c98c885ac3ad25674c3476a4a1"
+  "generated_at_utc": "2026-10-31T18:40:27.951374+00:00",
+  "source_digest": "8f87fa72679d2b7ce920c55815892acb8fe3206c6d8fbf65d7d69c6a5d53fd6a"
 }
