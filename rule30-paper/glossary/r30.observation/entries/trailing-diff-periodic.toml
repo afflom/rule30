@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trailing-diff-periodic"
+category = "function"
+signature = "(pi ((explicit S (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.TrailingDiffPeriodic"
+
+[[form]]
+id = "trailing-diff-periodic"
+channel = "math"
+surface = "trailingdiffperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trailingdiffperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

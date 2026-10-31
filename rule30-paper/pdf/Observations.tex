@@ -3074,4 +3074,18 @@ If \(\operatorname{stableformulaaperiodic}\), then \(\operatorname{problemone}\)
 Assume \(h\).
 The goal follows from \(\operatorname{problem1ofstableformulaaperiodic}(h)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:trailing-diff-not-periodic}
+For every natural number \(S\) and natural number \(P\) and natural number \(Q\), if \(0 < P\), then if \(0 < Q\), then not \(\operatorname{trailingdiffperiodic}(S, P, Q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trailingdiffnotperiodic}(S, P, Q)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:not-three-periodic-of-center-periodic}
+For every natural number \(T\) and natural number \(P\) and natural number \(S\) and natural number \(Q\), if \(0 < P\), then if \(0 < Q\), then if \(\operatorname{centerperiodic}(T, P)\), then not \(\operatorname{threeperiodic}(S, Q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{notthreeperiodicofcenterperiodic}(T, P, S, Q)\).
+\end{proof}
 \end{document}

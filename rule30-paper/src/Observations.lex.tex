@@ -3518,5 +3518,21 @@ Close the goal with \(\lexeme{r30.observation::problem1-of-stable-formula-aperio
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{trailing-diff-not-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(S\) and natural number \(P\) and natural number \(Q\), if \(0 < P\), then if \(0 < Q\), then \(¬ trailingdiffperiodic(S, P, Q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trailing-diff-not-periodic}(S, P, Q)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{not-three-periodic-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(S\) and natural number \(Q\), if \(0 < P\), then if \(0 < Q\), then if \(centerperiodic(T, P)\), then \(¬ threeperiodic(S, Q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::not-three-periodic-of-center-periodic}(T, P, S, Q)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

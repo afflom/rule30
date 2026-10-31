@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trailing-diff-not-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit S (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q)))) (app (const lexlean.core::lnot) (app (const r30.observation::trailing-diff-periodic) (local S) (local P) (local Q)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.trailingDiff_not_periodic"
+
+[[form]]
+id = "trailing-diff-not-periodic"
+channel = "math"
+surface = "trailingdiffnotperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trailingdiffnotperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

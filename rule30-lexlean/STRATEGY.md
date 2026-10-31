@@ -3082,4 +3082,14 @@ kernel is dyadically stable, `trinomialParity (2^{j+1}−1−m) d = trinomialPar
 below degree `2^j`), so the dyadic column reads the carries through a fixed inverse kernel
 `1/q^{m+1}` (`Rule30UOR.StableKernel`): `DyadicColumnAperiodic ⟺ StableFormulaAperiodic`.
 
+*The band stops at three (measured 2026-10-31).* Diagonals `3 … 15`, singly or cumulatively, with or
+without `trailingParity (t−2)`, show no eventual period in the first 700 steps: the three-diagonal
+band is the exact extent of the regular side's transparency. Under a center period `P` the deep
+interior is not `P`-periodic (`interiorThree_aperiodic_of_centerPeriodic`), and not eventually
+periodic with any period `Q` (`not_threePeriodic_of_centerPeriodic`: if `e(t) = a(t+P) ⊕ a(t)` were
+`Q`-periodic then `G(s) = a(s+PQ) ⊕ a(s)` would be `P`-periodic, hence `PQ`-periodic, and `a` would
+be `2PQ`-periodic, `trailingDiff_not_periodic`), so a periodic center forces the deep interior to be
+exactly "period-doubling plus periodic", a specific 2-automatic non-periodic sequence, and Problem 1
+is the statement that it never is.
+
 Problem 1 remains unproved.

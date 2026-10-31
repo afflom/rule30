@@ -507,4 +507,72 @@ theorem dyadic_one_obligation (T P k : Nat) (hc : Rule30UOR.Scale.CenterPeriodic
   rw [bxor_aux_comm (decide (k % 2 = 1))]
   exact bxor_aux_period _ _ _ _ hc'
 
+/-! ## Under a center period the deep interior has no eventual period at all
+
+`ThreeAgainstTrailing T P` makes `e(t) = a(t+P) ⊕ a(t)` (with `a = trailingParity (· − 2)`)
+the difference of the deep interior across `P`. If the deep interior were eventually `Q`-periodic,
+`e` would be too; then `G(s) = a(s+QP) ⊕ a(s)` would be `P`-periodic, hence `QP`-periodic, and `a`
+would be `2QP`-periodic, which `trailingParity_not_periodic` forbids. -/
+
+/-- A period iterates (host lemma, function argument). -/
+theorem period_mul (g : Nat → Bool) (S p : Nat) (h : ∀ s, S ≤ s → g (s + p) = g s) :
+    ∀ k s, S ≤ s → g (s + k * p) = g s
+  | 0, s, _ => by rw [Nat.zero_mul, Nat.add_zero]
+  | k + 1, s, hs => by
+    rw [Nat.succ_mul, ← Nat.add_assoc, h (s + k * p) (by cfomega), period_mul g S p h k s hs]
+
+theorem bxor_aux_swap (a b c d : Bool) (h : bxor a b = bxor c d) : bxor a c = bxor b d := by
+  cases a <;> cases b <;> cases c <;> cases d <;> first | rfl | exact absurd h (by decide)
+
+/-- The difference of the trailing-ones parity across `P` is `Q`-periodic from `S`. -/
+def TrailingDiffPeriodic (S P Q : Nat) : Prop :=
+  ∀ s, S ≤ s → bxor (trailingParity (s + Q + P)) (trailingParity (s + Q)) =
+    bxor (trailingParity (s + P)) (trailingParity s)
+
+/-- **The difference of the period-doubling sequence across any shift has no eventual period.** -/
+theorem trailingDiff_not_periodic (S P Q : Nat) (hP : 0 < P) (hQ : 0 < Q) :
+    ¬ TrailingDiffPeriodic S P Q := by
+  intro h
+  have he : ∀ s, S ≤ s → (fun s => bxor (trailingParity (s + P)) (trailingParity s)) (s + Q)
+      = (fun s => bxor (trailingParity (s + P)) (trailingParity s)) s := fun s hs => h s hs
+  have hG : ∀ s, S ≤ s → (fun s => bxor (trailingParity (s + P * Q)) (trailingParity s)) (s + P)
+      = (fun s => bxor (trailingParity (s + P * Q)) (trailingParity s)) s := by
+    intro s hs
+    have h1 := period_mul (fun s => bxor (trailingParity (s + P)) (trailingParity s)) S Q he P s hs
+    show bxor (trailingParity (s + P + P * Q)) (trailingParity (s + P)) =
+      bxor (trailingParity (s + P * Q)) (trailingParity s)
+    rw [show s + P + P * Q = s + P * Q + P by cfomega]
+    exact bxor_aux_swap _ _ _ _ h1
+  have hpos : 0 < P * Q := Nat.mul_pos hP hQ
+  apply trailingParity_not_periodic S (2 * (P * Q)) (by cfomega)
+  intro s hs
+  have h2 := period_mul (fun s => bxor (trailingParity (s + P * Q)) (trailingParity s)) S P hG Q s hs
+  rw [Nat.mul_comm Q P] at h2
+  have h3 : bxor (trailingParity (s + P * Q + P * Q)) (trailingParity (s + P * Q)) =
+      bxor (trailingParity (s + P * Q)) (trailingParity s) := h2
+  rw [show s + 2 * (P * Q) = s + P * Q + P * Q by cfomega]
+  apply bxor_aux_cancel _ _ (trailingParity (s + P * Q))
+  rw [h3]
+  cases trailingParity (s + P * Q) <;> cases trailingParity s <;> rfl
+
+/-- **Under a center period the deep interior is not eventually periodic with any period.** -/
+theorem interiorThree_no_period_of_centerPeriodic (T P S Q : Nat) (hP : 0 < P) (hQ : 0 < Q)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (h3 : ThreePeriodic S Q) : False := by
+  have hT : 2 ≤ T + S + 2 := by cfomega
+  have hc' : Rule30UOR.Scale.CenterPeriodic (T + S + 2) P := fun t ht => hc t (by cfomega)
+  have ha := (centerPeriodic_iff_threeAgainstTrailing (T + S + 2) P hT).1 hc'
+  apply trailingDiff_not_periodic (T + S) P Q hP hQ
+  intro s hs
+  have e1 := ha (s + 2) (by cfomega)
+  have e2 := ha (s + 2 + Q) (by cfomega)
+  rw [show s + 2 + Q + P - 2 = s + Q + P by cfomega, show s + 2 + Q - 2 = s + Q by cfomega] at e2
+  rw [show s + 2 + P - 2 = s + P by cfomega, show s + 2 - 2 = s by cfomega] at e1
+  rw [← e1, ← e2, show s + 2 + Q + P = s + 2 + P + Q by cfomega,
+    h3 (s + 2 + P) (by cfomega), h3 (s + 2) (by cfomega)]
+
+/-- The same, as a negation: no eventual period of the deep interior survives a center period. -/
+theorem not_threePeriodic_of_centerPeriodic (T P S Q : Nat) (hP : 0 < P) (hQ : 0 < Q)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : ¬ ThreePeriodic S Q :=
+  fun h3 => interiorThree_no_period_of_centerPeriodic T P S Q hP hQ hc h3
+
 end Rule30UOR.Band
