@@ -2929,5 +2929,13 @@ Close the goal with \(\lexeme{r30.observation::problem1-of-dyadic-response-aperi
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{dyadic-response-halves-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(response(twopow(j + 1), j + 1) = bxor(bxor(window(twopow(j + 1), twopow(j), 0), window(twopow(j + 1), twopow(j), negpow(j))), window(twopow(j + 1) + twopow(j), twopow(j), 0))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::dyadic-response-halves-paper}(j)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

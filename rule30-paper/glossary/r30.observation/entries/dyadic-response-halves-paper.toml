@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dyadic-response-halves-paper"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::response) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local j) (nat 1))) (app (const lexlean.std.nat::add) (local j) (nat 1))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.scale::window) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local j) (nat 1))) (app (const r30.scale::twopow) (local j)) (nat 0)) (app (const r30.scale::window) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local j) (nat 1))) (app (const r30.scale::twopow) (local j)) (app (const r30.scale::negpow) (local j)))) (app (const r30.scale::window) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local j) (nat 1))) (app (const r30.scale::twopow) (local j))) (app (const r30.scale::twopow) (local j)) (nat 0)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Gasket"
+name = "Rule30UOR.Gasket.dyadic_response_halves_paper"
+
+[[form]]
+id = "dyadic-response-halves-paper"
+channel = "math"
+surface = "dyadicresponsehalvespaper"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name dyadicresponsehalvespaper) (paren (seq (slot 0))))"

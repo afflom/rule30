@@ -24,6 +24,8 @@ TOOLS = [
     ("claim", "One frontier claim in full: register entry, Lean type, published statement, dependents.", {"id": "string"}),
     ("gate", "Is the pre-commit gate running, its last stage and log tail.", {}),
     ("chain", "The reduction tree of the register: which claims rest on which, with status and Lean names.", {}),
+    ("interface", "The labeled interface sheet of a claim: its chain from the root, the notions of its statement with defining equations, the exact facts about each, the handles.",
+     {"id": "string", "write": "boolean"}),
     ("lexicon_search", "Find lexemes by id, surface or Lean name.",
      {"query": "string", "limit": "integer"}),
     ("lexicon_show", "Show one lexeme (by qualified id or Lean name).", {"id": "string"}),
@@ -79,6 +81,8 @@ def argv_for(name, a):
         return ["gate"]
     if name == "chain":
         return ["chain"]
+    if name == "interface":
+        return ["interface", g("id", "")] + (["--write"] if g("write") else [])
     if name == "brief":
         return ["brief"]
     if name == "claim":

@@ -80,6 +80,9 @@ def prepare(lean_name, package, slug=None, lexicon=None, allow_existing=False):
     sig = leansig.signatures([lean_name])[lean_name]
     if sig is None:
         raise Unsupported(f"Lean does not know `{lean_name}` (is the library built?)")
+    existing = lx.for_lean(lean_name)
+    if existing is not None and not allow_existing:
+        raise Unsupported(f"`{lean_name}` is already denoted by {existing.qid}; a second lexeme would be ambiguous")
     conv = Converter(lx, package)
     term = conv.term(sig["type"])
     args = variables(term)
@@ -175,6 +178,35 @@ def add(lean_name, package, slug=None, target=None, dry_run=False, env="theorem"
                           "\n".join(result["diagnostics"][:6]))
     p["check"] = "ok"
     return p
+
+
+def remove(qid):
+    """Unpublish a lexeme: delete its entry and, for a proof-constant, its block
+    in the module that holds it; then lock. Returns what was removed."""
+    lx = Lexicon()
+    e = lx.get(qid)
+    if e is None:
+        raise Unsupported(f"no lexeme {qid}")
+    removed = {"entry": str(e.path) if hasattr(e, "path") else None, "block": None}
+    entry_path = lx.lexicon_dir[e.package] / "entries" / f"{e.id}.toml"
+    if entry_path.exists():
+        entry_path.unlink()
+        removed["entry"] = str(entry_path)
+    for f in lx.lex_tex_files(e.package):
+        text = f.read_text()
+        for env in ("theorem", "lemma", "corollary"):
+            start = text.find(f"\\begin{{{env}}}{{{e.id}}}")
+            if start >= 0:
+                end = text.index(f"\\end{{{env}}}", start) + len(f"\\end{{{env}}}")
+                while end < len(text) and text[end] == "\n":
+                    end += 1
+                f.write_text(text[:start] + text[end:])
+                removed["block"] = str(f)
+                break
+        if removed["block"]:
+            break
+    checks.lock(lx.lexicon_project[e.package])
+    return removed
 
 
 def selfcheck(package="r30.observation", limit=None):

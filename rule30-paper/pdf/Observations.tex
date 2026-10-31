@@ -2558,4 +2558,11 @@ If \(\operatorname{dyadicresponseaperiodic}\), then \(\operatorname{problemone}\
 Assume \(h\).
 The goal follows from \(\operatorname{problem1ofdyadicresponseaperiodic}(h)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:dyadic-response-halves-paper}
+For every natural number \(j\), \(\operatorname{response}(\operatorname{twopow}(j + 1), j + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{window}(\operatorname{twopow}(j + 1), \operatorname{twopow}(j), 0), \operatorname{window}(\operatorname{twopow}(j + 1), \operatorname{twopow}(j), \operatorname{negpow}(j))), \operatorname{window}(\operatorname{twopow}(j + 1) + \operatorname{twopow}(j), \operatorname{twopow}(j), 0))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{dyadicresponsehalvespaper}(j)\).
+\end{proof}
 \end{document}

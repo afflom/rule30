@@ -14,7 +14,9 @@ with `bin/r30 theorem add`, which also writes the statement, checks it, and
 elaborates the same probe `lexlean verify` will run. The generator refuses
 what LexLean cannot state and says why (implicit binders, casts, `Bool.xor`
 instead of `bxor`, `2 ^ k` instead of `twopow k`, a lexeme not visible from the
-target lexicon). Fix the Lean statement, not the entry.
+target lexicon, a function-typed argument such as `x : Int → Bool`: the surface
+is first-order, so operator lemmas stay host lemmas). Fix the Lean statement,
+not the entry.
 
 Every theorem depends on at most `propext` and `Quot.sound`. `Classical.choice`
 is forbidden: `by_cases` on an undecidable proposition is a compile error, and
@@ -33,6 +35,7 @@ which is the historical log.
 bin/r30 brief                          # the session briefing
 bin/r30 claim <id> [--related]         # one claim in full; --related lists the theorems about its constants
 bin/r30 chain                          # the reduction tree of the register: what rests on what, with status
+bin/r30 interface <id> [--write]       # the labeled interface sheet of a claim (chain, notions, exact facts, handles); --write puts it in interfaces/
 bin/r30 status                         # HEAD, dirty files, frontier counts
 bin/r30 frontier list                  # what is open, proved, refuted
 bin/r30 lexicon search <text>          # find lexemes by id, surface, or Lean name
@@ -44,6 +47,7 @@ bin/r30 unpublished <module prefixes>  # theorems without a lexeme, and whether 
 bin/r30 theorem preview <Lean names>   # the entry and statement, without writing
 bin/r30 theorem add <Lean names>       # write entry + statement, lock, check the module, probe
 bin/r30 define <Lean definitions>      # publish each notion's defining equation as a lemma in the Notions section
+bin/r30 theorem remove <qids>          # unpublish: delete the entry and its statement block, lock (one lexeme per Lean constant)
 bin/r30 check paper --modules src/Observations.lex.tex   # seconds
 bin/r30 verify paper --modules src/Observations.lex.tex  # seconds; the real probe
 bin/r30 axioms <Lean names>            # must print only propext, Quot.sound

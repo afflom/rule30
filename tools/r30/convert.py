@@ -90,6 +90,20 @@ class Term:
         return [self.kind, groups, self.body.lse()]
 
 
+def _is_function_type(ty):
+    """A binder type `A → … → B` with `B` a data type (`Nat`, `Int`, `Bool`) or a
+    universe: a higher-order argument, which LexLean's first-order surface cannot
+    bind. A chain ending in a proposition is a (quantified) hypothesis instead."""
+    if not (isinstance(ty, list) and ty[0] == "pi"):
+        return False
+    body = ty
+    while isinstance(body, list) and body[0] == "pi":
+        body = body[4]
+    return isinstance(body, list) and (
+        (body[0] == "const" and body[1] in ("Nat", "Int", "Bool")) or
+        (body[0] == "sort" and body[1] not in ("prop", "0")))
+
+
 class Converter:
     def __init__(self, lexicon: Lexicon, target_package: str):
         self.lx = lexicon
@@ -172,6 +186,9 @@ class Converter:
             _, kind, name, ty, body = cur
             if kind != "explicit":
                 raise Unsupported(f"{kind} binder `{name}` cannot be stated in LexLean; make it explicit")
+            if _is_function_type(ty):
+                raise Unsupported(f"argument `{name}` has a function type; LexLean's surface is first-order "
+                                  "(state the theorem on the orbit's own functions, or keep it as a host lemma)")
             t = self._term(ty)
             is_var = t.kind == "app" and t.head in SORT_WORD and not t.args
             new = self.binder_name(name, not is_var)

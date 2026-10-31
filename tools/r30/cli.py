@@ -66,6 +66,18 @@ def cmd_brief(args):
     out(args, {"open": by["open"], "proved": by["proved"], "refuted": by["refuted"]}, "\n".join(lines))
 
 
+def cmd_interface(args):
+    from . import interface
+    try:
+        data = interface.sheet(args.id, with_related=not args.no_related)
+    except ValueError as e:
+        sys.exit(str(e))
+    if args.write:
+        path = interface.write(args.id, data)
+        print(f"wrote {path.relative_to(repo.ROOT)}")
+    out(args, data, interface.render(data))
+
+
 def cmd_chain(args):
     """The reduction tree: from each root claim, the claims that rest on it
     (`depends`), with status and Lean name, so the proof plan is read as a DAG."""
@@ -205,6 +217,18 @@ def cmd_theorem(args):
         if args.sub == "add":
             print(f"  wrote {p['entry_path'].name}" + (f" and appended to {p['target']}" if p.get('target') else "")
                   + f"; lexlean check {p['check']}")
+
+
+def cmd_theorem_remove(args):
+    from . import theorem
+    rows = []
+    for qid in args.qids:
+        try:
+            rows.append({"qid": qid, **theorem.remove(qid)})
+        except Unsupported as e:
+            sys.exit(f"refused: {e}")
+    out(args, rows, "\n".join(f"removed {r['qid']}: entry {r['entry']}" + (f", block in {r['block']}" if r['block'] else "")
+                              for r in rows))
 
 
 def cmd_selfcheck(args):
@@ -414,6 +438,9 @@ def main(argv=None):
     sp.add_parser("status").set_defaults(fn=cmd_status)
     sp.add_parser("brief", help="the one-screen briefing to start a session").set_defaults(fn=cmd_brief)
     sp.add_parser("chain", help="the reduction tree of the register (depends), with status and Lean names").set_defaults(fn=cmd_chain)
+    s = sp.add_parser("interface", help="the labeled interface sheet of a claim: chain, notions, exact facts, handles")
+    s.add_argument("id"); s.add_argument("--write", action="store_true", help="also write interfaces/<id>.md")
+    s.add_argument("--no-related", action="store_true"); s.set_defaults(fn=cmd_interface)
     s = sp.add_parser("claim", help="one frontier claim in full"); s.add_argument("id")
     s.add_argument("--related", action="store_true", help="also list the theorems mentioning the claim's constants")
     s.set_defaults(fn=cmd_claim)
@@ -438,6 +465,8 @@ def main(argv=None):
         s.add_argument("--slug", help="entry id (single name only)")
         s.add_argument("--target", help=".lex.tex file for the statement")
         s.set_defaults(fn=cmd_theorem)
+    s = th.add_parser("remove", help="unpublish lexemes: delete the entry and the statement block, lock")
+    s.add_argument("qids", nargs="+"); s.set_defaults(fn=cmd_theorem_remove)
 
     s = sp.add_parser("define", help="publish the defining equations of host definitions as lemmas")
     s.add_argument("names", nargs="+"); s.add_argument("--lexicon", default="r30.observation"); s.add_argument("--target")
