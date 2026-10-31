@@ -2877,4 +2877,15 @@ never collapse uniformly across scales, and the exact obstruction to a general p
 same collapse read at lag `2^k mod P` (`periodic_scale`: under a period the responses collapse
 onto the center's own lag differences). Registered as `kappa-collapse` (proved).
 
+**The dyadic column reads the responses on the dyadic diagonal.** At time `2^j` the right cell at
+distance `2^j` is the black edge, so `wittRespBool(2^j, j) = ¬response(2^j, j)` and the dyadic
+column obeys `center(2^(j+1)) = ¬center(2^j) ⊕ response(2^j, j)` (`dyadic_column_step`): it flips at
+every scale unless the out-of-cone response at the dyadic time is set. Hence the dyadic column is
+not eventually periodic as soon as `j ↦ response(2^j, j)` is not
+(`dyadicColumnAperiodic_of_response`), and **Problem 1 follows if the responses on the dyadic
+diagonal are not eventually periodic** (`problem1_of_dyadic_response_aperiodic`, registered as
+`dyadic-response-aperiodic`). This is the κ-structure of one window per scale, the window
+`[2^j, 2^(j+1))` read at the center: the leaf is now a statement about the carries of a single
+dyadic block at each scale, and nothing else.
+
 Problem 1 remains unproved.

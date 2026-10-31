@@ -211,3 +211,21 @@ lean = "Rule30UOR.Automatic.kappaCollapse_iff"
 since = "2026-10-31"
 note = "Rule30UOR.Automatic: KappaCollapse K := all response r k = false for K <= k, r < 2^k; center_mod_of_kappaCollapse (the center is then a function of n mod 2^K), centerPeriodic_of_kappaCollapse, kappaCollapse_of_centerPeriodic, no_kappaCollapse_small (K <= 7), no_kappaCollapse_of_problem1. The collapse of the leaves is the root: the carries' uniform vanishing across scales is the period itself."
 depends = ["ledger-diagonal", "horizon-certificate"]
+
+[[claim]]
+id = "dyadic-response-reduction"
+status = "proved"
+statement = "At time 2^j the right cell at distance 2^j is the black edge, so center(2^(j+1)) = not center(2^j) XOR response(2^j, j); hence Problem 1 follows if the responses on the dyadic diagonal, j -> response(2^j, j), are not eventually periodic."
+lean = "Rule30UOR.Automatic.problem1_of_dyadic_response_aperiodic"
+since = "2026-10-31"
+note = "Rule30UOR.Automatic: dyadic_column_step, dyadicResponsePeriodic_of_dilationPeriodic, dyadicColumnAperiodic_of_response. The leaf becomes the kappa-structure of one window per scale, [2^j, 2^(j+1)) read at the center."
+depends = ["dilation-reduction", "kappa-collapse"]
+
+[[claim]]
+id = "dyadic-response-aperiodic"
+status = "open"
+statement = "The responses on the dyadic diagonal, j -> response(2^j, j) (the window [2^j, 2^(j+1)) read at the center), are not eventually periodic."
+lean = "Rule30UOR.Automatic.DyadicResponseAperiodic"
+since = "2026-10-31"
+note = "Sufficient for Problem 1 (dyadic-response-reduction). response(2^j, j) is out of the cone; by wittRespBool_xor_response_ge it is the complement of wittRespBool(2^j, j), the ledger of the second dyadic block read at the diagonal, and by the scale cocycle it is the increment of the ledger diagonal between 2^j and 2^(j+1). The 2-adic continuity caveat here reads: if response(2^j, j) were eventually 1 the column would be eventually constant. Not known."
+depends = ["dyadic-response-reduction"]

@@ -705,6 +705,55 @@ theorem no_kappaCollapse_of_problem1 (h : Ruliology.CellularAutomata.Rule30Prize
 theorem no_kappaCollapse_of_problem1_paper (K : Nat) (h : Ruliology.CellularAutomata.Rule30Prize.Problem1) :
     ¬ KappaCollapse K := no_kappaCollapse_of_problem1 h K
 
+/-! ## The dyadic column and the responses on the dyadic diagonal
+
+At time `2^j` the right cell at distance `2^j` is the black edge, so the late
+Witt response is the complement of the window response: the dyadic column
+flips at every step unless `response (2^j) j` is set. Its aperiodicity
+therefore follows from the aperiodicity of `j ↦ response (2^j) j`, the
+κ-structure read along the dyadic diagonal. -/
+
+theorem dyadic_column_step (j : Nat) :
+    center (twopow (j + 1)) = bxor (!center (twopow j)) (Rule30UOR.Scale.response (twopow j) j) := by
+  rw [center_twopow_succ]
+  have h := Rule30UOR.Interfaces.wittRespBool_xor_response_ge (twopow j) j (Nat.le_refl _)
+  rw [Nat.sub_self, Rule30UOR.Right.rdiag_eq_R, Ruliology.CellularAutomata.Rule30Diagonals.R_zero] at h
+  rcases Bool.eq_false_or_eq_true (Rule30UOR.Interfaces.wittRespBool (twopow j) j) with hw | hw <;>
+    rcases Bool.eq_false_or_eq_true (Rule30UOR.Scale.response (twopow j) j) with hr | hr <;>
+    rw [hw, hr] at h <;> rw [hw, hr] <;> cases center (twopow j) <;>
+    simp [Rule30UOR.Core.bxor] at h ⊢
+
+/-- `j ↦ response (2^j) j` has period `d` from `K`. -/
+def DyadicResponsePeriodic (K d : Nat) : Prop :=
+  ∀ j, K ≤ j → Rule30UOR.Scale.response (twopow (j + d)) (j + d) = Rule30UOR.Scale.response (twopow j) j
+
+theorem dyadicResponsePeriodic_of_dilationPeriodic (K d : Nat) (h : DilationPeriodic 1 K d) :
+    DyadicResponsePeriodic K d := by
+  intro j hj
+  have h0 := h j hj
+  have h1 := h (j + 1) (by cfomega)
+  rw [Nat.mul_one, Nat.mul_one] at h0 h1
+  rw [show j + 1 + d = (j + d) + 1 by cfomega] at h1
+  have e0 := dyadic_column_step j
+  have e1 := dyadic_column_step (j + d)
+  rw [h1, h0] at e1
+  rw [e0] at e1
+  rcases Bool.eq_false_or_eq_true (Rule30UOR.Scale.response (twopow j) j) with hr0 | hr0 <;>
+    rcases Bool.eq_false_or_eq_true (Rule30UOR.Scale.response (twopow (j + d)) (j + d)) with hrd | hrd <;>
+    rw [hr0, hrd] at e1 <;> rw [hr0, hrd] <;> cases center (twopow j) <;>
+    simp [Rule30UOR.Core.bxor] at e1 ⊢
+
+/-- The responses on the dyadic diagonal are not eventually periodic. -/
+def DyadicResponseAperiodic : Prop := ∀ K d, 0 < d → ¬ DyadicResponsePeriodic K d
+
+theorem dyadicColumnAperiodic_of_response (h : DyadicResponseAperiodic) : DyadicColumnAperiodic :=
+  fun K d hd hp => h K d hd (dyadicResponsePeriodic_of_dilationPeriodic K d hp)
+
+/-- **Problem 1 follows if the responses on the dyadic diagonal are not eventually periodic.** -/
+theorem problem1_of_dyadic_response_aperiodic (h : DyadicResponseAperiodic) :
+    Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
+  problem1_of_dyadic_column_aperiodic (dyadicColumnAperiodic_of_response h)
+
 /-- **Problem 1 follows from the absence of dyadic self-similarity.** -/
 theorem problem1_of_no_dyadic_self_similarity (h : NoDyadicSelfSimilarity) :
     Ruliology.CellularAutomata.Rule30Prize.Problem1 :=

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dyadic-column-step"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local j) (nat 1)))) (app (const r30.local::bxor) (app (const lexlean.std.bool::not) (app (const r30.scale::center) (app (const r30.scale::twopow) (local j)))) (app (const r30.scale::response) (app (const r30.scale::twopow) (local j)) (local j)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.dyadic_column_step"
+
+[[form]]
+id = "dyadic-column-step"
+channel = "math"
+surface = "dyadiccolumnstep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name dyadiccolumnstep) (paren (seq (slot 0))))"

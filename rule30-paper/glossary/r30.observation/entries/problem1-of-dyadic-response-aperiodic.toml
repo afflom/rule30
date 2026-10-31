@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-of-dyadic-response-aperiodic"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.observation::dyadic-response-aperiodic))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.problem1_of_dyadic_response_aperiodic"
+
+[[form]]
+id = "problem1-of-dyadic-response-aperiodic"
+channel = "math"
+surface = "problem1ofdyadicresponseaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problem1ofdyadicresponseaperiodic) (paren (seq (slot 0))))"

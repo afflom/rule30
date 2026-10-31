@@ -2895,5 +2895,39 @@ Close the goal with \(\lexeme{r30.observation::no-kappa-collapse-of-problem1-pap
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{dyadic-column-step}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(center(twopow(j + 1)) = bxor(not(center(twopow(j))), response(twopow(j), j))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::dyadic-column-step}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{dyadic-response-periodic-of-dilation-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\) and natural number \(d\), if \(dilationperiodic(1, K, d)\), then \(dyadicresponseperiodic(K, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::dyadic-response-periodic-of-dilation-periodic}(K, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{dyadic-column-aperiodic-of-response}
+\allowaxioms{Quot.sound;propext}
+if \(dyadicresponseaperiodic\), then \(dyadiccolumnaperiodic\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::dyadic-column-aperiodic-of-response}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-dyadic-response-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(dyadicresponseaperiodic\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-dyadic-response-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

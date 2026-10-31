@@ -2528,4 +2528,34 @@ For every natural number \(K\), if \(\operatorname{problemone}\), then not \(\op
 \begin{proof}
 The goal follows from \(\operatorname{nokappacollapseofproblem1paper}(K)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:dyadic-column-step}
+For every natural number \(j\), \(\operatorname{center}(\operatorname{twopow}(j + 1)) = \operatorname{bxor}(\operatorname{not}(\operatorname{center}(\operatorname{twopow}(j))), \operatorname{response}(\operatorname{twopow}(j), j))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{dyadiccolumnstep}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:dyadic-response-periodic-of-dilation-periodic}
+For every natural number \(K\) and natural number \(d\), if \(\operatorname{dilationperiodic}(1, K, d)\), then \(\operatorname{dyadicresponseperiodic}(K, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{dyadicresponseperiodicofdilationperiodic}(K, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:dyadic-column-aperiodic-of-response}
+If \(\operatorname{dyadicresponseaperiodic}\), then \(\operatorname{dyadiccolumnaperiodic}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{dyadiccolumnaperiodicofresponse}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-dyadic-response-aperiodic}
+If \(\operatorname{dyadicresponseaperiodic}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofdyadicresponseaperiodic}(h)\).
+\end{proof}
 \end{document}

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dyadic-response-periodic"
+category = "function"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.DyadicResponsePeriodic"
+
+[[form]]
+id = "dyadic-response-periodic"
+channel = "math"
+surface = "dyadicresponseperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name dyadicresponseperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
