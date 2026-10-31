@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "right-import-definition"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::right-import) (local t)) (app (const lexlean.std.bool::and) (app (const lexlean.std.bool::not) (app (const r30.observation::right-cell) (local t) (nat 1))) (app (const r30.observation::right-cell) (local t) (nat 2)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.rightImport.eq_1"
+
+[[form]]
+id = "right-import-definition"
+channel = "math"
+surface = "rightimportdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rightimportdefinition) (paren (seq (slot 0))))"

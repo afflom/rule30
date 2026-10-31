@@ -33,6 +33,8 @@ TOOLS = [
      {"names": "array", "lexicon": "string", "slug": "string", "target": "string"}),
     ("unpublished", "Theorems without a lexeme and whether the converter can publish them.",
      {"prefixes": "array", "lexicon": "string", "only_ok": "boolean"}),
+    ("define", "Publish host definitions' defining equations as lemmas in the Notions section.",
+     {"names": "array", "lexicon": "string"}),
     ("probe", "Elaborate the verify-time probe for declarations (seconds).", {"names": "array", "lexicon": "string"}),
     ("check", "lexlean check. project: paper|core|all; modules: paths like src/Observations.lex.tex (seconds).",
      {"project": "string", "modules": "array"}),
@@ -89,6 +91,8 @@ def argv_for(name, a):
     if name == "unpublished":
         return ["unpublished", *(g("prefixes") or ["Rule30UOR"]), "--lexicon", g("lexicon", "r30.observation")] + \
             (["--only-ok"] if g("only_ok") else [])
+    if name == "define":
+        return ["define", *names, "--lexicon", g("lexicon", "r30.observation")]
     if name == "probe":
         return ["probe", *names, "--lexicon", g("lexicon", "r30.observation")]
     if name == "check":

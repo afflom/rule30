@@ -11,6 +11,371 @@
 \useglossary{r30.local@1.0.0}
 \title{Masked observations}
 
+\begin{section}{notions}
+\heading{Defining equations}
+
+\begin{lemma}{center-gate-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(centergate(Q, t) = not(center(t)) band rightdefect(Q, t, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-gate-definition}(Q, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{background-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(alignedbackground(Q, t) = wittshl(wittrow(t), Q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::background-definition}(Q, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{aligned-defect-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(aligneddefect(Q, t) = wittxor(wittrow(t + Q), alignedbackground(Q, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-defect-definition}(Q, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{carry-ledger-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(L\) and natural number \(H\), \(carryledger(L, H, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::carry-ledger-definition}(L, H)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{carry-ledger-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(L\) and natural number \(H\) and natural number \(t\), \(carryledger(L, H, succ(t)) = wittxor(carryledger(L, H, t), wittxor(wittcarry(page(L, H, t)), naturalbit(pageboundarycarry(L, H, t))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::carry-ledger-definition-2}(L, H, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{center-flip-mask-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(centerflipmask(n) = wittshl(7, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-flip-mask-definition}(n)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{center-sign-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(start\), \(centersign(start, 0) = 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-sign-definition}(start)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{center-sign-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(start\) and natural number \(t\), \(centersign(start, succ(t)) = (1 intminus 2 inttimes bitvalue(center(start))) inttimes centersign(start + 1, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-sign-definition-2}(start, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{defect-step-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\) and natural number \(d\), \(defectstep(b, d) = wittxor(wittphi(d), wittshl(crosscarry(b, d), 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::defect-step-definition}(b, d)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{diagonal-phase-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(d\) and natural number \(t\), \(diagonalphase(Q, d, t) = bitvalue(ldiag(d, t + Q)) intminus bitvalue(ldiag(d, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-phase-definition}(Q, d, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{observer-source-flux-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(observersourceflux(Q, t, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-source-flux-definition}(Q, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{observer-source-flux-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(t1\), \(observersourceflux(Q, t, succ(t1)) = wittxor(wittlinear(observersourceflux(Q, t, t1)), wittshl(observersource(Q, t + t1), t1 + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-source-flux-definition-2}(Q, t, t1)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{page-boundary-carry-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(L\) and natural number \(H\), \(pageboundarycarry(L, H, 0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::page-boundary-carry-definition}(L, H)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{page-boundary-carry-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(L\) and natural number \(H\) and natural number \(t\), \(pageboundarycarry(L, H, succ(t)) = rowbit(page(L, H, t + 1), 0) band rowbit(page(L, H, t), L - 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::page-boundary-carry-definition-2}(L, H, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{page-fold-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(L\) and natural number \(H\), \(pagefold(L, H, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::page-fold-definition}(L, H)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{page-fold-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(L\) and natural number \(H\) and natural number \(t\), \(pagefold(L, H, succ(t)) = wittxor(pagefold(L, H, t), page(L, H, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::page-fold-definition-2}(L, H, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{path-flux-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(pathflux(Q, t, k, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::path-flux-definition}(Q, t, k)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{q-order-search-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(d\), \(qordersearch(d, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-order-search-definition}(d)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{ray-flux-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and natural number \(k\), \(rayflux(t, k, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ray-flux-definition}(t, k)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{recover-phase-definition}
+\allowaxioms{Quot.sound;propext}
+For every truth value \(a\) and truth value \(g\) and integer \(outgoing\) and integer \(gate\), \(recoverphase(a, g, outgoing, gate) = (1 intminus 2 inttimes bitvalue(g)) inttimes (outgoing intminus (1 intminus 2 inttimes bitvalue(a)) inttimes gate)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::recover-phase-definition}(a, g, outgoing, gate)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{right-import-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rightimport(t) = not(rightcell(t, 1)) band rightcell(t, 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-import-definition}(t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{right-phase-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(rightphase(Q, t, k) = bitvalue(rightcell(t + Q, k)) intminus bitvalue(rightcell(t, k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-phase-definition}(Q, t, k)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{transfer-phase-definition}
+\allowaxioms{Quot.sound;propext}
+For every truth value \(a\) and truth value \(g\) and integer \(incoming\) and integer \(gate\), \(transferphase(a, g, incoming, gate) = (1 intminus 2 inttimes bitvalue(g)) inttimes incoming intplus (1 intminus 2 inttimes bitvalue(a)) inttimes gate\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::transfer-phase-definition}(a, g, incoming, gate)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{twopow-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(twopow(succ(n)) = twopow(n) + twopow(n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::twopow-definition-2}(n)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{phi-linear-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(y\), \(wittlinear(y) = wittxor(wittxor(y, wittshl(y, 1)), wittshl(y, 2))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-linear-definition}(y)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{phi-linear-pow-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(h1\) and natural number \(m\), \(wittlinpow(succ(m), h1) = wittlinear(wittlinpow(m, h1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-linear-pow-definition-2}(h1, m)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{row-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(wittrow(succ(n)) = wittphi(wittrow(n))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-definition-2}(n)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{aligned-phase-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(i\), \(alignedphase(Q, t, i) = pairphase(alignedbackground(Q, t), aligneddefect(Q, t), i)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-phase-definition}(Q, t, i)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{block-endpoint-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(h\) and natural number \(A\), \(blockendpoint(h, A) = rowbit(A, 0) band rowbit(A, h - 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::block-endpoint-definition}(h, A)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{center-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = cell(t, 0)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-definition}(t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{diagonal-flux-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(d\) and natural number \(t\) and natural number \(p\), \(diagonalflux(Q, d, t, p) = rayflux(t + Q, t + Q - d, t + Q - d - p) intminus rayflux(t, t - d, t - d - p)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-flux-definition}(Q, d, t, p)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{erasure-event-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(erasureevent(Q, t, k) = (leftdefect(Q, t, k + 1) = true ∧ leftdefect(Q, t + 1, k) = false ∧ gatecode(Q, t, k) ≠ 0 ∧ collisioncode(Q, t, k) = 0 ∧ (leftcolour(Q, t + 1, k) = 0 ∨ leftcolour(Q, t + 1, k) = 3))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::erasure-event-definition}(Q, t, k)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{ldiag-definition}
+\allowaxioms{Quot.sound;propext}
+\(ldiag(0, 0) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-definition}\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{ldiag-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(ldiag(succ(n), 0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-definition-2}(n)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{ldiag-definition-3}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(ldiag(0, succ(s)) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-definition-3}(s)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{ldiag-definition-4}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(ldiag(succ(0), succ(s)) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-definition-4}(s)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{ldiag-definition-5}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\) and natural number \(n1\), \(ldiag(succ(succ(n1)), succ(s)) = bxor(ldiag(n1, s), ldiag(succ(n1), s) bor ldiag(succ(succ(n1)), s))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-definition-5}(s, n1)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{leading-advance-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leadingadvance(Q, t, k) = (2 ≤ k ∧ advancingatdepth(Q, t, k) ∧ rightmostleft(Q, t, k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::leading-advance-definition}(Q, t, k)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{natural-bit-definition}
+\allowaxioms{Quot.sound;propext}
+For every truth value \(b\), \(naturalbit(b) = naturalbit(b)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::natural-bit-definition}(b)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{observer-input-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(observerinput(t) = not(center(t)) band rightcell(t, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-input-definition}(t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{observer-qrank-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(observerqrank(Q, t) = t + Q - 2 * qorder(observerdefect(Q, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-qrank-definition}(Q, t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{pair-phase-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\) and natural number \(d\) and natural number \(i\), \(pairphase(b, d, i) = bitvalue(rowbit(wittxor(b, d), i)) intminus bitvalue(rowbit(b, i))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pair-phase-definition}(b, d, i)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{row-bit-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(i\), \(rowbit(a, i) = rowbit(a, i)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-bit-definition}(a, i)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{win-witt-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(h1\), \(wittwin(h1, 0) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::win-witt-definition}(h1)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{win-witt-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(h1\) and natural number \(s\), \(wittwin(h1, succ(s)) = wittxor(wittlinear(wittwin(h1, s)), wittshl(wittcarry(wittrow(h1 + s)), 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::win-witt-definition-2}(h1, s)\).
+\end{proof}
+\end{lemma}
+
+\end{section}
+
 \begin{section}{masked-observations}
 \heading{Masked observations}
 
@@ -1825,6 +2190,14 @@ Close the goal with \(\lexeme{r30.observation::coupled-arrival-gate-phase}(Q, st
 For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(rowbit(aligneddefect(Q, t), 0) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-defect-bit-zero}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-arrival-no-crossing}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ b\), then if \(rightmostleft(m * P, b, k)\), then \(leftdefect(m * P, b + (k - 1), 1) = true ∧ centergate(m * P, b + (k - 1)) = true ∧ leftdefect(m * P, b + (k - 1) + 1, 0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-arrival-no-crossing}(T, P, m, b, k)\).
 \end{proof}
 \end{theorem}
 

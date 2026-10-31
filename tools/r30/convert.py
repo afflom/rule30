@@ -203,6 +203,8 @@ class Converter:
             raise Unsupported("non-literal OfNat")
         if name in SORT_LEAN and not args:
             return Term("app", SORT_LEAN[name])
+        if name == "Nat.zero" and not args:
+            return Term("nat", "0")
         if name in CORE:
             # Eq α a b ; And a b ; ...
             payload = args[1:] if name == "Eq" else args
@@ -406,6 +408,8 @@ def _patch_math(cls):
             ne = _NE
             return f"{self.math_child(l, ne, 'left')} ≠ {self.math_child(r, ne, 'right')}"
         e = self.lx.get(t.head)
+        if e is None or e.surface is None:
+            raise Unsupported(f"`{t.head}` has no math surface; it cannot appear in a statement")
         if e.frame == "atom" or not t.args:
             return e.surface
         surface = f"\\lexeme{{{e.qid}}}" if e.surface in RESERVED_SURFACES else e.surface

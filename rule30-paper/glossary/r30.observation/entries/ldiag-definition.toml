@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-definition"
+category = "proof-constant"
+signature = "(app (const lexlean.core::eq) (app (const r30.time::ldiag) (nat 0) (nat 0)) (const lexlean.std.bool::true))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.ldiag.eq_1"
+
+[[form]]
+id = "ldiag-definition"
+channel = "math"
+surface = "ldiagdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name ldiagdefinition)"

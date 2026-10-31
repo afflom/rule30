@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "diagonal-phase-definition"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::diagonal-phase) (local Q) (local d) (local t)) (app (const lexlean.std.int::sub) (app (const r30.observation::bit-value) (app (const r30.time::ldiag) (local d) (app (const lexlean.std.nat::add) (local t) (local Q)))) (app (const r30.observation::bit-value) (app (const r30.time::ldiag) (local d) (local t))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.diagonalPhase.eq_1"
+
+[[form]]
+id = "diagonal-phase-definition"
+channel = "math"
+surface = "diagonalphasedefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name diagonalphasedefinition) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

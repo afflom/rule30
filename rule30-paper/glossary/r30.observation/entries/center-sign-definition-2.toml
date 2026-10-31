@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-sign-definition-2"
+category = "proof-constant"
+signature = "(pi ((explicit start (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::center-sign) (local start) (app (const lexlean.std.nat::succ) (local t))) (app (const lexlean.std.int::mul) (app (const lexlean.std.int::sub) (nat 1) (app (const lexlean.std.int::mul) (nat 2) (app (const r30.observation::bit-value) (app (const r30.scale::center) (local start))))) (app (const r30.observation::center-sign) (app (const lexlean.std.nat::add) (local start) (nat 1)) (local t)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.centerSign.eq_2"
+
+[[form]]
+id = "center-sign-definition-2"
+channel = "math"
+surface = "centersigndefinition2"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centersigndefinition2) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

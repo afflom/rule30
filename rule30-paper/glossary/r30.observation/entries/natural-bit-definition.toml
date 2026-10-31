@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "natural-bit-definition"
+category = "proof-constant"
+signature = "(pi ((explicit b (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.observation::natural-bit) (local b)) (app (const r30.observation::natural-bit) (local b))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.naturalBit.eq_1"
+
+[[form]]
+id = "natural-bit-definition"
+channel = "math"
+surface = "naturalbitdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name naturalbitdefinition) (paren (seq (slot 0))))"

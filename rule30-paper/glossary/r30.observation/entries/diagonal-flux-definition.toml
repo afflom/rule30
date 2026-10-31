@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "diagonal-flux-definition"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::diagonal-flux) (local Q) (local d) (local t) (local p)) (app (const lexlean.std.int::sub) (app (const r30.observation::ray-flux) (app (const lexlean.std.nat::add) (local t) (local Q)) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (local Q)) (local d)) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::add) (local t) (local Q)) (local d)) (local p))) (app (const r30.observation::ray-flux) (local t) (app (const lexlean.std.nat::sub) (local t) (local d)) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::sub) (local t) (local d)) (local p))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.diagonalFlux.eq_1"
+
+[[form]]
+id = "diagonal-flux-definition"
+channel = "math"
+surface = "diagonalfluxdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name diagonalfluxdefinition) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

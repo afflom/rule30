@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "transfer-phase-definition"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit g (const lexlean.std.bool::bool)) (explicit incoming (const lexlean.std.int::int)) (explicit gate (const lexlean.std.int::int))) (app (const lexlean.core::eq) (app (const r30.observation::transfer-phase) (local a) (local g) (local incoming) (local gate)) (app (const lexlean.std.int::add) (app (const lexlean.std.int::mul) (app (const lexlean.std.int::sub) (nat 1) (app (const lexlean.std.int::mul) (nat 2) (app (const r30.observation::bit-value) (local g)))) (local incoming)) (app (const lexlean.std.int::mul) (app (const lexlean.std.int::sub) (nat 1) (app (const lexlean.std.int::mul) (nat 2) (app (const r30.observation::bit-value) (local a)))) (local gate)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.transferPhase.eq_1"
+
+[[form]]
+id = "transfer-phase-definition"
+channel = "math"
+surface = "transferphasedefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name transferphasedefinition) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

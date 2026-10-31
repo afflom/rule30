@@ -166,6 +166,16 @@ def cmd_unpublished(args):
     out(args, rows, text)
 
 
+def cmd_define(args):
+    from . import theorem
+    results, refused = theorem.define(args.names, args.lexicon, args.target)
+    for p in results:
+        print(f"OK   {p['qid']}: {p['statement'][:150]}")
+    for name, why in refused:
+        print(f"NO   {name}: {why}")
+    print(f"{len(results)} defining equations published, {len(refused)} refused")
+
+
 def cmd_check(args):
     results = checks.check_all() if args.project == "all" else [checks.check(args.project, args.modules or None)]
     text = "\n".join(f"{r['project']}: {'ok' if r['ok'] else 'FAILED'}" +
@@ -333,6 +343,9 @@ def main(argv=None):
         s.add_argument("--target", help=".lex.tex file for the statement")
         s.set_defaults(fn=cmd_theorem)
 
+    s = sp.add_parser("define", help="publish the defining equations of host definitions as lemmas")
+    s.add_argument("names", nargs="+"); s.add_argument("--lexicon", default="r30.observation"); s.add_argument("--target")
+    s.set_defaults(fn=cmd_define)
     s = sp.add_parser("check"); s.add_argument("project", nargs="?", default="all")
     s.add_argument("--modules", nargs="*"); s.set_defaults(fn=cmd_check)
     s = sp.add_parser("unpublished"); s.add_argument("prefixes", nargs="*", default=["Rule30UOR"])

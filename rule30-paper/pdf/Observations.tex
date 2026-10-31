@@ -13,6 +13,323 @@
 \begin{center}
 {\LARGE Masked observations}
 \end{center}
+\section{Defining equations}
+\label{ll:observations:notions}
+\begin{lemma}
+\label{ll:observations:center-gate-definition}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{centergate}(Q, t) = \operatorname{not}(\operatorname{center}(t)) \operatorname{and} \operatorname{rightdefect}(Q, t, 1)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{centergatedefinition}(Q, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:background-definition}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{alignedbackground}(Q, t) = \operatorname{wittshl}(\operatorname{wittrow}(t), Q)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{backgrounddefinition}(Q, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:aligned-defect-definition}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{aligneddefect}(Q, t) = \operatorname{wittxor}(\operatorname{wittrow}(t + Q), \operatorname{alignedbackground}(Q, t))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{aligneddefectdefinition}(Q, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:carry-ledger-definition}
+For every natural number \(L\) and natural number \(H\), \(\operatorname{carryledger}(L, H, 0) = 0\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{carryledgerdefinition}(L, H)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:carry-ledger-definition-2}
+For every natural number \(L\) and natural number \(H\) and natural number \(t\), \(\operatorname{carryledger}(L, H, \operatorname{succ}(t)) = \operatorname{wittxor}(\operatorname{carryledger}(L, H, t), \operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{page}(L, H, t)), \operatorname{naturalbit}(\operatorname{pageboundarycarry}(L, H, t))))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{carryledgerdefinition2}(L, H, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:center-flip-mask-definition}
+For every natural number \(n\), \(\operatorname{centerflipmask}(n) = \operatorname{wittshl}(7, n)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{centerflipmaskdefinition}(n)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:center-sign-definition}
+For every natural number \(start\), \(\operatorname{centersign}(start, 0) = 1\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{centersigndefinition}(start)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:center-sign-definition-2}
+For every natural number \(start\) and natural number \(t\), \(\operatorname{centersign}(start, \operatorname{succ}(t)) = (1 - 2 \cdot \operatorname{bitvalue}(\operatorname{center}(start))) \cdot \operatorname{centersign}(start + 1, t)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{centersigndefinition2}(start, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:defect-step-definition}
+For every natural number \(b\) and natural number \(d\), \(\operatorname{defectstep}(b, d) = \operatorname{wittxor}(\operatorname{wittphi}(d), \operatorname{wittshl}(\operatorname{crosscarry}(b, d), 1))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{defectstepdefinition}(b, d)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:diagonal-phase-definition}
+For every natural number \(Q\) and natural number \(d\) and natural number \(t\), \(\operatorname{diagonalphase}(Q, d, t) = \operatorname{bitvalue}(\operatorname{ldiag}(d, t + Q)) - \operatorname{bitvalue}(\operatorname{ldiag}(d, t))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalphasedefinition}(Q, d, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:observer-source-flux-definition}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{observersourceflux}(Q, t, 0) = 0\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{observersourcefluxdefinition}(Q, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:observer-source-flux-definition-2}
+For every natural number \(Q\) and natural number \(t\) and natural number \(t1\), \(\operatorname{observersourceflux}(Q, t, \operatorname{succ}(t1)) = \operatorname{wittxor}(\operatorname{wittlinear}(\operatorname{observersourceflux}(Q, t, t1)), \operatorname{wittshl}(\operatorname{observersource}(Q, t + t1), t1 + 1))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{observersourcefluxdefinition2}(Q, t, t1)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:page-boundary-carry-definition}
+For every natural number \(L\) and natural number \(H\), \(\operatorname{pageboundarycarry}(L, H, 0) = \operatorname{false}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{pageboundarycarrydefinition}(L, H)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:page-boundary-carry-definition-2}
+For every natural number \(L\) and natural number \(H\) and natural number \(t\), \(\operatorname{pageboundarycarry}(L, H, \operatorname{succ}(t)) = \operatorname{rowbit}(\operatorname{page}(L, H, t + 1), 0) \operatorname{and} \operatorname{rowbit}(\operatorname{page}(L, H, t), L - 1)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{pageboundarycarrydefinition2}(L, H, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:page-fold-definition}
+For every natural number \(L\) and natural number \(H\), \(\operatorname{pagefold}(L, H, 0) = 0\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{pagefolddefinition}(L, H)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:page-fold-definition-2}
+For every natural number \(L\) and natural number \(H\) and natural number \(t\), \(\operatorname{pagefold}(L, H, \operatorname{succ}(t)) = \operatorname{wittxor}(\operatorname{pagefold}(L, H, t), \operatorname{page}(L, H, t))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{pagefolddefinition2}(L, H, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:path-flux-definition}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{pathflux}(Q, t, k, 0) = 0\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{pathfluxdefinition}(Q, t, k)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:q-order-search-definition}
+For every natural number \(d\), \(\operatorname{qordersearch}(d, 0) = 0\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{qordersearchdefinition}(d)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:ray-flux-definition}
+For every natural number \(t\) and natural number \(k\), \(\operatorname{rayflux}(t, k, 0) = 0\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rayfluxdefinition}(t, k)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:recover-phase-definition}
+For every truth value \(a\) and truth value \(g\) and integer \(outgoing\) and integer \(gate\), \(\operatorname{recoverphase}(a, g, outgoing, gate) = (1 - 2 \cdot \operatorname{bitvalue}(g)) \cdot (outgoing - (1 - 2 \cdot \operatorname{bitvalue}(a)) \cdot gate)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{recoverphasedefinition}(a, g, outgoing, gate)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:right-import-definition}
+For every natural number \(t\), \(\operatorname{rightimport}(t) = \operatorname{not}(\operatorname{rightcell}(t, 1)) \operatorname{and} \operatorname{rightcell}(t, 2)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rightimportdefinition}(t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:right-phase-definition}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{rightphase}(Q, t, k) = \operatorname{bitvalue}(\operatorname{rightcell}(t + Q, k)) - \operatorname{bitvalue}(\operatorname{rightcell}(t, k))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rightphasedefinition}(Q, t, k)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:transfer-phase-definition}
+For every truth value \(a\) and truth value \(g\) and integer \(incoming\) and integer \(gate\), \(\operatorname{transferphase}(a, g, incoming, gate) = (1 - 2 \cdot \operatorname{bitvalue}(g)) \cdot incoming + (1 - 2 \cdot \operatorname{bitvalue}(a)) \cdot gate\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{transferphasedefinition}(a, g, incoming, gate)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:twopow-definition-2}
+For every natural number \(n\), \(\operatorname{twopow}(\operatorname{succ}(n)) = \operatorname{twopow}(n) + \operatorname{twopow}(n)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{twopowdefinition2}(n)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:phi-linear-definition}
+For every natural number \(y\), \(\operatorname{wittlinear}(y) = \operatorname{wittxor}(\operatorname{wittxor}(y, \operatorname{wittshl}(y, 1)), \operatorname{wittshl}(y, 2))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{philineardefinition}(y)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:phi-linear-pow-definition-2}
+For every natural number \(h1\) and natural number \(m\), \(\operatorname{wittlinpow}(\operatorname{succ}(m), h1) = \operatorname{wittlinear}(\operatorname{wittlinpow}(m, h1))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{philinearpowdefinition2}(h1, m)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:row-definition-2}
+For every natural number \(n\), \(\operatorname{wittrow}(\operatorname{succ}(n)) = \operatorname{wittphi}(\operatorname{wittrow}(n))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rowdefinition2}(n)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:aligned-phase-definition}
+For every natural number \(Q\) and natural number \(t\) and natural number \(i\), \(\operatorname{alignedphase}(Q, t, i) = \operatorname{pairphase}(\operatorname{alignedbackground}(Q, t), \operatorname{aligneddefect}(Q, t), i)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{alignedphasedefinition}(Q, t, i)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:block-endpoint-definition}
+For every natural number \(h\) and natural number \(A\), \(\operatorname{blockendpoint}(h, A) = \operatorname{rowbit}(A, 0) \operatorname{and} \operatorname{rowbit}(A, h - 1)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{blockendpointdefinition}(h, A)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:center-definition}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{cell}(t, 0)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{centerdefinition}(t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:diagonal-flux-definition}
+For every natural number \(Q\) and natural number \(d\) and natural number \(t\) and natural number \(p\), \(\operatorname{diagonalflux}(Q, d, t, p) = \operatorname{rayflux}(t + Q, t + Q - d, t + Q - d - p) - \operatorname{rayflux}(t, t - d, t - d - p)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalfluxdefinition}(Q, d, t, p)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:erasure-event-definition}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{erasureevent}(Q, t, k) = (\operatorname{leftdefect}(Q, t, k + 1) = \operatorname{true} \land \operatorname{leftdefect}(Q, t + 1, k) = \operatorname{false} \land \operatorname{gatecode}(Q, t, k) \ne 0 \land \operatorname{collisioncode}(Q, t, k) = 0 \land (\operatorname{leftcolour}(Q, t + 1, k) = 0 \lor \operatorname{leftcolour}(Q, t + 1, k) = 3))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{erasureeventdefinition}(Q, t, k)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:ldiag-definition}
+\(\operatorname{ldiag}(0, 0) = \operatorname{true}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagdefinition}\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:ldiag-definition-2}
+For every natural number \(n\), \(\operatorname{ldiag}(\operatorname{succ}(n), 0) = \operatorname{false}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagdefinition2}(n)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:ldiag-definition-3}
+For every natural number \(s\), \(\operatorname{ldiag}(0, \operatorname{succ}(s)) = \operatorname{true}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagdefinition3}(s)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:ldiag-definition-4}
+For every natural number \(s\), \(\operatorname{ldiag}(\operatorname{succ}(0), \operatorname{succ}(s)) = \operatorname{true}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagdefinition4}(s)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:ldiag-definition-5}
+For every natural number \(s\) and natural number \(n1\), \(\operatorname{ldiag}(\operatorname{succ}(\operatorname{succ}(n1)), \operatorname{succ}(s)) = \operatorname{bxor}(\operatorname{ldiag}(n1, s), \operatorname{ldiag}(\operatorname{succ}(n1), s) \operatorname{or} \operatorname{ldiag}(\operatorname{succ}(\operatorname{succ}(n1)), s))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagdefinition5}(s, n1)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:leading-advance-definition}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(\operatorname{leadingadvance}(Q, t, k) = (2 \le k \land \operatorname{advancingatdepth}(Q, t, k) \land \operatorname{rightmostleft}(Q, t, k))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{leadingadvancedefinition}(Q, t, k)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:natural-bit-definition}
+For every truth value \(b\), \(\operatorname{naturalbit}(b) = \operatorname{naturalbit}(b)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{naturalbitdefinition}(b)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:observer-input-definition}
+For every natural number \(t\), \(\operatorname{observerinput}(t) = \operatorname{not}(\operatorname{center}(t)) \operatorname{and} \operatorname{rightcell}(t, 1)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{observerinputdefinition}(t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:observer-qrank-definition}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{observerqrank}(Q, t) = t + Q - 2 \cdot \operatorname{qorder}(\operatorname{observerdefect}(Q, t))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{observerqrankdefinition}(Q, t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:pair-phase-definition}
+For every natural number \(b\) and natural number \(d\) and natural number \(i\), \(\operatorname{pairphase}(b, d, i) = \operatorname{bitvalue}(\operatorname{rowbit}(\operatorname{wittxor}(b, d), i)) - \operatorname{bitvalue}(\operatorname{rowbit}(b, i))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{pairphasedefinition}(b, d, i)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:row-bit-definition}
+For every natural number \(a\) and natural number \(i\), \(\operatorname{rowbit}(a, i) = \operatorname{rowbit}(a, i)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rowbitdefinition}(a, i)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:win-witt-definition}
+For every natural number \(h1\), \(\operatorname{wittwin}(h1, 0) = 0\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{winwittdefinition}(h1)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:win-witt-definition-2}
+For every natural number \(h1\) and natural number \(s\), \(\operatorname{wittwin}(h1, \operatorname{succ}(s)) = \operatorname{wittxor}(\operatorname{wittlinear}(\operatorname{wittwin}(h1, s)), \operatorname{wittshl}(\operatorname{wittcarry}(\operatorname{wittrow}(h1 + s)), 1))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{winwittdefinition2}(h1, s)\).
+\end{proof}
 \section{Masked observations}
 \label{ll:observations:masked-observations}
 \begin{theorem}
@@ -1595,5 +1912,12 @@ For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(\o
 \end{theorem}
 \begin{proof}
 The goal follows from \(\operatorname{aligneddefectbitzero}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-arrival-no-crossing}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le b\), then if \(\operatorname{rightmostleft}(m \cdot P, b, k)\), then \(\operatorname{leftdefect}(m \cdot P, b + (k - 1), 1) = \operatorname{true}\) and \(\operatorname{centergate}(m \cdot P, b + (k - 1)) = \operatorname{true} \land \operatorname{leftdefect}(m \cdot P, b + (k - 1) + 1, 0) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicarrivalnocrossing}(T, P, m, b, k)\).
 \end{proof}
 \end{document}

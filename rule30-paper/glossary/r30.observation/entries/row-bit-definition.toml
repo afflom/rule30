@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "row-bit-definition"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit i (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::row-bit) (local a) (local i)) (app (const r30.observation::row-bit) (local a) (local i))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.rowBit.eq_1"
+
+[[form]]
+id = "row-bit-definition"
+channel = "math"
+surface = "rowbitdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rowbitdefinition) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

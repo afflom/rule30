@@ -4439,4 +4439,28 @@ theorem coupled_arrival_gate_phase (Q start : Nat)
   rw [hq]
   simp [centerSign, hw0, bitValue]
 
+/-! ## The arrival bit protects the center
+
+A reading of `periodic_front_arrival_observer_source` as a "re-excitation" of the
+center is backwards. At an arrival under a periodic center the boundary term is
+the right column-one defect, and by the coupling law it is exactly what cancels
+the arriving left defect: the center defect one step later is zero. The unit
+bit is the center's protection, not a source that drives the center away from
+its period. -/
+
+/-- At the arrival of a rightmost left front under a periodic center, the next
+center defect is zero: the arriving left defect and the admitted right defect
+cancel. -/
+theorem periodic_arrival_no_crossing (T P m b k : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (hb : T ≤ b)
+    (hr : RightmostLeft (m * P) b k) :
+    leftDefect (m * P) (b + (k - 1)) 1 = true ∧
+      centerGate (m * P) (b + (k - 1)) = true ∧
+      leftDefect (m * P) (b + (k - 1) + 1) 0 = false := by
+  obtain ⟨hl, hw, hrd, -⟩ := periodic_front_arrival_observer_source T P m b k hc hb hr
+  refine ⟨hl, ?_, ?_⟩
+  · simp [centerGate, hw, hrd]
+  · simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
+      Rule30UOR.DefectFront.center_defect_zero (kit_periodic hc) m (b + (k - 1) + 1) (by omega)
+
 end Rule30UOR.WittDefect

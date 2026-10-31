@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "leading-advance-definition"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::leading-advance) (local Q) (local t) (local k)) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (nat 2) (local k)) (app (const lexlean.core::land) (app (const r30.observation::advancing-at-depth) (local Q) (local t) (local k)) (app (const r30.observation::rightmost-left) (local Q) (local t) (local k))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.LeadingAdvance.eq_1"
+
+[[form]]
+id = "leading-advance-definition"
+channel = "math"
+surface = "leadingadvancedefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leadingadvancedefinition) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

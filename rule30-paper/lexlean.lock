@@ -62,7 +62,7 @@ version = "1.0.0"
 kind = "path"
 source = "glossary/r30.doc"
 revision = "none"
-tree_sha256 = "f4bf729a1141864a1c0be597bd2c51bb4a771a98e6751d86ef8259c80ad65e43"
+tree_sha256 = "35b5a417300efe5b425aa8989eb9738315903ed60233f928726959577e701692"
 manifest_sha256 = "710ae70a43f0d0806f8beca11245adef7d4a316b89c37f7fed94ee6608ccb048"
 imports = ["lexlean.core@1.2.0", "lexlean.std.nat@1.2.0"]
 
@@ -112,7 +112,7 @@ version = "1.0.0"
 kind = "path"
 source = "glossary/r30.observation"
 revision = "none"
-tree_sha256 = "28976b05253c595c0efe16a23dce56c3b5743ee91aeb4b6fb84ce72f355504c1"
+tree_sha256 = "38460bffde010c1a8f60d1926a31141fdc62a33b7a1851bc9aaafaa95e06022a"
 manifest_sha256 = "1383ef3de49ef1aa78a9fc790eaa8b36da1ee07c949d4f027aa4ba6faecbad28"
 imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.int@1.2.0", "lexlean.std.nat@1.2.0", "r30.local@1.0.0", "r30.scale@1.0.0", "r30.time@1.0.0", "r30.witt@1.0.0"]
 

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-arrival-no-crossing"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit hb (app (const lexlean.std.nat::le) (local T) (local b))) (explicit hr (app (const r30.observation::rightmost-left) (app (const lexlean.std.nat::mul) (local m) (local P)) (local b) (local k)))) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::add) (local b) (app (const lexlean.std.nat::sub) (local k) (nat 1))) (nat 1)) (const lexlean.std.bool::true)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::center-gate) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::add) (local b) (app (const lexlean.std.nat::sub) (local k) (nat 1)))) (const lexlean.std.bool::true)) (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local b) (app (const lexlean.std.nat::sub) (local k) (nat 1))) (nat 1)) (nat 0)) (const lexlean.std.bool::false))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.periodic_arrival_no_crossing"
+
+[[form]]
+id = "periodic-arrival-no-crossing"
+channel = "math"
+surface = "periodicarrivalnocrossing"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodicarrivalnocrossing) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

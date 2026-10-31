@@ -72,3 +72,20 @@ lean = "Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision"
 lexeme = "r30.frontier::problem-one-iff-no-recurrent-central-collision"
 since = "2026-10-27"
 note = "Band form since the choice elimination; the fixed-column form needs the infinite pigeonhole principle."
+
+[[claim]]
+id = "saturation-reexcitation"
+status = "refuted"
+statement = "Under a periodic center, each front arrival injects a unit boundary bit that re-excites the observer polynomial, so the center cannot settle (the RF/photonics heat-death reading)."
+lean = "Rule30UOR.WittDefect.periodic_arrival_no_crossing"
+since = "2026-10-31"
+note = "Backwards: at an arrival the boundary bit is the admitted right defect, and by the coupling law it cancels the arriving left defect, so the next center defect is zero (periodic_arrival_no_crossing). The unit bit protects the center's period. The budget-drain half of the reading is the refuted q-adic-descent: R_t = t + Q - O(1) grows, it never saturates."
+depends = ["coupling-law"]
+
+[[claim]]
+id = "horizon-criterion"
+status = "open"
+statement = "For every T and P > 0 there is an explicit horizon H(T, P) such that CenterPeriodic T P already fails on the window [T, T + H(T, P)]: a flip forced by the doubling zero diagonal of P reaches column -1 inside the window while the gated mirror forbids it there."
+since = "2026-10-31"
+note = "The finite-target shape of batch 35. experiments/agreement_runs.py: the longest center-agreement run at lag Q grows with the transient (max over Q <= 64: 15 at T = 2^8, 17 at 2^11, 18 at 2^13, 20 at 2^16), as for a random sequence (~log2 T), so no horizon depending on P alone can refute a period; H must depend on T. The natural candidate is light-cone size, H(T, P) = O(T + P)."
+depends = ["aperiodic-compensation", "problem1"]

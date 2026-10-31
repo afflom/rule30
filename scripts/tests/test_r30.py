@@ -170,22 +170,46 @@ class FrontierCheckTests(unittest.TestCase):
 
 
 class FrontierRenderTests(unittest.TestCase):
-    """The register renders to a LexLean module deterministically, and a stale
-    render is a check failure. Uses the real register and a fake kernel."""
+    """The register renders to a LexLean module deterministically, from a fake
+    kernel: the test must not depend on a built Lean library (the gate runs the
+    tooling tests before the build, and a cached olean may predate a claim)."""
+
+    IFF = ("(app (const Iff) (const Ruliology.CellularAutomata.Rule30Prize.Problem1) "
+           "(const Rule30UOR.CentralCollision.NoRecurrentCentralCollision))")
 
     class FakeLean:
-        def signatures(self, names):
-            from tools.r30 import leansig
-            return leansig.signatures(names)
+        def __init__(self, table):
+            self.table = table
 
-    def test_render_is_deterministic_and_check_detects_staleness(self):
-        text1, _ = frontier.render()
-        text2, _ = frontier.render()
+        def signatures(self, names):
+            return {n: ({"kind": "theorem", "type": sexpr.parse(self.table[n])} if n in self.table else None)
+                    for n in names}
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.old = repo.FRONTIER
+        repo.FRONTIER = Path(self.tmp.name) / "frontier.toml"
+        self.addCleanup(lambda: setattr(repo, "FRONTIER", self.old))
+        frontier.add("rcc", "the collision reduction", status="proved",
+                     lean="Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision")
+        frontier.add("ghost", "no published theorem", status="refuted", lean="Rule30UOR.Nope.x")
+
+    def test_render_restates_published_claims_and_reports_the_rest(self):
+        lean = self.FakeLean({"Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision": self.IFF,
+                              "Rule30UOR.Nope.x": self.IFF})
+        text1, skipped = frontier.render(Lexicon(), lean)
+        text2, _ = frontier.render(Lexicon(), lean)
         self.assertEqual(text1, text2)
         self.assertIn("\\begin{lexlean}{Frontier}", text1)
-        self.assertIn("claim-recurrent-central-collision", text1)
-        current, _ = frontier.render_file(check_only=True)
-        self.assertTrue(current, "Frontier.lex.tex is stale in the working tree; run bin/r30 frontier render")
+        self.assertIn("\\begin{theorem}{claim-rcc}", text1)
+        self.assertIn("problemone ↔ norecurrentcentralcollision", text1)
+        self.assertIn("\\lexeme{r30.frontier::problem-one-iff-no-recurrent-central-collision}", text1)
+        self.assertEqual(skipped, ["ghost"])
+
+    def test_render_refuses_when_lean_cannot_answer(self):
+        with self.assertRaisesRegex(RuntimeError, "Lean does not know"):
+            frontier.render(Lexicon(), self.FakeLean({}))
 
 
 class McpTests(unittest.TestCase):

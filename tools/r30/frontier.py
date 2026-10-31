@@ -140,12 +140,16 @@ def render(lexicon=None, leansig=None):
     claims = load()["claim"]
     wanted = [c for c in claims if c["status"] in dict(SECTIONS) and c.get("lean")]
     sigs = leansig.signatures([c["lean"] for c in wanted]) if wanted else {}
+    unknown = [c["lean"] for c in wanted if sigs.get(c["lean"]) is None]
+    if unknown:
+        raise RuntimeError("Lean does not know " + ", ".join(unknown) +
+                           " (is rule30-core-lean built?); the frontier cannot be rendered")
     blocks = {status: [] for status, _ in SECTIONS}
     packages, skipped = set(), []
     for c in wanted:
         e = lx.for_lean(c["lean"])
         sig = sigs.get(c["lean"])
-        if e is None or e.category != "proof-constant" or sig is None:
+        if e is None or e.category != "proof-constant":
             skipped.append(c["id"])
             continue
         conv = Converter(lx, e.package)

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "page-boundary-carry-definition-2"
+category = "proof-constant"
+signature = "(pi ((explicit L (const lexlean.std.nat::nat)) (explicit H (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::page-boundary-carry) (local L) (local H) (app (const lexlean.std.nat::succ) (local t))) (app (const lexlean.std.bool::and) (app (const r30.observation::row-bit) (app (const r30.observation::page) (local L) (local H) (app (const lexlean.std.nat::add) (local t) (nat 1))) (nat 0)) (app (const r30.observation::row-bit) (app (const r30.observation::page) (local L) (local H) (local t)) (app (const lexlean.std.nat::sub) (local L) (nat 1))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.pageBoundaryCarry.eq_2"
+
+[[form]]
+id = "page-boundary-carry-definition-2"
+channel = "math"
+surface = "pageboundarycarrydefinition2"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pageboundarycarrydefinition2) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

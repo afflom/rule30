@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "page-fold-definition-2"
+category = "proof-constant"
+signature = "(pi ((explicit L (const lexlean.std.nat::nat)) (explicit H (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::page-fold) (local L) (local H) (app (const lexlean.std.nat::succ) (local t))) (app (const r30.witt::witt-xor) (app (const r30.observation::page-fold) (local L) (local H) (local t)) (app (const r30.observation::page) (local L) (local H) (local t)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.pageFold.eq_2"
+
+[[form]]
+id = "page-fold-definition-2"
+channel = "math"
+surface = "pagefolddefinition2"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pagefolddefinition2) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

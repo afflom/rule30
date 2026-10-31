@@ -29,10 +29,15 @@ partial def r30Sexp (e : Expr) (names : List Name) : MetaM String := do
   | .letE .. => return "(let)"
   | .fvar .. | .mvar .. => return "(?)"
 
+/-- Resolve a name, realizing reserved names such as `foo.eq_1` on demand. -/
+def r30Resolve (n : Syntax) : CommandElabM Name := do
+  try liftTermElabM <| realizeGlobalConstNoOverload n
+  catch _ => pure n.getId
+
 elab "#r30sig " ns:ident* : command => do
-  let env ← getEnv
   for n in ns do
-    let name := n.getId
+    let name ← r30Resolve n
+    let env ← getEnv
     match env.find? name with
     | none => logInfo m!"SIG {name} unknown"
     | some ci =>
@@ -43,9 +48,9 @@ elab "#r30sig " ns:ident* : command => do
       logInfo m!"SIG {name} {kind} {s}"
 
 elab "#r30axioms " ns:ident* : command => do
-  let env ← getEnv
   for n in ns do
-    let name := n.getId
+    let name ← r30Resolve n
+    let env ← getEnv
     unless env.contains name do
       logInfo m!"AXIOMS {name} unknown"
       continue

@@ -39,6 +39,7 @@ bin/r30 sig <Lean names>               # a declaration's type as an s-expression
 bin/r30 unpublished <module prefixes>  # theorems without a lexeme, and whether they can be published
 bin/r30 theorem preview <Lean names>   # the entry and statement, without writing
 bin/r30 theorem add <Lean names>       # write entry + statement, lock, check the module, probe
+bin/r30 define <Lean definitions>      # publish each notion's defining equation as a lemma in the Notions section
 bin/r30 check paper --modules src/Observations.lex.tex   # seconds
 bin/r30 verify paper --modules src/Observations.lex.tex  # seconds; the real probe
 bin/r30 axioms <Lean names>            # must print only propext, Quot.sound
@@ -78,6 +79,33 @@ available as MCP tools: `claude mcp add r30 -- python3 <repo>/tools/r30/mcp_serv
    `rule30-lexlean/STRATEGY.md` if it changes the strategy. Negative results
    are recorded too; see the refuted claims in `frontier.toml`.
 5. `bin/r30 commit -m "..." --push`. The gate refreshes the PDFs into the commit.
+
+## What the paper can and cannot say
+
+LexLean's specification (§4.2) rejects free expository paragraphs and
+arbitrary natural language, so the LexLean documents carry no abstract,
+introduction or discussion: every sentence in them is a checked statement or
+a proof step. Their contextual layer is therefore built from what LexLean
+does admit, all of it verified:
+
+- **Defining equations.** `bin/r30 define` publishes, for each host definition,
+  the equation lemma Lean derives from it (`<def>.eq_n`) as a `lemma` named
+  `<notion>-definition` in the Notions section of `Observations.lex.tex`, so a
+  reader learns what `centergate(Q, t)` is from the paper and the kernel
+  confirms it. LexLean's own definition environments cannot be used for these
+  notions: they generate their own Lean, and the theorems are about the host's.
+- **Structure.** Sections with phrase headings (`r30.doc` label-words), the
+  Frontier module (proved reductions and refuted routes as theorems), and the
+  theorem/lemma/corollary distinction.
+- **Names.** Component ids are read: `center-defect-coupling`,
+  `periodic-black-no-arrival`.
+
+Exposition that is not a checked statement (why a route was tried, what a
+construction means, how the parts fit) belongs in `STRATEGY.md`, `frontier.toml`
+notes, and the README, and is shipped beside the attested PDFs, never inside
+them. Adding a prose environment to LexLean would be a change to LexLean's
+guarantee ("no semantically untracked prose path"), which is a decision for
+that project, not a workaround to take here.
 
 ## The register is the plan
 

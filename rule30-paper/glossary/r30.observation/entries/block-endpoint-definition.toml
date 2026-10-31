@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "block-endpoint-definition"
+category = "proof-constant"
+signature = "(pi ((explicit h (const lexlean.std.nat::nat)) (explicit A (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::block-endpoint) (local h) (local A)) (app (const lexlean.std.bool::and) (app (const r30.observation::row-bit) (local A) (nat 0)) (app (const r30.observation::row-bit) (local A) (app (const lexlean.std.nat::sub) (local h) (nat 1))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.blockEndpoint.eq_1"
+
+[[form]]
+id = "block-endpoint-definition"
+channel = "math"
+surface = "blockendpointdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name blockendpointdefinition) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

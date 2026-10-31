@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-definition"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const r30.time::cell) (local t) (nat 0))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.center.eq_1"
+
+[[form]]
+id = "center-definition"
+channel = "math"
+surface = "centerdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerdefinition) (paren (seq (slot 0))))"

@@ -49,16 +49,16 @@ math = "{render}"
 '''
 
 
-def theorem_block(id_, package, statement, args, assumed=()):
+def theorem_block(id_, package, statement, args, assumed=(), env="theorem"):
     call = f"({', '.join([*args, *assumed])})" if (args or assumed) else ""
     assume = "".join(f"Assume \\({h}\\).\n" for h in assumed)
-    return f'''\\begin{{theorem}}{{{id_}}}
+    return f'''\\begin{{{env}}}{{{id_}}}
 {ALLOW}
 {statement}
 \\begin{{proof}}
 {assume}Close the goal with \\(\\lexeme{{{package}::{id_}}}{call}\\).
 \\end{{proof}}
-\\end{{theorem}}
+\\end{{{env}}}
 
 '''
 
@@ -119,7 +119,25 @@ def probe(prepared_list):
     return errors
 
 
-def add(lean_name, package, slug=None, target=None, dry_run=False):
+def insert_block(text, block, section=None):
+    """Append a block at the end of `section` (created after the header when
+    absent) or at the end of the module."""
+    if section:
+        marker = "\\begin{section}{" + section + "}"
+        i = text.find(marker)
+        if i < 0:
+            lx = Lexicon()
+            label = lx.get("r30.doc::" + section)
+            heading = label.surface if label and label.surface else section
+            j = text.index("\n\n", text.index("\\title{")) + 2
+            return text[:j] + f"{marker}\n\\heading{{{heading}}}\n\n{block}\\end{{section}}\n\n" + text[j:]
+        end = text.index("\\end{section}", i)
+        return text[:end] + block + text[end:]
+    i = text.rindex("\\end{section}")
+    return text[:i] + block + text[i:]
+
+
+def add(lean_name, package, slug=None, target=None, dry_run=False, env="theorem", section=None):
     lx = Lexicon()
     p = prepare(lean_name, package, slug, lx, allow_existing=dry_run)
     files = lx.lex_tex_files(package)
@@ -137,9 +155,8 @@ def add(lean_name, package, slug=None, target=None, dry_run=False):
     p["entry_path"].write_text(entry)
     if p["statement"]:
         text = Path(target).read_text()
-        block = theorem_block(p["id"], package, p["statement"], p["args"], p["assumed"])
-        i = text.rindex("\\end{section}")
-        Path(target).write_text(text[:i] + block + text[i:])
+        block = theorem_block(p["id"], package, p["statement"], p["args"], p["assumed"], env)
+        Path(target).write_text(insert_block(text, block, section))
     project = lx.lexicon_project[package]
     checks.lock(project)
     result = checks.check(project, [str(Path(target).relative_to(repo.PROJECTS[project]))] if p["statement"] else None)
@@ -235,3 +252,31 @@ def unpublished(package="r30.observation", prefixes=("Rule30UOR",)):
         except Unsupported as ex:
             rows.append({"lean": n, "ok": False, "reason": str(ex)[:120]})
     return rows
+
+
+def define(lean_defs, package="r30.observation", target=None):
+    """Publish the defining equations of host definitions as lemmas in the
+    Notions section: `<slug>-definition` closes with the Lean equation lemma
+    `<def>.eq_n`. The reader gets every notion's meaning in controlled English,
+    and the kernel checks it against the definition."""
+    results, refused = [], []
+    for d in lean_defs:
+        n = 1
+        while True:
+            name = f"{d}.eq_{n}"
+            if leansig.signatures([name])[name] is None:
+                break
+            slug = slugify(d) + "-definition" + ("" if n == 1 else f"-{n}")
+            if Lexicon().get(f"{package}::{slug}") is not None:
+                n += 1
+                continue  # already published
+            try:
+                results.append(add(name, package, slug, target, env="lemma", section="notions"))
+            except Unsupported as ex:
+                refused.append((name, str(ex).splitlines()[0][:160]))
+            except Exception as ex:  # a converter bug must not abort the batch
+                refused.append((name, f"internal: {type(ex).__name__}: {str(ex)[:120]}"))
+            n += 1
+        if n == 1:
+            refused.append((d, "no equation lemma (not a definition, or unknown)"))
+    return results, refused

@@ -155,9 +155,11 @@ class VerificationTests(unittest.TestCase):
     def run_verify(self, body, env=None):
         self.compiler.write_text("#!/bin/bash\n" + body)
         self.compiler.chmod(0o755)
+        # The fixture must not see the gate's own cache: the tests run inside it.
+        clean = {k: v for k, v in os.environ.items() if not k.startswith("RULE30_LEXLEAN")}
         return subprocess.run(["bash", str(self.repo / "scripts/verify_lexlean.sh"), str(self.compiler)],
                               cwd=self.repo, capture_output=True, text=True,
-                              env={**os.environ, **(env or {})})
+                              env={**clean, **(env or {})})
 
     SUCCESS = ('if [[ "$1" == lock ]]; then exit 0; fi\n'
                'mkdir -p .lexlean/verified/new && echo "{}" > .lexlean/verified/new/attestation.json\n'

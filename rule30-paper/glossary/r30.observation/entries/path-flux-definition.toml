@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "path-flux-definition"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::path-flux) (local Q) (local t) (local k) (nat 0)) (nat 0)))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.pathFlux.eq_1"
+
+[[form]]
+id = "path-flux-definition"
+channel = "math"
+surface = "pathfluxdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pathfluxdefinition) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "recover-phase-definition"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit g (const lexlean.std.bool::bool)) (explicit outgoing (const lexlean.std.int::int)) (explicit gate (const lexlean.std.int::int))) (app (const lexlean.core::eq) (app (const r30.observation::recover-phase) (local a) (local g) (local outgoing) (local gate)) (app (const lexlean.std.int::mul) (app (const lexlean.std.int::sub) (nat 1) (app (const lexlean.std.int::mul) (nat 2) (app (const r30.observation::bit-value) (local g)))) (app (const lexlean.std.int::sub) (local outgoing) (app (const lexlean.std.int::mul) (app (const lexlean.std.int::sub) (nat 1) (app (const lexlean.std.int::mul) (nat 2) (app (const r30.observation::bit-value) (local a)))) (local gate))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.recoverPhase.eq_1"
+
+[[form]]
+id = "recover-phase-definition"
+channel = "math"
+surface = "recoverphasedefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name recoverphasedefinition) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

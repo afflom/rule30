@@ -73,7 +73,8 @@ class Lexicon:
         self.lexicon_project[package] = project
         for path in sorted((lexicon_toml.parent / "entries").glob("*.toml")):
             e = tomllib.loads(path.read_text())
-            forms = [f for f in e.get("form", []) if f.get("channel") == "math"]
+            forms = [f for f in e.get("form", []) if f.get("channel") == "math"] or \
+                [f for f in e.get("form", []) if f.get("channel") == "text"]
             den = e.get("denotation") or {}
             entry = Entry(f"{package}::{e['id']}", e.get("category"), e.get("frame"),
                           e.get("surface_arity", 0), forms[0]["surface"] if forms else None,
