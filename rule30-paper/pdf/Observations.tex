@@ -2657,4 +2657,18 @@ For every natural number \(n\) and natural number \(d\), \(\operatorname{rowbit}
 \begin{proof}
 The goal follows from \(\operatorname{testbitphilinpoweqtrinomialparity}(n, d)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:edge-diagonal-eq-formula}
+For every natural number \(t\), \(\operatorname{edgediagonal}(t) = \operatorname{edgeformula}(t, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{edgediagonaleqformula}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-not-formula-xor-interior}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{not}(\operatorname{bxor}(\operatorname{edgeformula}(t, t), \operatorname{interiordiagonal}(t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqnotformulaxorinterior}(t)\).
+\end{proof}
 \end{document}

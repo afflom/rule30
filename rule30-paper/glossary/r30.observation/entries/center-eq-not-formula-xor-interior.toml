@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-not-formula-xor-interior"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const lexlean.std.bool::not) (app (const r30.local::bxor) (app (const r30.observation::edge-formula) (local t) (local t)) (app (const r30.observation::interior-diagonal) (local t))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.center_eq_not_formula_xor_interior"
+
+[[form]]
+id = "center-eq-not-formula-xor-interior"
+channel = "math"
+surface = "centereqnotformulaxorinterior"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqnotformulaxorinterior) (paren (seq (slot 0))))"

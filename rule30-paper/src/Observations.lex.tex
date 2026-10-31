@@ -3042,5 +3042,21 @@ Close the goal with \(\lexeme{r30.observation::test-bit-phi-lin-pow-eq-trinomial
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{edge-diagonal-eq-formula}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(edgediagonal(t) = edgeformula(t, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::edge-diagonal-eq-formula}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-not-formula-xor-interior}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = not(bxor(edgeformula(t, t), interiordiagonal(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-formula-xor-interior}(t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

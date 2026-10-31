@@ -2929,4 +2929,18 @@ kernel: the edge diagonal is a finite XOR of `trinomialParity` values, and the i
 the same XOR over the bulk carry events. The automatic background is now exact; what remains is
 the bulk.
 
+**The edge diagonal in closed form (`EdgeSplit.edgeFormula`).** `edgeLedger t = ⊕_{m<t}
+q^(t-1-m) · (edgeSource m · X)` (`edgeLedger_eq_sum`, linearity and shift-commutation of the
+Rule-150 propagation), so the edge diagonal is the finite XOR over `m < t` of
+`edgeTerm t m = trinomialParity (t-1-m) (t-2m-1) ⊕ [rdiag 1 m] · trinomialParity (t-1-m) (t-2)`
+(`edgeDiagonal_eq_formula`), and
+
+    center t = ¬(edgeFormula t t ⊕ interiorDiagonal t)      (`center_eq_not_formula_xor_interior`).
+
+Everything explicit about the orbit is now on one side: the edge events (periodic) propagated by
+the trinomial automaton (2-automatic). `aperiodic-compensation` reads: the interior diagonal, the
+bulk carries propagated by the same automaton, is not eventually periodic against this
+background. The bulk carries are the adjacent black pairs strictly inside the pattern; the leaf is
+a statement about their parity on the gasket of every row, and nothing else is left to separate.
+
 Problem 1 remains unproved.

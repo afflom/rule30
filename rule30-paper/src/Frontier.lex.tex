@@ -124,6 +124,14 @@ Close the goal with \(\lexeme{r30.observation::center-eq-not-bxor-diagonals}(t)\
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-edge-diagonal-formula}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = not(bxor(edgeformula(t, t), interiordiagonal(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-formula-xor-interior}(t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

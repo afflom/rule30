@@ -169,6 +169,12 @@ suite = "register"
 statement = "Two carry events of every row are explicit (the left edge pair and the right pair at the right edge); removing them splits the ledger by linearity into an edge-sourced ledger, the Rule-150 evolution of a periodic source, and the ledger of the interior carries, and center t = not (edgeDiagonal t XOR interiorDiagonal t)."
 
 [[id]]
+id = "edge-diagonal-formula"
+level = "build"
+suite = "register"
+statement = "The edge diagonal is an explicit 2-automatic expression: edgeLedger t is the Rule-150 propagation of the edge events, so edgeDiagonal t = edgeFormula t t, the XOR over m < t of trinomialParity (t-1-m) (t-2m-1) XOR [rdiag 1 m] trinomialParity (t-1-m) (t-2); hence center t = not (edgeFormula t t XOR interiorDiagonal t)."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

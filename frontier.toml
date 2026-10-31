@@ -24,7 +24,7 @@ id = "aperiodic-compensation"
 status = "open"
 statement = "Under a hypothetical center period, the two column-one defects (each aperiodic by Jen) cannot satisfy the gated mirror forever. This is the remaining obligation."
 since = "2026-10-28"
-note = "Every proved reduction ends here. Shape fixed by left-defect-sourcing (2026-10-31): under a periodic center the entire left defect field is a function of the right column-one defect sequence and the center. Exact form (ledger-diagonal): center t = not ledgerDiagonal t, so the claim is that the diagonal of the carry ledger winWitt 0 t is not eventually periodic; the linear part contributes the constant 1 and all nonlinearity is in the carries. The closing statement is that the orbit's self-referential equation has no periodic solution. Decision point first-failure-2adic (refuted): the first failing comparison is fair-bit random in every 2-adic class, so the obstruction is exact, not statistical. No closing argument is known."
+note = "Every proved reduction ends here. Exact form (ledger-diagonal, edge-interior-split, edge-diagonal-formula): center t = not (edgeFormula t t XOR interiorDiagonal t), where edgeFormula is an explicit 2-automatic expression (the periodic edge events propagated by the trinomial automaton) and interiorDiagonal is the diagonal of the ledger of the bulk carries, the adjacent black pairs strictly inside the pattern, propagated by the same automaton. The claim is that interiorDiagonal is not eventually periodic against that background. Shape fixed by left-defect-sourcing: under a periodic center the entire left defect field is a function of the right column-one defect sequence and the center. The closing statement is that the orbit's self-referential equation has no periodic solution. Decision point first-failure-2adic (refuted): the first failing comparison is fair-bit random in every 2-adic class, so the obstruction is exact, not statistical. No closing argument is known."
 depends = ["recurrent-central-collision", "coupling-law"]
 
 [[claim]]
@@ -247,3 +247,12 @@ lean = "Rule30UOR.EdgeSplit.center_eq_not_bxor_diagonals"
 since = "2026-10-31"
 note = "Rule30UOR.EdgeSplit: carry_row_left_edge (bit 2t of the carry is set), carry_row_right_pair (bit 1 is rdiag 1 t), carry_split, ledger_split, center_eq_not_bxor_diagonals; interior_testBit_* show the interior mask carries no edge event. Next exact step: the edge diagonal in closed form (linear CA readout of a periodic source, 2-automatic), after which aperiodic-compensation reads: the interior diagonal is not eventually periodic against that background."
 depends = ["ledger-diagonal", "all-rules-facet"]
+
+[[claim]]
+id = "edge-diagonal-formula"
+status = "proved"
+statement = "The edge diagonal is an explicit 2-automatic expression: edgeLedger t is the Rule-150 propagation of the edge events, so edgeDiagonal t = edgeFormula t t, the XOR over m < t of trinomialParity (t-1-m) (t-2m-1) XOR [rdiag 1 m] trinomialParity (t-1-m) (t-2); hence center t = not (edgeFormula t t XOR interiorDiagonal t)."
+lean = "Rule30UOR.EdgeSplit.center_eq_not_formula_xor_interior"
+since = "2026-10-31"
+note = "Rule30UOR.EdgeSplit: phiLinearPow_xor, phiLinearPow_shiftLeft, testBit_phiLinearPow_shift, edgeTerm, edgeLedgerSum, edgeLedger_eq_sum, edgeFormula, testBit_edgeLedgerSum, edgeDiagonal_eq_formula, center_eq_not_formula_xor_interior, with Ledger.trinomialParity (testBit_phiLinPow_eq_trinomialParity). Everything explicit about the orbit is on one side; aperiodic-compensation is the aperiodicity of the interior diagonal against this background."
+depends = ["edge-interior-split"]
