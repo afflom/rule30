@@ -1,5 +1,7 @@
 module
 
+public import Rule30UOR.Constructive
+public import Rule30UOR.KitConstructive
 public import Ruliology.CellularAutomata.Rule30MaskedJen
 
 /-!
@@ -125,7 +127,7 @@ theorem other_column_defect_not_eventuallyPeriodic (hc : EventuallyPeriodic cent
     ¬ EventuallyPeriodic (fun t => defect Q t p) := by
   intro hd
   have hcol := (difference_eventuallyPeriodic_iff (fun t => cell t p) Q hQ).mp hd
-  exact jen p 0 hp ⟨hcol, hc⟩
+  exact Rule30UOR.KitConstructive.jen p 0 hp ⟨hcol, hc⟩
 
 /-- At every positive period multiple, even the masked right compensation signal must be
 aperiodic if the center were periodic. -/

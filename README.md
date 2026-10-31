@@ -17,8 +17,13 @@ Kernel-checked [LexLean](https://github.com/afflom) and Lean 4 formalization of 
 
 The authored statements in [Paper](Rule30-Paper.pdf), [Core](Rule30-Core.pdf), and
 [Observations](Rule30-Observations.pdf) are verified by the Lean 4 kernel
-(`leanprover/lean4:v4.32.1`) and `leanchecker` under only the standard Lean axioms
-(`{propext, Classical.choice, Quot.sound}`), with zero `sorry`s and zero custom axioms.
+(`leanprover/lean4:v4.32.1`) and `leanchecker` under only the axioms `{propext, Quot.sound}`,
+with zero `sorry`s and zero custom axioms. **`Classical.choice` is not used anywhere in the
+authored proof surfaces.** The kernel audits of the research library and of the bridge reject
+any theorem that depends on it, every LexLean statement declares `\allowaxioms{Quot.sound;propext}`,
+and `scripts/check_no_choice.py` rejects classical constants in the Lean sources. Where the prize
+kit's own proofs use choice, the kit is kept unchanged and the results used here are reproved
+under the kit's definitions in `Rule30UOR.KitConstructive`.
 
 ---
 

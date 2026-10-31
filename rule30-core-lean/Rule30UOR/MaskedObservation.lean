@@ -196,7 +196,7 @@ theorem compressed_prefix_repeat_pow {T P : Nat}
     (hc : ∀ t, T ≤ t → center (t + P) = center t) (t n : Nat) (ht : T ≤ t) :
     ∃ a b : Nat, a < b ∧ b ≤ 2 ^ whiteCount t n ∧
       LeftPrefixAgree (t + a * P) (t + b * P) n := by
-  obtain ⟨a, b, hab, hb, he⟩ := pigeonhole (whiteCount t n)
+  obtain ⟨a, b, hab, hb, he⟩ := Rule30UOR.KitConstructive.pigeonhole (whiteCount t n)
     (fun m => whiteTrace (t + m * P) n) (fun m => by
       change whiteCount (t + m * P) n = whiteCount t n
       simpa only [Nat.zero_mul, Nat.add_zero] using
@@ -222,12 +222,12 @@ theorem separated_prefix_bound (T P t n M : Nat) (_hP : 0 < P)
     (hsep : PrefixSeparated t P n M) :
     M ≤ Rule30UOR.Core.twopow (whiteCount t n) := by
   let codes := (List.range M).map (fun a => whiteTrace (t + a * P) n)
-  have hnd : codes.Nodup := nodup_map_of_inj _ List.nodup_range (by
+  have hnd : codes.Nodup := nodup_map_of_inj _ (Rule30UOR.Constructive.nodup_range _) (by
     intro a ha b hb he
     have hw := periodic_window (kit_period hc) t a b n ht
     exact hsep a b (List.mem_range.mp ha) (List.mem_range.mp hb)
       (prefix_of_white_trace hw ((whiteTrace_eq_iff hw).mp he)))
-  have hle := length_le_of_subset hnd (l₂ := allLists (whiteCount t n)) (by
+  have hle := Rule30UOR.KitConstructive.length_le_of_subset hnd (l₂ := allLists (whiteCount t n)) (by
     intro code hcode
     obtain ⟨a, ha, rfl⟩ := List.mem_map.mp hcode
     have hh := mem_allLists (whiteTrace (t + a * P) n)

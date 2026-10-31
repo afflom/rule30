@@ -102,11 +102,8 @@ theorem no_adjacent_zero (z : Nat) : ¬ (Zero z ∧ Zero (z + 1)) := by
 
 /-- Two diagonals past a zero diagonal is an all-black diagonal. -/
 theorem black_after_zero {z : Nat} (hz : Zero z) : Black (z + 2) := by
-  have hnz : ∃ s, E (z + 1) s = true := by
-    refine Classical.byContradiction fun h => no_adjacent_zero z ⟨hz, fun t => ?_⟩
-    cases e : E (z + 1) t
-    · rfl
-    · exact absurd ⟨t, e⟩ h
+  have hnz : ∃ s, E (z + 1) s = true :=
+    nonzero_witness (z + 1) (fun h => no_adjacent_zero z ⟨hz, h⟩)
   obtain ⟨s, hs⟩ := hnz
   have mono : ∀ n, E (z + 2) (s + 1 + n) = true := by
     intro n
@@ -162,34 +159,43 @@ theorem period_at_most_doubles {P j : Nat} (hP : 0 < P) (h : CommonPer P (j + 1)
       (Nat.zero_le _) (P + P), rs_double (h j (by omega))]
     cases E (j + 2) t <;> rfl
 
-/-- **Doubling points.** For every `P > 0` some zero diagonal `z` has every diagonal up to `z`
-`P`-periodic while diagonal `z + 1` is not. -/
-theorem doubling_point (P : Nat) (hP : 0 < P) :
-    ∃ z, Zero z ∧ CommonPer P z ∧ ¬ ∀ t, E (z + 1) (t + P) = E (z + 1) t := by
-  refine Classical.byContradiction fun hno => ?_
+/-- **Bounded doubling point.** The doubling point is found by depth `2 ^ (2 P)`. -/
+theorem doubling_point_bounded (P : Nat) (hP : 0 < P) :
+    ∃ z, z ≤ 2 ^ (2 * P) ∧
+      (Zero z ∧ CommonPer P z ∧ ¬ ∀ t, E (z + 1) (t + P) = E (z + 1) t) := by
+  haveI : ∀ z, Decidable (Zero z) := fun z => inferInstanceAs (Decidable (∀ t, E z t = false))
+  haveI : ∀ z, Decidable (CommonPer P z) := fun z =>
+    inferInstanceAs (Decidable (∀ i, i ≤ z → ∀ t, E i (t + P) = E i t))
+  refine Decidable.byContradiction fun hno => ?_
   have h1 : CommonPer P 1 := by
     intro i hi t
     rcases Nat.lt_or_ge i 1 with h | h
     · rw [show i = 0 by omega, E_zero', E_zero']
     · rw [show i = 1 by omega, E_one', E_one']
-  have hall : ∀ j, CommonPer P (j + 1) := by
+  have hall : ∀ j, j ≤ 2 ^ (2 * P) → CommonPer P (j + 1) := by
     intro j
     induction j with
-    | zero => exact h1
+    | zero => intro _; exact h1
     | succ j ih =>
-      by_cases hnz : ∃ s, E (j + 1) s = true
-      · exact period_passes hP ih hnz
-      · have hz : Zero (j + 1) := fun t => by
-          cases e : E (j + 1) t
-          · rfl
-          · exact absurd ⟨t, e⟩ hnz
-        by_cases hper : ∀ t, E (j + 2) (t + P) = E (j + 2) t
+      intro hj
+      have ih' := ih (by omega)
+      by_cases hz : Zero (j + 1)
+      · by_cases hper : ∀ t, E (j + 2) (t + P) = E (j + 2) t
         · intro i hi
           rcases Nat.lt_or_ge i (j + 2) with h' | h'
-          · exact ih i (by omega)
+          · exact ih' i (by omega)
           · rw [show i = j + 2 by omega]; exact hper
-        · exact absurd ⟨j + 1, hz, ih, hper⟩ hno
-  exact unbounded_periods P hP fun j t => hall j j (by omega) t
+        · exact absurd ⟨j + 1, hj, hz, ih', hper⟩ hno
+      · exact period_passes hP ih' (nonzero_witness (j + 1) hz)
+  exact common_period_fails_by P hP fun j hj t =>
+    hall (2 ^ (2 * P)) (Nat.le_refl _) j (by omega) t
+
+/-- **Doubling points.** For every `P > 0` some zero diagonal `z` has every diagonal up to `z`
+`P`-periodic while diagonal `z + 1` is not. -/
+theorem doubling_point (P : Nat) (hP : 0 < P) :
+    ∃ z, Zero z ∧ CommonPer P z ∧ ¬ ∀ t, E (z + 1) (t + P) = E (z + 1) t := by
+  obtain ⟨z, -, h⟩ := doubling_point_bounded P hP
+  exact ⟨z, h⟩
 
 /-! ### The compile bit is read off the real pattern -/
 

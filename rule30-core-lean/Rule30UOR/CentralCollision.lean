@@ -31,20 +31,21 @@ def CentralCollision (Q t B : Nat) : Prop :=
 def NearCollision (Q t H B : Nat) : Prop :=
   ∃ s : Nat, s ≤ H ∧ CentralCollision Q (t + s) B
 
-/-- One fixed central column, distinct from the collision-free column `-1`, carries
-nonzero collisions arbitrarily late. -/
+/-- Nonzero collisions occur arbitrarily late in the central band, away from the
+collision-free column `-1`. Classically this is the same as one fixed column of the
+band recurring (finite pigeonhole); that fixed-column form is not used, since
+extracting the column needs the infinite pigeonhole principle. -/
 def RecurrentCentralCollision (Q B : Nat) : Prop :=
-  ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ (B : Int) ∧ x ≠ -1 ∧
-    ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collision Q t x = true
+  ∀ N : Nat, ∃ t : Nat, N ≤ t ∧
+    ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ (B : Int) ∧ x ≠ -1 ∧ collision Q t x = true
 
 /-- A collision source in a fixed left strip, excluding the source-free column `-1`. -/
 def LeftCollision (Q t B : Nat) : Prop :=
   ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ -2 ∧ collision Q t x = true
 
-/-- A single fixed column of the left strip carries collisions arbitrarily late. -/
+/-- Collisions occur arbitrarily late in the left strip. -/
 def RecurrentLeftCollision (Q B : Nat) : Prop :=
-  ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ -2 ∧
-    ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collision Q t x = true
+  ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ ∃ x : Int, -(B : Int) ≤ x ∧ x ≤ -2 ∧ collision Q t x = true
 
 /-- A cone witness retaining the collision's unit/black endpoint orientation. -/
 def AdvancingLeftCone (Q t k : Nat) : Prop :=
@@ -58,10 +59,10 @@ def AdvancingLeftCollision (Q t B : Nat) : Prop :=
 def LeadingAdvance (Q t k : Nat) : Prop :=
   2 ≤ k ∧ advancingAtDepth Q t k ∧ RightmostLeft Q t k
 
-/-- Both the column and one of the advancing orientations recur infinitely often. -/
+/-- Advancing collisions, of either orientation, occur arbitrarily late in the strip. -/
 def RecurrentAdvancingLeftCollision (Q B : Nat) : Prop :=
-  ∃ k c : Nat, 2 ≤ k ∧ k ≤ B ∧ (c = 3 ∨ c = 5) ∧
-    ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collisionCode Q t k = c
+  ∀ N : Nat, ∃ t : Nat, N ≤ t ∧
+    ∃ k c : Nat, 2 ≤ k ∧ k ≤ B ∧ (c = 3 ∨ c = 5) ∧ collisionCode Q t k = c
 
 /-- The sharper mixed-colour witness is a cone with an advancing right endpoint. -/
 theorem left_defect_black_cone (Q t k : Nat)
@@ -80,20 +81,21 @@ def FirstPathErasure (Q t k j : Nat) : Prop :=
     (∀ i : Nat, i ≤ j → leftDefect Q (t + 1 + i) (k - (i + 1)) = true) ∧
     ErasureEvent Q (t + 1 + j) (k - (j + 2))
 
-/-- A fixed source orientation, first-erasure offset, gate pattern and reset colour
-recur together. This is a finite observation pattern, not a closed strip dynamics. -/
+/-- A source orientation, first-erasure offset, gate pattern and reset colour occur
+together arbitrarily late. This is a finite observation pattern, not a closed strip
+dynamics. -/
 def RecurrentSourceErasure (Q B : Nat) : Prop :=
-  ∃ k c j g z : Nat, 2 ≤ k ∧ k ≤ B ∧ (c = 3 ∨ c = 5) ∧ j + 1 < k ∧
-    1 ≤ g ∧ g ≤ 6 ∧ (z = 0 ∨ z = 3) ∧
-    ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collisionCode Q t k = c ∧
+  ∀ N : Nat, ∃ t : Nat, N ≤ t ∧
+    ∃ k c j g z : Nat, 2 ≤ k ∧ k ≤ B ∧ (c = 3 ∨ c = 5) ∧ j + 1 < k ∧
+      1 ≤ g ∧ g ≤ 6 ∧ (z = 0 ∨ z = 3) ∧ collisionCode Q t k = c ∧
       FirstPathErasure Q t k j ∧ gateCode Q (t + 1 + j) (k - (j + 2)) = g ∧
       leftColour Q (t + 2 + j) (k - (j + 2)) = z
 
 /-- A leading source reaches its first erasure exactly at the center. -/
 def RecurrentLeadingErasure (Q B : Nat) : Prop :=
-  ∃ k c g : Nat, 2 ≤ k ∧ k ≤ B ∧ (c = 3 ∨ c = 5) ∧ (g = 2 ∨ g = 5) ∧
-    ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ collisionCode Q t k = c ∧
-      LeadingAdvance Q t k ∧ FirstPathErasure Q t k (k - 2) ∧
+  ∀ N : Nat, ∃ t : Nat, N ≤ t ∧
+    ∃ k c g : Nat, 2 ≤ k ∧ k ≤ B ∧ (c = 3 ∨ c = 5) ∧ (g = 2 ∨ g = 5) ∧
+      collisionCode Q t k = c ∧ LeadingAdvance Q t k ∧ FirstPathErasure Q t k (k - 2) ∧
       gateCode Q (t + (k - 1)) 0 = g
 
 /-- A leading front cannot erase before reaching the center. Its center erasure
@@ -216,7 +218,7 @@ theorem leading_black_before_arrival (Q t k : Nat) (hl : LeadingAdvance Q t k)
     ∃ s : Nat, s + 1 < k ∧ Rule30UOR.Core.center (t + s) = true := by
   obtain ⟨_hf, _he, hg, hwfinal⟩ := leading_first_erasure Q t k hl hc
   have hk := hl.1
-  apply Classical.byContradiction
+  apply Decidable.byContradiction
   intro hn
   have hw : ∀ s : Nat, s ≤ k - 1 → cell (t + s) 0 = false := by
     intro s hs
@@ -319,7 +321,7 @@ private theorem white_cone (t : Nat) : ∀ (r : Nat) (p : Int),
 
 private theorem black_ancestor (t r : Nat) (h : center (t + r) = true) :
     ∃ q : Int, -(r : Int) ≤ q ∧ q ≤ (r : Int) ∧ cell t q = true := by
-  apply Classical.byContradiction
+  apply Decidable.byContradiction
   intro hn
   have hw := white_cone t r 0 (by
     intro q hq1 hq2
@@ -375,15 +377,9 @@ theorem unit_defect_forces_near_collision (Q t r : Nat)
 private theorem black_within_period {T P : Nat} (hP : 0 < P)
     (hc : ∀ t, T ≤ t → center (t + P) = center t) (t : Nat) (ht : T ≤ t) :
     ∃ r : Nat, r < P ∧ center (t + r) = true := by
-  have hex : ∃ u : Nat, t ≤ u ∧ center u = true := by
-    apply Classical.byContradiction
-    intro hn
-    apply center_not_eventually_constant
-    refine ⟨t, false, fun u hu => ?_⟩
-    cases hb : center u
-    · rfl
-    · exact (hn ⟨u, hu, hb⟩).elim
-  obtain ⟨u, hu, hb⟩ := hex
+  refine Decidable.byContradiction fun hn => ?_
+  apply Rule30UOR.KitConstructive.center_not_eventually_constant
+  refine ⟨t, false, fun u hu => ?_⟩
   let r := (u - t) % P
   have hr : r < P := Nat.mod_lt _ hP
   have he : (t + r) + ((u - t) / P) * P = u := by
@@ -393,7 +389,10 @@ private theorem black_within_period {T P : Nat} (hP : 0 < P)
     omega
   have hp := periodic_mul hc ((u - t) / P) (t + r) (by omega)
   rw [he] at hp
-  exact ⟨r, hr, hp.symm.trans hb⟩
+  rw [hp]
+  cases hb : center (t + r)
+  · rfl
+  · exact (hn ⟨r, hr, hb⟩).elim
 
 private theorem kit_period {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P) :
     ∀ t, T ≤ t → center (t + P) = center t := by
@@ -406,7 +405,7 @@ private theorem left_defect_of_agreeing_window (Q b r : Nat)
     (hc : Rule30UOR.MaskedObservation.CenterWindowAgree b (b + Q) (r + 1))
     (hd : leftAdjacentDefect Q (b + r) = true) :
     ∃ k : Nat, 1 ≤ k ∧ k ≤ r + 1 ∧ defect Q b (-(k : Int)) = true := by
-  apply Classical.byContradiction
+  apply Decidable.byContradiction
   intro hn
   have pref : Rule30UOR.MaskedObservation.LeftPrefixAgree b (b + Q) (r + 1) := by
     intro k hk1 hkr
@@ -434,7 +433,7 @@ private theorem nearest_left (Q t : Nat) (hz : leftDefect Q t 0 = false) :
       cases n with
       | zero => rw [hz] at hd; contradiction
       | succ n => omega
-    · apply Classical.byContradiction
+    · apply Decidable.byContradiction
       intro hn
       apply hp
       intro r hr
@@ -474,7 +473,7 @@ theorem black_window_forces_leading_source (Q b r : Nat) (hr : 0 < r)
   have prof := rightmost_left_profile Q b k s ⟨hk0, hdk, hpref⟩ hslt
     (fun j hj => clean j (by omega))
   have hxfront : x = -((k - s : Nat) : Int) := by
-    apply Classical.byContradiction
+    apply Decidable.byContradiction
     intro hn
     have hz := prof.2.2 (-x).toNat (by omega)
     have hs : cell (b + s) x = cell (b + s + Q) x := by
@@ -514,7 +513,7 @@ theorem black_gap_forces_initial_leading (Q b r : Nat) (hr : 0 < r)
     simpa only [Nat.add_assoc] using clean (s + j) (by omega)
   obtain ⟨j, hj, hblack⟩ := leading_black_before_arrival Q (b + s) k hl source_clean
   have hs0 : s = 0 := by
-    apply Classical.byContradiction
+    apply Decidable.byContradiction
     intro hn
     have hwhite := hw (s + j) (by omega) (by omega)
     have hh : Rule30UOR.Core.center (b + (s + j)) = true := by
@@ -569,7 +568,7 @@ theorem periodic_leading_source_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
   have hbv : b ≤ v := by dsimp [b, a]; omega
   have hgap : v - b < P := by dsimp [b, a]; omega
   have hgap0 : 0 < v - b := by
-    apply Classical.byContradiction
+    apply Decidable.byContradiction
     intro hn
     have he : v = b := by omega
     have hwhite : center v = false := hw
@@ -672,126 +671,65 @@ theorem periodic_central_collisions (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
     T P m (max T N) hP hm hc (by omega)
   exact ⟨t, by omega, hcol⟩
 
-private theorem finite_recurrent_choice (f : Nat → Nat → Prop) (n : Nat) :
-    (∀ N : Nat, ∃ t : Nat, N ≤ t ∧ ∃ i : Nat, i < n ∧ f i t) →
-    ∃ i : Nat, i < n ∧ ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ f i t := by
-  induction n with
-  | zero =>
-    intro h
-    obtain ⟨t, ht, i, hi, hf⟩ := h 0
-    omega
-  | succ n ih =>
-    intro h
-    by_cases hn : ∀ N : Nat, ∃ t : Nat, N ≤ t ∧ f n t
-    · exact ⟨n, by omega, hn⟩
-    · obtain ⟨N0, hN0⟩ := Classical.not_forall.mp hn
-      obtain ⟨i, hi, hf⟩ := ih (by
-        intro N
-        obtain ⟨t, ht, j, hj, hf⟩ := h (max N N0)
-        have hne : j ≠ n := by
-          intro he
-          subst j
-          exact hN0 ⟨t, by omega, hf⟩
-        exact ⟨t, by omega, j, by omega, hf⟩)
-      exact ⟨i, by omega, hf⟩
-
-/-- The recurring witness can be chosen on the leading front, with its first
-cancellation at the center. Only two of the six erasure gate cases remain. -/
+/-- Leading erasures, with their first cancellation at the center, occur arbitrarily
+late. Only two of the six erasure gate cases occur. Each witness lies in an explicit
+window after `N`. -/
 theorem periodic_recurrent_leading_erasure (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentLeadingErasure (m * P) P := by
-  obtain ⟨k, hk, hfront⟩ := finite_recurrent_choice
-    (fun k t => LeadingAdvance (m * P) t k ∧ FirstPathErasure (m * P) t k (k - 2) ∧
-      (gateCode (m * P) (t + (k - 1)) 0 = 2 ∨ gateCode (m * P) (t + (k - 1)) 0 = 5))
-    (P + 1) (by
-      intro N
-      obtain ⟨t, k, ht, hb, hk, hl, hf, hg⟩ :=
-        periodic_leading_erasure_window T P m (max T N) hP hm hc (by omega)
-      exact ⟨t, by omega, k, by omega, hl, hf, hg⟩)
-  have hk2 : 2 ≤ k := by
-    obtain ⟨t, ht, hl, hf, hg⟩ := hfront 0
-    exact hl.1
-  obtain ⟨j, hj, horient⟩ := finite_recurrent_choice
-    (fun j t => collisionCode (m * P) t k = (if j = 0 then 3 else 5) ∧
-      LeadingAdvance (m * P) t k ∧ FirstPathErasure (m * P) t k (k - 2) ∧
-      (gateCode (m * P) (t + (k - 1)) 0 = 2 ∨ gateCode (m * P) (t + (k - 1)) 0 = 5))
-    2 (by
-      intro N
-      obtain ⟨t, ht, hl, hf, hg⟩ := hfront N
-      rcases (advancing_collision_codes (m * P) t k).1 hl.2.1 with hx | hy
-      · exact ⟨t, ht, 0, by omega, by simpa using hx, hl, hf, hg⟩
-      · exact ⟨t, ht, 1, by omega, by simpa using hy, hl, hf, hg⟩)
-  obtain ⟨i, hi, hgate⟩ := finite_recurrent_choice
-    (fun i t => collisionCode (m * P) t k = (if j = 0 then 3 else 5) ∧
-      LeadingAdvance (m * P) t k ∧ FirstPathErasure (m * P) t k (k - 2) ∧
-      gateCode (m * P) (t + (k - 1)) 0 = (if i = 0 then 2 else 5)) 2 (by
-      intro N
-      obtain ⟨t, ht, hs, hl, hf, hg⟩ := horient N
-      rcases hg with hx | hy
-      · exact ⟨t, ht, 0, by omega, hs, hl, hf, by simpa using hx⟩
-      · exact ⟨t, ht, 1, by omega, hs, hl, hf, by simpa using hy⟩)
-  refine ⟨k, (if j = 0 then 3 else 5), (if i = 0 then 2 else 5), hk2, by omega,
-    ?_, ?_, hgate⟩
-  · by_cases he : j = 0 <;> simp [he]
-  · by_cases he : i = 0 <;> simp [he]
+  intro N
+  obtain ⟨t, k, ht, -, hk, hl, hf, hg⟩ :=
+    periodic_leading_erasure_window T P m (max T N) hP hm hc (by omega)
+  exact ⟨t, by omega, k, collisionCode (m * P) t k, gateCode (m * P) (t + (k - 1)) 0,
+    hl.1, hk, (advancing_collision_codes (m * P) t k).1 hl.2.1, hg, rfl, hl, hf, rfl⟩
 
-/-- The older fixed-column source interface follows by forgetting the leading
-profile and its correlated center erasure. -/
+/-- Advancing sources occur arbitrarily late, forgetting the leading profile and its
+correlated center erasure. -/
 theorem periodic_recurrent_advancing_left_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentAdvancingLeftCollision (m * P) P := by
-  obtain ⟨k, c, g, hk, hkP, hcs, hgs, hf⟩ := periodic_recurrent_leading_erasure T P m hP hm hc
-  refine ⟨k, c, hk, hkP, hcs, ?_⟩
   intro N
-  obtain ⟨t, ht, hs, hl, hp, hg⟩ := hf N
-  exact ⟨t, ht, hs⟩
+  obtain ⟨t, ht, k, c, g, hk, hkP, hcs, _hgs, hs, _hl, _hp, _hg⟩ :=
+    periodic_recurrent_leading_erasure T P m hP hm hc N
+  exact ⟨t, ht, k, c, hk, hkP, hcs, hs⟩
 
-/-- Finite choice fixes an entire source-to-first-erasure pattern, including the
-OR-gate case and common reset colour, under the hypothetical periodic center. -/
+/-- An entire source-to-first-erasure pattern, including the OR-gate case and the
+common reset colour, occurs arbitrarily late under the hypothetical periodic center. -/
 theorem periodic_recurrent_source_erasure (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentSourceErasure (m * P) P := by
-  obtain ⟨k, c, g, hk, hkP, hcs, hgs, hf⟩ := periodic_recurrent_leading_erasure T P m hP hm hc
-  obtain ⟨i, hi, hreset⟩ := finite_recurrent_choice
-    (fun i t => collisionCode (m * P) t k = c ∧ FirstPathErasure (m * P) t k (k - 2) ∧
-      gateCode (m * P) (t + 1 + (k - 2)) (k - ((k - 2) + 2)) = g ∧
-      leftColour (m * P) (t + 2 + (k - 2)) (k - ((k - 2) + 2)) = (if i = 0 then 0 else 3))
-    2 (by
-      intro N
-      obtain ⟨t, ht, hs, hl, hp, hg⟩ := hf N
-      have hg' : gateCode (m * P) (t + 1 + (k - 2)) (k - ((k - 2) + 2)) = g := by
-        simpa only [show t + 1 + (k - 2) = t + (k - 1) by omega,
-          show k - ((k - 2) + 2) = 0 by omega] using hg
-      have hh := hp.2.2.2.2.2.2
-      have hh' : leftColour (m * P) (t + 2 + (k - 2)) (k - ((k - 2) + 2)) = 0 ∨
-          leftColour (m * P) (t + 2 + (k - 2)) (k - ((k - 2) + 2)) = 3 := by
-        simpa only [show t + 1 + (k - 2) + 1 = t + 2 + (k - 2) by omega] using hh
-      rcases hh' with hx | hy
-      · exact ⟨t, ht, 0, by omega, hs, hp, hg', by simpa using hx⟩
-      · exact ⟨t, ht, 1, by omega, hs, hp, hg', by simpa using hy⟩)
-  refine ⟨k, c, k - 2, g, (if i = 0 then 0 else 3), hk, hkP, hcs, by omega,
-    ?_, ?_, ?_, hreset⟩
+  intro N
+  obtain ⟨t, ht, k, c, g, hk, hkP, hcs, hgs, hs, _hl, hp, hg⟩ :=
+    periodic_recurrent_leading_erasure T P m hP hm hc N
+  have hg' : gateCode (m * P) (t + 1 + (k - 2)) (k - ((k - 2) + 2)) = g := by
+    simpa only [show t + 1 + (k - 2) = t + (k - 1) by omega,
+      show k - ((k - 2) + 2) = 0 by omega] using hg
+  have hh := hp.2.2.2.2.2.2
+  have hh' : leftColour (m * P) (t + 2 + (k - 2)) (k - ((k - 2) + 2)) = 0 ∨
+      leftColour (m * P) (t + 2 + (k - 2)) (k - ((k - 2) + 2)) = 3 := by
+    simpa only [show t + 1 + (k - 2) + 1 = t + 2 + (k - 2) by omega] using hh
+  refine ⟨t, ht, k, c, k - 2, g, leftColour (m * P) (t + 2 + (k - 2)) (k - ((k - 2) + 2)),
+    hk, hkP, hcs, by omega, ?_, ?_, hh', hs, hp, hg', rfl⟩
   · rcases hgs with he | he <;> omega
   · rcases hgs with he | he <;> omega
-  · by_cases he : i = 0 <;> simp [he]
 
-/-- The weaker recurring-source interface follows from a fixed advancing type. -/
+/-- Collisions in the left strip occur arbitrarily late. -/
 theorem periodic_recurrent_left_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentLeftCollision (m * P) P := by
-  obtain ⟨k, c, hk, hkP, hc0, hf⟩ := periodic_recurrent_advancing_left_column T P m hP hm hc
-  refine ⟨-(k : Int), by omega, by omega, ?_⟩
   intro N
-  obtain ⟨t, ht, hcode⟩ := hf N
+  obtain ⟨t, ht, k, c, hk, hkP, hc0, hcode⟩ :=
+    periodic_recurrent_advancing_left_column T P m hP hm hc N
   have hne : collisionCode (m * P) t k ≠ 0 := by rw [hcode]; rcases hc0 with h | h <;> omega
-  refine ⟨t, ht, ?_⟩
+  refine ⟨t, ht, -(k : Int), by omega, by omega, ?_⟩
   simpa only [collisionBit] using (collision_code_nonzero (m * P) t k).1 hne
 
-/-- Finite choice localizes recurrence to one fixed source column. The central strip
-is not a closed dynamical system: this theorem does not make its source signal periodic. -/
+/-- Central collisions occur arbitrarily late in the band. The central strip is not a
+closed dynamical system: this theorem does not make its source signal periodic. -/
 theorem periodic_recurrent_central_column (T P m : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : RecurrentCentralCollision (m * P) (2 * P) := by
-  obtain ⟨x, hx1, hx2, hf⟩ := periodic_recurrent_left_column T P m hP hm hc
-  exact ⟨x, by omega, by omega, by omega, hf⟩
+  intro N
+  obtain ⟨t, ht, x, hx1, hx2, hf⟩ := periodic_recurrent_left_column T P m hP hm hc N
+  exact ⟨t, ht, x, by omega, by omega, by omega, hf⟩
 
-/-- Frontier reduction: any eventual periodic center hypothesis yields a fixed-band
-recurrent central collision witness. This packages the `T, P` witness extraction and
+/-- Frontier reduction: any eventual periodic center hypothesis yields recurrent
+central collisions in a fixed band. This packages the `T, P` witness extraction and
 the periodic recurrence theorem into one contradiction-ready consequence. -/
 theorem recurrent_central_collision_of_eventual_periodic
   (m : Nat) (hm : 0 < m) (hc : EventuallyPeriodic Rule30Prize.center) :

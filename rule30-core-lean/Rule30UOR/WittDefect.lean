@@ -102,10 +102,9 @@ theorem alignedDefect_bit_zero (Q t : Nat) (hQ : 0 < Q) :
 /-- Exact remaining obligation, retaining the full seeded nonlinear pair evolution. -/
 theorem problem1_iff_pairOrbit_center :
     Problem1 ↔ ∀ Q : Nat, 0 < Q → ∀ T : Nat,
-      ∃ t : Nat, T ≤ t ∧ (pairOrbit Q t).2.testBit (t + Q) = true := by
+      ¬ ¬ ∃ t : Nat, T ≤ t ∧ (pairOrbit Q t).2.testBit (t + Q) = true := by
   constructor
   · intro h Q hQ T
-    apply Classical.byContradiction
     intro hn
     apply h
     refine ⟨T, Q, hQ, fun t ht => ?_⟩
@@ -116,7 +115,8 @@ theorem problem1_iff_pairOrbit_center :
     · exact hb
     · exact (hh hb).elim
   · intro h ⟨T, Q, hQ, hc⟩
-    obtain ⟨t, ht, hb⟩ := h Q hQ T
+    apply h Q hQ T
+    rintro ⟨t, ht, hb⟩
     rw [pairOrbit_eq, alignedDefect_center] at hb
     have hz : defect Q t 0 = false := (difference_eq_false_iff center Q t).mpr (hc t ht)
     rw [hz] at hb
@@ -617,7 +617,7 @@ theorem transfer_recover (a g : Bool) (incoming gate : Int) :
 
 theorem transfer_kernel (a g : Bool) (incoming gate : Int) :
     transferPhase a g incoming gate = 0 ↔ incoming = recoverPhase a g 0 gate := by
-  cases a <;> cases g <;> simp [transferPhase, recoverPhase, bitValue] <;> omega
+  cases a <;> cases g <;> simp [transferPhase, recoverPhase, bitValue] <;> cfomega
 
 theorem phase_transfer (Q t k : Nat) :
     leftPhase Q (t + 1) k =
@@ -677,48 +677,47 @@ private theorem window_mass_slide (f : Nat → Bool) : ∀ Q t : Nat,
     rw [show t + 1 + Q = t + (Q + 1) by omega] at hh
     omega
 
+/-- A non-increasing natural sequence is not-not eventually constant. The
+settling time itself is not extracted. -/
 private theorem decreasing_nat_stabilizes (g : Nat → Nat)
-    (hs : ∀ n : Nat, g (n + 1) ≤ g n) : ∃ U : Nat, ∀ t : Nat, U ≤ t → g t = g U := by
+    (hs : ∀ n : Nat, g (n + 1) ≤ g n) : ¬ ¬ ∃ U : Nat, ∀ t : Nat, U ≤ t → g t = g U := by
   have hle : ∀ i d : Nat, g (i + d) ≤ g i := by
     intro i d
     induction d with
     | zero => simp
     | succ d ih =>
       have hh := hs (i + d)
-      rw [show i + (d + 1) = i + d + 1 by omega]
-      omega
-  have aux : ∀ a s : Nat, g s ≤ a → ∃ U : Nat, s ≤ U ∧ ∀ t : Nat, U ≤ t → g t = g U := by
+      rw [show i + (d + 1) = i + d + 1 by cfomega]
+      cfomega
+  have aux : ∀ a s : Nat, g s ≤ a → ¬ ¬ ∃ U : Nat, s ≤ U ∧ ∀ t : Nat, U ≤ t → g t = g U := by
     intro a
     induction a with
     | zero =>
       intro s hgs
-      refine ⟨s, Nat.le_refl s, ?_⟩
+      refine Rule30UOR.Constructive.nn_pure ⟨s, Nat.le_refl s, ?_⟩
       intro t ht
       have hh := hle s (t - s)
-      rw [show s + (t - s) = t by omega] at hh
-      omega
+      rw [show s + (t - s) = t by cfomega] at hh
+      cfomega
     | succ a ih =>
-      intro s hgs
-      by_cases he : ∀ t : Nat, s ≤ t → g t = g s
-      · exact ⟨s, Nat.le_refl s, he⟩
-      · have hex : ∃ t : Nat, s ≤ t ∧ g t < g s := by
-          apply Classical.byContradiction
-          intro hn
-          apply he
-          intro t ht
-          have hh := hle s (t - s)
-          rw [show s + (t - s) = t by omega] at hh
-          by_cases hlt : g t < g s
-          · exact (hn ⟨t, ht, hlt⟩).elim
-          · omega
-        obtain ⟨t, ht, hlt⟩ := hex
-        obtain ⟨U, hU, hh⟩ := ih t (by omega)
-        exact ⟨U, by omega, hh⟩
-  obtain ⟨U, hU, hh⟩ := aux (g 0) 0 (Nat.le_refl _)
-  exact ⟨U, hh⟩
+      intro s hgs hno
+      have hex : ¬ ¬ ∃ t : Nat, s ≤ t ∧ g t < g s := by
+        intro hn
+        apply hno
+        refine ⟨s, Nat.le_refl s, ?_⟩
+        intro t ht
+        have hh := hle s (t - s)
+        rw [show s + (t - s) = t by cfomega] at hh
+        by_cases hlt : g t < g s
+        · exact (hn ⟨t, ht, hlt⟩).elim
+        · cfomega
+      apply hex
+      rintro ⟨t, ht, hlt⟩
+      exact ih t (by cfomega) (fun ⟨U, hU, hh⟩ => hno ⟨U, by cfomega, hh⟩)
+  exact Rule30UOR.Constructive.nn_map (fun ⟨U, _, hh⟩ => ⟨U, hh⟩) (aux (g 0) 0 (Nat.le_refl _))
 
 private theorem no_rise_eventually_periodic (f : Nat → Bool) (Q T : Nat) (hQ : 0 < Q)
-    (hn : ∀ t : Nat, T ≤ t → f t = false → f (t + Q) = false) : EventuallyPeriodic f := by
+    (hn : ∀ t : Nat, T ≤ t → f t = false → f (t + Q) = false) : ¬ ¬ EventuallyPeriodic f := by
   let g (n : Nat) := windowMass f Q (T + n)
   have hg : ∀ n : Nat, g (n + 1) ≤ g n := by
     intro n
@@ -732,7 +731,8 @@ private theorem no_rise_eventually_periodic (f : Nat → Bool) (Q T : Nat) (hQ :
     · cases hb : f (T + n + Q) <;>
         simp only [ha, hb, Bool.false_eq_true, ite_false, ite_true] at hh <;>
         dsimp [g] <;> rw [show T + (n + 1) = T + n + 1 by omega] <;> omega
-  obtain ⟨U, hu⟩ := decreasing_nat_stabilizes g hg
+  refine Rule30UOR.Constructive.nn_map ?_ (decreasing_nat_stabilizes g hg)
+  rintro ⟨U, hu⟩
   refine ⟨T + U, Q, hQ, ?_⟩
   intro t ht
   have h0 := hu (t - T) (by omega)
@@ -742,21 +742,20 @@ private theorem no_rise_eventually_periodic (f : Nat → Bool) (Q T : Nat) (hQ :
   rw [show T + (t + 1 - T) = t + 1 by omega] at h1
   have hh := window_mass_slide f Q t
   rw [h0, h1] at hh
-  cases ha : f t <;> cases hb : f (t + Q) <;> simp_all
+  cases ha : f t <;> cases hb : f (t + Q) <;> rw [ha, hb] at hh <;>
+    simp only [Bool.false_eq_true, ite_false, ite_true] at hh <;> first | rfl | cfomega
 
 private theorem nonperiodic_has_rise (f : Nat → Bool) (hf : ¬ EventuallyPeriodic f)
-    (Q N : Nat) (hQ : 0 < Q) : ∃ t : Nat, N ≤ t ∧ f t = false ∧ f (t + Q) = true := by
-  apply Classical.byContradiction
+    (Q N : Nat) (hQ : 0 < Q) : ¬ ¬ ∃ t : Nat, N ≤ t ∧ f t = false ∧ f (t + Q) = true := by
   intro hn
-  apply hf
-  apply no_rise_eventually_periodic f Q N hQ
+  refine no_rise_eventually_periodic f Q N hQ ?_ hf
   intro t ht hw
   cases hb : f (t + Q)
   · rfl
   · exact (hn ⟨t, ht, hw, hb⟩).elim
 
 private theorem nonperiodic_has_fall (f : Nat → Bool) (hf : ¬ EventuallyPeriodic f)
-    (Q N : Nat) (hQ : 0 < Q) : ∃ t : Nat, N ≤ t ∧ f t = true ∧ f (t + Q) = false := by
+    (Q N : Nat) (hQ : 0 < Q) : ¬ ¬ ∃ t : Nat, N ≤ t ∧ f t = true ∧ f (t + Q) = false := by
   have hn : ¬ EventuallyPeriodic (fun t => !f t) := by
     rintro ⟨U, R, hR, hp⟩
     apply hf
@@ -764,7 +763,8 @@ private theorem nonperiodic_has_fall (f : Nat → Bool) (hf : ¬ EventuallyPerio
     intro t ht
     have hh := hp t ht
     cases ha : f t <;> cases hb : f (t + R) <;> simp_all
-  obtain ⟨t, ht, h0, h1⟩ := nonperiodic_has_rise (fun t => !f t) hn Q N hQ
+  refine Rule30UOR.Constructive.nn_map ?_ (nonperiodic_has_rise (fun t => !f t) hn Q N hQ)
+  rintro ⟨t, ht, h0, h1⟩
   refine ⟨t, ht, ?_, ?_⟩
   · cases ha : f t <;> simp_all
   · cases hb : f (t + Q) <;> simp_all
@@ -802,7 +802,7 @@ of actual center erasures recur arbitrarily late. A one-sided phase drift cannot
 be inferred by selecting just one recurring cancellation case. -/
 theorem periodic_erasure_orientation (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
-    ∃ t : Nat, N ≤ t ∧ ErasureEvent (m * P) t 0 ∧ gateCode (m * P) t 0 = g := by
+    ¬ ¬ ∃ t : Nat, N ≤ t ∧ ErasureEvent (m * P) t 0 ∧ gateCode (m * P) t 0 = g := by
   have hf := masked_right_nonperiodic hP hc
   have hp : ∀ t : Nat, T ≤ t → center (t + P) = center t := by
     intro t ht
@@ -819,12 +819,16 @@ theorem periodic_erasure_orientation (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
         Rule30UOR.DefectFront.center_defect_zero hp m (t + 1) (by omega)
     exact ⟨t, by omega, (center_erasure_iff_gate (m * P) t h0 h1).2 (by rw [hgate]; exact hg), hgate⟩
   rcases hg with hg | hg
-  · obtain ⟨t, ht, h0, h1⟩ := nonperiodic_has_fall maskedRight hf (m * P) (max T N) (Nat.mul_pos hm hP)
+  · refine Rule30UOR.Constructive.nn_map ?_
+      (nonperiodic_has_fall maskedRight hf (m * P) (max T N) (Nat.mul_pos hm hP))
+    rintro ⟨t, ht, h0, h1⟩
     have hchange : maskedRight (t + m * P) ≠ maskedRight t := by rw [h0, h1]; decide
     have hgate := gate_of_mask_change (m * P) t (periodic_mul hp m t (by omega)) hchange
     simp only [h0, ite_true] at hgate
     exact produce t ht (by simpa only [hg] using hgate)
-  · obtain ⟨t, ht, h0, h1⟩ := nonperiodic_has_rise maskedRight hf (m * P) (max T N) (Nat.mul_pos hm hP)
+  · refine Rule30UOR.Constructive.nn_map ?_
+      (nonperiodic_has_rise maskedRight hf (m * P) (max T N) (Nat.mul_pos hm hP))
+    rintro ⟨t, ht, h0, h1⟩
     have hchange : maskedRight (t + m * P) ≠ maskedRight t := by rw [h0, h1]; decide
     have hgate := gate_of_mask_change (m * P) t (periodic_mul hp m t (by omega)) hchange
     simp only [h0, Bool.false_eq_true, ite_false] at hgate
@@ -896,15 +900,9 @@ private theorem last_black_prefix (f : Nat → Bool) : ∀ n : Nat,
 private theorem black_in_period {T P : Nat} (hP : 0 < P)
     (hc : ∀ t, T ≤ t → center (t + P) = center t) (t : Nat) (ht : T ≤ t) :
     ∃ r : Nat, r < P ∧ center (t + r) = true := by
-  have hex : ∃ u : Nat, t ≤ u ∧ center u = true := by
-    apply Classical.byContradiction
-    intro hn
-    apply center_not_eventually_constant
-    refine ⟨t, false, fun u hu => ?_⟩
-    cases hb : center u
-    · rfl
-    · exact (hn ⟨u, hu, hb⟩).elim
-  obtain ⟨u, hu, hb⟩ := hex
+  refine Decidable.byContradiction fun hn => ?_
+  apply Rule30UOR.KitConstructive.center_not_eventually_constant
+  refine ⟨t, false, fun u hu => ?_⟩
   let r := (u - t) % P
   have hr : r < P := Nat.mod_lt _ hP
   have he : (t + r) + ((u - t) / P) * P = u := by
@@ -914,20 +912,25 @@ private theorem black_in_period {T P : Nat} (hP : 0 < P)
     omega
   have hp := periodic_mul hc ((u - t) / P) (t + r) (by omega)
   rw [he] at hp
-  exact ⟨r, hr, hp.symm.trans hb⟩
+  rw [hp]
+  cases hb : center (t + r)
+  · rfl
+  · exact (hn ⟨r, hr, hb⟩).elim
 
 /-- Both gate orientations recur with their actual leading sources on common
 black boundaries. The entire interval from that boundary to the first erasure
 is retained, so orientation recurrence and source recurrence are correlated. -/
 theorem periodic_black_erasure_origin (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
-    ∃ b k : Nat, N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
+    ¬ ¬ ∃ b k : Nat, N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
       WhiteCenterGap b (k - 1) ∧ LeadingAdvance (m * P) b k ∧
       FirstPathErasure (m * P) b k (k - 2) ∧ gateCode (m * P) (b + (k - 1)) 0 = g := by
   have hp : ∀ t, T ≤ t → center (t + P) = center t := by
     intro t ht
     simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
-  obtain ⟨t, ht, he, hgate⟩ := periodic_erasure_orientation T P m (max T N + P) g hP hm hc hg
+  refine Rule30UOR.Constructive.nn_map ?_
+    (periodic_erasure_orientation T P m (max T N + P) g hP hm hc hg)
+  rintro ⟨t, ht, he, hgate⟩
   have h0 := center_defect_zero hp m t (by omega)
   have h1 := center_defect_zero hp m (t + 1) (by omega)
   have hwhite : center t = false := (defect_right_and_white_of_clean_pair (m * P) t 0
@@ -1065,29 +1068,30 @@ private theorem right_import_nonperiodic {T P : Nat} (hP : 0 < P)
   have hhead := (difference_eventuallyPeriodic_iff (fun u => rightCell u 1) 1 (by decide)).1 hder
   have hc' : EventuallyPeriodic center := ⟨T, P, hP, fun t ht => by
     simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht⟩
-  exact jen 1 0 (by decide) ⟨by simpa only [rightCell, Int.natCast_one] using hhead, hc'⟩
+  exact Rule30UOR.KitConstructive.jen 1 0 (by decide) ⟨by simpa only [rightCell, Int.natCast_one] using hhead, hc'⟩
 
 /-- Both orientations of the actual gated column-2 input occur arbitrarily late
 for every positive period multiple. Each changes the head defect on that step;
 thus a periodic center cannot make this return input periodic or discard it. -/
 theorem periodic_right_import_orientation (T P m N : Nat) (before : Bool)
     (hP : 0 < P) (hm : 0 < m) (hc : Rule30UOR.Scale.CenterPeriodic T P) :
-    ∃ t : Nat, N ≤ t ∧ rightImport t = before ∧ rightImport (t + m * P) = !before ∧
+    ¬ ¬ ∃ t : Nat, N ≤ t ∧ rightImport t = before ∧ rightImport (t + m * P) = !before ∧
       rightDefect (m * P) (t + 1) 1 = !rightDefect (m * P) t 1 := by
   have hf := right_import_nonperiodic hP hc
-  have hex : ∃ t : Nat, max T N ≤ t ∧ rightImport t = before ∧
+  have hex : ¬ ¬ ∃ t : Nat, max T N ≤ t ∧ rightImport t = before ∧
       rightImport (t + m * P) = !before := by
     cases before
     · exact nonperiodic_has_rise rightImport hf (m * P) (max T N) (Nat.mul_pos hm hP)
     · exact nonperiodic_has_fall rightImport hf (m * P) (max T N) (Nat.mul_pos hm hP)
-  obtain ⟨t, ht, h0, h1⟩ := hex
+  refine Rule30UOR.Constructive.nn_map ?_ hex
+  rintro ⟨t, ht, h0, h1⟩
   have hd : rightImportDifference (m * P) t = true := by
     simp only [rightImportDifference, difference, h0, h1]
     cases before <;> rfl
-  have hc0 := Rule30UOR.Scale.center_mul hc m t (by omega)
+  have hc0 := Rule30UOR.Scale.center_mul hc m t (by cfomega)
   have hs := right_defect_import_balance (m * P) t hc0
   rw [Rule30UOR.Scale.bxor_eq, hd] at hs
-  refine ⟨t, by omega, h0, h1, ?_⟩
+  refine ⟨t, by cfomega, h0, h1, ?_⟩
   simpa only [Bool.xor_true] using hs
 
 /-! ## A joint history from the deeper right input to a left-source erasure -/
@@ -1237,7 +1241,7 @@ leading source are coupled at the same first erasure, with exact signed balance.
 Neither side is selected independently of the other. -/
 theorem periodic_coupled_cancellation (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
-    ∃ start b k : Nat, N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
+    ¬ ¬ ∃ start b k : Nat, N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
       WhiteCenterGap b (k - 1) ∧ LeadingAdvance (m * P) b k ∧
       FirstPathErasure (m * P) b k (k - 2) ∧ gateCode (m * P) (b + (k - 1)) 0 = g ∧
       HeadImportPath (m * P) start (b + (k - 1)) ∧
@@ -1248,11 +1252,12 @@ theorem periodic_coupled_cancellation (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m
     intro t ht
     simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
   have hper : EventuallyPeriodic center := ⟨T, P, hP, hp⟩
-  obtain ⟨v, hv, hzero⟩ := exists_defect_false_of_periodic hper (m * P) (Nat.mul_pos hm hP)
-    1 (by decide) (max T N)
+  refine Rule30UOR.Constructive.nn_bind (exists_defect_false_of_periodic hper (m * P)
+    (Nat.mul_pos hm hP) 1 (by decide) (max T N)) ?_
+  rintro ⟨v, hv, hzero⟩
   have hz : rightDefect (m * P) v 1 = false := hzero
-  obtain ⟨b, k, hbv, hkP, hb, hw, hl, hf, hgate⟩ :=
-    periodic_black_erasure_origin T P m (v + 1) g hP hm hc hg
+  refine Rule30UOR.Constructive.nn_map ?_ (periodic_black_erasure_origin T P m (v + 1) g hP hm hc hg)
+  rintro ⟨b, k, hbv, hkP, hb, hw, hl, hf, hgate⟩
   have hk2 := hl.1
   let finish := b + (k - 1)
   have clean : ∀ t : Nat, T ≤ t → leftDefect (m * P) t 0 = false := by
@@ -1360,14 +1365,14 @@ recurring erasure orientation. The closing minus-sign assertion is not a
 consequence of the coupled witness or its phase conventions. -/
 theorem periodic_coupled_gate_phase_sign (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
-    ∃ start b k : Nat, N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
+    ¬ ¬ ∃ start b k : Nat, N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ Rule30UOR.Core.center b = true ∧
       WhiteCenterGap b (k - 1) ∧ LeadingAdvance (m * P) b k ∧
       FirstPathErasure (m * P) b k (k - 2) ∧ gateCode (m * P) (b + (k - 1)) 0 = g ∧
       HeadImportPath (m * P) start (b + (k - 1)) ∧
       leftGatePhase (m * P) (b + (k - 1)) 0 =
         centerSign start (b + (k - 1) - start) * rightPhase (m * P) start 2 := by
-  obtain ⟨start, b, k, hs, hb, hk, hblack, hwhite, hl, hf, hgate, path, _balance⟩ :=
-    periodic_coupled_cancellation T P m (max T N) g hP hm hc hg
+  refine Rule30UOR.Constructive.nn_map ?_ (periodic_coupled_cancellation T P m (max T N) g hP hm hc hg)
+  rintro ⟨start, b, k, hs, hb, hk, hblack, hwhite, hl, hf, hgate, path, _balance⟩
   have hp : ∀ t, T ≤ t → center (t + P) = center t := by
     intro t ht
     simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
@@ -1531,28 +1536,28 @@ theorem defect_ancestry (Q : Nat) : ∀ (t : Nat) (p : Int), defect Q t p = true
     intro p h
     have hq : ∃ q : Int, p - 1 ≤ q ∧ q ≤ p + 1 ∧ defect Q t q = true := by
       rcases defect_has_ancestor Q t p h with h' | h' | h'
-      · exact ⟨p - 1, by omega, by omega, h'⟩
-      · exact ⟨p, by omega, by omega, h'⟩
-      · exact ⟨p + 1, by omega, by omega, h'⟩
+      · exact ⟨p - 1, by cfomega, by cfomega, h'⟩
+      · exact ⟨p, by cfomega, by cfomega, h'⟩
+      · exact ⟨p + 1, by cfomega, by cfomega, h'⟩
     obtain ⟨q, hq1, hq2, hqd⟩ := hq
     obtain ⟨f, hf0, hf1, hf2⟩ := ih q hqd
     refine ⟨fun s => if s ≤ t then f s else p, ?_, ?_, ?_⟩
-    · simp only [show ¬ (t + 1 ≤ t) by omega, if_false]
+    · simp only [show ¬ (t + 1 ≤ t) by cfomega, if_false]
     · intro s hs
       by_cases hst : s + 1 ≤ t
-      · simp only [show s ≤ t by omega, hst, if_true]
-        exact hf1 s (by omega)
-      · have hs' : s = t := by omega
+      · simp only [show s ≤ t by cfomega, hst, if_true]
+        exact hf1 s (by cfomega)
+      · have hs' : s = t := by cfomega
         rw [hs']
-        simp only [Nat.le_refl, if_true, show ¬ (t + 1 ≤ t) by omega, if_false, hf0]
-        omega
+        simp only [Nat.le_refl, if_true, show ¬ (t + 1 ≤ t) by cfomega, if_false, hf0]
+        cfomega
     · intro s hs
       by_cases hst : s ≤ t
       · simp only [hst, if_true]
         exact hf2 s hst
-      · have hs' : s = t + 1 := by omega
+      · have hs' : s = t + 1 := by cfomega
         rw [hs']
-        simp only [show ¬ (t + 1 ≤ t) by omega, if_false]
+        simp only [show ¬ (t + 1 ≤ t) by cfomega, if_false]
         exact h
 
 /-- A lineage moves by at most one column per step. -/
@@ -1562,16 +1567,16 @@ theorem ancestry_displacement (Q t : Nat) (p : Int) (f : Nat → Int) (h : Ances
   have key : ∀ j : Nat, j ≤ t → f (t - j) ≤ p + (j : Int) ∧ p - (j : Int) ≤ f (t - j) := by
     intro j
     induction j with
-    | zero => intro _; simp only [Nat.sub_zero, hf0]; omega
+    | zero => intro _; simp only [Nat.sub_zero, hf0]; cfomega
     | succ j ih =>
       intro hj
-      have h1 := ih (by omega)
-      have hstep := hf1 (t - (j + 1)) (by omega)
-      rw [show t - (j + 1) + 1 = t - j by omega] at hstep
-      omega
+      have h1 := ih (by cfomega)
+      have hstep := hf1 (t - (j + 1)) (by cfomega)
+      rw [show t - (j + 1) + 1 = t - j by cfomega] at hstep
+      cfomega
   intro s hs
-  have := key (t - s) (by omega)
-  rwa [show t - (t - s) = s by omega] at this
+  have := key (t - s) (by cfomega)
+  rwa [show t - (t - s) = s by cfomega] at this
 
 /-- **Seed terminal.** Every lineage ends at a seed-row defect: a cell of row `Q`
 that differs from the single seed. Off the center it is black in row `Q` (signed
@@ -1586,13 +1591,13 @@ theorem ancestry_seed_terminal (Q t : Nat) (p : Int) (f : Nat → Int) (h : Ance
     have h0 : cell 0 (f 0) = decide (f 0 = 0) := rfl
     simpa only [defect, difference, Nat.zero_add, h0] using hd
   refine ⟨?_, ?_, ?_⟩
-  · apply Classical.byContradiction
+  · apply Decidable.byContradiction
     intro hlt
     rw [cell_eq_false_of_lt Q (f 0) (by omega)] at hd'
     have : decide (f 0 = 0) = false := by simp only [decide_eq_false_iff_not]; omega
     rw [this] at hd'
     exact absurd hd' (by decide)
-  · apply Classical.byContradiction
+  · apply Decidable.byContradiction
     intro hlt
     rw [cell_eq_false_of_gt Q (f 0) (by omega)] at hd'
     have : decide (f 0 = 0) = false := by simp only [decide_eq_false_iff_not]; omega
@@ -1769,7 +1774,11 @@ theorem left_lineage_seed (Q t k : Nat) (h : LeftLineage Q t k 0) :
 def RightFront (Q t y : Nat) : Prop :=
   1 ≤ y ∧ rightDefect Q t y = true ∧ ∀ j : Nat, 1 ≤ j → j < y → rightDefect Q t j = false
 
-private theorem least_witness (P : Nat → Prop) : ∀ n : Nat, P n →
+instance (Q t y : Nat) : Decidable (RightFront Q t y) := by
+  unfold RightFront
+  infer_instance
+
+private theorem least_witness (P : Nat → Prop) [DecidablePred P] : ∀ n : Nat, P n →
     ∃ y, y ≤ n ∧ P y ∧ ∀ j, j < y → ¬ P j := by
   intro n
   induction n using Nat.strongRecOn with
@@ -1810,7 +1819,7 @@ private theorem right_front_clean (Q t y : Nat) (hc : leftDefect Q t 0 = false)
 /-- Under a clean center, the right front moves left by at most one column. -/
 theorem right_front_lower (Q t y z : Nat) (hc : leftDefect Q t 0 = false)
     (hy : RightFront Q t y) (hz : RightFront Q (t + 1) z) : y ≤ z + 1 := by
-  apply Classical.byContradiction
+  apply Decidable.byContradiction
   intro hlt
   have hclean := defect_clean_step Q t 0 ((y : Int) - 1) (right_front_clean Q t y hc hy)
     (z : Int) (by have := hz.1; omega) (by omega)
@@ -1863,7 +1872,7 @@ theorem coupled_import_born_at_arrival (Q b k start : Nat) (h3 : 3 ≤ k)
     (hw : WhiteCenterGap b (k - 1)) (hp : HeadImportPath Q start (b + (k - 1))) :
     start = b + (k - 2) := by
   have hlt := hp.1
-  apply Classical.byContradiction
+  apply Decidable.byContradiction
   intro hne
   have hh : rightDefect Q (b + (k - 2)) 1 = true :=
     hp.2.2.2.2.2.2 (b + (k - 2)) (by omega) (by omega)
@@ -1893,7 +1902,7 @@ theorem coupled_right_front_mirror (Q b k : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
   refine ⟨hclean, ?_⟩
   have hge : ∀ s y : Nat, 1 ≤ s → s + 1 < k → RightFront Q (b + s) y → 2 ≤ y := by
     intro s y hs1 hs hy
-    apply Classical.byContradiction
+    apply Decidable.byContradiction
     intro hlt
     have hy1 : y = 1 := by have := hy.1; omega
     have := hy.2.1
@@ -1902,7 +1911,7 @@ theorem coupled_right_front_mirror (Q b k : Nat) (hQ : 0 < Q) (h3 : 3 ≤ k)
   -- the import: the head is clean at b+(k-2) and defective at b+(k-1)
   have hfront_end : ∀ y : Nat, RightFront Q (b + (k - 2)) y → y ≤ 2 := by
     intro y hy
-    apply Classical.byContradiction
+    apply Decidable.byContradiction
     intro hgt
     obtain ⟨_hf, he, _hg, _hw⟩ := leading_first_erasure Q b k hl hc
     have hin : leftDefect Q (b + (k - 1)) 1 = true := he.1
@@ -2059,36 +2068,36 @@ source descend, after time `T`, from right-half and left-half defects respective
 Their lineages meet only before `T`. -/
 theorem periodic_coupled_import_ancestry (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (hg : g = 2 ∨ g = 5) :
-    ∃ start b k y : Nat, N ≤ start ∧ N ≤ b ∧ T ≤ b ∧ T ≤ start ∧ 2 ≤ k ∧ k ≤ P ∧
+    ¬ ¬ ∃ start b k y : Nat, N ≤ start ∧ N ≤ b ∧ T ≤ b ∧ T ≤ start ∧ 2 ≤ k ∧ k ≤ P ∧
       Rule30UOR.Core.center b = true ∧ WhiteCenterGap b (k - 1) ∧
       LeadingAdvance (m * P) b k ∧ gateCode (m * P) (b + (k - 1)) 0 = g ∧
       HeadImportPath (m * P) start (b + (k - 1)) ∧
       (3 ≤ k → start = b + (k - 2)) ∧
       (3 ≤ k → RightFront (m * P) (b + 1) y ∧ 2 ≤ y ∧ y ≤ k - 1) ∧
       RightLineage (m * P) start 2 T ∧ LeftLineage (m * P) b k T := by
-  obtain ⟨start, b, k, hs, hb, hk, hblack, hwhite, hl, _hf, hgate, path, _balance⟩ :=
-    periodic_coupled_cancellation T P m (max T N) g hP hm hc hg
+  refine Rule30UOR.Constructive.nn_map ?_ (periodic_coupled_cancellation T P m (max T N) g hP hm hc hg)
+  rintro ⟨start, b, k, hs, hb, hk, hblack, hwhite, hl, _hf, hgate, path, _balance⟩
   have hp : ∀ t, T ≤ t → center (t + P) = center t := by
     intro t ht
     simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
   have clean : ∀ t n : Nat, T ≤ t → CenterCleanThrough (m * P) t n := by
     intro t n ht s _hbound
     simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
-      center_defect_zero hp m (t + s) (by omega)
+      center_defect_zero hp m (t + s) (by cfomega)
   have hQ : 0 < m * P := Nat.mul_pos hm hP
   have hy : ∃ y : Nat, 3 ≤ k → RightFront (m * P) (b + 1) y ∧ 2 ≤ y ∧ y ≤ k - 1 := by
     by_cases h3 : 3 ≤ k
     · obtain ⟨y, _, hy, hy2, hyk⟩ := coupled_right_front_mirror_at (m * P) b k 1 hQ h3 hl
-        (clean b k (by omega)) hwhite (Nat.le_refl _) (by omega)
+        (clean b k (by cfomega)) hwhite (Nat.le_refl _) (by cfomega)
       exact ⟨y, fun _ => ⟨hy, hy2, hyk⟩⟩
     · exact ⟨0, fun h => absurd h h3⟩
   obtain ⟨y, hy⟩ := hy
-  refine ⟨start, b, k, y, by omega, by omega, by omega, by omega, hl.1, hk, hblack, hwhite, hl,
+  refine ⟨start, b, k, y, by cfomega, by cfomega, by cfomega, by cfomega, hl.1, hk, hblack, hwhite, hl,
     hgate, path, fun h3 => coupled_import_born_at_arrival (m * P) b k start h3 hl
-      (clean b k (by omega)) hwhite path, hy,
-    right_lineage_of_clean_center (m * P) start 2 T (by omega) (by omega) path.2.2.2.2.1
+      (clean b k (by cfomega)) hwhite path, hy,
+    right_lineage_of_clean_center (m * P) start 2 T (by cfomega) (by cfomega) path.2.2.2.2.1
       (clean T (start - T) (Nat.le_refl _)),
-    left_lineage_of_clean_center (m * P) b k T (by have := hl.1; omega) (by omega)
+    left_lineage_of_clean_center (m * P) b k T (by have := hl.1; cfomega) (by cfomega)
       hl.2.2.2.1 (clean T (b - T) (Nat.le_refl _))⟩
 
 /-! ## Moving-diagonal transport to a physical head
@@ -2336,7 +2345,7 @@ private theorem coupled_right_front_and_prefix (Q b k start : Nat) (hQ : 0 < Q) 
   obtain ⟨y, _hhead, hy, hy2, hyk⟩ :=
     coupled_right_front_mirror_at Q b k 1 hQ h3 hl hc hw (Nat.le_refl _) (by omega)
   have yeq : y = k - 1 := by
-    apply Classical.byContradiction
+    apply Decidable.byContradiction
     intro hne
     have white := whitePrefix y (by omega) (by omega)
     have hz : rightDefect Q (b + 1) y = false := by
@@ -2425,7 +2434,7 @@ theorem depth_two_cancellation_cases (Q b start : Nat)
     have born := right_head_birth Q b ce hd hn
     have reset := black_reset_import Q b hb hb' hd hn
     have hs : start = b := by
-      apply Classical.byContradiction
+      apply Decidable.byContradiction
       intro hne
       have hlt : start < b := by have := hp.1; omega
       have bad := hp.2.2.2.2.2.2 b hlt (by omega)
@@ -2786,7 +2795,11 @@ theorem center_flip_mask_invisible (d n j : Nat) (hj : j < n ∨ n + 2 < j) :
       Rule30UOR.Interfaces.valA (d ^^^ centerFlipMask n) = Rule30UOR.Interfaces.valA d ∧
       Rule30UOR.Interfaces.valB (d ^^^ centerFlipMask n) = Rule30UOR.Interfaces.valB d := by
   have bit7 (i : Nat) : (7 : Nat).testBit i = decide (i < 3) := by
-    rw [show (7 : Nat) = 2 ^ 3 - 1 by decide, Nat.testBit_two_pow_sub_one]
+    rcases Nat.lt_or_ge i 3 with hi | hi
+    · rcases (show i = 0 ∨ i = 1 ∨ i = 2 by cfomega) with rfl | rfl | rfl <;> decide
+    · rw [Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le (by decide : (7 : Nat) < 2 ^ 3)
+        (Nat.pow_le_pow_right (by decide) hi))]
+      exact (decide_eq_false (by cfomega)).symm
   have mn : (centerFlipMask n).testBit n = true := by
     simp [centerFlipMask, Nat.testBit_shiftLeft]
   have mj : (centerFlipMask n).testBit j = false := by
@@ -3158,12 +3171,43 @@ theorem q_divides_degree_bound (r d : Nat) (hd : d ≠ 0) (hr : QDivides r d) :
     subst a
     rw [q_power_zero] at ha
     exact hd ha.symm
-  have top := q_power_top r a a.log2 (Nat.testBit_log2 hne) (fun j hj =>
+  have top := q_power_top r a a.log2 (Rule30UOR.Constructive.testBit_log2 hne) (fun j hj =>
     Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le Nat.lt_log2_self
       (Nat.pow_le_pow_right (by decide) (by omega))))
   rw [ha] at top
   have hle := (Nat.le_log2 hd).2 (Nat.ge_two_pow_of_testBit top.1)
   omega
+
+/-- Every polynomial q-power quotient is at most the encoded dividend. -/
+theorem q_quotient_bound (r a d : Nat) (ha : phiLinearPow r a = d) : a ≤ d := by
+  by_cases hz : a = 0
+  · subst a; exact Nat.zero_le _
+  cases r with
+  | zero => simpa only [phiLinearPow] using Nat.le_of_eq ha
+  | succ r =>
+    have top := q_power_top (r + 1) a a.log2 (Rule30UOR.Constructive.testBit_log2 hz) (fun j hj =>
+      Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le Nat.lt_log2_self
+        (Nat.pow_le_pow_right (by decide) (by omega))))
+    rw [ha] at top
+    exact Nat.le_trans (Nat.le_of_lt Nat.lt_log2_self)
+      (Nat.le_trans (Nat.pow_le_pow_right (by decide) (by omega))
+        (Nat.ge_two_pow_of_testBit top.1))
+
+/-- A finite search decides q-divisibility; this is a reference procedure,
+not a claim of an efficient polynomial-division implementation. -/
+theorem q_divides_bounded (r d : Nat) :
+    QDivides r d ↔ ∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d := by
+  constructor
+  · rintro ⟨a, ha⟩
+    exact ⟨a, q_quotient_bound r a d ha, ha⟩
+  · rintro ⟨a, _, ha⟩
+    exact ⟨a, ha⟩
+
+theorem q_divides_bounded_witness (r d : Nat) (h : QDivides r d) :
+    ∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d := (q_divides_bounded r d).1 h
+
+instance qDividesDecidable (r d : Nat) : Decidable (QDivides r d) :=
+  decidable_of_iff (∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d) (q_divides_bounded r d).symm
 
 theorem q_order_exists (d : Nat) (hd : d ≠ 0) :
     ∃ r, QDivides r d ∧ ¬ QDivides (r + 1) d := by
@@ -3195,36 +3239,6 @@ theorem q_order_exists (d : Nat) (hd : d ≠ 0) :
   change 2 * r ≤ d.log2 at hb
   omega
 
-/-- Every polynomial q-power quotient is at most the encoded dividend. -/
-theorem q_quotient_bound (r a d : Nat) (ha : phiLinearPow r a = d) : a ≤ d := by
-  by_cases hz : a = 0
-  · subst a; exact Nat.zero_le _
-  cases r with
-  | zero => simpa only [phiLinearPow] using Nat.le_of_eq ha
-  | succ r =>
-    have top := q_power_top (r + 1) a a.log2 (Nat.testBit_log2 hz) (fun j hj =>
-      Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le Nat.lt_log2_self
-        (Nat.pow_le_pow_right (by decide) (by omega))))
-    rw [ha] at top
-    exact Nat.le_trans (Nat.le_of_lt Nat.lt_log2_self)
-      (Nat.le_trans (Nat.pow_le_pow_right (by decide) (by omega))
-        (Nat.ge_two_pow_of_testBit top.1))
-
-/-- A finite search decides q-divisibility; this is a reference procedure,
-not a claim of an efficient polynomial-division implementation. -/
-theorem q_divides_bounded (r d : Nat) :
-    QDivides r d ↔ ∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d := by
-  constructor
-  · rintro ⟨a, ha⟩
-    exact ⟨a, q_quotient_bound r a d ha, ha⟩
-  · rintro ⟨a, _, ha⟩
-    exact ⟨a, ha⟩
-
-theorem q_divides_bounded_witness (r d : Nat) (h : QDivides r d) :
-    ∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d := (q_divides_bounded r d).1 h
-
-instance qDividesDecidable (r d : Nat) : Decidable (QDivides r d) :=
-  decidable_of_iff (∃ a : Nat, a ≤ d ∧ phiLinearPow r a = d) (q_divides_bounded r d).symm
 
 /-- Executable bounded maximum of q-divisible exponents. -/
 def qOrderSearch (d : Nat) : Nat → Nat
@@ -3456,10 +3470,10 @@ theorem periodic_observer_q_rank_drop (T P m t n : Nat)
   have step := periodic_observer_window_divisibility T P m t n
     (qOrder (observerDefect (m * P) t))
     (qOrder (observerDefect (m * P) t) + n / 2 + 1) hc ht
-    (q_order_spec _ hd.1).1 (by omega)
+    (q_order_spec _ hd.1).1 (by cfomega)
   rw [← step, q_divides_iff_order _ _ hd'.1]
   unfold observerQRank
-  omega
+  cfomega
 
 /-- An exact seeded center-matching step can destroy a q-factor. The finite
 certificate assumes no infinite center period and is not a counterexample
@@ -3865,7 +3879,7 @@ theorem q_block_charge_zero_iff (a A0 A1 A2 : Nat)
   constructor
   · intro hq
     have hR0 : R = 0 := by
-      apply Classical.byContradiction
+      apply Decidable.byContradiction
       intro hne
       have hb := q_divides_degree_bound h R hne hq
       have hl := (Nat.log2_lt hne).2 hRlt
@@ -3919,36 +3933,36 @@ theorem repeated_block_carry (a A : Nat)
   intro j
   simp only [testBit_carry, Nat.testBit_xor, Nat.testBit_shiftLeft, testBit_bool_toNat]
   rcases (show j = 0 ∨ (1 ≤ j ∧ j < h) ∨ j = h ∨ (h < j ∧ j < h + h) ∨ j = h + h ∨
-      (h + h < j ∧ j < h + h + h) ∨ h + h + h ≤ j by omega) with
+      (h + h < j ∧ j < h + h + h) ∨ h + h + h ≤ j by cfomega) with
     hj | ⟨hj1, hj2⟩ | hj | ⟨hj1, hj2⟩ | hj | ⟨hj1, hj2⟩ | hj
   · subst hj
-    simp [show ¬ (0 ≥ h) by omega, show ¬ (0 ≥ h + h) by omega]
-  · simp [show ¬ (j ≥ h) by omega, show ¬ (j ≥ h + h) by omega, hj1,
-      show ¬ (j - 1 ≥ h) by omega, show ¬ (j - 1 ≥ h + h) by omega]
+    simp [show ¬ (0 ≥ h) by cfomega, show ¬ (0 ≥ h + h) by cfomega]
+  · simp [show ¬ (j ≥ h) by cfomega, show ¬ (j ≥ h + h) by cfomega, hj1,
+      show ¬ (j - 1 ≥ h) by cfomega, show ¬ (j - 1 ≥ h + h) by cfomega]
   · rw [hj]
-    simp [hz h (Nat.le_refl _), show ¬ (h ≥ h + h) by omega, show 1 ≤ h by omega,
-      show ¬ (h - 1 ≥ h) by omega, show ¬ (h - 1 ≥ h + h) by omega,
-      show h - h = 0 by omega]
-  · simp [hz j (by omega), hz (j - 1) (by omega), show j ≥ h by omega,
-      show ¬ (j ≥ h + h) by omega, show j - 1 ≥ h by omega,
-      show ¬ (j - 1 ≥ h + h) by omega, show 1 ≤ j by omega, show 1 ≤ j - h by omega,
-      show j - h ≠ 0 by omega, show j - 1 - h = j - h - 1 by omega]
+    simp [hz h (Nat.le_refl _), show ¬ (h ≥ h + h) by cfomega, show 1 ≤ h by cfomega,
+      show ¬ (h - 1 ≥ h) by cfomega, show ¬ (h - 1 ≥ h + h) by cfomega,
+      show h - h = 0 by cfomega]
+  · simp [hz j (by cfomega), hz (j - 1) (by cfomega), show j ≥ h by cfomega,
+      show ¬ (j ≥ h + h) by cfomega, show j - 1 ≥ h by cfomega,
+      show ¬ (j - 1 ≥ h + h) by cfomega, show 1 ≤ j by cfomega, show 1 ≤ j - h by cfomega,
+      show j - h ≠ 0 by cfomega, show j - 1 - h = j - h - 1 by cfomega]
   · rw [hj]
-    simp [hz (h + h) (by omega), hz (h + h - 1) (by omega), hz h (Nat.le_refl _),
-      show 1 ≤ h by omega, show 1 ≤ h + h by omega, show h + h - 1 ≥ h by omega,
-      show ¬ (h + h - 1 ≥ h + h) by omega, show h + h - h = h by omega,
-      show h + h - 1 - h = h - 1 by omega, show h + h - (h + h) = 0 by omega,
-      show h ≠ 0 by omega]
-  · simp [hz j (by omega), hz (j - 1) (by omega), hz (j - h) (by omega),
-      hz (j - 1 - h) (by omega), show j ≥ h by omega, show j ≥ h + h by omega,
-      show j - 1 ≥ h by omega, show j - 1 ≥ h + h by omega, show 1 ≤ j by omega,
-      show 1 ≤ j - (h + h) by omega, show j - (h + h) ≠ 0 by omega, show j - h ≠ 0 by omega,
-      show j - 1 - (h + h) = j - (h + h) - 1 by omega]
-  · simp [hz j (by omega), hz (j - 1) (by omega), hz (j - h) (by omega),
-      hz (j - 1 - h) (by omega), hz (j - (h + h)) (by omega),
-      show j ≥ h by omega, show j ≥ h + h by omega,
-      show j - 1 ≥ h by omega, show j - 1 ≥ h + h by omega,
-      show j - h ≠ 0 by omega, show j - (h + h) ≠ 0 by omega]
+    simp [hz (h + h) (by cfomega), hz (h + h - 1) (by cfomega), hz h (Nat.le_refl _),
+      show 1 ≤ h by cfomega, show 1 ≤ h + h by cfomega, show h + h - 1 ≥ h by cfomega,
+      show ¬ (h + h - 1 ≥ h + h) by cfomega, show h + h - h = h by cfomega,
+      show h + h - 1 - h = h - 1 by cfomega, show h + h - (h + h) = 0 by cfomega,
+      show h ≠ 0 by cfomega]
+  · simp [hz j (by cfomega), hz (j - 1) (by cfomega), hz (j - h) (by cfomega),
+      hz (j - 1 - h) (by cfomega), show j ≥ h by cfomega, show j ≥ h + h by cfomega,
+      show j - 1 ≥ h by cfomega, show j - 1 ≥ h + h by cfomega, show 1 ≤ j by cfomega,
+      show 1 ≤ j - (h + h) by cfomega, show j - (h + h) ≠ 0 by cfomega, show j - h ≠ 0 by cfomega,
+      show j - 1 - (h + h) = j - (h + h) - 1 by cfomega]
+  · simp [hz j (by cfomega), hz (j - 1) (by cfomega), hz (j - h) (by cfomega),
+      hz (j - 1 - h) (by cfomega), hz (j - (h + h)) (by cfomega),
+      show j ≥ h by cfomega, show j ≥ h + h by cfomega,
+      show j - 1 ≥ h by cfomega, show j - 1 ≥ h + h by cfomega,
+      show j - h ≠ 0 by cfomega, show j - (h + h) ≠ 0 by cfomega]
 
 /-- **Bulk-to-boundary congruence.** Modulo `q^h` the carry of a repeated block is
 the single endpoint product `a_0 a_(h-1)`. -/
@@ -4074,7 +4088,7 @@ private theorem q_front_degree_budget_bits (r d k : Nat) (hd : d ≠ 0)
     rw [hsplit, hz, Nat.zero_shiftLeft]
   rw [hsplit, q_divides_shl] at hr
   have hb := q_divides_degree_bound r _ hne hr
-  have htop : d.testBit d.log2 = true := Nat.testBit_log2 hd
+  have htop : d.testBit d.log2 = true := Rule30UOR.Constructive.testBit_log2 hd
   have hkle : k ≤ d.log2 := by
     apply Nat.le_of_not_gt
     intro hlt

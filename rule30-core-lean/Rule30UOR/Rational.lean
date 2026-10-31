@@ -65,7 +65,7 @@ theorem code_inj {b r r' : Nat} (hr : r ≤ b) (h : code b r = code b r') : r = 
 
 theorem periodic_digits {b r : Nat} (hr : r ≤ b) :
     ∃ m P, 0 < P ∧ ∀ i, lddig b r (m + i + P) = lddig b r (m + i) := by
-  obtain ⟨m, n, hmn, -, he⟩ := Ruliology.CellularAutomata.Rule30Jen.pigeonhole (b + 1)
+  obtain ⟨m, n, hmn, -, he⟩ := Rule30UOR.KitConstructive.pigeonhole (b + 1)
     (fun t => code b (ldrem b r t)) (fun t => code_length b _)
   have eq : ldrem b r m = ldrem b r n := code_inj (ldrem_le hr m) he
   refine ⟨m, n - m, by omega, fun i => ?_⟩

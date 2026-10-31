@@ -119,7 +119,7 @@ theorem problem1_of_leftHeavy_recurrence
 theorem shield_of_periodic {T P : Nat} (hc : ∀ t, T ≤ t → center (t + P) = center t)
     (m t k : Nat) (ht : T ≤ t) (hk : 0 < k) (hd : defect (m * P) t (-(k : Int)) = true) :
     ∃ p : Int, -(k : Int) < p ∧ p ≤ (k : Int) ∧ p ≠ 0 ∧ defect (m * P) t p = true := by
-  apply Classical.byContradiction
+  apply Decidable.byContradiction
   intro hn
   have hl : LeftHeavy (m * P) t k := by
     refine ⟨hk, hd, fun p hp1 hp2 => ?_⟩
@@ -214,6 +214,10 @@ theorem rightmost_left_defect_step (Q t : Nat) (x : Int) (hx : x ≤ -2)
 def RightmostLeft (Q t k : Nat) : Prop :=
   0 < k ∧ leftDefect Q t k = true ∧ ∀ r : Nat, r < k → leftDefect Q t r = false
 
+instance (Q t k : Nat) : Decidable (RightmostLeft Q t k) := by
+  unfold RightmostLeft
+  infer_instance
+
 def CenterCleanThrough (Q t n : Nat) : Prop :=
   ∀ j : Nat, j ≤ n → leftDefect Q (t + j) 0 = false
 
@@ -306,7 +310,7 @@ theorem exists_unit_defect_and_white_center_of_left_defect
     by_cases hclean : ∀ p : Int, -(k : Int) < p → p ≤ 0 → defect (m * P) t p = false
     · exact ⟨k, hk, Nat.le_refl k,
         center_white_and_right_defect_of_rightmost_left hc m t k ht hk hd hclean⟩
-    · apply Classical.byContradiction
+    · apply Decidable.byContradiction
       intro hno
       apply hclean
       intro p hp1 hp2
@@ -356,12 +360,13 @@ theorem exists_unit_defect_and_white_center_of_periodic
   exact exists_unit_defect_and_white_center_of_left_defect hc m t ht (t + m * P) (by omega)
     (left_edge_defect (m * P) t hQ)
 
-/-- Under a periodic center, every nonzero column `p ≠ 0` has `defect Q t p = true`
-infinitely often for every `Q > 0`. -/
+/-- Under a periodic center, every nonzero column `p ≠ 0` cannot have
+`defect Q t p = false` from some time on, for every `Q > 0`. The conclusion is the
+double negation of a later defect; extracting the time itself would need an
+unbounded search. -/
 theorem exists_defect_true_of_periodic (hc : EventuallyPeriodic center)
     (Q : Nat) (hQ : 0 < Q) (p : Int) (hp : p ≠ 0) (T : Nat) :
-    ∃ t : Nat, T ≤ t ∧ defect Q t p = true := by
-  apply Classical.byContradiction
+    ¬ ¬ ∃ t : Nat, T ≤ t ∧ defect Q t p = true := by
   intro hno
   have hall : ∀ t, T ≤ t → defect Q t p = false := by
     intro t ht
@@ -373,12 +378,12 @@ theorem exists_defect_true_of_periodic (hc : EventuallyPeriodic center)
       change defect Q (t + 1) p = defect Q t p
       rw [hall (t + 1) (by omega), hall t ht]⟩
 
-/-- Under a periodic center, every nonzero column `p ≠ 0` has `defect Q t p = false`
-infinitely often for every `Q > 0`. -/
+/-- Under a periodic center, every nonzero column `p ≠ 0` cannot have
+`defect Q t p = true` from some time on, for every `Q > 0`. As above, the
+conclusion is the double negation of a later agreement. -/
 theorem exists_defect_false_of_periodic (hc : EventuallyPeriodic center)
     (Q : Nat) (hQ : 0 < Q) (p : Int) (hp : p ≠ 0) (T : Nat) :
-    ∃ t : Nat, T ≤ t ∧ defect Q t p = false := by
-  apply Classical.byContradiction
+    ¬ ¬ ∃ t : Nat, T ≤ t ∧ defect Q t p = false := by
   intro hno
   have hall : ∀ t, T ≤ t → defect Q t p = true := by
     intro t ht

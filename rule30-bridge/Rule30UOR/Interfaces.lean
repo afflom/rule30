@@ -58,7 +58,7 @@ decreasing_by omega
 /-! ### Bit lemmas -/
 
 theorem mod_two_eq (n : Nat) : (n % 2 == 1) = n.testBit 0 := by
-  rw [Nat.testBit_zero]; rcases Nat.mod_two_eq_zero_or_one n with h | h <;> simp [h]
+  rw [Nat.testBit_zero]; rcases Nat.mod_two_eq_zero_or_one n with h | h <;> rw [h] <;> decide
 
 theorem div_two_testBit (n i : Nat) : (n / 2).testBit i = n.testBit (i + 1) := by
   have e : n / 2 = n >>> 1 := by rw [Nat.shiftRight_eq_div_pow, Nat.pow_one]
@@ -807,7 +807,7 @@ theorem winWitt_testBit_antiperiod (t0 k J : Nat) (hJlt : J + 1 < twopow k)
   rw [winWitt_testBit_lt_twopow t0 k (J + 1) hJlt]
   have ha : rdiag (J + 1) (t0 + twopow k) = !rdiag (J + 1) t0 := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
-    exact Ruliology.CellularAutomata.Rule30RightPeriods.antiperiod hJ hJ1 t0
+    exact Rule30UOR.KitConstructive.antiperiod hJ hJ1 t0
   rw [ha, bxor_eq_xor]
   cases rdiag (J + 1) t0 <;> rfl
 
@@ -1187,15 +1187,15 @@ def IsRightThreshold (k J : Nat) : Prop :=
 /-- For every scale `k`, there exists a unique right-period threshold `J` with `k ≤ J ≤ 2^(k+1) - 2`. -/
 theorem exists_right_threshold (k : Nat) :
     ∃ J, k ≤ J ∧ J ≤ 2 ^ (k + 1) - 2 ∧ IsRightThreshold k J := by
-  obtain ⟨J, hJ, hJ1, hk⟩ := Ruliology.CellularAutomata.Rule30RightPeriods.exists_last k
-  exact ⟨J, hk, Ruliology.CellularAutomata.Rule30RightPeriods.per_bound hJ, hJ, hJ1⟩
+  obtain ⟨J, hJ, hJ1, hk⟩ := Rule30UOR.KitConstructive.exists_last k
+  exact ⟨J, hk, Rule30UOR.KitConstructive.per_bound hJ, hJ, hJ1⟩
 
 /-- Every bit `j ≤ J` (with `j < 2^k`) below the right-period threshold `J` of scale `k` vanishes in `winWitt t0 (2^k)` for all `t0`. -/
 theorem winWitt_zero_gap_of_threshold (t0 k J j : Nat) (hJ : IsRightThreshold k J)
     (hjJ : j ≤ J) (hj : j < twopow k) :
     (winWitt t0 (twopow k)).testBit j = false :=
   winWitt_testBit_of_per t0 k j hj
-    (Ruliology.CellularAutomata.Rule30RightPeriods.per_mono_le hjJ hJ.1)
+    (Rule30UOR.KitConstructive.per_mono_le hjJ hJ.1)
 
 /-- At `J + 1` (when `J + 1 < 2^k`), the bit of `winWitt t0 (2^k)` is universally `true` for every `t0 : Nat`. -/
 theorem winWitt_leading_bit_of_threshold (t0 k J : Nat) (hJ : IsRightThreshold k J)
@@ -1221,7 +1221,7 @@ theorem threshold_lt_of_center_true (t k J : Nat) (hJ : IsRightThreshold k J)
     J < t := by
   apply Nat.lt_of_not_le
   intro hle
-  have hper := Ruliology.CellularAutomata.Rule30RightPeriods.per_mono_le hle hJ.1
+  have hper := Rule30UOR.KitConstructive.per_mono_le hle hJ.1
   have hfalse := center_false_of_ge_of_per t k ht hper
   rw [hc] at hfalse
   contradiction
@@ -1235,10 +1235,10 @@ theorem threshold_succ_lt_twopow_of_center_pred_false (k J : Nat) (hJ : IsRightT
   apply Nat.lt_of_not_le
   intro hle
   have hper : Ruliology.CellularAutomata.Rule30RightPeriods.Per (2 ^ k - 1) (2 ^ k) := by
-    apply Ruliology.CellularAutomata.Rule30RightPeriods.per_mono_le _ hJ.1
+    apply Rule30UOR.KitConstructive.per_mono_le _ hJ.1
     rw [← twopow_eq_pow k]
     omega
-  have hlast := Ruliology.CellularAutomata.Rule30RightPeriods.last_one (2 ^ k - 1) k hper
+  have hlast := Rule30UOR.KitConstructive.last_one (2 ^ k - 1) k hper
   have hcent : Rule30UOR.Core.center (twopow k - 1) = true := by
     rw [core_center_eq_rcenter]
     show rdiag (twopow k - 1) (twopow k - 1) = true
@@ -2129,7 +2129,7 @@ theorem bit_winWitt_second_edge_zero (m k : Nat) (hm : 1 + m < twopow k) :
 theorem rdiag_threshold_late_false_window (t0 k J j : Nat) (hJ : IsRightThreshold k J)
     (hgt : 2 * t0 < j) (hjJ : j ≤ J) :
     rdiag j (t0 + twopow k) = false := by
-  have hper := Ruliology.CellularAutomata.Rule30RightPeriods.per_mono_le hjJ hJ.1
+  have hper := Rule30UOR.KitConstructive.per_mono_le hjJ hJ.1
   have heq : rdiag j (t0 + twopow k) = rdiag j t0 := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
     exact hper t0
@@ -2142,7 +2142,7 @@ theorem rdiag_threshold_late_true_plateau (t0 k J : Nat) (hJ : IsRightThreshold 
     rdiag (J + 1) (t0 + twopow k) = true := by
   have ha : rdiag (J + 1) (t0 + twopow k) = !rdiag (J + 1) t0 := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
-    exact Ruliology.CellularAutomata.Rule30RightPeriods.antiperiod hJ.1 hJ.2 t0
+    exact Rule30UOR.KitConstructive.antiperiod hJ.1 hJ.2 t0
   rw [ha, rdiag_gt_two_mul t0 (J + 1) (by omega)]
   rfl
 
@@ -2152,7 +2152,7 @@ theorem rdiag_threshold_late_false_odd_hit (t0 k J : Nat) (hJ : IsRightThreshold
     rdiag (J + 1) (t0 + twopow k) = false := by
   have ha : rdiag (J + 1) (t0 + twopow k) = !rdiag (J + 1) t0 := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
-    exact Ruliology.CellularAutomata.Rule30RightPeriods.antiperiod hJ.1 hJ.2 t0
+    exact Rule30UOR.KitConstructive.antiperiod hJ.1 hJ.2 t0
   have h1 : rdiag (J + 1) t0 = true := by
     rw [← htJ]
     exact rdiag_left_edge t0
@@ -2165,7 +2165,7 @@ theorem rdiag_threshold_late_false_even_hit (t0 k J : Nat) (hJ : IsRightThreshol
     rdiag (J + 1) ((t0 + 1) + twopow k) = false := by
   have ha : rdiag (J + 1) ((t0 + 1) + twopow k) = !rdiag (J + 1) (t0 + 1) := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
-    exact Ruliology.CellularAutomata.Rule30RightPeriods.antiperiod hJ.1 hJ.2 (t0 + 1)
+    exact Rule30UOR.KitConstructive.antiperiod hJ.1 hJ.2 (t0 + 1)
   have h1 : rdiag (J + 1) (t0 + 1) = true := by
     rw [show J + 1 = 1 + 2 * t0 by omega, show t0 + 1 = 1 + t0 by omega,
       ← ldiag_eq_rdiag 1 t0]
@@ -3757,7 +3757,7 @@ theorem rdiag_defect_step_below_threshold (t k J j : Nat) (hJ : IsRightThreshold
     bxor (bxor (rdiag (j + 2) ((t + 1) + twopow k)) (rdiag (j + 2) (t + 1)))
       (bxor (rdiag (j + 2) (t + twopow k)) (rdiag (j + 2) t)) =
       (bxor (rdiag (j + 1) (t + twopow k)) (rdiag (j + 1) t) && !rdiag j t) := by
-  have hper := Ruliology.CellularAutomata.Rule30RightPeriods.per_mono_le hjJ hJ.1
+  have hper := Rule30UOR.KitConstructive.per_mono_le hjJ hJ.1
   have hj_eq : rdiag j (t + twopow k) = rdiag j t := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
     exact hper t
@@ -3779,7 +3779,7 @@ theorem rdiag_threshold_plus_two_defect_step (t k J : Nat) (hJ : IsRightThreshol
   rw [rdiag_defect_step_below_threshold t k J J hJ (by omega)]
   have ha : rdiag (J + 1) (t + twopow k) = !rdiag (J + 1) t := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
-    exact Ruliology.CellularAutomata.Rule30RightPeriods.antiperiod hJ.1 hJ.2 t
+    exact Rule30UOR.KitConstructive.antiperiod hJ.1 hJ.2 t
   rw [ha, bxor_eq_xor]
   cases rdiag (J + 1) t <;> cases rdiag J t <;> rfl
 
@@ -7606,7 +7606,7 @@ theorem rdiag_restart (k j u s : Nat) (hj : j ≤ k) :
 /-- **Threshold form of `restart` (`rdiag_restart_of_threshold`)**: for every right diagonal `j ≤ J` below the right-period threshold `J` of scale `k`, `rdiag j (s + u * 2^k) = rdiag j s` uniformly for all `u, s : Nat`. -/
 theorem rdiag_restart_of_threshold (k J j u s : Nat) (hJ : IsRightThreshold k J) (hj : j ≤ J) :
     rdiag j (s + u * twopow k) = rdiag j s := by
-  have hper := Ruliology.CellularAutomata.Rule30RightPeriods.per_mono_le hj hJ.1
+  have hper := Rule30UOR.KitConstructive.per_mono_le hj hJ.1
   rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
   exact hper.mul u s
 
@@ -10195,6 +10195,10 @@ def RhColAgree (t Q p0 S : Nat) : Prop :=
   ∀ s, s ≤ S →
     rhCenter ((t + s) + Q) p0 = rhCenter (t + s) p0
 
+instance (t Q p0 S : Nat) : Decidable (RhColAgree t Q p0 S) := by
+  unfold RhColAgree
+  infer_instance
+
 /-- Band `Q`-agreement of the right-half `OR` input `rhCenter · p0 || rhCenter · (p0 + 1)`:
     at times `t + s` and `(t + s) + Q` (`s < S`), the right-half OR inputs agree at column `p0`. -/
 def RhOrAgree (t Q p0 S : Nat) : Prop :=
@@ -10737,8 +10741,8 @@ theorem rhCenter_last_one_of_threshold (k J u j : Nat)
       rw [Nat.add_mul, Nat.one_mul]; omega,
     rdiag_restart_of_threshold k J j u (twopow k - 1) hJ hjJ,
     Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
-  exact Ruliology.CellularAutomata.Rule30RightPeriods.last_one j k
-    (Ruliology.CellularAutomata.Rule30RightPeriods.per_mono_le hjJ hJ.1)
+  exact Rule30UOR.KitConstructive.last_one j k
+    (Rule30UOR.KitConstructive.per_mono_le hjJ hJ.1)
 
 /-- **Right-Half Windowed Witt Column Agreement (`RhWinWittAgree`)**:
     the `2^k`-windowed Witt vector `winWitt · (2^k)` at rows `t + Q` and `t` has identical testBits at `t + Q - (p0 + i)` and `t - (p0 + i)` for all `0 ≤ i ≤ L`! -/
@@ -20592,7 +20596,7 @@ for all `z₁, z₂ ∈ ℕ`, if `IsZeroDiag z₁`, `IsZeroDiag z₂`, and `z₁
 theorem zero_diag_gap_ge_five (z1 z2 : Nat)
     (h1 : IsZeroDiag z1) (h2 : IsZeroDiag z2) (hlt : z1 < z2) :
     z1 + 5 ≤ z2 := by
-  refine Classical.byContradiction fun hlt5 => ?_
+  refine Decidable.byContradiction fun hlt5 => ?_
   have hd : z2 = z1 + 1 ∨ z2 = z1 + 2 ∨ z2 = z1 + 3 ∨ z2 = z1 + 4 := by omega
   rcases hd with rfl | rfl | rfl | rfl
   · exact Rule30UOR.CompilePoints.zero_then_nonzero z1 h1 h2
@@ -22169,7 +22173,7 @@ for `z ≥ 3`, `IsBlackDiag (z - 1)` (`9.775`) forces `IsZeroDiag (z - 3)` (`zer
 theorem zero_diag_le_two_of_add_five
     (z : Nat) (hz : IsZeroDiag z) (hz5 : IsZeroDiag (z + 5)) :
     z ≤ 2 := by
-  refine Classical.byContradiction fun h => ?_
+  refine Decidable.byContradiction fun h => ?_
   have hb1 := isBlackDiag_sub_one_of_zero_diag_and_add_five z hz hz5
   have hz3 : IsZeroDiag (z - 3) :=
     Rule30UOR.CompilePoints.zero_before_black_diag (z - 3)
@@ -22203,7 +22207,7 @@ theorem zero_diag_gap_ge_six_of_gt_two
     z1 + 6 ≤ z2 := by
   have h5 := zero_diag_gap_ge_five z1 z2 hz1 hz2 hlt
   have hn5 := not_isZeroDiag_add_five_of_gt_two z1 hgt hz1
-  refine Classical.byContradiction fun h => ?_
+  refine Decidable.byContradiction fun h => ?_
   have heq5 : z2 = z1 + 5 := by omega
   exact hn5 (heq5 ▸ hz2)
 
@@ -26139,7 +26143,7 @@ theorem exists_zero_diag_white_center_rhCenter_one_flip_of_periodic
     exact not_centerPeriodic_of_white_center_rhCenter_one_at_zero_diag_doubles
       T P m z p (p + 3 * (m * P)) hP hm (by dsimp [p]; omega) hz hd
       (by dsimp [p]; omega) (by dsimp [p]; omega) (by omega) hw hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ p + 3 * (m * P) := by
     by_cases hns : s ≤ p + 3 * (m * P)
     · exact hns
@@ -26176,7 +26180,7 @@ theorem exists_zero_diag_maskparity_zero_flip_of_periodic
     exact not_centerPeriodic_of_maskparity_zero_agree_at_zero_diag_doubles
       T P m z p (p + 3 * (m * P)) hP hm (by dsimp [p]; omega) hz hd
       (by dsimp [p]; omega) (by dsimp [p]; omega) (by omega) hm0 hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ p + 3 * (m * P) := by
     by_cases hns : s ≤ p + 3 * (m * P)
     · exact hns
@@ -26200,7 +26204,7 @@ theorem exists_zero_diag_lhCenter_one_flip_of_periodic
       s ≤ p + 3 * (m * P) ∧
       lhCenter (((z + (p + 1)) + s) + m * P) 1 = !lhCenter ((z + (p + 1)) + s) 1 := by
   obtain ⟨z, p, hz, hd, hnot⟩ := exists_zero_diag_not_periodic_lhColAgree_one T P hP hper m hm
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ p + 3 * (m * P) := by
     by_cases hns : s ≤ p + 3 * (m * P)
     · exact hns
@@ -28038,7 +28042,7 @@ theorem exists_white_center_rhCenter_one_flip_at_twopow_of_periodic
         rhCenter ((t + s) + m * P) 1 = rhCenter (t + s) 1 :=
     fun hw => not_centerPeriodic_of_white_center_rhCenter_one_at_twopow
       T P m t k S hP hm ht hcone hS hw hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -28067,7 +28071,7 @@ theorem exists_maskparity_zero_flip_at_twopow_of_periodic
         Rule30UOR.Scale.maskparity (t + s) 0 :=
     fun hmp => not_centerPeriodic_of_maskparity_zero_agree_at_twopow
       T P m t k S hP hm ht hcone hS hmp hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -28091,7 +28095,7 @@ theorem exists_lhCenter_one_flip_at_twopow_of_periodic
   have hnot : ¬ LhColAgree t (m * P) 1 S :=
     fun hlh => not_centerPeriodic_of_lhColAgree_one_at_twopow
       T P m t k S hP hm ht hcone hS hlh hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -28157,7 +28161,7 @@ theorem exists_white_center_rhCenter_one_flip_at_zero_diag_step_two_of_periodic
         rhCenter (((z + twopow k) + s) + m * P) 1 = rhCenter ((z + twopow k) + s) 1 :=
     fun hw => not_centerPeriodic_of_white_center_rhCenter_one_at_zero_diag_step_two
       T P m z k S hP hz hm ht hset0 hset2 hS hw hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -28199,7 +28203,7 @@ theorem exists_maskparity_zero_flip_at_zero_diag_step_two_of_periodic
         Rule30UOR.Scale.maskparity ((z + twopow k) + s) 0 :=
     fun hmp => not_centerPeriodic_of_maskparity_zero_agree_at_zero_diag_step_two
       T P m z k S hP hz hm ht hset0 hset2 hS hmp hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -28352,7 +28356,7 @@ theorem exists_lhCenter_one_flip_at_zero_diag_step_two_of_periodic
   have hnot : ¬ LhColAgree (z + twopow k) (m * P) 1 S :=
     fun hlh => not_centerPeriodic_of_lhColAgree_one_at_zero_diag_step_two
       T P m z k S hP hz hm ht hset0 hset2 hS hlh hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -28393,7 +28397,7 @@ theorem exists_white_center_rhCenter_one_flip_of_two_zero_diags_and_periodic
         rhCenter (((z + twopow k) + s) + m * P) 1 = rhCenter ((z + twopow k) + s) 1 :=
     fun hw => not_centerPeriodic_of_white_center_rhCenter_one_of_two_zero_diags
       T P m z k S hP hz0 h2 hz1 ht hset0 hset1 hS hw hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -28439,7 +28443,7 @@ theorem exists_maskparity_zero_flip_of_two_zero_diags_and_periodic
         Rule30UOR.Scale.maskparity ((z + twopow k) + s) 0 :=
     fun hmp => not_centerPeriodic_of_maskparity_zero_agree_of_two_zero_diags
       T P m z k S hP hz0 h2 hz1 ht hset0 hset1 hS hmp hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -28480,7 +28484,7 @@ theorem exists_lhCenter_one_flip_of_two_zero_diags_and_periodic
   have hnot : ¬ LhColAgree (z + twopow k) (m * P) 1 S :=
     fun hlh => not_centerPeriodic_of_lhColAgree_one_of_two_zero_diags
       T P m z k S hP hz0 h2 hz1 ht hset0 hset1 hS hlh hper
-  obtain ⟨s, hs_not⟩ := Classical.not_forall.mp hnot
+  obtain ⟨s, hs_not⟩ := Rule30UOR.Constructive.exists_not_of_not_forall_le _ hnot
   have hs : s ≤ S := by
     by_cases hns : s ≤ S
     · exact hns
@@ -37418,7 +37422,7 @@ theorem exists_lh_row_spatial_disagree_of_doubles_settledUpTo (Q z p : Nat)
     ∃ i : Nat, i ≤ 2 * Q ∧
       lhCenter ((z + (p + 1)) + Q) ((p + Q) + i) =
         !lhCenter ((z + (p + 1)) + Q) (((p + Q) + i) + Q) := by
-  refine Classical.byContradiction (fun hne => ?_)
+  refine Decidable.byContradiction (fun hne => ?_)
   have hspat : ∀ i : Nat, i ≤ 2 * Q →
       lhCenter ((z + (p + 1)) + Q) ((p + Q) + i) =
         lhCenter ((z + (p + 1)) + Q) (((p + Q) + i) + Q) := by
@@ -37544,5 +37548,120 @@ theorem lhBandAgree_two_mul_of_doubles_and_single_lh_row_spatial_agree (Q z t p0
   rw [hspat i hi]
   exact lhCenter_diag_shift_two_mul_periodic_le_add_three_of_doubles Q z t (p0 + i) hz hd
     (by omega) (by omega) hbt
+
+/-! ### Batch 86: Audit Theorems — Unsatisfiability of the Left-Band Engine Hypotheses and Exact Equivalence of the Engine Input with Problem 1 (9.1582–9.1587) -/
+
+/-- **9.1582 (audit)**: The hypothesis bundle of `not_centerPeriodic_of_lhBandAgree_one_at_zero_diag_doubles`
+    (everything except `CenterPeriodic` and `T ≤ z + (p + 1)`) is unsatisfiable. That engine's conclusion
+    therefore follows from `False`; its `CenterPeriodic` hypothesis carries no information. -/
+theorem lhBandAgree_engine_hypotheses_unsat (P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
+    (hset1 : SettledBy (z + 1) (z + (p + 1)))
+    (hset2 : SettledBy ((z + 1) - m * P) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (h : LhBandAgree (z + (p + 1)) (m * P) 1 S) : False := by
+  have hmP : 0 < m * P := Nat.mul_pos hm hP
+  exact not_lhBandAgree_of_doubles_single (m * P) (z + (p + 1)) p 1 S (by omega)
+    (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+    (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+    (by rw [show (z + (p + 1)) - (p + 1) = z by omega]; exact hset1)
+    (by rw [show (z + (p + 1)) - (p + m * P) = (z + 1) - m * P by omega]; exact hset2)
+    (by omega) (by omega) h
+
+/-- **9.1583 (audit)**: The hypothesis bundle of the prefix/tail refutation `9.1559` (minus `CenterPeriodic`
+    and the time bound) is unsatisfiable. -/
+theorem prefix_tail_engine_hypotheses_unsat (P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
+    (hbt : SettledUpTo (z + 1) (z + (p + 1)))
+    (hS : p + 3 * (m * P) ≤ S + 1)
+    (hpref : ∀ i : Nat, i < p →
+      lhCenter ((z + (p + 1)) + m * P) (1 + i) = lhCenter (z + (p + 1)) (1 + i))
+    (htail : ∀ i : Nat, p ≤ i → i ≤ S →
+      lhCenter ((z + (p + 1)) + m * P) (1 + i) = lhCenter ((z + (p + 1)) + m * P) ((1 + i) + m * P)) :
+    False := by
+  have hmP : 0 < m * P := Nat.mul_pos hm hP
+  exact not_lhBandAgree_one_at_zero_diag_of_doubles_settledUpTo (m * P) z p S (by omega) hz hd hbt hS
+    (lhBandAgree_one_at_zero_diag_of_doubles_settleBound_prefix_and_single_lh_row_tail
+      (m * P) z p S hd hbt hpref htail)
+
+/-- **9.1584 (audit)**: The hypothesis bundle of the late-scale refutation
+    `not_centerPeriodic_of_late_scale_doubles_prefix_and_single_lh_row_tail` (minus `CenterPeriodic`
+    and the time bound) is unsatisfiable. -/
+theorem late_scale_engine_hypotheses_unsat (P m z L k : Nat) (hP : 0 < P) (hm : 0 < m)
+    (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
+    (hset1 : SettledBy (z + 1) ((z + 1) + twopow k))
+    (hset2 : SettledBy ((z + 1) - m * P) ((z + 1) + twopow k))
+    (hL : 3 * (m * P) ≤ L + 1)
+    (hpref : ∀ i : Nat, i < twopow k →
+      lhCenter (((z + 1) + twopow k) + m * P) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
+    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
+    (hspat : ∀ i : Nat, i ≤ L →
+      lhCenter (((z + 1) + m * P) + twopow k) ((1 + twopow k) + i) =
+      lhCenter (((z + 1) + m * P) + twopow k) (((1 + twopow k) + i) + m * P)) :
+    False := by
+  have hmP : 0 < m * P := Nat.mul_pos hm hP
+  have hband := lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail
+    (m * P) z L k hd hpref hset hspat
+  exact not_lhBandAgree_of_doubles_single (m * P) ((z + 1) + twopow k) (twopow k) 1 (twopow k + L)
+    (by omega)
+    (by rwa [show ((z + 1) + twopow k) - (twopow k + 1) = z by omega])
+    (by rwa [show ((z + 1) + twopow k) - (twopow k + 1) = z by omega])
+    (by rw [show ((z + 1) + twopow k) - (twopow k + 1) = z by omega]; exact hset1)
+    (by rw [show ((z + 1) + twopow k) - (twopow k + m * P) = (z + 1) - m * P by omega]; exact hset2)
+    (by omega) (by omega) hband
+
+/-- **9.1585 (audit)**: The hypothesis bundle of the single-row refutation at `t = z + 1` (Batch 81)
+    is unsatisfiable whenever `3 * Q ≤ S + 1`. -/
+theorem single_row_zero_diag_succ_engine_hypotheses_unsat (Q z S : Nat) (hQ : 1 ≤ Q)
+    (hz : IsZeroDiag z) (hd : DoublesAt Q z)
+    (hset1 : SettledBy (z + 1) (z + 1))
+    (hset2 : SettledBy ((z + 1) - Q) (z + 1))
+    (hS : 3 * Q ≤ S + 1)
+    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
+    (hspat : ∀ i : Nat, i ≤ S →
+      lhCenter ((z + 1) + Q) (1 + i) = lhCenter ((z + 1) + Q) ((1 + i) + Q)) :
+    False :=
+  not_lhBandAgree_of_doubles_single Q (z + 1) 0 1 S hQ
+    (by rwa [show (z + 1) - (0 + 1) = z by omega])
+    (by rwa [show (z + 1) - (0 + 1) = z by omega])
+    (by rw [show (z + 1) - (0 + 1) = z by omega]; exact hset1)
+    (by rw [show (z + 1) - (0 + Q) = (z + 1) - Q by omega]; exact hset2)
+    (by omega) (by omega)
+    (lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree Q z S hd hset hspat)
+
+/-- **9.1586 (audit)**: Period by period, the engine input — "a `P`-periodic center yields column-`1`
+    agreement on a window after a doubling zero diagonal" — is equivalent to excluding period `P`. -/
+theorem engine_input_iff_not_centerPeriodic (T P : Nat) (hP : 0 < P) :
+    (Rule30UOR.Scale.CenterPeriodic T P →
+      ∃ m z p S : Nat, 0 < m ∧ T ≤ z + (p + 1) ∧ IsZeroDiag z ∧ DoublesAt (m * P) z ∧
+        SettledBy (z + 1) (z + (p + 1)) ∧ SettledBy ((z + 1) - m * P) (z + (p + 1)) ∧
+        p + 3 * (m * P) ≤ S + 1 ∧ RhColAgree (z + (p + 1)) (m * P) 1 S) ↔
+    ¬ Rule30UOR.Scale.CenterPeriodic T P := by
+  constructor
+  · intro h hc
+    obtain ⟨m, z, p, S, hm, ht, hz, hd, hs1, hs2, hS, hrc⟩ := h hc
+    exact not_periodic_rhColAgree_one_of_doubles T P hP hc m (z + (p + 1)) p S hm ht
+      (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+      (by rwa [show (z + (p + 1)) - (p + 1) = z by omega])
+      (by rw [show (z + (p + 1)) - (p + 1) = z by omega]; exact hs1)
+      (by rw [show (z + (p + 1)) - (p + m * P) = (z + 1) - m * P by omega]; exact hs2)
+      hS hrc
+  · intro hn hc
+    exact absurd hc hn
+
+/-- **9.1587 (audit)**: Problem 1 is equivalent to the engine input holding for every period. The
+    missing step of the zero-diagonal program is therefore Problem 1 itself, not a weaker lemma. -/
+theorem problem1_iff_engine_input :
+    Ruliology.CellularAutomata.Rule30Prize.Problem1 ↔
+      ∀ T P : Nat, 0 < P → Rule30UOR.Scale.CenterPeriodic T P →
+        ∃ m z p S : Nat, 0 < m ∧ T ≤ z + (p + 1) ∧ IsZeroDiag z ∧ DoublesAt (m * P) z ∧
+          SettledBy (z + 1) (z + (p + 1)) ∧ SettledBy ((z + 1) - m * P) (z + (p + 1)) ∧
+          p + 3 * (m * P) ≤ S + 1 ∧ RhColAgree (z + (p + 1)) (m * P) 1 S := by
+  rw [Rule30UOR.Scale.problem1_iff]
+  constructor
+  · intro h T P hP
+    exact (engine_input_iff_not_centerPeriodic T P hP).mpr (h T P hP)
+  · intro h T P hP
+    exact (engine_input_iff_not_centerPeriodic T P hP).mp (h T P hP)
 
 end Rule30UOR.Interfaces

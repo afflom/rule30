@@ -14,6 +14,7 @@ check-research-coverage:
 	python3 scripts/check_research_coverage.py
 
 check-research: check-research-coverage core
+	python3 scripts/check_no_choice.py
 	cd rule30-core-lean && lake env lean scripts/AuditVacuous.lean && lake env lean scripts/CheckResearchAxioms.lean
 	cd rule30-core-lean && modules="$$(python3 ../scripts/check_research_coverage.py --modules)" && lake env "$$(lake env lean --print-prefix)/bin/leanchecker" $$modules
 
@@ -28,6 +29,7 @@ pdf:
 
 bridge:
 	cd rule30-bridge && lake build LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build
+	python3 scripts/check_bridge_axioms.py
 
 release-artifacts:
 	./scripts/build_release.sh --package-only

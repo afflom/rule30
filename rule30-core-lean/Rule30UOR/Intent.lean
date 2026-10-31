@@ -1,5 +1,7 @@
 module
 
+public import Rule30UOR.Constructive
+public import Rule30UOR.KitConstructive
 public import Ruliology.CellularAutomata.Rule30Prize
 public import Ruliology.CellularAutomata.Rule30Diagonals
 
@@ -26,11 +28,46 @@ open Ruliology.CellularAutomata Rule30Jen Rule30Diagonals
 
 /-! ### Meaning: the zero-state -/
 
-/-- A settling time of diagonal `j` (from the kit's `D_periodic`). -/
-noncomputable def settle (j : Nat) : Nat := Classical.choose (D_periodic j)
+/-- Explicit settling times of diagonals `j` and `j + 1`, following the
+construction in the kit's `D_periodic`. -/
+def settlePair : Nat → Nat × Nat
+  | 0 => (0, 1)
+  | j + 1 => ((settlePair j).2, max (settlePair j).1 (settlePair j).2 + 2 ^ (j + 1))
+
+theorem settle_pair_spec (j : Nat) :
+    (∀ t, (settlePair j).1 ≤ t → D j (t + 2 ^ j) = D j t) ∧
+      (∀ t, (settlePair j).2 ≤ t → D (j + 1) (t + 2 ^ (j + 1)) = D (j + 1) t) := by
+  induction j with
+  | zero =>
+    refine ⟨fun t _ => by rw [D_zero, D_zero], fun t ht => ?_⟩
+    obtain ⟨s, rfl⟩ : ∃ s, t = s + 1 := ⟨t - 1, by simp only [settlePair] at ht; omega⟩
+    rw [show s + 1 + 2 ^ (0 + 1) = (s + 2) + 1 by simp, D_one, D_one]
+  | succ j ih =>
+    refine ⟨ih.2, ?_⟩
+    obtain ⟨ha, hb⟩ := ih
+    have hp := Nat.two_pow_pos j
+    have ha2 : ∀ t, (settlePair j).1 ≤ t → D j (t + 2 ^ (j + 1)) = D j t := by
+      intro t ht
+      rw [show t + 2 ^ (j + 1) = (t + 2 ^ j) + 2 ^ j by rw [Nat.pow_succ]; omega,
+        ha _ (by omega), ha t ht]
+    intro t ht
+    simp only [settlePair] at ht
+    have := transducer_periodic (x := D (j + 2))
+      (F := fun t b => xor (D j t) (D (j + 1) t || b))
+      (T := max (settlePair j).1 (settlePair j).2) (L := 2 ^ (j + 1))
+      (fun t _ => D_step j t)
+      (fun t ht => by
+        funext b
+        rw [ha2 t (by omega), hb t (by omega)])
+      t (by omega)
+    rw [show 2 ^ (j + 1 + 1) = 2 * 2 ^ (j + 1) by rw [Nat.pow_succ]; omega]
+    exact this
+
+/-- A settling time of diagonal `j`, given explicitly by `settlePair`. -/
+def settle (j : Nat) : Nat := (settlePair j).1
 
 theorem settle_spec (j : Nat) : ∀ t, settle j ≤ t → D j (t + 2 ^ j) = D j t :=
-  Classical.choose_spec (D_periodic j)
+  (settle_pair_spec j).1
 
 theorem per_mul (j : Nat) : ∀ k t, settle j ≤ t → D j (t + k * 2 ^ j) = D j t := by
   intro k
@@ -42,7 +79,7 @@ theorem per_mul (j : Nat) : ∀ k t, settle j ≤ t → D j (t + k * 2 ^ j) = D 
       settle_spec j _ (by omega), ih t ht]
 
 /-- A monotone settling bound. -/
-noncomputable def bound : Nat → Nat
+def bound : Nat → Nat
   | 0 => settle 0
   | j + 1 => bound j + settle (j + 1)
 
@@ -62,7 +99,7 @@ theorem bound_mono : ∀ i j, i ≤ j → bound i ≤ bound j := by
       subst this; exact Nat.le_refl _
 
 /-- **The zero-state**: diagonal `j` read far enough out that it has settled. -/
-noncomputable def E (j t : Nat) : Bool := D j (t + bound j * 2 ^ j)
+def E (j t : Nat) : Bool := D j (t + bound j * 2 ^ j)
 
 /-- Two late readings of a diagonal agree when they differ by a multiple of its period. -/
 theorem D_late (j a b : Nat) (ha : settle j ≤ a) (hb : settle j ≤ b) (k l : Nat)

@@ -1,6 +1,8 @@
 import Rule30UOR.CentralCollision
 import Rule30UOR.Collision
 import Rule30UOR.CompilePoints
+import Rule30UOR.Constructive
+import Rule30UOR.KitConstructive
 import Rule30UOR.Core
 import Rule30UOR.DefectFront
 import Rule30UOR.DefectSource
@@ -28,7 +30,7 @@ Run from rule30-core-lean after lake build:
 
 elab "#check_research_axioms" : command => do
   let env ← getEnv
-  let allowed : Array Name := #[``propext, ``Classical.choice, ``Quot.sound]
+  let allowed : Array Name := #[``propext, ``Quot.sound]
   let audits : Array Name := #[
     ``Rule30UOR.Interfaces.lhBandAgree_engine_hypotheses_unsat,
     ``Rule30UOR.Interfaces.prefix_tail_engine_hypotheses_unsat,
@@ -47,6 +49,6 @@ elab "#check_research_axioms" : command => do
         checked := checked + 1
   unless checked > audits.size do
     throwError "Rule30UOR theorems were not found"
-  logInfo m!"Checked {checked} research theorems; all axioms are in propext, Classical.choice, Quot.sound."
+  logInfo m!"Checked {checked} research theorems; all axioms are in propext, Quot.sound."
 
 #check_research_axioms

@@ -1,5 +1,6 @@
 module
 
+public import Rule30UOR.KitConstructive
 public import Ruliology.CellularAutomata.Rule30DrivenLeft
 
 /-!
@@ -42,10 +43,25 @@ theorem problem1_of_leftMask (hL : LeftMask) : Problem1 := by
   -- the center is black infinitely often (otherwise it is eventually white)
   have hrec : ∀ N, ∃ t, N ≤ t ∧ center t = true := by
     intro N
-    refine Classical.byContradiction fun hno => center_not_eventually_constant ⟨N, false, fun t ht => ?_⟩
-    cases h : center t
-    · rfl
-    · exact absurd ⟨t, ht, h⟩ hno
+    let M := max N T
+    have hb : ∃ r, r < P ∧ center (M + r) = true := by
+      refine Decidable.byContradiction fun hno =>
+        Rule30UOR.KitConstructive.center_not_eventually_constant ⟨M, false, fun u hu => ?_⟩
+      let r := (u - M) % P
+      have hr : r < P := Nat.mod_lt _ hP
+      have he : (M + r) + ((u - M) / P) * P = u := by
+        have hh := Nat.mod_add_div (u - M) P
+        rw [Nat.mul_comm P ((u - M) / P)] at hh
+        dsimp [r]
+        omega
+      have hp := periodic_mul hper ((u - M) / P) (M + r) (by omega)
+      rw [he] at hp
+      rw [hp]
+      cases h : center (M + r)
+      · rfl
+      · exact (hno ⟨r, hr, h⟩).elim
+    obtain ⟨r, -, hr⟩ := hb
+    exact ⟨M + r, by omega, hr⟩
   let T' := T + 1
   let c : Nat → Bool := fun k => cell (T' + k) 0
   have hc : EventuallyPeriodic c :=

@@ -186,45 +186,85 @@ theorem eq_of_pairList {P a b : Nat} (hP0 : 0 < P) (ha0 : ∀ t, E a (t + P) = E
   have hl := List.append_inj h (by simp)
   exact ⟨eq_of_range hP0 ha0 hb0 hl.1, eq_of_range hP0 ha1 hb1 hl.2⟩
 
-/-- **Infinitely many zero diagonals.** For every `N` some diagonal of depth `≥ N` is identically
-white. -/
-theorem infinitely_many_zero_diagonals (N : Nat) : ∃ z, N ≤ z ∧ ∀ t, E z t = false := by
-  refine Classical.byContradiction fun hno => ?_
-  have hnz : ∀ z, N ≤ z → ∃ s, E z s = true := by
-    intro z hz
-    refine Classical.byContradiction fun hn => hno ⟨z, hz, fun t => ?_⟩
-    cases h : E z t
+/-- A diagonal is identically white exactly when one period of it is. -/
+theorem zero_diag_iff_bounded (z : Nat) :
+    (∀ t, E z t = false) ↔ ∀ t, t < 2 ^ z → E z t = false := by
+  constructor
+  · exact fun h t _ => h t
+  · intro h t
+    rw [reduce_mod (E_per z) t]
+    exact h _ (Nat.mod_lt _ (Nat.two_pow_pos z))
+
+instance (z : Nat) : Decidable (∀ t, E z t = false) :=
+  decidable_of_iff _ (zero_diag_iff_bounded z).symm
+
+/-- A diagonal that is not identically white has a black cell within one period. -/
+theorem nonzero_witness (z : Nat) (h : ¬ ∀ t, E z t = false) : ∃ s, E z s = true := by
+  have hw : ∃ t, t < 2 ^ z ∧ E z t = true := by
+    refine Decidable.byContradiction fun hn => h ?_
+    rw [zero_diag_iff_bounded]
+    intro t ht
+    cases hE : E z t
     · rfl
-    · exact absurd ⟨t, h⟩ hn
-  -- a common period for every diagonal from `N` on
+    · exact absurd ⟨t, ht, hE⟩ hn
+  obtain ⟨t, -, ht⟩ := hw
+  exact ⟨t, ht⟩
+
+/-- A black cell somewhere on diagonal `z` is decided by one period. -/
+instance (z : Nat) : Decidable (∃ s, E z s = true) :=
+  decidable_of_iff (¬ ∀ t, E z t = false)
+    ⟨nonzero_witness z, fun ⟨s, hs⟩ hz => by rw [hz s] at hs; exact Bool.false_ne_true hs⟩
+
+/-- The depth by which a zero diagonal at depth at least `N` is found. -/
+def zeroDiagBound (N : Nat) : Nat := N + 3 + (N + 1) * 2 ^ (2 * 2 ^ (N + 1))
+
+/-- **A bounded zero diagonal.** Some diagonal of depth in `[N, zeroDiagBound N]` is
+identically white. The search space is finite, and every nonzero diagonal the
+argument uses lies inside it. -/
+theorem zero_diagonal_bounded (N : Nat) :
+    ∃ z, z ≤ zeroDiagBound N ∧ (N ≤ z ∧ ∀ t, E z t = false) := by
+  refine Decidable.byContradiction fun hno => ?_
+  let B := zeroDiagBound N
+  have hnz : ∀ z, N ≤ z → z ≤ B → ∃ s, E z s = true := fun z hz hzB =>
+    nonzero_witness z (fun hall => hno ⟨z, hzB, hz, hall⟩)
   let P := 2 ^ (N + 1)
+  let W := 2 ^ (2 * P)
+  have hB : B = N + 3 + (N + 1) * W := rfl
   have hP0 : 0 < P := Nat.two_pow_pos _
-  have hper : ∀ k, (∀ t, E (N + k) (t + P) = E (N + k) t) ∧ (∀ t, E (N + k + 1) (t + P) = E (N + k + 1) t) := by
+  have hper : ∀ k, k ≤ W → (∀ t, E (N + k) (t + P) = E (N + k) t) ∧
+      (∀ t, E (N + k + 1) (t + P) = E (N + k + 1) t) := by
     intro k
     induction k with
     | zero =>
+      intro _
       refine ⟨fun t => ?_, fun t => E_per (N + 1) t⟩
       have := E_per_mul N 2 t
       rw [show 2 * 2 ^ N = P by simp [P, Nat.pow_succ]; omega] at this
       simpa using this
     | succ k ih =>
-      refine ⟨by simpa [Nat.add_assoc] using ih.2, ?_⟩
-      have := period_prop (j := N + k) hP0 ih.1 ih.2 (hnz _ (by omega))
+      intro hk
+      have ih' := ih (by omega)
+      have hW : W ≤ (N + 1) * W := Nat.le_mul_of_pos_left W (by omega)
+      refine ⟨by simpa [Nat.add_assoc] using ih'.2, ?_⟩
+      have := period_prop (j := N + k) hP0 ih'.1 ih'.2 (hnz _ (by omega) (by omega))
       intro t; rw [show N + (k + 1) + 1 = N + k + 2 by omega]; exact this t
-  -- a repeated pair
-  obtain ⟨m, n, hmn, -, he⟩ := pigeonhole (2 * P) (fun m => pairList P (N + m)) (fun m => pairList_length P _)
-  obtain ⟨e0, e1⟩ := eq_of_pairList hP0 (hper m).1 (hper m).2 (hper n).1 (hper n).2 he
-  -- forward: the pairs keep agreeing
-  have fwd : ∀ k, (∀ t, E (N + m + k) t = E (N + n + k) t) ∧ (∀ t, E (N + m + k + 1) t = E (N + n + k + 1) t) := by
+  obtain ⟨m, n, hmn, hnW, he⟩ :=
+    Rule30UOR.KitConstructive.pigeonhole (2 * P) (fun m => pairList P (N + m))
+      (fun m => pairList_length P _)
+  obtain ⟨e0, e1⟩ := eq_of_pairList hP0 (hper m (by omega)).1 (hper m (by omega)).2
+    (hper n hnW).1 (hper n hnW).2 he
+  have fwd : ∀ k, N + m + k + 1 ≤ B → (∀ t, E (N + m + k) t = E (N + n + k) t) ∧
+      (∀ t, E (N + m + k + 1) t = E (N + n + k + 1) t) := by
     intro k
     induction k with
-    | zero => exact ⟨e0, e1⟩
+    | zero => intro _; exact ⟨e0, e1⟩
     | succ k ih =>
-      refine ⟨by simpa [Nat.add_assoc] using ih.2, ?_⟩
-      have := fwd_det ih.1 ih.2 (hnz _ (by omega))
+      intro hk
+      have ih' := ih (by omega)
+      refine ⟨by simpa [Nat.add_assoc] using ih'.2, ?_⟩
+      have := fwd_det ih'.1 ih'.2 (hnz _ (by omega) (by omega))
       intro t; rw [show N + m + (k + 1) + 1 = N + m + k + 2 by omega,
         show N + n + (k + 1) + 1 = N + n + k + 2 by omega]; exact this t
-  -- backward: down to depth 0
   have bwd : ∀ k, k ≤ N + m → (∀ t, E (N + m - k) t = E (N + n - k) t) ∧
       (∀ t, E (N + m - k + 1) t = E (N + n - k + 1) t) := by
     intro k
@@ -242,24 +282,36 @@ theorem infinitely_many_zero_diagonals (N : Nat) : ∃ z, N ≤ z ∧ ∀ t, E z
         exact this
       · intro t; rw [show N + m - (k + 1) + 1 = N + m - k by omega,
           show N + n - (k + 1) + 1 = N + n - k by omega]; exact h.1 t
-  -- the whole zero-state is periodic in depth with period d = n - m
-  have hd : ∀ i t, E i t = E (i + (n - m)) t := by
-    intro i t
-    rcases Nat.lt_or_ge i (N + m) with hi | hi
+  have hd : ∀ i t, i + 1 ≤ B → E i t = E (i + (n - m)) t := by
+    intro i t hi
+    rcases Nat.lt_or_ge i (N + m) with hlt | hge
     · have := (bwd (N + m - i) (by omega)).1 t
-      rwa [show N + m - (N + m - i) = i by omega, show N + n - (N + m - i) = i + (n - m) by omega] at this
-    · have := (fwd (i - (N + m))).1 t
-      rwa [show N + m + (i - (N + m)) = i by omega, show N + n + (i - (N + m)) = i + (n - m) by omega] at this
-  have hrep : ∀ k t, E (2 + k * (n - m)) t = false := by
-    intro k; induction k with
-    | zero => intro t; simpa using E_two t
+      rwa [show N + m - (N + m - i) = i by omega,
+        show N + n - (N + m - i) = i + (n - m) by omega] at this
+    · have := (fwd (i - (N + m)) (by omega)).1 t
+      rwa [show N + m + (i - (N + m)) = i by omega,
+        show N + n + (i - (N + m)) = i + (n - m) by omega] at this
+  have hgap : n - m ≤ W := by omega
+  have hNW : N * (n - m) ≤ N * W := Nat.mul_le_mul_left N hgap
+  have hW1 : N * W ≤ (N + 1) * W := Nat.mul_le_mul_right W (by omega)
+  have hrep : ∀ k t, k ≤ N → E (2 + k * (n - m)) t = false := by
+    intro k
+    induction k with
+    | zero => intro t _; simpa using E_two t
     | succ k ih =>
-      intro t
-      rw [show 2 + (k + 1) * (n - m) = (2 + k * (n - m)) + (n - m) by rw [Nat.succ_mul]; omega, ← hd, ih]
-  obtain ⟨s, hs⟩ := hnz (2 + N * (n - m)) (by
-    have : N ≤ N * (n - m) := Nat.le_mul_of_pos_right _ (by omega)
-    omega)
-  rw [hrep] at hs; exact absurd hs (by decide)
+      intro t hk
+      have hkm : k * (n - m) ≤ N * (n - m) := Nat.mul_le_mul_right _ (by omega)
+      rw [show 2 + (k + 1) * (n - m) = (2 + k * (n - m)) + (n - m) by rw [Nat.succ_mul]; omega,
+        ← hd _ t (by omega), ih t (by omega)]
+  have hpos : N ≤ N * (n - m) := Nat.le_mul_of_pos_right _ (by omega)
+  obtain ⟨s, hs⟩ := hnz (2 + N * (n - m)) (by omega) (by omega)
+  rw [hrep N s (Nat.le_refl N)] at hs; exact absurd hs (by decide)
+
+/-- **Infinitely many zero diagonals.** For every `N` some diagonal of depth `≥ N` is identically
+white. -/
+theorem infinitely_many_zero_diagonals (N : Nat) : ∃ z, N ≤ z ∧ ∀ t, E z t = false := by
+  obtain ⟨z, -, hz, h⟩ := zero_diagonal_bounded N
+  exact ⟨z, hz, h⟩
 
 /-! ### Unbounded periods -/
 
@@ -279,40 +331,57 @@ theorem E_one' (t : Nat) : E 1 t = true := by
     simp only [Nat.pow_one]; omega⟩
   rw [hs]; exact D_one s
 
-/-- **The zero-state has unbounded periods** (no common period for all depths). If every diagonal
-had period `P`, a pair of consecutive diagonals would repeat; reversibility carries the repeat down
-to the edge pair `(E 0, E 1) = (black, black)`, which recurs at some depth `d ≥ 1`; but two black
-diagonals force every diagonal below them to be white, against the black edge. -/
-theorem unbounded_periods (P : Nat) (hP0 : 0 < P) : ¬ ∀ j t, E j (t + P) = E j t := by
-  intro hper
-  obtain ⟨m, n, hmn, -, he⟩ := pigeonhole (2 * P) (fun m => pairList P m) (fun m => pairList_length P _)
-  obtain ⟨e0, e1⟩ := eq_of_pairList hP0 (hper m) (hper (m + 1)) (hper n) (hper (n + 1)) he
+/-- A period of diagonal `j` is checked on one period of `E j`. -/
+theorem per_iff_bounded (j P : Nat) :
+    (∀ t, E j (t + P) = E j t) ↔ ∀ t, t < 2 ^ j → E j (t + P) = E j t := by
+  constructor
+  · exact fun h t _ => h t
+  · intro h t
+    have hl := reduce_mod (f := fun t => E j (t + P)) (P := 2 ^ j)
+      (fun t => by
+        show E j (t + 2 ^ j + P) = E j (t + P)
+        rw [show t + 2 ^ j + P = (t + P) + 2 ^ j by omega, E_per]) t
+    have hr := reduce_mod (E_per j) t
+    rw [hl, hr]
+    exact h _ (Nat.mod_lt _ (Nat.two_pow_pos j))
+
+instance (j P : Nat) : Decidable (∀ t, E j (t + P) = E j t) :=
+  decidable_of_iff _ (per_iff_bounded j P).symm
+
+/-- **Finite core of `unbounded_periods`.** No `P > 0` is a common period of the
+diagonals through depth `2 ^ (2 P) + 1`. -/
+theorem common_period_fails_by (P : Nat) (hP0 : 0 < P) :
+    ¬ ∀ j, j ≤ 2 ^ (2 * P) + 1 → ∀ t, E j (t + P) = E j t := by
+  intro hper'
+  obtain ⟨m, n, hmn, hnW, he⟩ := Rule30UOR.KitConstructive.pigeonhole (2 * P) (fun m => pairList P m) (fun m => pairList_length P _)
+  obtain ⟨e0, e1⟩ := eq_of_pairList hP0 (hper' m (by cfomega)) (hper' (m + 1) (by cfomega))
+    (hper' n (by cfomega)) (hper' (n + 1) (by cfomega)) he
   have bwd : ∀ k, k ≤ m → (∀ t, E (m - k) t = E (n - k) t) ∧ (∀ t, E (m - k + 1) t = E (n - k + 1) t) := by
     intro k
     induction k with
     | zero => intro _; simpa using And.intro e0 e1
     | succ k ih =>
       intro hk
-      have h := ih (by omega)
+      have h := ih (by cfomega)
       refine ⟨?_, ?_⟩
       · exact bwd_det (a := m - (k + 1)) (b := n - (k + 1))
-          (by intro t; rw [show m - (k + 1) + 1 = m - k by omega, show n - (k + 1) + 1 = n - k by omega]; exact h.1 t)
-          (by intro t; rw [show m - (k + 1) + 2 = m - k + 1 by omega, show n - (k + 1) + 2 = n - k + 1 by omega]; exact h.2 t)
-      · intro t; rw [show m - (k + 1) + 1 = m - k by omega, show n - (k + 1) + 1 = n - k by omega]; exact h.1 t
+          (by intro t; rw [show m - (k + 1) + 1 = m - k by cfomega, show n - (k + 1) + 1 = n - k by cfomega]; exact h.1 t)
+          (by intro t; rw [show m - (k + 1) + 2 = m - k + 1 by cfomega, show n - (k + 1) + 2 = n - k + 1 by cfomega]; exact h.2 t)
+      · intro t; rw [show m - (k + 1) + 1 = m - k by cfomega, show n - (k + 1) + 1 = n - k by cfomega]; exact h.1 t
   obtain ⟨b0, b1⟩ := bwd m (Nat.le_refl _)
   simp only [Nat.sub_self, Nat.zero_add] at b0 b1
   -- the edge pair recurs at depth d = n - m
   have hd0 : ∀ t, E (n - m) t = true := fun t => by rw [← b0, E_zero']
   have hd1 : ∀ t, E (n - m + 1) t = true := fun t => by rw [← b1, E_one']
   rcases Nat.lt_or_ge (n - m) 2 with hsmall | hbig
-  · have : n - m = 1 := by omega
-    have := hd1 0; rw [show n - m + 1 = 2 by omega, E_two] at this; exact absurd this (by decide)
+  · have : n - m = 1 := by cfomega
+    have := hd1 0; rw [show n - m + 1 = 2 by cfomega, E_two] at this; exact absurd this (by decide)
   · -- every diagonal below depth n - m is white
     have hw1 : ∀ t, E (n - m - 1) t = false := by
-      intro t; rw [E_back, show n - m - 1 + 2 = n - m + 1 by omega, show n - m - 1 + 1 = n - m by omega,
+      intro t; rw [E_back, show n - m - 1 + 2 = n - m + 1 by cfomega, show n - m - 1 + 1 = n - m by cfomega,
         hd1, hd0]; rfl
     have hw2 : ∀ t, E (n - m - 2) t = false := by
-      intro t; rw [E_back, show n - m - 2 + 2 = n - m by omega, show n - m - 2 + 1 = n - m - 1 by omega,
+      intro t; rw [E_back, show n - m - 2 + 2 = n - m by cfomega, show n - m - 2 + 1 = n - m - 1 by cfomega,
         hw1]
       simp [hd0]
     have down : ∀ k, k + 2 ≤ n - m → (∀ t, E (n - m - 1 - k) t = false) ∧ (∀ t, E (n - m - 2 - k) t = false) := by
@@ -321,15 +390,22 @@ theorem unbounded_periods (P : Nat) (hP0 : 0 < P) : ¬ ∀ j t, E j (t + P) = E 
       | zero => intro _; exact ⟨hw1, hw2⟩
       | succ k ih =>
         intro hk
-        have h := ih (by omega)
-        refine ⟨by intro t; rw [show n - m - 1 - (k + 1) = n - m - 2 - k by omega]; exact h.2 t, ?_⟩
+        have h := ih (by cfomega)
+        refine ⟨by intro t; rw [show n - m - 1 - (k + 1) = n - m - 2 - k by cfomega]; exact h.2 t, ?_⟩
         intro t
-        rw [E_back, show n - m - 2 - (k + 1) + 2 = n - m - 1 - k by omega,
-          show n - m - 2 - (k + 1) + 1 = n - m - 2 - k by omega]
+        rw [E_back, show n - m - 2 - (k + 1) + 2 = n - m - 1 - k by cfomega,
+          show n - m - 2 - (k + 1) + 1 = n - m - 2 - k by cfomega]
         simp [h.1, h.2]
-    have := (down (n - m - 2) (by omega)).2 0
-    rw [show n - m - 2 - (n - m - 2) = 0 by omega, E_zero'] at this
+    have := (down (n - m - 2) (by cfomega)).2 0
+    rw [show n - m - 2 - (n - m - 2) = 0 by cfomega, E_zero'] at this
     exact absurd this (by decide)
+
+/-- **The zero-state has unbounded periods** (no common period for all depths). If every diagonal
+had period `P`, a pair of consecutive diagonals would repeat; reversibility carries the repeat down
+to the edge pair `(E 0, E 1) = (black, black)`, which recurs at some depth `d ≥ 1`; but two black
+diagonals force every diagonal below them to be white, against the black edge. -/
+theorem unbounded_periods (P : Nat) (hP0 : 0 < P) : ¬ ∀ j t, E j (t + P) = E j t :=
+  fun hper => common_period_fails_by P hP0 (fun j _ t => hper j t)
 
 end Rule30UOR.ZeroDiagonals
 

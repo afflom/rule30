@@ -15,7 +15,7 @@
 \heading{Masked observations}
 
 \begin{theorem}{white-count-zero}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\), \(whitecount(t, 0) = 0\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::white-count-zero}(t)\).
@@ -23,7 +23,7 @@ Close the goal with \(\lexeme{r30.observation::white-count-zero}(t)\).
 \end{theorem}
 
 \begin{theorem}{white-count-black-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\) and natural number \(n\), if \(center(t) = true\), then \(whitecount(t, n + 1) = whitecount(t + 1, n)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::white-count-black-step}(t, n)\).
@@ -31,7 +31,7 @@ Close the goal with \(\lexeme{r30.observation::white-count-black-step}(t, n)\).
 \end{theorem}
 
 \begin{theorem}{white-count-white-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\) and natural number \(n\), if \(center(t) = false\), then \(whitecount(t, n + 1) = whitecount(t + 1, n) + 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::white-count-white-step}(t, n)\).
@@ -39,7 +39,7 @@ Close the goal with \(\lexeme{r30.observation::white-count-white-step}(t, n)\).
 \end{theorem}
 
 \begin{theorem}{prefix-agreement-iff-white-trace}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t1\) and natural number \(t2\) and natural number \(n\), if \(centerwindowagree(t1, t2, n)\), then \(leftprefixagree(t1, t2, n) ↔ whitetraceagree(t1, t2, n)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::prefix-agreement-iff-white-trace}(t1, t2, n)\).
@@ -47,7 +47,7 @@ Close the goal with \(\lexeme{r30.observation::prefix-agreement-iff-white-trace}
 \end{theorem}
 
 \begin{theorem}{compressed-prefix-repeat}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then there exists a natural number \(a\) such that there exists a natural number \(b\) such that \(a < b ∧ b ≤ twopow(whitecount(t, n)) ∧ leftprefixagree(t + a * P, t + b * P, n)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::compressed-prefix-repeat}(T, P, t, n)\).
@@ -55,7 +55,7 @@ Close the goal with \(\lexeme{r30.observation::compressed-prefix-repeat}(T, P, t
 \end{theorem}
 
 \begin{theorem}{separated-prefix-bound}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\) and natural number \(M\), if \(0 < P\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(prefixseparated(t, P, n, M)\), then \(M ≤ twopow(whitecount(t, n))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::separated-prefix-bound}(T, P, t, n, M)\).
@@ -63,7 +63,7 @@ Close the goal with \(\lexeme{r30.observation::separated-prefix-bound}(T, P, t, 
 \end{theorem}
 
 \begin{theorem}{edge-information-bound}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(n < t + twopow(whitecount(t, n)) * P\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::edge-information-bound}(T, P, t, n)\).
@@ -71,7 +71,7 @@ Close the goal with \(\lexeme{r30.observation::edge-information-bound}(T, P, t, 
 \end{theorem}
 
 \begin{theorem}{information-bound-audit}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(n\) and natural number \(t\) and natural number \(w\) and natural number \(P\), if \(n < (w + 1) * P\), then \(n < t + twopow(w) * P\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::information-bound-audit}(n, t, w, P)\).
@@ -84,7 +84,7 @@ Close the goal with \(\lexeme{r30.observation::information-bound-audit}(n, t, w,
 \heading{Central collision recurrence}
 
 \begin{theorem}{unit-defect-forces-near-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(r\), if \(leftadjacentdefect(Q, t) = true\), then if \(center(t + r) = true\), then if \(center((t + r) + Q) = true\), then \(nearcollision(Q, t, r + 1, 2 * (r + 1))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::unit-defect-forces-near-collision}(Q, t, r)\).
@@ -92,7 +92,7 @@ Close the goal with \(\lexeme{r30.observation::unit-defect-forces-near-collision
 \end{theorem}
 
 \begin{theorem}{periodic-unit-defect-forces-near-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(leftadjacentdefect(m * P, t) = true\), then \(nearcollision(m * P, t, P, 2 * P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-unit-defect-forces-near-collision}(T, P, m, t)\).
@@ -100,7 +100,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-unit-defect-forces-near-
 \end{theorem}
 
 \begin{theorem}{periodic-central-collision-window}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + P ∧ centralcollision(m * P, t, 2 * P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-central-collision-window}(T, P, m, N)\).
@@ -108,7 +108,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-central-collision-window
 \end{theorem}
 
 \begin{theorem}{periodic-central-collisions}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then there exists a natural number \(t\) such that \(N ≤ t ∧ centralcollision(m * P, t, 2 * P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-central-collisions}(T, P, m, N)\).
@@ -116,7 +116,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-central-collisions}(T, P
 \end{theorem}
 
 \begin{theorem}{periodic-recurrent-central-column}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentcentralcollision(m * P, 2 * P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-recurrent-central-column}(T, P, m)\).
@@ -124,7 +124,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-recurrent-central-column
 \end{theorem}
 
 \begin{theorem}{black-window-forces-left-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(leftadjacentdefect(Q, b + r) = true\), then there exists a natural number \(s\) such that \(2 * s ≤ r + 1 ∧ s ≤ r ∧ leftcollision(Q, b + s, r + 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::black-window-forces-left-collision}(Q, b, r)\).
@@ -132,7 +132,7 @@ Close the goal with \(\lexeme{r30.observation::black-window-forces-left-collisio
 \end{theorem}
 
 \begin{theorem}{periodic-left-collision-window}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ leftcollision(m * P, t, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-left-collision-window}(T, P, m, N)\).
@@ -140,7 +140,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-left-collision-window}(T
 \end{theorem}
 
 \begin{theorem}{periodic-left-collisions}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then there exists a natural number \(t\) such that \(N ≤ t ∧ leftcollision(m * P, t, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-left-collisions}(T, P, m, N)\).
@@ -148,7 +148,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-left-collisions}(T, P, m
 \end{theorem}
 
 \begin{theorem}{periodic-recurrent-left-column}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentleftcollision(m * P, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-recurrent-left-column}(T, P, m)\).
@@ -156,7 +156,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-recurrent-left-column}(T
 \end{theorem}
 
 \begin{theorem}{collision-code-nonzero}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(collisioncode(Q, t, k) ≠ 0 ↔ collisionbit(Q, t, k) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::collision-code-nonzero}(Q, t, k)\).
@@ -164,7 +164,7 @@ Close the goal with \(\lexeme{r30.observation::collision-code-nonzero}(Q, t, k)\
 \end{theorem}
 
 \begin{theorem}{collision-code-bound}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(collisioncode(Q, t, k) ≤ 6\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::collision-code-bound}(Q, t, k)\).
@@ -172,7 +172,7 @@ Close the goal with \(\lexeme{r30.observation::collision-code-bound}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{collision-code-colours}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \((collisioncode(Q, t, k) = 1 ↔ leftcolour(Q, t, k) = 1 ∧ leftcolour(Q, t, k - 1) = 2) ∧ (collisioncode(Q, t, k) = 2 ↔ leftcolour(Q, t, k) = 2 ∧ leftcolour(Q, t, k - 1) = 1) ∧ (collisioncode(Q, t, k) = 3 ↔ leftcolour(Q, t, k) = 1 ∧ leftcolour(Q, t, k - 1) = 3) ∧ (collisioncode(Q, t, k) = 4 ↔ leftcolour(Q, t, k) = 3 ∧ leftcolour(Q, t, k - 1) = 1) ∧ (collisioncode(Q, t, k) = 5 ↔ leftcolour(Q, t, k) = 2 ∧ leftcolour(Q, t, k - 1) = 3) ∧ (collisioncode(Q, t, k) = 6 ↔ leftcolour(Q, t, k) = 3 ∧ leftcolour(Q, t, k - 1) = 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::collision-code-colours}(Q, t, k)\).
@@ -180,7 +180,7 @@ Close the goal with \(\lexeme{r30.observation::collision-code-colours}(Q, t, k)\
 \end{theorem}
 
 \begin{theorem}{advancing-collision-codes}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(advancingatdepth(Q, t, k) ↔ collisioncode(Q, t, k) = 3 ∨ collisioncode(Q, t, k) = 5\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::advancing-collision-codes}(Q, t, k)\).
@@ -188,7 +188,7 @@ Close the goal with \(\lexeme{r30.observation::advancing-collision-codes}(Q, t, 
 \end{theorem}
 
 \begin{theorem}{collision-transmits-left}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(collisioncode(Q, t, k) ≠ 0\), then \(leftdefect(Q, t + 1, k) = leftdefect(Q, t, k + 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::collision-transmits-left}(Q, t, k)\).
@@ -196,7 +196,7 @@ Close the goal with \(\lexeme{r30.observation::collision-transmits-left}(Q, t, k
 \end{theorem}
 
 \begin{theorem}{collision-gates-agree}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(collisioncode(Q, t, k) ≠ 0\), then \(leftgatedifference(Q, t, k) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::collision-gates-agree}(Q, t, k)\).
@@ -204,7 +204,7 @@ Close the goal with \(\lexeme{r30.observation::collision-gates-agree}(Q, t, k)\)
 \end{theorem}
 
 \begin{theorem}{collision-right-transport-table}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(2 ≤ k\), then \((collisioncode(Q, t, k) = 1 → leftdefect(Q, t + 1, k - 1) = leftcell(t, k - 2)) ∧ (collisioncode(Q, t, k) = 2 → leftdefect(Q, t + 1, k - 1) = leftcell(t + Q, k - 2)) ∧ (collisioncode(Q, t, k) = 3 → leftdefect(Q, t + 1, k - 1) = true) ∧ (collisioncode(Q, t, k) = 4 → leftdefect(Q, t + 1, k - 1) = \lexeme{lexlean.std.bool::not}(leftcell(t + Q, k - 2))) ∧ (collisioncode(Q, t, k) = 5 → leftdefect(Q, t + 1, k - 1) = true) ∧ (collisioncode(Q, t, k) = 6 → leftdefect(Q, t + 1, k - 1) = \lexeme{lexlean.std.bool::not}(leftcell(t, k - 2)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::collision-right-transport-table}(Q, t, k)\).
@@ -212,7 +212,7 @@ Close the goal with \(\lexeme{r30.observation::collision-right-transport-table}(
 \end{theorem}
 
 \begin{theorem}{advancing-right-colour-table}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \((collisioncode(Q, t, k) = 3 → leftcolour(Q, t + 1, k - 1) = 2) ∧ (collisioncode(Q, t, k) = 5 → leftcolour(Q, t + 1, k - 1) = 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::advancing-right-colour-table}(Q, t, k)\).
@@ -220,7 +220,7 @@ Close the goal with \(\lexeme{r30.observation::advancing-right-colour-table}(Q, 
 \end{theorem}
 
 \begin{theorem}{gate-difference-iff-flip}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftdefect(Q, t + 1, k) = \lexeme{lexlean.std.bool::not}(leftdefect(Q, t, k + 1)) ↔ leftgatedifference(Q, t, k) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::gate-difference-iff-flip}(Q, t, k)\).
@@ -228,7 +228,7 @@ Close the goal with \(\lexeme{r30.observation::gate-difference-iff-flip}(Q, t, k
 \end{theorem}
 
 \begin{theorem}{incoming-defect-erased-iff}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftdefect(Q, t, k + 1) = true\), then \(leftdefect(Q, t + 1, k) = false ↔ leftgatedifference(Q, t, k) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::incoming-defect-erased-iff}(Q, t, k)\).
@@ -236,7 +236,7 @@ Close the goal with \(\lexeme{r30.observation::incoming-defect-erased-iff}(Q, t,
 \end{theorem}
 
 \begin{theorem}{erasure-has-no-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftdefect(Q, t, k + 1) = true\), then if \(leftdefect(Q, t + 1, k) = false\), then \(collisioncode(Q, t, k) = 0\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::erasure-has-no-collision}(Q, t, k)\).
@@ -244,7 +244,7 @@ Close the goal with \(\lexeme{r30.observation::erasure-has-no-collision}(Q, t, k
 \end{theorem}
 
 \begin{theorem}{seed-left-colours}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(k\), if \(0 < k\), then \(leftcolour(Q, 0, k) = 0 ∨ leftcolour(Q, 0, k) = 2\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-left-colours}(Q, k)\).
@@ -252,7 +252,7 @@ Close the goal with \(\lexeme{r30.observation::seed-left-colours}(Q, k)\).
 \end{theorem}
 
 \begin{theorem}{seed-left-collision-zero}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(k\), if \(2 ≤ k\), then \(collisioncode(Q, 0, k) = 0\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-left-collision-zero}(Q, k)\).
@@ -260,7 +260,7 @@ Close the goal with \(\lexeme{r30.observation::seed-left-collision-zero}(Q, k)\)
 \end{theorem}
 
 \begin{theorem}{seed-advancing-collision-birth}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(collisioncode(1, 1, 2) = 5\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-advancing-collision-birth}\).
@@ -268,7 +268,7 @@ Close the goal with \(\lexeme{r30.observation::seed-advancing-collision-birth}\)
 \end{theorem}
 
 \begin{theorem}{seed-gate-erasure}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(leftdefect(3, 0, 3) = true ∧ leftdefect(3, 1, 2) = false ∧ leftgatedifference(3, 0, 2) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-gate-erasure}\).
@@ -276,7 +276,7 @@ Close the goal with \(\lexeme{r30.observation::seed-gate-erasure}\).
 \end{theorem}
 
 \begin{theorem}{left-defect-black-cone}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftdefect(Q, t, k) = true\), then if \(center(t) = true\), then if \(center(t + Q) = true\), then \(advancingleftcone(Q, t, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-defect-black-cone}(Q, t, k)\).
@@ -284,7 +284,7 @@ Close the goal with \(\lexeme{r30.observation::left-defect-black-cone}(Q, t, k)\
 \end{theorem}
 
 \begin{theorem}{black-window-forces-advancing-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(leftadjacentdefect(Q, b + r) = true\), then there exists a natural number \(s\) such that \(2 * s ≤ r + 1 ∧ s ≤ r ∧ advancingleftcollision(Q, b + s, r + 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::black-window-forces-advancing-collision}(Q, b, r)\).
@@ -292,7 +292,7 @@ Close the goal with \(\lexeme{r30.observation::black-window-forces-advancing-col
 \end{theorem}
 
 \begin{theorem}{periodic-advancing-left-collision-window}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ advancingleftcollision(m * P, t, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-advancing-left-collision-window}(T, P, m, N)\).
@@ -300,7 +300,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-advancing-left-collision
 \end{theorem}
 
 \begin{theorem}{periodic-recurrent-advancing-left-column}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentadvancingleftcollision(m * P, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-recurrent-advancing-left-column}(T, P, m)\).
@@ -308,7 +308,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-recurrent-advancing-left
 \end{theorem}
 
 \begin{theorem}{left-defect-false-colours}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftdefect(Q, t, k) = false ↔ leftcolour(Q, t, k) = 0 ∨ leftcolour(Q, t, k) = 3\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-defect-false-colours}(Q, t, k)\).
@@ -316,7 +316,7 @@ Close the goal with \(\lexeme{r30.observation::left-defect-false-colours}(Q, t, 
 \end{theorem}
 
 \begin{theorem}{left-defect-true-colours}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftdefect(Q, t, k) = true ↔ leftcolour(Q, t, k) = 1 ∨ leftcolour(Q, t, k) = 2\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-defect-true-colours}(Q, t, k)\).
@@ -324,7 +324,7 @@ Close the goal with \(\lexeme{r30.observation::left-defect-true-colours}(Q, t, k
 \end{theorem}
 
 \begin{theorem}{left-colours-outside-seed-cone}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(t < k\), then \(leftcolour(Q, t, k) = 0 ∨ leftcolour(Q, t, k) = 2\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-colours-outside-seed-cone}(Q, t, k)\).
@@ -332,7 +332,7 @@ Close the goal with \(\lexeme{r30.observation::left-colours-outside-seed-cone}(Q
 \end{theorem}
 
 \begin{theorem}{collision-code-support}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(collisioncode(Q, t, k) ≠ 0\), then \(k ≤ t + 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::collision-code-support}(Q, t, k)\).
@@ -340,7 +340,7 @@ Close the goal with \(\lexeme{r30.observation::collision-code-support}(Q, t, k)\
 \end{theorem}
 
 \begin{theorem}{gate-code-nonzero}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(gatecode(Q, t, k) ≠ 0 ↔ leftgatedifference(Q, t, k) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::gate-code-nonzero}(Q, t, k)\).
@@ -348,7 +348,7 @@ Close the goal with \(\lexeme{r30.observation::gate-code-nonzero}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{gate-code-bound}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(gatecode(Q, t, k) ≤ 6\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::gate-code-bound}(Q, t, k)\).
@@ -356,7 +356,7 @@ Close the goal with \(\lexeme{r30.observation::gate-code-bound}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{gate-code-colours}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then \((gatecode(Q, t, k) = 1 ↔ leftcolour(Q, t, k) = 1 ∧ leftcolour(Q, t, k - 1) = 0) ∧ (gatecode(Q, t, k) = 2 ↔ leftcolour(Q, t, k) = 0 ∧ leftcolour(Q, t, k - 1) = 1) ∧ (gatecode(Q, t, k) = 3 ↔ leftcolour(Q, t, k) = 1 ∧ leftcolour(Q, t, k - 1) = 1) ∧ (gatecode(Q, t, k) = 4 ↔ leftcolour(Q, t, k) = 2 ∧ leftcolour(Q, t, k - 1) = 0) ∧ (gatecode(Q, t, k) = 5 ↔ leftcolour(Q, t, k) = 0 ∧ leftcolour(Q, t, k - 1) = 2) ∧ (gatecode(Q, t, k) = 6 ↔ leftcolour(Q, t, k) = 2 ∧ leftcolour(Q, t, k - 1) = 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::gate-code-colours}(Q, t, k)\).
@@ -364,7 +364,7 @@ Close the goal with \(\lexeme{r30.observation::gate-code-colours}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{erasure-event-of-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftdefect(Q, t, k + 1) = true\), then if \(leftdefect(Q, t + 1, k) = false\), then \(erasureevent(Q, t, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::erasure-event-of-step}(Q, t, k)\).
@@ -372,7 +372,7 @@ Close the goal with \(\lexeme{r30.observation::erasure-event-of-step}(Q, t, k)\)
 \end{theorem}
 
 \begin{theorem}{erasure-black-phase-iff}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(erasureevent(Q, t, k)\), then \(leftcolour(Q, t + 1, k) = 3 ↔ (gatecode(Q, t, k) ≤ 3 ∧ leftcolour(Q, t, k + 1) = 2) ∨ (4 ≤ gatecode(Q, t, k) ∧ leftcolour(Q, t, k + 1) = 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::erasure-black-phase-iff}(Q, t, k)\).
@@ -380,7 +380,7 @@ Close the goal with \(\lexeme{r30.observation::erasure-black-phase-iff}(Q, t, k)
 \end{theorem}
 
 \begin{theorem}{erasure-outside-seed-cone-white}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(t + 1 < k\), then if \(erasureevent(Q, t, k)\), then \(leftcolour(Q, t + 1, k) = 0\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::erasure-outside-seed-cone-white}(Q, t, k)\).
@@ -388,7 +388,7 @@ Close the goal with \(\lexeme{r30.observation::erasure-outside-seed-cone-white}(
 \end{theorem}
 
 \begin{theorem}{advancing-source-first-erasure}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(2 ≤ k\), then if \(advancingatdepth(Q, t, k)\), then if \(leftdefect(Q, t + k, 0) = false\), then there exists a natural number \(j\) such that \(firstpatherasure(Q, t, k, j)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::advancing-source-first-erasure}(Q, t, k)\).
@@ -396,7 +396,7 @@ Close the goal with \(\lexeme{r30.observation::advancing-source-first-erasure}(Q
 \end{theorem}
 
 \begin{theorem}{periodic-erasure-window}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(u\) such that there exists a natural number \(d\) such that \(N ≤ u ∧ u + 1 ≤ 2 * N + m * P + 3 * P ∧ d + 2 ≤ P ∧ erasureevent(m * P, u, d)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-erasure-window}(T, P, m, N)\).
@@ -404,7 +404,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-erasure-window}(T, P, m,
 \end{theorem}
 
 \begin{theorem}{periodic-recurrent-source-erasure}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentsourceerasure(m * P, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-recurrent-source-erasure}(T, P, m)\).
@@ -412,7 +412,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-recurrent-source-erasure
 \end{theorem}
 
 \begin{theorem}{no-period-iff-no-recurrent-central-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(noperiod ↔ norecurrentcentralcollision\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.frontier::no-period-iff-no-recurrent-central-collision}\).
@@ -420,7 +420,7 @@ Close the goal with \(\lexeme{r30.frontier::no-period-iff-no-recurrent-central-c
 \end{theorem}
 
 \begin{theorem}{no-row-center-period-iff-no-recurrent-central-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(norowcenterperiod ↔ norecurrentcentralcollision\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.frontier::no-row-center-period-iff-no-recurrent-central-collision}\).
@@ -428,7 +428,7 @@ Close the goal with \(\lexeme{r30.frontier::no-row-center-period-iff-no-recurren
 \end{theorem}
 
 \begin{theorem}{problem-one-iff-no-recurrent-central-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(problemone ↔ norecurrentcentralcollision\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.frontier::problem-one-iff-no-recurrent-central-collision}\).
@@ -436,7 +436,7 @@ Close the goal with \(\lexeme{r30.frontier::problem-one-iff-no-recurrent-central
 \end{theorem}
 
 \begin{theorem}{no-period-of-no-recurrent-central-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 if \(norecurrentcentralcollision\), then \(noperiod\).
 \begin{proof}
 Assume \(h\).
@@ -445,7 +445,7 @@ Close the goal with \(\lexeme{r30.frontier::no-period-of-no-recurrent-central-co
 \end{theorem}
 
 \begin{theorem}{not-center-periodic-of-no-recurrent-central-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(norecurrentcentralcollision\), then \(¬ centerperiodic(T, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.frontier::not-center-periodic-of-no-recurrent-central-collision}(T, P)\).
@@ -453,7 +453,7 @@ Close the goal with \(\lexeme{r30.frontier::not-center-periodic-of-no-recurrent-
 \end{theorem}
 
 \begin{theorem}{not-eventually-periodic-of-no-recurrent-central-collision}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 if \(norecurrentcentralcollision\), then \(problemone\).
 \begin{proof}
 Assume \(h\).
@@ -462,7 +462,7 @@ Close the goal with \(\lexeme{r30.frontier::not-eventually-periodic-of-no-recurr
 \end{theorem}
 
 \begin{theorem}{pair-phase-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(b\) and natural number \(d\) and natural number \(i\), \(pairphase(wittphi(b), wittxor(wittphi(d), wittshl(crosscarry(b, d), 1)), i) = bitvalue(rowbit(wittphi(wittxor(b, d)), i)) intminus bitvalue(rowbit(wittphi(b), i))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::pair-phase-step}(b, d, i)\).
@@ -470,7 +470,7 @@ Close the goal with \(\lexeme{r30.observation::pair-phase-step}(b, d, i)\).
 \end{theorem}
 
 \begin{theorem}{aligned-phase-left}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(alignedphase(Q, t, t + k + Q) = leftphase(Q, t, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-phase-left}(Q, t, k)\).
@@ -478,7 +478,7 @@ Close the goal with \(\lexeme{r30.observation::aligned-phase-left}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{phase-zero-iff}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftphase(Q, t, k) = 0 ↔ leftdefect(Q, t, k) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::phase-zero-iff}(Q, t, k)\).
@@ -486,7 +486,7 @@ Close the goal with \(\lexeme{r30.observation::phase-zero-iff}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{phase-unit-iff}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \((leftphase(Q, t, k) = intneg 1 ∨ leftphase(Q, t, k) = 1) ↔ leftdefect(Q, t, k) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::phase-unit-iff}(Q, t, k)\).
@@ -494,7 +494,7 @@ Close the goal with \(\lexeme{r30.observation::phase-unit-iff}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{left-phase-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftphase(Q, t + 1, k) = leftphase(Q, t, k + 1) intplus leftphaseflux(Q, t, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-phase-balance}(Q, t, k)\).
@@ -502,7 +502,7 @@ Close the goal with \(\lexeme{r30.observation::left-phase-balance}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{collision-phase-flip}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(collisioncode(Q, t, k) ≠ 0\), then \(leftphaseflux(Q, t, k) = intneg 2 inttimes leftphase(Q, t, k + 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::collision-phase-flip}(Q, t, k)\).
@@ -510,7 +510,7 @@ Close the goal with \(\lexeme{r30.observation::collision-phase-flip}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{advancing-phase-flip}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < k\), then if \(advancingatdepth(Q, t, k)\), then \(leftphase(Q, t + 1, k - 1) = intneg leftphase(Q, t, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::advancing-phase-flip}(Q, t, k)\).
@@ -518,7 +518,7 @@ Close the goal with \(\lexeme{r30.observation::advancing-phase-flip}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{gate-phase-cases}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \((gatecode(Q, t, k) = 1 → leftgatephase(Q, t, k) = intneg 1) ∧ (gatecode(Q, t, k) = 2 → leftgatephase(Q, t, k) = intneg 1) ∧ (gatecode(Q, t, k) = 3 → leftgatephase(Q, t, k) = intneg 1) ∧ (gatecode(Q, t, k) = 4 → leftgatephase(Q, t, k) = 1) ∧ (gatecode(Q, t, k) = 5 → leftgatephase(Q, t, k) = 1) ∧ (gatecode(Q, t, k) = 6 → leftgatephase(Q, t, k) = 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::gate-phase-cases}(Q, t, k)\).
@@ -526,7 +526,7 @@ Close the goal with \(\lexeme{r30.observation::gate-phase-cases}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{erasure-phase-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(erasureevent(Q, t, k)\), then \(leftphase(Q, t + 1, k) = 0 ∧ leftphaseflux(Q, t, k) = intneg leftphase(Q, t, k + 1) ∧ (leftphase(Q, t, k + 1) = intneg 1 ∨ leftphase(Q, t, k + 1) = 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::erasure-phase-balance}(Q, t, k)\).
@@ -534,7 +534,7 @@ Close the goal with \(\lexeme{r30.observation::erasure-phase-balance}(Q, t, k)\)
 \end{theorem}
 
 \begin{theorem}{erasure-reset-product}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(erasureevent(Q, t, k)\), then \((leftcolour(Q, t + 1, k) = 3 ↔ leftgatephase(Q, t, k) inttimes leftphase(Q, t, k + 1) = intneg 1) ∧ (leftcolour(Q, t + 1, k) = 0 ↔ leftgatephase(Q, t, k) inttimes leftphase(Q, t, k + 1) = 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::erasure-reset-product}(Q, t, k)\).
@@ -542,7 +542,7 @@ Close the goal with \(\lexeme{r30.observation::erasure-reset-product}(Q, t, k)\)
 \end{theorem}
 
 \begin{theorem}{path-phase-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(n\), \(pathphase(Q, t, k, n) = leftphase(Q, t, k) intplus pathflux(Q, t, k, n)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::path-phase-balance}(Q, t, k, n)\).
@@ -550,7 +550,7 @@ Close the goal with \(\lexeme{r30.observation::path-phase-balance}(Q, t, k, n)\)
 \end{theorem}
 
 \begin{theorem}{seed-left-phase}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(leftphase(Q, t, t + Q) = 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-left-phase}(Q, t)\).
@@ -558,7 +558,7 @@ Close the goal with \(\lexeme{r30.observation::seed-left-phase}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{seed-center-phase-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(leftphase(Q, t + (t + Q), 0) = 1 intplus pathflux(Q, t, t + Q, t + Q)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-center-phase-balance}(Q, t)\).
@@ -566,7 +566,7 @@ Close the goal with \(\lexeme{r30.observation::seed-center-phase-balance}(Q, t)\
 \end{theorem}
 
 \begin{theorem}{periodic-seed-flux}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then \(pathflux(m * P, N, N + m * P, N + m * P) = intneg 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-seed-flux}(T, P, m, N)\).
@@ -574,7 +574,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-seed-flux}(T, P, m, N)\)
 \end{theorem}
 
 \begin{theorem}{seed-phase-cancellation}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(leftphase(3, 0, 3) = 1 ∧ leftphase(3, 1, 2) = 0 ∧ leftphaseflux(3, 0, 2) = intneg 1 ∧ leftgatephase(3, 0, 2) = 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-phase-cancellation}\).
@@ -582,7 +582,7 @@ Close the goal with \(\lexeme{r30.observation::seed-phase-cancellation}\).
 \end{theorem}
 
 \begin{theorem}{rightmost-left-profile}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(s\), if \(rightmostleft(Q, t, k)\), then if \(s < k\), then if \(centercleanthrough(Q, t, s)\), then \(rightmostleft(Q, t + s, k - s)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::rightmost-left-profile}(Q, t, k, s)\).
@@ -590,7 +590,7 @@ Close the goal with \(\lexeme{r30.observation::rightmost-left-profile}(Q, t, k, 
 \end{theorem}
 
 \begin{theorem}{leading-first-erasure}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leadingadvance(Q, t, k)\), then if \(centercleanthrough(Q, t, k)\), then \(firstpatherasure(Q, t, k, k - 2) ∧ erasureevent(Q, t + (k - 1), 0) ∧ (gatecode(Q, t + (k - 1), 0) = 2 ∨ gatecode(Q, t + (k - 1), 0) = 5) ∧ center(t + (k - 1)) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::leading-first-erasure}(Q, t, k)\).
@@ -598,7 +598,7 @@ Close the goal with \(\lexeme{r30.observation::leading-first-erasure}(Q, t, k)\)
 \end{theorem}
 
 \begin{theorem}{black-window-forces-leading-source}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(leftadjacentdefect(Q, b + r) = true\), then there exists a natural number \(s\) such that there exists a natural number \(k\) such that \(2 * s ≤ r + 1 ∧ s ≤ r ∧ k + s ≤ r + 1 ∧ leadingadvance(Q, b + s, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::black-window-forces-leading-source}(Q, b, r)\).
@@ -606,7 +606,7 @@ Close the goal with \(\lexeme{r30.observation::black-window-forces-leading-sourc
 \end{theorem}
 
 \begin{theorem}{periodic-leading-source-window}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that there exists a natural number \(k\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ k ≤ P ∧ leadingadvance(m * P, t, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-leading-source-window}(T, P, m, N)\).
@@ -614,7 +614,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-leading-source-window}(T
 \end{theorem}
 
 \begin{theorem}{periodic-leading-erasure-window}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then there exists a natural number \(t\) such that there exists a natural number \(k\) such that \(N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ k ≤ P ∧ leadingadvance(m * P, t, k) ∧ firstpatherasure(m * P, t, k, k - 2) ∧ (gatecode(m * P, t + (k - 1), 0) = 2 ∨ gatecode(m * P, t + (k - 1), 0) = 5)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-leading-erasure-window}(T, P, m, N)\).
@@ -622,7 +622,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-leading-erasure-window}(
 \end{theorem}
 
 \begin{theorem}{periodic-recurrent-leading-erasure}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then \(recurrentleadingerasure(m * P, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-recurrent-leading-erasure}(T, P, m)\).
@@ -630,7 +630,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-recurrent-leading-erasur
 \end{theorem}
 
 \begin{theorem}{left-phase-lag-add}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(R\) and natural number \(t\) and natural number \(k\), \(leftphase(Q + R, t, k) = leftphase(Q, t, k) intplus leftphase(R, t + Q, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-phase-lag-add}(Q, R, t, k)\).
@@ -638,7 +638,7 @@ Close the goal with \(\lexeme{r30.observation::left-phase-lag-add}(Q, R, t, k)\)
 \end{theorem}
 
 \begin{theorem}{path-flux-lag-add}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(R\) and natural number \(t\) and natural number \(k\) and natural number \(n\), \(pathflux(Q + R, t, k, n) = pathflux(Q, t, k, n) intplus pathflux(R, t + Q, k, n)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::path-flux-lag-add}(Q, R, t, k, n)\).
@@ -646,7 +646,7 @@ Close the goal with \(\lexeme{r30.observation::path-flux-lag-add}(Q, R, t, k, n)
 \end{theorem}
 
 \begin{theorem}{leading-phase-reset}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leadingadvance(Q, t, k)\), then if \(centercleanthrough(Q, t, k)\), then \((leftcolour(Q, t + k, 0) = 3 ↔ leftgatephase(Q, t + (k - 1), 0) inttimes (leftphase(Q, t, k) intplus pathflux(Q, t, k, k - 1)) = intneg 1) ∧ (leftcolour(Q, t + k, 0) = 0 ↔ leftgatephase(Q, t + (k - 1), 0) inttimes (leftphase(Q, t, k) intplus pathflux(Q, t, k, k - 1)) = 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::leading-phase-reset}(Q, t, k)\).
@@ -654,7 +654,7 @@ Close the goal with \(\lexeme{r30.observation::leading-phase-reset}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{center-erasure-iff-gate}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(leftdefect(Q, t, 0) = false\), then if \(leftdefect(Q, t + 1, 0) = false\), then \(erasureevent(Q, t, 0) ↔ (gatecode(Q, t, 0) = 2 ∨ gatecode(Q, t, 0) = 5)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::center-erasure-iff-gate}(Q, t)\).
@@ -662,7 +662,7 @@ Close the goal with \(\lexeme{r30.observation::center-erasure-iff-gate}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{white-block-gate-convex}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(n\) and natural number \(i\) and natural number \(j\) and natural number \(k\), if \(commonwhiteblock(Q, b, n)\), then if \(i ≤ j\), then if \(j ≤ k\), then if \(k ≤ n\), then if \(gatecode(Q, b + i, 0) = 2 ∨ gatecode(Q, b + i, 0) = 5\), then if \(gatecode(Q, b + k, 0) = 2 ∨ gatecode(Q, b + k, 0) = 5\), then \(gatecode(Q, b + j, 0) = gatecode(Q, b + i, 0)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::white-block-gate-convex}(Q, b, n, i, j, k)\).
@@ -670,7 +670,7 @@ Close the goal with \(\lexeme{r30.observation::white-block-gate-convex}(Q, b, n,
 \end{theorem}
 
 \begin{theorem}{white-block-erasure-convex}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(n\) and natural number \(i\) and natural number \(j\) and natural number \(k\), if \(commonwhiteblock(Q, b, n)\), then if \(centercleanthrough(Q, b, n + 1)\), then if \(i ≤ j\), then if \(j ≤ k\), then if \(k ≤ n\), then if \(erasureevent(Q, b + i, 0)\), then if \(erasureevent(Q, b + k, 0)\), then \(erasureevent(Q, b + j, 0) ∧ gatecode(Q, b + j, 0) = gatecode(Q, b + i, 0)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::white-block-erasure-convex}(Q, b, n, i, j, k)\).
@@ -678,7 +678,7 @@ Close the goal with \(\lexeme{r30.observation::white-block-erasure-convex}(Q, b,
 \end{theorem}
 
 \begin{theorem}{seed-leading-gate-five}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(leadingadvance(4, 5, 2) ∧ centercleanthrough(4, 5, 2) ∧ gatecode(4, 6, 0) = 5\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-leading-gate-five}\).
@@ -686,7 +686,7 @@ Close the goal with \(\lexeme{r30.observation::seed-leading-gate-five}\).
 \end{theorem}
 
 \begin{theorem}{seed-leading-gate-two}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(leadingadvance(7, 7, 4) ∧ centercleanthrough(7, 7, 4) ∧ gatecode(7, 10, 0) = 2\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-leading-gate-two}\).
@@ -694,7 +694,7 @@ Close the goal with \(\lexeme{r30.observation::seed-leading-gate-two}\).
 \end{theorem}
 
 \begin{theorem}{seed-leading-black-reset}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(leadingadvance(11, 4, 4) ∧ centercleanthrough(11, 4, 4) ∧ gatecode(11, 7, 0) = 5 ∧ leftcolour(11, 8, 0) = 3\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-leading-black-reset}\).
@@ -702,7 +702,7 @@ Close the goal with \(\lexeme{r30.observation::seed-leading-black-reset}\).
 \end{theorem}
 
 \begin{theorem}{transfer-recover}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every truth value \(incomingBit\) and truth value \(laterBit\) and integer \(incoming\) and integer \(gate\), \(recoverphase(incomingBit, laterBit, transferphase(incomingBit, laterBit, incoming, gate), gate) = incoming\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::transfer-recover}(incomingBit, laterBit, incoming, gate)\).
@@ -710,7 +710,7 @@ Close the goal with \(\lexeme{r30.observation::transfer-recover}(incomingBit, la
 \end{theorem}
 
 \begin{theorem}{transfer-kernel}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every truth value \(incomingBit\) and truth value \(laterBit\) and integer \(incoming\) and integer \(gate\), \(transferphase(incomingBit, laterBit, incoming, gate) = 0 ↔ incoming = recoverphase(incomingBit, laterBit, 0, gate)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::transfer-kernel}(incomingBit, laterBit, incoming, gate)\).
@@ -718,7 +718,7 @@ Close the goal with \(\lexeme{r30.observation::transfer-kernel}(incomingBit, lat
 \end{theorem}
 
 \begin{theorem}{phase-transfer}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftphase(Q, t + 1, k) = transferphase(leftcell(t, k + 1), latergate(Q, t, k), leftphase(Q, t, k + 1), leftgatephase(Q, t, k))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::phase-transfer}(Q, t, k)\).
@@ -726,7 +726,7 @@ Close the goal with \(\lexeme{r30.observation::phase-transfer}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{phase-recover}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), \(leftphase(Q, t, k + 1) = recoverphase(leftcell(t, k + 1), latergate(Q, t, k), leftphase(Q, t + 1, k), leftgatephase(Q, t, k))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::phase-recover}(Q, t, k)\).
@@ -734,7 +734,7 @@ Close the goal with \(\lexeme{r30.observation::phase-recover}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{erasure-recovery}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(erasureevent(Q, t, k)\), then \(¬ (leftgatephase(Q, t, k) = 0) ∧ leftphase(Q, t, k + 1) = recoverphase(leftcell(t, k + 1), latergate(Q, t, k), 0, leftgatephase(Q, t, k))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::erasure-recovery}(Q, t, k)\).
@@ -742,15 +742,15 @@ Close the goal with \(\lexeme{r30.observation::erasure-recovery}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{periodic-erasure-orientation}
-\allowaxioms{Classical.choice;Quot.sound;propext}
-For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(t\) such that \(N ≤ t ∧ erasureevent(m * P, t, 0) ∧ gatecode(m * P, t, 0) = g\).
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then not not there exists a natural number \(t\) such that \(N ≤ t ∧ erasureevent(m * P, t, 0) ∧ gatecode(m * P, t, 0) = g\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-erasure-orientation}(T, P, m, N, g)\).
 \end{proof}
 \end{theorem}
 
 \begin{theorem}{leading-black-before-arrival}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leadingadvance(Q, t, k)\), then if \(centercleanthrough(Q, t, k)\), then there exists a natural number \(s\) such that \(s + 1 < k ∧ center(t + s) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::leading-black-before-arrival}(Q, t, k)\).
@@ -758,7 +758,7 @@ Close the goal with \(\lexeme{r30.observation::leading-black-before-arrival}(Q, 
 \end{theorem}
 
 \begin{theorem}{black-gap-forces-initial-leading}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(r\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(whitecentergap(b, r)\), then if \(leftadjacentdefect(Q, b + r) = true\), then there exists a natural number \(k\) such that \(k ≤ r + 1 ∧ leadingadvance(Q, b, k)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::black-gap-forces-initial-leading}(Q, b, r)\).
@@ -766,7 +766,7 @@ Close the goal with \(\lexeme{r30.observation::black-gap-forces-initial-leading}
 \end{theorem}
 
 \begin{theorem}{leading-depth-two-black}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(leadingadvance(Q, t, 2)\), then if \(centercleanthrough(Q, t, 2)\), then \(center(t) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::leading-depth-two-black}(Q, t)\).
@@ -774,7 +774,7 @@ Close the goal with \(\lexeme{r30.observation::leading-depth-two-black}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{black-gap-erasure-origin}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(r\) and natural number \(g\), if \(0 < r\), then if \(centerwindowagree(b, b + Q, r + 1)\), then if \(center(b) = true\), then if \(whitecentergap(b, r)\), then if \(erasureevent(Q, b + r, 0)\), then if \(gatecode(Q, b + r, 0) = g\), then there exists a natural number \(k\) such that \(k ≤ r + 1 ∧ leadingadvance(Q, b, k) ∧ firstpatherasure(Q, b, k, k - 2) ∧ gatecode(Q, b + (k - 1), 0) = g\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::black-gap-erasure-origin}(Q, b, r, g)\).
@@ -782,15 +782,15 @@ Close the goal with \(\lexeme{r30.observation::black-gap-erasure-origin}(Q, b, r
 \end{theorem}
 
 \begin{theorem}{periodic-black-erasure-origin}
-\allowaxioms{Classical.choice;Quot.sound;propext}
-For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g\).
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then not not there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-black-erasure-origin}(T, P, m, N, g)\).
 \end{proof}
 \end{theorem}
 
 \begin{theorem}{right-import-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\), \(rightcell(t + 1, 1) = bxor(center(t), bxor(rightcell(t, 1), rightimport(t)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-import-step}(t)\).
@@ -798,7 +798,7 @@ Close the goal with \(\lexeme{r30.observation::right-import-step}(t)\).
 \end{theorem}
 
 \begin{theorem}{right-defect-import-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(center(t + Q) = center(t)\), then \(rightdefect(Q, t + 1, 1) = bxor(rightdefect(Q, t, 1), rightimportdifference(Q, t))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-defect-import-balance}(Q, t)\).
@@ -806,7 +806,7 @@ Close the goal with \(\lexeme{r30.observation::right-defect-import-balance}(Q, t
 \end{theorem}
 
 \begin{theorem}{black-reset-survival}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(center(t) = true\), then if \(center(t + Q) = true\), then if \(rightdefect(Q, t, 1) = true\), then if \(rightdefect(Q, t + 1, 1) = true\), then \(rightphase(Q, t + 1, 1) = intneg rightphase(Q, t, 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::black-reset-survival}(Q, t)\).
@@ -814,7 +814,7 @@ Close the goal with \(\lexeme{r30.observation::black-reset-survival}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{black-reset-import}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(center(t) = true\), then if \(center(t + Q) = true\), then if \(rightdefect(Q, t, 1) = false\), then if \(rightdefect(Q, t + 1, 1) = true\), then \(rightcell(t, 1) = false ∧ rightcell(t + Q, 1) = false ∧ rightdefect(Q, t, 2) = true ∧ rightphase(Q, t + 1, 1) = intneg rightphase(Q, t, 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::black-reset-import}(Q, t)\).
@@ -822,15 +822,15 @@ Close the goal with \(\lexeme{r30.observation::black-reset-import}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{periodic-right-import-orientation}
-\allowaxioms{Classical.choice;Quot.sound;propext}
-For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and truth value \(before\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then there exists a natural number \(t\) such that \(N ≤ t ∧ rightimport(t) = before ∧ rightimport(t + m * P) = not(before) ∧ rightdefect(m * P, t + 1, 1) = not(rightdefect(m * P, t, 1))\).
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and truth value \(before\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then not not there exists a natural number \(t\) such that \(N ≤ t ∧ rightimport(t) = before ∧ rightimport(t + m * P) = not(before) ∧ rightdefect(m * P, t + 1, 1) = not(rightdefect(m * P, t, 1))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-right-import-orientation}(T, P, m, N, before)\).
 \end{proof}
 \end{theorem}
 
 \begin{theorem}{right-head-birth}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(center(t + Q) = center(t)\), then if \(rightdefect(Q, t, 1) = false\), then if \(rightdefect(Q, t + 1, 1) = true\), then \(rightcell(t, 1) = false ∧ rightcell(t + Q, 1) = false ∧ rightdefect(Q, t, 2) = true ∧ rightimportdifference(Q, t) = true ∧ rightphase(Q, t + 1, 1) = (1 intminus 2 inttimes bitvalue(center(t))) inttimes rightphase(Q, t, 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-head-birth}(Q, t)\).
@@ -838,7 +838,7 @@ Close the goal with \(\lexeme{r30.observation::right-head-birth}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{head-import-path-phase}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(headimportpath(Q, start, finish)\), then if \(centercleanthrough(Q, start, finish - start)\), then \(rightphase(Q, finish, 1) = centersign(start, finish - start) inttimes rightphase(Q, start, 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::head-import-path-phase}(Q, start, finish)\).
@@ -846,7 +846,7 @@ Close the goal with \(\lexeme{r30.observation::head-import-path-phase}(Q, start,
 \end{theorem}
 
 \begin{theorem}{white-center-phase-matching}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(leftdefect(Q, t, 0) = false\), then if \(leftdefect(Q, t + 1, 0) = false\), then if \(center(t) = false\), then \(leftphase(Q, t, 1) = (1 intminus 2 inttimes bitvalue(center(t + 1))) inttimes rightphase(Q, t, 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::white-center-phase-matching}(Q, t)\).
@@ -854,15 +854,15 @@ Close the goal with \(\lexeme{r30.observation::white-center-phase-matching}(Q, t
 \end{theorem}
 
 \begin{theorem}{periodic-coupled-cancellation}
-\allowaxioms{Classical.choice;Quot.sound;propext}
-For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ leftphase(m * P, b, k) intplus pathflux(m * P, b, k, k - 1) = (1 intminus 2 inttimes bitvalue(center(b + k))) inttimes centersign(start, b + (k - 1) - start) inttimes rightphase(m * P, start, 2)\).
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then not not there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ leftphase(m * P, b, k) intplus pathflux(m * P, b, k, k - 1) = (1 intminus 2 inttimes bitvalue(center(b + k))) inttimes centersign(start, b + (k - 1) - start) inttimes rightphase(m * P, start, 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-coupled-cancellation}(T, P, m, N, g)\).
 \end{proof}
 \end{theorem}
 
 \begin{theorem}{leading-arrival-phase-eq-gate-phase}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\), if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then \(leftphase(Q, b, k) intplus pathflux(Q, b, k, k - 1) = (1 intminus 2 inttimes bitvalue(center(b + k))) inttimes leftgatephase(Q, b + (k - 1), 0)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::leading-arrival-phase-eq-gate-phase}(Q, b, k)\).
@@ -870,7 +870,7 @@ Close the goal with \(\lexeme{r30.observation::leading-arrival-phase-eq-gate-pha
 \end{theorem}
 
 \begin{theorem}{head-import-path-gate-phase}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(headimportpath(Q, start, finish)\), then if \(centercleanthrough(Q, start, finish - start)\), then if \(center(finish) = false\), then \(leftgatephase(Q, finish, 0) = centersign(start, finish - start) inttimes rightphase(Q, start, 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::head-import-path-gate-phase}(Q, start, finish)\).
@@ -878,7 +878,7 @@ Close the goal with \(\lexeme{r30.observation::head-import-path-gate-phase}(Q, s
 \end{theorem}
 
 \begin{theorem}{head-import-path-rejects-negative-gate}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(headimportpath(Q, start, finish)\), then if \(centercleanthrough(Q, start, finish - start)\), then if \(center(finish) = false\), then \(¬ (leftgatephase(Q, finish, 0) = intneg (centersign(start, finish - start) inttimes rightphase(Q, start, 2)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::head-import-path-rejects-negative-gate}(Q, start, finish)\).
@@ -886,15 +886,15 @@ Close the goal with \(\lexeme{r30.observation::head-import-path-rejects-negative
 \end{theorem}
 
 \begin{theorem}{periodic-coupled-gate-phase-sign}
-\allowaxioms{Classical.choice;Quot.sound;propext}
-For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ leftgatephase(m * P, b + (k - 1), 0) = centersign(start, b + (k - 1) - start) inttimes rightphase(m * P, start, 2)\).
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then not not there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that \(N ≤ start ∧ N ≤ b ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ firstpatherasure(m * P, b, k, k - 2) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ leftgatephase(m * P, b + (k - 1), 0) = centersign(start, b + (k - 1) - start) inttimes rightphase(m * P, start, 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-coupled-gate-phase-sign}(T, P, m, N, g)\).
 \end{proof}
 \end{theorem}
 
 \begin{theorem}{periodic-doubled-seed-flux-split}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ N\), then \(pathflux(m * P + m * P, N, N + (m * P + m * P), N + (m * P + m * P)) = intneg 1 ∧ pathflux(m * P, N, N + (m * P + m * P), N + (m * P + m * P)) = 0 ∧ pathflux(m * P, N + m * P, N + (m * P + m * P), N + (m * P + m * P)) = intneg 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-doubled-seed-flux-split}(T, P, m, N)\).
@@ -902,7 +902,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-doubled-seed-flux-split}
 \end{theorem}
 
 \begin{theorem}{seed-coupled-gate-sign}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(leadingadvance(11, 4, 4) ∧ centercleanthrough(11, 4, 4) ∧ headimportpath(11, 6, 7) ∧ centercleanthrough(11, 6, 1) ∧ leftgatephase(11, 7, 0) = 1 ∧ centersign(6, 1) = 1 ∧ rightphase(11, 6, 2) = 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-coupled-gate-sign}\).
@@ -911,7 +911,7 @@ Close the goal with \(\lexeme{r30.observation::seed-coupled-gate-sign}\).
 
 
 \begin{theorem}{right-defect-has-ancestor}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(rightdefect(Q, t + 1, j + 1) = true\), then \(rightdefect(Q, t, j) = true ∨ rightdefect(Q, t, j + 1) = true ∨ rightdefect(Q, t, j + 2) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-defect-has-ancestor}(Q, t, j)\).
@@ -919,7 +919,7 @@ Close the goal with \(\lexeme{r30.observation::right-defect-has-ancestor}(Q, t, 
 \end{theorem}
 
 \begin{theorem}{right-lineage-of-clean-center}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(j\) and natural number \(T\), if \(1 ≤ j\), then if \(T ≤ t\), then if \(rightdefect(Q, t, j) = true\), then if \(centercleanthrough(Q, T, t - T)\), then \(rightlineage(Q, t, j, T)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-lineage-of-clean-center}(Q, t, j, T)\).
@@ -927,7 +927,7 @@ Close the goal with \(\lexeme{r30.observation::right-lineage-of-clean-center}(Q,
 \end{theorem}
 
 \begin{theorem}{left-lineage-of-clean-center}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(T\), if \(1 ≤ k\), then if \(T ≤ t\), then if \(leftdefect(Q, t, k) = true\), then if \(centercleanthrough(Q, T, t - T)\), then \(leftlineage(Q, t, k, T)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-lineage-of-clean-center}(Q, t, k, T)\).
@@ -935,7 +935,7 @@ Close the goal with \(\lexeme{r30.observation::left-lineage-of-clean-center}(Q, 
 \end{theorem}
 
 \begin{theorem}{right-lineage-at-start}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(j\) and natural number \(T\), if \(T ≤ t\), then if \(rightlineage(Q, t, j, T)\), then there exists a natural number \(i\) such that \(1 ≤ i ∧ i ≤ j + (t - T) ∧ j ≤ i + (t - T) ∧ rightdefect(Q, T, i) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-lineage-at-start}(Q, t, j, T)\).
@@ -943,7 +943,7 @@ Close the goal with \(\lexeme{r30.observation::right-lineage-at-start}(Q, t, j, 
 \end{theorem}
 
 \begin{theorem}{left-lineage-at-start}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\) and natural number \(T\), if \(T ≤ t\), then if \(leftlineage(Q, t, k, T)\), then there exists a natural number \(i\) such that \(1 ≤ i ∧ i ≤ k + (t - T) ∧ k ≤ i + (t - T) ∧ leftdefect(Q, T, i) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-lineage-at-start}(Q, t, k, T)\).
@@ -951,7 +951,7 @@ Close the goal with \(\lexeme{r30.observation::left-lineage-at-start}(Q, t, k, T
 \end{theorem}
 
 \begin{theorem}{right-lineage-seed}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(rightlineage(Q, t, j, 0)\), then there exists a natural number \(i\) such that \(1 ≤ i ∧ i ≤ Q ∧ i ≤ j + t ∧ j ≤ i + t ∧ rightdefect(Q, 0, i) = true ∧ rightcell(Q, i) = true ∧ rightphase(Q, 0, i) = 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-lineage-seed}(Q, t, j)\).
@@ -959,7 +959,7 @@ Close the goal with \(\lexeme{r30.observation::right-lineage-seed}(Q, t, j)\).
 \end{theorem}
 
 \begin{theorem}{left-lineage-seed}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(leftlineage(Q, t, k, 0)\), then there exists a natural number \(i\) such that \(1 ≤ i ∧ i ≤ Q ∧ i ≤ k + t ∧ k ≤ i + t ∧ leftdefect(Q, 0, i) = true ∧ leftcell(Q, i) = true ∧ leftphase(Q, 0, i) = 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::left-lineage-seed}(Q, t, k)\).
@@ -967,7 +967,7 @@ Close the goal with \(\lexeme{r30.observation::left-lineage-seed}(Q, t, k)\).
 \end{theorem}
 
 \begin{theorem}{exists-right-front}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then there exists a natural number \(y\) such that \(y ≤ t + Q ∧ rightfront(Q, t, y)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::exists-right-front}(Q, t)\).
@@ -975,7 +975,7 @@ Close the goal with \(\lexeme{r30.observation::exists-right-front}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{right-front-lower}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(y\) and natural number \(z\), if \(leftdefect(Q, t, 0) = false\), then if \(rightfront(Q, t, y)\), then if \(rightfront(Q, t + 1, z)\), then \(y ≤ z + 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-front-lower}(Q, t, y, z)\).
@@ -983,7 +983,7 @@ Close the goal with \(\lexeme{r30.observation::right-front-lower}(Q, t, y, z)\).
 \end{theorem}
 
 \begin{theorem}{right-front-descent}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(y\), if \(leftdefect(Q, t, 0) = false\), then if \(rightfront(Q, t, y)\), then if \(2 ≤ y\), then \(rightdefect(Q, t + 1, y - 1) = \lexeme{lexlean.std.bool::not}(rightcell(t, y - 1))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-front-descent}(Q, t, y)\).
@@ -991,7 +991,7 @@ Close the goal with \(\lexeme{r30.observation::right-front-descent}(Q, t, y)\).
 \end{theorem}
 
 \begin{theorem}{right-front-lockstep}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(y\) and natural number \(z\), if \(leftdefect(Q, t, 0) = false\), then if \(rightfront(Q, t, y)\), then if \(2 ≤ y\), then if \(rightfront(Q, t + 1, z)\), then if \(z + 1 ≤ y\), then \(z = y - 1 ∧ rightcell(t, y - 1) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::right-front-lockstep}(Q, t, y, z)\).
@@ -999,7 +999,7 @@ Close the goal with \(\lexeme{r30.observation::right-front-lockstep}(Q, t, y, z)
 \end{theorem}
 
 \begin{theorem}{leading-head-black-before-arrival}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(rightmostleft(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(s + 1 < k\), then if \(rightdefect(Q, b + s, 1) = true\), then \(center(b + s) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::leading-head-black-before-arrival}(Q, b, k, s)\).
@@ -1007,7 +1007,7 @@ Close the goal with \(\lexeme{r30.observation::leading-head-black-before-arrival
 \end{theorem}
 
 \begin{theorem}{coupled-import-born-at-arrival}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\), if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then \(start = b + (k - 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::coupled-import-born-at-arrival}(Q, b, k, start)\).
@@ -1015,7 +1015,7 @@ Close the goal with \(\lexeme{r30.observation::coupled-import-born-at-arrival}(Q
 \end{theorem}
 
 \begin{theorem}{coupled-right-front-mirror-at}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(1 ≤ s\), then if \(s + 1 < k\), then there exists a natural number \(y\) such that \(rightdefect(Q, b + s, 1) = false ∧ rightfront(Q, b + s, y) ∧ 2 ≤ y ∧ y ≤ k - s\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::coupled-right-front-mirror-at}(Q, b, k, s)\).
@@ -1023,7 +1023,7 @@ Close the goal with \(\lexeme{r30.observation::coupled-right-front-mirror-at}(Q,
 \end{theorem}
 
 \begin{theorem}{coupled-white-staircase-at}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(1 ≤ s\), then if \(s + 2 < k\), then if \(rightfront(Q, b + s, k - s)\), then \(rightcell(b + s, k - s - 1) = false ∧ rightfront(Q, b + (s + 1), k - (s + 1))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::coupled-white-staircase-at}(Q, b, k, s)\).
@@ -1031,15 +1031,15 @@ Close the goal with \(\lexeme{r30.observation::coupled-white-staircase-at}(Q, b,
 \end{theorem}
 
 \begin{theorem}{periodic-coupled-import-ancestry}
-\allowaxioms{Classical.choice;Quot.sound;propext}
-For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that there exists a natural number \(y\) such that \(N ≤ start ∧ N ≤ b ∧ T ≤ b ∧ T ≤ start ∧ 2 ≤ k ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ (3 ≤ k → start = b + (k - 2)) ∧ (3 ≤ k → rightfront(m * P, b + 1, y) ∧ 2 ≤ y ∧ y ≤ k - 1) ∧ rightlineage(m * P, start, 2, T) ∧ leftlineage(m * P, b, k, T)\).
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(N\) and natural number \(g\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(g = 2 ∨ g = 5\), then not not there exists a natural number \(start\) such that there exists a natural number \(b\) such that there exists a natural number \(k\) such that there exists a natural number \(y\) such that \(N ≤ start ∧ N ≤ b ∧ T ≤ b ∧ T ≤ start ∧ 2 ≤ k ∧ k ≤ P ∧ center(b) = true ∧ whitecentergap(b, k - 1) ∧ leadingadvance(m * P, b, k) ∧ gatecode(m * P, b + (k - 1), 0) = g ∧ headimportpath(m * P, start, b + (k - 1)) ∧ (3 ≤ k → start = b + (k - 2)) ∧ (3 ≤ k → rightfront(m * P, b + 1, y) ∧ 2 ≤ y ∧ y ≤ k - 1) ∧ rightlineage(m * P, start, 2, T) ∧ leftlineage(m * P, b, k, T)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-coupled-import-ancestry}(T, P, m, N, g)\).
 \end{proof}
 \end{theorem}
 
 \begin{theorem}{seed-coupled-import-at-arrival}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(leadingadvance(14, 5, 3) ∧ centercleanthrough(14, 5, 3) ∧ whitecentergap(5, 2) ∧ center(5) = true ∧ rightfront(14, 6, 2) ∧ headimportpath(14, 6, 7)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-coupled-import-at-arrival}\).
@@ -1047,7 +1047,7 @@ Close the goal with \(\lexeme{r30.observation::seed-coupled-import-at-arrival}\)
 \end{theorem}
 
 \begin{theorem}{ray-bit-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\) and natural number \(k\) and natural number \(n\), \(bitvalue(raybit(t, k, n)) = bitvalue(raybit(t, k, 0)) intplus rayflux(t, k, n)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::ray-bit-balance}(t, k, n)\).
@@ -1055,7 +1055,7 @@ Close the goal with \(\lexeme{r30.observation::ray-bit-balance}(t, k, n)\).
 \end{theorem}
 
 \begin{theorem}{diagonal-ray-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(d\) and natural number \(t\) and natural number \(p\), if \(d + p ≤ t\), then \(leftphase(Q + Q, t + (t - d - p), p) = diagonalphase(Q, d, t) intplus diagonalflux(Q, d, t, p)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::diagonal-ray-balance}(Q, d, t, p)\).
@@ -1063,7 +1063,7 @@ Close the goal with \(\lexeme{r30.observation::diagonal-ray-balance}(Q, d, t, p)
 \end{theorem}
 
 \begin{theorem}{diagonal-flux-lag-add}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(R\) and natural number \(d\) and natural number \(t\) and natural number \(p\), \(diagonalflux(Q + R, d, t, p) = diagonalflux(Q, d, t, p) intplus diagonalflux(R, d, t + Q, p)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::diagonal-flux-lag-add}(Q, R, d, t, p)\).
@@ -1071,7 +1071,7 @@ Close the goal with \(\lexeme{r30.observation::diagonal-flux-lag-add}(Q, R, d, t
 \end{theorem}
 
 \begin{theorem}{diagonal-phase-doubles}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(doublesat(Q, z)\), then if \(settledby(z + 1, t)\), then \((diagonalphase(Q, z + 1, t) = intneg 1 ∨ diagonalphase(Q, z + 1, t) = 1) ∧ diagonalphase(Q, z + 1, t + Q) = intneg diagonalphase(Q, z + 1, t) ∧ diagonalphase(Q + Q, z + 1, t) = 0\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::diagonal-phase-doubles}(Q, z, t)\).
@@ -1079,7 +1079,7 @@ Close the goal with \(\lexeme{r30.observation::diagonal-phase-doubles}(Q, z, t)\
 \end{theorem}
 
 \begin{theorem}{diagonal-reset-phase}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(settledby(z + 2, t)\), then \(diagonalphase(Q, z + 3, t + 1) = intneg diagonalphase(Q, z + 1, t)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::diagonal-reset-phase}(Q, z, t)\).
@@ -1087,7 +1087,7 @@ Close the goal with \(\lexeme{r30.observation::diagonal-reset-phase}(Q, z, t)\).
 \end{theorem}
 
 \begin{theorem}{diagonal-reset-flux-jump}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(settledby(z + 2, t)\), then if \(z + 3 ≤ t\), then \(diagonalflux(Q, z + 3, t + 1, 1) = diagonalflux(Q, z + 1, t, 1) intplus 2 inttimes diagonalphase(Q, z + 1, t)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::diagonal-reset-flux-jump}(Q, z, t)\).
@@ -1095,7 +1095,7 @@ Close the goal with \(\lexeme{r30.observation::diagonal-reset-flux-jump}(Q, z, t
 \end{theorem}
 
 \begin{theorem}{periodic-diagonal-white-head-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(d\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(d + 1 ≤ t\), then if \(T ≤ t + (t - d - 1)\), then if \(center(t + (t - d - 1)) = false\), then \(diagonalphase(m * P, d, t) intplus diagonalflux(m * P, d, t, 1) = (1 intminus 2 inttimes bitvalue(center(t + (t - d - 1) + 1))) inttimes rightphase(m * P + m * P, t + (t - d - 1), 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-diagonal-white-head-balance}(T, P, m, d, t)\).
@@ -1103,7 +1103,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-diagonal-white-head-bala
 \end{theorem}
 
 \begin{theorem}{periodic-diagonal-import-balance}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(d\) and natural number \(t\) and natural number \(start\), if \(centerperiodic(T, P)\), then if \(d + 1 ≤ t\), then if \(T ≤ start\), then if \(headimportpath(m * P + m * P, start, t + (t - d - 1))\), then if \(center(t + (t - d - 1)) = false\), then \(diagonalphase(m * P, d, t) intplus diagonalflux(m * P, d, t, 1) = (1 intminus 2 inttimes bitvalue(center(t + (t - d - 1) + 1))) inttimes (centersign(start, t + (t - d - 1) - start) inttimes rightphase(m * P + m * P, start, 2))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-diagonal-import-balance}(T, P, m, d, t, start)\).
@@ -1111,7 +1111,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-diagonal-import-balance}
 \end{theorem}
 
 \begin{theorem}{coupled-right-front-exact}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\) and natural number \(q\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then if \(1 ≤ q\), then if \(q + 1 < k\), then \(rightfront(Q, b + 1, k - 1) ∧ rightcell(b + 1, q) = false ∧ rightcell(b + 1 + Q, q) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::coupled-right-front-exact}(Q, b, k, start, q)\).
@@ -1119,7 +1119,7 @@ Close the goal with \(\lexeme{r30.observation::coupled-right-front-exact}(Q, b, 
 \end{theorem}
 
 \begin{theorem}{coupled-forced-white-staircase}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\) and natural number \(i\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then if \(1 ≤ i\), then if \(i + 1 < k\), then \(rightfront(Q, b + i, k - i) ∧ rightcell(b + i, k - i - 1) = false ∧ rightcell(b + i + Q, k - i - 1) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::coupled-forced-white-staircase}(Q, b, k, start, i)\).
@@ -1127,7 +1127,7 @@ Close the goal with \(\lexeme{r30.observation::coupled-forced-white-staircase}(Q
 \end{theorem}
 
 \begin{theorem}{depth-two-cancellation-cases}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(start\), if \(leadingadvance(Q, b, 2)\), then if \(centercleanthrough(Q, b, 2)\), then if \(headimportpath(Q, start, b + 1)\), then \(center(b) = true ∧ center(b + 1) = false ∧ ((start < b ∧ rightdefect(Q, b, 1) = true ∧ rightimportdifference(Q, b) = false ∧ leftphase(Q, b, 2) = (1 intminus 2 inttimes bitvalue(center(b + 2))) inttimes rightphase(Q, b, 1)) ∨ (start = b ∧ rightdefect(Q, b, 1) = false ∧ rightcell(b, 1) = false ∧ rightcell(b + Q, 1) = false ∧ rightdefect(Q, b, 2) = true ∧ rightimportdifference(Q, b) = true ∧ leftphase(Q, b, 2) = (1 intminus 2 inttimes bitvalue(center(b + 2))) inttimes rightphase(Q, b, 2)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::depth-two-cancellation-cases}(Q, b, start)\).
@@ -1135,7 +1135,7 @@ Close the goal with \(\lexeme{r30.observation::depth-two-cancellation-cases}(Q, 
 \end{theorem}
 
 \begin{theorem}{coupled-import-birth-or-depth-two-survival}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\), if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then \(start = b + (k - 2) ∨ (k = 2 ∧ start < b ∧ rightdefect(Q, b, 1) = true)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::coupled-import-birth-or-depth-two-survival}(Q, b, k, start)\).
@@ -1143,7 +1143,7 @@ Close the goal with \(\lexeme{r30.observation::coupled-import-birth-or-depth-two
 \end{theorem}
 
 \begin{theorem}{coupled-black-root-prefix}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(b\) and natural number \(k\) and natural number \(start\) and natural number \(q\), if \(0 < Q\), then if \(3 ≤ k\), then if \(leadingadvance(Q, b, k)\), then if \(centercleanthrough(Q, b, k)\), then if \(center(b) = true\), then if \(whitecentergap(b, k - 1)\), then if \(headimportpath(Q, start, b + (k - 1))\), then if \(q + 2 < k\), then \(rightcell(b, q) = true ∧ rightcell(b + Q, q) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::coupled-black-root-prefix}(Q, b, k, start, q)\).
@@ -1151,7 +1151,7 @@ Close the goal with \(\lexeme{r30.observation::coupled-black-root-prefix}(Q, b, 
 \end{theorem}
 
 \begin{theorem}{seed-depth-two-survival}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(leadingadvance(4, 5, 2) ∧ centercleanthrough(4, 5, 2) ∧ headimportpath(4, 2, 6) ∧ rightdefect(4, 5, 1) = true ∧ rightimportdifference(4, 5) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-depth-two-survival}\).
@@ -1159,7 +1159,7 @@ Close the goal with \(\lexeme{r30.observation::seed-depth-two-survival}\).
 \end{theorem}
 
 \begin{theorem}{aligned-background-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), \(alignedbackground(Q, t + 1) = wittphi(alignedbackground(Q, t))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-background-step}(Q, t)\).
@@ -1167,7 +1167,7 @@ Close the goal with \(\lexeme{r30.observation::aligned-background-step}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{aligned-defect-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), \(aligneddefect(Q, t + 1) = defectstep(alignedbackground(Q, t), aligneddefect(Q, t))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-defect-step}(Q, t)\).
@@ -1175,7 +1175,7 @@ Close the goal with \(\lexeme{r30.observation::aligned-defect-step}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{background-top-bit}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), \(rowbit(alignedbackground(Q, t), 2 * t + Q) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::background-top-bit}(Q, t)\).
@@ -1183,7 +1183,7 @@ Close the goal with \(\lexeme{r30.observation::background-top-bit}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{aligned-defect-top-bit}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(rowbit(aligneddefect(Q, t), 2 * (t + Q)) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-defect-top-bit}(Q, t)\).
@@ -1191,7 +1191,7 @@ Close the goal with \(\lexeme{r30.observation::aligned-defect-top-bit}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{aligned-defect-magnitude}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(twopow(2 * (t + Q)) ≤ aligneddefect(Q, t) ∧ aligneddefect(Q, t) < twopow(2 * (t + Q) + 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-defect-magnitude}(Q, t)\).
@@ -1199,7 +1199,7 @@ Close the goal with \(\lexeme{r30.observation::aligned-defect-magnitude}(Q, t)\)
 \end{theorem}
 
 \begin{theorem}{aligned-defect-above-top}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(2 * (t + Q) < j\), then \(rowbit(aligneddefect(Q, t), j) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-defect-above-top}(Q, t, j)\).
@@ -1207,7 +1207,7 @@ Close the goal with \(\lexeme{r30.observation::aligned-defect-above-top}(Q, t, j
 \end{theorem}
 
 \begin{theorem}{aligned-defect-low-prefix}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(j\), if \(j < Q\), then \(rowbit(aligneddefect(Q, t), j) = rowbit(wittrow(t + Q), j)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-defect-low-prefix}(Q, t, j)\).
@@ -1215,7 +1215,7 @@ Close the goal with \(\lexeme{r30.observation::aligned-defect-low-prefix}(Q, t, 
 \end{theorem}
 
 \begin{theorem}{defect-step-linear}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(b\) and natural number \(d\), \(defectstep(b, d) = wittxor(wittlinear(d), wittshl(wittxor(wittcarry(d), crosscarry(b, d)), 1))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::defect-step-linear}(b, d)\).
@@ -1223,7 +1223,7 @@ Close the goal with \(\lexeme{r30.observation::defect-step-linear}(b, d)\).
 \end{theorem}
 
 \begin{theorem}{defect-step-low-bit}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(b\) and natural number \(d\), \(rowbit(defectstep(b, d), 0) = rowbit(d, 0)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::defect-step-low-bit}(b, d)\).
@@ -1231,7 +1231,7 @@ Close the goal with \(\lexeme{r30.observation::defect-step-low-bit}(b, d)\).
 \end{theorem}
 
 \begin{theorem}{defect-step-val-coordinates}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(b\) and natural number \(d\), \(vala(defectstep(b, d)) = valb(wittxor(wittcarry(d), crosscarry(b, d))) ∧ valb(defectstep(b, d)) = bxor(vala(wittxor(wittcarry(d), crosscarry(b, d))), valb(wittxor(wittcarry(d), crosscarry(b, d))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::defect-step-val-coordinates}(b, d)\).
@@ -1239,7 +1239,7 @@ Close the goal with \(\lexeme{r30.observation::defect-step-val-coordinates}(b, d
 \end{theorem}
 
 \begin{theorem}{edge-val-coordinates}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(j\), \(vala(wittshl(1, j + 3)) = vala(wittshl(1, j)) ∧ valb(wittshl(1, j + 3)) = valb(wittshl(1, j)) ∧ (vala(wittshl(1, j)) = true ∨ valb(wittshl(1, j)) = true)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::edge-val-coordinates}(j)\).
@@ -1247,7 +1247,7 @@ Close the goal with \(\lexeme{r30.observation::edge-val-coordinates}(j)\).
 \end{theorem}
 
 \begin{theorem}{aligned-defect-window}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\) and natural number \(k\), \(aligneddefect(twopow(k), t) = wittxor(wittwin(t, twopow(k)), wittxor(wittrow(t), wittshl(wittrow(t), twopow(k) + twopow(k))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::aligned-defect-window}(t, k)\).
@@ -1255,7 +1255,7 @@ Close the goal with \(\lexeme{r30.observation::aligned-defect-window}(t, k)\).
 \end{theorem}
 
 \begin{theorem}{dyadic-window-readings}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\) and natural number \(k\), if \(t < twopow(k)\), then \(rowbit(aligneddefect(twopow(k), t), 0) = true ∧ rowbit(wittwin(t, twopow(k)), 0) = false ∧ rowbit(aligneddefect(twopow(k), t), 2 * (t + twopow(k))) = true ∧ rowbit(wittwin(t, twopow(k)), 2 * (t + twopow(k))) = false ∧ vala(wittwin(t, twopow(k))) = vala(wittrow(t + twopow(k))) ∧ valb(wittwin(t, twopow(k))) = valb(wittrow(t + twopow(k))) ∧ rowbit(aligneddefect(twopow(k), t), t + twopow(k)) = rowbit(wittwin(t, twopow(k)), t + twopow(k))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::dyadic-window-readings}(t, k)\).
@@ -1263,7 +1263,7 @@ Close the goal with \(\lexeme{r30.observation::dyadic-window-readings}(t, k)\).
 \end{theorem}
 
 \begin{theorem}{periodic-center-cross-carry}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(rowbit(wittphi(aligneddefect(m * P, t)), t + m * P + 1) = rowbit(crosscarry(alignedbackground(m * P, t), aligneddefect(m * P, t)), t + m * P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-center-cross-carry}(T, P, m, t)\).
@@ -1271,7 +1271,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-center-cross-carry}(T, P
 \end{theorem}
 
 \begin{theorem}{seed-val-cancellation}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(aligneddefect(1, 0) = 5 ∧ vala(aligneddefect(1, 0)) = false ∧ valb(aligneddefect(1, 0)) = true ∧ aligneddefect(1, 2) = 93 ∧ vala(aligneddefect(1, 2)) = false ∧ valb(aligneddefect(1, 2)) = false ∧ rowbit(aligneddefect(1, 2), 3) = true ∧ aligneddefect(4, 0) = 385 ∧ vala(aligneddefect(4, 0)) = false ∧ valb(aligneddefect(4, 0)) = false ∧ rowbit(aligneddefect(4, 0), 4) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::seed-val-cancellation}\).
@@ -1279,7 +1279,7 @@ Close the goal with \(\lexeme{r30.observation::seed-val-cancellation}\).
 \end{theorem}
 
 \begin{theorem}{center-flip-mask-invisible}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(d\) and natural number \(n\) and natural number \(j\), if \(j < n ∨ n + 2 < j\), then \(rowbit(wittxor(d, centerflipmask(n)), n) = \lexeme{lexlean.std.bool::not}(rowbit(d, n)) ∧ rowbit(wittxor(d, centerflipmask(n)), j) = rowbit(d, j) ∧ vala(wittxor(d, centerflipmask(n))) = vala(d) ∧ valb(wittxor(d, centerflipmask(n))) = valb(d)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::center-flip-mask-invisible}(d, n, j)\).
@@ -1287,7 +1287,7 @@ Close the goal with \(\lexeme{r30.observation::center-flip-mask-invisible}(d, n,
 \end{theorem}
 
 \begin{theorem}{observer-code-readout}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\) and natural number \(j\), \(rowbit(observercode(t), j) = leftcell(t, j)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-code-readout}(t, j)\).
@@ -1295,7 +1295,7 @@ Close the goal with \(\lexeme{r30.observation::observer-code-readout}(t, j)\).
 \end{theorem}
 
 \begin{theorem}{observer-defect-alignment}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), \(observerdefect(Q, t) = wittxor(observercode(t + Q), observercode(t))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-defect-alignment}(Q, t)\).
@@ -1303,7 +1303,7 @@ Close the goal with \(\lexeme{r30.observation::observer-defect-alignment}(Q, t)\
 \end{theorem}
 
 \begin{theorem}{observer-defect-readout}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(j\), \(rowbit(observerdefect(Q, t), j) = rowbit(aligneddefect(Q, t), t + Q + j)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-defect-readout}(Q, t, j)\).
@@ -1311,7 +1311,7 @@ Close the goal with \(\lexeme{r30.observation::observer-defect-readout}(Q, t, j)
 \end{theorem}
 
 \begin{theorem}{observer-val-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(t\), \(vala(observercode(t + 1)) = bxor(center(t), bxor(vala(wittcarry(observercode(t))), observerinput(t))) ∧ valb(observercode(t + 1)) = bxor(center(t), valb(wittcarry(observercode(t))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-val-step}(t)\).
@@ -1319,7 +1319,7 @@ Close the goal with \(\lexeme{r30.observation::observer-val-step}(t)\).
 \end{theorem}
 
 \begin{theorem}{periodic-observer-val-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(vala(observerdefect(m * P, t + 1)) = bxor(vala(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t)))), leftdefect(m * P, t, 1)) ∧ valb(observerdefect(m * P, t + 1)) = valb(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-val-step}(T, P, m, t)\).
@@ -1327,7 +1327,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-val-step}(T, P,
 \end{theorem}
 
 \begin{theorem}{periodic-observer-edges}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(rowbit(observerdefect(m * P, t), t + m * P) = true ∧ rowbit(observerdefect(m * P, t), 0) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-edges}(T, P, m, t)\).
@@ -1335,7 +1335,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-edges}(T, P, m,
 \end{theorem}
 
 \begin{theorem}{observer-seed-zero-val}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(observerdefect(2, 0) = 7 ∧ vala(observerdefect(2, 0)) = false ∧ valb(observerdefect(2, 0)) = false ∧ rowbit(observerdefect(2, 0), 0) = true ∧ observerdefect(4, 0) = 24 ∧ vala(observerdefect(4, 0)) = true ∧ valb(observerdefect(4, 0)) = true ∧ rowbit(observerdefect(4, 0), 0) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-seed-zero-val}\).
@@ -1347,7 +1347,7 @@ Close the goal with \(\lexeme{r30.observation::observer-seed-zero-val}\).
 \heading{Cyclotomic observer transport}
 
 \begin{theorem}{q-divides-intro}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(a\), \(qdivides(r, wittlinpow(r, a))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-intro}(r, a)\).
@@ -1355,7 +1355,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-intro}(r, a)\).
 \end{theorem}
 
 \begin{theorem}{q-divides-elim}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(d\), if \(qdivides(r, d)\), then there exists a natural number \(a\) such that \(wittlinpow(r, a) = d\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-elim}(r, d)\).
@@ -1363,7 +1363,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-elim}(r, d)\).
 \end{theorem}
 
 \begin{theorem}{q-divides-shl}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(d\) and natural number \(n\), \(qdivides(r, wittshl(d, n)) ↔ qdivides(r, d)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-shl}(r, d, n)\).
@@ -1371,7 +1371,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-shl}(r, d, n)\).
 \end{theorem}
 
 \begin{theorem}{q-divides-val}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(d\), if \(0 < r\), then if \(qdivides(r, d)\), then \(vala(d) = false ∧ valb(d) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-val}(r, d)\).
@@ -1379,7 +1379,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-val}(r, d)\).
 \end{theorem}
 
 \begin{theorem}{q-divides-degree-bound}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(d\), if \(d ≠ 0\), then if \(qdivides(r, d)\), then \(2 * r ≤ binarydegree(d)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-degree-bound}(r, d)\).
@@ -1387,7 +1387,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-degree-bound}(r, d)\).
 \end{theorem}
 
 \begin{theorem}{q-order-exists}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(d\), if \(d ≠ 0\), then there exists a natural number \(r\) such that \(qdivides(r, d) ∧ ¬ qdivides(r + 1, d)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-order-exists}(d)\).
@@ -1395,7 +1395,7 @@ Close the goal with \(\lexeme{r30.observation::q-order-exists}(d)\).
 \end{theorem}
 
 \begin{theorem}{q-divides-iff-order}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(d\), if \(d ≠ 0\), then \(qdivides(r, d) ↔ r ≤ qorder(d)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-iff-order}(r, d)\).
@@ -1403,7 +1403,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-iff-order}(r, d)\).
 \end{theorem}
 
 \begin{theorem}{observer-source-flux-zero}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), \(observersourceflux(Q, t, 0) = 0\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-source-flux-zero}(Q, t)\).
@@ -1411,7 +1411,7 @@ Close the goal with \(\lexeme{r30.observation::observer-source-flux-zero}(Q, t)\
 \end{theorem}
 
 \begin{theorem}{observer-source-flux-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(n\), \(observersourceflux(Q, t, n + 1) = wittxor(wittlinear(observersourceflux(Q, t, n)), wittshl(observersource(Q, t + n), n + 1))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-source-flux-step}(Q, t, n)\).
@@ -1419,7 +1419,7 @@ Close the goal with \(\lexeme{r30.observation::observer-source-flux-step}(Q, t, 
 \end{theorem}
 
 \begin{theorem}{observer-source-flux-append}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(n\) and natural number \(s\), \(observersourceflux(Q, t, n + s) = wittxor(wittlinpow(s, observersourceflux(Q, t, n)), wittshl(observersourceflux(Q, t + n, s), n))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-source-flux-append}(Q, t, n, s)\).
@@ -1427,7 +1427,7 @@ Close the goal with \(\lexeme{r30.observation::observer-source-flux-append}(Q, t
 \end{theorem}
 
 \begin{theorem}{observer-q-rank-definition}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), \(observerqrank(Q, t) = t + Q - 2 * qorder(observerdefect(Q, t))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-q-rank-definition}(Q, t)\).
@@ -1435,7 +1435,7 @@ Close the goal with \(\lexeme{r30.observation::observer-q-rank-definition}(Q, t)
 \end{theorem}
 
 \begin{theorem}{periodic-observer-polynomial-step}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(wittshl(observerdefect(m * P, t + 1), 1) = wittxor(wittlinear(observerdefect(m * P, t)), wittshl(observersource(m * P, t), 1))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-polynomial-step}(T, P, m, t)\).
@@ -1443,7 +1443,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-polynomial-step
 \end{theorem}
 
 \begin{theorem}{periodic-observer-source}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(observersource(m * P, t) = wittxor(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t))), naturalbit(leftdefect(m * P, t, 1)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-source}(T, P, m, t)\).
@@ -1451,7 +1451,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-source}(T, P, m
 \end{theorem}
 
 \begin{theorem}{periodic-observer-polynomial-window}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(wittshl(observerdefect(m * P, t + n), n) = wittxor(wittlinpow(n, observerdefect(m * P, t)), observersourceflux(m * P, t, n))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-polynomial-window}(T, P, m, t, n)\).
@@ -1459,7 +1459,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-polynomial-wind
 \end{theorem}
 
 \begin{theorem}{periodic-observer-window-divisibility}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\) and natural number \(r\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(qdivides(r, observerdefect(m * P, t))\), then if \(k ≤ n + r\), then \(qdivides(k, observerdefect(m * P, t + n)) ↔ qdivides(k, observersourceflux(m * P, t, n))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-window-divisibility}(T, P, m, t, n, r, k)\).
@@ -1467,7 +1467,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-window-divisibi
 \end{theorem}
 
 \begin{theorem}{periodic-observer-q-gain}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(r\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(qdivides(r, observerdefect(m * P, t))\), then \(qdivides(r + 1, observerdefect(m * P, t + 1)) ↔ qdivides(r + 1, observersource(m * P, t))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-q-gain}(T, P, m, t, r)\).
@@ -1475,7 +1475,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-q-gain}(T, P, m
 \end{theorem}
 
 \begin{theorem}{observer-q-order-bound}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(2 * qorder(observerdefect(Q, t)) ≤ t + Q\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-q-order-bound}(Q, t)\).
@@ -1483,7 +1483,7 @@ Close the goal with \(\lexeme{r30.observation::observer-q-order-bound}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{periodic-observer-q-rank-drop}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(n\), if \(0 < P\), then if \(0 < m\), then if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(0 < n\), then \(observerqrank(m * P, t + n) < observerqrank(m * P, t) ↔ qdivides(qorder(observerdefect(m * P, t)) + n / 2 + 1, observersourceflux(m * P, t, n))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-q-rank-drop}(T, P, m, t, n)\).
@@ -1491,7 +1491,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-q-rank-drop}(T,
 \end{theorem}
 
 \begin{theorem}{observer-seed-q-loss}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(observerdefect(5, 2) = 216 ∧ observerdefect(5, 3) = 412 ∧ qdivides(1, observerdefect(5, 2)) ∧ ¬ qdivides(1, observerdefect(5, 3)) ∧ center(2) = false ∧ center(7) = false ∧ center(3) = true ∧ center(8) = true\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-seed-q-loss}\).
@@ -1499,7 +1499,7 @@ Close the goal with \(\lexeme{r30.observation::observer-seed-q-loss}\).
 \end{theorem}
 
 \begin{theorem}{q-quotient-bound}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(a\) and natural number \(d\), if \(wittlinpow(r, a) = d\), then \(a ≤ d\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-quotient-bound}(r, a, d)\).
@@ -1507,7 +1507,7 @@ Close the goal with \(\lexeme{r30.observation::q-quotient-bound}(r, a, d)\).
 \end{theorem}
 
 \begin{theorem}{q-order-search-hit}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(d\) and natural number \(r\), if \(qdivides(r + 1, d)\), then \(qordersearch(d, r + 1) = r + 1\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-order-search-hit}(d, r)\).
@@ -1515,7 +1515,7 @@ Close the goal with \(\lexeme{r30.observation::q-order-search-hit}(d, r)\).
 \end{theorem}
 
 \begin{theorem}{q-order-search-miss}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(d\) and natural number \(r\), if \(¬ qdivides(r + 1, d)\), then \(qordersearch(d, r + 1) = qordersearch(d, r)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-order-search-miss}(d, r)\).
@@ -1523,7 +1523,7 @@ Close the goal with \(\lexeme{r30.observation::q-order-search-miss}(d, r)\).
 \end{theorem}
 
 \begin{theorem}{q-order-definition}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(d\), \(qorder(d) = qordersearch(d, binarydegree(d))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-order-definition}(d)\).
@@ -1531,7 +1531,7 @@ Close the goal with \(\lexeme{r30.observation::q-order-definition}(d)\).
 \end{theorem}
 
 \begin{theorem}{q-divides-bounded-witness}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(d\), if \(qdivides(r, d)\), then there exists a natural number \(a\) such that \(a ≤ d ∧ wittlinpow(r, a) = d\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-bounded-witness}(r, d)\).
@@ -1539,7 +1539,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-bounded-witness}(r, d)\
 \end{theorem}
 
 \begin{theorem}{q-order-search-zero}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(d\), \(qordersearch(d, 0) = 0\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-order-search-zero}(d)\).
@@ -1548,7 +1548,7 @@ Close the goal with \(\lexeme{r30.observation::q-order-search-zero}(d)\).
 
 
 \begin{theorem}{q-frobenius-twopow}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(y\), \(wittlinpow(twopow(a), y) = wittxor(wittxor(y, wittshl(y, twopow(a))), wittshl(y, twopow(a) + twopow(a)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-frobenius-twopow}(a, y)\).
@@ -1556,7 +1556,7 @@ Close the goal with \(\lexeme{r30.observation::q-frobenius-twopow}(a, y)\).
 \end{theorem}
 
 \begin{theorem}{q-sixteen-page}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(wittlinpow(16, 1) = wittxor(wittxor(1, wittshl(1, 16)), wittshl(1, 32)) ∧ wittlinpow(16, wittxor(1, wittshl(1, 16))) = wittxor(1, wittshl(1, 48))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-sixteen-page}\).
@@ -1564,7 +1564,7 @@ Close the goal with \(\lexeme{r30.observation::q-sixteen-page}\).
 \end{theorem}
 
 \begin{theorem}{q-divides-page-shift-twopow}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(y\), \(qdivides(twopow(a), wittxor(y, wittshl(y, 3 * twopow(a))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-page-shift-twopow}(a, y)\).
@@ -1572,7 +1572,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-page-shift-twopow}(a, y
 \end{theorem}
 
 \begin{theorem}{q-divides-page-fold-twopow}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(n\) and natural number \(H\), \(qdivides(twopow(a), wittxor(H, wittxor(pagefold(3 * twopow(a), H, n), pagetail(3 * twopow(a), H, n))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-divides-page-fold-twopow}(a, n, H)\).
@@ -1580,7 +1580,7 @@ Close the goal with \(\lexeme{r30.observation::q-divides-page-fold-twopow}(a, n,
 \end{theorem}
 
 \begin{theorem}{page-carry}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(L\) and natural number \(H\) and natural number \(p\), if \(0 < L\), then \(page(L, wittcarry(H), p) = wittxor(wittcarry(page(L, H, p)), naturalbit(pageboundarycarry(L, H, p)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::page-carry}(L, H, p)\).
@@ -1588,7 +1588,7 @@ Close the goal with \(\lexeme{r30.observation::page-carry}(L, H, p)\).
 \end{theorem}
 
 \begin{theorem}{carry-fold-eq-ledger}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(L\) and natural number \(H\) and natural number \(n\), if \(0 < L\), then \(pagefold(L, wittcarry(H), n) = carryledger(L, H, n)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::carry-fold-eq-ledger}(L, H, n)\).
@@ -1596,7 +1596,7 @@ Close the goal with \(\lexeme{r30.observation::carry-fold-eq-ledger}(L, H, n)\).
 \end{theorem}
 
 \begin{theorem}{carry-ledger-congruence-twopow}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(H\) and natural number \(n\), \(qdivides(twopow(a), wittxor(wittcarry(H), wittxor(carryledger(3 * twopow(a), H, n), pagetail(3 * twopow(a), wittcarry(H), n))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::carry-ledger-congruence-twopow}(a, H, n)\).
@@ -1604,7 +1604,7 @@ Close the goal with \(\lexeme{r30.observation::carry-ledger-congruence-twopow}(a
 \end{theorem}
 
 \begin{theorem}{periodic-observer-source-ledger}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(a\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(qdivides(twopow(a), wittxor(observersource(m * P, t), wittxor(wittxor(carryledger(3 * twopow(a), observercode(t + m * P), t + m * P + 1), carryledger(3 * twopow(a), observercode(t), t + m * P + 1)), naturalbit(leftdefect(m * P, t, 1)))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-source-ledger}(T, P, m, t, a)\).
@@ -1612,7 +1612,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-source-ledger}(
 \end{theorem}
 
 \begin{theorem}{periodic-observer-q-gain-ledger}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(r\) and natural number \(a\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(r + 1 ≤ twopow(a)\), then if \(qdivides(r, observerdefect(m * P, t))\), then \(qdivides(r + 1, observerdefect(m * P, t + 1)) ↔ qdivides(r + 1, wittxor(wittxor(carryledger(3 * twopow(a), observercode(t + m * P), t + m * P + 1), carryledger(3 * twopow(a), observercode(t), t + m * P + 1)), naturalbit(leftdefect(m * P, t, 1))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-q-gain-ledger}(T, P, m, t, r, a)\).
@@ -1620,7 +1620,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-q-gain-ledger}(
 \end{theorem}
 
 \begin{theorem}{page-residue-not-closed}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 \(qdivides(16, wittlinpow(16, 1)) ∧ wittxor(wittphi(wittxor(2, wittlinpow(16, 1))), wittphi(2)) = wittxor(wittlinpow(17, 1), 4) ∧ ¬ qdivides(16, wittxor(wittphi(wittxor(2, wittlinpow(16, 1))), wittphi(2)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::page-residue-not-closed}\).
@@ -1629,7 +1629,7 @@ Close the goal with \(\lexeme{r30.observation::page-residue-not-closed}\).
 
 
 \begin{theorem}{q-block-residue}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(A0\) and natural number \(A1\) and natural number \(A2\), \(qdivides(twopow(a), wittxor(wittxor(wittxor(A0, wittshl(A1, twopow(a))), wittshl(A2, twopow(a) + twopow(a))), wittxor(wittxor(A0, A2), wittshl(wittxor(A1, A2), twopow(a)))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-block-residue}(a, A0, A1, A2)\).
@@ -1637,7 +1637,7 @@ Close the goal with \(\lexeme{r30.observation::q-block-residue}(a, A0, A1, A2)\)
 \end{theorem}
 
 \begin{theorem}{q-block-charge-zero-iff}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(A0\) and natural number \(A1\) and natural number \(A2\), if \(A0 < twopow(twopow(a))\), then if \(A1 < twopow(twopow(a))\), then if \(A2 < twopow(twopow(a))\), then \(qdivides(twopow(a), wittxor(wittxor(A0, wittshl(A1, twopow(a))), wittshl(A2, twopow(a) + twopow(a)))) ↔ A0 = A2 ∧ A1 = A2\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-block-charge-zero-iff}(a, A0, A1, A2)\).
@@ -1645,7 +1645,7 @@ Close the goal with \(\lexeme{r30.observation::q-block-charge-zero-iff}(a, A0, A
 \end{theorem}
 
 \begin{theorem}{repeated-block-carry}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(A\), if \(A < twopow(twopow(a))\), then \(wittcarry(wittxor(wittxor(A, wittshl(A, twopow(a))), wittshl(A, twopow(a) + twopow(a)))) = wittxor(wittxor(wittxor(wittcarry(A), wittshl(wittcarry(A), twopow(a))), wittshl(wittcarry(A), twopow(a) + twopow(a))), wittxor(wittshl(naturalbit(blockendpoint(twopow(a), A)), twopow(a)), wittshl(naturalbit(blockendpoint(twopow(a), A)), twopow(a) + twopow(a))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::repeated-block-carry}(a, A)\).
@@ -1653,7 +1653,7 @@ Close the goal with \(\lexeme{r30.observation::repeated-block-carry}(a, A)\).
 \end{theorem}
 
 \begin{theorem}{repeated-block-carry-congruence}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(A\), if \(A < twopow(twopow(a))\), then \(qdivides(twopow(a), wittxor(wittcarry(wittxor(wittxor(A, wittshl(A, twopow(a))), wittshl(A, twopow(a) + twopow(a)))), naturalbit(blockendpoint(twopow(a), A))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::repeated-block-carry-congruence}(a, A)\).
@@ -1661,7 +1661,7 @@ Close the goal with \(\lexeme{r30.observation::repeated-block-carry-congruence}(
 \end{theorem}
 
 \begin{theorem}{page-carry-repeated}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(H\) and natural number \(p\) and natural number \(A\), if \(A < twopow(twopow(a))\), then if \(page(3 * twopow(a), H, p) = wittxor(wittxor(A, wittshl(A, twopow(a))), wittshl(A, twopow(a) + twopow(a)))\), then \(qdivides(twopow(a), wittxor(page(3 * twopow(a), wittcarry(H), p), wittxor(naturalbit(blockendpoint(twopow(a), A)), naturalbit(pageboundarycarry(3 * twopow(a), H, p)))))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::page-carry-repeated}(a, H, p, A)\).
@@ -1669,7 +1669,7 @@ Close the goal with \(\lexeme{r30.observation::page-carry-repeated}(a, H, p, A)\
 \end{theorem}
 
 \begin{theorem}{periodic-observer-source-cross-carry}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(observersource(m * P, t) = wittxor(wittxor(wittcarry(observerdefect(m * P, t)), crosscarry(observercode(t), observerdefect(m * P, t))), naturalbit(leftdefect(m * P, t, 1)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-source-cross-carry}(T, P, m, t)\).
@@ -1677,7 +1677,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-source-cross-ca
 \end{theorem}
 
 \begin{theorem}{residue-not-congruence}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 there exists a natural number \(s\) such that there exists a natural number \(s2\) such that \(qdivides(16, wittxor(s, s2)) ∧ ¬ qdivides(16, wittxor(wittphi(s), wittphi(s2)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::residue-not-congruence}\).
@@ -1685,7 +1685,7 @@ Close the goal with \(\lexeme{r30.observation::residue-not-congruence}\).
 \end{theorem}
 
 \begin{theorem}{observer-defect-left-readout}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(j\), \(rowbit(observerdefect(Q, t), j) = leftdefect(Q, t, j)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-defect-left-readout}(Q, t, j)\).
@@ -1693,7 +1693,7 @@ Close the goal with \(\lexeme{r30.observation::observer-defect-left-readout}(Q, 
 \end{theorem}
 
 \begin{theorem}{q-front-degree-budget}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(r\) and natural number \(e\) and natural number \(k\), if \(e ≠ 0\), then if \(qdivides(r, wittshl(e, k))\), then \(k + 2 * r ≤ binarydegree(wittshl(e, k))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-front-degree-budget}(r, e, k)\).
@@ -1701,7 +1701,7 @@ Close the goal with \(\lexeme{r30.observation::q-front-degree-budget}(r, e, k)\)
 \end{theorem}
 
 \begin{theorem}{q-page-offset-charge}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(n\) and natural number \(e\) and natural number \(o\), if \(e ≠ 0\), then if \(twopow(n) ≤ o\), then if \(wittshl(e, o) < twopow(3 * twopow(n))\), then \(¬ qdivides(twopow(n), wittshl(e, o))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::q-page-offset-charge}(n, e, o)\).
@@ -1709,7 +1709,7 @@ Close the goal with \(\lexeme{r30.observation::q-page-offset-charge}(n, e, o)\).
 \end{theorem}
 
 \begin{theorem}{observer-front-q-budget}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < Q\), then if \(rightmostleft(Q, t, k)\), then \(k + 2 * qorder(observerdefect(Q, t)) ≤ t + Q\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-front-q-budget}(Q, t, k)\).
@@ -1717,7 +1717,7 @@ Close the goal with \(\lexeme{r30.observation::observer-front-q-budget}(Q, t, k)
 \end{theorem}
 
 \begin{theorem}{observer-front-q-rank}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < Q\), then if \(rightmostleft(Q, t, k)\), then \(k ≤ observerqrank(Q, t)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-front-q-rank}(Q, t, k)\).
@@ -1725,7 +1725,7 @@ Close the goal with \(\lexeme{r30.observation::observer-front-q-rank}(Q, t, k)\)
 \end{theorem}
 
 \begin{theorem}{observer-front-page-charge}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(a\) and natural number \(Q\) and natural number \(t\) and natural number \(p\) and natural number \(o\), if \(twopow(a) ≤ o\), then if \(o < 3 * twopow(a)\), then if \(rightmostleft(Q, t, 3 * twopow(a) * p + o)\), then \(¬ qdivides(twopow(a), page(3 * twopow(a), observerdefect(Q, t), p))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::observer-front-page-charge}(a, Q, t, p, o)\).
@@ -1733,7 +1733,7 @@ Close the goal with \(\lexeme{r30.observation::observer-front-page-charge}(a, Q,
 \end{theorem}
 
 \begin{theorem}{center-defect-coupling}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(t\), if \(leftdefect(Q, t, 0) = false\), then \(leftdefect(Q, t + 1, 0) = bxor(leftdefect(Q, t, 1), centergate(Q, t))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::center-defect-coupling}(Q, t)\).
@@ -1741,7 +1741,7 @@ Close the goal with \(\lexeme{r30.observation::center-defect-coupling}(Q, t)\).
 \end{theorem}
 
 \begin{theorem}{periodic-center-coupling}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(leftdefect(m * P, t, 1) = centergate(m * P, t)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-center-coupling}(T, P, m, t)\).
@@ -1749,7 +1749,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-center-coupling}(T, P, m
 \end{theorem}
 
 \begin{theorem}{periodic-black-no-arrival}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = true\), then \(leftdefect(m * P, t, 1) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-black-no-arrival}(T, P, m, t)\).
@@ -1757,7 +1757,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-black-no-arrival}(T, P, 
 \end{theorem}
 
 \begin{theorem}{periodic-white-mirror}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = false\), then \(leftdefect(m * P, t, 1) = rightdefect(m * P, t, 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-white-mirror}(T, P, m, t)\).
@@ -1765,7 +1765,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-white-mirror}(T, P, m, t
 \end{theorem}
 
 \begin{theorem}{center-periodic-of-coupling}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\), if \(center(T + P) = center(T)\), then if for every natural number \(t\), if \(T ≤ t\), then \(leftdefect(P, t, 1) = centergate(P, t)\), then \(centerperiodic(T, P)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::center-periodic-of-coupling}(T, P)\).
@@ -1773,7 +1773,7 @@ Close the goal with \(\lexeme{r30.observation::center-periodic-of-coupling}(T, P
 \end{theorem}
 
 \begin{theorem}{periodic-observer-source-center-gate}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(observersource(m * P, t) = wittxor(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t))), naturalbit(centergate(m * P, t)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-observer-source-center-gate}(T, P, m, t)\).
@@ -1781,7 +1781,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-observer-source-center-g
 \end{theorem}
 
 \begin{theorem}{periodic-black-observer-source}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = true\), then \(observersource(m * P, t) = wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-black-observer-source}(T, P, m, t)\).
@@ -1789,7 +1789,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-black-observer-source}(T
 \end{theorem}
 
 \begin{theorem}{periodic-white-observer-source}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = false\), then \(observersource(m * P, t) = wittxor(wittxor(wittcarry(observercode(t + m * P)), wittcarry(observercode(t))), naturalbit(rightdefect(m * P, t, 1)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-white-observer-source}(T, P, m, t)\).
@@ -1797,7 +1797,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-white-observer-source}(T
 \end{theorem}
 
 \begin{theorem}{periodic-front-gap-observer-source}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\) and natural number \(s\), if \(centerperiodic(T, P)\), then if \(T ≤ b\), then if \(rightmostleft(m * P, b, k)\), then if \(s + 1 < k\), then \(leftdefect(m * P, b + s, 1) = false ∧ observersource(m * P, b + s) = wittxor(wittcarry(observercode(b + s + m * P)), wittcarry(observercode(b + s)))\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-front-gap-observer-source}(T, P, m, b, k, s)\).
@@ -1805,7 +1805,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-front-gap-observer-sourc
 \end{theorem}
 
 \begin{theorem}{periodic-front-arrival-observer-source}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ b\), then if \(rightmostleft(m * P, b, k)\), then \(leftdefect(m * P, b + (k - 1), 1) = true ∧ center(b + (k - 1)) = false ∧ rightdefect(m * P, b + (k - 1), 1) = true ∧ observersource(m * P, b + (k - 1)) = wittxor(wittxor(wittcarry(observercode(b + (k - 1) + m * P)), wittcarry(observercode(b + (k - 1)))), 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-front-arrival-observer-source}(T, P, m, b, k)\).
@@ -1813,7 +1813,7 @@ Close the goal with \(\lexeme{r30.observation::periodic-front-arrival-observer-s
 \end{theorem}
 
 \begin{theorem}{coupled-arrival-gate-phase}
-\allowaxioms{Classical.choice;Quot.sound;propext}
+\allowaxioms{Quot.sound;propext}
 For every natural number \(Q\) and natural number \(start\), if \(center(start) = false\), then if \(center(start + Q) = false\), then if \(center(start + 1) = false\), then if \(center(start + 1 + Q) = false\), then if \(rightcell(start, 1) = false\), then if \(rightcell(start + Q, 1) = false\), then \(leftgatephase(Q, start + 1, 0) = rightphase(Q, start, 2) ∧ leftgatephase(Q, start + 1, 0) = centersign(start, 1) inttimes rightphase(Q, start, 2)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::coupled-arrival-gate-phase}(Q, start)\).

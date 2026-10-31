@@ -1,5 +1,6 @@
 module
 
+public import Rule30UOR.Constructive
 public import Ruliology.CellularAutomata.Rule30XorRigidity
 public import Rule30UOR.TemporalDefect
 public import Ruliology.CellularAutomata.Rule30Diagonals
@@ -20,6 +21,10 @@ open Ruliology.CellularAutomata
 open Rule30XorRigidity (Actual)
 open Rule30XorRigidity.HalfLine (Good good_self middle_zero gap_two gap_large)
 
+
+instance (a b c d : Bool) : Decidable (Good a b c d) :=
+  inferInstanceAs (Decidable ((a && d) = (c && b)))
+
 /-- If adjacent cross-carries vanish for `d + 1` time slices on the interval from `p`
 through `p + d` (including the pair starting at its right endpoint), then the endpoint
 colors at the initial slice are compatible. Coordinates are sheared as in XOR rigidity. -/
@@ -37,7 +42,7 @@ theorem finite_distant_good (A B : Nat → Int → Bool) (ha : Actual A) (hb : A
     by_cases hd1 : d = 1
     · subst d
       simpa using h 0 (by omega) p (by omega) (by omega)
-    apply Classical.byContradiction
+    apply Decidable.byContradiction
     intro bad
     have mid : ∀ k : Nat, 0 < k → k < d →
         A t (p + (k : Int)) = false ∧ B t (p + (k : Int)) = false := by
@@ -90,12 +95,12 @@ theorem finite_collision (A B : Nat → Int → Bool) (ha : Actual A) (hb : Actu
     ∃ s : Nat, s ≤ d ∧ ∃ i : Int, p ≤ i ∧ i ≤ p + (d : Int) ∧
       ¬ Good (A (t + s) i) (B (t + s) i)
         (A (t + s) (i + 1)) (B (t + s) (i + 1)) := by
-  apply Classical.byContradiction
+  apply Decidable.byContradiction
   intro hn
   apply hbad
   apply finite_distant_good A B ha hb d t p
   intro s hs i hi hix
-  exact Classical.byContradiction (fun hh => hn ⟨s, hs, i, hi, hix, hh⟩)
+  exact Decidable.byContradiction (fun hh => hn ⟨s, hs, i, hi, hix, hh⟩)
 
 open Rule30Jen Rule30Prize
 
@@ -145,11 +150,11 @@ theorem left_edge_collision (Q T : Nat) (hQ : 0 < Q) :
   have hbad : ¬ Good (cell T (-((T + Q : Nat) : Int))) (cell (T + Q) (-((T + Q : Nat) : Int)))
       (cell T (-((T + Q : Nat) : Int) + (Q : Int)))
       (cell (T + Q) (-((T + Q : Nat) : Int) + (Q : Int))) := by
-    rw [cell_eq_false_of_lt T _ (by omega), cell_left_edge,
-      show -((T + Q : Nat) : Int) + (Q : Int) = -(T : Int) by omega, cell_left_edge]
+    rw [cell_eq_false_of_lt T _ (by cfomega), cell_left_edge,
+      show -((T + Q : Nat) : Int) + (Q : Int) = -(T : Int) by cfomega, cell_left_edge]
     simp [Good]
   have hh := temporal_collision_of_incompatible Q T (-((T + Q : Nat) : Int)) Q hbad
-  simpa only [show -((T + Q : Nat) : Int) + (Q : Int) = -(T : Int) by omega] using hh
+  simpa only [show -((T + Q : Nat) : Int) + (Q : Int) = -(T : Int) by cfomega] using hh
 
 
 /-- Paired colours: 0 = 00, 1 = X = 10, 2 = Y = 01, 3 = Z = 11.
@@ -185,6 +190,10 @@ def collisionBit (Q t k : Nat) : Bool := collision Q t (-(k : Int))
 colour on the right. It forces an advance at the right endpoint. -/
 def AdvancingCollision (Q t : Nat) (p : Int) : Prop :=
   cell t p ≠ cell (t + Q) p ∧ cell t (p + 1) = true ∧ cell (t + Q) (p + 1) = true
+
+instance (Q t : Nat) (p : Int) : Decidable (AdvancingCollision Q t p) := by
+  unfold AdvancingCollision
+  infer_instance
 
 def advancingAtDepth (Q t k : Nat) : Prop := AdvancingCollision Q t (-(k : Int))
 
@@ -233,7 +242,7 @@ private theorem mixed_collision (Q : Nat) : ∀ (d t : Nat) (p : Int),
       refine ⟨0, by omega, p, by omega, by omega, by omega, ?_⟩
       simpa only [AdvancingCollision, Mixed, Nat.add_zero,
         show ((1 : Nat) : Int) = (1 : Int) by omega] using hm
-    apply Classical.byContradiction
+    apply Decidable.byContradiction
     intro hn
     have mid : ∀ x : Int, p < x → x < p + (d : Int) →
         cell t x = false ∧ cell (t + Q) x = false := by
@@ -383,7 +392,7 @@ theorem left_colours_outside_seed_cone (Q t k : Nat) (hk : t < k) :
 
 /-- A nonzero source needs a black cell in the earlier history's adjacent pair. -/
 theorem collision_code_support (Q t k : Nat) (hc : collisionCode Q t k ≠ 0) : k ≤ t + 1 := by
-  apply Classical.byContradiction
+  apply Decidable.byContradiction
   intro hn
   have ha := cell_eq_false_of_lt t (-(k : Int)) (by omega)
   have hb := cell_eq_false_of_lt t (-(k : Int) + 1) (by omega)

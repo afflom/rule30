@@ -1,5 +1,7 @@
 module
 
+public import Rule30UOR.Constructive
+public import Rule30UOR.KitConstructive
 public import Rule30UOR.Core
 public import Ruliology.CellularAutomata.Rule30Prize
 

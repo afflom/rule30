@@ -1,5 +1,6 @@
 module
 
+public import Rule30UOR.Constructive
 public import Ruliology.CellularAutomata.Rule30Prize
 public import Rule30UOR.Core
 
@@ -158,7 +159,9 @@ theorem lin15_gen : ∀ t p, pow15 t seed p = xor (seed (p - t)) (decide (t % 2 
 /-- After time `0`, the known rule's center is black exactly at odd times. -/
 theorem lin15_center (t : Nat) (ht : 1 ≤ t) : pow15 t seed 0 = decide (t % 2 = 1) := by
   rw [lin15_gen]
-  have hs : seed (0 - (t : Int)) = false := by simp [seed]; omega
+  have hs : seed (0 - (t : Int)) = false := by
+    unfold seed
+    exact decide_eq_false (by cfomega)
   rw [hs]; cases decide (t % 2 = 1) <;> rfl
 
 theorem center_eq_resp15 (t : Nat) (ht : 1 ≤ t) :
@@ -179,23 +182,23 @@ theorem ep_congr {f g : Nat → Bool} {N : Nat} (h : ∀ t, N ≤ t → f t = g 
 theorem ep_xor_two {f : Nat → Bool} :
     EventuallyPeriodic (fun t => xor (decide (t % 2 = 1)) (f t)) ↔ EventuallyPeriodic f := by
   have hg : ∀ k s, decide ((s + 2 * k) % 2 = 1) = decide (s % 2 = 1) := by
-    intro k s; congr 1; apply propext; omega
+    intro k s; congr 1; apply propext; cfomega
   constructor
   · rintro ⟨T, P, hP, h⟩
-    refine ⟨T, 2 * P, by omega, fun t ht => ?_⟩
+    refine ⟨T, 2 * P, by cfomega, fun t ht => ?_⟩
     have h1 := h t ht
-    have h2 := h (t + P) (by omega)
+    have h2 := h (t + P) (by cfomega)
     simp only at h1 h2
-    rw [show t + P + P = t + 2 * P by omega] at h2
+    rw [show t + P + P = t + 2 * P by cfomega] at h2
     have e := hg P t
     revert h1 h2 e
     cases decide ((t + 2 * P) % 2 = 1) <;> cases decide (t % 2 = 1) <;>
       cases decide ((t + P) % 2 = 1) <;> cases f (t + 2 * P) <;> cases f t <;>
       cases f (t + P) <;> simp
   · rintro ⟨T, P, hP, h⟩
-    refine ⟨T, 2 * P, by omega, fun t ht => ?_⟩
+    refine ⟨T, 2 * P, by cfomega, fun t ht => ?_⟩
     have hf2 : f (t + 2 * P) = f t := by
-      rw [show t + 2 * P = (t + P) + P by omega, h (t + P) (by omega), h t ht]
+      rw [show t + 2 * P = (t + P) + P by cfomega, h (t + P) (by cfomega), h t ht]
     show xor (decide ((t + 2 * P) % 2 = 1)) (f (t + 2 * P)) = xor (decide (t % 2 = 1)) (f t)
     rw [hg P t, hf2]
 

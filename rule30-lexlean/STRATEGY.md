@@ -3,6 +3,8 @@
 ## Target
 `Rule30Submission.problem1 : Ruliology.CellularAutomata.Rule30Prize.Problem1`, one module,
 axioms within {propext, Classical.choice, Quot.sound}, kit commit named by the verifier.
+This repository is stricter than the verifier: it forbids `Classical.choice` (see
+"No `Classical.choice`" below).
 
 ## Current proof frontier (2026-10-28)
 Problem 1 remains open in this repository. The sections below record the development of the
@@ -17,7 +19,7 @@ remaining obligation. Rephrasing these impossible agreement bundles is not a dis
 `cd rule30-core-lean && lake build && lake env lean scripts/AuditVacuous.lean` checks the audit
 and writes `.lake/build/vacuity-audit.txt`. The conservative proof-term analysis classifies 26
 of 184 refutation theorems as vacuous; the other 158 are **unclassified**, not certified
-nonvacuous. The six audit theorems use only `propext`, `Classical.choice`, and `Quot.sound`.
+nonvacuous. The six audit theorems use only `propext` and `Quot.sound`.
 These host additions are not yet included in the attested LexLean paper or release PDFs.
 
 The active question is whether forced temporal disagreements can remain compatible with an
@@ -2616,3 +2618,66 @@ column two and `centerSign start 1 = 1`. The chain's 3.63 is therefore not a
 lemma awaiting proof; under a periodic center it is false on every window
 `periodic_coupled_cancellation` produces, so 3.64 cannot use it. Problem 1
 remains unproved.
+
+## No `Classical.choice` (2026-10-30)
+
+Every authored theorem now depends at most on `propext` and `Quot.sound`. Before the change
+1533 of 3981 constants in the research library depended on `Classical.choice`; after it,
+none do, and none of the 10857 bridge theorems do. The published statements are checked the
+same way: every LexLean statement declares `\allowaxioms{Quot.sound;propext}` and verifies.
+
+**Enforcement.** `CheckResearchAxioms.lean` and `scripts/check_bridge_axioms.py` reject any
+theorem outside `{propext, Quot.sound}`; the bridge audit generates its imports from the
+bridge's Lake roots. `scripts/check_no_choice.py` (run by `make check-research`, tested in
+`scripts/tests/test_no_choice.py`) rejects `Classical.choice` in any `\allowaxioms` or
+`\exactaxioms`, any `Classical.*`, `Exists.choose` or `.choose` in the research and bridge
+Lean sources, and an allowlist that admits choice. In the research modules `by_cases` is
+redefined (`Rule30UOR.Constructive`) to elaborate without `open Classical`, so a case split
+on an undecidable proposition is a compile error rather than a hidden axiom.
+
+**Where choice entered, and what replaced it.**
+
+* *Settling times.* `Intent.settle` was `Classical.choose (D_periodic j)`. It is now the
+  explicit `settlePair` recursion that the kit's own `D_periodic` proof constructs, so the
+  whole zero-diagonal apparatus (`E`, `IsZeroDiag`, `DoublesAt`, `SettledBy`, `zcenter`, ...)
+  is computable. No proof depended on which settling time was chosen.
+* *The prize kit.* The kit is the reference statement and is not edited. Its proofs of
+  pigeonhole, Jen's theorem, `no_column_eventually_constant` and fifteen right-diagonal period
+  lemmas use choice; `Rule30UOR.KitConstructive` reproves exactly those, with the kit's
+  statements and definitions. `R j` has period `2 ^ j`, so `Per j H` is decidable and the
+  kit's last-diagonal search is a bounded search.
+* *Decidable case splits.* Core `by_cases` and `omega` silently use `Classical.propDecidable`:
+  `by_cases` elaborates under `open Classical`, and `omega` turns implications, iffs, negated
+  conjunctions and existential hypotheses into facts classically. Bounded predicates
+  (`RightmostLeft`, `RhColAgree`, `RightFront`, `Good`, `AdvancingCollision`, integer and
+  natural intervals) received `Decidable` instances, and `cfomega` runs `omega` on the
+  arithmetic part of the context after negating a decidable goal itself.
+* *Bounded searches.* `infinitely_many_zero_diagonals` was a proof by contradiction over all
+  depths; every depth it uses lies below `zeroDiagBound N`, so `zero_diagonal_bounded` finds a
+  zero diagonal by a finite search, using that `E z` has period `2 ^ z`.
+  `doubling_point_bounded` does the same below depth `2 ^ (2 P)`, from the finite core
+  `common_period_fails_by` of `unbounded_periods`.
+
+**Statements that changed.** Two kinds of classical content cannot be made constructive, so
+the statements were changed to their constructive equivalents. Classically each new
+statement is equivalent to the old one.
+
+1. *Unbounded searches (Markov's principle).* An existential obtained from a negated
+   universal by an unbounded search is now stated as its double negation: `exists_defect_true/
+   false_of_periodic`, `periodic_erasure_orientation`, `periodic_black_erasure_origin`,
+   `periodic_coupled_cancellation`, `periodic_coupled_gate_phase_sign`,
+   `periodic_coupled_import_ancestry`, `periodic_right_import_orientation`, and the right-hand
+   side of `problem1_iff_pairOrbit_center`. A refutation, which derives `False`, can use the
+   double negation exactly as it used the witness. A non-increasing natural sequence is
+   proved not-not eventually constant, by induction on its first value.
+2. *The infinite pigeonhole principle.* "One fixed column (or pattern) recurs" was obtained
+   from "some column in a finite band recurs" by the infinite pigeonhole principle, which has
+   no constructive proof, not even in double-negated form. `RecurrentCentralCollision`,
+   `RecurrentLeftCollision`, `RecurrentAdvancingLeftCollision`, `RecurrentSourceErasure` and
+   `RecurrentLeadingErasure` now say that the event occurs arbitrarily late in the band.
+   This is classically the same condition. Each witness lies in the explicit window of
+   `periodic_leading_erasure_window`. `Problem 1 ⟺ no recurrent central collision` and the
+   other frontier equivalences remain exact. The fixed-column refinement is no longer
+   claimed.
+
+Problem 1 remains unproved.

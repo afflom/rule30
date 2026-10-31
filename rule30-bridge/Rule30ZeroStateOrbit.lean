@@ -1,5 +1,6 @@
 module
 
+public import Rule30UOR.KitConstructive
 public import Rule30Intent
 public import Ruliology.CellularAutomata.Rule30FiniteMaskedJen
 
@@ -24,6 +25,92 @@ The zero-state's center is column `0` (`E t t`), its transparency column is `-1`
 namespace Rule30ZeroStateOrbit
 
 open Ruliology.CellularAutomata Rule30Jen Rule30Diagonals Rule30Realization Rule30Intent
+
+/-! ### Choice-free Jen's theorem for configurations with a leftmost black cell
+
+The kit's proofs of these two statements use `Classical.choice` through its
+pigeonhole lemma and a classical eventual-constancy step. These copies keep the
+kit's statements and definitions and use only `propext` and `Quot.sound`. -/
+
+private theorem fc_between_periodic {x : Int → Bool} {j k : Int} (hjk : j + 1 < k)
+    (hj : EventuallyPeriodic fun t => Rule30Realization.evol x t j)
+    (hk : EventuallyPeriodic fun t => Rule30Realization.evol x t k) :
+    EventuallyPeriodic fun t => Rule30Realization.evol x t (j + 1) := by
+  obtain ⟨T, P, hP, hpj, hpk⟩ := Rule30Jen.common_period hj hk
+  obtain ⟨m, n, hmn, -, he⟩ := Rule30UOR.KitConstructive.pigeonhole (k - j - 1).toNat
+    (fun m => Rule30FiniteConfigs.strip x j k (T + m * P))
+    (fun m => by simp only [Rule30FiniteConfigs.strip, List.length_map, List.length_range])
+  refine ⟨T + m * P, (n - m) * P, Nat.mul_pos (by omega) hP, fun t ht => ?_⟩
+  have hmul : m * P ≤ n * P := Nat.mul_le_mul_right _ (by omega)
+  have key := Rule30FiniteConfigs.strip_agree (by omega) he (fun r => ⟨?_, ?_⟩)
+    (t - (T + m * P)) (j + 1) (by omega) (by omega)
+  · rw [show T + m * P + (t - (T + m * P)) = t by omega,
+      show T + n * P + (t - (T + m * P)) = t + (n - m) * P by rw [Nat.sub_mul]; omega] at key
+    exact key.symm
+  · rw [show T + n * P + r = (T + m * P + r) + (n - m) * P by rw [Nat.sub_mul]; omega]
+    exact (periodic_mul (f := fun t => Rule30Realization.evol x t j) hpj (n - m) _ (by omega)).symm
+  · rw [show T + n * P + r = (T + m * P + r) + (n - m) * P by rw [Nat.sub_mul]; omega]
+    exact (periodic_mul (f := fun t => Rule30Realization.evol x t k) hpk (n - m) _ (by omega)).symm
+
+private theorem fc_jen {x : Int → Bool} {lo : Int} (hlo : x lo = true)
+    (hzero : ∀ p, p < lo → x p = false) (j k : Int) (hjk : j ≠ k) :
+    ¬ (EventuallyPeriodic (fun t => Rule30Realization.evol x t j) ∧
+      EventuallyPeriodic (fun t => Rule30Realization.evol x t k)) := by
+  have lt_case : ∀ a b : Int, a < b → (EventuallyPeriodic fun t => Rule30Realization.evol x t a) →
+      (EventuallyPeriodic fun t => Rule30Realization.evol x t b) → False := by
+    intro a b hab ha hb
+    by_cases hadj : b = a + 1
+    · subst hadj; exact Rule30FiniteConfigs.not_adjacent hlo hzero a ha hb
+    · exact Rule30FiniteConfigs.not_adjacent hlo hzero a ha (fc_between_periodic (by omega) ha hb)
+  rintro ⟨hj, hk⟩
+  rcases Int.lt_or_gt_of_ne hjk with h | h
+  · exact lt_case j k h hj hk
+  · exact lt_case k j h hk hj
+
+private theorem fc_no_column_eventually_constant {x : Int → Bool} {lo : Int} (hlo : x lo = true)
+    (hzero : ∀ p, p < lo → x p = false) (i : Int) :
+    ¬ ∃ T b, ∀ t, T ≤ t → Rule30Realization.evol x t i = b := by
+  rintro ⟨T, b, h⟩
+  cases b
+  · have hmono : ∀ t, T ≤ t → Rule30Realization.evol x t (i + 1) = true →
+        Rule30Realization.evol x (t + 1) (i + 1) = true := by
+      intro t ht h1
+      show rule (Rule30Realization.evol x t (i + 1 - 1)) (Rule30Realization.evol x t (i + 1))
+        (Rule30Realization.evol x t (i + 1 + 1)) = true
+      rw [show i + 1 - 1 = i by omega, h t ht, h1]
+      rfl
+    have hi := Rule30Prize.eventuallyPeriodic_of_const h
+    have hblack : ¬ ∃ t₀, T ≤ t₀ ∧ Rule30Realization.evol x t₀ (i + 1) = true := by
+      rintro ⟨t₀, ht₀, hf⟩
+      have hk : ∀ k, Rule30Realization.evol x (t₀ + k) (i + 1) = true := by
+        intro k
+        induction k with
+        | zero => exact hf
+        | succ k ih => exact hmono (t₀ + k) (by omega) ih
+      refine Rule30FiniteConfigs.not_adjacent hlo hzero i hi
+        (Rule30Prize.eventuallyPeriodic_of_const (T := t₀) (b := true) ?_)
+      intro t ht
+      have := hk (t - t₀)
+      rwa [show t₀ + (t - t₀) = t by omega] at this
+    refine Rule30FiniteConfigs.not_adjacent hlo hzero i hi
+      (Rule30Prize.eventuallyPeriodic_of_const (T := T) (b := false) ?_)
+    intro t ht
+    cases hft : Rule30Realization.evol x t (i + 1)
+    · rfl
+    · exact absurd ⟨t, ht, hft⟩ hblack
+  · have hleft : ∀ t, T ≤ t → Rule30Realization.evol x t (i - 1) = false := by
+      intro t ht
+      have e := h (t + 1) (by omega)
+      have hc : Rule30Realization.evol x (t + 1) i = rule (Rule30Realization.evol x t (i - 1))
+          (Rule30Realization.evol x t i) (Rule30Realization.evol x t (i + 1)) := rfl
+      rw [hc, h t ht] at e
+      revert e
+      cases Rule30Realization.evol x t (i - 1) <;> cases Rule30Realization.evol x t (i + 1) <;>
+        decide
+    refine Rule30FiniteConfigs.not_adjacent hlo hzero (i - 1)
+      (Rule30Prize.eventuallyPeriodic_of_const hleft) ?_
+    rw [show i - 1 + 1 = i by omega]
+    exact Rule30Prize.eventuallyPeriodic_of_const h
 
 /-- The first diagonal settles at a positive time (it is white at `0` and black from `1` on). -/
 theorem settle_one_pos : 1 ≤ settle 1 := by
@@ -85,7 +172,7 @@ theorem evol_ezero : ∀ t p, evol ezero t p = Ecell t p := by
 /-- **No column of the zero-state is eventually constant.** -/
 theorem zero_no_constant_column (i : Int) : ¬ ∃ T b, ∀ t, T ≤ t → Ecell t i = b := by
   rintro ⟨T, b, h⟩
-  exact Rule30FiniteConfigs.no_column_eventually_constant ezero_edge ezero_left i
+  exact fc_no_column_eventually_constant ezero_edge ezero_left i
     ⟨T, b, fun t ht => by rw [evol_ezero]; exact h t ht⟩
 
 /-- **Jen's theorem for the zero-state.** -/
@@ -94,7 +181,7 @@ theorem zero_jen (j k : Int) (hjk : j ≠ k) :
   have e : ∀ i, (fun t => Ecell t i) = (fun t => evol ezero t i) := fun i => by
     funext t; rw [evol_ezero]
   rw [e j, e k]
-  exact Rule30FiniteConfigs.jen ezero_edge ezero_left j k hjk
+  exact fc_jen ezero_edge ezero_left j k hjk
 
 /-- **Masked Jen for the zero-state.** -/
 theorem zero_masked_jen (i : Int) {T P : Nat} (hP : 0 < P)
