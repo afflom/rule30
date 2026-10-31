@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "periodic-center-coupling"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t)))) (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t) (nat 1)) (app (const r30.observation::center-gate) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.periodic_center_coupling"
+
+[[form]]
+id = "periodic-center-coupling"
+channel = "math"
+surface = "periodiccentercoupling"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name periodiccentercoupling) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -2511,3 +2511,61 @@ one per step as the front advances under a clean center
 (`rightmost_left_profile`), so by itself it cannot force a rank increase. Any
 descent argument must still constrain the seeded sources on admissible
 successor windows. Problem 1 remains unproved.
+
+### The center coupling law, and four finite negatives
+
+**Coupling law.** `defect_source_law` and `collision_center_of_agree` combine
+into one exact step at the center. With the center agreeing at `t`,
+
+    leftDefect Q (t+1) 0 = leftDefect Q t 1  XOR  centerGate Q t,
+    centerGate Q t       = (not center t) AND rightDefect Q t 1
+
+(`center_defect_coupling`). A black center passes the left column-one defect
+through unchanged and admits nothing from the right; a white center admits the
+right column-one defect. Under a hypothetical center period, for every
+`t >= T` and `Q = mP`:
+
+* `periodic_black_no_arrival`: no left front arrives on a black phase;
+* `periodic_white_mirror`: on a white phase the left and right column-one
+  defects are equal;
+* `periodic_center_coupling`: in one equation, `leftDefect = centerGate`.
+
+`center_periodic_iff_coupling` proves the converse: one agreeing pair of times
+`T, T+P` together with the coupling at every later time integrates to
+`CenterPeriodic T P`. The coupling is therefore an exact restatement of the
+lag-`P` difference of the fixed-point equation `Phi c = c`, not a refutation
+of it. Both halves are determined by the center sequence, so the law says a
+periodic center must drive its two neighbouring columns into an exact
+black/white-gated mirror forever. Jen's theorem makes each of those columns
+aperiodic; the remaining obligation is to exclude their aperiodic
+compensation. Nothing here does so.
+
+**Finite negatives.** `scripts/diagnose_front_coupling.py` computes the
+seeded orbit for `Q <= 64`, `t < 1024`, and checks the coupling law at every
+agreeing step. It also records four measurements that rule out candidate
+descent quantities. These are diagnostics only, not theorem premises.
+
+1. *q-adic order is noise.* The histogram of `qOrder(E_t)` over all `(Q, t)`
+   is 49007, 12399, 3113, 757, 192, 46, 17, 5: each level is one quarter of
+   the previous one, independent of `Q`. That is the distribution of `v_q` for
+   a uniformly random binary polynomial (`q` is irreducible of degree two).
+   `R_t = t + Q - 2 qOrder(E_t)` is therefore `t + Q - O(1)`; the budget
+   `k + 2 v_q(E) <= deg E` is slack by about `t`, and no descent built on
+   `qOrder`, page charge or carry ledgers can see the front.
+2. *Front slack is not monotone.* `Phi_t = R_t - k_t` increases on most
+   steps of every class: 11845 of 14828 black advances, 7119 of 8991 white
+   advances, and 2155 of 4541 white jumps are positive.
+3. *Evaluation points carry nothing.* The observer polynomial can be
+   evaluated at `0` (the center itself), at `1` (row parity: a flat 2x2 table
+   against center agreement, autocorrelation 0.48-0.52 at every lag) and at
+   `omega, omega^2` (Frobenius conjugates, so the same `q`-residue as in 1).
+   No constant evaluation point resolves the center.
+4. *The arrival schedule is unstructured.* Arrivals (`k_t = 1`) have density
+   0.251 at every `Q`; black-center arrivals cross into the center 7467 of
+   7467 times and white-center arrivals cross exactly when the right
+   column-one defect vanishes (4448 against 4541), as the law requires. The
+   right column-one defect at arrival is a coin.
+
+Problem 1 remains unproved. Any closing argument must produce an invariant of
+the single-seed orbit that the gated mirror would violate; the four families
+above are now excluded as that invariant.

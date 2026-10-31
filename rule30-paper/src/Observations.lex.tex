@@ -1732,5 +1732,45 @@ Close the goal with \(\lexeme{r30.observation::observer-front-page-charge}(a, Q,
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{center-defect-coupling}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(leftdefect(Q, t, 0) = false\), then \(leftdefect(Q, t + 1, 0) = bxor(leftdefect(Q, t, 1), centergate(Q, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-defect-coupling}(Q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-center-coupling}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(leftdefect(m * P, t, 1) = centergate(m * P, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-center-coupling}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-black-no-arrival}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = true\), then \(leftdefect(m * P, t, 1) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-black-no-arrival}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-white-mirror}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(center(t) = false\), then \(leftdefect(m * P, t, 1) = rightdefect(m * P, t, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-white-mirror}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-periodic-of-coupling}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(center(T + P) = center(T)\), then if for every natural number \(t\), if \(T ≤ t\), then \(leftdefect(P, t, 1) = centergate(P, t)\), then \(centerperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-of-coupling}(T, P)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -1512,4 +1512,39 @@ For every natural number \(a\) and natural number \(Q\) and natural number \(t\)
 \begin{proof}
 The goal follows from \(\operatorname{observerfrontpagecharge}(a, Q, t, p, o)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:center-defect-coupling}
+For every natural number \(Q\) and natural number \(t\), if \(\operatorname{leftdefect}(Q, t, 0) = \operatorname{false}\), then \(\operatorname{leftdefect}(Q, t + 1, 0) = \operatorname{bxor}(\operatorname{leftdefect}(Q, t, 1), \operatorname{centergate}(Q, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerdefectcoupling}(Q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-center-coupling}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{leftdefect}(m \cdot P, t, 1) = \operatorname{centergate}(m \cdot P, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodiccentercoupling}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-black-no-arrival}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{center}(t) = \operatorname{true}\), then \(\operatorname{leftdefect}(m \cdot P, t, 1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicblacknoarrival}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-white-mirror}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{center}(t) = \operatorname{false}\), then \(\operatorname{leftdefect}(m \cdot P, t, 1) = \operatorname{rightdefect}(m \cdot P, t, 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicwhitemirror}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-periodic-of-coupling}
+For every natural number \(T\) and natural number \(P\), if \(\operatorname{center}(T + P) = \operatorname{center}(T)\), then if for every natural number \(t\), if \(T \le t\), then \(\operatorname{leftdefect}(P, t, 1) = \operatorname{centergate}(P, t)\), then \(\operatorname{centerperiodic}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerperiodicofcoupling}(T, P)\).
+\end{proof}
 \end{document}

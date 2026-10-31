@@ -4164,4 +4164,127 @@ theorem observer_front_page_charge (a Q t p o : Nat)
   simp only [binaryDegree] at hb
   omega
 
+/-! ## The center coupling law
+
+With the center in agreement at time `t`, the next center defect is the left
+column-one defect plus the right column-one defect admitted through a white
+center (`defect_source_law`, `collision_center_of_agree`). A black center admits
+no right defect and passes the left defect unchanged. An eventually periodic
+center therefore needs, at every later time, no left arrival on a black phase and
+an exact left/right mirror on every white phase. Conversely that coupling, from
+one agreeing pair of times, integrates to a periodic center. This is an exact
+restatement of the fixed-point equation, not a refutation of it. -/
+
+/-- The right column-one defect that a white center admits. -/
+def centerGate (Q t : Nat) : Bool := (!Rule30UOR.Core.center t) && rightDefect Q t 1
+
+private theorem leftDefect_zero_eq (Q t : Nat) :
+    leftDefect Q t 0 = xor (Rule30UOR.Core.center (t + Q)) (Rule30UOR.Core.center t) := by
+  simp only [leftDefect, defect, difference, Int.natCast_zero, Int.neg_zero]
+  rw [Rule30UOR.Scale.center_eq_kit, Rule30UOR.Scale.center_eq_kit]
+  rfl
+
+private theorem center_defect_coupling_xor (Q t : Nat) (h0 : leftDefect Q t 0 = false) :
+    leftDefect Q (t + 1) 0 = xor (leftDefect Q t 1) (centerGate Q t) := by
+  have h0' : defect Q t 0 = false := by
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using h0
+  have hlaw := defect_source_law Q t 0
+  rw [collision_center_of_agree Q t h0', h0'] at hlaw
+  simp only [show (0 : Int) - 1 = -1 by omega, show (0 : Int) + 1 = 1 by omega] at hlaw
+  have hL : defect Q t (-1) = leftDefect Q t 1 := by
+    simp only [leftDefect, Int.natCast_one]
+  have hR : defect Q t 1 = rightDefect Q t 1 := by
+    simp only [rightDefect, rightCell, defect, difference, Int.natCast_one]
+  have hC : Rule30Prize.center t = Rule30UOR.Core.center t :=
+    (Rule30UOR.Scale.center_eq_kit t).symm
+  rw [hL, hR, hC] at hlaw
+  have hgoal : leftDefect Q (t + 1) 0 = defect Q (t + 1) 0 := by
+    simp only [leftDefect, Int.natCast_zero, Int.neg_zero]
+  rw [hgoal, hlaw]
+  unfold centerGate rule
+  cases leftDefect Q t 1 <;> cases rightDefect Q t 1 <;> cases Rule30UOR.Core.center t <;> rfl
+
+/-- **Coupling law.** Under center agreement at `t`, the next center defect is the
+left column-one defect plus the gated right column-one defect. -/
+theorem center_defect_coupling (Q t : Nat) (h0 : leftDefect Q t 0 = false) :
+    leftDefect Q (t + 1) 0 =
+      Rule30UOR.Core.bxor (leftDefect Q t 1) (centerGate Q t) := by
+  rw [Rule30UOR.Scale.bxor_eq]
+  exact center_defect_coupling_xor Q t h0
+
+private theorem kit_periodic {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P) :
+    ∀ t, T ≤ t → Rule30Prize.center (t + P) = Rule30Prize.center t := by
+  intro t ht
+  rw [← Rule30UOR.Scale.center_eq_kit, ← Rule30UOR.Scale.center_eq_kit]
+  exact hc t ht
+
+/-- Under a hypothetical center period the left column-one defect equals the gated
+right column-one defect at every later time. -/
+theorem periodic_center_coupling (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    leftDefect (m * P) t 1 = centerGate (m * P) t := by
+  have h0 : leftDefect (m * P) t 0 = false := by
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
+      Rule30UOR.DefectFront.center_defect_zero (kit_periodic hc) m t ht
+  have h1 : leftDefect (m * P) (t + 1) 0 = false := by
+    simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
+      Rule30UOR.DefectFront.center_defect_zero (kit_periodic hc) m (t + 1) (Nat.le_succ_of_le ht)
+  have hl := center_defect_coupling_xor (m * P) t h0
+  rw [h1] at hl
+  revert hl
+  cases leftDefect (m * P) t 1 <;> cases centerGate (m * P) t <;> decide
+
+/-- No left front arrives on a black phase of a periodic center. -/
+theorem periodic_black_no_arrival (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
+    (hb : Rule30UOR.Core.center t = true) :
+    leftDefect (m * P) t 1 = false := by
+  rw [periodic_center_coupling T P m t hc ht]
+  simp [centerGate, hb]
+
+/-- On a white phase of a periodic center the two column-one defects mirror. -/
+theorem periodic_white_mirror (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
+    (hw : Rule30UOR.Core.center t = false) :
+    leftDefect (m * P) t 1 = rightDefect (m * P) t 1 := by
+  rw [periodic_center_coupling T P m t hc ht]
+  simp [centerGate, hw]
+
+/-- **Exact equivalence.** A center period from `T` is one agreeing pair of
+times together with the coupling at every later time. -/
+theorem center_periodic_iff_coupling (T P : Nat) :
+    Rule30UOR.Scale.CenterPeriodic T P ↔
+      (Rule30UOR.Core.center (T + P) = Rule30UOR.Core.center T ∧
+        ∀ t, T ≤ t → leftDefect P t 1 = centerGate P t) := by
+  constructor
+  · intro hc
+    refine ⟨hc T (Nat.le_refl T), fun t ht => ?_⟩
+    have := periodic_center_coupling T P 1 t hc ht
+    simpa only [Nat.one_mul] using this
+  · rintro ⟨hbase, hcouple⟩
+    intro t ht
+    obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le ht
+    induction n with
+    | zero => simpa using hbase
+    | succ n ih =>
+      have ih' := ih (Nat.le_add_right T n)
+      have h0 : leftDefect P (T + n) 0 = false := by
+        rw [leftDefect_zero_eq, ih']
+        simp
+      have hl := center_defect_coupling_xor P (T + n) h0
+      rw [hcouple (T + n) (Nat.le_add_right T n), Bool.xor_self, leftDefect_zero_eq] at hl
+      rw [show T + (n + 1) = T + n + 1 by omega,
+        show T + n + 1 + P = T + n + P + 1 by omega]
+      rw [show T + n + 1 + P = T + n + P + 1 by omega] at hl
+      revert hl
+      cases Rule30UOR.Core.center (T + n + P + 1) <;>
+        cases Rule30UOR.Core.center (T + n + 1) <;> decide
+
+/-- The converse direction, stated for the LexLean surface. -/
+theorem center_periodic_of_coupling (T P : Nat)
+    (hbase : Rule30UOR.Core.center (T + P) = Rule30UOR.Core.center T)
+    (hcouple : ∀ t, T ≤ t → leftDefect P t 1 = centerGate P t) :
+    Rule30UOR.Scale.CenterPeriodic T P :=
+  (center_periodic_iff_coupling T P).2 ⟨hbase, hcouple⟩
+
 end Rule30UOR.WittDefect
