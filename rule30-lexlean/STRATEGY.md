@@ -2938,7 +2938,8 @@ Rule-150 propagation), so the edge diagonal is the finite XOR over `m < t` of
     center t = ¬(edgeFormula t t ⊕ interiorDiagonal t)      (`center_eq_not_formula_xor_interior`).
 
 Everything explicit about the orbit is now on one side: the edge events (periodic) propagated by
-the trinomial automaton (2-automatic). `aperiodic-compensation` reads: the interior diagonal, the
+the trinomial automaton (each term a decided value of a 2-automaton on `(n, d)`; whether the sum
+`t ↦ edgeFormula t t` is itself 2-automatic is not proved and is the natural next exact theorem). `aperiodic-compensation` reads: the interior diagonal, the
 bulk carries propagated by the same automaton, is not eventually periodic against this
 background. The bulk carries are the adjacent black pairs strictly inside the pattern; the leaf is
 a statement about their parity on the gasket of every row, and nothing else is left to separate.

@@ -23,6 +23,7 @@ depends = ["problem1"]
 id = "aperiodic-compensation"
 status = "open"
 statement = "Under a hypothetical center period, the two column-one defects (each aperiodic by Jen) cannot satisfy the gated mirror forever. This is the remaining obligation."
+lean = "Rule30UOR.EdgeSplit.InteriorAgainstEdge"
 since = "2026-10-28"
 note = "Every proved reduction ends here. Exact form (ledger-diagonal, edge-interior-split, edge-diagonal-formula): center t = not (edgeFormula t t XOR interiorDiagonal t), where edgeFormula is an explicit 2-automatic expression (the periodic edge events propagated by the trinomial automaton) and interiorDiagonal is the diagonal of the ledger of the bulk carries, the adjacent black pairs strictly inside the pattern, propagated by the same automaton. The claim is that interiorDiagonal is not eventually periodic against that background. Shape fixed by left-defect-sourcing: under a periodic center the entire left defect field is a function of the right column-one defect sequence and the center. The closing statement is that the orbit's self-referential equation has no periodic solution. Decision point first-failure-2adic (refuted): the first failing comparison is fair-bit random in every 2-adic class, so the obstruction is exact, not statistical. No closing argument is known."
 depends = ["recurrent-central-collision", "coupling-law"]
@@ -254,7 +255,7 @@ status = "proved"
 statement = "The edge diagonal is an explicit 2-automatic expression: edgeLedger t is the Rule-150 propagation of the edge events, so edgeDiagonal t = edgeFormula t t, the XOR over m < t of trinomialParity (t-1-m) (t-2m-1) XOR [rdiag 1 m] trinomialParity (t-1-m) (t-2); hence center t = not (edgeFormula t t XOR interiorDiagonal t)."
 lean = "Rule30UOR.EdgeSplit.center_eq_not_formula_xor_interior"
 since = "2026-10-31"
-note = "Rule30UOR.EdgeSplit: phiLinearPow_xor, phiLinearPow_shiftLeft, testBit_phiLinearPow_shift, edgeTerm, edgeLedgerSum, edgeLedger_eq_sum, edgeFormula, testBit_edgeLedgerSum, edgeDiagonal_eq_formula, center_eq_not_formula_xor_interior, with Ledger.trinomialParity (testBit_phiLinPow_eq_trinomialParity). Everything explicit about the orbit is on one side; aperiodic-compensation is the aperiodicity of the interior diagonal against this background."
+note = "Rule30UOR.EdgeSplit: phiLinearPow_xor, phiLinearPow_shiftLeft, testBit_phiLinearPow_shift, edgeTerm, edgeLedgerSum, edgeLedger_eq_sum, edgeFormula, testBit_edgeLedgerSum, edgeDiagonal_eq_formula, center_eq_not_formula_xor_interior, with Ledger.trinomialParity (testBit_phiLinPow_eq_trinomialParity). The edge diagonal is an explicit finite XOR of trinomial parities over the (periodic) edge events; each term is a decided value of a 2-automaton on (n, d). That the sequence t -> edgeFormula t t is itself 2-automatic is not proved here (a sum over m of automatic terms is not automatic in general); it is the natural next exact theorem. aperiodic-compensation is the aperiodicity of the interior diagonal against this background."
 depends = ["edge-interior-split"]
 
 [[claim]]

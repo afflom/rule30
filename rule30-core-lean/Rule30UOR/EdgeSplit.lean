@@ -358,10 +358,60 @@ theorem interiorDiagonal_eq_formula (t : Nat) : interiorDiagonal t = interiorFor
   unfold interiorDiagonal
   rw [interiorLedger_eq_sum, testBit_interiorLedgerSum]
 
+/-- The right pair alternates: `rdiag 1 t = [t odd]`, so the edge source is fully explicit. -/
+theorem rdiag_one_eq_parity : ∀ t, rdiag 1 t = decide (t % 2 = 1) := by
+  intro t
+  rw [Rule30UOR.Right.rdiag_eq_R]
+  induction t with
+  | zero => rfl
+  | succ t ih =>
+    rw [Ruliology.CellularAutomata.Rule30Diagonals.R_one_succ, ih]
+    rcases Nat.mod_two_eq_zero_or_one t with h | h
+    · rw [h, show (t + 1) % 2 = 1 by cfomega]; rfl
+    · rw [h, show (t + 1) % 2 = 0 by cfomega]; rfl
+
+/-- The edge term with the right pair made explicit. -/
+theorem edgeTerm_eq (t m : Nat) :
+    edgeTerm t m = bxor (if 2 * m + 1 ≤ t then trinomialParity (t - 1 - m) (t - (2 * m + 1)) else false)
+      (if m % 2 = 1 then (if 2 ≤ t then trinomialParity (t - 1 - m) (t - 2) else false) else false) := by
+  unfold edgeTerm
+  rw [rdiag_one_eq_parity]
+  rcases Nat.mod_two_eq_zero_or_one m with h | h <;> rw [h] <;> rfl
+
+/-- A center period `P` from `T`, in the carries: the interior parity, read against the
+edge parity, repeats with period `P`. -/
+def InteriorAgainstEdge (T P : Nat) : Prop :=
+  ∀ t, T ≤ t → bxor (interiorFormula (t + P) (t + P)) (edgeFormula (t + P) (t + P)) =
+    bxor (interiorFormula t t) (edgeFormula t t)
+
 /-- **The center, fully explicit in the carries**:
 `center t = ¬(edgeFormula t t ⊕ interiorFormula t t)`. -/
 theorem center_eq_not_formulas (t : Nat) :
     center t = !(bxor (edgeFormula t t) (interiorFormula t t)) := by
   rw [center_eq_not_formula_xor_interior, interiorDiagonal_eq_formula]
+
+/-- **`aperiodic-compensation` in the carries**: a center period is exactly a period of the
+interior parity against the edge parity. -/
+theorem centerPeriodic_iff_interiorAgainstEdge (T P : Nat) :
+    Rule30UOR.Scale.CenterPeriodic T P ↔ InteriorAgainstEdge T P := by
+  unfold Rule30UOR.Scale.CenterPeriodic InteriorAgainstEdge
+  constructor
+  · intro h t ht
+    have := h t ht
+    rw [center_eq_not_formulas, center_eq_not_formulas] at this
+    have this' := Bool.not_inj this
+    rcases Bool.eq_false_or_eq_true (interiorFormula (t + P) (t + P)) with h1 | h1 <;>
+      rcases Bool.eq_false_or_eq_true (edgeFormula (t + P) (t + P)) with h2 | h2 <;>
+      rcases Bool.eq_false_or_eq_true (interiorFormula t t) with h3 | h3 <;>
+      rcases Bool.eq_false_or_eq_true (edgeFormula t t) with h4 | h4 <;>
+      rw [h1, h2, h3, h4] at this' ⊢ <;> first | rfl | exact absurd this' (by decide)
+  · intro h t ht
+    rw [center_eq_not_formulas, center_eq_not_formulas]
+    have := h t ht
+    rcases Bool.eq_false_or_eq_true (interiorFormula (t + P) (t + P)) with h1 | h1 <;>
+      rcases Bool.eq_false_or_eq_true (edgeFormula (t + P) (t + P)) with h2 | h2 <;>
+      rcases Bool.eq_false_or_eq_true (interiorFormula t t) with h3 | h3 <;>
+      rcases Bool.eq_false_or_eq_true (edgeFormula t t) with h4 | h4 <;>
+      rw [h1, h2, h3, h4] at this ⊢ <;> first | rfl | exact absurd this (by decide)
 
 end Rule30UOR.EdgeSplit

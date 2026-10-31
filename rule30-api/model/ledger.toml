@@ -19,7 +19,7 @@ id = "aperiodic-compensation"
 level = "open"
 statement = "Under a hypothetical center period, the two column-one defects (each aperiodic by Jen) cannot satisfy the gated mirror forever. This is the remaining obligation."
 feature = "interfaces/aperiodic-compensation.md"
-evidence = "register: open"
+evidence = "register: open (Rule30UOR.EdgeSplit.InteriorAgainstEdge)"
 
 [[claim]]
 id = "q-adic-descent"

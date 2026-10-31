@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-periodic-iff-interior-against-edge"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const r30.scale::center-periodic) (local T) (local P)) (app (const r30.observation::interior-against-edge) (local T) (local P))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.centerPeriodic_iff_interiorAgainstEdge"
+
+[[form]]
+id = "center-periodic-iff-interior-against-edge"
+channel = "math"
+surface = "centerperiodiciffinterioragainstedge"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerperiodiciffinterioragainstedge) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
