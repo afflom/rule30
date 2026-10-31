@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "response-definition"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::response) (local t) (local k)) (app (const r30.scale::window) (local t) (app (const r30.scale::twopow) (local k)) (nat 0))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.response.eq_1"
+
+[[form]]
+id = "response-definition"
+channel = "math"
+surface = "responsedefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name responsedefinition) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

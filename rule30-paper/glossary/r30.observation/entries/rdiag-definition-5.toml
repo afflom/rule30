@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-definition-5"
+category = "proof-constant"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat)) (explicit n1 (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (app (const lexlean.std.nat::succ) (app (const lexlean.std.nat::succ) (local n1))) (app (const lexlean.std.nat::succ) (local s))) (app (const r30.local::bxor) (app (const r30.right::rdiag) (app (const lexlean.std.nat::succ) (app (const lexlean.std.nat::succ) (local n1))) (local s)) (app (const lexlean.std.bool::or) (app (const r30.right::rdiag) (app (const lexlean.std.nat::succ) (local n1)) (local s)) (app (const r30.right::rdiag) (local n1) (local s))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rdiag.eq_5"
+
+[[form]]
+id = "rdiag-definition-5"
+channel = "math"
+surface = "rdiagdefinition5"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagdefinition5) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

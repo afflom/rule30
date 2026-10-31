@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "twopow-pos"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.std.nat::lt) (nat 0) (app (const r30.scale::twopow) (local k))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.twopow_pos"
+
+[[form]]
+id = "twopow-pos"
+channel = "math"
+surface = "twopowpos"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name twopowpos) (paren (seq (slot 0))))"

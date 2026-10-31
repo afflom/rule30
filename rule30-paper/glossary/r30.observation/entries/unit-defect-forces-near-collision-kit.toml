@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "unit-defect-forces-near-collision-kit"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const lexlean.core::eq) (app (const r30.observation::left-adjacent-defect) (local Q) (local t)) (const lexlean.std.bool::true))) (explicit ha (app (const lexlean.core::eq) (app (const r30.right::center-col) (app (const lexlean.std.nat::add) (local t) (local r))) (const lexlean.std.bool::true))) (explicit hb (app (const lexlean.core::eq) (app (const r30.right::center-col) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::add) (local t) (local r)) (local Q))) (const lexlean.std.bool::true)))) (app (const r30.observation::near-collision) (local Q) (local t) (app (const lexlean.std.nat::add) (local r) (nat 1)) (app (const lexlean.std.nat::mul) (nat 2) (app (const lexlean.std.nat::add) (local r) (nat 1))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.CentralCollision"
+name = "Rule30UOR.CentralCollision.unit_defect_forces_near_collision_kit"
+
+[[form]]
+id = "unit-defect-forces-near-collision-kit"
+channel = "math"
+surface = "unitdefectforcesnearcollisionkit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name unitdefectforcesnearcollisionkit) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

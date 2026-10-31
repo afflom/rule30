@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "twopow-definition"
+category = "proof-constant"
+signature = "(app (const lexlean.core::eq) (app (const r30.scale::twopow) (nat 0)) (nat 1))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.twopow.eq_1"
+
+[[form]]
+id = "twopow-definition"
+channel = "math"
+surface = "twopowdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name twopowdefinition)"

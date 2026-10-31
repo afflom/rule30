@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "maskcount-definition"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.witt::mask-count) (local t0) (nat 0)) (const lexlean.std.bool::false)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.maskcount.eq_1"
+
+[[form]]
+id = "maskcount-definition"
+channel = "math"
+surface = "maskcountdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskcountdefinition) (paren (seq (slot 0))))"

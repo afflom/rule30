@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-kit"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const r30.right::center-col) (local t))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Scale"
+name = "Rule30UOR.Scale.center_eq_kit"
+
+[[form]]
+id = "center-eq-kit"
+channel = "math"
+surface = "centereqkit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqkit) (paren (seq (slot 0))))"

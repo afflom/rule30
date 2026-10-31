@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-cross-carry-eq-definition"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.witt::bit-crosscarry-eq) (local a) (local b) (local j) (local c)) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit) (app (const r30.witt::cross-carry) (local a) (local b)) (local j)) (app (const r30.witt::bton) (local c)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.BitCrossCarryEq.eq_1"
+
+[[form]]
+id = "bit-cross-carry-eq-definition"
+channel = "math"
+surface = "bitcrosscarryeqdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitcrosscarryeqdefinition) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

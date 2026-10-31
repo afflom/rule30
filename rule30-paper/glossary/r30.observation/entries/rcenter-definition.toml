@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rcenter-definition"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rcenter) (local t)) (app (const r30.right::rdiag) (local t) (local t))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rcenter.eq_1"
+
+[[form]]
+id = "rcenter-definition"
+channel = "math"
+surface = "rcenterdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rcenterdefinition) (paren (seq (slot 0))))"

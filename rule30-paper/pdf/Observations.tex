@@ -330,6 +330,174 @@ For every natural number \(h1\) and natural number \(s\), \(\operatorname{wittwi
 \begin{proof}
 The goal follows from \(\operatorname{winwittdefinition2}(h1, s)\).
 \end{proof}
+\begin{lemma}
+\label{ll:observations:bit-carry-eq-definition}
+For every natural number \(n\) and natural number \(j\) and truth value \(b\), \(\operatorname{bitcarryeq}(n, j, b) = (\operatorname{wittbit}(\operatorname{wittcarry}(n), j) = \operatorname{bton}(b))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{bitcarryeqdefinition}(n, j, b)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:bit-cross-carry-eq-definition}
+For every natural number \(a\) and natural number \(b\) and natural number \(j\) and truth value \(c\), \(\operatorname{bitcrosscarryeq}(a, b, j, c) = (\operatorname{wittbit}(\operatorname{crosscarry}(a, b), j) = \operatorname{bton}(c))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{bitcrosscarryeqdefinition}(a, b, j, c)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:bit-cross-carry-xor-eq-definition}
+For every natural number \(a\) and natural number \(b\) and natural number \(j1\) and natural number \(j2\) and truth value \(c\), \(\operatorname{bitcrosscarryxoreq}(a, b, j1, j2, c) = (\operatorname{bxor}(\operatorname{rowbit}(\operatorname{crosscarry}(a, b), j1), \operatorname{rowbit}(\operatorname{crosscarry}(a, b), j2)) = c)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{bitcrosscarryxoreqdefinition}(a, b, j1, j2, c)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:bit-frob-defect-eq-definition}
+For every natural number \(k\) and natural number \(y\) and natural number \(j\) and truth value \(b\), \(\operatorname{bitfrobdefecteq}(k, y, j, b) = (\operatorname{wittbit}(\operatorname{frobdefect}(k, y), j) = \operatorname{bton}(b))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{bitfrobdefecteqdefinition}(k, y, j, b)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:bit-win-witt-eq-definition}
+For every natural number \(t0\) and natural number \(m\) and natural number \(j\) and truth value \(b\), \(\operatorname{bitwinwitteq}(t0, m, j, b) = (\operatorname{wittbit}(\operatorname{wittwin}(t0, m), j) = \operatorname{bton}(b))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{bitwinwitteqdefinition}(t0, m, j, b)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:frob-defect-definition}
+For every natural number \(k\) and natural number \(y\), \(\operatorname{frobdefect}(k, y) = \operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{wittscale}(k, y)), \operatorname{wittscale}(k, \operatorname{wittcarry}(y)))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{frobdefectdefinition}(k, y)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:maskcount-definition}
+For every natural number \(t0\), \(\operatorname{maskcount}(t0, 0) = \operatorname{false}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{maskcountdefinition}(t0)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:maskparity-definition}
+For every natural number \(t\) and natural number \(k\), \(\operatorname{maskparity}(t, k) = \operatorname{maskcount}(t, \operatorname{twopow}(k))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{maskparitydefinition}(t, k)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:rcenter-definition}
+For every natural number \(t\), \(\operatorname{rcenter}(t) = \operatorname{rdiag}(t, t)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rcenterdefinition}(t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:rdiag-definition}
+\(\operatorname{rdiag}(0, 0) = \operatorname{true}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rdiagdefinition}\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:rdiag-definition-2}
+For every natural number \(n\), \(\operatorname{rdiag}(\operatorname{succ}(n), 0) = \operatorname{false}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rdiagdefinition2}(n)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:rdiag-definition-3}
+For every natural number \(s\), \(\operatorname{rdiag}(0, \operatorname{succ}(s)) = \operatorname{true}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rdiagdefinition3}(s)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:rdiag-definition-4}
+For every natural number \(s\), \(\operatorname{rdiag}(\operatorname{succ}(0), \operatorname{succ}(s)) = \operatorname{not}(\operatorname{rdiag}(\operatorname{succ}(0), s))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rdiagdefinition4}(s)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:rdiag-definition-5}
+For every natural number \(s\) and natural number \(n1\), \(\operatorname{rdiag}(\operatorname{succ}(\operatorname{succ}(n1)), \operatorname{succ}(s)) = \operatorname{bxor}(\operatorname{rdiag}(\operatorname{succ}(\operatorname{succ}(n1)), s), \operatorname{rdiag}(\operatorname{succ}(n1), s) \operatorname{or} \operatorname{rdiag}(n1, s))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rdiagdefinition5}(s, n1)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:response-definition}
+For every natural number \(t\) and natural number \(k\), \(\operatorname{response}(t, k) = \operatorname{window}(t, \operatorname{twopow}(k), 0)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{responsedefinition}(t, k)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:rule-definition}
+For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(\operatorname{rule}(a, b, c) = \operatorname{bxor}(a, b \operatorname{or} c)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{ruledefinition}(a, b, c)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:twopow-definition}
+\(\operatorname{twopow}(0) = 1\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{twopowdefinition}\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:window60-definition}
+For every natural number \(h1\) and integer \(h2\), \(\operatorname{window}(h1, 0, h2) = \operatorname{false}\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{window60definition}(h1, h2)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:witt-bit-bool-definition}
+For every natural number \(y\) and natural number \(j\), \(\operatorname{wittbitbool}(y, j) = \operatorname{rowbit}(y, j)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{wittbitbooldefinition}(y, j)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:row-center-definition}
+For every natural number \(t\), \(\operatorname{wittcenter}(t) = \operatorname{wittbit}(\operatorname{wittrow}(t), t)\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rowcenterdefinition}(t)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:phi-linear-pow-definition}
+For every natural number \(h1\), \(\operatorname{wittlinpow}(0, h1) = h1\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{philinearpowdefinition}(h1)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:witt-resp-bool-definition}
+For every natural number \(t\) and natural number \(k\), \(\operatorname{wittresp}(t, k) = \operatorname{rowbit}(\operatorname{wittwin}(t, \operatorname{twopow}(k)), t + \operatorname{twopow}(k))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{wittrespbooldefinition}(t, k)\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:row-definition}
+\(\operatorname{wittrow}(0) = 1\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{rowdefinition}\).
+\end{proof}
+\begin{lemma}
+\label{ll:observations:phi-scale-definition}
+For every natural number \(k\) and natural number \(y\), \(\operatorname{wittscale}(k, y) = \operatorname{wittxor}(\operatorname{wittxor}(y, \operatorname{wittshl}(y, \operatorname{twopow}(k))), \operatorname{wittshl}(y, \operatorname{twopow}(k) + \operatorname{twopow}(k)))\).
+\end{lemma}
+\begin{proof}
+The goal follows from \(\operatorname{phiscaledefinition}(k, y)\).
+\end{proof}
 \section{Masked observations}
 \label{ll:observations:masked-observations}
 \begin{theorem}
@@ -1919,5 +2087,47 @@ For every natural number \(T\) and natural number \(P\) and natural number \(m\)
 \end{theorem}
 \begin{proof}
 The goal follows from \(\operatorname{periodicarrivalnocrossing}(T, P, m, b, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:unit-defect-forces-near-collision-kit}
+For every natural number \(Q\) and natural number \(t\) and natural number \(r\), if \(\operatorname{leftadjacentdefect}(Q, t) = \operatorname{true}\), then if \(\operatorname{centercol}(t + r) = \operatorname{true}\), then if \(\operatorname{centercol}(t + r + Q) = \operatorname{true}\), then \(\operatorname{nearcollision}(Q, t, r + 1, 2 \cdot (r + 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{unitdefectforcesnearcollisionkit}(Q, t, r)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-kit}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{centercol}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqkit}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:twopow-pos}
+For every natural number \(k\), \(0 < \operatorname{twopow}(k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{twopowpos}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:defect-step-eq}
+For every natural number \(b\) and natural number \(d\), \(\operatorname{defectstep}(b, d) = \operatorname{wittxor}(\operatorname{wittphi}(\operatorname{wittxor}(b, d)), \operatorname{wittphi}(b))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{defectstepeq}(b, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:phi-shl}
+For every natural number \(y\) and natural number \(Q\), \(\operatorname{wittphi}(\operatorname{wittshl}(y, Q)) = \operatorname{wittshl}(\operatorname{wittphi}(y), Q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{phishl}(y, Q)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:reconstruct}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{wittxor}(\operatorname{alignedbackground}(Q, t), \operatorname{aligneddefect}(Q, t)) = \operatorname{wittrow}(t + Q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{reconstruct}(Q, t)\).
 \end{proof}
 \end{document}

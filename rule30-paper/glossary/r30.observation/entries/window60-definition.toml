@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "window60-definition"
+category = "proof-constant"
+signature = "(pi ((explicit h1 (const lexlean.std.nat::nat)) (explicit h2 (const lexlean.std.int::int))) (app (const lexlean.core::eq) (app (const r30.scale::window) (local h1) (nat 0) (local h2)) (const lexlean.std.bool::false)))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.window60.eq_1"
+
+[[form]]
+id = "window60-definition"
+channel = "math"
+surface = "window60definition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name window60definition) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

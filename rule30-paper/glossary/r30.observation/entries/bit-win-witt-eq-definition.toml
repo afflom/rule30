@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bit-win-witt-eq-definition"
+category = "proof-constant"
+signature = "(pi ((explicit t0 (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.witt::bit-winwitt-eq) (local t0) (local m) (local j) (local b)) (app (const lexlean.core::eq) (app (const r30.witt::witt-bit) (app (const r30.witt::witt-win) (local t0) (local m)) (local j)) (app (const r30.witt::bton) (local b)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Interfaces"
+name = "Rule30UOR.Interfaces.BitWinWittEq.eq_1"
+
+[[form]]
+id = "bit-win-witt-eq-definition"
+channel = "math"
+surface = "bitwinwitteqdefinition"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bitwinwitteqdefinition) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

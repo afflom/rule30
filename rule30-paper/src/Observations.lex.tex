@@ -374,6 +374,198 @@ Close the goal with \(\lexeme{r30.observation::win-witt-definition-2}(h1, s)\).
 \end{proof}
 \end{lemma}
 
+\begin{lemma}{bit-carry-eq-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(j\) and truth value \(b\), \(bitcarryeq(n, j, b) = (wittbit(wittcarry(n), j) = bton(b))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::bit-carry-eq-definition}(n, j, b)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{bit-cross-carry-eq-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\) and natural number \(j\) and truth value \(c\), \(bitcrosscarryeq(a, b, j, c) = (wittbit(crosscarry(a, b), j) = bton(c))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::bit-cross-carry-eq-definition}(a, b, j, c)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{bit-cross-carry-xor-eq-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\) and natural number \(j1\) and natural number \(j2\) and truth value \(c\), \(bitcrosscarryxoreq(a, b, j1, j2, c) = (bxor(rowbit(crosscarry(a, b), j1), rowbit(crosscarry(a, b), j2)) = c)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::bit-cross-carry-xor-eq-definition}(a, b, j1, j2, c)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{bit-frob-defect-eq-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(y\) and natural number \(j\) and truth value \(b\), \(bitfrobdefecteq(k, y, j, b) = (wittbit(frobdefect(k, y), j) = bton(b))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::bit-frob-defect-eq-definition}(k, y, j, b)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{bit-win-witt-eq-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t0\) and natural number \(m\) and natural number \(j\) and truth value \(b\), \(bitwinwitteq(t0, m, j, b) = (wittbit(wittwin(t0, m), j) = bton(b))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::bit-win-witt-eq-definition}(t0, m, j, b)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{frob-defect-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(y\), \(frobdefect(k, y) = wittxor(wittcarry(wittscale(k, y)), wittscale(k, wittcarry(y)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::frob-defect-definition}(k, y)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{maskcount-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t0\), \(maskcount(t0, 0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::maskcount-definition}(t0)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{maskparity-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and natural number \(k\), \(maskparity(t, k) = maskcount(t, twopow(k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::maskparity-definition}(t, k)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{rcenter-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rcenter(t) = rdiag(t, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rcenter-definition}(t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{rdiag-definition}
+\allowaxioms{Quot.sound;propext}
+\(rdiag(0, 0) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-definition}\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{rdiag-definition-2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(rdiag(succ(n), 0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-definition-2}(n)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{rdiag-definition-3}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(rdiag(0, succ(s)) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-definition-3}(s)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{rdiag-definition-4}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(rdiag(succ(0), succ(s)) = not(rdiag(succ(0), s))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-definition-4}(s)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{rdiag-definition-5}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\) and natural number \(n1\), \(rdiag(succ(succ(n1)), succ(s)) = bxor(rdiag(succ(succ(n1)), s), rdiag(succ(n1), s) bor rdiag(n1, s))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-definition-5}(s, n1)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{response-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and natural number \(k\), \(response(t, k) = window(t, twopow(k), 0)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::response-definition}(t, k)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{rule-definition}
+\allowaxioms{Quot.sound;propext}
+For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(rule(a, b, c) = bxor(a, b bor c)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rule-definition}(a, b, c)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{twopow-definition}
+\allowaxioms{Quot.sound;propext}
+\(twopow(0) = 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::twopow-definition}\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{window60-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(h1\) and integer \(h2\), \(window(h1, 0, h2) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::window60-definition}(h1, h2)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{witt-bit-bool-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(y\) and natural number \(j\), \(wittbitbool(y, j) = rowbit(y, j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::witt-bit-bool-definition}(y, j)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{row-center-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(wittcenter(t) = wittbit(wittrow(t), t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-center-definition}(t)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{phi-linear-pow-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(h1\), \(wittlinpow(0, h1) = h1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-linear-pow-definition}(h1)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{witt-resp-bool-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and natural number \(k\), \(wittresp(t, k) = rowbit(wittwin(t, twopow(k)), t + twopow(k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::witt-resp-bool-definition}(t, k)\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{row-definition}
+\allowaxioms{Quot.sound;propext}
+\(wittrow(0) = 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-definition}\).
+\end{proof}
+\end{lemma}
+
+\begin{lemma}{phi-scale-definition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(y\), \(wittscale(k, y) = wittxor(wittxor(y, wittshl(y, twopow(k))), wittshl(y, twopow(k) + twopow(k)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-scale-definition}(k, y)\).
+\end{proof}
+\end{lemma}
+
 \end{section}
 
 \begin{section}{masked-observations}
@@ -2198,6 +2390,54 @@ Close the goal with \(\lexeme{r30.observation::aligned-defect-bit-zero}(Q, t)\).
 For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(b\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ b\), then if \(rightmostleft(m * P, b, k)\), then \(leftdefect(m * P, b + (k - 1), 1) = true ∧ centergate(m * P, b + (k - 1)) = true ∧ leftdefect(m * P, b + (k - 1) + 1, 0) = false\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::periodic-arrival-no-crossing}(T, P, m, b, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{unit-defect-forces-near-collision-kit}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(r\), if \(leftadjacentdefect(Q, t) = true\), then if \(centercol(t + r) = true\), then if \(centercol(t + r + Q) = true\), then \(nearcollision(Q, t, r + 1, 2 * (r + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::unit-defect-forces-near-collision-kit}(Q, t, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-kit}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = centercol(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-kit}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{twopow-pos}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), \(0 < twopow(k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::twopow-pos}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{defect-step-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\) and natural number \(d\), \(defectstep(b, d) = wittxor(wittphi(wittxor(b, d)), wittphi(b))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::defect-step-eq}(b, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{phi-shl}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(y\) and natural number \(Q\), \(wittphi(wittshl(y, Q)) = wittshl(wittphi(y), Q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::phi-shl}(y, Q)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{reconstruct}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(wittxor(alignedbackground(Q, t), aligneddefect(Q, t)) = wittrow(t + Q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::reconstruct}(Q, t)\).
 \end{proof}
 \end{theorem}
 

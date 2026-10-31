@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-definition-3"
+category = "proof-constant"
+signature = "(pi ((explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (nat 0) (app (const lexlean.std.nat::succ) (local s))) (const lexlean.std.bool::true)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Core"
+name = "Rule30UOR.Core.rdiag.eq_3"
+
+[[form]]
+id = "rdiag-definition-3"
+channel = "math"
+surface = "rdiagdefinition3"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagdefinition3) (paren (seq (slot 0))))"
