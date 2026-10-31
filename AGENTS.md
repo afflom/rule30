@@ -22,7 +22,16 @@ is forbidden: `by_cases` on an undecidable proposition is a compile error, and
 
 ## The loop
 
+Start a session with `bin/r30 brief`: one screen with the open claims (the only
+places to work), the proved reductions (equivalent forms of the goal; use them,
+do not re-derive them), the refuted routes (do not walk them again) and the
+loop below. `bin/r30 claim <id>` gives one claim in full: register entry, Lean
+type, published statement, dependents. Neither requires reading STRATEGY.md,
+which is the historical log.
+
 ```
+bin/r30 brief                          # the session briefing
+bin/r30 claim <id>                     # one claim in full
 bin/r30 status                         # HEAD, dirty files, frontier counts
 bin/r30 frontier list                  # what is open, proved, refuted
 bin/r30 lexicon search <text>          # find lexemes by id, surface, or Lean name
@@ -41,10 +50,14 @@ bin/r30 experiment run <name> [args]   # a finite diagnostic on the seed
 ```
 
 Costs: `check`/`verify` of one module take seconds; `verify` of the whole paper
-takes about six minutes (`Paper.lex.tex` is 13k lines); the pre-commit gate
-takes twenty to thirty minutes and runs everything (tooling tests, Lean
-build, vacuity and axiom audits, kernel replay, bridge, both LexLean projects,
-PDFs). Use the module forms while iterating and the gate once per batch.
+takes about six minutes (`Paper.lex.tex` is 13k lines). The pre-commit gate
+runs everything (tooling tests, Lean build, vacuity and axiom audits, kernel
+replay, bridge, both LexLean projects, PDFs) but reuses the last accepted run's
+Lake build directories and any LexLean verification whose exact inputs were
+already accepted, so a commit that touches one research module and
+`Observations.lex.tex` takes a few minutes; the first run after a toolchain
+change takes twenty to thirty. Use the module forms while iterating and the
+gate once per batch.
 
 `--json` on any command gives the same report as JSON. The same commands are
 available as MCP tools: `claude mcp add r30 -- python3 <repo>/tools/r30/mcp_server.py`.
@@ -74,14 +87,22 @@ drift. Every claim has a status and, when it is `proved`, a Lean name that
 published as a lexeme; a `refuted` claim names its Lean refutation or the
 experiment that refutes it; `depends` records which claims a claim rests on.
 `make check-research` runs the check, so a commit cannot carry an unbacked
-"proved". Work happens only on `open` claims; a new route is an `open` claim
+"proved". The register is also a LexLean document: `bin/r30 frontier render`
+(run automatically by `frontier add` and `set`) writes
+`rule30-paper/src/Frontier.lex.tex`, in which every proved or refuted claim
+with a published theorem is restated as a theorem block generated from its
+Lean type and closed by its lexeme, so `lexlean verify` checks the content of
+the register and `frontier check` refuses a stale render. Work happens only on `open` claims; a new route is an `open` claim
 before it is a theorem, and a dead route stays in the file as `refuted` so it is
 not walked again. This is the one idea taken from PrismPM's model registers
 (every registered capability covered by a fixture): every registered claim is
 covered by kernel evidence. PrismPM itself compiles LexLean application models
 into Cargo, Wasm and Hologram artifacts behind a Rust and devcontainer
-toolchain; nothing in a proof repository needs those artifacts, so it is not a
-dependency here.
+toolchain, and `prism-stdlib` is its generated runtime (Holo containers,
+checked integers, UTF-8, system manifests). Nothing in a proof repository needs
+those artifacts or that runtime, so neither is a dependency here. No tool
+constructs the proof; what the tooling does is make every statement, claim and
+cost explicit and checked, so that effort goes only to `open` claims.
 
 ## Layout
 

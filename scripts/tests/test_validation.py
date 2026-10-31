@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -59,6 +60,12 @@ p = Path(os.environ["VALIDATION_COUNTER"])
 p.write_text(p.read_text() + "run\\n" if p.exists() else "run\\n")
 assert "ELAN_TOOLCHAIN" not in os.environ
 assert "FAIL" not in Path("rule30-paper/src/Observations.lex.tex").read_text()
+lake = Path("rule30-core-lean/.lake/marker")
+Path(os.environ["VALIDATION_COUNTER"] + ".lake").open("a").write("seeded\\n" if lake.exists() else "fresh\\n")
+lake.parent.mkdir(parents=True, exist_ok=True)
+lake.write_text("built by the fixture gate")
+assert os.environ.get("RULE30_LEXLEAN_CACHE"), "the gate must name the LexLean cache"
+assert os.environ.get("RULE30_LEXLEAN_KEY_rule30_paper"), "the gate must key each project's inputs"
 Path("dist").mkdir(exist_ok=True)
 for name in ("Core", "Paper", "Observations"):
     Path("dist", name + ".pdf").write_bytes(b"%PDF-1.4 fresh " + name.encode())
@@ -137,6 +144,33 @@ subprocess.run([sys.executable, "scripts/sync_pdfs.py"] +
         self.compiler.write_text(self.compiler.read_text() + "# compiler binary changed\n")
         self.validate(True)
         self.assertEqual(self.runs(), 5)
+
+    def test_lake_build_directories_are_reused_between_runs(self):
+        self.write("rule30-paper/src/Observations.lex.tex", "valid 2\n")
+        self.git("add", ".")
+        self.git("commit", "-qm", "second")
+        self.write("rule30-paper/src/Observations.lex.tex", "valid 3\n")
+        self.git("add", ".")
+        self.git("commit", "-qm", "third")
+        runs = Path(self.env["VALIDATION_COUNTER"] + ".lake").read_text().split()
+        self.assertEqual(runs, ["fresh", "seeded"])
+
+    def test_lexlean_key_changes_only_with_its_inputs(self):
+        sys.path.insert(0, str(self.repo / "scripts"))
+        try:
+            import importlib
+            validate = importlib.import_module("validate_git_tree")
+            importlib.reload(validate)
+        finally:
+            sys.path.pop(0)
+        tree = lambda: self.git("write-tree").stdout.strip()
+        before = validate.lexlean_input_digest(self.repo, tree(), "rule30-paper")
+        self.write("README.md", "docs only\n")
+        self.git("add", ".")
+        self.assertEqual(validate.lexlean_input_digest(self.repo, tree(), "rule30-paper"), before)
+        self.write("rule30-core-lean/Rule30UOR/X.lean", "theorem x : True := trivial\n")
+        self.git("add", ".")
+        self.assertNotEqual(validate.lexlean_input_digest(self.repo, tree(), "rule30-paper"), before)
 
     def test_wrong_compiler_blocks_before_build(self):
         self.compiler.write_text("#!/bin/sh\necho 'compiler-semantics wrong'\n")

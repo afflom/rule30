@@ -152,11 +152,55 @@ class VerificationTests(unittest.TestCase):
             (cache / "latest-verified.json").write_text(json.dumps({"success": True, "attestation_id": "old"}))
         self.compiler = self.repo / "compiler"
 
-    def run_verify(self, body):
+    def run_verify(self, body, env=None):
         self.compiler.write_text("#!/bin/bash\n" + body)
         self.compiler.chmod(0o755)
         return subprocess.run(["bash", str(self.repo / "scripts/verify_lexlean.sh"), str(self.compiler)],
-                              cwd=self.repo, capture_output=True, text=True)
+                              cwd=self.repo, capture_output=True, text=True,
+                              env={**os.environ, **(env or {})})
+
+    SUCCESS = ('if [[ "$1" == lock ]]; then exit 0; fi\n'
+               'mkdir -p .lexlean/verified/new && echo "{}" > .lexlean/verified/new/attestation.json\n'
+               'printf \'{"success":true,"attestation_id":"new"}\\n\'\n')
+    FAILURE = 'if [[ "$1" == lock ]]; then exit 0; fi\nexit 1\n'
+
+    def cache_env(self, key="k1"):
+        return {"RULE30_LEXLEAN_CACHE": str(self.repo / "cache"),
+                "RULE30_LEXLEAN_KEY_rule30_lexlean": key, "RULE30_LEXLEAN_KEY_rule30_paper": key}
+
+    def test_accepted_verification_is_reused_for_the_same_inputs(self):
+        first = self.run_verify(self.SUCCESS, self.cache_env())
+        self.assertEqual(first.returncode, 0, first.stderr)
+        self.assertTrue((self.repo / "cache/rule30-paper/k1/verified/new/attestation.json").exists())
+        # the compiler now fails: only the cache can make this pass
+        second = self.run_verify(self.FAILURE, self.cache_env())
+        self.assertEqual(second.returncode, 0, second.stderr)
+        self.assertIn("reused verification new", second.stdout)
+        self.assertEqual(self.latest()["attestation_id"], "new")
+        self.assertTrue((self.repo / "rule30-lexlean/.lexlean/verified/new/attestation.json").exists())
+
+    def test_changed_inputs_verify_again(self):
+        self.run_verify(self.SUCCESS, self.cache_env("k1"))
+        result = self.run_verify(self.FAILURE, self.cache_env("k2"))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(self.latest()["success"])
+
+    def test_failed_verification_leaves_no_cache_entry(self):
+        result = self.run_verify(self.FAILURE, self.cache_env())
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse((self.repo / "cache").exists())
+
+    def test_cache_record_without_bundle_is_not_reused(self):
+        slot = self.repo / "cache/rule30-lexlean/k1"
+        slot.mkdir(parents=True)
+        (slot / "latest-verified.json").write_text(json.dumps({"success": True, "attestation_id": "ghost"}))
+        result = self.run_verify(self.FAILURE, self.cache_env())
+        self.assertNotEqual(result.returncode, 0)
+
+    def test_without_gate_environment_every_run_verifies(self):
+        self.run_verify(self.SUCCESS, self.cache_env())
+        result = self.run_verify(self.FAILURE)
+        self.assertNotEqual(result.returncode, 0)
 
     def latest(self):
         return json.loads((self.repo / "rule30-lexlean/.lexlean/latest-verified.json").read_text())

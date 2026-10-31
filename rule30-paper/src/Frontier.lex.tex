@@ -1,0 +1,59 @@
+\begin{lexlean}{Frontier}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.int@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\useglossary{r30.doc@1.0.0}
+\useglossary{r30.frontier@1.0.0}
+\useglossary{r30.joint@1.0.0}
+\useglossary{r30.local@1.0.0}
+\useglossary{r30.observation@1.0.0}
+\useglossary{r30.real@1.0.0}
+\useglossary{r30.right@1.0.0}
+\useglossary{r30.scale@1.0.0}
+\useglossary{r30.time@1.0.0}
+\useglossary{r30.witt@1.0.0}
+\title{Frontier}
+
+\begin{section}{frontier-proved}
+\heading{Proved reductions}
+
+\begin{theorem}{claim-coupling-law}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(center(T + P) = center(T)\), then if for every natural number \(t\), if \(T ≤ t\), then \(leftdefect(P, t, 1) = centergate(P, t)\), then \(centerperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-of-coupling}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-recurrent-central-collision}
+\allowaxioms{Quot.sound;propext}
+\(problemone ↔ norecurrentcentralcollision\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.frontier::problem-one-iff-no-recurrent-central-collision}\).
+\end{proof}
+\end{theorem}
+
+\end{section}
+
+\begin{section}{frontier-refuted}
+\heading{Refuted routes}
+
+\begin{theorem}{claim-q-adic-descent}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < Q\), then if \(rightmostleft(Q, t, k)\), then \(k ≤ observerqrank(Q, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-front-q-rank}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-gate-phase-opposition}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(start\) and natural number \(finish\), if \(headimportpath(Q, start, finish)\), then if \(centercleanthrough(Q, start, finish - start)\), then if \(center(finish) = false\), then \(¬ (leftgatephase(Q, finish, 0) = intneg (centersign(start, finish - start) inttimes rightphase(Q, start, 2)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::head-import-path-rejects-negative-gate}(Q, start, finish)\).
+\end{proof}
+\end{theorem}
+
+\end{section}
+
+\end{lexlean}

@@ -100,6 +100,7 @@ class Converter:
         self.bound: set[str] = set()
         self.hyp_counter = 0
         self.has_numeral = False
+        self.sorts: dict[str, str] = {}   # binder name -> sort qid (nat/int/bool)
 
     # ---- Lean s-expression -> Term ----
     def term(self, node):
@@ -139,6 +140,8 @@ class Converter:
                 new = self.binder_name(name, False)
                 self.rename.append((name, new))
                 self.bound.add(new)
+                if t.kind == "app" and t.head in SORT_WORD:
+                    self.sorts[new] = t.head
                 out = Term("lam", binders=[(new, t)], body=self._term(body))
                 self.rename.pop()
                 return out
@@ -175,6 +178,7 @@ class Converter:
             self.rename.append((name, new))
             self.bound.add(new)
             if is_var:
+                self.sorts[new] = t.head
                 if hyps:
                     raise Unsupported(f"variable `{name}` is bound after a hypothesis; reorder binders")
                 vars_.append((new, t))
@@ -336,6 +340,25 @@ class Converter:
             return f"{ls} {e.surface} {rs}" if not self._needs(l, e, "left") or True else ""
         raise Unsupported(f"frame {e.frame} of {e.qid}")
 
+    def sort_of(self, t):
+        """The carrier of a term: a sort qid, or None when unknown (a numeral)."""
+        if t.kind == "local":
+            return self.sorts.get(t.head)
+        if t.kind == "nat":
+            return None
+        if t.kind == "app":
+            e = self.lx.get(t.head)
+            if e and e.signature:
+                node = sexpr.parse(e.signature)
+                while isinstance(node, list) and node and node[0] == "pi":
+                    node = node[2]
+                return sexpr.const_name(node)
+        return None
+
+    def _is_nat_eq(self, eq):
+        a, b = (self.sort_of(x) for x in eq.args)
+        return {a, b} <= {"lexlean.std.nat::nat", None} and (a or b) is not None
+
     def _compound(self, t):
         return t.kind == "app" and bool(t.args) and self.lx.get(t.head).frame in ("infix", "prefix")
 
@@ -349,7 +372,7 @@ class Converter:
         if child.kind != "app" or not child.args:
             return s
         if child.head == "lexlean.core::lnot" and child.args[0].kind == "app" \
-                and child.args[0].head == "lexlean.core::eq":
+                and child.args[0].head == "lexlean.core::eq" and self._is_nat_eq(child.args[0]):
             ce = _NE
         else:
             ce = self.lx.get(child.head)
@@ -378,7 +401,7 @@ def _patch_math(cls):
         if t.kind in ("lam", "sort"):
             raise Unsupported("binder inside a math island")
         if t.kind == "app" and t.head == "lexlean.core::lnot" and t.args[0].kind == "app" \
-                and t.args[0].head == "lexlean.core::eq":
+                and t.args[0].head == "lexlean.core::eq" and self._is_nat_eq(t.args[0]):
             l, r = t.args[0].args
             ne = _NE
             return f"{self.math_child(l, ne, 'left')} ≠ {self.math_child(r, ne, 'right')}"

@@ -169,6 +169,25 @@ class FrontierCheckTests(unittest.TestCase):
         self.assertIn("dep: depends on unknown claim ghost", joined)
 
 
+class FrontierRenderTests(unittest.TestCase):
+    """The register renders to a LexLean module deterministically, and a stale
+    render is a check failure. Uses the real register and a fake kernel."""
+
+    class FakeLean:
+        def signatures(self, names):
+            from tools.r30 import leansig
+            return leansig.signatures(names)
+
+    def test_render_is_deterministic_and_check_detects_staleness(self):
+        text1, _ = frontier.render()
+        text2, _ = frontier.render()
+        self.assertEqual(text1, text2)
+        self.assertIn("\\begin{lexlean}{Frontier}", text1)
+        self.assertIn("claim-recurrent-central-collision", text1)
+        current, _ = frontier.render_file(check_only=True)
+        self.assertTrue(current, "Frontier.lex.tex is stale in the working tree; run bin/r30 frontier render")
+
+
 class McpTests(unittest.TestCase):
     def test_every_tool_maps_to_argv(self):
         for tool in tool_list():

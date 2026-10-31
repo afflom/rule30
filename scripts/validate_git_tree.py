@@ -13,6 +13,20 @@ import tomllib
 
 from sync_pdfs import GENERATED, source_digest
 
+# Lake packages whose build directories are reused between gate runs. Lake
+# decides what to rebuild from content traces, so a stale entry costs a rebuild,
+# never a wrong result; the cache is keyed by the proof tools' digest.
+LAKE_PACKAGES = ("Rule30PrizeKit/lean", "rule30-core-lean", "rule30-bridge",
+                 "rule30-lexlean", "rule30-paper")
+# Tracked inputs of a LexLean project's verification: the project itself, the
+# host Lean it elaborates its external-interface probe against, and the script.
+LEXLEAN_INPUTS = {
+    "rule30-lexlean": ("rule30-lexlean/", "rule30-core-lean/", "Rule30PrizeKit/lean/",
+                       "scripts/verify_lexlean.sh"),
+    "rule30-paper": ("rule30-paper/", "rule30-core-lean/", "Rule30PrizeKit/lean/",
+                     "scripts/verify_lexlean.sh"),
+}
+
 
 def output(*args, **kwargs):
     return subprocess.check_output(args, text=True, **kwargs).strip()
@@ -46,6 +60,46 @@ def install_generated(root, snapshot):
         shutil.copyfile(snapshot / path, target)
     subprocess.run(["git", "update-index", "-z", "--index-info"], cwd=root,
                    input=b"".join(entries), check=True)
+
+
+def lexlean_input_digest(root, tree, project):
+    """Hash of every tracked, non-generated blob a project's verification reads."""
+    prefixes = LEXLEAN_INPUTS[project]
+    entries = subprocess.check_output(["git", "ls-tree", "-rz", "--full-tree", tree],
+                                      cwd=root).split(b"\0")
+    digest = hashlib.sha256()
+    for entry in entries:
+        if not entry:
+            continue
+        path = entry.split(b"\t", 1)[1].decode()
+        if path in GENERATED or not path.startswith(prefixes):
+            continue
+        digest.update(entry + b"\0")
+    return digest.hexdigest()
+
+
+def seed_lake_cache(cache_dir, snapshot):
+    """Start the snapshot's Lake builds from the last accepted run's build directories."""
+    for package in LAKE_PACKAGES:
+        source = cache_dir / package / ".lake"
+        target = snapshot / package
+        if source.is_dir() and target.is_dir() and not (target / ".lake").exists():
+            subprocess.run(["cp", "-a", str(source), str(target / ".lake")], check=True)
+
+
+def store_lake_cache(cache_dir, snapshot):
+    """Keep the accepted snapshot's build directories for the next run."""
+    for package in LAKE_PACKAGES:
+        built = snapshot / package / ".lake"
+        if not built.is_dir():
+            continue
+        slot = cache_dir / package
+        fresh = slot.with_name(slot.name + ".new")
+        shutil.rmtree(fresh, ignore_errors=True)
+        fresh.mkdir(parents=True)
+        subprocess.run(["cp", "-a", str(built), str(fresh / ".lake")], check=True)
+        shutil.rmtree(slot, ignore_errors=True)
+        fresh.rename(slot)
 
 
 def main():
@@ -108,6 +162,14 @@ def main():
 
     key = cache_key(tree)
     certificate = cache / (key + ".ok")
+    # Finer caches, keyed by the same proof-tool digest: Lake build directories
+    # and per-project LexLean verifications.
+    tools_key = cache_key("tools")[:16]
+    lake_cache = cache / "lake" / tools_key
+    lexlean_cache = cache / "lexlean" / tools_key
+    env["RULE30_LEXLEAN_CACHE"] = str(lexlean_cache)
+    for project in LEXLEAN_INPUTS:
+        env["RULE30_LEXLEAN_KEY_" + project.replace("-", "_")] = lexlean_input_digest(root, tree, project)
     with (cache / (key + ".lock")).open("w") as guard:
         fcntl.flock(guard, fcntl.LOCK_EX)
         if certificate.exists():
@@ -123,8 +185,10 @@ def main():
                     archive.stdout.close()
                     if archive.wait() != 0:
                         raise RuntimeError("Could not export the captured Git tree")
+                seed_lake_cache(lake_cache, Path(directory))
                 subprocess.run(["make", "check-ci", "LEXLEAN=" + compiler],
                                cwd=directory, env=env, check=True)
+                store_lake_cache(lake_cache, Path(directory))
                 if staged:
                     if output("git", "write-tree") != tree:
                         raise RuntimeError("The index changed during validation; retry the commit")

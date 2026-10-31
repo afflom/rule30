@@ -144,7 +144,12 @@ stale PDFs is rejected. Source fingerprints exclude only these generated outputs
 a circular dependency between the PDFs and their commit.
 Both CI workflows use the same gate. Successful local results are cached under
 `.git/rule30-validation`, keyed by the exact tree, validator, and proof tools; failures are
-never cached. The final tree containing the generated PDFs is certified, so a matching push
+never cached. Two finer caches under the same key make a typical commit take minutes rather
+than twenty: the snapshot starts from the last accepted run's Lake build directories (Lake
+rebuilds exactly what its content traces say changed), and a LexLean project whose tracked
+inputs (its sources and glossaries, the host Lean its probe elaborates against, the kit, and
+the verify script) have the digest of an accepted verification reuses that attestation bundle
+instead of verifying again. A failed verification is never cached. The final tree containing the generated PDFs is certified, so a matching push
 reuses the successful result without a second proof build.
 `make check-research-coverage` provides a quick check that new host modules are included in
 the build, axiom audit, and kernel replay.

@@ -20,6 +20,8 @@ PROTOCOL = "2025-06-18"
 
 TOOLS = [
     ("status", "Repository status: HEAD, dirty files, frontier counts, whether a gate is running.", {}),
+    ("brief", "The one-screen session briefing: open claims, proved reductions, refuted routes, the loop.", {}),
+    ("claim", "One frontier claim in full: register entry, Lean type, published statement, dependents.", {"id": "string"}),
     ("gate", "Is the pre-commit gate running, its last stage and log tail.", {}),
     ("lexicon_search", "Find lexemes by id, surface or Lean name.",
      {"query": "string", "limit": "integer"}),
@@ -67,6 +69,10 @@ def argv_for(name, a):
         return ["status"]
     if name == "gate":
         return ["gate"]
+    if name == "brief":
+        return ["brief"]
+    if name == "claim":
+        return ["claim", g("id", "")]
     if name == "lexicon_search":
         return ["lexicon", "search", g("query", ""), "--limit", str(g("limit", 40))]
     if name == "lexicon_show":

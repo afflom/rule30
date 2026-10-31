@@ -1,0 +1,16 @@
+spec = "lexlean/entry/1"
+id = "frontier-proved"
+category = "label-word"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "defined"
+value = "(const lexlean.std.nat::nat)"
+
+[[form]]
+id = "frontier-proved"
+channel = "text"
+surface = "Proved reductions"
+canonical_source = true
+features = ["sentence-case", "singular"]

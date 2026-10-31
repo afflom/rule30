@@ -34,6 +34,62 @@ def cmd_status(args):
     out(args, data, text)
 
 
+def cmd_brief(args):
+    """Everything a session needs before touching the repo, in one screen."""
+    from .lexicon import Lexicon
+    lx = Lexicon()
+    claims = frontier.load()["claim"]
+    by = {s: [c for c in claims if c["status"] == s] for s in frontier.STATUSES}
+    _, head, _ = repo.run(["git", "log", "--oneline", "-1"])
+    gate = gate_state()
+    lines = [f"HEAD {head.strip()}" + ("   [GATE RUNNING]" if gate and gate["running"] else ""),
+             "", "OPEN (the only places to work):"]
+    for c in by["open"]:
+        lines.append(f"  {c['id']}: {c['statement']}")
+        if c.get("note"):
+            lines.append(f"      {c['note']}")
+    lines += ["", "PROVED REDUCTIONS (equivalent forms of the goal; use them, do not re-derive them):"]
+    for c in by["proved"]:
+        lines.append(f"  {c['id']}: {c['statement'][:140]}")
+        lines.append(f"      Lean {c.get('lean', '-')}   lexeme {c.get('lexeme', '-')}")
+    lines += ["", "REFUTED ROUTES (do not walk again):"]
+    for c in by["refuted"]:
+        lines.append(f"  {c['id']}: {c['statement'][:120]}")
+    lines += ["", "LOOP: edit Rule30UOR/*.lean -> lake build Rule30UOR.<Module> -> bin/r30 theorem add <name>",
+              "      -> bin/r30 verify paper --modules src/Observations.lex.tex (seconds) -> bin/r30 frontier set/add",
+              "      -> bin/r30 commit -m ... --push (gate; minutes with warm caches). Details: AGENTS.md.",
+              f"VOCABULARY: {sum(1 for e in lx.entries.values() if e.project != 'builtin')} lexemes; "
+              "bin/r30 lexicon search <text>; state theorems with twopow, bxor, rowBit, naturalBit, named predicates."]
+    out(args, {"open": by["open"], "proved": by["proved"], "refuted": by["refuted"]}, "\n".join(lines))
+
+
+def cmd_claim(args):
+    """One claim in full: register entry, Lean type, published statement, dependents."""
+    from .lexicon import Lexicon
+    claims = frontier.load()["claim"]
+    c = next((x for x in claims if x["id"] == args.id), None)
+    if c is None:
+        sys.exit(f"no claim {args.id}")
+    lx = Lexicon()
+    data = dict(c)
+    data["dependents"] = [x["id"] for x in claims if args.id in x.get("depends", [])]
+    if c.get("lean"):
+        from . import sexpr
+        sig = leansig.signatures([c["lean"]]).get(c["lean"])
+        data["lean_type"] = sexpr.dumps(sig["type"]) if sig else "unknown to Lean"
+        e = lx.for_lean(c["lean"])
+        if e and e.category == "proof-constant":
+            for f in lx.lex_tex_files(e.package):
+                text = f.read_text()
+                i = text.find("\\begin{theorem}{" + e.id + "}")
+                if i >= 0:
+                    data["published"] = text[i:text.index("\\end{theorem}", i)].splitlines()[2]
+                    data["published_in"] = str(f.relative_to(repo.ROOT))
+                    break
+    text = "\n".join(f"{k}: {v}" for k, v in data.items())
+    out(args, data, text)
+
+
 def cmd_lexicon(args):
     from .lexicon import Lexicon
     lx = Lexicon()
@@ -162,11 +218,17 @@ def cmd_frontier(args):
                                   + (f"  ({c['lean']})" if c.get('lean') else "") for c in rows) or "empty")
     elif args.sub == "add":
         c = frontier.add(args.id, args.statement, args.status, args.lean, args.lexeme, args.note, args.depends)
+        frontier.render_file()
         out(args, c, f"added {c['id']} [{c['status']}]")
     elif args.sub == "set":
         c = frontier.update(args.id, status=args.status, lean=args.lean, lexeme=args.lexeme, note=args.note,
                             depends=args.depends)
+        frontier.render_file()
         out(args, c, f"updated {c['id']} [{c['status']}]")
+    elif args.sub == "render":
+        _, skipped = frontier.render_file()
+        out(args, {"skipped": skipped}, f"rendered {frontier.FRONTIER_TEX.relative_to(repo.ROOT)}"
+            + (f"; not restated (no published proof-constant): {', '.join(skipped)}" if skipped else ""))
     elif args.sub == "check":
         problems = frontier.check()
         out(args, problems, "frontier register is consistent with the kernel" if not problems
@@ -250,6 +312,8 @@ def main(argv=None):
     sp = ap.add_subparsers(dest="cmd", required=True)
 
     sp.add_parser("status").set_defaults(fn=cmd_status)
+    sp.add_parser("brief", help="the one-screen briefing to start a session").set_defaults(fn=cmd_brief)
+    s = sp.add_parser("claim", help="one frontier claim in full"); s.add_argument("id"); s.set_defaults(fn=cmd_claim)
     sp.add_parser("gate", help="is the pre-commit gate running, and where is it").set_defaults(fn=cmd_gate)
 
     lex = sp.add_parser("lexicon").add_subparsers(dest="sub", required=True)
@@ -293,6 +357,7 @@ def main(argv=None):
     s = fr.add_parser("set"); s.add_argument("id"); s.add_argument("--status"); s.add_argument("--lean")
     s.add_argument("--lexeme"); s.add_argument("--note"); s.add_argument("--depends", nargs="*"); s.set_defaults(fn=cmd_frontier)
     fr.add_parser("check").set_defaults(fn=cmd_frontier)
+    fr.add_parser("render", help="write src/Frontier.lex.tex from the register").set_defaults(fn=cmd_frontier)
 
     s = sp.add_parser("commit"); s.add_argument("-m", "--message", required=True)
     s.add_argument("--push", action="store_true"); s.add_argument("paths", nargs="*")

@@ -112,4 +112,77 @@ def check(lexicon=None, leansig=None):
             problems.append(f"{cid}: proved but unpublished ({c['lean']} has no lexeme)")
         if st == "refuted" and not (c.get("lean") or "experiments/" in (c.get("note") or "")):
             problems.append(f"{cid}: refuted without a Lean refutation or an experiment")
+    try:
+        current, _ = render_file(check_only=True)
+        if not current:
+            problems.append("Frontier.lex.tex is stale; run `bin/r30 frontier render`")
+    except Exception as ex:  # the render itself refused
+        problems.append(f"Frontier.lex.tex cannot be rendered: {ex}")
     return problems
+
+
+FRONTIER_TEX = repo.PROJECTS["paper"] / "src/Frontier.lex.tex"
+SECTIONS = (("proved", "frontier-proved"), ("refuted", "frontier-refuted"))
+
+
+def render(lexicon=None, leansig=None):
+    """The frontier as a LexLean module: every proved or refuted claim whose Lean
+    theorem is published is restated as a theorem block generated from Lean and
+    closed by its lexeme, so `lexlean verify` checks the register's content.
+    Returns (text, skipped) where skipped lists claims that have no published
+    proof-constant to restate."""
+    from . import leansig as _leansig, sexpr
+    from .convert import Converter, variables
+    from .lexicon import Lexicon
+    from .theorem import theorem_block, ALLOW
+    leansig = leansig or _leansig
+    lx = lexicon or Lexicon()
+    claims = load()["claim"]
+    wanted = [c for c in claims if c["status"] in dict(SECTIONS) and c.get("lean")]
+    sigs = leansig.signatures([c["lean"] for c in wanted]) if wanted else {}
+    blocks = {status: [] for status, _ in SECTIONS}
+    packages, skipped = set(), []
+    for c in wanted:
+        e = lx.for_lean(c["lean"])
+        sig = sigs.get(c["lean"])
+        if e is None or e.category != "proof-constant" or sig is None:
+            skipped.append(c["id"])
+            continue
+        conv = Converter(lx, e.package)
+        term = conv.term(sig["type"])
+        args = variables(term)
+        assumed = [] if args or term.kind != "pi" else [n for n, _ in term.binders]
+        packages |= {lx.get(q).package for q in conv.used} | {e.package}
+        blocks[c["status"]].append(theorem_block("claim-" + c["id"], e.package, conv.statement(term) + ".",
+                                                 args, assumed).replace(
+            "\\lexeme{" + e.package + "::claim-" + c["id"] + "}", "\\lexeme{" + e.qid + "}"))
+    closure = set()
+    for p in packages:
+        closure |= lx.visible_from(p)
+    closure.discard("lexlean.core")
+    closure.add("r30.doc")
+    lines = ["\\begin{lexlean}{Frontier}"]
+    for p in sorted(closure):
+        version = "1.2.0" if p.startswith("lexlean.std") else "1.0.0"
+        lines.append(f"\\useglossary{{{p}@{version}}}")
+    lines += ["\\title{Frontier}", ""]
+    for status, label in SECTIONS:
+        title = {"proved": "Proved reductions", "refuted": "Refuted routes"}[status]
+        lines += [f"\\begin{{section}}{{{label}}}", f"\\heading{{{title}}}", ""]
+        lines += [b.rstrip("\n") + "\n" for b in blocks[status]]
+        lines += ["\\end{section}", ""]
+    lines.append("\\end{lexlean}")
+    return "\n".join(lines).replace("\n\n\n", "\n\n") + "\n", skipped
+
+
+def render_file(check_only=False):
+    """Write Frontier.lex.tex (or report whether it is current)."""
+    text, skipped = render()
+    current = FRONTIER_TEX.read_text() if FRONTIER_TEX.exists() else ""
+    if check_only:
+        return current == text, skipped
+    if current != text:
+        FRONTIER_TEX.write_text(text)
+        from . import checks
+        checks.lock("paper")
+    return True, skipped
