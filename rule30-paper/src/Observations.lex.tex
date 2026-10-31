@@ -3082,5 +3082,13 @@ Close the goal with \(\lexeme{r30.observation::center-periodic-iff-interior-agai
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{diagonal-reset-sum-invariant}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(settledby(z + 2, t)\), then if \(z + 3 ≤ t\), then \(diagonalphase(Q, z + 3, t + 1) intplus diagonalflux(Q, z + 3, t + 1, 1) = diagonalphase(Q, z + 1, t) intplus diagonalflux(Q, z + 1, t, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-reset-sum-invariant}(Q, z, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

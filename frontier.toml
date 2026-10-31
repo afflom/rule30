@@ -266,3 +266,30 @@ lean = "Rule30UOR.EdgeSplit.center_eq_not_formulas"
 since = "2026-10-31"
 note = "Rule30UOR.EdgeSplit: convFuel/conv (binary decomposition of y, nat_eq_shift_xor_mod), testBit_phiLinearPow_conv, interiorLedgerSum, interiorLedger_eq_sum, interiorFormula, interiorDiagonal_eq_formula, center_eq_not_formulas. aperiodic-compensation now reads: interiorFormula t t, the gasket parity of the bulk carry events, is not eventually periodic against edgeFormula t t."
 depends = ["edge-diagonal-formula"]
+
+[[claim]]
+id = "route-a-band-discharge"
+status = "refuted"
+statement = "Route A (dyadic reflection): discharge the single-row spatial-agreement hypothesis of the terminal refutations 9.1496-9.1516 under a periodic center with Q = c 2^K P and K large, so that lhBandAgree(z+p+1, Q, 1, S) with S >= p + 3Q follows and the terminal theorems close Problem 1."
+lean = "Rule30UOR.Interfaces.lhBandAgree_engine_hypotheses_unsat"
+since = "2026-10-31"
+note = "Every terminal refutation routes through not_centerPeriodic_of_lhBandAgree_one_at_zero_diag_doubles, whose hypothesis bundle (IsZeroDiag z, DoublesAt Q z, SettledBy, p + 3Q <= S + 1, LhBandAgree (z+p+1) Q 1 S) is contradictory with no periodicity premise (lhBandAgree_engine_hypotheses_unsat, 9.1582). Deriving the single-row hypothesis under CenterPeriodic would therefore be deriving False from CenterPeriodic, i.e. Problem 1 itself; the dyadic choice K >= z + p only supplies the settled prefix i < p (2^K-periodic diagonals), not the tail p <= i <= S over unsettled diagonals, which is the whole content. Not a route."
+depends = ["band-engines"]
+
+[[claim]]
+id = "route-c-rank-drop"
+status = "refuted"
+statement = "Route C (cyclotomic rank drop): link the carry-ledger congruences modulo q^(2^a) and the page charge to show the observer source flux cannot supply the q-divisibility needed to keep the q-rank non-negative as t grows, closing Problem 1."
+lean = "Rule30UOR.WittDefect.observer_front_q_rank"
+since = "2026-10-31"
+note = "The q-rank R_t = t + Q - 2 qOrder(E_t) is bounded below by the front depth k >= 0 unconditionally (observer_front_q_rank), so its non-negativity is never at stake; a closing argument would need the rank or the q-order to carry a monotone or forced quantity, which q-adic-descent refuted by measurement (the q-order is random-like, ratio 1/4, slack not monotone). The page charge (observer_front_page_charge) constrains where q^(2^a) can divide a page, not the sequence of orders. Not a route."
+depends = ["q-adic-descent"]
+
+[[claim]]
+id = "route-b-reset-mismatch"
+status = "refuted"
+statement = "Route B (reset flux jump): between the doubling diagonal z+1 at time t and the reset diagonal z+3 at time t+1, which share the arrival time 2t-z-2 and hence the same import balance, the sum diagonalPhase + diagonalFlux changes by a unit, contradicting periodic_diagonal_import_balance and closing Problem 1."
+lean = "Rule30UOR.Routes.diagonal_reset_sum_invariant"
+since = "2026-10-31"
+note = "Decided by the kernel against the cited theorems: the phase negates (diagonal_reset_phase) and the flux jumps by twice the phase (diagonal_reset_flux_jump), so the sum changes by -phi + 2 phi = phi, i.e. it is invariant (diagonal_reset_sum_invariant), exactly as the common import balance requires. The claimed +-1 mismatch is an arithmetic slip. Not a route."
+depends = ["gate-phase-opposition"]

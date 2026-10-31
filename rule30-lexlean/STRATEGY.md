@@ -2959,4 +2959,33 @@ over carry events, the edge events known and periodic, the interior events the o
 the first; every term of it is a decided Boolean, and the only unknown is which interior pairs
 are black. That is the exact object the closing argument must speak about.
 
+## Three proposed routes, decided (2026-10-31)
+
+A reading of the paper proposed three endgame routes; each was decided by the kernel against the
+theorems it cites (`Rule30UOR.Routes`, register entries `route-a-band-discharge`,
+`route-b-reset-mismatch`, `route-c-rank-drop`, all refuted).
+
+* **Route A (dyadic reflection).** Discharge the single-row spatial-agreement hypothesis of the
+  terminal refutations 9.1496–9.1516 under a periodic center with `Q = c·2^K·P`, `K` large. Every
+  terminal refutation routes through `not_centerPeriodic_of_lhBandAgree_one_at_zero_diag_doubles`,
+  whose hypothesis bundle is contradictory with no periodicity premise
+  (`lhBandAgree_engine_hypotheses_unsat`); deriving the single-row hypothesis under
+  `CenterPeriodic` would be deriving `False` from `CenterPeriodic`, which is Problem 1 itself. The
+  dyadic choice `K ≥ z + p` supplies only the settled prefix `i < p` (`2^K`-periodic diagonals),
+  not the tail over unsettled diagonals, which is the whole content.
+* **Route B (reset flux jump).** Between the doubling diagonal `z+1` at `t` and the reset diagonal
+  `z+3` at `t+1`, sharing the arrival time `2t−z−2`, the sum `diagonalPhase + diagonalFlux` was
+  claimed to change by a unit. The phase negates (`diagonal_reset_phase`) and the flux jumps by
+  twice the phase (`diagonal_reset_flux_jump`): `−φ + 2φ = φ`, the sum is invariant
+  (`diagonal_reset_sum_invariant`), exactly as the common import balance requires.
+* **Route C (cyclotomic rank drop).** The `q`-rank `t + Q − 2·qOrder` is bounded below by the
+  front depth unconditionally (`observer_front_q_rank`), so its non-negativity is never at stake;
+  a closing argument would need a forced quantity in the sequence of orders, which
+  `q-adic-descent` refuted by measurement.
+
+The three pincers the reading describes (the unified boundary gate, coupled erasure with the
+right staircase, cyclotomic transport) are all proved and in the register; what none of them
+contains is a witness against the interior parity, and the routes that claimed one were
+arithmetic or vacuous. The register is unchanged in its open leaves.
+
 Problem 1 remains unproved.

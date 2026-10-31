@@ -181,6 +181,24 @@ suite = "register"
 statement = "Bit t of q^n times y is the convolution of the bits of y with the trinomial row (testBit_phiLinearPow_conv), so the interior diagonal is the explicit XOR over the rows m < t of the convolution of row m's interior carries with trinomialParity (t-1-m), and center t = not (edgeFormula t t XOR interiorFormula t t): the center is fully explicit in the carries."
 
 [[id]]
+id = "route-a-band-discharge"
+level = "some-true"
+suite = "register"
+statement = "Route A (dyadic reflection): discharge the single-row spatial-agreement hypothesis of the terminal refutations 9.1496-9.1516 under a periodic center with Q = c 2^K P and K large, so that lhBandAgree(z+p+1, Q, 1, S) with S >= p + 3Q follows and the terminal theorems close Problem 1."
+
+[[id]]
+id = "route-c-rank-drop"
+level = "some-true"
+suite = "register"
+statement = "Route C (cyclotomic rank drop): link the carry-ledger congruences modulo q^(2^a) and the page charge to show the observer source flux cannot supply the q-divisibility needed to keep the q-rank non-negative as t grows, closing Problem 1."
+
+[[id]]
+id = "route-b-reset-mismatch"
+level = "some-true"
+suite = "register"
+statement = "Route B (reset flux jump): between the doubling diagonal z+1 at time t and the reset diagonal z+3 at time t+1, which share the arrival time 2t-z-2 and hence the same import balance, the sum diagonalPhase + diagonalFlux changes by a unit, contradicting periodic_diagonal_import_balance and closing Problem 1."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

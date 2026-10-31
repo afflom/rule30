@@ -43,6 +43,7 @@ import Rule30UOR.Automatic
 import Rule30UOR.Gasket
 import Rule30UOR.Rules
 import Rule30UOR.EdgeSplit
+import Rule30UOR.Routes
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

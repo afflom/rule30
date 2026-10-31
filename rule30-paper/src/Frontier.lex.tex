@@ -169,6 +169,22 @@ Close the goal with \(\lexeme{r30.observation::periodic-arrival-no-crossing}(T, 
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-route-c-rank-drop}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < Q\), then if \(rightmostleft(Q, t, k)\), then \(k ≤ observerqrank(Q, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-front-q-rank}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-route-b-reset-mismatch}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(settledby(z + 2, t)\), then if \(z + 3 ≤ t\), then \(diagonalphase(Q, z + 3, t + 1) intplus diagonalflux(Q, z + 3, t + 1, 1) = diagonalphase(Q, z + 1, t) intplus diagonalflux(Q, z + 1, t, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-reset-sum-invariant}(Q, z, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \end{lexlean}

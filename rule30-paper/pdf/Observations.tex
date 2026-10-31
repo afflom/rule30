@@ -2692,4 +2692,11 @@ For every natural number \(T\) and natural number \(P\), \(\operatorname{centerp
 \begin{proof}
 The goal follows from \(\operatorname{centerperiodiciffinterioragainstedge}(T, P)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:diagonal-reset-sum-invariant}
+For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(\operatorname{zerodiagonal}(z)\), then if \(\operatorname{settledby}(z + 2, t)\), then if \(z + 3 \le t\), then \(\operatorname{diagonalphase}(Q, z + 3, t + 1) + \operatorname{diagonalflux}(Q, z + 3, t + 1, 1) = \operatorname{diagonalphase}(Q, z + 1, t) + \operatorname{diagonalflux}(Q, z + 1, t, 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalresetsuminvariant}(Q, z, t)\).
+\end{proof}
 \end{document}

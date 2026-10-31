@@ -211,6 +211,27 @@ feature = "interfaces/interior-diagonal-formula.md"
 evidence = "frontier check: Rule30UOR.EdgeSplit.center_eq_not_formulas kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "route-a-band-discharge"
+level = "some-true"
+statement = "Route A (dyadic reflection): discharge the single-row spatial-agreement hypothesis of the terminal refutations 9.1496-9.1516 under a periodic center with Q = c 2^K P and K large, so that lhBandAgree(z+p+1, Q, 1, S) with S >= p + 3Q follows and the terminal theorems close Problem 1."
+feature = "interfaces/route-a-band-discharge.md"
+evidence = "register: refuted (Rule30UOR.Interfaces.lhBandAgree_engine_hypotheses_unsat)"
+
+[[claim]]
+id = "route-c-rank-drop"
+level = "some-true"
+statement = "Route C (cyclotomic rank drop): link the carry-ledger congruences modulo q^(2^a) and the page charge to show the observer source flux cannot supply the q-divisibility needed to keep the q-rank non-negative as t grows, closing Problem 1."
+feature = "interfaces/route-c-rank-drop.md"
+evidence = "register: refuted (Rule30UOR.WittDefect.observer_front_q_rank)"
+
+[[claim]]
+id = "route-b-reset-mismatch"
+level = "some-true"
+statement = "Route B (reset flux jump): between the doubling diagonal z+1 at time t and the reset diagonal z+3 at time t+1, which share the arrival time 2t-z-2 and hence the same import balance, the sum diagonalPhase + diagonalFlux changes by a unit, contradicting periodic_diagonal_import_balance and closing Problem 1."
+feature = "interfaces/route-b-reset-mismatch.md"
+evidence = "register: refuted (Rule30UOR.Routes.diagonal_reset_sum_invariant)"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register and the architecture are LexLean semantic modules verified by the gate."
