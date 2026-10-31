@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "defect"
+category = "function"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.int::int))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.TemporalDefect"
+name = "Rule30UOR.TemporalDefect.defect"
+
+[[form]]
+id = "defect"
+channel = "math"
+surface = "defect"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name defect) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

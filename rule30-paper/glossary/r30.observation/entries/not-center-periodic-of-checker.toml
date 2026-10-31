@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-center-periodic-of-checker"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit H (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::center-disagrees-within) (local T) (local P) (local H)) (const lexlean.std.bool::true)))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Horizon"
+name = "Rule30UOR.Horizon.not_centerPeriodic_of_checker"
+
+[[form]]
+id = "not-center-periodic-of-checker"
+channel = "math"
+surface = "notcenterperiodicofchecker"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notcenterperiodicofchecker) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

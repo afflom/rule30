@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "right-defect-eq-defect"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (local Q) (local t) (nat 1)) (app (const r30.observation::defect) (local Q) (local t) (nat 1))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftCone"
+name = "Rule30UOR.LeftCone.rightDefect_eq_defect"
+
+[[form]]
+id = "right-defect-eq-defect"
+channel = "math"
+surface = "rightdefecteqdefect"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rightdefecteqdefect) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

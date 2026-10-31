@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "certificate-512-128-32"
+category = "proof-constant"
+signature = "(app (const lexlean.core::eq) (app (const r30.observation::short-periods-fail) (nat 512) (nat 128) (nat 32)) (const lexlean.std.bool::true))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Horizon"
+name = "Rule30UOR.Horizon.certificate_512_128_32"
+
+[[form]]
+id = "certificate-512-128-32"
+channel = "math"
+surface = "certificate51212832"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name certificate51212832)"

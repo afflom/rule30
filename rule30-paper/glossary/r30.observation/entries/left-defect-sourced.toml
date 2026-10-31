@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-defect-sourced"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hd (app (const lexlean.core::eq) (app (const r30.observation::left-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (local t) (local k)) (const lexlean.std.bool::true)))) (app (const lexlean.core::exists-op) (lam ((explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local t) (local s)) (app (const lexlean.core::land) (app (const lexlean.std.nat::lt) (local s) (app (const lexlean.std.nat::add) (local t) (local k))) (app (const lexlean.core::eq) (app (const r30.observation::right-defect) (app (const lexlean.std.nat::mul) (local m) (local P)) (local s) (nat 1)) (const lexlean.std.bool::true))))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftCone"
+name = "Rule30UOR.LeftCone.left_defect_sourced"
+
+[[form]]
+id = "left-defect-sourced"
+channel = "math"
+surface = "leftdefectsourced"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftdefectsourced) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

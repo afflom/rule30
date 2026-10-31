@@ -2685,3 +2685,33 @@ statement is equivalent to the old one.
    claimed.
 
 Problem 1 remains unproved.
+
+## Finite horizon certificates and the left agreement cone (2026-10-31)
+
+**Horizon certificates.** The rows are `Nat` bit-vectors (`row`, `rowCenter`), so the kernel
+evaluates the center column directly. `Rule30UOR.Horizon` states a window checker
+`centerDisagreesWithin T P H` and a range checker `shortPeriodsFail T0 P0 H`, proves them sound
+against `CenterPeriodic` (`disagreement_of_checker`, `not_centerPeriodic_of_checker`), and
+certifies `shortPeriodsFail 512 128 32 = true` by `decide` (about seventy seconds in the kernel).
+Hence `horizon_thirty_two`: for every `T ≤ 512` and `0 < P ≤ 128` the center disagrees with its
+lag-`P` shift at a time in `[T, T + 32)`, and `no_center_period_512_128`. The certificate is a
+theorem under `propext` and `Quot.sound`, not an experiment; it is registered as
+`horizon-certificate`, and `horizon-criterion` (the uniform `H(T, P)`) stays open. Extending the
+ranges costs kernel time linearly in `T0 · P0 · H`.
+
+**The left agreement cone.** Rule 30 is left-permutive, and on temporal defects
+`defect_step_linear` reads: agreement at `(t+1, p)`, `(t, p)` and `(t, p+1)` forces agreement at
+`(t, p-1)` (`LeftCone.defect_left_of_agree`). Iterating from the center, if the center agrees on
+`[t, t+k]` and column one agrees on `[t, t+k)` (`RightAgrees Q t k`, decidable), then every
+column `-j`, `j ≤ k`, agrees at time `t` (`left_cone_of_right_agrees`). Under a periodic center
+the first hypothesis is free, so every left defect at depth `k` at time `t` is *sourced* by a
+right column-one defect at a time in `[t, t+k)` (`left_defect_sourced`, a bounded search, no
+choice). This is the coupling law at every depth: the left half carries no defect that the
+right column did not send through the center within its depth. For `aperiodic-compensation` it
+fixes the shape of any closing argument: the two column-one defect sequences are not merely
+mirrored through the gate at depth one; the entire left defect field at times `≥ T` is a
+function of the right column-one defect sequence and the periodic center, so an obstruction
+must be an invariant of the right column-one sequence (which the right half, driven only by the
+periodic center as its boundary, produces autonomously from row `T`).
+
+Problem 1 remains unproved.

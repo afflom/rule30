@@ -2457,5 +2457,69 @@ Close the goal with \(\lexeme{r30.observation::no-center-period-512-128}(T, P)\)
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{left-defect-sourced}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(leftdefect(m * P, t, k) = true\), then there exists a natural number \(s\) such that \(t ≤ s ∧ s < t + k ∧ rightdefect(m * P, s, 1) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-defect-sourced}(T, P, m, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-cone-of-right-agrees}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(rightagrees(m * P, t, k)\), then \(leftdefect(m * P, t, k) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-cone-of-right-agrees}(T, P, m, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{defect-left-of-agree}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and integer \(p\), if \(defect(Q, t + 1, p) = false\), then if \(defect(Q, t, p) = false\), then if \(defect(Q, t, p intplus 1) = false\), then \(defect(Q, t, p intminus 1) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::defect-left-of-agree}(Q, t, p)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{certificate-512-128-32}
+\allowaxioms{Quot.sound;propext}
+\(shortperiodsfail(512, 128, 32) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::certificate-512-128-32}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{checker-of-certificate}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T0\) and natural number \(P0\) and natural number \(H\) and natural number \(T\) and natural number \(P\), if \(shortperiodsfail(T0, P0, H) = true\), then if \(T ≤ T0\), then if \(0 < P\), then if \(P ≤ P0\), then \(centerdisagreeswithin(T, P, H) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::checker-of-certificate}(T0, P0, H, T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{disagreement-of-checker}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(H\), if \(centerdisagreeswithin(T, P, H) = true\), then there exists a natural number \(t\) such that \(T ≤ t ∧ t < T + H ∧ ¬ (center(t + P) = center(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::disagreement-of-checker}(T, P, H)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{not-center-periodic-of-checker}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(H\), if \(centerdisagreeswithin(T, P, H) = true\), then \(¬ centerperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::not-center-periodic-of-checker}(T, P, H)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-defect-eq-defect}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), \(rightdefect(Q, t, 1) = defect(Q, t, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-defect-eq-defect}(Q, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

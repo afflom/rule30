@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "disagreement-of-checker"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit H (const lexlean.std.nat::nat))) (pi ((explicit h (app (const lexlean.core::eq) (app (const r30.observation::center-disagrees-within) (local T) (local P) (local H)) (const lexlean.std.bool::true)))) (app (const lexlean.core::exists-op) (lam ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local T) (local t)) (app (const lexlean.core::land) (app (const lexlean.std.nat::lt) (local t) (app (const lexlean.std.nat::add) (local T) (local H))) (app (const lexlean.core::lnot) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (local P))) (app (const r30.scale::center) (local t))))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Horizon"
+name = "Rule30UOR.Horizon.disagreement_of_checker"
+
+[[form]]
+id = "disagreement-of-checker"
+channel = "math"
+surface = "disagreementofchecker"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name disagreementofchecker) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

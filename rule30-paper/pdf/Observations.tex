@@ -2144,4 +2144,60 @@ For every natural number \(T\) and natural number \(P\), if \(T \le 512\), then 
 \begin{proof}
 The goal follows from \(\operatorname{nocenterperiod512128}(T, P)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:left-defect-sourced}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{leftdefect}(m \cdot P, t, k) = \operatorname{true}\), then there exists a natural number \(s\) such that \(t \le s\) and \(s < t + k \land \operatorname{rightdefect}(m \cdot P, s, 1) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftdefectsourced}(T, P, m, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-cone-of-right-agrees}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(\operatorname{rightagrees}(m \cdot P, t, k)\), then \(\operatorname{leftdefect}(m \cdot P, t, k) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftconeofrightagrees}(T, P, m, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:defect-left-of-agree}
+For every natural number \(Q\) and natural number \(t\) and integer \(p\), if \(\operatorname{defect}(Q, t + 1, p) = \operatorname{false}\), then if \(\operatorname{defect}(Q, t, p) = \operatorname{false}\), then if \(\operatorname{defect}(Q, t, p + 1) = \operatorname{false}\), then \(\operatorname{defect}(Q, t, p - 1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{defectleftofagree}(Q, t, p)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:certificate-512-128-32}
+\(\operatorname{shortperiodsfail}(512, 128, 32) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{certificate51212832}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:checker-of-certificate}
+For every natural number \(T0\) and natural number \(P0\) and natural number \(H\) and natural number \(T\) and natural number \(P\), if \(\operatorname{shortperiodsfail}(T0, P0, H) = \operatorname{true}\), then if \(T \le T0\), then if \(0 < P\), then if \(P \le P0\), then \(\operatorname{centerdisagreeswithin}(T, P, H) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{checkerofcertificate}(T0, P0, H, T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:disagreement-of-checker}
+For every natural number \(T\) and natural number \(P\) and natural number \(H\), if \(\operatorname{centerdisagreeswithin}(T, P, H) = \operatorname{true}\), then there exists a natural number \(t\) such that \(T \le t\) and \(t < T + H \land \lnot\operatorname{center}(t + P) = \operatorname{center}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{disagreementofchecker}(T, P, H)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:not-center-periodic-of-checker}
+For every natural number \(T\) and natural number \(P\) and natural number \(H\), if \(\operatorname{centerdisagreeswithin}(T, P, H) = \operatorname{true}\), then not \(\operatorname{centerperiodic}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{notcenterperiodicofchecker}(T, P, H)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-defect-eq-defect}
+For every natural number \(Q\) and natural number \(t\), \(\operatorname{rightdefect}(Q, t, 1) = \operatorname{defect}(Q, t, 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightdefecteqdefect}(Q, t)\).
+\end{proof}
 \end{document}

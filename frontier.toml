@@ -23,7 +23,7 @@ id = "aperiodic-compensation"
 status = "open"
 statement = "Under a hypothetical center period, the two column-one defects (each aperiodic by Jen) cannot satisfy the gated mirror forever. This is the remaining obligation."
 since = "2026-10-28"
-note = "Every proved reduction ends here. A closing argument needs an invariant of the single-seed orbit that the gated mirror violates."
+note = "Every proved reduction ends here. A closing argument needs an invariant of the single-seed orbit that the gated mirror violates. Shape fixed by left-defect-sourcing (2026-10-31): under a periodic center the entire left defect field is a function of the right column-one defect sequence and the center, so the obstruction must be an invariant of the right column-one sequence, which the right half produces autonomously from row T with the periodic center as its only boundary input."
 
 [[claim]]
 id = "q-adic-descent"
@@ -97,3 +97,11 @@ statement = "For every transient T ≤ 512 and period 0 < P ≤ 128 the center d
 lean = "Rule30UOR.Horizon.horizon_thirty_two"
 since = "2026-10-31"
 note = "Rule30UOR.Horizon: rows are Nat bit-vectors, so the kernel evaluates the center column directly; shortPeriodsFail 512 128 32 = true by decide (about 70 s), with the checker proved sound against CenterPeriodic (no_center_period_512_128). Each certificate is finite; the open claim is the uniform H(T, P). Extending the ranges costs kernel time linearly in T0 * P0 * H."
+
+[[claim]]
+id = "left-defect-sourcing"
+status = "proved"
+statement = "Under a periodic center, a left defect at depth k at time t is sourced by a right column-one defect at a time in [t, t + k); equivalently column-one agreement on [t, t + k) forces the whole left cone of depth k at t to agree."
+lean = "Rule30UOR.LeftCone.left_defect_sourced"
+since = "2026-10-31"
+note = "Rule30UOR.LeftCone: left-permutivity on temporal defects (defect_left_of_agree, from defect_step_linear) iterated from the center; the center hypothesis is free under CenterPeriodic (left_cone_of_right_agrees, hypothesis RightAgrees decidable); the witness is a bounded search, no choice. The coupling law at every depth: the left defect field at times >= T is a function of the right column-one defect sequence and the periodic center."

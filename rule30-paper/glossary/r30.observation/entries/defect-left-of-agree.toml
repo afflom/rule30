@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "defect-left-of-agree"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.int::int))) (pi ((explicit h1 (app (const lexlean.core::eq) (app (const r30.observation::defect) (local Q) (app (const lexlean.std.nat::add) (local t) (nat 1)) (local p)) (const lexlean.std.bool::false))) (explicit h0 (app (const lexlean.core::eq) (app (const r30.observation::defect) (local Q) (local t) (local p)) (const lexlean.std.bool::false))) (explicit hr (app (const lexlean.core::eq) (app (const r30.observation::defect) (local Q) (local t) (app (const lexlean.std.int::add) (local p) (nat 1))) (const lexlean.std.bool::false)))) (app (const lexlean.core::eq) (app (const r30.observation::defect) (local Q) (local t) (app (const lexlean.std.int::sub) (local p) (nat 1))) (const lexlean.std.bool::false))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftCone"
+name = "Rule30UOR.LeftCone.defect_left_of_agree"
+
+[[form]]
+id = "defect-left-of-agree"
+channel = "math"
+surface = "defectleftofagree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name defectleftofagree) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

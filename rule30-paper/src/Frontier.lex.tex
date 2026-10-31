@@ -41,6 +41,14 @@ Close the goal with \(\lexeme{r30.observation::horizon-thirty-two}(T, P)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-left-defect-sourcing}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(leftdefect(m * P, t, k) = true\), then there exists a natural number \(s\) such that \(t ≤ s ∧ s < t + k ∧ rightdefect(m * P, s, 1) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-defect-sourced}(T, P, m, t, k)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

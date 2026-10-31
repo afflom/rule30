@@ -159,7 +159,10 @@ def add(lean_name, package, slug=None, target=None, dry_run=False, env="theorem"
         Path(target).write_text(insert_block(text, block, section))
     project = lx.lexicon_project[package]
     checks.lock(project)
-    result = checks.check(project, [str(Path(target).relative_to(repo.PROJECTS[project]))] if p["statement"] else None)
+    # A function entry has no statement block; any module that loads the glossary
+    # validates it, so check the default module rather than the whole project.
+    checked = Path(target) if p["statement"] else next((f for f in files if f.name == "Observations.lex.tex"), files[-1])
+    result = checks.check(project, [str(checked.relative_to(repo.PROJECTS[project]))])
     if not result["ok"]:
         # roll back the entry, the statement and the lock
         p["entry_path"].unlink(missing_ok=True)

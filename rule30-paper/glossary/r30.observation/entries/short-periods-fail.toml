@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "short-periods-fail"
+category = "function"
+signature = "(pi ((explicit T0 (const lexlean.std.nat::nat)) (explicit P0 (const lexlean.std.nat::nat)) (explicit H (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Horizon"
+name = "Rule30UOR.Horizon.shortPeriodsFail"
+
+[[form]]
+id = "short-periods-fail"
+channel = "math"
+surface = "shortperiodsfail"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name shortperiodsfail) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"
