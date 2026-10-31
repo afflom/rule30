@@ -80,20 +80,27 @@ def cmd_interface(args):
 
 def cmd_api(args):
     """The API as a LexLean semantic module (rule30-api/src/Api.lex.tex)."""
-    from . import apimodel, registermodel
+    from . import apimodel, registermodel, archmodel, prismmodel
     if args.sub == "sync":
-        a, r = apimodel.sync(), registermodel.sync()
-        if a["changed"] or r["changed"]:
+        a, r, h = apimodel.sync(), registermodel.sync(), archmodel.sync()
+        m = prismmodel.sync()
+        if a["changed"] or r["changed"] or h["changed"]:
             checks.lock("api")
-        out(args, {"api": a, "register": r},
+        out(args, {"api": a, "register": r, "architecture": h},
             f"{a['module']}: {a['commands']} commands" + (" (rewritten)" if a["changed"] else " (current)") +
-            f"\n{r['module']}: {r['claims']} claims" + (" (rewritten)" if r["changed"] else " (current)"))
+            f"\n{r['module']}: {r['claims']} claims" + (" (rewritten)" if r["changed"] else " (current)") +
+            f"\n{h['module']}: {h['stakeholders']} stakeholders" + (" (rewritten)" if h["changed"] else " (current)") +
+            f"\n{m['model']}: {m['claims']} claims" + (" (rewritten)" if m["changed"] else " (current)"))
     else:
-        a, r = apimodel.check(), registermodel.check()
-        out(args, {"api": a, "register": r},
+        a, r, h = apimodel.check(), registermodel.check(), archmodel.check()
+        m = prismmodel.check()
+        if not m["ok"]:
+            print(m["reason"]); sys.exit(1)
+        out(args, {"api": a, "register": r, "architecture": h},
             ("Api.lex.tex matches the CLI" if a["ok"] else a["reason"]) + "\n" +
-            ("Register.lex.tex matches frontier.toml" if r["ok"] else r["reason"]))
-        if not (a["ok"] and r["ok"]):
+            ("Register.lex.tex matches frontier.toml" if r["ok"] else r["reason"]) + "\n" +
+            ("Architecture.lex.tex is current" if h["ok"] else h["reason"]))
+        if not (a["ok"] and r["ok"] and h["ok"]):
             sys.exit(1)
 
 
@@ -331,6 +338,8 @@ def _sync_register():
     from . import registermodel
     if registermodel.sync()["changed"]:
         checks.lock("api")
+    from . import prismmodel
+    prismmodel.sync()
 
 
 def cmd_frontier(args):

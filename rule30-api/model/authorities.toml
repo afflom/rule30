@@ -1,0 +1,22 @@
+spec = "template/1"
+
+[[authority]]
+id = "RULE30-PRIZE"
+name = "Wolfram Rule 30 Prize, Problem 1"
+citation = "https://www.rule30prize.org"
+statement = "The center column of Rule 30 from a single black cell is not eventually periodic."
+realized_by = ["problem1", "coupling-law", "aperiodic-compensation", "recurrent-central-collision", "horizon-criterion", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "center-infinite-kernel", "kernel-self-similarity", "no-dyadic-self-similarity", "dilation-reduction", "dyadic-column-aperiodic", "base-generic-reduction", "some-base-dilation-aperiodic", "kappa-collapse", "dyadic-response-reduction", "dyadic-response-aperiodic"]
+
+[[authority]]
+id = "LEXLEAN"
+name = "UOR-Foundation/LexLean"
+citation = "https://github.com/UOR-Foundation/LexLean"
+statement = "A closed-lexicon LaTeX-to-Lean 4 compiler; the paper, the register and the API are its modules."
+realized_by = ["api-modules"]
+
+[[authority]]
+id = "PRISMPM"
+name = "UOR-Foundation/PrismPM"
+citation = "https://github.com/UOR-Foundation/PrismPM"
+statement = "Model registers (authorities, ids, ledger) and the generated runtime of LexLean application models."
+realized_by = ["api-modules"]

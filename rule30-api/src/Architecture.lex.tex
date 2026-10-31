@@ -1,0 +1,161 @@
+\begin{lexlean}{Architecture}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+  name: ConceptualModel,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: statement, type: String},
+    {name: citation, type: String}
+  ]
+}
+
+structure{
+  name: Stakeholder,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: name, type: String},
+    {name: concerns, type: (List String)}
+  ]
+}
+
+structure{
+  name: Concern,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: statement, type: String}
+  ]
+}
+
+structure{
+  name: View,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: concern, type: String},
+    {name: command, type: String},
+    {name: statement, type: String}
+  ]
+}
+
+definition{
+  name: conceptualModel,
+  parameters: [],
+  result: ConceptualModel,
+  body: (record ConceptualModel {id := "rule30-problem-1", statement := "Wolfram's Rule 30 Prize, Problem 1: the center column of Rule 30 from a single black cell is not eventually periodic.", citation := "https://www.rule30prize.org"}),
+  axioms: []
+}
+
+definition{
+  name: stakeholders,
+  parameters: [],
+  result: (List Stakeholder),
+  body: (cons (record Stakeholder {id := "wolfram", name := "Stephen Wolfram and the Rule 30 Prize committee", concerns := (cons "closure" (cons "evidence" (nil String)))}) (cons (record Stakeholder {id := "researcher", name := "The researcher driving the proof", concerns := (cons "closure" (cons "optimal-implementation" (cons "comprehension" (nil String))))}) (cons (record Stakeholder {id := "community", name := "The community and industry reading and reusing the work", concerns := (cons "evidence" (cons "comprehension" (cons "current-view" (nil String))))}) (cons (record Stakeholder {id := "uor-foundation", name := "The UOR Foundation (LexLean and prism-stdlib improve through this research)", concerns := (cons "stdlib" (cons "optimal-implementation" (cons "current-view" (nil String))))}) (nil Stakeholder))))),
+  axioms: []
+}
+
+definition{
+  name: concerns,
+  parameters: [],
+  result: (List Concern),
+  body: (cons (record Concern {id := "closure", statement := "Problem 1 is closed by a kernel-checked chain of reductions."}) (cons (record Concern {id := "evidence", statement := "Every claim is backed by kernel evidence; nothing unproved is called proved."}) (cons (record Concern {id := "optimal-implementation", statement := "The implementation stays optimal: validation runs once, in the gate, and never impedes the research."}) (cons (record Concern {id := "comprehension", statement := "The features of the problem and of the solution are labeled and readable from the register."}) (cons (record Concern {id := "current-view", statement := "Each push publishes the current state of the implementation."}) (cons (record Concern {id := "stdlib", statement := "What the research needs from LexLean and prism-stdlib is identified and fed back."}) (nil Concern))))))),
+  axioms: []
+}
+
+definition{
+  name: views,
+  parameters: [],
+  result: (List View),
+  body: (cons (record View {id := "reduction-tree", concern := "closure", command := "chain", statement := "The register as one DAG from problem1 to the open leaves, every arrow a theorem."}) (cons (record View {id := "register-evidence", concern := "evidence", command := "frontier_check", statement := "frontier check: proved claims kernel-checked under propext and Quot.sound and published; Register.lex.tex decided."}) (cons (record View {id := "gate", concern := "optimal-implementation", command := "commit", statement := "One validate-and-commit step with cached Lake directories and reused LexLean attestations; CI renders, it does not re-validate."}) (cons (record View {id := "interface-sheets", concern := "comprehension", command := "interface", statement := "The labeled interface sheet of every claim: chain, notions, exact facts, handles."}) (cons (record View {id := "published-view", concern := "current-view", command := "chain", statement := "The view workflow uploads the tree, the register, the sheets and the API modules on every push to main."}) (cons (record View {id := "api-modules", concern := "stdlib", command := "api_sync", statement := "The command surface, the register and this architecture are LexLean semantic modules; what they needed from the language is recorded in AGENTS.md."}) (nil View))))))),
+  axioms: []
+}
+
+definition{
+  name: memberString,
+  parameters: [value : String, values : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => false
+    | List.cons head tail => (if (prim equal value head : Bool) then true else (memberString value tail))),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: concernIds,
+  parameters: [cs : (List Concern)],
+  result: (List String),
+  body: (match cs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (concernIds tail))),
+  axioms: [],
+  recursive_argument: cs
+}
+
+definition{
+  name: viewConcerns,
+  parameters: [vs : (List View)],
+  result: (List String),
+  body: (match vs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head concern) (viewConcerns tail))),
+  axioms: [],
+  recursive_argument: vs
+}
+
+definition{
+  name: allMembers,
+  parameters: [values : (List String), ids : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => true
+    | List.cons head tail => (if (memberString head ids) then (allMembers tail ids) else false)),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: stakeholderConcernsExist,
+  parameters: [ss : (List Stakeholder), ids : (List String)],
+  result: Bool,
+  body: (match ss
+    | List.nil => true
+    | List.cons head tail => (if (allMembers (project head concerns) ids) then (stakeholderConcernsExist tail ids) else false)),
+  axioms: [],
+  recursive_argument: ss
+}
+
+theorem{
+  name: stakeholderConcernsDeclared,
+  parameters: [],
+  statement: ((stakeholderConcernsExist (stakeholders) (concernIds (concerns))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyConcernAddressed,
+  parameters: [],
+  statement: ((allMembers (concernIds (concerns)) (viewConcerns (views))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyViewHasConcern,
+  parameters: [],
+  statement: ((allMembers (viewConcerns (views)) (concernIds (concerns))) = true),
+  proof: decide{},
+  axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

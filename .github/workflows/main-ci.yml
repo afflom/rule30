@@ -1,9 +1,9 @@
 name: Main Branch Validation
 
+# The complete gate already runs before every commit and push (the hooks);
+# running it again on every push would only slow the research down. It stays
+# available on demand and on pull requests from outside the hooks.
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main

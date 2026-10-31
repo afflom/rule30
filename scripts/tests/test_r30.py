@@ -274,6 +274,16 @@ class ApiModelTests(unittest.TestCase):
         r = apimodel.check()
         self.assertTrue(r["ok"], r["reason"])
 
+    def test_architecture_module_is_current_and_closes_its_concerns(self):
+        from tools.r30 import archmodel
+        r = archmodel.check()
+        self.assertTrue(r["ok"], r["reason"])
+        concern_ids = {c["id"] for c in archmodel.CONCERNS}
+        for s in archmodel.STAKEHOLDERS:
+            self.assertTrue(set(s["concerns"]) <= concern_ids, s["id"])
+        self.assertEqual(concern_ids, {v["concern"] for v in archmodel.VIEWS})
+        self.assertIn("name: everyConcernAddressed", archmodel.render())
+
     def test_register_module_matches_frontier_and_states_well_formedness(self):
         from tools.r30 import registermodel
         r = registermodel.check()

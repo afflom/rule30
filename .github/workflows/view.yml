@@ -1,0 +1,44 @@
+name: Current view for stakeholders
+
+# Every push to main publishes the current state of the implementation as a
+# light artifact: the reduction tree, the register, the interface sheets and
+# the LexLean API modules. Validation already happened in the pre-commit gate
+# (every commit on main passed it), so this workflow runs no Lean, no
+# lexlean and no tests: it must never slow the research down.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: view-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  view:
+    name: Render the current view
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Render the reduction tree and the register
+        run: |
+          mkdir -p view
+          cp frontier.toml view/
+          cp rule30-api/src/Api.lex.tex rule30-api/src/Register.lex.tex view/
+          cp rule30-paper/src/Frontier.lex.tex view/
+          python3 -m tools.r30 chain > view/chain.txt
+          python3 -m tools.r30 frontier list > view/register.txt
+          python3 -m tools.r30 --json frontier list > view/register.json
+          cp -r interfaces view/interfaces
+          cp AGENTS.md rule30-lexlean/STRATEGY.md view/
+          { echo "# Rule 30 Problem 1: current view"; echo; echo "Commit: ${GITHUB_SHA}"; echo; echo '```'; cat view/chain.txt; echo '```'; } > view/README.md
+      - name: Upload the view
+        uses: actions/upload-artifact@v4
+        with:
+          name: rule30-current-view
+          path: view
