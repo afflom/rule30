@@ -363,6 +363,56 @@ theorem problem1_of_infinite_kernel (h : CenterInfiniteKernel) :
     Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
   Rule30UOR.Scale.problem1_iff.2 (no_period_of_infinite_kernel h)
 
+/-! ## Dilation sequences
+
+A dyadic self-similarity `center (2^k' t) = center (2^k t)` for all `t` makes
+every dilation sequence `j ↦ center (2^j t)` periodic with period `k' − k`
+from `j = k` (substitute `2^j t` for `t`). So a finite kernel makes every
+dilation sequence eventually periodic, with one period for all `t`; and
+Problem 1 follows if a single dilation sequence, for instance the dyadic
+column `j ↦ center (2^j)`, is not eventually periodic. -/
+
+/-- The dilation sequence `j ↦ center (2^j t)` has period `d` from `K`. -/
+def DilationPeriodic (t K d : Nat) : Prop := ∀ j, K ≤ j → center (twopow (j + d) * t) = center (twopow j * t)
+
+theorem twopow_add (a b : Nat) : twopow (a + b) = twopow a * twopow b := by
+  induction b with
+  | zero => rw [Nat.add_zero, Rule30UOR.Core.twopow, Nat.mul_one]
+  | succ b ih =>
+    rw [Nat.add_succ, Rule30UOR.Core.twopow, Rule30UOR.Core.twopow, ih, Nat.mul_add]
+
+/-- A finite kernel makes every dilation sequence periodic with a common period. -/
+theorem dilationPeriodic_of_kernel2Finite (h : Kernel2Finite center) :
+    ∃ K d, 0 < d ∧ ∀ t, DilationPeriodic t K d := by
+  obtain ⟨k, k', hkk, hs⟩ := dyadic_self_similar_of_kernel2Finite h
+  refine ⟨k, k' - k, by cfomega, fun t j hj => ?_⟩
+  have h1 := hs (twopow (j - k) * t)
+  rw [← Nat.mul_assoc, ← Nat.mul_assoc, ← twopow_add, ← twopow_add,
+    show k' + (j - k) = j + (k' - k) by cfomega, show k + (j - k) = j by cfomega] at h1
+  exact h1
+
+/-- Some dilation sequence is not eventually periodic. -/
+def SomeDilationAperiodic : Prop := ∃ t, ∀ K d, 0 < d → ¬ DilationPeriodic t K d
+
+theorem centerInfiniteKernel_of_dilation_aperiodic (h : SomeDilationAperiodic) :
+    CenterInfiniteKernel := fun hfin => by
+  obtain ⟨K, d, hd, hall⟩ := dilationPeriodic_of_kernel2Finite hfin
+  obtain ⟨t, ht⟩ := h
+  exact ht K d hd (hall t)
+
+/-- **Problem 1 follows if some dilation sequence `j ↦ center (2^j t)` is not
+eventually periodic**, for instance the dyadic column `j ↦ center (2^j)`. -/
+theorem problem1_of_dilation_aperiodic (h : SomeDilationAperiodic) :
+    Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
+  problem1_of_infinite_kernel (centerInfiniteKernel_of_dilation_aperiodic h)
+
+/-- The dyadic column `j ↦ center (2^j)` is not eventually periodic. -/
+def DyadicColumnAperiodic : Prop := ∀ K d, 0 < d → ¬ DilationPeriodic 1 K d
+
+theorem problem1_of_dyadic_column_aperiodic (h : DyadicColumnAperiodic) :
+    Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
+  problem1_of_dilation_aperiodic ⟨1, h⟩
+
 /-- **Problem 1 follows from the absence of dyadic self-similarity.** -/
 theorem problem1_of_no_dyadic_self_similarity (h : NoDyadicSelfSimilarity) :
     Ruliology.CellularAutomata.Rule30Prize.Problem1 :=

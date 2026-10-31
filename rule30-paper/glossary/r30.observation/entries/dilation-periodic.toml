@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dilation-periodic"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit K (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.DilationPeriodic"
+
+[[form]]
+id = "dilation-periodic"
+channel = "math"
+surface = "dilationperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name dilationperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

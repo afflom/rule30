@@ -2834,4 +2834,19 @@ question is the behaviour in `k` of the late Witt responses at the dyadic times 
 zero-state machinery (`zcenter`, `settle`, batches 20–49) describes exactly these and was vacuous as
 an engine, so the witness must come from a comparison of two scales, not from one.
 
+**Dilation sequences: Problem 1 on the Witt axis.** A self-similarity `center(2^k' t) = center(2^k t)`
+for all `t`, applied to `2^j t`, makes every dilation sequence `j ↦ center(2^j t)` periodic with
+the one period `k' − k` from `j = k` (`dilationPeriodic_of_kernel2Finite`). Hence **Problem 1
+follows if a single dilation sequence is not eventually periodic** (`problem1_of_dilation_aperiodic`),
+in particular if the dyadic column `j ↦ center(2^j)` is not (`problem1_of_dyadic_column_aperiodic`,
+registered as `dyadic-column-aperiodic`). This transfers the problem from the time axis to the
+scale axis, where the exact law is `center(2^(j+1)) = center(2^j) ⊕ wittRespBool(2^j, j)`
+(`center_twopow_succ`): the dyadic column is the running XOR of the late Witt responses at the
+dyadic times. The caveat is exact too: if the center were 2-adically continuous at `0` (constant on
+all multiples of some `2^K`), every dilation sequence would be eventually constant and this
+reduction would be silent, while the kernel could still be infinite along other paths; the
+statement therefore also asks whether `wittRespBool(2^j, j)` is eventually zero. Nothing exact
+here decides it; what is proved is that the whole of Problem 1 rests on the behaviour of one
+sequence indexed by scale.
+
 Problem 1 remains unproved.

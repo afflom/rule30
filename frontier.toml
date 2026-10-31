@@ -154,3 +154,21 @@ lean = "Rule30UOR.Automatic.NoDyadicSelfSimilarity"
 since = "2026-10-31"
 note = "The most concrete sufficient condition for Problem 1 in the register: a witness t(k, k') against every pair of scales. Equivalent data: kernelSeq_step_late gives the step of center(2^k t) out of the cone as the symmetric pair of cells at distance 2^k XOR the Witt window response; two_places_settled gives the dyadic increments center(r + 2^(k+1)) XOR center(r + 2^k) as late Witt responses. A witness must compare two scales; single-scale (zero-state) engines were vacuous (band-engines)."
 depends = ["kernel-self-similarity"]
+
+[[claim]]
+id = "dilation-reduction"
+status = "proved"
+statement = "A finite 2-kernel makes every dilation sequence j -> center(2^j t) eventually periodic with one common period; hence Problem 1 follows if a single dilation sequence, in particular the dyadic column j -> center(2^j), is not eventually periodic."
+lean = "Rule30UOR.Automatic.problem1_of_dyadic_column_aperiodic"
+since = "2026-10-31"
+note = "Rule30UOR.Automatic: dilationPeriodic_of_kernel2Finite (substitute 2^j t into the self-similarity), problem1_of_dilation_aperiodic, problem1_of_dyadic_column_aperiodic. Transfers Problem 1 from the time axis to the scale axis."
+depends = ["kernel-self-similarity"]
+
+[[claim]]
+id = "dyadic-column-aperiodic"
+status = "open"
+statement = "The dyadic column j -> center(2^j) is not eventually periodic."
+lean = "Rule30UOR.Automatic.DyadicColumnAperiodic"
+since = "2026-10-31"
+note = "Sufficient for Problem 1 (dilation-reduction). Exact law: center(2^(j+1)) = center(2^j) XOR wittRespBool(2^j, j) (center_twopow_succ), so the column is the running XOR of the late Witt responses at dyadic times. Caveat: if the center were 2-adically continuous at 0 (constant on all multiples of some 2^K) this column would be eventually constant and the reduction silent; the claim therefore includes that wittRespBool(2^j, j) is not eventually zero. More generally SomeDilationAperiodic (any t) suffices. Not known."
+depends = ["dilation-reduction"]

@@ -2772,5 +2772,40 @@ Close the goal with \(\lexeme{r30.observation::center-twopow-succ}(k)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{twopow-add}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\), \(twopow(a + b) = twopow(a) * twopow(b)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::twopow-add}(a, b)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-infinite-kernel-of-dilation-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(somedilationaperiodic\), then \(centerinfinitekernel\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::center-infinite-kernel-of-dilation-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-dilation-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(somedilationaperiodic\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-dilation-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-dyadic-column-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(dyadiccolumnaperiodic\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-dyadic-column-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

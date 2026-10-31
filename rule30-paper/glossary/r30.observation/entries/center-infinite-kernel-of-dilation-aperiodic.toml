@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-infinite-kernel-of-dilation-aperiodic"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.observation::some-dilation-aperiodic))) (const r30.observation::center-infinite-kernel))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.centerInfiniteKernel_of_dilation_aperiodic"
+
+[[form]]
+id = "center-infinite-kernel-of-dilation-aperiodic"
+channel = "math"
+surface = "centerinfinitekernelofdilationaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerinfinitekernelofdilationaperiodic) (paren (seq (slot 0))))"
