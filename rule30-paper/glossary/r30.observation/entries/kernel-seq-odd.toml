@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "kernel-seq-odd"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::kernel-seq) (app (const lexlean.std.nat::add) (local k) (nat 1)) (app (const lexlean.std.nat::add) (local r) (app (const r30.scale::twopow) (local k))) (local t)) (app (const r30.observation::kernel-seq) (local k) (local r) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local t)) (nat 1)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.kernelSeq_odd"
+
+[[form]]
+id = "kernel-seq-odd"
+channel = "math"
+surface = "kernelseqodd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name kernelseqodd) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -27,6 +27,8 @@ TOOLS = [
      {"query": "string", "limit": "integer"}),
     ("lexicon_show", "Show one lexeme (by qualified id or Lean name).", {"id": "string"}),
     ("sig", "Lean types of declarations as s-expressions.", {"names": "array"}),
+    ("mentions", "Theorems whose statements mention all of the given Lean constants (the exact facts already proved about a notion).",
+     {"names": "array", "prefixes": "array"}),
     ("theorem_preview", "Translate Lean theorems to a LexLean entry and statement without writing.",
      {"names": "array", "lexicon": "string"}),
     ("theorem_add", "Publish Lean theorems on the LexLean surface: entry, statement, check, probe.",
@@ -84,6 +86,8 @@ def argv_for(name, a):
         return ["lexicon", "show", g("id", "")]
     if name == "sig":
         return ["sig", *names]
+    if name == "mentions":
+        return ["mentions", *names] + (["--prefixes", *g("prefixes")] if g("prefixes") else [])
     if name in ("theorem_preview", "theorem_add"):
         argv = ["theorem", name.split("_")[1], *names, "--lexicon", g("lexicon", "r30.observation")]
         if g("slug"):

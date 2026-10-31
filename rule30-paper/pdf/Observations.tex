@@ -2355,4 +2355,32 @@ If \(\operatorname{centerinfinitekernel}\), then \(\operatorname{problemone}\).
 Assume \(h\).
 The goal follows from \(\operatorname{problem1ofinfinitekernel}(h)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:kernel-seq-step}
+For every natural number \(k\) and natural number \(r\) and natural number \(t\), \(\operatorname{kernelseq}(k, r, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{kernelseq}(k, r, t), \operatorname{cell}(\operatorname{twopow}(k) \cdot t + r, \operatorname{negpow}(k))), \operatorname{response}(\operatorname{twopow}(k) \cdot t + r, k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{kernelseqstep}(k, r, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:response-cone}
+For every natural number \(t\) and natural number \(k\), if \(t < \operatorname{twopow}(k)\), then \(\operatorname{response}(t, k) = \operatorname{bxor}(\operatorname{center}(t), \operatorname{center}(t + \operatorname{twopow}(k)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{responsecone}(t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:kernel-seq-even}
+For every natural number \(k\) and natural number \(r\) and natural number \(t\), \(\operatorname{kernelseq}(k + 1, r, t) = \operatorname{kernelseq}(k, r, 2 \cdot t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{kernelseqeven}(k, r, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:kernel-seq-odd}
+For every natural number \(k\) and natural number \(r\) and natural number \(t\), \(\operatorname{kernelseq}(k + 1, r + \operatorname{twopow}(k), t) = \operatorname{kernelseq}(k, r, 2 \cdot t + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{kernelseqodd}(k, r, t)\).
+\end{proof}
 \end{document}

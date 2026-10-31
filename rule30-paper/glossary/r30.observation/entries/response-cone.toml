@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "response-cone"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::lt) (local t) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.scale::response) (local t) (local k)) (app (const r30.local::bxor) (app (const r30.scale::center) (local t)) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (local k))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.response_cone"
+
+[[form]]
+id = "response-cone"
+channel = "math"
+surface = "responsecone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name responsecone) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

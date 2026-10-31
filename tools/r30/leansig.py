@@ -62,6 +62,12 @@ def choice_users(prefixes=("Rule30UOR",), **kw):
     return sorted(line.split(" ", 2)[2] for line in out.splitlines() if line.startswith("CHOICE "))
 
 
+def mentions(names, prefixes=("Rule30UOR",), **kw):
+    """Theorems under the prefixes whose statements mention all of `names`."""
+    out, _ = _run("#r30mentions " + " ".join(prefixes) + " : " + " ".join(names), **kw)
+    return sorted(line.split(" ", 1)[1] for line in out.splitlines() if line.startswith("MENTION "))
+
+
 def theorems(prefixes=("Rule30UOR",), **kw):
     """Public theorem names under the module prefixes."""
     out, _ = _run("#r30decls " + " ".join(prefixes), **kw)

@@ -161,6 +161,48 @@ theorem centerKernelFinite_of_centerPeriodic (T P : Nat) (hP : 0 < P)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : CenterKernelFinite :=
   kernel2Finite_of_centerPeriodic T P hP hc
 
+/-! ## The kernel subsequences and their differences
+
+`kernelSeq k r t = center (2^k t + r)`. The scale identity gives each kernel
+subsequence as a running XOR of a difference sequence built from the cell at
+depth `2^k` and the window response; in the cone (`t < 2^k`) the response is
+the center's own lag-`2^k` difference. The kernel is a binary tree: the
+children of `(k, r)` are `(k+1, r)` and `(k+1, r + 2^k)`, the even and odd
+subsequences. -/
+
+/-- The kernel subsequence `t ↦ center (2^k t + r)`. -/
+def kernelSeq (k r t : Nat) : Bool := center (twopow k * t + r)
+
+theorem kernelSeq_step (k r t : Nat) :
+    kernelSeq k r (t + 1) =
+      bxor (bxor (kernelSeq k r t) (cell (twopow k * t + r) (Rule30UOR.Scale.negpow k)))
+        (Rule30UOR.Scale.response (twopow k * t + r) k) := by
+  unfold kernelSeq
+  rw [show twopow k * (t + 1) + r = (twopow k * t + r) + twopow k by rw [Nat.mul_succ]; cfomega]
+  exact Rule30UOR.Scale.scale_center_paper (twopow k * t + r) k
+
+/-- In the cone the window response is the center's lag-`2^k` difference. -/
+theorem response_cone (t k : Nat) (hk : t < twopow k) :
+    Rule30UOR.Scale.response t k = bxor (center t) (center (t + twopow k)) := by
+  have h := Rule30UOR.Scale.scale_center_paper t k
+  rw [show Rule30UOR.Scale.negpow k = -((twopow k : Nat) : Int) from rfl,
+    Rule30UOR.Scale.cell_left_white t _ (by cfomega)] at h
+  rw [h]
+  cases center t <;> cases Rule30UOR.Scale.response t k <;> rfl
+
+theorem kernelSeq_even (k r t : Nat) : kernelSeq (k + 1) r t = kernelSeq k r (2 * t) := by
+  unfold kernelSeq
+  rw [Rule30UOR.Core.twopow]
+  congr 2
+  rw [Nat.two_mul, Nat.mul_add, Nat.add_mul]
+
+theorem kernelSeq_odd (k r t : Nat) : kernelSeq (k + 1) (r + twopow k) t = kernelSeq k r (2 * t + 1) := by
+  unfold kernelSeq
+  rw [Rule30UOR.Core.twopow]
+  congr 1
+  simp only [Nat.mul_add, Nat.add_mul, Nat.mul_one, Nat.two_mul]
+  cfomega
+
 /-- **Problem 1 follows from an infinite 2-kernel.** -/
 theorem no_period_of_infinite_kernel (h : CenterInfiniteKernel) :
     ∀ T P, 0 < P → ¬ Rule30UOR.Scale.CenterPeriodic T P :=

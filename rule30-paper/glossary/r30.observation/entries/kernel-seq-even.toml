@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "kernel-seq-even"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::kernel-seq) (app (const lexlean.std.nat::add) (local k) (nat 1)) (local r) (local t)) (app (const r30.observation::kernel-seq) (local k) (local r) (app (const lexlean.std.nat::mul) (nat 2) (local t)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.kernelSeq_even"
+
+[[form]]
+id = "kernel-seq-even"
+channel = "math"
+surface = "kernelseqeven"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name kernelseqeven) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

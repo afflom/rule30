@@ -15,7 +15,10 @@ from .convert import Unsupported
 
 
 def out(args, data, text):
-    print(repo.to_json(data) if args.json else text)
+    try:
+        print(repo.to_json(data) if args.json else text)
+    except BrokenPipeError:  # the reader (a pager, `head`) closed early
+        sys.stderr.close()
 
 
 def cmd_status(args):
@@ -110,6 +113,11 @@ def cmd_lexicon(args):
                 for p in lx.packages()]
         out(args, rows, "\n".join(f"{r['package']:20s} {r['entries']:5d} entries  "
                                   f"[{r['project']}] imports {', '.join(r['imports'])}" for r in rows))
+
+
+def cmd_mentions(args):
+    rows = leansig.mentions(args.names, tuple(args.prefixes))
+    out(args, rows, "\n".join(rows) if rows else "no theorem mentions all of " + " ".join(args.names))
 
 
 def cmd_sig(args):
@@ -361,6 +369,9 @@ def main(argv=None):
     lex.add_parser("packages").set_defaults(fn=cmd_lexicon)
 
     s = sp.add_parser("sig"); s.add_argument("names", nargs="+"); s.set_defaults(fn=cmd_sig)
+    s = sp.add_parser("mentions", help="theorems whose statements mention all of the given Lean constants")
+    s.add_argument("names", nargs="+"); s.add_argument("--prefixes", nargs="*", default=["Rule30UOR"])
+    s.set_defaults(fn=cmd_mentions)
 
     th = sp.add_parser("theorem").add_subparsers(dest="sub", required=True)
     for name in ("preview", "add"):

@@ -77,4 +77,16 @@ elab "#r30decls " prefixes:ident* : command => do
     unless prefixes.any (fun p => p.getId.isPrefixOf name) do continue
     logInfo m!"DECL {name}"
 
+/-- Theorems under the prefixes whose statements mention every one of the given constants. -/
+elab "#r30mentions " prefixes:ident* " : " names:ident* : command => do
+  let env ← getEnv
+  let wanted := names.map (·.getId) |>.toList
+  for (name, info) in env.constants.toList do
+    unless info matches .thmInfo _ do continue
+    if name.isInternal || (`_private).isPrefixOf name then continue
+    unless prefixes.any (fun p => p.getId.isPrefixOf name) do continue
+    let ty := info.type
+    if wanted.all (fun w => Option.isSome (ty.find? (fun e => e.isConstOf w))) then
+      logInfo m!"MENTION {name}"
+
 __COMMANDS__

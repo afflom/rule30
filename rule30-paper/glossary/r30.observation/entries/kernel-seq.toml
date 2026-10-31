@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "kernel-seq"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.kernelSeq"
+
+[[form]]
+id = "kernel-seq"
+channel = "math"
+surface = "kernelseq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name kernelseq) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

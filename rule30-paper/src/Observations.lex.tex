@@ -2698,5 +2698,37 @@ Close the goal with \(\lexeme{r30.observation::problem1-of-infinite-kernel}(h)\)
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{kernel-seq-step}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(t\), \(kernelseq(k, r, t + 1) = bxor(bxor(kernelseq(k, r, t), cell(twopow(k) * t + r, negpow(k))), response(twopow(k) * t + r, k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::kernel-seq-step}(k, r, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{response-cone}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and natural number \(k\), if \(t < twopow(k)\), then \(response(t, k) = bxor(center(t), center(t + twopow(k)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::response-cone}(t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{kernel-seq-even}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(t\), \(kernelseq(k + 1, r, t) = kernelseq(k, r, 2 * t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::kernel-seq-even}(k, r, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{kernel-seq-odd}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(t\), \(kernelseq(k + 1, r + twopow(k), t) = kernelseq(k, r, 2 * t + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::kernel-seq-odd}(k, r, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

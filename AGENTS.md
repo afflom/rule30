@@ -36,6 +36,7 @@ bin/r30 status                         # HEAD, dirty files, frontier counts
 bin/r30 frontier list                  # what is open, proved, refuted
 bin/r30 lexicon search <text>          # find lexemes by id, surface, or Lean name
 bin/r30 sig <Lean names>               # a declaration's type as an s-expression
+bin/r30 mentions <Lean constants>      # every theorem whose statement mentions all of them: what is already proved about a notion
 bin/r30 module add <Name> [--build]    # register (and create) a research module: Lake root + axiom-audit import
 bin/r30 module build [<Names>]         # lake build; prints only errors
 bin/r30 unpublished <module prefixes>  # theorems without a lexeme, and whether they can be published
