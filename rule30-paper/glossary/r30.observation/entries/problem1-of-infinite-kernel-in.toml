@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-of-infinite-kernel-in"
+category = "proof-constant"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat))) (pi ((explicit hb (app (const lexlean.std.nat::le) (nat 2) (local b))) (explicit h (app (const r30.observation::center-infinite-kernel-in) (local b)))) (const r30.joint::problem-one)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.problem1_of_infinite_kernel_in"
+
+[[form]]
+id = "problem1-of-infinite-kernel-in"
+channel = "math"
+surface = "problem1ofinfinitekernelin"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problem1ofinfinitekernelin) (paren (seq (slot 0))))"

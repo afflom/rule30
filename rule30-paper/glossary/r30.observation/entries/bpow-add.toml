@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bpow-add"
+category = "proof-constant"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::bpow) (local b) (app (const lexlean.std.nat::add) (local a) (local c))) (app (const lexlean.std.nat::mul) (app (const r30.observation::bpow) (local b) (local a)) (app (const r30.observation::bpow) (local b) (local c)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.bpow_add"
+
+[[form]]
+id = "bpow-add"
+channel = "math"
+surface = "bpowadd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name bpowadd) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

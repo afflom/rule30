@@ -23,6 +23,7 @@ TOOLS = [
     ("brief", "The one-screen session briefing: open claims, proved reductions, refuted routes, the loop.", {}),
     ("claim", "One frontier claim in full: register entry, Lean type, published statement, dependents.", {"id": "string"}),
     ("gate", "Is the pre-commit gate running, its last stage and log tail.", {}),
+    ("chain", "The reduction tree of the register: which claims rest on which, with status and Lean names.", {}),
     ("lexicon_search", "Find lexemes by id, surface or Lean name.",
      {"query": "string", "limit": "integer"}),
     ("lexicon_show", "Show one lexeme (by qualified id or Lean name).", {"id": "string"}),
@@ -76,6 +77,8 @@ def argv_for(name, a):
         return ["status"]
     if name == "gate":
         return ["gate"]
+    if name == "chain":
+        return ["chain"]
     if name == "brief":
         return ["brief"]
     if name == "claim":

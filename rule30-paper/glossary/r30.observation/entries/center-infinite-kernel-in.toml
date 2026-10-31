@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-infinite-kernel-in"
+category = "function"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.CenterInfiniteKernelIn"
+
+[[form]]
+id = "center-infinite-kernel-in"
+channel = "math"
+surface = "centerinfinitekernelin"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerinfinitekernelin) (paren (seq (slot 0))))"

@@ -172,3 +172,20 @@ lean = "Rule30UOR.Automatic.DyadicColumnAperiodic"
 since = "2026-10-31"
 note = "Sufficient for Problem 1 (dilation-reduction). Exact law: center(2^(j+1)) = center(2^j) XOR wittRespBool(2^j, j) (center_twopow_succ), so the column is the running XOR of the late Witt responses at dyadic times. Caveat: if the center were 2-adically continuous at 0 (constant on all multiples of some 2^K) this column would be eventually constant and the reduction silent; the claim therefore includes that wittRespBool(2^j, j) is not eventually zero. More generally SomeDilationAperiodic (any t) suffices. Not known."
 depends = ["dilation-reduction"]
+
+[[claim]]
+id = "base-generic-reduction"
+status = "proved"
+statement = "For every base b >= 2 and every t, Problem 1 follows if the b-dilation sequence j -> center(b^j t) is not eventually periodic: a periodic center has a finite b-kernel, a finite b-kernel forces a b-adic self-similarity, and that makes every b-dilation sequence eventually periodic."
+lean = "Rule30UOR.Automatic.problem1_of_dilation_aperiodic_in_paper"
+since = "2026-10-31"
+note = "Rule30UOR.Automatic, base-parametrized (bpow, KernelFiniteIn, kernelFiniteIn_of_centerPeriodic, self_similar_of_kernelFiniteIn, dilationPeriodicIn_of_kernelFiniteIn). The 2-adic claims are the case b = 2. Bases are orthogonal in Cobham's sense; the orbit's exact structure is 2-adic, so a base that is not a power of two is a direction with no built-in self-similarity."
+depends = ["periodic-finite-kernel"]
+
+[[claim]]
+id = "some-base-dilation-aperiodic"
+status = "open"
+statement = "There are a base b >= 2 and a time t such that the dilation sequence j -> center(b^j t) is not eventually periodic."
+since = "2026-10-31"
+note = "Sufficient for Problem 1 (base-generic-reduction). dyadic-column-aperiodic is the instance b = 2, t = 1 with its 2-adic continuity caveat; a base that is not a power of two has no such caveat supplied by the orbit's Witt structure. The mechanical task is to choose (b, t) against the orbit's own scale and prove the aperiodicity of one sequence."
+depends = ["base-generic-reduction"]

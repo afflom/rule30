@@ -66,6 +66,35 @@ def cmd_brief(args):
     out(args, {"open": by["open"], "proved": by["proved"], "refuted": by["refuted"]}, "\n".join(lines))
 
 
+def cmd_chain(args):
+    """The reduction tree: from each root claim, the claims that rest on it
+    (`depends`), with status and Lean name, so the proof plan is read as a DAG."""
+    claims = frontier.load()["claim"]
+    by_id = {c["id"]: c for c in claims}
+    children = {c["id"]: [] for c in claims}
+    for c in claims:
+        for d in c.get("depends", []):
+            children.setdefault(d, []).append(c["id"])
+    roots = [c["id"] for c in claims if not c.get("depends")]
+    mark = {"open": "?", "proved": "✓", "refuted": "✗", "retired": "-"}
+    lines, rows = [], []
+
+    def walk(cid, depth, seen):
+        c = by_id[cid]
+        rows.append({"id": cid, "depth": depth, "status": c["status"], "lean": c.get("lean")})
+        lines.append("  " * depth + f"[{mark[c['status']]}] {cid}" + (f"  ({c['lean']})" if c.get("lean") else ""))
+        if cid in seen:
+            return
+        for k in children.get(cid, []):
+            walk(k, depth + 1, seen | {cid})
+    for r in roots:
+        walk(r, 0, set())
+    lines.append("")
+    lines.append("open leaves are sufficient conditions once every proved arrow above them is read upward;")
+    lines.append("a refuted node is a route not to be walked again.")
+    out(args, rows, "\n".join(lines))
+
+
 def cmd_claim(args):
     """One claim in full: register entry, Lean type, published statement, dependents."""
     from .lexicon import Lexicon
@@ -384,6 +413,7 @@ def main(argv=None):
 
     sp.add_parser("status").set_defaults(fn=cmd_status)
     sp.add_parser("brief", help="the one-screen briefing to start a session").set_defaults(fn=cmd_brief)
+    sp.add_parser("chain", help="the reduction tree of the register (depends), with status and Lean names").set_defaults(fn=cmd_chain)
     s = sp.add_parser("claim", help="one frontier claim in full"); s.add_argument("id")
     s.add_argument("--related", action="store_true", help="also list the theorems mentioning the claim's constants")
     s.set_defaults(fn=cmd_claim)

@@ -413,6 +413,200 @@ theorem problem1_of_dyadic_column_aperiodic (h : DyadicColumnAperiodic) :
     Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
   problem1_of_dilation_aperiodic ⟨1, h⟩
 
+/-! ## Every base
+
+Nothing above used that the base is `2` except the arithmetic of `twopow`.
+The same reductions hold in every base `b ≥ 2`: an eventually periodic
+sequence is `b`-automatic for every `b` (Allouche–Shallit Thm. 5.4.2), so a
+periodic center has a finite `b`-kernel, a finite `b`-kernel forces a
+`b`-adic self-similarity, and that makes every `b`-dilation sequence
+`j ↦ center (b^j t)` eventually periodic. Problem 1 therefore follows from the
+aperiodicity of a single dilation sequence in a single base. The bases are
+orthogonal in Cobham's sense (a sequence automatic in two multiplicatively
+independent bases is eventually periodic), and the orbit's exact structure is
+`2`-adic (the Witt tower), so a base `b` that is not a power of `2` is a
+direction in which the orbit carries no built-in self-similarity. -/
+
+/-- `b ^ k`, as a function (LexLean states powers through a named function). -/
+def bpow (b k : Nat) : Nat := b ^ k
+
+/-- The `b`-kernel of `f` is finite. -/
+def KernelFiniteIn (b : Nat) (f : Nat → Bool) : Prop :=
+  ∃ n : Nat, ∃ g : Nat → Nat → Bool,
+    ∀ k r, r < bpow b k → ∃ i, i < n ∧ ∀ t, f (bpow b k * t + r) = g i t
+
+theorem bpow_ge_succ (b : Nat) (hb : 2 ≤ b) (k : Nat) : k + 1 ≤ bpow b k :=
+  Nat.lt_pow_self (by cfomega)
+
+theorem bpow_mono (b : Nat) (hb : 2 ≤ b) {a c : Nat} (h : a ≤ c) : bpow b a ≤ bpow b c :=
+  Nat.pow_le_pow_right (by cfomega) h
+
+theorem bpow_add (b a c : Nat) : bpow b (a + c) = bpow b a * bpow b c := Nat.pow_add b a c
+
+theorem bpow_pos (b : Nat) (hb : 2 ≤ b) (k : Nat) : 0 < bpow b k :=
+  Nat.lt_of_lt_of_le (Nat.zero_lt_succ k) (bpow_ge_succ b hb k)
+
+def largeScaleIn (T P : Nat) (i : Nat) (t : Nat) : Bool :=
+  if t = 0 then decide (i % 2 = 1) else center (T + ((i / 2 / P % P) * t + i / 2 % P) % P)
+
+def smallScaleIn (b K : Nat) (i : Nat) (t : Nat) : Bool :=
+  center (bpow b (i / bpow b K) * t + i % bpow b K)
+
+def kernelFamilyIn (b T P K : Nat) (i : Nat) : Nat → Bool :=
+  if i < K * bpow b K then smallScaleIn b K i else largeScaleIn T P (i - K * bpow b K)
+
+/-- **A periodic center has a finite `b`-kernel, for every base `b ≥ 2`.** -/
+theorem kernelFiniteIn_of_centerPeriodic (b : Nat) (hb : 2 ≤ b) (T P : Nat) (hP : 0 < P)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : KernelFiniteIn b center := by
+  refine ⟨(T + P) * bpow b (T + P) + 2 * (P * P), kernelFamilyIn b T P (T + P), ?_⟩
+  intro k r hr
+  rcases Nat.lt_or_ge k (T + P) with hk | hk
+  · refine ⟨k * bpow b (T + P) + r, ?_, ?_⟩
+    · have h1 : r < bpow b (T + P) := Nat.lt_of_lt_of_le hr (bpow_mono b hb (Nat.le_of_lt hk))
+      have h2 : (k + 1) * bpow b (T + P) ≤ (T + P) * bpow b (T + P) := Nat.mul_le_mul_right _ hk
+      rw [Nat.succ_mul] at h2
+      cfomega
+    · intro t
+      have h1 : r < bpow b (T + P) := Nat.lt_of_lt_of_le hr (bpow_mono b hb (Nat.le_of_lt hk))
+      have hlt : k * bpow b (T + P) + r < (T + P) * bpow b (T + P) := by
+        have h2 : (k + 1) * bpow b (T + P) ≤ (T + P) * bpow b (T + P) := Nat.mul_le_mul_right _ hk
+        rw [Nat.succ_mul] at h2
+        cfomega
+      unfold kernelFamilyIn
+      rw [if_pos hlt]
+      unfold smallScaleIn
+      have hpos := bpow_pos b hb (T + P)
+      rw [Nat.mul_comm k, Nat.mul_add_div hpos, Nat.div_eq_of_lt h1, Nat.add_zero, Nat.mul_add_mod,
+        Nat.mod_eq_of_lt h1]
+  · have hbig : T + P ≤ bpow b k :=
+      Nat.le_trans (by have := bpow_ge_succ b hb (T + P); cfomega) (bpow_mono b hb hk)
+    let u := bpow b k % P
+    let v := (r + (P - T % P)) % P
+    let bb := if center r then 1 else 0
+    refine ⟨(T + P) * bpow b (T + P) + ((u * P + v) * 2 + bb), ?_, ?_⟩
+    · have hu : u < P := Nat.mod_lt _ hP
+      have hv : v < P := Nat.mod_lt _ hP
+      have hbb : bb ≤ 1 := by show (if center r then 1 else 0) ≤ 1; cases center r <;> decide
+      have h1 : (u + 1) * P ≤ P * P := Nat.mul_le_mul_right _ hu
+      rw [Nat.succ_mul] at h1
+      cfomega
+    · intro t
+      unfold kernelFamilyIn
+      rw [if_neg (by cfomega), Nat.add_sub_cancel_left]
+      unfold largeScaleIn
+      have hu : u < P := Nat.mod_lt _ hP
+      have hv : v < P := Nat.mod_lt _ hP
+      have hbb : bb ≤ 1 := by show (if center r then 1 else 0) ≤ 1; cases center r <;> decide
+      have hdiv : ((u * P + v) * 2 + bb) / 2 = u * P + v := by cfomega
+      have hmod : ((u * P + v) * 2 + bb) % 2 = bb := by cfomega
+      rw [hdiv, hmod]
+      have hv' : (u * P + v) % P = v := by
+        rw [Nat.mul_comm, Nat.mul_add_mod, Nat.mod_eq_of_lt hv]
+      have hu' : (u * P + v) / P % P = u := by
+        rw [Nat.mul_comm, Nat.mul_add_div hP, Nat.div_eq_of_lt hv, Nat.add_zero, Nat.mod_eq_of_lt hu]
+      rw [hv', hu']
+      rcases Nat.eq_zero_or_pos t with ht0 | htpos
+      · subst ht0
+        simp only [Nat.mul_zero, Nat.zero_add, if_true]
+        show center r = decide (bb = 1)
+        show center r = decide ((if center r then 1 else 0) = 1)
+        rcases Bool.eq_false_or_eq_true (center r) with h | h <;> simp [h]
+      · rw [if_neg (by cfomega)]
+        have hle : T ≤ bpow b k * t + r := by
+          have : bpow b k * 1 ≤ bpow b k * t := Nat.mul_le_mul_left _ htpos
+          cfomega
+        rw [mod_eq_of_periodic_shift hP hc _ hle, residue_eq P T hP (bpow b k) r t hle]
+
+/-- The center has a finite `b`-kernel (is `b`-automatic). -/
+def CenterKernelFiniteIn (b : Nat) : Prop := KernelFiniteIn b center
+
+theorem centerKernelFiniteIn_of_centerPeriodic (b : Nat) (hb : 2 ≤ b) (T P : Nat) (hP : 0 < P)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : CenterKernelFiniteIn b :=
+  kernelFiniteIn_of_centerPeriodic b hb T P hP hc
+
+/-- The center has an infinite `b`-kernel: it is not `b`-automatic. -/
+def CenterInfiniteKernelIn (b : Nat) : Prop := ¬ KernelFiniteIn b center
+
+theorem no_period_of_infinite_kernel_in (b : Nat) (hb : 2 ≤ b) (h : CenterInfiniteKernelIn b) :
+    ∀ T P, 0 < P → ¬ Rule30UOR.Scale.CenterPeriodic T P :=
+  fun T P hP hc => h (kernelFiniteIn_of_centerPeriodic b hb T P hP hc)
+
+theorem problem1_of_infinite_kernel_in (b : Nat) (hb : 2 ≤ b) (h : CenterInfiniteKernelIn b) :
+    Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
+  Rule30UOR.Scale.problem1_iff.2 (no_period_of_infinite_kernel_in b hb h)
+
+/-- A finite `b`-kernel forces a `b`-adic self-similarity along the zero path. -/
+theorem self_similar_of_kernelFiniteIn (b : Nat) (hb : 2 ≤ b) (h : KernelFiniteIn b center) :
+    ∃ k k', k < k' ∧ ∀ t, center (bpow b k' * t) = center (bpow b k * t) := by
+  obtain ⟨n, g, hg⟩ := h
+  have hl : ∀ m, ∃ f : Nat → Nat, ∀ k, k ≤ m → f k < n ∧ ∀ t, center (bpow b k * t) = g (f k) t := by
+    intro m
+    induction m with
+    | zero =>
+      obtain ⟨i, hi, hP⟩ := hg 0 0 (bpow_pos b hb 0)
+      refine ⟨fun _ => i, fun k hk => ?_⟩
+      have hk0 : k = 0 := by cfomega
+      subst hk0
+      exact ⟨hi, fun t => by have := hP t; rwa [Nat.add_zero] at this⟩
+    | succ m ih =>
+      obtain ⟨f, hf⟩ := ih
+      obtain ⟨i, hi, hP⟩ := hg (m + 1) 0 (bpow_pos b hb (m + 1))
+      refine ⟨fun k => if k ≤ m then f k else i, fun k hk => ?_⟩
+      by_cases hkm : k ≤ m
+      · simp only [if_pos hkm]
+        exact hf k hkm
+      · simp only [if_neg hkm]
+        have hk1 : k = m + 1 := by cfomega
+        subst hk1
+        exact ⟨hi, fun t => by have := hP t; rwa [Nat.add_zero] at this⟩
+  obtain ⟨f, hf⟩ := hl n
+  obtain ⟨a, c, hac, hc, heq⟩ := pigeon n f (fun i hi => (hf i hi).1)
+  refine ⟨a, c, hac, fun t => ?_⟩
+  rw [(hf c hc).2 t, (hf a (by cfomega)).2 t, heq]
+
+/-- The `b`-dilation sequence `j ↦ center (b^j t)` has period `d` from `K`. -/
+def DilationPeriodicIn (b t K d : Nat) : Prop :=
+  ∀ j, K ≤ j → center (bpow b (j + d) * t) = center (bpow b j * t)
+
+theorem dilationPeriodicIn_of_kernelFiniteIn (b : Nat) (hb : 2 ≤ b) (h : KernelFiniteIn b center) :
+    ∃ K d, 0 < d ∧ ∀ t, DilationPeriodicIn b t K d := by
+  obtain ⟨k, k', hkk, hs⟩ := self_similar_of_kernelFiniteIn b hb h
+  refine ⟨k, k' - k, by cfomega, fun t j hj => ?_⟩
+  have h1 := hs (bpow b (j - k) * t)
+  rw [← Nat.mul_assoc, ← Nat.mul_assoc, ← bpow_add, ← bpow_add,
+    show k' + (j - k) = j + (k' - k) by cfomega, show k + (j - k) = j by cfomega] at h1
+  exact h1
+
+/-- The `b`-dilation sequence of `t` is not eventually periodic. -/
+def DilationAperiodicIn (b t : Nat) : Prop := ∀ K d, 0 < d → ¬ DilationPeriodicIn b t K d
+
+theorem centerInfiniteKernelIn_of_dilation_aperiodic (b : Nat) (hb : 2 ≤ b) (t : Nat)
+    (h : DilationAperiodicIn b t) : CenterInfiniteKernelIn b := fun hfin => by
+  obtain ⟨K, d, hd, hall⟩ := dilationPeriodicIn_of_kernelFiniteIn b hb hfin
+  exact h K d hd (hall t)
+
+/-- **Problem 1 follows from the aperiodicity of one dilation sequence in one base.** -/
+theorem problem1_of_dilation_aperiodic_in (b : Nat) (hb : 2 ≤ b) (t : Nat)
+    (h : DilationAperiodicIn b t) : Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
+  problem1_of_infinite_kernel_in b hb (centerInfiniteKernelIn_of_dilation_aperiodic b hb t h)
+
+/-! ### Paper forms (variables before hypotheses) -/
+
+theorem bpow_ge_succ_paper (b k : Nat) (hb : 2 ≤ b) : k + 1 ≤ bpow b k := bpow_ge_succ b hb k
+
+theorem centerKernelFiniteIn_of_centerPeriodic_paper (b T P : Nat) (hb : 2 ≤ b) (hP : 0 < P)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : CenterKernelFiniteIn b :=
+  kernelFiniteIn_of_centerPeriodic b hb T P hP hc
+
+theorem centerInfiniteKernelIn_of_dilation_aperiodic_paper (b t : Nat) (hb : 2 ≤ b)
+    (h : DilationAperiodicIn b t) : CenterInfiniteKernelIn b :=
+  centerInfiniteKernelIn_of_dilation_aperiodic b hb t h
+
+/-- **Problem 1 follows from the aperiodicity of one dilation sequence in one base** (paper form). -/
+theorem problem1_of_dilation_aperiodic_in_paper (b t : Nat) (hb : 2 ≤ b) (h : DilationAperiodicIn b t) :
+    Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
+  problem1_of_dilation_aperiodic_in b hb t h
+
 /-- **Problem 1 follows from the absence of dyadic self-similarity.** -/
 theorem problem1_of_no_dyadic_self_similarity (h : NoDyadicSelfSimilarity) :
     Ruliology.CellularAutomata.Rule30Prize.Problem1 :=

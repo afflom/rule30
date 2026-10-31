@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dilation-aperiodic-in"
+category = "function"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.DilationAperiodicIn"
+
+[[form]]
+id = "dilation-aperiodic-in"
+channel = "math"
+surface = "dilationaperiodicin"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name dilationaperiodicin) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

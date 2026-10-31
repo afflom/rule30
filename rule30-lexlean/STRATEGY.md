@@ -2849,4 +2849,18 @@ statement therefore also asks whether `wittRespBool(2^j, j)` is eventually zero.
 here decides it; what is proved is that the whole of Problem 1 rests on the behaviour of one
 sequence indexed by scale.
 
+**Every base (orthogonal scaling).** Nothing in the kernel reductions used the base `2` beyond the
+arithmetic of `2^k`. `Rule30UOR.Automatic` now carries them for every base `b ≥ 2` (`bpow`,
+`KernelFiniteIn`, `kernelFiniteIn_of_centerPeriodic`, `self_similar_of_kernelFiniteIn`,
+`dilationPeriodicIn_of_kernelFiniteIn`, `problem1_of_dilation_aperiodic_in`): Problem 1 follows
+from the aperiodicity of a single `b`-dilation sequence `j ↦ center(b^j t)` in a single base `b`,
+for any `b` and any `t`. The bases are orthogonal in Cobham's sense (a sequence automatic in two
+multiplicatively independent bases is eventually periodic), and the orbit's exact structure is
+`2`-adic (the Witt tower, the right periods `2^j`, Frobenius on the linear part), so a base that is
+not a power of two is a direction in which the orbit carries no built-in self-similarity: the
+`2`-adic continuity caveat of the dyadic column has no `3`-adic counterpart that the structure
+supplies. The register's open claims are therefore instances of one base-parametrized family,
+and the mechanical task is to find the pair `(b, t)` for which the dilation sequence is
+provably not eventually periodic, with `b` chosen against the orbit's own scale.
+
 Problem 1 remains unproved.

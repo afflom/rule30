@@ -32,6 +32,7 @@ which is the historical log.
 ```
 bin/r30 brief                          # the session briefing
 bin/r30 claim <id> [--related]         # one claim in full; --related lists the theorems about its constants
+bin/r30 chain                          # the reduction tree of the register: what rests on what, with status
 bin/r30 status                         # HEAD, dirty files, frontier counts
 bin/r30 frontier list                  # what is open, proved, refuted
 bin/r30 lexicon search <text>          # find lexemes by id, surface, or Lean name

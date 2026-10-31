@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-kernel-finite-in-of-center-periodic-paper"
+category = "proof-constant"
+signature = "(pi ((explicit b (const lexlean.std.nat::nat)) (explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hb (app (const lexlean.std.nat::le) (nat 2) (local b))) (explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P)))) (app (const r30.observation::center-kernel-finite-in) (local b))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.centerKernelFiniteIn_of_centerPeriodic_paper"
+
+[[form]]
+id = "center-kernel-finite-in-of-center-periodic-paper"
+channel = "math"
+surface = "centerkernelfiniteinofcenterperiodicpaper"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerkernelfiniteinofcenterperiodicpaper) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

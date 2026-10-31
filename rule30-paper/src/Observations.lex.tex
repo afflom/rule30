@@ -2807,5 +2807,53 @@ Close the goal with \(\lexeme{r30.observation::problem1-of-dyadic-column-aperiod
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{bpow-add}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\) and natural number \(a\) and natural number \(c\), \(bpow(b, a + c) = bpow(b, a) * bpow(b, c)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::bpow-add}(b, a, c)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-infinite-kernel-in}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\), if \(2 ≤ b\), then if \(centerinfinitekernelin(b)\), then \(problemone\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::problem1-of-infinite-kernel-in}(b)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{bpow-ge-succ-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\) and natural number \(k\), if \(2 ≤ b\), then \(k + 1 ≤ bpow(b, k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::bpow-ge-succ-paper}(b, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-kernel-finite-in-of-center-periodic-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\) and natural number \(T\) and natural number \(P\), if \(2 ≤ b\), then if \(0 < P\), then if \(centerperiodic(T, P)\), then \(centerkernelfinitein(b)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-kernel-finite-in-of-center-periodic-paper}(b, T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-infinite-kernel-in-of-dilation-aperiodic-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\) and natural number \(t\), if \(2 ≤ b\), then if \(dilationaperiodicin(b, t)\), then \(centerinfinitekernelin(b)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-infinite-kernel-in-of-dilation-aperiodic-paper}(b, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-dilation-aperiodic-in-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(b\) and natural number \(t\), if \(2 ≤ b\), then if \(dilationaperiodicin(b, t)\), then \(problemone\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::problem1-of-dilation-aperiodic-in-paper}(b, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}
