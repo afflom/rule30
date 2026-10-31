@@ -2383,4 +2383,41 @@ For every natural number \(k\) and natural number \(r\) and natural number \(t\)
 \begin{proof}
 The goal follows from \(\operatorname{kernelseqodd}(k, r, t)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:kernel-seq-step-late}
+For every natural number \(k\) and natural number \(r\) and natural number \(t\), if \(\operatorname{twopow}(k) \le \operatorname{twopow}(k) \cdot t + r\), then \(\operatorname{kernelseq}(k, r, t + 1) = \operatorname{bxor}(\operatorname{kernelseq}(k, r, t), \operatorname{bxor}(\operatorname{bxor}(\operatorname{cell}(\operatorname{twopow}(k) \cdot t + r, \operatorname{negpow}(k)), \operatorname{rdiag}(\operatorname{twopow}(k) \cdot t + r - \operatorname{twopow}(k), \operatorname{twopow}(k) \cdot t + r)), \operatorname{wittresp}(\operatorname{twopow}(k) \cdot t + r, k)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{kernelseqsteplate}(k, r, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-recovered-at-scale}
+For every natural number \(d\) and natural number \(k\), if \(d \le k\), then \(\operatorname{center}(d) = \operatorname{bxor}(\operatorname{wittresp}(d + \operatorname{twopow}(k), k), \operatorname{response}(d + \operatorname{twopow}(k), k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerrecoveredatscale}(d, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-infinite-kernel-of-no-dyadic-self-similarity}
+If \(\operatorname{nodyadicselfsimilarity}\), then \(\operatorname{centerinfinitekernel}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{centerinfinitekernelofnodyadicselfsimilarity}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-no-dyadic-self-similarity}
+If \(\operatorname{nodyadicselfsimilarity}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofnodyadicselfsimilarity}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-twopow-succ}
+For every natural number \(k\), \(\operatorname{center}(\operatorname{twopow}(k + 1)) = \operatorname{bxor}(\operatorname{center}(\operatorname{twopow}(k)), \operatorname{wittresp}(\operatorname{twopow}(k), k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centertwopowsucc}(k)\).
+\end{proof}
 \end{document}

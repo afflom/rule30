@@ -190,6 +190,30 @@ theorem response_cone (t k : Nat) (hk : t < twopow k) :
   rw [h]
   cases center t <;> cases Rule30UOR.Scale.response t k <;> rfl
 
+/-- Out of the cone the step of a kernel subsequence is the symmetric pair of
+cells at distance `2^k` XOR the symmetric (Witt) window response:
+`E = cell(s, −2^k) ⊕ cell(s, 2^k) ⊕ wittRespBool s k`. -/
+theorem kernelSeq_step_late (k r t : Nat) (hs : twopow k ≤ twopow k * t + r) :
+    kernelSeq k r (t + 1) =
+      bxor (kernelSeq k r t)
+        (bxor (bxor (cell (twopow k * t + r) (Rule30UOR.Scale.negpow k))
+          (rdiag (twopow k * t + r - twopow k) (twopow k * t + r)))
+          (Rule30UOR.Interfaces.wittRespBool (twopow k * t + r) k)) := by
+  rw [kernelSeq_step]
+  have h := Rule30UOR.Interfaces.wittRespBool_xor_response_ge (twopow k * t + r) k hs
+  rw [← h]
+  cases kernelSeq k r t <;> cases cell (twopow k * t + r) (Rule30UOR.Scale.negpow k) <;>
+    cases Rule30UOR.Interfaces.wittRespBool (twopow k * t + r) k <;>
+    cases Rule30UOR.Scale.response (twopow k * t + r) k <;> rfl
+
+/-- The center's past is recovered from late responses (`center_from_late_responses`):
+the value at `d` is the XOR of the two window responses at time `d + 2^k`, for
+every `k ≥ d`. -/
+theorem center_recovered_at_scale (d k : Nat) (hk : d ≤ k) :
+    center d = bxor (Rule30UOR.Interfaces.wittRespBool (d + twopow k) k)
+      (Rule30UOR.Scale.response (d + twopow k) k) :=
+  Rule30UOR.Interfaces.center_from_late_responses d k hk
+
 theorem kernelSeq_even (k r t : Nat) : kernelSeq (k + 1) r t = kernelSeq k r (2 * t) := by
   unfold kernelSeq
   rw [Rule30UOR.Core.twopow]
@@ -202,6 +226,128 @@ theorem kernelSeq_odd (k r t : Nat) : kernelSeq (k + 1) (r + twopow k) t = kerne
   congr 1
   simp only [Nat.mul_add, Nat.add_mul, Nat.mul_one, Nat.two_mul]
   cfomega
+
+/-! ## Dyadic self-similarity
+
+Along the zero path of the kernel tree, `(k, 0) ↦ t ↦ center (2^k t)`, a finite
+kernel forces two scales to carry the same subsequence: `center (2^k' t) =
+center (2^k t)` for all `t`, some `k < k'`. So Problem 1 follows from the
+absence of any dyadic self-similarity of the center. -/
+
+/-- Injective on `[0, n]` forces a value `≥ n`. -/
+theorem exists_ge_of_injective_on : ∀ (n : Nat) (f : Nat → Nat),
+    (∀ i j, i ≤ n → j ≤ n → f i = f j → i = j) → ∃ i, i ≤ n ∧ n ≤ f i
+  | 0, f, _ => ⟨0, Nat.le_refl 0, Nat.zero_le _⟩
+  | n + 1, f, hinj => by
+    obtain ⟨i, hi, hfi⟩ := exists_ge_of_injective_on n f
+      (fun a b ha hb h => hinj a b (by cfomega) (by cfomega) h)
+    rcases Nat.lt_or_ge n (f i) with h1 | h1
+    · exact ⟨i, by cfomega, h1⟩
+    · have hfi' : f i = n := by cfomega
+      rcases Nat.lt_or_ge n (f (n + 1)) with h2 | h2
+      · exact ⟨n + 1, Nat.le_refl _, h2⟩
+      · have hne : f (n + 1) ≠ n := fun h => by
+          have := hinj (n + 1) i (Nat.le_refl _) (by cfomega) (by rw [h, hfi'])
+          cfomega
+        have hlt : f (n + 1) < n := by cfomega
+        let g : Nat → Nat := fun j => if j = i then f (n + 1) else f j
+        have hg : ∀ a b, a ≤ n → b ≤ n → g a = g b → a = b := by
+          intro a b ha hb hab
+          have hab' : (if a = i then f (n + 1) else f a) = (if b = i then f (n + 1) else f b) := hab
+          by_cases hai : a = i <;> by_cases hbi : b = i
+          · rw [hai, hbi]
+          · rw [if_pos hai, if_neg hbi] at hab'
+            have := hinj (n + 1) b (Nat.le_refl _) (by cfomega) hab'
+            cfomega
+          · rw [if_neg hai, if_pos hbi] at hab'
+            have := hinj a (n + 1) (by cfomega) (Nat.le_refl _) hab'
+            cfomega
+          · rw [if_neg hai, if_neg hbi] at hab'
+            exact hinj a b (by cfomega) (by cfomega) hab'
+        obtain ⟨j, hj, hgj⟩ := exists_ge_of_injective_on n g hg
+        by_cases hji : j = i
+        · have : g j = f (n + 1) := by show (if j = i then f (n + 1) else f j) = _; rw [if_pos hji]
+          cfomega
+        · have hgj' : g j = f j := by show (if j = i then f (n + 1) else f j) = _; rw [if_neg hji]
+          have hne' : f j ≠ n := fun h => hji (hinj j i (by cfomega) (by cfomega) (by rw [h, hfi']))
+          exact ⟨j, by cfomega, by cfomega⟩
+
+/-- Pigeonhole on `[0, n]` into `[0, n)`, with a decidable search. -/
+theorem pigeon (n : Nat) (f : Nat → Nat) (hf : ∀ i, i ≤ n → f i < n) :
+    ∃ a b, a < b ∧ b ≤ n ∧ f a = f b := by
+  have hd : Decidable (∃ a, 0 ≤ a ∧ a ≤ n ∧ ∃ b, a < b ∧ b ≤ n ∧ f a = f b) := inferInstance
+  rcases hd with hno | hyes
+  · exfalso
+    have hinj : ∀ i j, i ≤ n → j ≤ n → f i = f j → i = j := by
+      intro i j hi hj h
+      rcases Nat.lt_trichotomy i j with hlt | heq | hgt
+      · exact absurd ⟨i, Nat.zero_le i, hi, j, hlt, hj, h⟩ hno
+      · exact heq
+      · exact absurd ⟨j, Nat.zero_le j, hj, i, hgt, hi, h.symm⟩ hno
+    obtain ⟨i, hi, hfi⟩ := exists_ge_of_injective_on n f hinj
+    have := hf i hi
+    cfomega
+  · obtain ⟨a, -, -, b, hab, hb, h⟩ := hyes
+    exact ⟨a, b, hab, hb, h⟩
+
+/-- A finite kernel forces a dyadic self-similarity along the zero path. -/
+theorem dyadic_self_similar_of_kernel2Finite (h : Kernel2Finite center) :
+    ∃ k k', k < k' ∧ ∀ t, center (twopow k' * t) = center (twopow k * t) := by
+  obtain ⟨n, g, hg⟩ := h
+  have hpos : ∀ k, 0 < twopow k := fun k => Nat.lt_of_lt_of_le (Nat.zero_lt_succ k) (twopow_ge_succ k)
+  have hl : ∀ m, ∃ f : Nat → Nat, ∀ k, k ≤ m → f k < n ∧ ∀ t, center (twopow k * t) = g (f k) t := by
+    intro m
+    induction m with
+    | zero =>
+      obtain ⟨i, hi, hP⟩ := hg 0 0 (hpos 0)
+      refine ⟨fun _ => i, fun k hk => ?_⟩
+      have hk0 : k = 0 := by cfomega
+      subst hk0
+      exact ⟨hi, fun t => by have := hP t; rwa [Nat.add_zero] at this⟩
+    | succ m ih =>
+      obtain ⟨f, hf⟩ := ih
+      obtain ⟨i, hi, hP⟩ := hg (m + 1) 0 (hpos (m + 1))
+      refine ⟨fun k => if k ≤ m then f k else i, fun k hk => ?_⟩
+      by_cases hkm : k ≤ m
+      · simp only [if_pos hkm]
+        exact hf k hkm
+      · simp only [if_neg hkm]
+        have hk1 : k = m + 1 := by cfomega
+        subst hk1
+        exact ⟨hi, fun t => by have := hP t; rwa [Nat.add_zero] at this⟩
+  obtain ⟨f, hf⟩ := hl n
+  obtain ⟨a, b, hab, hb, heq⟩ := pigeon n f (fun i hi => (hf i hi).1)
+  refine ⟨a, b, hab, fun t => ?_⟩
+  rw [(hf b hb).2 t, (hf a (by cfomega)).2 t, heq]
+
+/-- The simplest column of the kernel tree, `k ↦ center (2^k)`: it flips exactly
+when the late Witt response `wittRespBool (2^k) k` is set, because at time `2^k`
+the two cells at distance `2^k` are the black edges. -/
+theorem center_twopow_succ (k : Nat) :
+    center (twopow (k + 1)) = bxor (center (twopow k)) (Rule30UOR.Interfaces.wittRespBool (twopow k) k) := by
+  have h := kernelSeq_step_late k 0 1 (by rw [Nat.mul_one, Nat.add_zero]; exact Nat.le_refl _)
+  unfold kernelSeq at h
+  rw [Nat.mul_one, Nat.add_zero, Nat.mul_add, Nat.mul_one, Nat.add_zero] at h
+  have hl : cell (twopow k) (Rule30UOR.Scale.negpow k) = true := by
+    show cell (twopow k) (-((twopow k : Nat) : Int)) = true
+    rw [Rule30UOR.Scale.cell_eq_kit]
+    exact Ruliology.CellularAutomata.Rule30Jen.cell_left_edge (twopow k)
+  have hr : rdiag (twopow k - twopow k) (twopow k) = true := by
+    rw [Nat.sub_self, Rule30UOR.Right.rdiag_eq_R]
+    exact Ruliology.CellularAutomata.Rule30Diagonals.R_zero (twopow k)
+  rw [hl, hr] at h
+  rw [show twopow (k + 1) = twopow k + twopow k from rfl, h]
+  cases center (twopow k) <;> cases Rule30UOR.Interfaces.wittRespBool (twopow k) k <;> rfl
+
+/-- The center is not self-similar under any dyadic dilation. -/
+def NoDyadicSelfSimilarity : Prop :=
+  ∀ k k', k < k' → ∃ t, ¬ center (twopow k' * t) = center (twopow k * t)
+
+theorem centerInfiniteKernel_of_no_dyadic_self_similarity (h : NoDyadicSelfSimilarity) :
+    CenterInfiniteKernel := fun hfin => by
+  obtain ⟨k, k', hkk, hs⟩ := dyadic_self_similar_of_kernel2Finite hfin
+  obtain ⟨t, ht⟩ := h k k' hkk
+  exact ht (hs t)
 
 /-- **Problem 1 follows from an infinite 2-kernel.** -/
 theorem no_period_of_infinite_kernel (h : CenterInfiniteKernel) :
@@ -216,5 +362,10 @@ theorem not_centerPeriodic_of_infinite_kernel (T P : Nat) (h : CenterInfiniteKer
 theorem problem1_of_infinite_kernel (h : CenterInfiniteKernel) :
     Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
   Rule30UOR.Scale.problem1_iff.2 (no_period_of_infinite_kernel h)
+
+/-- **Problem 1 follows from the absence of dyadic self-similarity.** -/
+theorem problem1_of_no_dyadic_self_similarity (h : NoDyadicSelfSimilarity) :
+    Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
+  problem1_of_infinite_kernel (centerInfiniteKernel_of_no_dyadic_self_similarity h)
 
 end Rule30UOR.Automatic

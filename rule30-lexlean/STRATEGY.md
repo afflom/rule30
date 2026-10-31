@@ -2817,4 +2817,21 @@ depth-`2^k` left cells and the window responses. Registered as `center-infinite-
 2-kernel. Whether the kernel is infinite is not known; no decision procedure applies, since
 Honkala's theorem presupposes automaticity.
 
+**The kernel tree and dyadic self-similarity.** `kernelSeq k r t = center(2^k t + r)`; the
+children of `(k, r)` are `(k+1, r)` and `(k+1, r + 2^k)` (`kernelSeq_even`, `kernelSeq_odd`), the
+step of each subsequence is the scale identity (`kernelSeq_step`; out of the cone,
+`kernelSeq_step_late`: the symmetric pair of cells at distance `2^k` XOR the Witt window response),
+and in the cone the response is the center's own lag-`2^k` difference (`response_cone`). Along the
+zero path `(k, 0)` a finite kernel forces, by a constructive pigeonhole on the listed family, two
+scales with the same subsequence: `∃ k < k', ∀ t, center(2^k' t) = center(2^k t)`
+(`dyadic_self_similar_of_kernel2Finite`). Hence **Problem 1 follows from
+`NoDyadicSelfSimilarity`**: for all `k < k'` some `t` has `center(2^k' t) ≠ center(2^k t)`
+(`problem1_of_no_dyadic_self_similarity`). This is the most concrete sufficient condition in the
+register: a witness `t(k, k')` against every dyadic dilation. The dyadic increments of the center,
+`center(r + 2^(k+1)) ⊕ center(r + 2^k) = zcenter r ⊕ center r ⊕ wittRespBool(r + 2^k, k)` for
+settled `k ≥ r` (`two_places_settled`), are the late Witt responses, so the self-similarity
+question is the behaviour in `k` of the late Witt responses at the dyadic times `r + 2^k`; the
+zero-state machinery (`zcenter`, `settle`, batches 20–49) describes exactly these and was vacuous as
+an engine, so the witness must come from a comparison of two scales, not from one.
+
 Problem 1 remains unproved.

@@ -2730,5 +2730,47 @@ Close the goal with \(\lexeme{r30.observation::kernel-seq-odd}(k, r, t)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{kernel-seq-step-late}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(t\), if \(twopow(k) ≤ twopow(k) * t + r\), then \(kernelseq(k, r, t + 1) = bxor(kernelseq(k, r, t), bxor(bxor(cell(twopow(k) * t + r, negpow(k)), rdiag(twopow(k) * t + r - twopow(k), twopow(k) * t + r)), wittresp(twopow(k) * t + r, k)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::kernel-seq-step-late}(k, r, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-recovered-at-scale}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(d\) and natural number \(k\), if \(d ≤ k\), then \(center(d) = bxor(wittresp(d + twopow(k), k), response(d + twopow(k), k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-recovered-at-scale}(d, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-infinite-kernel-of-no-dyadic-self-similarity}
+\allowaxioms{Quot.sound;propext}
+if \(nodyadicselfsimilarity\), then \(centerinfinitekernel\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::center-infinite-kernel-of-no-dyadic-self-similarity}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-no-dyadic-self-similarity}
+\allowaxioms{Quot.sound;propext}
+if \(nodyadicselfsimilarity\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-no-dyadic-self-similarity}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-twopow-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), \(center(twopow(k + 1)) = bxor(center(twopow(k)), wittresp(twopow(k), k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-twopow-succ}(k)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -89,8 +89,33 @@ def cmd_claim(args):
                     data["published"] = text[i:text.index("\\end{theorem}", i)].splitlines()[2]
                     data["published_in"] = str(f.relative_to(repo.ROOT))
                     break
-    text = "\n".join(f"{k}: {v}" for k, v in data.items())
+    if getattr(args, "related", False) and c.get("lean"):
+        # the exact facts already proved about the claim's head constants
+        sigs = leansig.signatures([c["lean"], c["lean"] + ".eq_1"])
+        heads = set()
+        for s in sigs.values():  # a predicate's constants are in its defining equation, a theorem's in its type
+            if s:
+                heads |= {n for n in _constants(s["type"]) if n.startswith("Rule30UOR.") and n != c["lean"]}
+        data["related"] = {h: leansig.mentions([h]) for h in sorted(heads)}
+    text = "\n".join(f"{k}: {v}" for k, v in data.items() if k != "related")
+    if data.get("related"):
+        for h, rows in data["related"].items():
+            text += f"\nrelated via {h} ({len(rows)}):\n  " + "\n  ".join(rows[:40]) + ("\n  ..." if len(rows) > 40 else "")
     out(args, data, text)
+
+
+def _constants(node):
+    """Constant names occurring in an s-expression node."""
+    found = set()
+
+    def walk(n):
+        if isinstance(n, list):
+            if len(n) == 2 and n[0] == "const" and isinstance(n[1], str):
+                found.add(n[1])
+            for x in n:
+                walk(x)
+    walk(node)
+    return found
 
 
 def cmd_lexicon(args):
@@ -359,7 +384,9 @@ def main(argv=None):
 
     sp.add_parser("status").set_defaults(fn=cmd_status)
     sp.add_parser("brief", help="the one-screen briefing to start a session").set_defaults(fn=cmd_brief)
-    s = sp.add_parser("claim", help="one frontier claim in full"); s.add_argument("id"); s.set_defaults(fn=cmd_claim)
+    s = sp.add_parser("claim", help="one frontier claim in full"); s.add_argument("id")
+    s.add_argument("--related", action="store_true", help="also list the theorems mentioning the claim's constants")
+    s.set_defaults(fn=cmd_claim)
     sp.add_parser("gate", help="is the pre-commit gate running, and where is it").set_defaults(fn=cmd_gate)
 
     lex = sp.add_parser("lexicon").add_subparsers(dest="sub", required=True)

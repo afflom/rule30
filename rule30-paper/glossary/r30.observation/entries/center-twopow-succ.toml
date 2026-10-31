@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-twopow-succ"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const r30.scale::twopow) (app (const lexlean.std.nat::add) (local k) (nat 1)))) (app (const r30.local::bxor) (app (const r30.scale::center) (app (const r30.scale::twopow) (local k))) (app (const r30.witt::witt-resp) (app (const r30.scale::twopow) (local k)) (local k)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.center_twopow_succ"
+
+[[form]]
+id = "center-twopow-succ"
+channel = "math"
+surface = "centertwopowsucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centertwopowsucc) (paren (seq (slot 0))))"
