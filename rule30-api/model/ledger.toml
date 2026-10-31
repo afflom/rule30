@@ -204,6 +204,13 @@ feature = "interfaces/edge-diagonal-formula.md"
 evidence = "frontier check: Rule30UOR.EdgeSplit.center_eq_not_formula_xor_interior kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "interior-diagonal-formula"
+level = "build"
+statement = "Bit t of q^n times y is the convolution of the bits of y with the trinomial row (testBit_phiLinearPow_conv), so the interior diagonal is the explicit XOR over the rows m < t of the convolution of row m's interior carries with trinomialParity (t-1-m), and center t = not (edgeFormula t t XOR interiorFormula t t): the center is fully explicit in the carries."
+feature = "interfaces/interior-diagonal-formula.md"
+evidence = "frontier check: Rule30UOR.EdgeSplit.center_eq_not_formulas kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register and the architecture are LexLean semantic modules verified by the gate."

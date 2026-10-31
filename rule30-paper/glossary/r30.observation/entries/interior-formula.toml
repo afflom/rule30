@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-formula"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit h1 (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.interiorFormula"
+
+[[form]]
+id = "interior-formula"
+channel = "math"
+surface = "interiorformula"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiorformula) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

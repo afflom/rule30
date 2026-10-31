@@ -256,3 +256,12 @@ lean = "Rule30UOR.EdgeSplit.center_eq_not_formula_xor_interior"
 since = "2026-10-31"
 note = "Rule30UOR.EdgeSplit: phiLinearPow_xor, phiLinearPow_shiftLeft, testBit_phiLinearPow_shift, edgeTerm, edgeLedgerSum, edgeLedger_eq_sum, edgeFormula, testBit_edgeLedgerSum, edgeDiagonal_eq_formula, center_eq_not_formula_xor_interior, with Ledger.trinomialParity (testBit_phiLinPow_eq_trinomialParity). Everything explicit about the orbit is on one side; aperiodic-compensation is the aperiodicity of the interior diagonal against this background."
 depends = ["edge-interior-split"]
+
+[[claim]]
+id = "interior-diagonal-formula"
+status = "proved"
+statement = "Bit t of q^n times y is the convolution of the bits of y with the trinomial row (testBit_phiLinearPow_conv), so the interior diagonal is the explicit XOR over the rows m < t of the convolution of row m's interior carries with trinomialParity (t-1-m), and center t = not (edgeFormula t t XOR interiorFormula t t): the center is fully explicit in the carries."
+lean = "Rule30UOR.EdgeSplit.center_eq_not_formulas"
+since = "2026-10-31"
+note = "Rule30UOR.EdgeSplit: convFuel/conv (binary decomposition of y, nat_eq_shift_xor_mod), testBit_phiLinearPow_conv, interiorLedgerSum, interiorLedger_eq_sum, interiorFormula, interiorDiagonal_eq_formula, center_eq_not_formulas. aperiodic-compensation now reads: interiorFormula t t, the gasket parity of the bulk carry events, is not eventually periodic against edgeFormula t t."
+depends = ["edge-diagonal-formula"]

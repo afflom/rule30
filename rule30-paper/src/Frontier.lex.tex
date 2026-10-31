@@ -132,6 +132,14 @@ Close the goal with \(\lexeme{r30.observation::center-eq-not-formula-xor-interio
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-interior-diagonal-formula}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = not(bxor(edgeformula(t, t), interiorformula(t, t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-formulas}(t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

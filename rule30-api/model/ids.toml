@@ -175,6 +175,12 @@ suite = "register"
 statement = "The edge diagonal is an explicit 2-automatic expression: edgeLedger t is the Rule-150 propagation of the edge events, so edgeDiagonal t = edgeFormula t t, the XOR over m < t of trinomialParity (t-1-m) (t-2m-1) XOR [rdiag 1 m] trinomialParity (t-1-m) (t-2); hence center t = not (edgeFormula t t XOR interiorDiagonal t)."
 
 [[id]]
+id = "interior-diagonal-formula"
+level = "build"
+suite = "register"
+statement = "Bit t of q^n times y is the convolution of the bits of y with the trinomial row (testBit_phiLinearPow_conv), so the interior diagonal is the explicit XOR over the rows m < t of the convolution of row m's interior carries with trinomialParity (t-1-m), and center t = not (edgeFormula t t XOR interiorFormula t t): the center is fully explicit in the carries."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

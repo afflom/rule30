@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "conv"
+category = "function"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.conv"
+
+[[form]]
+id = "conv"
+channel = "math"
+surface = "conv"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name conv) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

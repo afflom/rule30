@@ -2671,4 +2671,18 @@ For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{not}(
 \begin{proof}
 The goal follows from \(\operatorname{centereqnotformulaxorinterior}(t)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:interior-diagonal-eq-formula}
+For every natural number \(t\), \(\operatorname{interiordiagonal}(t) = \operatorname{interiorformula}(t, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiordiagonaleqformula}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-not-formulas}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{not}(\operatorname{bxor}(\operatorname{edgeformula}(t, t), \operatorname{interiorformula}(t, t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqnotformulas}(t)\).
+\end{proof}
 \end{document}

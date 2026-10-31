@@ -2943,4 +2943,19 @@ bulk carries propagated by the same automaton, is not eventually periodic agains
 background. The bulk carries are the adjacent black pairs strictly inside the pattern; the leaf is
 a statement about their parity on the gasket of every row, and nothing else is left to separate.
 
+**The interior diagonal in the same form (`EdgeSplit.conv`, `interiorFormula`).** Bit `t` of
+`q^n · y` is the convolution of the bits of `y` with the trinomial row, `⊕_i y_i ·
+trinomialParity n (t−i)` (`testBit_phiLinearPow_conv`, by the binary decomposition
+`y = 2(y/2) ⊕ (y mod 2)`), so the interior diagonal is the explicit XOR over `m < t` of the
+convolution of row `m`'s interior carries with `trinomialParity (t−1−m)`
+(`interiorDiagonal_eq_formula`), and
+
+    center t = ¬(edgeFormula t t ⊕ interiorFormula t t)      (`center_eq_not_formulas`).
+
+The center is now fully explicit in the carries: both sides are finite XORs of trinomial parities
+over carry events, the edge events known and periodic, the interior events the orbit's own.
+`aperiodic-compensation` is the statement that the second sum is not eventually periodic against
+the first; every term of it is a decided Boolean, and the only unknown is which interior pairs
+are black. That is the exact object the closing argument must speak about.
+
 Problem 1 remains unproved.

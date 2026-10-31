@@ -227,4 +227,141 @@ theorem center_eq_not_formula_xor_interior (t : Nat) :
     center t = !(bxor (edgeFormula t t) (interiorDiagonal t)) := by
   rw [center_eq_not_bxor_diagonals, edgeDiagonal_eq_formula]
 
+/-! ## The interior diagonal in the same form
+
+Bit `t` of `q^n · y` is the convolution of the bits of `y` with the trinomial
+row: `⊕_i y_i · trinomialParity n (t - i)` (`testBit_phiLinearPow_conv`, by the
+binary decomposition of `y`). Applied to the interior masks, the interior
+diagonal is the explicit XOR over the rows `m < t` and the interior carry
+events `i` of row `m` of `trinomialParity (t-1-m) (t-1-i)`: the parity of
+the bulk carry events on the gasket, which is the object of the open leaf. -/
+
+/-- Convolution of the bits of `y` (fuel `f ≥ y`) with the trinomial row `n`, read at `t`. -/
+def convFuel (n : Nat) : Nat → Nat → Nat → Bool
+  | 0, _, _ => false
+  | f + 1, y, t =>
+    if y = 0 then false
+    else bxor (if y % 2 = 1 then trinomialParity n t else false)
+      (if 1 ≤ t then convFuel n f (y / 2) (t - 1) else false)
+
+def conv (n y t : Nat) : Bool := convFuel n y y t
+
+theorem convFuel_congr (n : Nat) : ∀ f g y t, y ≤ f → y ≤ g → convFuel n f y t = convFuel n g y t
+  | 0, g, y, t, hf, _ => by
+    have : y = 0 := by cfomega
+    subst this
+    cases g <;> rfl
+  | f + 1, 0, y, t, _, hg => by
+    have : y = 0 := by cfomega
+    subst this
+    rfl
+  | f + 1, g + 1, y, t, hf, hg => by
+    show (if y = 0 then false else _) = (if y = 0 then false else _)
+    by_cases hy : y = 0
+    · rw [if_pos hy, if_pos hy]
+    · rw [if_neg hy, if_neg hy, convFuel_congr n f g (y / 2) (t - 1) (by cfomega) (by cfomega)]
+
+/-- `y = 2 (y / 2) ⊕ (y mod 2)` as bit vectors. -/
+theorem nat_eq_shift_xor_mod (y : Nat) : y = ((y / 2) <<< 1) ^^^ (y % 2) := by
+  apply Nat.eq_of_testBit_eq
+  intro i
+  rw [Nat.testBit_xor, Nat.testBit_shiftLeft]
+  cases i with
+  | zero =>
+    simp only [Nat.testBit_zero]
+    rw [Nat.mod_mod]
+    simp
+  | succ i =>
+    have h2 : (2 : Nat) ≤ 2 ^ (i + 1) := @Nat.pow_le_pow_right 2 (by decide) 1 (i + 1) (by cfomega)
+    have hlt : y % 2 < 2 ^ (i + 1) := Nat.lt_of_lt_of_le (Nat.mod_lt y (by decide)) h2
+    rw [Nat.testBit_add_one, decide_eq_true (by cfomega : i + 1 ≥ 1), Bool.true_and, Nat.add_sub_cancel,
+      Nat.testBit_lt_two_pow hlt]
+    cases (y / 2).testBit i <;> rfl
+
+/-- **The convolution law**: bit `t` of `q^n · y`. -/
+theorem testBit_phiLinearPow_conv (n : Nat) : ∀ y t, (phiLinearPow n y).testBit t = conv n y t := by
+  intro y
+  induction y using Nat.strongRecOn with
+  | ind y ih =>
+    intro t
+    unfold conv
+    rcases Nat.eq_zero_or_pos y with h0 | hpos
+    · subst h0
+      rw [phiLinearPow_zero, Nat.zero_testBit]
+      rfl
+    · obtain ⟨f, rfl⟩ : ∃ f, y = f + 1 := ⟨y - 1, by cfomega⟩
+      show (phiLinearPow n (f + 1)).testBit t = (if f + 1 = 0 then false else _)
+      rw [if_neg (by cfomega)]
+      have hrec : ∀ t', convFuel n f ((f + 1) / 2) t' = conv n ((f + 1) / 2) t' := fun t' =>
+        convFuel_congr n f ((f + 1) / 2) ((f + 1) / 2) t' (by cfomega) (Nat.le_refl _)
+      rw [hrec]
+      conv => lhs; rw [nat_eq_shift_xor_mod (f + 1)]
+      rw [phiLinearPow_xor, Nat.testBit_xor, phiLinearPow_shiftLeft, Nat.testBit_shiftLeft]
+      have hlow : (phiLinearPow n ((f + 1) % 2)).testBit t = (if (f + 1) % 2 = 1 then trinomialParity n t else false) := by
+        rcases Nat.mod_two_eq_zero_or_one (f + 1) with h | h
+        · rw [h, phiLinearPow_zero, if_neg (by decide)]; simp
+        · rw [h, if_pos rfl, phiLinearPow_eq_phiLinPow, testBit_phiLinPow_eq_trinomialParity]
+      have hlt : (f + 1) / 2 < f + 1 := Nat.div_lt_self (by cfomega) (by decide)
+      rw [hlow, ih ((f + 1) / 2) hlt]
+      rcases Nat.lt_or_ge t 1 with ht | ht
+      · have hd : decide (t ≥ 1) = false := decide_eq_false (by cfomega)
+        rw [hd, if_neg (by cfomega : ¬ (1 ≤ t))]
+        cases (if (f + 1) % 2 = 1 then trinomialParity n t else false) <;> rfl
+      · have hd : decide (t ≥ 1) = true := decide_eq_true ht
+        rw [hd, if_pos ht, Bool.true_and, Rule30UOR.Scale.bxor_eq]
+        cases (if (f + 1) % 2 = 1 then trinomialParity n t else false) <;>
+          cases conv n ((f + 1) / 2) (t - 1) <;> rfl
+
+/-- The partial sums of the propagated interior masks. -/
+def interiorLedgerSum (t : Nat) : Nat → Nat
+  | 0 => 0
+  | n + 1 => interiorLedgerSum t n ^^^ phiLinearPow (t - 1 - n) (interior n <<< 1)
+
+theorem phiLinear_interiorLedgerSum (t : Nat) : ∀ n, n ≤ t →
+    phiLinear (interiorLedgerSum t n) = interiorLedgerSum (t + 1) n := by
+  intro n
+  induction n with
+  | zero => intro _; exact phiLinear_zero
+  | succ n ih =>
+    intro hn
+    show phiLinear (interiorLedgerSum t n ^^^ phiLinearPow (t - 1 - n) (interior n <<< 1)) =
+      interiorLedgerSum (t + 1) n ^^^ phiLinearPow (t + 1 - 1 - n) (interior n <<< 1)
+    rw [phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
+
+theorem interiorLedger_eq_sum : ∀ t, interiorLedger t = interiorLedgerSum t t := by
+  intro t
+  induction t with
+  | zero => rfl
+  | succ t ih =>
+    show phiLinear (interiorLedger t) ^^^ (interior t <<< 1) =
+      interiorLedgerSum (t + 1) t ^^^ phiLinearPow (t + 1 - 1 - t) (interior t <<< 1)
+    rw [ih, phiLinear_interiorLedgerSum t t (Nat.le_refl t), show t + 1 - 1 - t = 0 by cfomega]
+    rfl
+
+/-- The closed form of the interior diagonal: the XOR over `m < n` of the
+convolution of row `m`'s interior carries with the trinomial row `t-1-m`. -/
+def interiorFormula (t : Nat) : Nat → Bool
+  | 0 => false
+  | n + 1 => bxor (interiorFormula t n) (conv (t - 1 - n) (interior n <<< 1) t)
+
+theorem testBit_interiorLedgerSum (t : Nat) : ∀ n, (interiorLedgerSum t n).testBit t = interiorFormula t n := by
+  intro n
+  induction n with
+  | zero => show (0 : Nat).testBit t = false; simp
+  | succ n ih =>
+    show (interiorLedgerSum t n ^^^ phiLinearPow (t - 1 - n) (interior n <<< 1)).testBit t =
+      bxor (interiorFormula t n) (conv (t - 1 - n) (interior n <<< 1) t)
+    rw [Nat.testBit_xor, ih, testBit_phiLinearPow_conv, Rule30UOR.Scale.bxor_eq]
+
+/-- **The interior diagonal is the gasket parity of the bulk carries.** -/
+theorem interiorDiagonal_eq_formula (t : Nat) : interiorDiagonal t = interiorFormula t t := by
+  unfold interiorDiagonal
+  rw [interiorLedger_eq_sum, testBit_interiorLedgerSum]
+
+/-- **The center, fully explicit in the carries**:
+`center t = ¬(edgeFormula t t ⊕ interiorFormula t t)`. -/
+theorem center_eq_not_formulas (t : Nat) :
+    center t = !(bxor (edgeFormula t t) (interiorFormula t t)) := by
+  rw [center_eq_not_formula_xor_interior, interiorDiagonal_eq_formula]
+
 end Rule30UOR.EdgeSplit
