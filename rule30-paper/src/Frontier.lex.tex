@@ -33,6 +33,14 @@ Close the goal with \(\lexeme{r30.frontier::problem-one-iff-no-recurrent-central
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-horizon-certificate}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(T ≤ 512\), then if \(0 < P\), then if \(P ≤ 128\), then there exists a natural number \(t\) such that \(T ≤ t ∧ t < T + 32 ∧ ¬ (center(t + P) = center(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::horizon-thirty-two}(T, P)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

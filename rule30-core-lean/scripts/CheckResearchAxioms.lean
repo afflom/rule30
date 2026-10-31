@@ -36,6 +36,7 @@ import Rule30UOR.Scale
 import Rule30UOR.TemporalDefect
 import Rule30UOR.WittDefect
 import Rule30UOR.ZeroDiagonals
+import Rule30UOR.Horizon
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

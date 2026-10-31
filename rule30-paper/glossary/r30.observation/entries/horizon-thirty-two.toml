@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "horizon-thirty-two"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hT (app (const lexlean.std.nat::le) (local T) (nat 512))) (explicit hP0 (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hP (app (const lexlean.std.nat::le) (local P) (nat 128)))) (app (const lexlean.core::exists-op) (lam ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::land) (app (const lexlean.std.nat::le) (local T) (local t)) (app (const lexlean.core::land) (app (const lexlean.std.nat::lt) (local t) (app (const lexlean.std.nat::add) (local T) (nat 32))) (app (const lexlean.core::lnot) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const lexlean.std.nat::add) (local t) (local P))) (app (const r30.scale::center) (local t))))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Horizon"
+name = "Rule30UOR.Horizon.horizon_thirty_two"
+
+[[form]]
+id = "horizon-thirty-two"
+channel = "math"
+surface = "horizonthirtytwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name horizonthirtytwo) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

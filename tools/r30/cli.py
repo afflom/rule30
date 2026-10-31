@@ -304,6 +304,34 @@ def cmd_commit(args):
                                   f"poll with: tail -3 {log}")
 
 
+def cmd_module(args):
+    from . import modules
+    if args.sub == "list":
+        rows = modules.list_modules()
+        out(args, rows, "\n".join(rows))
+        return
+    if args.sub == "add":
+        try:
+            r = modules.register(args.name)
+        except (ValueError, FileNotFoundError) as e:
+            sys.exit(f"refused: {e}")
+        text = f"{r['module']}: " + (", ".join(r["changed"]) if r["changed"] else "already registered")
+        if not args.build:
+            out(args, r, text)
+            return
+        print(text)
+        names = [r["module"]]
+    else:
+        names = args.names
+    t0 = time.time()
+    ok, errors = modules.build(names)
+    report = {"ok": ok, "seconds": round(time.time() - t0, 1), "errors": errors}
+    out(args, report, ("built" if ok else "build failed") + f" {' '.join(names) or 'Rule30UOR'} "
+                      f"({report['seconds']}s)" + ("" if ok else "\n" + errors))
+    if not ok:
+        sys.exit(1)
+
+
 def cmd_experiment(args):
     exp = repo.ROOT / "experiments"
     if args.sub == "list":
@@ -376,6 +404,13 @@ def main(argv=None):
     s.add_argument("--push", action="store_true"); s.add_argument("paths", nargs="*")
     s.add_argument("--coauthor", default="Claude <noreply@anthropic.com>")
     s.set_defaults(fn=cmd_commit)
+
+    mo = sp.add_parser("module", help="research modules: list, add (register + skeleton), build").add_subparsers(dest="sub", required=True)
+    mo.add_parser("list").set_defaults(fn=cmd_module)
+    s = mo.add_parser("add", help="register a Rule30UOR module as a Lake root and audit import; create it if absent")
+    s.add_argument("name"); s.add_argument("--build", action="store_true"); s.set_defaults(fn=cmd_module)
+    s = mo.add_parser("build", help="lake build the given modules (all research modules when none)")
+    s.add_argument("names", nargs="*"); s.set_defaults(fn=cmd_module)
 
     ex = sp.add_parser("experiment").add_subparsers(dest="sub", required=True)
     ex.add_parser("list").set_defaults(fn=cmd_experiment)

@@ -52,6 +52,9 @@ TOOLS = [
      {"message": "string", "push": "boolean", "paths": "array"}),
     ("tail_log", "Last lines of a log file under .r30/.", {"path": "string", "lines": "integer"}),
     ("experiment_run", "Run experiments/<name>.py with arguments.", {"name": "string", "args": "array"}),
+    ("module_add", "Register a Rule30UOR research module (Lake root + axiom-audit import), creating it if absent; optionally build it.",
+     {"name": "string", "build": "boolean"}),
+    ("module_build", "lake build research modules (all when none are given); returns only errors.", {"names": "array"}),
 ]
 
 JSON_TYPES = {"string": {"type": "string"}, "integer": {"type": "integer"},
@@ -119,6 +122,10 @@ def argv_for(name, a):
         return ["commit", "-m", g("message", "")] + (["--push"] if g("push") else []) + list(g("paths") or [])
     if name == "experiment_run":
         return ["experiment", "run", g("name", ""), *(g("args") or [])]
+    if name == "module_add":
+        return ["module", "add", g("name", "")] + (["--build"] if g("build") else [])
+    if name == "module_build":
+        return ["module", "build", *names]
     raise KeyError(name)
 
 

@@ -2441,5 +2441,21 @@ Close the goal with \(\lexeme{r30.observation::reconstruct}(Q, t)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{horizon-thirty-two}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(T ≤ 512\), then if \(0 < P\), then if \(P ≤ 128\), then there exists a natural number \(t\) such that \(T ≤ t ∧ t < T + 32 ∧ ¬ (center(t + P) = center(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::horizon-thirty-two}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-center-period-512-128}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(T ≤ 512\), then if \(0 < P\), then if \(P ≤ 128\), then \(¬ centerperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::no-center-period-512-128}(T, P)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

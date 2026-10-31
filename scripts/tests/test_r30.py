@@ -212,6 +212,49 @@ class FrontierRenderTests(unittest.TestCase):
             frontier.render(Lexicon(), self.FakeLean({}))
 
 
+class ModuleRegisterTests(unittest.TestCase):
+    """`module add` edits the Lake roots and the audit imports exactly as
+    `check_research_coverage.py` expects, and is idempotent."""
+
+    def setUp(self):
+        from tools.r30 import modules
+        self.modules = modules
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        core = Path(self.tmp.name)
+        self.old = repo.CORE_LEAN
+        repo.CORE_LEAN = core
+        self.addCleanup(lambda: setattr(repo, "CORE_LEAN", self.old))
+        self.lakefile = core / "lakefile.toml"
+        self.lakefile.write_text('[[lean_lib]]\nname = "LexLeanRuntime"\nroots = ["LexLeanRuntime.Portable"]\n\n'
+                                 '[[lean_lib]]\nname = "Rule30UOR"\nroots = ["Rule30UOR.Core", "Rule30UOR.Frontier"]\n')
+        self.audit = core / "scripts/CheckResearchAxioms.lean"
+        self.audit.parent.mkdir()
+        self.audit.write_text("import Rule30UOR.Core\nimport Rule30UOR.Frontier\nimport Lean.Util.CollectAxioms\n\n"
+                              "if (`Rule30UOR).isPrefixOf name then\n")
+        (core / "Rule30UOR").mkdir()
+        for m in ("Core", "Frontier"):
+            (core / "Rule30UOR" / f"{m}.lean").write_text("module\n")
+
+    def test_register_creates_root_audit_and_skeleton(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import check_research_coverage as coverage
+        r = self.modules.register("Horizon", lakefile=self.lakefile, audit=self.audit)
+        self.assertEqual(r["changed"], ["source", "lakefile", "audit"])
+        self.assertIn("namespace Rule30UOR.Horizon", (Path(self.tmp.name) / "Rule30UOR/Horizon.lean").read_text())
+        self.assertIn('"Rule30UOR.Frontier", "Rule30UOR.Horizon"]', self.lakefile.read_text())
+        self.assertIn("import Rule30UOR.Horizon\nimport Lean.Util.CollectAxioms", self.audit.read_text())
+        root = Path(self.tmp.name).parent
+        with tempfile.TemporaryDirectory() as fake_root:
+            (Path(fake_root) / "rule30-core-lean").symlink_to(Path(self.tmp.name))
+            self.assertEqual(coverage.covered_modules(Path(fake_root)),
+                             ["Rule30UOR.Core", "Rule30UOR.Frontier", "Rule30UOR.Horizon"])
+        again = self.modules.register("Rule30UOR.Horizon", lakefile=self.lakefile, audit=self.audit)
+        self.assertEqual(again["changed"], [])
+        with self.assertRaises(ValueError):
+            self.modules.register("Rule30UOR.bad-name", lakefile=self.lakefile, audit=self.audit)
+
+
 class McpTests(unittest.TestCase):
     def test_every_tool_maps_to_argv(self):
         for tool in tool_list():

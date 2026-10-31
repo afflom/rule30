@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-center-period-512-128"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hT (app (const lexlean.std.nat::le) (local T) (nat 512))) (explicit hP0 (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hP (app (const lexlean.std.nat::le) (local P) (nat 128)))) (app (const lexlean.core::lnot) (app (const r30.scale::center-periodic) (local T) (local P)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Horizon"
+name = "Rule30UOR.Horizon.no_center_period_512_128"
+
+[[form]]
+id = "no-center-period-512-128"
+channel = "math"
+surface = "nocenterperiod512128"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name nocenterperiod512128) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

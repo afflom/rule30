@@ -87,5 +87,13 @@ id = "horizon-criterion"
 status = "open"
 statement = "For every T and P > 0 there is an explicit horizon H(T, P) such that CenterPeriodic T P already fails on the window [T, T + H(T, P)]: a flip forced by the doubling zero diagonal of P reaches column -1 inside the window while the gated mirror forbids it there."
 since = "2026-10-31"
-note = "The finite-target shape of batch 35. experiments/agreement_runs.py: the longest center-agreement run at lag Q grows with the transient (max over Q <= 64: 15 at T = 2^8, 17 at 2^11, 18 at 2^13, 20 at 2^16), as for a random sequence, so H must depend on T; candidate H(T, P) = O(T + P). Coordinate warning (2026-10-31): diagonal_phase_doubles compares diagonal z+1 at t and t+Q, i.e. columns -m and -(m+Q) (ldiag_eq_cell_neg); a leftDefect compares one column at two times, i.e. two diagonals Q apart. An antiperiodic diagonal is therefore not a supply of column defects marching to the center; its column-coordinate consequences under a periodic center are the *_of_doubles bundles of batches 20-49, which are vacuous as engines (band-engines). A horizon proof needs a column-coordinate forcing from the doubling point, which no theorem here provides."
+note = "The finite-target shape of batch 35. experiments/agreement_runs.py: the longest center-agreement run at lag Q grows with the transient (max over Q <= 64: 15 at T = 2^8, 17 at 2^11, 18 at 2^13, 20 at 2^16), as for a random sequence, so H must depend on T; candidate H(T, P) = O(T + P). Kernel-checked instance: horizon-certificate (H = 32 for all T <= 512, 0 < P <= 128). Coordinate warning (2026-10-31): diagonal_phase_doubles compares diagonal z+1 at t and t+Q, i.e. columns -m and -(m+Q) (ldiag_eq_cell_neg); a leftDefect compares one column at two times, i.e. two diagonals Q apart. An antiperiodic diagonal is therefore not a supply of column defects marching to the center; its column-coordinate consequences under a periodic center are the *_of_doubles bundles of batches 20-49, which are vacuous as engines (band-engines). A horizon proof needs a column-coordinate forcing from the doubling point, which no theorem here provides."
 depends = ["aperiodic-compensation", "problem1"]
+
+[[claim]]
+id = "horizon-certificate"
+status = "proved"
+statement = "For every transient T ≤ 512 and period 0 < P ≤ 128 the center disagrees with its lag-P shift at a time in [T, T + 32): the horizon H = 32 is a kernel-checked certificate on these ranges."
+lean = "Rule30UOR.Horizon.horizon_thirty_two"
+since = "2026-10-31"
+note = "Rule30UOR.Horizon: rows are Nat bit-vectors, so the kernel evaluates the center column directly; shortPeriodsFail 512 128 32 = true by decide (about 70 s), with the checker proved sound against CenterPeriodic (no_center_period_512_128). Each certificate is finite; the open claim is the uniform H(T, P). Extending the ranges costs kernel time linearly in T0 * P0 * H."

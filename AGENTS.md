@@ -36,6 +36,8 @@ bin/r30 status                         # HEAD, dirty files, frontier counts
 bin/r30 frontier list                  # what is open, proved, refuted
 bin/r30 lexicon search <text>          # find lexemes by id, surface, or Lean name
 bin/r30 sig <Lean names>               # a declaration's type as an s-expression
+bin/r30 module add <Name> [--build]    # register (and create) a research module: Lake root + axiom-audit import
+bin/r30 module build [<Names>]         # lake build; prints only errors
 bin/r30 unpublished <module prefixes>  # theorems without a lexeme, and whether they can be published
 bin/r30 theorem preview <Lean names>   # the entry and statement, without writing
 bin/r30 theorem add <Lean names>       # write entry + statement, lock, check the module, probe
@@ -67,8 +69,9 @@ available as MCP tools: `claude mcp add r30 -- python3 <repo>/tools/r30/mcp_serv
 
 1. State and prove it in a research module (`rule30-core-lean/Rule30UOR/*.lean`).
    Use the paper's vocabulary in the statement: `twopow`, `bxor`, `rowBit`,
-   `naturalBit`, named predicates rather than inline quantifiers. `lake build
-   Rule30UOR.<Module>` from `rule30-core-lean`.
+   `naturalBit`, named predicates rather than inline quantifiers. A new module
+   is created and registered with `bin/r30 module add <Name>` (never by editing
+   `lakefile.toml` or the audit by hand); `bin/r30 module build <Name>` builds it.
 2. `bin/r30 theorem add Rule30UOR.<Module>.<name>`. The entry lands in
    `r30.observation` (override with `--lexicon`), the statement at the end of
    `Observations.lex.tex` (override with `--target`). Known limitation: a
