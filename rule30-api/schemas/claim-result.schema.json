@@ -1,0 +1,73 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/claim-result/1",
+ "title": "claim --json: one register entry with its dependents, Lean type, published statement and related facts",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "id",
+  "status",
+  "statement",
+  "dependents"
+ ],
+ "properties": {
+  "id": {
+   "type": "string",
+   "pattern": "^[a-z][a-z0-9-]*$"
+  },
+  "status": {
+   "type": "string",
+   "enum": [
+    "open",
+    "proved",
+    "refuted",
+    "retired"
+   ]
+  },
+  "statement": {
+   "type": "string"
+  },
+  "lean": {
+   "type": "string"
+  },
+  "lexeme": {
+   "type": "string"
+  },
+  "since": {
+   "type": "string"
+  },
+  "note": {
+   "type": "string"
+  },
+  "depends": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "dependents": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "lean_type": {
+   "type": "string"
+  },
+  "published": {
+   "type": "string"
+  },
+  "published_in": {
+   "type": "string"
+  },
+  "related": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  }
+ }
+}

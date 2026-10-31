@@ -107,11 +107,17 @@ def structure(name, fields):
             "fields": [{"name": f, "type": t} for f, t in fields]}
 
 
-def definition(name, result, body, parameters=(), recursive=None):
+def definition(name, result, body, parameters=(), recursive=None, production=None):
+    """`production` ({"effects": [...], "targets": [...]}, SPEC §17.13) makes
+    the definition an executable production root that `lexlean production`
+    exports to Rust."""
     d = {"kind": "definition", "name": name, "parameters": [{"name": p, "type": t} for p, t in parameters],
          "result": result, "axioms": [], "body": body}
     if recursive:
         d["recursive_argument"] = recursive
+    if production:
+        d["executable"] = True
+        d["production"] = {"effects": sorted(production["effects"]), "targets": sorted(production["targets"])}
     return d
 
 

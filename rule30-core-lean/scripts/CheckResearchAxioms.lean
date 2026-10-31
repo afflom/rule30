@@ -44,6 +44,8 @@ import Rule30UOR.Gasket
 import Rule30UOR.Rules
 import Rule30UOR.EdgeSplit
 import Rule30UOR.Routes
+import Rule30UOR.EdgeParity
+import Rule30UOR.KernelParity
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

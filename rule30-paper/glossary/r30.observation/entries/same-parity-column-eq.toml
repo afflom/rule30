@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "same-parity-column-eq"
+category = "proof-constant"
+signature = "(pi ((explicit N (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::same-parity-column) (local N)) (app (const r30.observation::column-parity) (app (const lexlean.std.nat::div) (local N) (nat 2)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeParity"
+name = "Rule30UOR.EdgeParity.sameParityColumn_eq"
+
+[[form]]
+id = "same-parity-column-eq"
+channel = "math"
+surface = "sameparitycolumneq"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name sameparitycolumneq) (paren (seq (slot 0))))"

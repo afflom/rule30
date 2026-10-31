@@ -526,5 +526,303 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(pm.APPLICATION_RECORD["workflow"], pm.PUBLICATION["workflow"])
 
 
+class ProductionTests(unittest.TestCase):
+    """The production roots of Api.lex.tex are executable definitions with a
+    production clause (SPEC §17.13); the request and the runtime-roots register
+    follow them; the pinned compiler's targets are the pinned digests."""
+
+    def test_api_module_declares_the_production_roots(self):
+        from tools.r30 import apimodel, production
+        text = apimodel.MODULE.read_text()
+        for name, spec in apimodel.PRODUCTION_ROOTS.items():
+            self.assertIn(f"name: {name},", text)
+            self.assertIn(f"production: {{effects: [{', '.join(spec['effects'])}], targets: [{', '.join(spec['targets'])}]}}", text)
+        self.assertEqual(text.count("executable: true"), len(apimodel.PRODUCTION_ROOTS))
+        roots = production.roots()
+        self.assertEqual([r["root"] for r in roots], sorted(r["root"] for r in roots))
+        self.assertEqual(production.crate_name("commandCount"), "rule30_api_command_count")
+
+    def test_request_and_runtime_roots_are_generated_from_the_roots(self):
+        import tomllib, json
+        from tools.r30 import production
+        req = json.loads(production.request_json())
+        self.assertEqual(req["spec"], "lexlean/production-request/1")
+        self.assertEqual([r["root"] for r in req["roots"]], [r["root"] for r in production.roots()])
+        for r in req["roots"]:
+            for t in r["targets"]:
+                self.assertEqual(t["digest"], production.TARGET_DIGESTS[t["id"]])
+            self.assertRegex(r["package"]["name"], r"^[a-z][a-z0-9_]{0,63}$")
+        self.assertEqual(production.REQUEST.read_text(), production.request_json())
+        rr = tomllib.loads(production.runtime_roots_toml())
+        self.assertEqual(rr["spec"], "prismpm/runtime-roots/1")
+        self.assertEqual(rr["roots"], [r["root"] for r in production.roots()])
+        self.assertEqual(production.RUNTIME_ROOTS.read_text(), production.runtime_roots_toml())
+
+    def test_pinned_compiler_states_the_pinned_targets(self):
+        """Skipped without the pinned binary; with it, the version and the
+        target digests the request pins are the compiler's own."""
+        from tools.r30 import production
+        if not Path(repo.lexlean_bin()).exists():
+            self.skipTest("no pinned lexlean")
+        code, out, _ = repo.run([repo.lexlean_bin(), "--version"])
+        self.assertEqual(code, 0)
+        self.assertEqual(out.splitlines()[0], f"lexlean {production.LEXLEAN_VERSION}")
+        t = production.targets()
+        self.assertTrue(t["ok"], t["diagnostics"])
+        self.assertEqual(t["targets"], production.TARGET_DIGESTS)
+
+    def test_summarize_reads_a_production_result(self):
+        from tools.r30 import production, schema
+        result = {"result_id": "ab" * 32, "compiler": {"version": "0.4.0", "semantics": "s", "lean_toolchain": "t"},
+                  "source": {"semantic_id": "cd" * 32},
+                  "roots": [{"root": "Rule30Api.Api.commands", "optimality": {"status": "not-claimed"}, "outputs": [{
+                      "target": {"id": "rust-std"}, "package": {"directory": "packages/rust-std/rule30_api_commands"},
+                      "crate": {"path": "evidence/crate/R0.rust-std.rs"},
+                      "certification": {"status": "kernel-checked", "axioms": ["Classical.choice", "Quot.sound", "propext"]},
+                      "effects": ["allocation", "recursion"]}]}]}
+        report = {"ok": True, "stage": "build", "bundle": "rule30-api/.lexlean/production/x", "diagnostics": [],
+                  "replay": "bindings-verified", **production.summarize(result)}
+        self.assertEqual(report["needs_stack"], 1)
+        self.assertEqual(report["outputs"][0]["certification"], "kernel-checked")
+        schema.validate(schema.document("api-production-result"), report)
+        self.assertIn("rule30_api_commands [rust-std]: kernel-checked", production.render(report))
+        self.assertIn("FAILED", production.render({"ok": False, "stage": "build", "diagnostics": ["LLC0202 x"]}))
+
+
+class ErrorRegisterTests(unittest.TestCase):
+    """Every public failure of the CLI is typed: `cli.py` exits only through
+    `errors.fail` with a registered code, every registered code is raised, and
+    every command a row names is a leaf of the parser (R5)."""
+
+    def test_cli_fails_only_through_registered_codes(self):
+        import re
+        from tools.r30 import errors
+        source = (ROOT / "tools/r30/cli.py").read_text()
+        self.assertNotIn("sys.exit(", source)
+        self.assertNotIn("sys.exit(", source)
+        used = set(re.findall(r'"(R30\d{4})"', source))
+        self.assertTrue(all(line.lstrip().startswith("fail(") or "fail(" in line
+                            for line in source.splitlines() if re.search(r'"R30\d{4}"', line)))
+        registered = {e["code"] for e in errors.ERRORS}
+        self.assertEqual(used, registered)
+        self.assertEqual(len(registered), len(errors.ERRORS))
+        self.assertTrue(all(e["exit"] in (1, 2) for e in errors.ERRORS))
+
+    def test_error_commands_are_parser_leaves_and_register_matches(self):
+        import tomllib
+        from tools.r30 import errors, prismmodel, apimodel
+        leaves = {r["name"] for r in apimodel.surface()}
+        for e in errors.ERRORS:
+            self.assertTrue(set(e["commands"]) <= leaves, e["code"])
+        rows = tomllib.loads(prismmodel.errors())["error"]
+        self.assertEqual([r["code"] for r in rows], [e["code"] for e in errors.ERRORS])
+        self.assertEqual((prismmodel.MODEL / "errors.toml").read_text(), prismmodel.errors())
+
+    def test_fail_prints_the_code_and_exits_with_its_status(self):
+        import io, contextlib
+        from tools.r30 import errors
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as cm:
+            errors.fail("R301001", "ghost")
+        self.assertEqual(cm.exception.code, 2)
+        self.assertEqual(err.getvalue().strip(), "R301001 Unknown claim: ghost")
+
+    def test_unknown_claim_is_a_typed_failure(self):
+        import io, contextlib
+        from tools.r30 import cli
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as cm:
+            cli.main(["claim", "no-such-claim"])
+        self.assertEqual(cm.exception.code, 2)
+        self.assertTrue(err.getvalue().startswith("R301001 "))
+
+
+class ResultSchemaTests(unittest.TestCase):
+    """The `--json` report of each read-only command fits its schema file, and
+    the validator refuses what the schema excludes."""
+
+    def run_json(self, *argv):
+        import io, json, contextlib
+        from tools.r30 import cli
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            cli.main(["--json", *argv])
+        return json.loads(out.getvalue())
+
+    def schema_for(self, name):
+        import json
+        from tools.r30 import prismmodel
+        return json.loads((prismmodel.SCHEMAS / f"{name}.schema.json").read_text())
+
+    def test_status_brief_chain_and_api_check_fit_their_schemas(self):
+        from tools.r30 import schema
+        for command, name in (("status", "status-result"), ("brief", "brief-result"), ("chain", "chain-result")):
+            schema.validate(self.schema_for(name), self.run_json(command))
+        schema.validate(self.schema_for("api-check-result"), self.run_json("api", "check"))
+
+    def test_frontier_list_and_claim_fit_their_schemas(self):
+        """`claim` asks Lean for the type; here the kernel is replaced so the
+        test needs no built library, and the report shape is the command's."""
+        from tools.r30 import schema, cli, leansig
+        schema.validate(self.schema_for("register"), self.run_json("frontier", "list"))
+        old = leansig.signatures
+        leansig.signatures = lambda names, **kw: {n: {"kind": "theorem", "type": ["const", "Prop"]} for n in names}
+        self.addCleanup(lambda: setattr(leansig, "signatures", old))
+        data = self.run_json("claim", "problem1")
+        schema.validate(self.schema_for("claim-result"), data)
+        self.assertEqual(data["lean_type"], "(const Prop)")
+        self.assertIn("coupling-law", data["dependents"])
+
+    def test_every_result_schema_of_commands_toml_with_a_file_validates_its_shape(self):
+        import tomllib, json
+        from tools.r30 import prismmodel, schema
+        rows = tomllib.loads(prismmodel.commands())["command"]
+        by_name = {r["name"]: r["result_schema"] for r in rows}
+        self.assertEqual(by_name["frontier_list"], "r30/register/1")
+        self.assertEqual(by_name["interface"], "r30/interface-sheet/1")
+        self.assertEqual(by_name["api_production"], "r30/api-production-result/1")
+        for name in schema.RESULTS:
+            doc = json.loads((prismmodel.SCHEMAS / f"{name}.schema.json").read_text())
+            self.assertEqual(doc["$id"], f"r30/{name}/1")
+            self.assertIn(f"r30/{name}/1", by_name.values())
+        contracts = tomllib.loads(prismmodel.contracts())["contract"]
+        self.assertTrue({c["schema"] for c in contracts} >= {f"r30/{n}/1" for n in schema.RESULTS})
+
+    def test_validator_refuses_what_the_schema_excludes(self):
+        from tools.r30 import schema
+        doc = schema.document("chain-result")
+        schema.validate(doc, [{"depth": 0, "id": "a", "lean": None, "status": "open"}])
+        for bad in ([{"depth": 0, "id": "a", "lean": None, "status": "bogus"}],
+                    [{"depth": 0, "id": "a", "lean": None, "status": "open", "extra": 1}],
+                    [{"depth": "0", "id": "a", "lean": None, "status": "open"}],
+                    [{"id": "a", "lean": None, "status": "open"}]):
+            with self.assertRaises(schema.Invalid):
+                schema.validate(doc, bad)
+        with self.assertRaises(schema.Invalid):
+            schema.validate(schema.document("status-result"), {"head": [], "dirty": True})
+
+
+class ConformanceTests(unittest.TestCase):
+    """One scenario per id, tagged with the id and its level; CONFORMANCE.md
+    lists every id with its evidence; the registers are drift-checked."""
+
+    def test_every_id_has_one_scenario_tagged_with_its_level(self):
+        import re, tomllib
+        from tools.r30 import prismmodel
+        ids_ = tomllib.loads(prismmodel.ids(prismmodel.rows()))["id"]
+        features = prismmodel.features(prismmodel.rows())
+        self.assertEqual(set(features), {r["suite"] for r in ids_})
+        for suite, text in features.items():
+            self.assertEqual((prismmodel.FEATURES / f"{suite}.feature").read_text(), text)
+            tags = re.findall(r"^  @(\S+) @(\S+)\n  Scenario: ", text, re.M)
+            rows = [r for r in ids_ if r["suite"] == suite]
+            self.assertEqual(tags, [(r["id"], r["level"]) for r in rows])
+            self.assertEqual(text.count("  Scenario: "), len(rows))
+        levels = {r["level"] for r in ids_}
+        self.assertEqual(levels, {"some-true", "build", "open"})
+        self.assertIn("never asserted", features["register"])
+        self.assertIn("nothing is established here", features["register"])
+
+    def test_conformance_document_is_generated_from_the_register(self):
+        from tools.r30 import prismmodel
+        text = prismmodel.conformance(prismmodel.rows())
+        self.assertEqual(prismmodel.CONFORMANCE.read_text(), text)
+        self.assertTrue(text.startswith("<!-- @generated by `bin/r30 api sync`"))
+        for r in prismmodel.all_ids(prismmodel.rows()).values():
+            self.assertIn(f"| `{r['id']}` | `{r['level']}` |", text)
+        for a in prismmodel.AUTHORITIES:
+            self.assertIn(a["citation"], text)
+
+    def test_dependencies_and_stdlib_registers_bind_the_pins(self):
+        import tomllib
+        from tools.r30 import prismmodel, production
+        deps = {d["id"]: d for d in tomllib.loads(prismmodel.dependencies())["dependency"]}
+        self.assertEqual(deps["lexlean"]["version"], production.LEXLEAN_VERSION)
+        lock = tomllib.loads((prismmodel.API / "lexlean.lock").read_text())
+        self.assertEqual(deps["lexlean"]["revision"], lock["compiler_semantics"])
+        self.assertEqual(deps["lean4"]["version"], lock["lean_toolchain"])
+        arts = {a["path"]: a["sha256"] for a in deps["prism-stdlib"]["artifact"]}
+        self.assertEqual(arts["rule30-api/stdlib/Foundation"], prismmodel.tree_sha256(prismmodel.API / "stdlib" / "Foundation"))
+        self.assertEqual(arts["rule30-api/language/prism.arch"], next(p["tree_sha256"] for p in lock["package"] if p["id"] == "prism.arch"))
+        std = tomllib.loads(prismmodel.stdlib_package())
+        self.assertEqual(std["version"], prismmodel.STDLIB["version"])
+        self.assertEqual(deps["prism-stdlib"]["version"], std["version"])
+        self.assertEqual((prismmodel.MODEL / "dependencies.toml").read_text(), prismmodel.dependencies())
+        self.assertEqual((prismmodel.MODEL / "stdlib-package.toml").read_text(), prismmodel.stdlib_package())
+
+
+class AccessibilityTests(unittest.TestCase):
+    """The site: landmarks, a skip link, a visible focus ring, reduced motion
+    honoured, keyboard-operable claim cards, every journey step a panel, and
+    WCAG AA contrast (4.5:1) of every text token on its surfaces, in both
+    themes, measured from the stylesheet."""
+
+    @staticmethod
+    def luminance(hex_colour):
+        r, g, b = (int(hex_colour[i:i + 2], 16) / 255 for i in (1, 3, 5))
+        f = lambda c: c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+
+    def contrast(self, a, b):
+        la, lb = self.luminance(a), self.luminance(b)
+        return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+
+    def tokens(self, html):
+        import re
+        themes = {}
+        for name, start in (("light", ":root {"), ("dark", ':root[data-theme="dark"] {')):
+            block = html[html.index(start):]
+            block = block[:block.index("}")]
+            themes[name] = dict(re.findall(r"--([a-z-]+):\s*(#[0-9a-f]{6})", block))
+        return themes
+
+    def test_landmarks_focus_motion_and_keyboard(self):
+        from tools.r30 import site
+        html = site.TEMPLATE.read_text()
+        self.assertIn('<a class="skip" href="#main">', html)
+        self.assertIn('<main id="main"', html)
+        for landmark in ("<header", "<nav", "<main", "<footer"):
+            self.assertIn(landmark, html)
+        self.assertIn(":focus-visible { outline: 3px solid var(--focus)", html)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", html)
+        self.assertIn('reducedMotion() ? "auto" : "smooth"', html)
+        self.assertIn('role="button" tabindex="0" aria-pressed=', html)
+        self.assertIn('e.key !== "Enter" && e.key !== " "', html)
+        self.assertIn('aria-label="Toggle dark or light theme"', html)
+        self.assertIn('role="status"', html)
+        self.assertIn('data-missing=', html)
+
+    def test_text_tokens_meet_aa_contrast_in_both_themes(self):
+        from tools.r30 import site
+        themes = self.tokens(site.TEMPLATE.read_text())
+        pairs = [("ink", "bg"), ("ink", "panel"), ("ink", "soft"), ("muted", "bg"), ("muted", "panel"), ("link", "bg"),
+                 ("link", "panel"), ("open", "open-bg"), ("open", "panel"), ("proved", "proved-bg"), ("proved", "panel"),
+                 ("refuted", "refuted-bg"), ("refuted", "panel"), ("retired", "retired-bg"), ("retired", "panel"),
+                 ("ink", "open-bg"), ("focus", "bg")]
+        for name, t in themes.items():
+            for fg, bg in pairs:
+                self.assertGreaterEqual(self.contrast(t[fg], t[bg]), 4.5 if fg != "focus" else 3.0, f"{name}: {fg} on {bg}")
+
+    def test_journeys_check_finds_a_step_without_a_panel(self):
+        from tools.r30 import site, presentationmodel as pm
+        self.assertEqual(site.check_journeys(), [])
+        broken = [{"id": "j", "stakeholder": "researcher", "panels": ["register", "ghost-panel"]}]
+        self.assertEqual(site.check_journeys(pm.PANELS, broken), ["journey j: panel ghost-panel is not rendered"])
+        nobody = [{"id": "j", "stakeholder": "nobody", "panels": ["register"]}]
+        self.assertEqual(site.check_journeys(pm.PANELS, nobody), ["journey j: stakeholder nobody is not declared"])
+        old = pm.JOURNEYS[:]
+        pm.JOURNEYS[:] = broken
+        self.addCleanup(lambda: pm.JOURNEYS.__setitem__(slice(None), old))
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, "ghost-panel"):
+                site.render_view(Path(tmp) / "view")
+
+    def test_readme_points_to_the_view_and_the_api(self):
+        text = (ROOT / "README.md").read_text()
+        self.assertIn("## Centerline: the current view and the API modules", text)
+        for needle in ("bin/r30 view render", "bin/r30 api check", "src/Api.lex.tex", "rule30-current-view", "bin/r30 api production"):
+            self.assertIn(needle, text)
+
+
 if __name__ == "__main__":
     unittest.main()

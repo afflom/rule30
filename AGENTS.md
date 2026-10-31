@@ -38,6 +38,7 @@ bin/r30 chain                          # the reduction tree of the register: wha
 bin/r30 interface <id> [--write]       # the labeled interface sheet of a claim (chain, notions, exact facts, handles); --write puts it in interfaces/
 bin/r30 view render [--out <dir>]      # the stakeholder view (site, artifacts) that the view workflow publishes; the runtime of Presentation.lex.tex
 bin/r30 api sync | check               # regenerate / drift-check the LexLean API modules, the PrismPM model and the logo
+bin/r30 api production                 # export the production roots of Api.lex.tex to certified Rust (lexlean production) and replay the bundle
 bin/r30 status                         # HEAD, dirty files, frontier counts
 bin/r30 frontier list                  # what is open, proved, refuted
 bin/r30 lexicon search <text>          # find lexemes by id, surface, or Lean name
@@ -80,8 +81,12 @@ surface as data (`Argument`, `Command`, `commands`) with a kernel-checked
 count theorem; `bin/r30 api sync` regenerates it from the parser, `api check`
 (run by the tests) refuses a parser that drifted from it, and the gate
 verifies the module with `lexlean` like the paper. LexLean emits Lean for it
-now and, under PrismPM, Rust (`lexlean production`), so the runtime can be
-generated from the same declarations when that toolchain is pinned.
+and, through `bin/r30 api production` (`lexlean production`, SPEC §24.7),
+certified Rust packages of its production roots (`commands`, `commandCount`),
+kernel-checked and replayed, into `rule30-api/.lexlean/production/` (never
+committed); the PrismPM registers `errors`, `dependencies`, `runtime-roots`
+and `stdlib-package`, the result schemas, the Gherkin suites and
+`CONFORMANCE.md` are generated and drift-checked with the modules.
 `rule30-api/src/Architecture.lex.tex` (on the vendored prism-stdlib `Foundation.Arch` and `Foundation.Qual`: stakeholders, concerns, viewpoints, views, and the quality model that defines an optimal implementation), `Presentation.lex.tex` and `Application.lex.tex` (the stakeholder view and its publication, whose runtime is `bin/r30 view render`) are generated the same way; the PrismPM model lives in `rule30-api/model/` and `prismpm.toml`.
 `rule30-api/src/Register.lex.tex` is the register in the same form: the
 claims of `frontier.toml` as data, with the well-formedness of the plan

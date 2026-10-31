@@ -94,8 +94,14 @@ def decl(d):
     if k == "definition":
         params = ", ".join(f"{p['name']} : {type_(p['type'])}" for p in d.get("parameters", []))
         rec = f",\n  recursive_argument: {d['recursive_argument']}" if d.get("recursive_argument") else ""
+        # a production root (SPEC §17.13): executable, with its effects and
+        # targets from the closed registry, in the order `fmt` writes them
+        exe = ",\n  executable: true" if d.get("executable") else ""
+        prod = d.get("production")
+        prod = (f",\n  production: {{effects: [{', '.join(prod['effects'])}], targets: [{', '.join(prod['targets'])}]}}"
+                if prod else "")
         return (f"definition{{\n  name: {d['name']},\n  parameters: [{params}],\n  result: {type_(d['result'])},\n"
-                f"  body: {expr(d['body'])},\n  axioms: []{rec}\n}}")
+                f"  body: {expr(d['body'])},\n  axioms: []{rec}{exe}{prod}\n}}")
     if k == "theorem":
         st = d["statement"]
         proof = d["proof"]["kind"]

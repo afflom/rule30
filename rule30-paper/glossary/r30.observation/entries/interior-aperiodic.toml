@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-aperiodic"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeParity"
+name = "Rule30UOR.EdgeParity.InteriorAperiodic"
+
+[[form]]
+id = "interior-aperiodic"
+channel = "math"
+surface = "interioraperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name interioraperiodic)"

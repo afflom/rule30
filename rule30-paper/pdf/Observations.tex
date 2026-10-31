@@ -2727,4 +2727,146 @@ For every natural number \(n\) and natural number \(d\), if \(d \le 2 \cdot n\),
 \begin{proof}
 The goal follows from \(\operatorname{trinomialparitypalindrome}(n, d)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-central}
+For every natural number \(n\), \(\operatorname{trinomialparity}(n, n) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparitycentral}(n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-even-even}
+For every natural number \(m\) and natural number \(e\), \(\operatorname{trinomialparity}(2 \cdot m, 2 \cdot e) = \operatorname{trinomialparity}(m, e)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparityeveneven}(m, e)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-even-odd}
+For every natural number \(m\) and natural number \(e\), \(\operatorname{trinomialparity}(2 \cdot m, 2 \cdot e + 1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparityevenodd}(m, e)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-odd-odd}
+For every natural number \(m\) and natural number \(e\), \(\operatorname{trinomialparity}(2 \cdot m + 1, 2 \cdot e + 1) = \operatorname{trinomialparity}(m, e)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparityoddodd}(m, e)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-odd-even-succ}
+For every natural number \(m\) and natural number \(e\), \(\operatorname{trinomialparity}(2 \cdot m + 1, 2 \cdot e + 2) = \operatorname{bxor}(\operatorname{trinomialparity}(m, e + 1), \operatorname{trinomialparity}(m, e))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparityoddevensucc}(m, e)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:column-parity-zero}
+\(\operatorname{columnparity}(0) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{columnparityzero}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:column-parity-odd}
+For every natural number \(e\), \(\operatorname{columnparity}(2 \cdot e + 1) = \operatorname{columnparity}(e)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{columnparityodd}(e)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:column-parity-even-succ}
+For every natural number \(e\), \(\operatorname{columnparity}(2 \cdot e + 2) = \operatorname{not}(\operatorname{columnparity}(e))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{columnparityevensucc}(e)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:same-parity-column-eq}
+For every natural number \(N\), \(\operatorname{sameparitycolumn}(N) = \operatorname{columnparity}(N / 2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{sameparitycolumneq}(N)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:edge-diagonal-eq-time-parity}
+For every natural number \(t\), \(\operatorname{edgediagonal}(t) = \operatorname{timeparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{edgediagonaleqtimeparity}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-not-time-parity-xor-interior}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{not}(\operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{interiordiagonal}(t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqnottimeparityxorinterior}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:interior-diagonal-eq-center}
+For every natural number \(t\), \(\operatorname{interiordiagonal}(t) = \operatorname{bxor}(\operatorname{not}(\operatorname{center}(t)), \operatorname{timeparity}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiordiagonaleqcenter}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:time-parity-add-two-mul}
+For every natural number \(t\) and natural number \(P\), \(\operatorname{timeparity}(t + 2 \cdot P) = \operatorname{timeparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{timeparityaddtwomul}(t, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:interior-periodic-of-center-periodic}
+For every natural number \(T\) and natural number \(P\), if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{interiorperiodic}(T, 2 \cdot P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiorperiodicofcenterperiodic}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-periodic-of-interior-periodic}
+For every natural number \(T\) and natural number \(P\), if \(\operatorname{interiorperiodic}(T, P)\), then \(\operatorname{centerperiodic}(T, 2 \cdot P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerperiodicofinteriorperiodic}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-iff-interior-aperiodic}
+\(\operatorname{problemone}\) if and only if \(\operatorname{interioraperiodic}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{problem1iffinterioraperiodic}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-interior-aperiodic}
+If for every natural number \(T\) and natural number \(P\), if \(0 < P\), then not \(\operatorname{interiorperiodic}(T, P)\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofinterioraperiodic}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-kernel-finite-iff-interior}
+\(\operatorname{centerkernelfinite}\) if and only if \(\operatorname{interiorkernelfinite}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerkernelfiniteiffinterior}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-infinite-kernel-iff-interior}
+\(\operatorname{centerinfinitekernel}\) if and only if not \(\operatorname{interiorkernelfinite}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerinfinitekerneliffinterior}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-interior-infinite-kernel}
+If not \(\operatorname{interiorkernelfinite}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofinteriorinfinitekernel}(h)\).
+\end{proof}
 \end{document}

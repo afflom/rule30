@@ -9,26 +9,32 @@
 <link rel="icon" href="logo.svg" type="image/svg+xml">
 <style>
 :root {
+  /* text tokens keep at least 4.5:1 on the surfaces they sit on (WCAG 2.2 AA; scripts/tests/test_r30.py measures them) */
   --bg: #f4f1ea; --panel: #fbfaf6; --ink: #14161a; --muted: #5c6066; --line: #d9d4c7; --soft: #ebe7dc;
-  --accent: #b97d0c; --accent-ink: #14161a; --link: #1f5f8b;
-  --open: #b97d0c; --open-bg: #fbefd3; --proved: #2f7d4f; --proved-bg: #ddf1e3; --refuted: #b8372f; --refuted-bg: #f9dfdc; --retired: #6b6f76; --retired-bg: #e6e6e6;
+  --accent: #b97d0c; --accent-ink: #14161a; --link: #1f5f8b; --focus: #1f5f8b;
+  --open: #7a5104; --open-bg: #fbefd3; --proved: #256a41; --proved-bg: #ddf1e3; --refuted: #a8302a; --refuted-bg: #f9dfdc; --retired: #595d63; --retired-bg: #e6e6e6;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #14161a; --panel: #1c1f25; --ink: #ece8df; --muted: #a2a6ad; --line: #2e323a; --soft: #23272e;
-  --accent: #e0a526; --accent-ink: #14161a; --link: #7fb6e0;
+  --accent: #e0a526; --accent-ink: #14161a; --link: #7fb6e0; --focus: #7fb6e0;
   --open: #e0a526; --open-bg: #3a2e12; --proved: #6fcf97; --proved-bg: #173524; --refuted: #ef8a80; --refuted-bg: #3f1f1c; --retired: #a2a6ad; --retired-bg: #2b2e34;
 } }
 :root[data-theme="dark"] {
   --bg: #14161a; --panel: #1c1f25; --ink: #ece8df; --muted: #a2a6ad; --line: #2e323a; --soft: #23272e;
-  --accent: #e0a526; --accent-ink: #14161a; --link: #7fb6e0;
+  --accent: #e0a526; --accent-ink: #14161a; --link: #7fb6e0; --focus: #7fb6e0;
   --open: #e0a526; --open-bg: #3a2e12; --proved: #6fcf97; --proved-bg: #173524; --refuted: #ef8a80; --refuted-bg: #3f1f1c; --retired: #a2a6ad; --retired-bg: #2b2e34;
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--sans); }
+/* keyboard: one visible focus ring everywhere, and a skip link that appears on focus */
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.skip { position: absolute; left: 16px; top: -48px; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; z-index: 10; }
+.skip:focus { top: 8px; }
 a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 2px; }
 code, pre, .mono { font-family: var(--mono); font-size: 0.86em; }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
@@ -112,6 +118,7 @@ footer p { margin: 4px 0; }
 </head>
 <body>
 <script id="r30-data" type="application/json">null</script>
+<a class="skip" href="#main">Skip to the view</a>
 <header class="top">
   <div class="wrap">
     <div class="brand">
@@ -129,8 +136,8 @@ footer p { margin: 4px 0; }
     <nav class="panels" id="nav" aria-label="Panels"></nav>
   </div>
 </header>
-<main class="wrap">
-  <div id="notice" class="notice" hidden></div>
+<main id="main" class="wrap" tabindex="-1">
+  <div id="notice" class="notice" role="status" hidden></div>
   <p class="lede" id="lede"></p>
   <div class="tiles" id="tiles"></div>
   <div id="sections"></div>
@@ -247,7 +254,7 @@ footer p { margin: 4px 0; }
     var regBody = $("body-register");
     var filter = "all", query = "";
     function claimCard(c) {
-      return '<div class="claim' + (selected === c.id ? " selected" : "") + '" data-id="' + esc(c.id) + '"><div class="head">' + badge(c.status) +
+      return '<div class="claim' + (selected === c.id ? " selected" : "") + '" data-id="' + esc(c.id) + '" role="button" tabindex="0" aria-pressed="' + (selected === c.id) + '" aria-label="' + esc(c.id) + ', ' + esc(c.status) + '"><div class="head">' + badge(c.status) +
         '<span class="id">' + esc(c.id) + "</span>" + (c.since ? '<span class="k mono" style="color:var(--muted);font-size:.78rem">' + esc(c.since) + "</span>" : "") + "</div>" +
         '<p class="st">' + esc(c.statement) + "</p>" + (c.lean ? '<div class="lean mono">' + esc(c.lean) + "</div>" : "") + "</div>";
     }
@@ -322,10 +329,20 @@ footer p { margin: 4px 0; }
     var jBody = $("body-journeys");
     if (jBody) {
       var ptitle = {}; panels.forEach(function (p) { ptitle[p.id] = p.title; });
+      // the journeys check: every step of every journey is a rendered panel
+      // (what Presentation.lex.tex decides as journeysThroughPanels), else the
+      // step is marked and the notice says which journey is broken
+      var broken = [];
       jBody.innerHTML = d.journeys.map(function (j) {
         var sh = (d.stakeholders || []).filter(function (s) { return s.id === j.stakeholder; })[0] || { name: j.stakeholder };
-        return '<div class="journey"><span class="who">' + esc(sh.name) + "</span>" + j.panels.map(function (p) { return '<a class="step" href="#' + esc(p) + '">' + esc(ptitle[p] || p) + "</a>"; }).join(" → ") + "</div>";
+        return '<div class="journey" data-journey="' + esc(j.id) + '"><span class="who">' + esc(sh.name) + "</span>" + j.panels.map(function (p) {
+          var ok = !!document.getElementById(p);
+          if (!ok) broken.push(j.id + ": " + p);
+          return ok ? '<a class="step" href="#' + esc(p) + '">' + esc(ptitle[p] || p) + "</a>"
+                    : '<span class="step" data-missing="' + esc(p) + '" aria-label="panel ' + esc(p) + ' is missing">' + esc(p) + " (missing)</span>";
+        }).join(" → ") + "</div>";
       }).join("");
+      if (broken.length) { var nb = $("notice"); nb.hidden = false; nb.textContent = "Journeys with a step that has no panel: " + broken.join(", "); }
     }
 
     function select(id) {
@@ -339,9 +356,9 @@ footer p { margin: 4px 0; }
           fetch("interfaces/" + id + ".md").then(function (r) { return r.ok ? r.text() : ""; }).then(function (t) { if (t) sv.innerHTML = '<pre class="sheet">' + esc(t) + "</pre>"; }).catch(function () {});
         }
       }
-      var el = $("register"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      var el = $("register"); if (el) el.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
     }
-    document.addEventListener("click", function (e) {
+    function activate(e) {
       var t = e.target.closest("[data-select], .node, .claim, [data-filter]");
       if (!t) return;
       if (t.hasAttribute("data-filter")) { filter = t.getAttribute("data-filter"); renderRegister(); return; }
@@ -349,8 +366,18 @@ footer p { margin: 4px 0; }
       if (!id) return;
       e.preventDefault();
       select(id === selected && t.classList.contains("claim") ? null : id);
+      if (t.classList.contains("claim")) { var again = document.querySelector('.claim[data-id="' + id + '"]'); if (again) again.focus(); }
+    }
+    document.addEventListener("click", activate);
+    // keyboard: a claim card is a button (role, tabindex); Enter and Space activate it like a click
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var t = e.target.closest(".claim");
+      if (t) activate({ target: t, preventDefault: function () { e.preventDefault(); } });
     });
   }
+
+  function reducedMotion() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
 
   load().then(render).catch(function (err) {
     var n = $("notice"); n.hidden = false;

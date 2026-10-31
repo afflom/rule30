@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trinomial-parity-odd-even-succ"
+category = "proof-constant"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat)) (explicit e (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::trinomial-parity) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local m)) (nat 1)) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (nat 2) (local e)) (nat 2))) (app (const r30.local::bxor) (app (const r30.observation::trinomial-parity) (local m) (app (const lexlean.std.nat::add) (local e) (nat 1))) (app (const r30.observation::trinomial-parity) (local m) (local e)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeParity"
+name = "Rule30UOR.EdgeParity.trinomialParity_odd_even_succ"
+
+[[form]]
+id = "trinomial-parity-odd-even-succ"
+channel = "math"
+surface = "trinomialparityoddevensucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trinomialparityoddevensucc) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

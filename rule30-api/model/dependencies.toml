@@ -1,0 +1,69 @@
+spec = "prismpm/dependencies/1"
+
+[[dependency]]
+id = "lexlean"
+version = "0.4.0"
+language = "1.2"
+revision = "2a0617a236367ffb610a9b5957fa21759aec43c2e2bbd5c5ed71b28e0b0bc7e3"
+source = "pinned-binary"
+role = "compiler"
+path = ".local/bin/lexlean"
+
+[[dependency]]
+id = "lean4"
+version = "leanprover/lean4:v4.32.1"
+source = "elan"
+role = "kernel"
+
+[[dependency]]
+id = "lexlean.core"
+version = "1.2.0"
+source = "embedded"
+role = "lexicon"
+tree_sha256 = "827317cae68c162f3a96c8a8de4e53ab348e7d3724fd2b834fa85ecde1a1b392"
+
+[[dependency]]
+id = "lexlean.std.bool"
+version = "1.2.0"
+source = "embedded"
+role = "lexicon"
+tree_sha256 = "3bc0fb09d706ffa7d5a1363302ea87c049acc7c7dcafde63c62682620c11be9b"
+
+[[dependency]]
+id = "lexlean.std.nat"
+version = "1.2.0"
+source = "embedded"
+role = "lexicon"
+tree_sha256 = "e0db021e01b91d651c43921d66f6b0023c8efbf17cac2ec53192ce5305e4e1ac"
+
+[[dependency]]
+id = "prism-stdlib"
+version = "0.2.0"
+source = "vendored"
+role = "stdlib"
+repository = "https://github.com/UOR-Foundation/PrismPM"
+
+[[dependency.artifact]]
+kind = "tree-manifest"
+path = "rule30-api/language/prism.arch"
+sha256 = "5d112f52e4c72ceb84f51b9ea1901d5749a3acab07d51a7c5ab39cf8ba79ea7c"
+recorded_by = "lexlean.lock"
+
+[[dependency.artifact]]
+kind = "tree-manifest"
+path = "rule30-api/language/prism.qual"
+sha256 = "88748e3b24fa79693aed461bbce0fa626ec83356cd7ef980adaa22722a907602"
+recorded_by = "lexlean.lock"
+
+[[dependency.artifact]]
+kind = "tree-manifest"
+path = "rule30-api/stdlib/Foundation"
+sha256 = "75bc673dbdbaff7168b2563f7e514f7db50346eabb6143259874a179a32e2e64"
+recorded_by = "bin/r30 api sync"
+
+[[dependency]]
+id = "python"
+version = "3"
+source = "host"
+role = "interim-runtime"
+statement = "The standard library only: tools/r30 is subprocess calls and file I/O around the LexLean modules."

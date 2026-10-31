@@ -1,0 +1,39 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/chain-result/1",
+ "title": "chain --json: the pre-order walk of the reduction tree",
+ "type": "array",
+ "items": {
+  "type": "object",
+  "required": [
+   "depth",
+   "id",
+   "lean",
+   "status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+   "depth": {
+    "type": "integer"
+   },
+   "id": {
+    "type": "string"
+   },
+   "lean": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "open",
+     "proved",
+     "refuted",
+     "retired"
+    ]
+   }
+  }
+ }
+}

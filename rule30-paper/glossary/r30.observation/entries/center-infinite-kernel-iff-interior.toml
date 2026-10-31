@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-infinite-kernel-iff-interior"
+category = "proof-constant"
+signature = "(app (const lexlean.core::iff) (const r30.observation::center-infinite-kernel) (app (const lexlean.core::lnot) (const r30.observation::interior-kernel-finite)))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelParity"
+name = "Rule30UOR.KernelParity.centerInfiniteKernel_iff_interior"
+
+[[form]]
+id = "center-infinite-kernel-iff-interior"
+channel = "math"
+surface = "centerinfinitekerneliffinterior"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name centerinfinitekerneliffinterior)"

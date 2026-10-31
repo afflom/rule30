@@ -36,6 +36,13 @@ requires_digest = false
 result_schema = "r30/api-check-result/1"
 
 [[command]]
+name = "api_production"
+path = ["api", "production"]
+mutates = "lexlean-build"
+requires_digest = false
+result_schema = "r30/api-production-result/1"
+
+[[command]]
 name = "view_render"
 path = ["view", "render"]
 mutates = "view-directory"
@@ -47,7 +54,7 @@ name = "interface"
 path = ["interface"]
 mutates = "interface-sheets"
 requires_digest = false
-result_schema = "r30/interface-result/1"
+result_schema = "r30/interface-sheet/1"
 
 [[command]]
 name = "claim"
@@ -180,7 +187,7 @@ name = "frontier_list"
 path = ["frontier", "list"]
 mutates = "never"
 requires_digest = false
-result_schema = "r30/frontier-list-result/1"
+result_schema = "r30/register/1"
 
 [[command]]
 name = "frontier_add"

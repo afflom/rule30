@@ -1,0 +1,75 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/status-result/1",
+ "title": "status --json: HEAD, dirty files, the frontier counts, the compiler, the gate",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "head",
+  "dirty",
+  "ahead_of_origin",
+  "frontier",
+  "lexlean",
+  "gate_running"
+ ],
+ "properties": {
+  "head": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "dirty": {
+   "type": "integer"
+  },
+  "ahead_of_origin": {
+   "type": "integer"
+  },
+  "frontier": {
+   "type": "object",
+   "required": [
+    "counts",
+    "open"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "counts": {
+     "type": "object",
+     "required": [
+      "open",
+      "proved",
+      "refuted",
+      "retired"
+     ],
+     "additionalProperties": false,
+     "properties": {
+      "open": {
+       "type": "integer"
+      },
+      "proved": {
+       "type": "integer"
+      },
+      "refuted": {
+       "type": "integer"
+      },
+      "retired": {
+       "type": "integer"
+      }
+     }
+    },
+    "open": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "lexlean": {
+   "type": "string"
+  },
+  "gate_running": {
+   "type": "boolean"
+  }
+ }
+}

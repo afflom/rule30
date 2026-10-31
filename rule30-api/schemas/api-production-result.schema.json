@@ -1,0 +1,134 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/api-production-result/1",
+ "title": "api production --json: the certified Rust bundle lexlean production published, or the stage that failed",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "ok",
+  "stage",
+  "diagnostics"
+ ],
+ "properties": {
+  "ok": {
+   "type": "boolean"
+  },
+  "stage": {
+   "type": "string",
+   "enum": [
+    "lock",
+    "build",
+    "replay"
+   ]
+  },
+  "diagnostics": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "bundle": {
+   "type": "string"
+  },
+  "result_id": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "semantic_id": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "compiler": {
+   "type": "object",
+   "required": [
+    "version",
+    "semantics",
+    "lean_toolchain"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "version": {
+     "type": "string"
+    },
+    "semantics": {
+     "type": "string"
+    },
+    "lean_toolchain": {
+     "type": "string"
+    }
+   }
+  },
+  "outputs": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "root",
+     "target",
+     "package",
+     "crate",
+     "certification",
+     "axioms",
+     "effects",
+     "optimality"
+    ],
+    "properties": {
+     "root": {
+      "type": "string"
+     },
+     "target": {
+      "type": "string",
+      "enum": [
+       "rust-core",
+       "rust-std"
+      ]
+     },
+     "package": {
+      "type": "string"
+     },
+     "crate": {
+      "type": "string"
+     },
+     "certification": {
+      "type": "string",
+      "const": "kernel-checked"
+     },
+     "axioms": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "effects": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "allocation",
+        "overflow",
+        "recursion"
+       ]
+      }
+     },
+     "optimality": {
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    }
+   }
+  },
+  "needs_stack": {
+   "type": "integer"
+  },
+  "replay": {
+   "type": "string",
+   "enum": [
+    "bindings-verified",
+    "failed"
+   ]
+  }
+ }
+}

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-of-interior-aperiodic"
+category = "proof-constant"
+signature = "(pi ((explicit h (pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit h1 (app (const lexlean.std.nat::lt) (nat 0) (local P)))) (app (const lexlean.core::lnot) (app (const r30.observation::interior-periodic) (local T) (local P))))))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeParity"
+name = "Rule30UOR.EdgeParity.problem1_of_interior_aperiodic"
+
+[[form]]
+id = "problem1-of-interior-aperiodic"
+channel = "math"
+surface = "problem1ofinterioraperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problem1ofinterioraperiodic) (paren (seq (slot 0))))"

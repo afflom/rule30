@@ -1,0 +1,19 @@
+spec = "prismpm/runtime-roots/1"
+lean_module = "Rule30Api.Api"
+ir_module = "Rule30Api"
+roots = [
+  "Rule30Api.Api.commandCount",
+  "Rule30Api.Api.commands",
+]
+
+[[root]]
+name = "Rule30Api.Api.commandCount"
+package = "rule30_api_command_count"
+targets = ["rust-std"]
+effects = ["allocation"]
+
+[[root]]
+name = "Rule30Api.Api.commands"
+package = "rule30_api_commands"
+targets = ["rust-std"]
+effects = ["allocation"]

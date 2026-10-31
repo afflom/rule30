@@ -3122,5 +3122,167 @@ Close the goal with \(\lexeme{r30.observation::trinomial-parity-palindrome}(n, d
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{trinomial-parity-central}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(trinomialparity(n, n) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-central}(n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-even-even}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(e\), \(trinomialparity(2 * m, 2 * e) = trinomialparity(m, e)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-even-even}(m, e)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-even-odd}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(e\), \(trinomialparity(2 * m, 2 * e + 1) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-even-odd}(m, e)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-odd-odd}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(e\), \(trinomialparity(2 * m + 1, 2 * e + 1) = trinomialparity(m, e)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-odd-odd}(m, e)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-odd-even-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(e\), \(trinomialparity(2 * m + 1, 2 * e + 2) = bxor(trinomialparity(m, e + 1), trinomialparity(m, e))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-odd-even-succ}(m, e)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{column-parity-zero}
+\allowaxioms{Quot.sound;propext}
+\(columnparity(0) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::column-parity-zero}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{column-parity-odd}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(e\), \(columnparity(2 * e + 1) = columnparity(e)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::column-parity-odd}(e)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{column-parity-even-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(e\), \(columnparity(2 * e + 2) = not(columnparity(e))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::column-parity-even-succ}(e)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{same-parity-column-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(N\), \(sameparitycolumn(N) = columnparity(N / 2)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::same-parity-column-eq}(N)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{edge-diagonal-eq-time-parity}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(edgediagonal(t) = timeparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::edge-diagonal-eq-time-parity}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-not-time-parity-xor-interior}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = not(bxor(timeparity(t), interiordiagonal(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-time-parity-xor-interior}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{interior-diagonal-eq-center}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(interiordiagonal(t) = bxor(not(center(t)), timeparity(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-diagonal-eq-center}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{time-parity-add-two-mul}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and natural number \(P\), \(timeparity(t + 2 * P) = timeparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::time-parity-add-two-mul}(t, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{interior-periodic-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(centerperiodic(T, P)\), then \(interiorperiodic(T, 2 * P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-periodic-of-center-periodic}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-periodic-of-interior-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(interiorperiodic(T, P)\), then \(centerperiodic(T, 2 * P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-of-interior-periodic}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-iff-interior-aperiodic}
+\allowaxioms{Quot.sound;propext}
+\(problemone ↔ interioraperiodic\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::problem1-iff-interior-aperiodic}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-interior-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if for every natural number \(T\) and natural number \(P\), if \(0 < P\), then \(¬ interiorperiodic(T, P)\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-interior-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-kernel-finite-iff-interior}
+\allowaxioms{Quot.sound;propext}
+\(centerkernelfinite ↔ interiorkernelfinite\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-kernel-finite-iff-interior}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-infinite-kernel-iff-interior}
+\allowaxioms{Quot.sound;propext}
+\(centerinfinitekernel ↔ ¬ interiorkernelfinite\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-infinite-kernel-iff-interior}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-interior-infinite-kernel}
+\allowaxioms{Quot.sound;propext}
+if \(¬ interiorkernelfinite\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-interior-infinite-kernel}(h)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

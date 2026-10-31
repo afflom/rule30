@@ -17,6 +17,16 @@ from . import repo
 API = repo.ROOT / "rule30-api"
 MODULE = API / "src" / "Api.lex.tex"
 
+# The production roots of the module (SPEC §17.13): the executable definitions
+# `lexlean production` exports to certified Rust. Strings and lists live on
+# the heap, so the roots require `allocation` and only `rust-std` realizes
+# them; nothing here overflows or recurses. `production.py` builds the
+# request and the runtime-roots register from this table.
+PRODUCTION_ROOTS = {
+    "commands": {"effects": ["allocation"], "targets": ["rust-std"]},
+    "commandCount": {"effects": ["allocation"], "targets": ["rust-std"]},
+}
+
 
 
 def _string(v):
@@ -79,10 +89,12 @@ def declarations(rows):
             {"name": "name", "type": str_t}, {"name": "path", "type": {"kind": "list", "element": str_t}},
             {"name": "help", "type": str_t}, {"name": "arguments", "type": {"kind": "list", "element": arg_t}}]},
         {"kind": "definition", "name": "commands", "parameters": [], "result": {"kind": "list", "element": cmd_t},
-         "axioms": [], "body": _list([cmd_record(c) for c in rows], cmd_t)},
+         "axioms": [], "body": _list([cmd_record(c) for c in rows], cmd_t),
+         "executable": True, "production": PRODUCTION_ROOTS["commands"]},
         {"kind": "definition", "name": "commandCount", "parameters": [], "result": {"kind": "nat"}, "axioms": [],
          "body": {"kind": "primitive", "operation": "length", "result": {"kind": "nat"},
-                  "arguments": [{"kind": "call", "function": {"name": "commands"}, "arguments": []}]}},
+                  "arguments": [{"kind": "call", "function": {"name": "commands"}, "arguments": []}]},
+         "executable": True, "production": PRODUCTION_ROOTS["commandCount"]},
         {"kind": "theorem", "name": "commandCountIs", "parameters": [], "axioms": [],
          "statement": {"kind": "eq", "left": {"kind": "call", "function": {"name": "commandCount"}, "arguments": []},
                        "right": {"kind": "nat", "value": str(len(rows))}},

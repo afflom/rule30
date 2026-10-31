@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-diagonal-eq-center"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::interior-diagonal) (local t)) (app (const r30.local::bxor) (app (const lexlean.std.bool::not) (app (const r30.scale::center) (local t))) (app (const r30.observation::time-parity) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeParity"
+name = "Rule30UOR.EdgeParity.interiorDiagonal_eq_center"
+
+[[form]]
+id = "interior-diagonal-eq-center"
+channel = "math"
+surface = "interiordiagonaleqcenter"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiordiagonaleqcenter) (paren (seq (slot 0))))"

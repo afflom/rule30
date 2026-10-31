@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-periodic"
+category = "function"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeParity"
+name = "Rule30UOR.EdgeParity.InteriorPeriodic"
+
+[[form]]
+id = "interior-periodic"
+channel = "math"
+surface = "interiorperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiorperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

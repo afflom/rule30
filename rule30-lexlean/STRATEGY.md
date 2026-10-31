@@ -3009,4 +3009,28 @@ of the trinomial triangle, `⊕_{n ≤ N} trinomialParity n N` with `N = t − 1
 2-automaticity of the edge background is to be proved, after which `center-infinite-kernel` is
 equivalent to the interior diagonal alone not being 2-automatic.
 
+**The edge background is the time parity (`Rule30UOR.EdgeParity`, 2026-10-31).** The column
+parity is not merely 2-automatic; it is Thue–Morse shifted by one. The digit recursion of
+`trinomialParity` gives, with `trinomialParity n n = true` for every `n` (the central trinomial
+coefficients are all odd), `columnParity (2e+1) = columnParity e` and
+`columnParity (2e+2) = ¬columnParity e` (`columnParity_odd`, `columnParity_even_succ`), so
+`columnParity N = ⊕ (binary digits of N+1)`. The right-pair part is the same column read on the
+rows of one parity, `⊕_{j ≤ N, j ≡ N (2)} trinomialParity j N = columnParity (N/2)`
+(`sameParityColumn_eq`, `edgeRight_eq`), so for `t ≥ 2` the edge background is
+`columnParity (t−1) ⊕ columnParity ((t−2)/2)`, which the two recursions evaluate to `t mod 2`
+without induction: `edgeDiagonal t = timeParity t` (`edgeDiagonal_eq_timeParity`). Hence
+`center t = ¬(timeParity t ⊕ interiorDiagonal t)` (`center_eq_not_timeParity_xor_interior`): the two
+edge carries of every row, propagated through the whole trinomial triangle, contribute exactly the
+alternation of the time, and everything else about the center is the gasket parity of the bulk
+carries. Consequences, all exact: `CenterPeriodic T P → InteriorPeriodic T (2P)` and
+`InteriorPeriodic T P → CenterPeriodic T (2P)`, so **Problem 1 is equivalent to the interior
+diagonal not being eventually periodic** (`problem1_iff_interior`); and since a finite 2-kernel is
+closed under XOR with the parity (`Rule30UOR.KernelParity.kernel2Finite_xor_parity`),
+`center-infinite-kernel` is equivalent to the interior diagonal not being 2-automatic
+(`centerInfiniteKernel_iff_interior`). The causal-horizon lever on the edge is thereby spent (the
+edge is periodic, so its horizon is trivial); `aperiodic-compensation` is now stated on the
+interior alone: `InteriorPeriodic` is the predicate a hypothetical period must satisfy, with no
+background to compensate against beyond the alternation. The dyadic column reads the interior
+alone too: `center (2^j) = ¬interiorDiagonal (2^j)` for `j ≥ 1`.
+
 Problem 1 remains unproved.

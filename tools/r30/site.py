@@ -122,6 +122,24 @@ def view_data(claims, rows, sheets, commit):
     }
 
 
+def check_journeys(panels=PANELS, journeys=JOURNEYS):
+    """Every step of every journey is a panel the site renders, and every
+    journey belongs to a declared stakeholder: the runtime's own check of
+    what `Presentation.lex.tex` decides (`journeysThroughPanels`,
+    `journeysOfStakeholders`), so a render cannot publish a journey whose
+    step has no section to scroll to. Returns the problems, empty when none."""
+    ids = {p["id"] for p in panels}
+    stakeholders = {s["id"] for s in archmodel.STAKEHOLDERS}
+    problems = []
+    for j in journeys:
+        for step in j["panels"]:
+            if step not in ids:
+                problems.append(f"journey {j['id']}: panel {step} is not rendered")
+        if j["stakeholder"] not in stakeholders:
+            problems.append(f"journey {j['id']}: stakeholder {j['stakeholder']} is not declared")
+    return problems
+
+
 def embed(html, data):
     """The template with its data script filled (an embedded `</` is escaped
     so the JSON cannot close the script element)."""
@@ -132,6 +150,9 @@ def embed(html, data):
 
 
 def render_view(out):
+    problems = check_journeys()
+    if problems:
+        raise ValueError("; ".join(problems))
     out.mkdir(parents=True, exist_ok=True)
     claims = frontier.list_claims()
     rows, chain_text = frontier.chain()

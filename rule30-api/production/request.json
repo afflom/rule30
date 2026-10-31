@@ -1,0 +1,31 @@
+{
+  "roots": [
+    {
+      "package": {
+        "name": "rule30_api_command_count",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Api.commandCount",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_commands",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Api.commands",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    }
+  ],
+  "spec": "lexlean/production-request/1"
+}

@@ -17,9 +17,9 @@ evidence = "frontier check: Rule30UOR.WittDefect.center_periodic_of_coupling ker
 [[claim]]
 id = "aperiodic-compensation"
 level = "open"
-statement = "Under a hypothetical center period, the two column-one defects (each aperiodic by Jen) cannot satisfy the gated mirror forever. This is the remaining obligation."
+statement = "The interior diagonal, the gasket parity of the bulk carries, is not eventually periodic (InteriorAperiodic). Equivalent to Problem 1 (interior-aperiodicity). This is the remaining obligation."
 feature = "interfaces/aperiodic-compensation.md"
-evidence = "register: open (Rule30UOR.EdgeSplit.InteriorAgainstEdge)"
+evidence = "register: open (Rule30UOR.EdgeParity.InteriorAperiodic)"
 
 [[claim]]
 id = "q-adic-descent"
@@ -232,6 +232,27 @@ feature = "interfaces/route-b-reset-mismatch.md"
 evidence = "register: refuted (Rule30UOR.Routes.diagonal_reset_sum_invariant)"
 
 [[claim]]
+id = "edge-parity"
+level = "build"
+statement = "The edge background of the center is the time parity: edgeDiagonal t = timeParity t, i.e. t mod 2. The column parity of the trinomial triangle is Thue-Morse shifted by one (columnParity (2e+1) = columnParity e, columnParity (2e+2) = not columnParity e, from trinomialParity n n = true), the right-pair part is the same sequence read at (t-2)/2 (sameParityColumn_eq), and the two cancel to the parity. Hence center t = not (timeParity t XOR interiorDiagonal t)."
+feature = "interfaces/edge-parity.md"
+evidence = "frontier check: Rule30UOR.EdgeParity.edgeDiagonal_eq_timeParity kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "interior-aperiodicity"
+level = "build"
+statement = "Problem 1 is equivalent to the interior diagonal not being eventually periodic: CenterPeriodic T P gives InteriorPeriodic T (2P) and InteriorPeriodic T P gives CenterPeriodic T (2P), so Problem1 iff InteriorAperiodic."
+feature = "interfaces/interior-aperiodicity.md"
+evidence = "frontier check: Rule30UOR.EdgeParity.problem1_iff_interiorAperiodic kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "interior-kernel-reduction"
+level = "build"
+statement = "The center is 2-automatic exactly when the interior diagonal is: a finite 2-kernel is closed under negation and under XOR with the time parity, so CenterInfiniteKernel iff not InteriorKernelFinite, and Problem 1 follows if the interior diagonal is not 2-automatic."
+feature = "interfaces/interior-kernel-reduction.md"
+evidence = "frontier check: Rule30UOR.KernelParity.centerInfiniteKernel_iff_interior kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."
@@ -241,13 +262,20 @@ evidence = "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api c
 [[claim]]
 id = "prism-model"
 level = "build"
-statement = "The model registers (authorities, ids, ledger, commands, standards, projection, contracts) are generated from the register, the parser and the architecture, and drift is refused."
+statement = "The model registers (authorities, ids, ledger, commands, standards, projection, contracts, errors, dependencies, runtime-roots, stdlib-package), the result schemas, the Gherkin suites and CONFORMANCE.md are generated from the register, the parser, the error table and the architecture, and drift is refused."
 feature = "rule30-api/model"
 evidence = "bin/r30 api check; scripts/tests/test_r30.py"
 
 [[claim]]
+id = "rust-emission"
+level = "build"
+statement = "The production roots of Api.lex.tex (commands, commandCount) export to certified Rust packages through lexlean production build, kernel-checked under its stated axioms, and the published bundle replays with verify-artifact."
+feature = "rule30-api/production/request.json"
+evidence = "bin/r30 api production; scripts/tests/test_r30.py"
+
+[[claim]]
 id = "current-view"
 level = "build"
-statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, and runs no validation."
+statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured."
 feature = ".github/workflows/view.yml"
 evidence = "bin/r30 view render; scripts/tests/test_r30.py"

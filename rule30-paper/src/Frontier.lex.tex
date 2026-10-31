@@ -140,6 +140,30 @@ Close the goal with \(\lexeme{r30.observation::center-eq-not-formulas}(t)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-edge-parity}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(edgediagonal(t) = timeparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::edge-diagonal-eq-time-parity}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-interior-aperiodicity}
+\allowaxioms{Quot.sound;propext}
+\(problemone ↔ interioraperiodic\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::problem1-iff-interior-aperiodic}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-interior-kernel-reduction}
+\allowaxioms{Quot.sound;propext}
+\(centerinfinitekernel ↔ ¬ interiorkernelfinite\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-infinite-kernel-iff-interior}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

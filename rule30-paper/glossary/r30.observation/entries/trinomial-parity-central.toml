@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trinomial-parity-central"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::trinomial-parity) (local n) (local n)) (const lexlean.std.bool::true)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeParity"
+name = "Rule30UOR.EdgeParity.trinomialParity_central"
+
+[[form]]
+id = "trinomial-parity-central"
+channel = "math"
+surface = "trinomialparitycentral"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trinomialparitycentral) (paren (seq (slot 0))))"

@@ -13,6 +13,7 @@ import time
 
 from . import repo, checks, frontier, leansig
 from .convert import Unsupported
+from .errors import fail
 
 
 def out(args, data, text):
@@ -72,7 +73,7 @@ def cmd_interface(args):
     try:
         data = interface.sheet(args.id, with_related=not args.no_related)
     except ValueError as e:
-        sys.exit(str(e))
+        fail("R301001", str(e))
     if args.write:
         path = interface.write(args.id, data)
         print(f"wrote {path.relative_to(repo.ROOT)}")
@@ -95,15 +96,25 @@ def cmd_api(args):
             f"\n{p['module']}: {p['panels']} panels" + state(p) +
             f"\n{m['model']}: {m['claims']} claims, {m['registers']} registers" + state(m) +
             f"\n{g['logo']}" + state(g))
+    elif args.sub == "production":
+        from . import production
+        if args.targets:
+            t = production.targets()
+            out(args, t, "\n".join(f"{k} {v}" for k, v in t["targets"].items()) or "\n".join(t["diagnostics"]))
+            return
+        r = production.build(replay=not args.no_replay)
+        out(args, r, production.render(r))
+        if not r["ok"]:
+            fail("R306002" if r["stage"] == "replay" else "R306001", f"see the report above ({r['stage']})")
     else:
         results = {"api": apimodel.check(), "register": registermodel.check(), "architecture": archmodel.check(),
                    "presentation": presentationmodel.check(), "model": prismmodel.check(), "logo": site.check_logo()}
         names = {"api": "Api.lex.tex matches the CLI", "register": "Register.lex.tex matches frontier.toml",
                  "architecture": "Architecture.lex.tex is current", "presentation": "Presentation.lex.tex and Application.lex.tex are current",
-                 "model": "model/ registers are current", "logo": "site/logo.svg is current"}
+                 "model": "model/ registers, schemas, features and CONFORMANCE.md are current", "logo": "site/logo.svg is current"}
         out(args, results, "\n".join(names[k] if v["ok"] else v["reason"] for k, v in results.items()))
         if not all(v["ok"] for v in results.values()):
-            sys.exit(1)
+            fail("R303003", ", ".join(k for k, v in results.items() if not v["ok"]))
 
 
 def cmd_chain(args):
@@ -128,7 +139,7 @@ def cmd_claim(args):
     claims = frontier.load()["claim"]
     c = next((x for x in claims if x["id"] == args.id), None)
     if c is None:
-        sys.exit(f"no claim {args.id}")
+        fail("R301001", args.id)
     lx = Lexicon()
     data = dict(c)
     data["dependents"] = [x["id"] for x in claims if args.id in x.get("depends", [])]
@@ -184,7 +195,7 @@ def cmd_lexicon(args):
     elif args.sub == "show":
         e = lx.get(args.id) or lx.for_lean(args.id)
         if e is None:
-            sys.exit(f"no lexeme {args.id}")
+            fail("R302001", args.id)
         data = {**e.row(), "signature": e.signature, "path": str(e.path) if e.path else None,
                 "precedence": e.precedence, "associativity": e.associativity}
         out(args, data, "\n".join(f"{k}: {v}" for k, v in data.items()))
@@ -219,7 +230,7 @@ def cmd_theorem(args):
                             args.target, dry_run=(args.sub == "preview"))
             results.append(p)
     except Unsupported as e:
-        sys.exit(f"refused: {e}")
+        fail("R302002", str(e))
     if args.json:
         print(repo.to_json([{k: (str(v) if k == "entry_path" else v) for k, v in p.items()} for p in results]))
         return
@@ -241,7 +252,7 @@ def cmd_theorem_remove(args):
         try:
             rows.append({"qid": qid, **theorem.remove(qid)})
         except Unsupported as e:
-            sys.exit(f"refused: {e}")
+            fail("R302003", str(e))
     out(args, rows, "\n".join(f"removed {r['qid']}: entry {r['entry']}" + (f", block in {r['block']}" if r['block'] else "")
                               for r in rows))
 
@@ -283,7 +294,8 @@ def cmd_check(args):
                      ("".join("\n  " + d for d in r["diagnostics"]) if r["diagnostics"] else "")
                      for r in results)
     out(args, results, text)
-    sys.exit(0 if all(r["ok"] for r in results) else 1)
+    if not all(r["ok"] for r in results):
+        fail("R303001", ", ".join(r["project"] for r in results if not r["ok"]))
 
 
 def cmd_verify(args):
@@ -294,7 +306,8 @@ def cmd_verify(args):
     if r["diagnostics"]:
         text += "".join("\n  " + d for d in r["diagnostics"])
     out(args, r, text)
-    sys.exit(0 if r["ok"] else 1)
+    if not r["ok"]:
+        fail("R303002", r["project"])
 
 
 def cmd_probe(args):
@@ -302,10 +315,11 @@ def cmd_probe(args):
     try:
         prepared = [theorem.prepare(n, args.lexicon) for n in args.names]
     except Unsupported as e:
-        sys.exit(f"refused: {e}")
+        fail("R302002", str(e))
     errs = theorem.probe(prepared)
     out(args, {"errors": errs}, "probe ok" if not errs else "probe FAILED:\n" + "\n".join(errs[:10]))
-    sys.exit(0 if not errs else 1)
+    if errs:
+        fail("R304001", f"{len(errs)} error(s)")
 
 
 def cmd_axioms(args):
@@ -313,13 +327,15 @@ def cmd_axioms(args):
     bad = {n: a for n, a in data.items() if a is None or any(x not in ("propext", "Quot.sound") for x in a)}
     text = "\n".join(f"{n}: {', '.join(a) if a else ('unknown' if a is None else 'none')}" for n, a in data.items())
     out(args, data, text)
-    sys.exit(1 if bad else 0)
+    if bad:
+        fail("R304002", ", ".join(bad))
 
 
 def cmd_choice_audit(args):
     users = leansig.choice_users(tuple(args.prefixes))
     out(args, users, "\n".join(users) if users else "no theorem depends on Classical.choice")
-    sys.exit(1 if users else 0)
+    if users:
+        fail("R304003", f"{len(users)} theorem(s)")
 
 
 def _sync_register():
@@ -336,17 +352,18 @@ def cmd_frontier(args):
         rows = frontier.list_claims(args.status)
         out(args, rows, "\n".join(f"[{c['status']:7s}] {c['id']}: {c['statement']}"
                                   + (f"  ({c['lean']})" if c.get('lean') else "") for c in rows) or "empty")
-    elif args.sub == "add":
-        c = frontier.add(args.id, args.statement, args.status, args.lean, args.lexeme, args.note, args.depends)
+    elif args.sub in ("add", "set"):
+        try:
+            if args.sub == "add":
+                c = frontier.add(args.id, args.statement, args.status, args.lean, args.lexeme, args.note, args.depends)
+            else:
+                c = frontier.update(args.id, status=args.status, lean=args.lean, lexeme=args.lexeme, note=args.note,
+                                    depends=args.depends, statement=args.statement)
+        except ValueError as e:
+            fail("R301003", str(e))
         frontier.render_file()
         _sync_register()
-        out(args, c, f"added {c['id']} [{c['status']}]")
-    elif args.sub == "set":
-        c = frontier.update(args.id, status=args.status, lean=args.lean, lexeme=args.lexeme, note=args.note,
-                            depends=args.depends)
-        frontier.render_file()
-        _sync_register()
-        out(args, c, f"updated {c['id']} [{c['status']}]")
+        out(args, c, f"{'added' if args.sub == 'add' else 'updated'} {c['id']} [{c['status']}]")
     elif args.sub == "render":
         _, skipped = frontier.render_file()
         out(args, {"skipped": skipped}, f"rendered {frontier.FRONTIER_TEX.relative_to(repo.ROOT)}"
@@ -355,7 +372,8 @@ def cmd_frontier(args):
         problems = frontier.check()
         out(args, problems, "frontier register is consistent with the kernel" if not problems
             else "frontier register problems:\n  " + "\n  ".join(problems))
-        sys.exit(1 if problems else 0)
+        if problems:
+            fail("R301002", f"{len(problems)} problem(s)")
 
 
 def _gate_process_alive():
@@ -404,7 +422,7 @@ def cmd_commit(args):
     commit through the pre-commit gate in the background; optionally push."""
     st = gate_state()
     if st and st["running"]:
-        sys.exit(f"a gate is already running ({st['log']}); wait for it: bin/r30 gate")
+        fail("R305001", f"{st['log']}; wait for it: bin/r30 gate")
     paths = args.paths or ["-A"]
     repo.run(["git", "add", *paths])
     log = repo.scratch_dir() / f"commit-{int(time.time())}.log"
@@ -426,7 +444,7 @@ def cmd_module(args):
         try:
             r = modules.register(args.name)
         except (ValueError, FileNotFoundError) as e:
-            sys.exit(f"refused: {e}")
+            fail("R305002", str(e))
         text = f"{r['module']}: " + (", ".join(r["changed"]) if r["changed"] else "already registered")
         if not args.build:
             out(args, r, text)
@@ -441,7 +459,7 @@ def cmd_module(args):
     out(args, report, ("built" if ok else "build failed") + f" {' '.join(names) or 'Rule30UOR'} "
                       f"({report['seconds']}s)" + ("" if ok else "\n" + errors))
     if not ok:
-        sys.exit(1)
+        fail("R305003", " ".join(names) or "Rule30UOR")
 
 
 def cmd_experiment(args):
@@ -453,7 +471,8 @@ def cmd_experiment(args):
         script = exp / (args.name if args.name.endswith(".py") else args.name + ".py")
         code, o, e = repo.run([sys.executable, "-I", str(script), *args.args], timeout=3600)
         print(o if code == 0 else o + e)
-        sys.exit(code)
+        if code != 0:
+            fail("R305004", f"{script.name} exited {code}")
 
 
 def build_parser():
@@ -469,6 +488,10 @@ def build_parser():
     api = sp.add_parser("api", help="the API as a LexLean semantic module: sync regenerates it from the CLI, check compares").add_subparsers(dest="sub", required=True)
     api.add_parser("sync", help="regenerate rule30-api/src/Api.lex.tex from the CLI parser and lock").set_defaults(fn=cmd_api)
     api.add_parser("check", help="refuse a CLI that drifted from Api.lex.tex").set_defaults(fn=cmd_api)
+    s = api.add_parser("production", help="export the production roots of Api.lex.tex to certified Rust packages (lexlean production build) and replay the bundle")
+    s.add_argument("--targets", action="store_true", help="only print the compiler's target descriptors (id and digest)")
+    s.add_argument("--no-replay", action="store_true", help="do not replay the published bundle with verify-artifact")
+    s.set_defaults(fn=cmd_api)
     vw = sp.add_parser("view", help="the current view for stakeholders, as Presentation.lex.tex declares it").add_subparsers(dest="sub", required=True)
     s = vw.add_parser("render", help="write the view artifacts (tree, register, sheets, modules, site) into a directory")
     s.add_argument("--out", default="view", help="the directory to write (default: view)"); s.set_defaults(fn=cmd_view)
@@ -527,7 +550,8 @@ def build_parser():
     s.add_argument("--status", default="open"); s.add_argument("--lean"); s.add_argument("--lexeme"); s.add_argument("--note")
     s.add_argument("--depends", nargs="*"); s.set_defaults(fn=cmd_frontier)
     s = fr.add_parser("set"); s.add_argument("id"); s.add_argument("--status"); s.add_argument("--lean")
-    s.add_argument("--lexeme"); s.add_argument("--note"); s.add_argument("--depends", nargs="*"); s.set_defaults(fn=cmd_frontier)
+    s.add_argument("--lexeme"); s.add_argument("--note"); s.add_argument("--depends", nargs="*")
+    s.add_argument("--statement", help="restate the claim"); s.set_defaults(fn=cmd_frontier)
     fr.add_parser("check").set_defaults(fn=cmd_frontier)
     fr.add_parser("render", help="write src/Frontier.lex.tex from the register").set_defaults(fn=cmd_frontier)
 
@@ -552,7 +576,10 @@ def build_parser():
 
 def main(argv=None):
     args = build_parser().parse_args(argv)
-    args.fn(args)
+    try:
+        args.fn(args)
+    except RuntimeError as e:  # `leansig`: the research library did not answer
+        fail("R304004", str(e)[:800])
 
 
 if __name__ == "__main__":
