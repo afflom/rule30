@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trinomial-parity-palindrome"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const lexlean.std.nat::le) (local d) (app (const lexlean.std.nat::mul) (nat 2) (local n))))) (app (const lexlean.core::eq) (app (const r30.observation::trinomial-parity) (local n) (local d)) (app (const r30.observation::trinomial-parity) (local n) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::mul) (nat 2) (local n)) (local d))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.trinomialParity_palindrome"
+
+[[form]]
+id = "trinomial-parity-palindrome"
+channel = "math"
+surface = "trinomialparitypalindrome"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trinomialparitypalindrome) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

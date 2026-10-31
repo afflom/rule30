@@ -3114,5 +3114,13 @@ Close the goal with \(\lexeme{r30.observation::periodic-black-ledger-absorbs}(T,
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{trinomial-parity-palindrome}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(d\), if \(d ≤ 2 * n\), then \(trinomialparity(n, d) = trinomialparity(n, 2 * n - d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-palindrome}(n, d)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

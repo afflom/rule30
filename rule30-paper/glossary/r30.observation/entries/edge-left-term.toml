@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "edge-left-term"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.EdgeSplit"
+name = "Rule30UOR.EdgeSplit.edgeLeftTerm"
+
+[[form]]
+id = "edge-left-term"
+channel = "math"
+surface = "edgeleftterm"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name edgeleftterm) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

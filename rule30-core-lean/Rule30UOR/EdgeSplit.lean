@@ -482,6 +482,218 @@ theorem edgeDiagonal_half (t : Nat) : edgeDiagonal t = edgeFormula t (t / 2 + 1)
     subst this; rfl
   · exact edgeFormula_half t t h (Nat.le_refl t)
 
+/-! ## Palindromy of the trinomial row
+
+`q` is palindromic, so `q^n` is: `trinomialParity n d = trinomialParity n (2n − d)`
+for `d ≤ 2n`. With it the left-edge part of the edge background is the column
+parity of the trinomial triangle, `⊕_{n ≤ N} trinomialParity n N` with `N = t − 1`,
+the form in which its 2-automaticity is to be proved. -/
+
+/-- One digit of the recursion, with the fuel discharged. -/
+theorem trinomialParity_succ (f d : Nat) :
+    trinomialParity (f + 1) d =
+      (if (f + 1) % 2 = 0 then
+        (if d % 2 = 0 then trinomialParity ((f + 1) / 2) (d / 2) else false)
+      else
+        bxor (bxor (if d % 2 = 0 then trinomialParity ((f + 1) / 2) (d / 2) else false)
+          (if 1 ≤ d then (if (d - 1) % 2 = 0 then trinomialParity ((f + 1) / 2) ((d - 1) / 2) else false) else false))
+          (if 2 ≤ d then (if (d - 2) % 2 = 0 then trinomialParity ((f + 1) / 2) ((d - 2) / 2) else false) else false)) := by
+  unfold trinomialParity
+  show (if f + 1 = 0 then decide (d = 0) else _) = _
+  rw [if_neg (by cfomega)]
+  have hrec : ∀ e, trinomialParityFuel f ((f + 1) / 2) e = trinomialParityFuel ((f + 1) / 2) ((f + 1) / 2) e :=
+    fun e => trinomialParityFuel_congr f ((f + 1) / 2) ((f + 1) / 2) e (by cfomega) (Nat.le_refl _)
+  simp only [hrec]
+
+/-- `q^n` is palindromic on the lower half, `d ≤ n`. -/
+theorem trinomialParity_palindrome_half : ∀ n d, d ≤ n → trinomialParity n d = trinomialParity n (2 * n - d) := by
+  intro n
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    intro d hd
+    rcases Nat.eq_zero_or_pos n with h0 | hpos
+    · subst h0
+      have : d = 0 := by cfomega
+      subst this; rfl
+    · obtain ⟨f, rfl⟩ : ∃ f, n = f + 1 := ⟨n - 1, by cfomega⟩
+      rcases Nat.lt_or_ge f 1 with hf0 | hf1
+      · -- n = 1
+        have : f = 0 := by cfomega
+        subst this
+        rcases Nat.lt_or_ge d 1 with h | h
+        · have : d = 0 := by cfomega
+          subst this; decide
+        · have : d = 1 := by cfomega
+          subst this; decide
+      have ihh : ∀ e, e ≤ (f + 1) / 2 → trinomialParity ((f + 1) / 2) e =
+          trinomialParity ((f + 1) / 2) (2 * ((f + 1) / 2) - e) :=
+        ih ((f + 1) / 2) (by cfomega)
+      obtain ⟨r, hr⟩ : ∃ r, r = 2 * (f + 1) - d := ⟨_, rfl⟩
+      rw [← hr, trinomialParity_succ, trinomialParity_succ]
+      rcases Nat.mod_two_eq_zero_or_one (f + 1) with hf | hf
+      · rw [if_pos hf, if_pos hf]
+        rcases Nat.mod_two_eq_zero_or_one d with hdp | hdp
+        · have hrp : r % 2 = 0 := by cfomega
+          have hq : r / 2 = 2 * ((f + 1) / 2) - d / 2 := by cfomega
+          have hle : d / 2 ≤ (f + 1) / 2 := by cfomega
+          rw [if_pos hdp, if_pos hrp, hq]
+          exact ihh (d / 2) hle
+        · have hrp : ¬ (r % 2 = 0) := by cfomega
+          rw [if_neg (by cfomega : ¬ (d % 2 = 0)), if_neg hrp]
+      · have hfn : ¬ ((f + 1) % 2 = 0) := by cfomega
+        rw [if_neg hfn, if_neg hfn]
+        rcases Nat.mod_two_eq_zero_or_one d with hdp | hdp
+        · have hrp : r % 2 = 0 := by cfomega
+          rw [if_pos hdp, if_pos hrp]
+          rcases Nat.lt_or_ge d 2 with hd2 | hd2
+          · have hd0 : d = 0 := by cfomega
+            subst hd0
+            have hr1 : 1 ≤ r := by cfomega
+            have hr1p : ¬ ((r - 1) % 2 = 0) := by cfomega
+            have hr2 : 2 ≤ r := by cfomega
+            have hr2p : (r - 2) % 2 = 0 := by cfomega
+            have hq1 : r / 2 = 2 * ((f + 1) / 2) + 1 := by cfomega
+            have hq2 : (r - 2) / 2 = 2 * ((f + 1) / 2) := by cfomega
+            rw [if_neg (by cfomega : ¬ (1 ≤ 0)), if_neg (by cfomega : ¬ (2 ≤ 0)), if_pos hr1, if_neg hr1p, if_pos hr2,
+              if_pos hr2p, hq1, hq2, Nat.zero_div,
+              trinomialParity_eq_false_of_gt ((f + 1) / 2) (2 * ((f + 1) / 2) + 1) (by cfomega),
+              ihh 0 (by cfomega), Nat.sub_zero]
+            cases trinomialParity ((f + 1) / 2) (2 * ((f + 1) / 2)) <;> rfl
+          · have h1 : 1 ≤ d := by cfomega
+            have h1p : ¬ ((d - 1) % 2 = 0) := by cfomega
+            have h2p : (d - 2) % 2 = 0 := by cfomega
+            have hr1 : 1 ≤ r := by cfomega
+            have hr1p : ¬ ((r - 1) % 2 = 0) := by cfomega
+            have hr2 : 2 ≤ r := by cfomega
+            have hr2p : (r - 2) % 2 = 0 := by cfomega
+            have hq1 : r / 2 = 2 * ((f + 1) / 2) - (d - 2) / 2 := by cfomega
+            have hq2 : (r - 2) / 2 = 2 * ((f + 1) / 2) - d / 2 := by cfomega
+            have hle1 : d / 2 ≤ (f + 1) / 2 := by cfomega
+            have hle2 : (d - 2) / 2 ≤ (f + 1) / 2 := by cfomega
+            rw [if_pos h1, if_neg h1p, if_pos hd2, if_pos h2p, if_pos hr1, if_neg hr1p, if_pos hr2, if_pos hr2p,
+              hq1, hq2, ← ihh (d / 2) hle1, ← ihh ((d - 2) / 2) hle2]
+            cases trinomialParity ((f + 1) / 2) (d / 2) <;> cases trinomialParity ((f + 1) / 2) ((d - 2) / 2) <;> rfl
+        · have hrp : ¬ (r % 2 = 0) := by cfomega
+          have h1 : 1 ≤ d := by cfomega
+          have h1p : (d - 1) % 2 = 0 := by cfomega
+          have hr1 : 1 ≤ r := by cfomega
+          have hr1p : (r - 1) % 2 = 0 := by cfomega
+          rw [if_neg (by cfomega : ¬ (d % 2 = 0)), if_neg hrp, if_pos h1, if_pos h1p, if_pos hr1, if_pos hr1p]
+          rcases Nat.lt_or_ge d 2 with hd2 | hd2
+          · have hd1 : d = 1 := by cfomega
+            subst hd1
+            have hr2 : 2 ≤ r := by cfomega
+            have hr2p : ¬ ((r - 2) % 2 = 0) := by cfomega
+            have hq1 : (r - 1) / 2 = 2 * ((f + 1) / 2) := by cfomega
+            rw [if_neg (by cfomega : ¬ (2 ≤ 1)), if_pos hr2, if_neg hr2p, hq1, show (1 - 1) / 2 = 0 by rfl,
+              ihh 0 (by cfomega), Nat.sub_zero]
+          · have h2p : ¬ ((d - 2) % 2 = 0) := by cfomega
+            have hr2 : 2 ≤ r := by cfomega
+            have hr2p : ¬ ((r - 2) % 2 = 0) := by cfomega
+            have hq1 : (r - 1) / 2 = 2 * ((f + 1) / 2) - (d - 1) / 2 := by cfomega
+            have hle : (d - 1) / 2 ≤ (f + 1) / 2 := by cfomega
+            rw [if_pos hd2, if_neg h2p, if_pos hr2, if_neg hr2p, hq1, ← ihh ((d - 1) / 2) hle]
+
+/-- `q^n` is palindromic: `trinomialParity n d = trinomialParity n (2n − d)` for `d ≤ 2n`. -/
+theorem trinomialParity_palindrome (n d : Nat) (hd : d ≤ 2 * n) :
+    trinomialParity n d = trinomialParity n (2 * n - d) := by
+  rcases Nat.lt_or_ge n d with h | h
+  · have := trinomialParity_palindrome_half n (2 * n - d) (by cfomega)
+    rw [show 2 * n - (2 * n - d) = d by cfomega] at this
+    exact this.symm
+  · exact trinomialParity_palindrome_half n d h
+
+/-! ## The edge background as a column parity
+
+Splitting `edgeFormula` into its left-edge and right-pair parts and reversing
+the fold, the left-edge part is the column parity of the trinomial triangle,
+`columnParity (t − 1) = ⊕_{n ≤ t−1} trinomialParity n (t − 1)`, by palindromy and
+the degree bound. -/
+
+/-- XOR of `g m` over `m < n`. -/
+def xorBelow (g : Nat → Bool) : Nat → Bool
+  | 0 => false
+  | n + 1 => bxor (xorBelow g n) (g n)
+
+theorem xorBelow_congr (g h : Nat → Bool) : ∀ n, (∀ m, m < n → g m = h m) → xorBelow g n = xorBelow h n
+  | 0, _ => rfl
+  | n + 1, hgh => by
+    show bxor (xorBelow g n) (g n) = bxor (xorBelow h n) (h n)
+    rw [xorBelow_congr g h n (fun m hm => hgh m (by cfomega)), hgh n (by cfomega)]
+
+theorem xorBelow_front (g : Nat → Bool) : ∀ n, xorBelow g (n + 1) = bxor (g 0) (xorBelow (fun m => g (m + 1)) n) := by
+  intro n
+  induction n with
+  | zero => show bxor false (g 0) = bxor (g 0) false; cases g 0 <;> rfl
+  | succ n ih =>
+    show bxor (xorBelow g (n + 1)) (g (n + 1)) = bxor (g 0) (bxor (xorBelow (fun m => g (m + 1)) n) (g (n + 1)))
+    rw [ih]
+    cases g 0 <;> cases xorBelow (fun m => g (m + 1)) n <;> cases g (n + 1) <;> rfl
+
+/-- Fold reversal: `⊕_{m<n} g m = ⊕_{m<n} g (n − 1 − m)`. -/
+theorem xorBelow_rev (g : Nat → Bool) : ∀ n, xorBelow g n = xorBelow (fun m => g (n - 1 - m)) n := by
+  intro n
+  induction n generalizing g with
+  | zero => rfl
+  | succ n ih =>
+    rw [xorBelow_front, ih (fun m => g (m + 1))]
+    show bxor (g 0) (xorBelow (fun m => g (n - 1 - m + 1)) n) =
+      bxor (xorBelow (fun m => g (n + 1 - 1 - m)) n) (g (n + 1 - 1 - n))
+    rw [show n + 1 - 1 - n = 0 by cfomega,
+      xorBelow_congr (fun m => g (n - 1 - m + 1)) (fun m => g (n + 1 - 1 - m)) n
+        (fun m hm => by show g (n - 1 - m + 1) = g (n + 1 - 1 - m); rw [show n - 1 - m + 1 = n + 1 - 1 - m by cfomega])]
+    cases g 0 <;> cases xorBelow (fun m => g (n + 1 - 1 - m)) n <;> rfl
+
+theorem xorBelow_bxor (a b : Nat → Bool) : ∀ n, xorBelow (fun m => bxor (a m) (b m)) n = bxor (xorBelow a n) (xorBelow b n) := by
+  intro n
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    show bxor (xorBelow (fun m => bxor (a m) (b m)) n) (bxor (a n) (b n)) = bxor (bxor (xorBelow a n) (a n)) (bxor (xorBelow b n) (b n))
+    rw [ih]
+    cases xorBelow a n <;> cases xorBelow b n <;> cases a n <;> cases b n <;> rfl
+
+/-- The left-edge and right-pair parts of the edge term. -/
+def edgeLeftTerm (t m : Nat) : Bool :=
+  if 2 * m + 1 ≤ t then trinomialParity (t - 1 - m) (t - (2 * m + 1)) else false
+
+def edgeRightTerm (t m : Nat) : Bool :=
+  if rdiag 1 m then (if 2 ≤ t then trinomialParity (t - 1 - m) (t - 2) else false) else false
+
+theorem edgeTerm_eq_parts (t m : Nat) : edgeTerm t m = bxor (edgeLeftTerm t m) (edgeRightTerm t m) := rfl
+
+theorem edgeFormula_eq_xorBelow (t : Nat) : ∀ n, edgeFormula t n = xorBelow (edgeTerm t) n
+  | 0 => rfl
+  | n + 1 => by
+    show bxor (edgeFormula t n) (edgeTerm t n) = bxor (xorBelow (edgeTerm t) n) (edgeTerm t n)
+    rw [edgeFormula_eq_xorBelow t n]
+
+/-- The column parity of the trinomial triangle at column `N`: `⊕_{n ≤ N} trinomialParity n N`. -/
+def columnParity (N : Nat) : Bool := xorBelow (fun n => trinomialParity n N) (N + 1)
+
+/-- **The left-edge background is the column parity of the trinomial triangle.** -/
+theorem edgeLeft_eq_columnParity (t : Nat) (ht : 1 ≤ t) :
+    xorBelow (edgeLeftTerm t) t = columnParity (t - 1) := by
+  unfold columnParity
+  rw [xorBelow_rev, show t - 1 + 1 = t by cfomega]
+  apply xorBelow_congr
+  intro n hn
+  show (if 2 * (t - 1 - n) + 1 ≤ t then trinomialParity (t - 1 - (t - 1 - n)) (t - (2 * (t - 1 - n) + 1)) else false)
+    = trinomialParity n (t - 1)
+  rw [show t - 1 - (t - 1 - n) = n by cfomega]
+  rcases Nat.lt_or_ge (2 * n) (t - 1) with h | h
+  · rw [if_neg (by cfomega), trinomialParity_eq_false_of_gt n (t - 1) h]
+  · rw [if_pos (by cfomega), show t - (2 * (t - 1 - n) + 1) = 2 * n - (t - 1) by cfomega,
+      ← trinomialParity_palindrome n (t - 1) h]
+
+/-- The edge background split into the column parity and the right-pair part. -/
+theorem edgeFormula_split (t : Nat) (ht : 1 ≤ t) :
+    edgeFormula t t = bxor (columnParity (t - 1)) (xorBelow (edgeRightTerm t) t) := by
+  rw [edgeFormula_eq_xorBelow, ← edgeLeft_eq_columnParity t ht, ← xorBelow_bxor]
+  apply xorBelow_congr
+  intro m _
+  exact edgeTerm_eq_parts t m
+
 /-! ## The black-center absorption of the 2-adic flip
 
 Under a periodic center no left defect arrives at a black center

@@ -3002,4 +3002,11 @@ absorb the 2-adic signal of the linear part; at white centers the mirror cancels
 sides and no such constraint appears. Neither lever is a witness; both are exact constraints a
 periodic interior parity would have to satisfy, and they are now in the register's vocabulary.
 
+**Palindromy (`trinomialParity_palindrome`).** `q` is palindromic, so `q^n` is: `trinomialParity n d
+= trinomialParity n (2n − d)` for `d ≤ 2n`, proved by the digit recursion on the lower half and
+reflected. With the causal horizon, the left-edge part of the edge background is the column parity
+of the trinomial triangle, `⊕_{n ≤ N} trinomialParity n N` with `N = t − 1`: the form in which the
+2-automaticity of the edge background is to be proved, after which `center-infinite-kernel` is
+equivalent to the interior diagonal alone not being 2-automatic.
+
 Problem 1 remains unproved.
