@@ -274,6 +274,16 @@ class ApiModelTests(unittest.TestCase):
         r = apimodel.check()
         self.assertTrue(r["ok"], r["reason"])
 
+    def test_register_module_matches_frontier_and_states_well_formedness(self):
+        from tools.r30 import registermodel
+        r = registermodel.check()
+        self.assertTrue(r["ok"], r["reason"])
+        text = registermodel.render([{"id": "a", "status": "proved", "lean": "X.y", "depends": []},
+                                     {"id": "b", "status": "open", "lean": "", "depends": ["a"]}])
+        self.assertIn("name: registerDependsResolve", text)
+        self.assertIn("proof: decide{}", text)
+        self.assertIn('(record Claim {id := "b", status := "open", lean := "", depends := (cons "a" (nil String))})', text)
+
 
 class McpTests(unittest.TestCase):
     """The MCP tools are derived from the CLI parser: every leaf subcommand is a

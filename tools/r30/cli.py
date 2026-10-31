@@ -80,16 +80,20 @@ def cmd_interface(args):
 
 def cmd_api(args):
     """The API as a LexLean semantic module (rule30-api/src/Api.lex.tex)."""
-    from . import apimodel
+    from . import apimodel, registermodel
     if args.sub == "sync":
-        r = apimodel.sync()
-        if r["changed"]:
+        a, r = apimodel.sync(), registermodel.sync()
+        if a["changed"] or r["changed"]:
             checks.lock("api")
-        out(args, r, f"{r['module']}: {r['commands']} commands" + (" (rewritten; lock updated)" if r["changed"] else " (current)"))
+        out(args, {"api": a, "register": r},
+            f"{a['module']}: {a['commands']} commands" + (" (rewritten)" if a["changed"] else " (current)") +
+            f"\n{r['module']}: {r['claims']} claims" + (" (rewritten)" if r["changed"] else " (current)"))
     else:
-        r = apimodel.check()
-        out(args, r, "Api.lex.tex matches the CLI" if r["ok"] else r["reason"])
-        if not r["ok"]:
+        a, r = apimodel.check(), registermodel.check()
+        out(args, {"api": a, "register": r},
+            ("Api.lex.tex matches the CLI" if a["ok"] else a["reason"]) + "\n" +
+            ("Register.lex.tex matches frontier.toml" if r["ok"] else r["reason"]))
+        if not (a["ok"] and r["ok"]):
             sys.exit(1)
 
 
@@ -322,6 +326,13 @@ def cmd_choice_audit(args):
     sys.exit(1 if users else 0)
 
 
+def _sync_register():
+    """The register module follows frontier.toml (a changed plan is a changed LexLean module)."""
+    from . import registermodel
+    if registermodel.sync()["changed"]:
+        checks.lock("api")
+
+
 def cmd_frontier(args):
     if args.sub == "list":
         rows = frontier.list_claims(args.status)
@@ -330,11 +341,13 @@ def cmd_frontier(args):
     elif args.sub == "add":
         c = frontier.add(args.id, args.statement, args.status, args.lean, args.lexeme, args.note, args.depends)
         frontier.render_file()
+        _sync_register()
         out(args, c, f"added {c['id']} [{c['status']}]")
     elif args.sub == "set":
         c = frontier.update(args.id, status=args.status, lean=args.lean, lexeme=args.lexeme, note=args.note,
                             depends=args.depends)
         frontier.render_file()
+        _sync_register()
         out(args, c, f"updated {c['id']} [{c['status']}]")
     elif args.sub == "render":
         _, skipped = frontier.render_file()

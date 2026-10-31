@@ -17,9 +17,6 @@ from . import repo
 API = repo.ROOT / "rule30-api"
 MODULE = API / "src" / "Api.lex.tex"
 
-HEADER = ("\\begin{lexlean}{Api}\n\\useglossary{lexlean.std.bool@1.2.0}\n"
-          "\\useglossary{lexlean.std.nat@1.2.0}\n\\title{Boolean}\n\\begin{semanticmodule}")
-FOOTER = "\\end{semanticmodule}\n\\end{lexlean}\n"
 
 
 def _string(v):
@@ -93,71 +90,9 @@ def declarations(rows):
     ]
 
 
-def _lit(s):
-    return json.dumps(s)
-
-
-def _expr(node):
-    """The language-1.2 authoring notation of an expression (SPEC.md §17.21),
-    as `lexlean migrate` writes it from the data form."""
-    k = node["kind"]
-    if k == "string":
-        return _lit(node["value"])
-    if k == "bool":
-        return "true" if node["value"] else "false"
-    if k == "nat":
-        return node["value"]
-    if k == "nil":
-        return f"(nil {_type(node['element'])})"
-    if k == "cons":
-        return f"(cons {_expr(node['head'])} {_expr(node['tail'])})"
-    if k == "record":
-        fields = ", ".join(f"{f['field']} := {_expr(f['value'])}" for f in node["fields"])
-        return f"(record {node['type']['name']} {{{fields}}})"
-    if k == "call":
-        args = " ".join(_expr(a) for a in node["arguments"])
-        return f"({node['function']['name']}{(' ' + args) if args else ''})"
-    if k == "primitive":
-        args = " ".join(_expr(a) for a in node["arguments"])
-        return f"(prim {node['operation']} {args} : {_type(node['result'])})"
-    raise ValueError(f"no notation for {k}")
-
-
-def _type(t):
-    k = t["kind"]
-    if k == "string":
-        return "String"
-    if k == "bool":
-        return "Bool"
-    if k == "nat":
-        return "Nat"
-    if k == "list":
-        return f"(List {_type(t['element'])})"
-    if k == "named":
-        return t["member"]["name"]
-    raise ValueError(f"no notation for type {k}")
-
-
-def _decl(d):
-    k = d["kind"]
-    if k == "structure":
-        fields = ",\n".join(f"    {{name: {f['name']}, type: {_type(f['type'])}}}" for f in d["fields"])
-        return (f"structure{{\n  name: {d['name']},\n  type_parameters: [],\n  parameters: [],\n"
-                f"  fields: [\n{fields}\n  ]\n}}")
-    if k == "definition":
-        return (f"definition{{\n  name: {d['name']},\n  parameters: [],\n  result: {_type(d['result'])},\n"
-                f"  body: {_expr(d['body'])},\n  axioms: []\n}}")
-    if k == "theorem":
-        st = d["statement"]
-        return (f"theorem{{\n  name: {d['name']},\n  parameters: [],\n"
-                f"  statement: ({_expr(st['left'])} = {_expr(st['right'])}),\n"
-                f"  proof: reflexivity{{}},\n  axioms: []\n}}")
-    raise ValueError(k)
-
-
 def render(rows):
-    body = "\n\n".join(_decl(d) for d in declarations(rows))
-    return HEADER + "\n" + body + "\n" + FOOTER
+    from . import lexmod
+    return lexmod.module("Api", declarations(rows))
 
 
 def sync():
