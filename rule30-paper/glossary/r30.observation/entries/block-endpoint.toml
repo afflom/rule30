@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "block-endpoint"
+category = "function"
+signature = "(pi ((explicit h (const lexlean.std.nat::nat)) (explicit A (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.blockEndpoint"
+
+[[form]]
+id = "block-endpoint"
+channel = "math"
+surface = "blockendpoint"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name blockendpoint) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

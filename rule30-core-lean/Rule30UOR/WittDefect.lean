@@ -3793,4 +3793,375 @@ theorem page_residue_not_closed :
   have hd : binaryDegree 4 = 2 := by decide
   omega
 
+/-! ## Three blocks of a page: zero charge and repeated-block carries
+
+Split a page of width `3h` (`h = 2^a`) into three blocks `A0 + X^h A1 + X^(2h) A2`.
+Because `q^h = 1 + X^h + X^(2h)`, the page is congruent to
+`(A0 + A2) + X^h (A1 + A2)` modulo `q^h`, and it is divisible by `q^h` exactly when
+the three blocks are identical. For a repeated block `T = A + X^h A + X^(2h) A`,
+the interior carries occur in three copies and vanish in the quotient; only the
+two junctions survive, as the single endpoint product `a_0 a_(h-1)`. -/
+
+/-- The junction product of a block of width `h`: its first bit times its last bit. -/
+def blockEndpoint (h A : Nat) : Bool := A.testBit 0 && A.testBit (h - 1)
+
+private theorem xor_eq_zero_imp (x y : Nat) (h : x ^^^ y = 0) : x = y := by
+  apply Nat.eq_of_testBit_eq
+  intro i
+  have hi := congrArg (fun z => z.testBit i) h
+  simp only [Nat.testBit_xor, Nat.zero_testBit] at hi
+  cases hx : x.testBit i <;> cases hy : y.testBit i <;> simp_all
+
+private theorem testBit_high_false (A h i : Nat) (hA : A < 2 ^ h) (hi : h ≤ i) :
+    A.testBit i = false :=
+  Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le hA (Nat.pow_le_pow_right (by omega) hi))
+
+/-- **Block residue.** Modulo `q^(2^a)`, a three-block page reduces to two blocks. -/
+theorem q_block_residue (a A0 A1 A2 : Nat) :
+    QDivides (Rule30UOR.Core.twopow a)
+      ((A0 ^^^ (A1 <<< Rule30UOR.Core.twopow a) ^^^
+          (A2 <<< (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a))) ^^^
+        ((A0 ^^^ A2) ^^^ ((A1 ^^^ A2) <<< Rule30UOR.Core.twopow a))) := by
+  rw [Rule30UOR.Interfaces.twopow_eq_pow]
+  refine ⟨A2, ?_⟩
+  rw [q_frobenius]
+  apply Nat.eq_of_testBit_eq
+  intro i
+  simp only [Nat.testBit_xor, Nat.testBit_shiftLeft]
+  cases A0.testBit i <;> cases decide (i ≥ 2 ^ a) <;> cases A1.testBit (i - 2 ^ a) <;>
+    cases A2.testBit (i - 2 ^ a) <;> cases A2.testBit i <;>
+    cases decide (i ≥ 2 ^ a + 2 ^ a) <;> cases A2.testBit (i - (2 ^ a + 2 ^ a)) <;> rfl
+
+/-- **Zero page charge.** For blocks of degree below `h = twopow a`, the page
+`A0 + X^h A1 + X^(2h) A2` is divisible by `q^h` exactly when `A0 = A2` and `A1 = A2`. -/
+theorem q_block_charge_zero_iff (a A0 A1 A2 : Nat)
+    (h0 : A0 < Rule30UOR.Core.twopow (Rule30UOR.Core.twopow a))
+    (h1 : A1 < Rule30UOR.Core.twopow (Rule30UOR.Core.twopow a))
+    (h2 : A2 < Rule30UOR.Core.twopow (Rule30UOR.Core.twopow a)) :
+    QDivides (Rule30UOR.Core.twopow a)
+        (A0 ^^^ (A1 <<< Rule30UOR.Core.twopow a) ^^^
+          (A2 <<< (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a))) ↔
+      A0 = A2 ∧ A1 = A2 := by
+  have hres := q_block_residue a A0 A1 A2
+  rw [Rule30UOR.Interfaces.twopow_eq_pow] at hres h0 h1 h2 ⊢
+  rw [Rule30UOR.Interfaces.twopow_eq_pow] at h0 h1 h2
+  generalize hh : 2 ^ a = h at hres h0 h1 h2 ⊢
+  generalize hP : A0 ^^^ (A1 <<< h) ^^^ (A2 <<< (h + h)) = P at hres ⊢
+  generalize hR : (A0 ^^^ A2) ^^^ ((A1 ^^^ A2) <<< h) = R at hres
+  have hPR : QDivides h P ↔ QDivides h R := by
+    have := q_divides_xor_iff h (P ^^^ R) P hres
+    rw [show P ^^^ R ^^^ P = R by
+      rw [Nat.xor_comm P R, Nat.xor_assoc, Nat.xor_self, Nat.xor_zero]] at this
+    exact this.symm
+  rw [hPR]
+  have hx : A0 ^^^ A2 < 2 ^ h := Nat.xor_lt_two_pow h0 h2
+  have hy : A1 ^^^ A2 < 2 ^ h := Nat.xor_lt_two_pow h1 h2
+  have hRlt : R < 2 ^ (h + h) := by
+    rw [← hR]
+    apply Nat.xor_lt_two_pow
+    · exact Nat.lt_of_lt_of_le hx (Nat.pow_le_pow_right (by omega) (by omega))
+    · rw [Nat.shiftLeft_eq, Nat.pow_add, Nat.mul_comm (2 ^ h) (2 ^ h)]
+      exact Nat.mul_lt_mul_of_pos_right hy (Nat.two_pow_pos h)
+  constructor
+  · intro hq
+    have hR0 : R = 0 := by
+      apply Classical.byContradiction
+      intro hne
+      have hb := q_divides_degree_bound h R hne hq
+      have hl := (Nat.log2_lt hne).2 hRlt
+      simp only [binaryDegree] at hb
+      omega
+    rw [hR0] at hR
+    have hlow : A0 ^^^ A2 = 0 := by
+      apply Nat.eq_of_testBit_eq
+      intro i
+      by_cases hi : i < h
+      · have hb := congrArg (fun z => z.testBit i) hR
+        simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, Nat.zero_testBit,
+          show ¬ (i ≥ h) by omega, decide_false, Bool.false_and, Bool.xor_false] at hb
+        simpa only [Nat.testBit_xor, Nat.zero_testBit] using hb
+      · rw [Nat.zero_testBit]
+        exact testBit_high_false _ h i hx (by omega)
+    have hhigh : (A1 ^^^ A2) <<< h = 0 := by
+      rw [hlow, Nat.zero_xor] at hR
+      exact hR
+    have hy0 : A1 ^^^ A2 = 0 := by
+      rw [Nat.shiftLeft_eq] at hhigh
+      rcases Nat.mul_eq_zero.1 hhigh with h' | h'
+      · exact h'
+      · exact absurd h' (Nat.pos_iff_ne_zero.1 (Nat.two_pow_pos h))
+    exact ⟨xor_eq_zero_imp _ _ hlow, xor_eq_zero_imp _ _ hy0⟩
+  · rintro ⟨e0, e1⟩
+    refine ⟨0, ?_⟩
+    rw [q_power_zero, ← hR, e0, e1]
+    simp
+
+/-- **Repeated-block carry.** For `A` of degree below `h = twopow a` and
+`T = A + X^h A + X^(2h) A`, the carry consists of three copies of `carry A` plus
+the junction product `a_0 a_(h-1)` at `X^h` and `X^(2h)`. -/
+theorem repeated_block_carry (a A : Nat)
+    (hA : A < Rule30UOR.Core.twopow (Rule30UOR.Core.twopow a)) :
+    carry (A ^^^ (A <<< Rule30UOR.Core.twopow a) ^^^
+        (A <<< (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a))) =
+      (carry A ^^^ (carry A <<< Rule30UOR.Core.twopow a) ^^^
+          (carry A <<< (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a))) ^^^
+        (((blockEndpoint (Rule30UOR.Core.twopow a) A).toNat <<<
+            Rule30UOR.Core.twopow a) ^^^
+          ((blockEndpoint (Rule30UOR.Core.twopow a) A).toNat <<<
+            (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a))) := by
+  unfold blockEndpoint
+  rw [Rule30UOR.Interfaces.twopow_eq_pow] at hA ⊢
+  rw [Rule30UOR.Interfaces.twopow_eq_pow] at hA
+  have hpos : 0 < 2 ^ a := Nat.two_pow_pos a
+  generalize 2 ^ a = h at hA hpos ⊢
+  have hz : ∀ i, h ≤ i → A.testBit i = false := fun i hi => testBit_high_false A h i hA hi
+  apply Nat.eq_of_testBit_eq
+  intro j
+  simp only [testBit_carry, Nat.testBit_xor, Nat.testBit_shiftLeft, testBit_bool_toNat]
+  rcases (show j = 0 ∨ (1 ≤ j ∧ j < h) ∨ j = h ∨ (h < j ∧ j < h + h) ∨ j = h + h ∨
+      (h + h < j ∧ j < h + h + h) ∨ h + h + h ≤ j by omega) with
+    hj | ⟨hj1, hj2⟩ | hj | ⟨hj1, hj2⟩ | hj | ⟨hj1, hj2⟩ | hj
+  · subst hj
+    simp [show ¬ (0 ≥ h) by omega, show ¬ (0 ≥ h + h) by omega]
+  · simp [show ¬ (j ≥ h) by omega, show ¬ (j ≥ h + h) by omega, hj1,
+      show ¬ (j - 1 ≥ h) by omega, show ¬ (j - 1 ≥ h + h) by omega]
+  · rw [hj]
+    simp [hz h (Nat.le_refl _), show ¬ (h ≥ h + h) by omega, show 1 ≤ h by omega,
+      show ¬ (h - 1 ≥ h) by omega, show ¬ (h - 1 ≥ h + h) by omega,
+      show h - h = 0 by omega]
+  · simp [hz j (by omega), hz (j - 1) (by omega), show j ≥ h by omega,
+      show ¬ (j ≥ h + h) by omega, show j - 1 ≥ h by omega,
+      show ¬ (j - 1 ≥ h + h) by omega, show 1 ≤ j by omega, show 1 ≤ j - h by omega,
+      show j - h ≠ 0 by omega, show j - 1 - h = j - h - 1 by omega]
+  · rw [hj]
+    simp [hz (h + h) (by omega), hz (h + h - 1) (by omega), hz h (Nat.le_refl _),
+      show 1 ≤ h by omega, show 1 ≤ h + h by omega, show h + h - 1 ≥ h by omega,
+      show ¬ (h + h - 1 ≥ h + h) by omega, show h + h - h = h by omega,
+      show h + h - 1 - h = h - 1 by omega, show h + h - (h + h) = 0 by omega,
+      show h ≠ 0 by omega]
+  · simp [hz j (by omega), hz (j - 1) (by omega), hz (j - h) (by omega),
+      hz (j - 1 - h) (by omega), show j ≥ h by omega, show j ≥ h + h by omega,
+      show j - 1 ≥ h by omega, show j - 1 ≥ h + h by omega, show 1 ≤ j by omega,
+      show 1 ≤ j - (h + h) by omega, show j - (h + h) ≠ 0 by omega, show j - h ≠ 0 by omega,
+      show j - 1 - (h + h) = j - (h + h) - 1 by omega]
+  · simp [hz j (by omega), hz (j - 1) (by omega), hz (j - h) (by omega),
+      hz (j - 1 - h) (by omega), hz (j - (h + h)) (by omega),
+      show j ≥ h by omega, show j ≥ h + h by omega,
+      show j - 1 ≥ h by omega, show j - 1 ≥ h + h by omega,
+      show j - h ≠ 0 by omega, show j - (h + h) ≠ 0 by omega]
+
+/-- **Bulk-to-boundary congruence.** Modulo `q^h` the carry of a repeated block is
+the single endpoint product `a_0 a_(h-1)`. -/
+theorem repeated_block_carry_congruence (a A : Nat)
+    (hA : A < Rule30UOR.Core.twopow (Rule30UOR.Core.twopow a)) :
+    QDivides (Rule30UOR.Core.twopow a)
+      (carry (A ^^^ (A <<< Rule30UOR.Core.twopow a) ^^^
+          (A <<< (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a))) ^^^
+        (blockEndpoint (Rule30UOR.Core.twopow a) A).toNat) := by
+  rw [repeated_block_carry a A hA]
+  refine ⟨carry A ^^^ (blockEndpoint (Rule30UOR.Core.twopow a) A).toNat, ?_⟩
+  rw [q_frobenius_twopow]
+  generalize carry A = c
+  generalize (blockEndpoint (Rule30UOR.Core.twopow a) A).toNat = e
+  generalize Rule30UOR.Core.twopow a = h
+  apply Nat.eq_of_testBit_eq
+  intro i
+  simp only [Nat.testBit_xor, Nat.testBit_shiftLeft]
+  cases c.testBit i <;> cases e.testBit i <;> cases decide (i ≥ h) <;>
+    cases c.testBit (i - h) <;> cases e.testBit (i - h) <;> cases decide (i ≥ h + h) <;>
+    cases c.testBit (i - (h + h)) <;> cases e.testBit (i - (h + h)) <;> rfl
+
+/-- **An embedded repeated page.** If physical page `p` of width `3h` is a repeated
+block, its carry page is congruent modulo `q^h` to the endpoint product plus the
+carry entering from page `p - 1`. The incoming boundary carry is retained. -/
+theorem page_carry_repeated (a H p A : Nat)
+    (hA : A < Rule30UOR.Core.twopow (Rule30UOR.Core.twopow a))
+    (hp : page (3 * Rule30UOR.Core.twopow a) H p =
+      A ^^^ (A <<< Rule30UOR.Core.twopow a) ^^^
+        (A <<< (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a))) :
+    QDivides (Rule30UOR.Core.twopow a)
+      (page (3 * Rule30UOR.Core.twopow a) (carry H) p ^^^
+        ((blockEndpoint (Rule30UOR.Core.twopow a) A).toNat ^^^
+          (pageBoundaryCarry (3 * Rule30UOR.Core.twopow a) H p).toNat)) := by
+  have hL : 0 < 3 * Rule30UOR.Core.twopow a := by
+    rw [Rule30UOR.Interfaces.twopow_eq_pow]; have := Nat.two_pow_pos a; omega
+  rw [page_carry _ H p hL, hp]
+  have hc := repeated_block_carry_congruence a A hA
+  generalize carry (A ^^^ (A <<< Rule30UOR.Core.twopow a) ^^^
+    (A <<< (Rule30UOR.Core.twopow a + Rule30UOR.Core.twopow a))) = c at hc ⊢
+  generalize (blockEndpoint (Rule30UOR.Core.twopow a) A).toNat = e at hc ⊢
+  generalize (pageBoundaryCarry (3 * Rule30UOR.Core.twopow a) H p).toNat = d
+  rw [show c ^^^ d ^^^ (e ^^^ d) = c ^^^ e by
+    rw [Nat.xor_assoc, ← Nat.xor_assoc d e d, Nat.xor_comm d e, Nat.xor_assoc e d d,
+      Nat.xor_self, Nat.xor_zero]]
+  exact hc
+
+/-- **Background cross-carry at the observer.** The carry difference in the
+observer source is the defect's own carry plus its cross-carry with the actual
+earlier background. Nothing is discarded. -/
+theorem observer_source_cross_carry (Q t : Nat) :
+    observerSource Q t =
+      (carry (observerDefect Q t) ^^^
+          Rule30UOR.Interfaces.crossCarry (observerCode t) (observerDefect Q t)) ^^^
+        (xor (observerInput (t + Q)) (observerInput t)).toNat := by
+  have he : observerCode (t + Q) = observerCode t ^^^ observerDefect Q t := by
+    rw [observer_defect_alignment, ← Nat.xor_assoc, Nat.xor_comm (observerCode t),
+      Nat.xor_assoc, Nat.xor_self, Nat.xor_zero]
+  unfold observerSource
+  rw [he, Rule30UOR.Interfaces.carry_xor]
+  generalize carry (observerCode t) = c
+  generalize carry (observerDefect Q t) = d
+  generalize Rule30UOR.Interfaces.crossCarry (observerCode t) (observerDefect Q t) = x
+  generalize (xor (observerInput (t + Q)) (observerInput t)).toNat = b
+  apply Nat.eq_of_testBit_eq
+  intro i
+  simp only [Nat.testBit_xor]
+  cases c.testBit i <;> cases d.testBit i <;> cases x.testBit i <;> cases b.testBit i <;> rfl
+
+/-- Under a hypothetical center period the boundary term is the column-minus-one
+defect, so the source is the defect carry, its background cross-carry, and the
+physical arrival/erasure bit. -/
+theorem periodic_observer_source_cross_carry (T P m t : Nat)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t) :
+    observerSource (m * P) t =
+      (carry (observerDefect (m * P) t) ^^^
+          Rule30UOR.Interfaces.crossCarry (observerCode t) (observerDefect (m * P) t)) ^^^
+        (leftDefect (m * P) t 1).toNat := by
+  have hb := observer_input_difference T P m t hc ht
+  simp only [difference] at hb
+  rw [observer_source_cross_carry, hb]
+
+/-- **The q-adic residue is not a congruence for Rule 30.** Two words with equal
+residues modulo `q^16` can have Rule 30 images with different residues, so no
+operation on residues alone is induced by `phi`. -/
+theorem residue_not_congruence :
+    ∃ s s2 : Nat, QDivides 16 (s ^^^ s2) ∧ ¬ QDivides 16 (phi s ^^^ phi s2) := by
+  obtain ⟨hq, _, hn⟩ := page_residue_not_closed
+  refine ⟨2 ^^^ phiLinearPow 16 1, 2, ?_, hn⟩
+  rw [show 2 ^^^ phiLinearPow 16 1 ^^^ 2 = phiLinearPow 16 1 by
+    rw [Nat.xor_comm 2, Nat.xor_assoc, Nat.xor_self, Nat.xor_zero]]
+  exact hq
+
+/-! ## The physical front and the q-adic degree budget
+
+Bit `j` of the observer word is the left defect at depth `j`. If every defect
+shallower than `k` vanishes, the word is `X^k` times a polynomial of degree
+`deg E - k`. Since `X` is a unit at the q-place, each q-factor still costs two
+degrees of that shorter polynomial: `k + 2 v_q(E) <= deg E`. Applied to a single
+page of width `3h`, the same budget forbids divisibility by `q^h` whenever the
+page's first coefficient sits in its middle or last block. -/
+
+/-- The observer word reads the left defect at every depth. -/
+theorem observer_defect_left_readout (Q t j : Nat) :
+    (observerDefect Q t).testBit j = leftDefect Q t j := by
+  rw [observer_defect_alignment, Nat.testBit_xor, observer_code_readout,
+    observer_code_readout]
+  rfl
+
+private theorem q_front_degree_budget_bits (r d k : Nat) (hd : d ≠ 0)
+    (hk : ∀ j, j < k → d.testBit j = false) (hr : QDivides r d) :
+    k + 2 * r ≤ binaryDegree d := by
+  have hsplit : d = (d >>> k) <<< k := by
+    apply Nat.eq_of_testBit_eq
+    intro i
+    rw [Nat.testBit_shiftLeft, Nat.testBit_shiftRight]
+    by_cases hi : k ≤ i
+    · simp [hi, show k + (i - k) = i by omega]
+    · simp [hi, hk i (by omega)]
+  have hne : d >>> k ≠ 0 := by
+    intro hz
+    apply hd
+    rw [hsplit, hz, Nat.zero_shiftLeft]
+  rw [hsplit, q_divides_shl] at hr
+  have hb := q_divides_degree_bound r _ hne hr
+  have htop : d.testBit d.log2 = true := Nat.testBit_log2 hd
+  have hkle : k ≤ d.log2 := by
+    apply Nat.le_of_not_gt
+    intro hlt
+    rw [hk _ hlt] at htop
+    exact Bool.false_ne_true htop
+  have hlog : (d >>> k).log2 < d.log2 - k + 1 := by
+    rw [Nat.log2_lt hne]
+    apply Nat.lt_pow_two_of_testBit
+    intro j hj
+    rw [Nat.testBit_shiftRight]
+    exact Nat.testBit_lt_two_pow (Nat.lt_of_lt_of_le Nat.lt_log2_self
+      (Nat.pow_le_pow_right (by omega) (by omega)))
+  simp only [binaryDegree] at hb ⊢
+  omega
+
+private theorem shl_ne_zero (e k : Nat) (he : e ≠ 0) : e <<< k ≠ 0 := by
+  rw [Nat.shiftLeft_eq]
+  exact Nat.mul_ne_zero he (Nat.pos_iff_ne_zero.1 (Nat.two_pow_pos k))
+
+private theorem shl_low_bits (e k : Nat) : ∀ j, j < k → (e <<< k).testBit j = false := by
+  intro j hj
+  simp [Nat.testBit_shiftLeft, show ¬ (j ≥ k) by omega]
+
+/-- **Front budget.** If `q^r` divides `X^k e` with `e` nonzero, then
+`k + 2r <= deg(X^k e)`. -/
+theorem q_front_degree_budget (r e k : Nat) (he : e ≠ 0) (hr : QDivides r (e <<< k)) :
+    k + 2 * r ≤ binaryDegree (e <<< k) :=
+  q_front_degree_budget_bits r _ k (shl_ne_zero e k he) (shl_low_bits e k) hr
+
+/-- **Page offset charge.** A word of width `3h` (`h = twopow a`) whose first
+coefficient is at offset `o >= h` is not divisible by `q^h`. -/
+theorem q_page_offset_charge (a e o : Nat) (he : e ≠ 0)
+    (ho : Rule30UOR.Core.twopow a ≤ o)
+    (hw : e <<< o < Rule30UOR.Core.twopow (3 * Rule30UOR.Core.twopow a)) :
+    ¬ QDivides (Rule30UOR.Core.twopow a) (e <<< o) := by
+  intro hq
+  have hb := q_front_degree_budget _ e o he hq
+  rw [Rule30UOR.Interfaces.twopow_eq_pow, Rule30UOR.Interfaces.twopow_eq_pow] at hw
+  have hlt := (Nat.log2_lt (shl_ne_zero e o he)).2 hw
+  rw [Rule30UOR.Interfaces.twopow_eq_pow] at ho hb
+  simp only [binaryDegree] at hb
+  omega
+
+/-- **Observer front budget.** At a rightmost left front of depth `k`,
+`k + 2 qOrder(E_t) <= t + Q`. -/
+theorem observer_front_q_budget (Q t k : Nat) (hQ : 0 < Q)
+    (hr : Rule30UOR.DefectFront.RightmostLeft Q t k) :
+    k + 2 * qOrder (observerDefect Q t) ≤ t + Q := by
+  have hd := observer_defect_degree Q t hQ
+  have hb := q_front_degree_budget_bits _ _ k hd.1
+    (fun j hj => by rw [observer_defect_left_readout]; exact hr.2.2 j hj)
+    (q_order_spec _ hd.1).1
+  simpa only [binaryDegree, hd.2] using hb
+
+/-- The q-adic rank is at least the depth of the rightmost left front. -/
+theorem observer_front_q_rank (Q t k : Nat) (hQ : 0 < Q)
+    (hr : Rule30UOR.DefectFront.RightmostLeft Q t k) :
+    k ≤ observerQRank Q t := by
+  have hb := observer_front_q_budget Q t k hQ hr
+  unfold observerQRank
+  omega
+
+/-- **Front-page charge.** If the rightmost left front is at offset `o` of
+observer page `p` of width `3h`, and `h <= o`, then that page has nonzero charge
+modulo `q^h`. -/
+theorem observer_front_page_charge (a Q t p o : Nat)
+    (ho : Rule30UOR.Core.twopow a ≤ o) (hoL : o < 3 * Rule30UOR.Core.twopow a)
+    (hr : Rule30UOR.DefectFront.RightmostLeft Q t (3 * Rule30UOR.Core.twopow a * p + o)) :
+    ¬ QDivides (Rule30UOR.Core.twopow a)
+      (page (3 * Rule30UOR.Core.twopow a) (observerDefect Q t) p) := by
+  rw [Rule30UOR.Interfaces.twopow_eq_pow] at ho hoL hr ⊢
+  have hpos : 0 < 2 ^ a := Nat.two_pow_pos a
+  generalize 2 ^ a = h at ho hoL hr hpos ⊢
+  intro hq
+  have hbit : (page (3 * h) (observerDefect Q t) p).testBit o = true := by
+    rw [testBit_page, observer_defect_left_readout]
+    simp [hoL, hr.2.1]
+  have hne : page (3 * h) (observerDefect Q t) p ≠ 0 := by
+    intro hz
+    rw [hz, Nat.zero_testBit] at hbit
+    exact Bool.false_ne_true hbit
+  have hb := q_front_degree_budget_bits h _ o hne (fun j hj => by
+    rw [testBit_page, observer_defect_left_readout, hr.2.2 _ (by omega)]
+    simp) hq
+  have hlt : (page (3 * h) (observerDefect Q t) p).log2 < 3 * h :=
+    (Nat.log2_lt hne).2 (Nat.mod_lt _ (Nat.two_pow_pos _))
+  simp only [binaryDegree] at hb
+  omega
+
 end Rule30UOR.WittDefect

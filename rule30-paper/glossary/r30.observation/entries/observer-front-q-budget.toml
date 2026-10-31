@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "observer-front-q-budget"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q))) (explicit hr (app (const r30.observation::rightmost-left) (local Q) (local t) (local k)))) (app (const lexlean.std.nat::le) (app (const lexlean.std.nat::add) (local k) (app (const lexlean.std.nat::mul) (nat 2) (app (const r30.observation::q-order) (app (const r30.observation::observer-defect) (local Q) (local t))))) (app (const lexlean.std.nat::add) (local t) (local Q)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.observer_front_q_budget"
+
+[[form]]
+id = "observer-front-q-budget"
+channel = "math"
+surface = "observerfrontqbudget"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name observerfrontqbudget) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

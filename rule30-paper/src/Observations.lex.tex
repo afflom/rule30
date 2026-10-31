@@ -1627,5 +1627,110 @@ Close the goal with \(\lexeme{r30.observation::page-residue-not-closed}\).
 \end{proof}
 \end{theorem}
 
+
+\begin{theorem}{q-block-residue}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(A0\) and natural number \(A1\) and natural number \(A2\), \(qdivides(twopow(a), wittxor(wittxor(wittxor(A0, wittshl(A1, twopow(a))), wittshl(A2, twopow(a) + twopow(a))), wittxor(wittxor(A0, A2), wittshl(wittxor(A1, A2), twopow(a)))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-block-residue}(a, A0, A1, A2)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-block-charge-zero-iff}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(A0\) and natural number \(A1\) and natural number \(A2\), if \(A0 < twopow(twopow(a))\), then if \(A1 < twopow(twopow(a))\), then if \(A2 < twopow(twopow(a))\), then \(qdivides(twopow(a), wittxor(wittxor(A0, wittshl(A1, twopow(a))), wittshl(A2, twopow(a) + twopow(a)))) ↔ A0 = A2 ∧ A1 = A2\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-block-charge-zero-iff}(a, A0, A1, A2)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{repeated-block-carry}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(A\), if \(A < twopow(twopow(a))\), then \(wittcarry(wittxor(wittxor(A, wittshl(A, twopow(a))), wittshl(A, twopow(a) + twopow(a)))) = wittxor(wittxor(wittxor(wittcarry(A), wittshl(wittcarry(A), twopow(a))), wittshl(wittcarry(A), twopow(a) + twopow(a))), wittxor(wittshl(naturalbit(blockendpoint(twopow(a), A)), twopow(a)), wittshl(naturalbit(blockendpoint(twopow(a), A)), twopow(a) + twopow(a))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::repeated-block-carry}(a, A)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{repeated-block-carry-congruence}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(A\), if \(A < twopow(twopow(a))\), then \(qdivides(twopow(a), wittxor(wittcarry(wittxor(wittxor(A, wittshl(A, twopow(a))), wittshl(A, twopow(a) + twopow(a)))), naturalbit(blockendpoint(twopow(a), A))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::repeated-block-carry-congruence}(a, A)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{page-carry-repeated}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(H\) and natural number \(p\) and natural number \(A\), if \(A < twopow(twopow(a))\), then if \(page(3 * twopow(a), H, p) = wittxor(wittxor(A, wittshl(A, twopow(a))), wittshl(A, twopow(a) + twopow(a)))\), then \(qdivides(twopow(a), wittxor(page(3 * twopow(a), wittcarry(H), p), wittxor(naturalbit(blockendpoint(twopow(a), A)), naturalbit(pageboundarycarry(3 * twopow(a), H, p)))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::page-carry-repeated}(a, H, p, A)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{periodic-observer-source-cross-carry}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(observersource(m * P, t) = wittxor(wittxor(wittcarry(observerdefect(m * P, t)), crosscarry(observercode(t), observerdefect(m * P, t))), naturalbit(leftdefect(m * P, t, 1)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::periodic-observer-source-cross-carry}(T, P, m, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{residue-not-congruence}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+there exists a natural number \(s\) such that there exists a natural number \(s2\) such that \(qdivides(16, wittxor(s, s2)) ∧ ¬ qdivides(16, wittxor(wittphi(s), wittphi(s2)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::residue-not-congruence}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-defect-left-readout}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), \(rowbit(observerdefect(Q, t), j) = leftdefect(Q, t, j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-defect-left-readout}(Q, t, j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-front-degree-budget}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(r\) and natural number \(e\) and natural number \(k\), if \(e ≠ 0\), then if \(qdivides(r, wittshl(e, k))\), then \(k + 2 * r ≤ binarydegree(wittshl(e, k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-front-degree-budget}(r, e, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{q-page-offset-charge}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(n\) and natural number \(e\) and natural number \(o\), if \(e ≠ 0\), then if \(twopow(n) ≤ o\), then if \(wittshl(e, o) < twopow(3 * twopow(n))\), then \(¬ qdivides(twopow(n), wittshl(e, o))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::q-page-offset-charge}(n, e, o)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-front-q-budget}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < Q\), then if \(rightmostleft(Q, t, k)\), then \(k + 2 * qorder(observerdefect(Q, t)) ≤ t + Q\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-front-q-budget}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-front-q-rank}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < Q\), then if \(rightmostleft(Q, t, k)\), then \(k ≤ observerqrank(Q, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-front-q-rank}(Q, t, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{observer-front-page-charge}
+\allowaxioms{Classical.choice;Quot.sound;propext}
+For every natural number \(a\) and natural number \(Q\) and natural number \(t\) and natural number \(p\) and natural number \(o\), if \(twopow(a) ≤ o\), then if \(o < 3 * twopow(a)\), then if \(rightmostleft(Q, t, 3 * twopow(a) * p + o)\), then \(¬ qdivides(twopow(a), page(3 * twopow(a), observerdefect(Q, t), p))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::observer-front-page-charge}(a, Q, t, p, o)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

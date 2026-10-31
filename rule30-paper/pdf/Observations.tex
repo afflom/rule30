@@ -1421,4 +1421,95 @@ The goal follows from \(\operatorname{periodicobserverqgainledger}(T, P, m, t, r
 \begin{proof}
 The goal follows from \(\operatorname{pageresiduenotclosed}\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:q-block-residue}
+For every natural number \(a\) and natural number \(A0\) and natural number \(A1\) and natural number \(A2\), \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittxor}(A0, \operatorname{wittshl}(A1, \operatorname{twopow}(a))), \operatorname{wittshl}(A2, \operatorname{twopow}(a) + \operatorname{twopow}(a))), \operatorname{wittxor}(\operatorname{wittxor}(A0, A2), \operatorname{wittshl}(\operatorname{wittxor}(A1, A2), \operatorname{twopow}(a)))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qblockresidue}(a, A0, A1, A2)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-block-charge-zero-iff}
+For every natural number \(a\) and natural number \(A0\) and natural number \(A1\) and natural number \(A2\), if \(A0 < \operatorname{twopow}(\operatorname{twopow}(a))\), then if \(A1 < \operatorname{twopow}(\operatorname{twopow}(a))\), then if \(A2 < \operatorname{twopow}(\operatorname{twopow}(a))\), then \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{wittxor}(\operatorname{wittxor}(A0, \operatorname{wittshl}(A1, \operatorname{twopow}(a))), \operatorname{wittshl}(A2, \operatorname{twopow}(a) + \operatorname{twopow}(a))))\) if and only if \(A0 = A2\) and \(A1 = A2\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qblockchargezeroiff}(a, A0, A1, A2)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:repeated-block-carry}
+For every natural number \(a\) and natural number \(A\), if \(A < \operatorname{twopow}(\operatorname{twopow}(a))\), then \(\operatorname{wittcarry}(\operatorname{wittxor}(\operatorname{wittxor}(A, \operatorname{wittshl}(A, \operatorname{twopow}(a))), \operatorname{wittshl}(A, \operatorname{twopow}(a) + \operatorname{twopow}(a)))) = \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittcarry}(A), \operatorname{wittshl}(\operatorname{wittcarry}(A), \operatorname{twopow}(a))), \operatorname{wittshl}(\operatorname{wittcarry}(A), \operatorname{twopow}(a) + \operatorname{twopow}(a))), \operatorname{wittxor}(\operatorname{wittshl}(\operatorname{naturalbit}(\operatorname{blockendpoint}(\operatorname{twopow}(a), A)), \operatorname{twopow}(a)), \operatorname{wittshl}(\operatorname{naturalbit}(\operatorname{blockendpoint}(\operatorname{twopow}(a), A)), \operatorname{twopow}(a) + \operatorname{twopow}(a))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{repeatedblockcarry}(a, A)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:repeated-block-carry-congruence}
+For every natural number \(a\) and natural number \(A\), if \(A < \operatorname{twopow}(\operatorname{twopow}(a))\), then \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{wittxor}(\operatorname{wittxor}(A, \operatorname{wittshl}(A, \operatorname{twopow}(a))), \operatorname{wittshl}(A, \operatorname{twopow}(a) + \operatorname{twopow}(a)))), \operatorname{naturalbit}(\operatorname{blockendpoint}(\operatorname{twopow}(a), A))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{repeatedblockcarrycongruence}(a, A)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:page-carry-repeated}
+For every natural number \(a\) and natural number \(H\) and natural number \(p\) and natural number \(A\), if \(A < \operatorname{twopow}(\operatorname{twopow}(a))\), then if \(\operatorname{page}(3 \cdot \operatorname{twopow}(a), H, p) = \operatorname{wittxor}(\operatorname{wittxor}(A, \operatorname{wittshl}(A, \operatorname{twopow}(a))), \operatorname{wittshl}(A, \operatorname{twopow}(a) + \operatorname{twopow}(a)))\), then \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{wittxor}(\operatorname{page}(3 \cdot \operatorname{twopow}(a), \operatorname{wittcarry}(H), p), \operatorname{wittxor}(\operatorname{naturalbit}(\operatorname{blockendpoint}(\operatorname{twopow}(a), A)), \operatorname{naturalbit}(\operatorname{pageboundarycarry}(3 \cdot \operatorname{twopow}(a), H, p)))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pagecarryrepeated}(a, H, p, A)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:periodic-observer-source-cross-carry}
+For every natural number \(T\) and natural number \(P\) and natural number \(m\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{observersource}(m \cdot P, t) = \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{observerdefect}(m \cdot P, t)), \operatorname{crosscarry}(\operatorname{observercode}(t), \operatorname{observerdefect}(m \cdot P, t))), \operatorname{naturalbit}(\operatorname{leftdefect}(m \cdot P, t, 1)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{periodicobserversourcecrosscarry}(T, P, m, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:residue-not-congruence}
+There exists a natural number \(s\) such that there exists a natural number \(s2\) such that \(\operatorname{qdivides}(16, \operatorname{wittxor}(s, s2))\) and not \(\operatorname{qdivides}(16, \operatorname{wittxor}(\operatorname{wittphi}(s), \operatorname{wittphi}(s2)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{residuenotcongruence}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-defect-left-readout}
+For every natural number \(Q\) and natural number \(t\) and natural number \(j\), \(\operatorname{rowbit}(\operatorname{observerdefect}(Q, t), j) = \operatorname{leftdefect}(Q, t, j)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerdefectleftreadout}(Q, t, j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-front-degree-budget}
+For every natural number \(r\) and natural number \(e\) and natural number \(k\), if \(e \ne 0\), then if \(\operatorname{qdivides}(r, \operatorname{wittshl}(e, k))\), then \(k + 2 \cdot r \le \operatorname{binarydegree}(\operatorname{wittshl}(e, k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qfrontdegreebudget}(r, e, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:q-page-offset-charge}
+For every natural number \(n\) and natural number \(e\) and natural number \(o\), if \(e \ne 0\), then if \(\operatorname{twopow}(n) \le o\), then if \(\operatorname{wittshl}(e, o) < \operatorname{twopow}(3 \cdot \operatorname{twopow}(n))\), then not \(\operatorname{qdivides}(\operatorname{twopow}(n), \operatorname{wittshl}(e, o))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{qpageoffsetcharge}(n, e, o)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-front-q-budget}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < Q\), then if \(\operatorname{rightmostleft}(Q, t, k)\), then \(k + 2 \cdot \operatorname{qorder}(\operatorname{observerdefect}(Q, t)) \le t + Q\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerfrontqbudget}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-front-q-rank}
+For every natural number \(Q\) and natural number \(t\) and natural number \(k\), if \(0 < Q\), then if \(\operatorname{rightmostleft}(Q, t, k)\), then \(k \le \operatorname{observerqrank}(Q, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerfrontqrank}(Q, t, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:observer-front-page-charge}
+For every natural number \(a\) and natural number \(Q\) and natural number \(t\) and natural number \(p\) and natural number \(o\), if \(\operatorname{twopow}(a) \le o\), then if \(o < 3 \cdot \operatorname{twopow}(a)\), then if \(\operatorname{rightmostleft}(Q, t, 3 \cdot \operatorname{twopow}(a) \cdot p + o)\), then not \(\operatorname{qdivides}(\operatorname{twopow}(a), \operatorname{page}(3 \cdot \operatorname{twopow}(a), \operatorname{observerdefect}(Q, t), p))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{observerfrontpagecharge}(a, Q, t, p, o)\).
+\end{proof}
 \end{document}

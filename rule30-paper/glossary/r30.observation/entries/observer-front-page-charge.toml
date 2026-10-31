@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "observer-front-page-charge"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat)) (explicit o (const lexlean.std.nat::nat))) (pi ((explicit ho (app (const lexlean.std.nat::le) (app (const r30.scale::twopow) (local a)) (local o))) (explicit hoL (app (const lexlean.std.nat::lt) (local o) (app (const lexlean.std.nat::mul) (nat 3) (app (const r30.scale::twopow) (local a))))) (explicit hr (app (const r30.observation::rightmost-left) (local Q) (local t) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (app (const lexlean.std.nat::mul) (nat 3) (app (const r30.scale::twopow) (local a))) (local p)) (local o))))) (app (const lexlean.core::lnot) (app (const r30.observation::q-divides) (app (const r30.scale::twopow) (local a)) (app (const r30.observation::page) (app (const lexlean.std.nat::mul) (nat 3) (app (const r30.scale::twopow) (local a))) (app (const r30.observation::observer-defect) (local Q) (local t)) (local p))))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.observer_front_page_charge"
+
+[[form]]
+id = "observer-front-page-charge"
+channel = "math"
+surface = "observerfrontpagecharge"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name observerfrontpagecharge) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "observer-defect-left-readout"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::row-bit) (app (const r30.observation::observer-defect) (local Q) (local t)) (local j)) (app (const r30.observation::left-defect) (local Q) (local t) (local j))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.observer_defect_left_readout"
+
+[[form]]
+id = "observer-defect-left-readout"
+channel = "math"
+surface = "observerdefectleftreadout"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name observerdefectleftreadout) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

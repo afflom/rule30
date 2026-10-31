@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "q-block-charge-zero-iff"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit A0 (const lexlean.std.nat::nat)) (explicit A1 (const lexlean.std.nat::nat)) (explicit A2 (const lexlean.std.nat::nat))) (pi ((explicit hA0 (app (const lexlean.std.nat::lt) (local A0) (app (const r30.scale::twopow) (app (const r30.scale::twopow) (local a))))) (explicit hA1 (app (const lexlean.std.nat::lt) (local A1) (app (const r30.scale::twopow) (app (const r30.scale::twopow) (local a))))) (explicit hA2 (app (const lexlean.std.nat::lt) (local A2) (app (const r30.scale::twopow) (app (const r30.scale::twopow) (local a)))))) (app (const lexlean.core::iff) (app (const r30.observation::q-divides) (app (const r30.scale::twopow) (local a)) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-xor) (local A0) (app (const r30.witt::witt-shl) (local A1) (app (const r30.scale::twopow) (local a)))) (app (const r30.witt::witt-shl) (local A2) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local a)) (app (const r30.scale::twopow) (local a)))))) (app (const lexlean.core::land) (app (const lexlean.core::eq) (local A0) (local A2)) (app (const lexlean.core::eq) (local A1) (local A2))))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.q_block_charge_zero_iff"
+
+[[form]]
+id = "q-block-charge-zero-iff"
+channel = "math"
+surface = "qblockchargezeroiff"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name qblockchargezeroiff) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

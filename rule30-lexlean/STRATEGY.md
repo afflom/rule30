@@ -2445,3 +2445,69 @@ complete seeded ledger across page interiors, page junctions and physical
 arrival/erasure events; the blocks `3*2^a` supply the analogous pages for
 deeper q-adic information. No such seed-specific restriction is proved
 here, and Problem 1 remains unproved.
+
+### Three blocks of a page and the repeated-block carry
+
+Split a page of width `3h` (`h = 2^a`) into blocks
+`A0 + X^h A1 + X^(2h) A2`, each of degree below `h`. Since
+`q^h = 1 + X^h + X^(2h)`, `q_block_residue` proves
+
+    A0 + X^h A1 + X^(2h) A2 = (A0 + A2) + X^h (A1 + A2)   (mod q^h),
+
+and the right-hand side has degree below `2h`, so it is its own remainder.
+`q_block_charge_zero_iff` proves that the page has zero charge exactly when
+`A0 = A1 = A2`. For a repeated block `T = A + X^h A + X^(2h) A`,
+`repeated_block_carry` gives the exact carry: three copies of `carry A`, plus
+the junction product `a_0 a_(h-1)` (`blockEndpoint`) at `X^h` and `X^(2h)`.
+Modulo `q^h` the three interior copies cancel, and
+`repeated_block_carry_congruence` leaves only the single endpoint product.
+`page_carry_repeated` places this inside an actual word. If physical page `p`
+is a repeated block, its carry page is congruent to the endpoint product
+plus the boundary carry entering from page `p - 1`, which is retained.
+
+`observer_source_cross_carry` rewrites the observer source as the defect's
+own carry, its cross-carry with the actual earlier background, and the
+masked-head difference. `periodic_observer_source_cross_carry` identifies
+the last term with the column-minus-one defect under a hypothetical center
+period. `residue_not_congruence` restates the earlier limitation as a
+non-congruence: equal residues modulo `q^16` need not have Rule 30 images
+with equal residues. No operation on residues alone is induced by Rule 30.
+
+### The physical front and the q-adic degree budget
+
+Bit `j` of `E_t = observerDefect Q t` is the left defect at depth `j`
+(`observer_defect_left_readout`). Its center bit is bit 0 and its seed edge is
+bit `t + Q`. If every defect shallower than `k` vanishes, then
+`E_t = X^k E'`. Since `X` is a unit at the q-place, `q^r | E_t` gives
+`q^r | E'`, and `E'` has degree `deg E_t - k`. `q_front_degree_budget` proves
+the shifted form of the degree bound:
+
+    k + 2 v_q(E) <= deg E.
+
+At the rightmost left front (`RightmostLeft Q t k`, the first defect at
+depth `k`), `observer_front_q_budget` gives
+`k + 2 qOrder(E_t) <= t + Q`. Equivalently `observer_front_q_rank` gives
+`k <= R_t`: the q-adic rank `R_t = t + Q - 2 qOrder(E_t)` is at least the
+depth of the physical front. The previous bound `2 qOrder(E_t) <= t + Q` is
+the case `k = 0`. The residue analysis is therefore tied to the front
+geometry. The q-primary part of the defect can occupy at most the region
+between the front and the seed edge.
+
+The same budget, applied to a single page, determines when the front page
+has nonzero charge. A page of width `3h` has degree below `3h`. If its first
+coefficient is at offset `o >= h`, then divisibility by `q^h` would need
+`o + 2h < 3h`, which is impossible. `q_page_offset_charge` proves this for any
+word. `observer_front_page_charge` applies it to the actual front. If the
+rightmost left front is at depth `3h p + o` with `h <= o < 3h` (the middle or
+last block of observer page `p`), then page `p` is not divisible by `q^h`.
+Only a front in the first block of its page allows zero charge. By
+`q_block_charge_zero_iff` that page must then be a repeated block
+`A, A, A` whose block `A` begins at the front.
+
+**Limitation.** Nonzero charge of the front page is a statement about one
+page residue. The residue of `E_t` is the fold of all its pages, and the later
+pages can cancel the front page. The rank lower bound `k <= R_t` decreases by
+one per step as the front advances under a clean center
+(`rightmost_left_profile`), so by itself it cannot force a rank increase. Any
+descent argument must still constrain the seeded sources on admissible
+successor windows. Problem 1 remains unproved.

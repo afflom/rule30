@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "repeated-block-carry"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit A (const lexlean.std.nat::nat))) (pi ((explicit hA (app (const lexlean.std.nat::lt) (local A) (app (const r30.scale::twopow) (app (const r30.scale::twopow) (local a)))))) (app (const lexlean.core::eq) (app (const r30.witt::witt-carry) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-xor) (local A) (app (const r30.witt::witt-shl) (local A) (app (const r30.scale::twopow) (local a)))) (app (const r30.witt::witt-shl) (local A) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local a)) (app (const r30.scale::twopow) (local a)))))) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-carry) (local A)) (app (const r30.witt::witt-shl) (app (const r30.witt::witt-carry) (local A)) (app (const r30.scale::twopow) (local a)))) (app (const r30.witt::witt-shl) (app (const r30.witt::witt-carry) (local A)) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local a)) (app (const r30.scale::twopow) (local a))))) (app (const r30.witt::witt-xor) (app (const r30.witt::witt-shl) (app (const r30.observation::natural-bit) (app (const r30.observation::block-endpoint) (app (const r30.scale::twopow) (local a)) (local A))) (app (const r30.scale::twopow) (local a))) (app (const r30.witt::witt-shl) (app (const r30.observation::natural-bit) (app (const r30.observation::block-endpoint) (app (const r30.scale::twopow) (local a)) (local A))) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local a)) (app (const r30.scale::twopow) (local a)))))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.WittDefect"
+name = "Rule30UOR.WittDefect.repeated_block_carry"
+
+[[form]]
+id = "repeated-block-carry"
+channel = "math"
+surface = "repeatedblockcarry"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name repeatedblockcarry) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
