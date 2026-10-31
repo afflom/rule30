@@ -2714,4 +2714,32 @@ function of the right column-one defect sequence and the periodic center, so an 
 must be an invariant of the right column-one sequence (which the right half, driven only by the
 periodic center as its boundary, produces autonomously from row `T`).
 
+**The first-failure decision point (refuted).** If the closing argument were the scale mismatch
+between the periodically seeded right half and the doubling-time reconstruction of the left
+edge, the first failing comparison of a hypothetical period `(T, P)` would carry 2-adic
+structure. `experiments/first_failure.py` shows it follows the fair-bit law `2^-k` to within
+0.3% in every class by `v2(P)`, `P mod 8`, `T mod 8` and `T mod P`; registered as
+`first-failure-2adic`. The exact forcing from the doubling point (`left_edge_defect` with
+`exists_unit_defect_and_white_center_of_periodic`, or `left_defect_sourced`) is a window
+`[t, 2t + mP)`, satisfied by exponentially sparse arrivals, while the orbit fails at
+`T + O(log T)`. No exact statement here sees the logarithm. No closing argument is known; heuristic
+and enumerative work on Problem 1 is not pursued further.
+
+**Sigil algebra as conceptual content (2026-10-31).** The Atlas sigil algebra (a 96-class
+quotient of bytes, cyclic transforms `R`, `T_k`, a mirror `M` exchanging produce and consume,
+sequential and parallel composition that cannot cross classes except through typed
+homomorphisms, a conserved budget, and `NOT = M ∘ T_4`) was read against the exact structure of
+the orbit. Each of its structures already has an exact counterpart here: the class tower is the
+pure power-of-two periodicity of the right diagonals (`rdiag_periodic`, kit `Per j (2^j)`), the
+cyclic transform is the time shift on each level, `NOT = M ∘ T_4` is the kit's `antiperiod` (a
+half-period shift negates the next diagonal), the mirror between produce and consume is the center
+gate (`periodic_white_mirror`: at white-center times the two column-one lag-`mP` defects
+coincide, at black times the left one vanishes), and the conserved budget is information: `phi`
+is triangular with identity diagonal, so it is a bijection on every `Z/2^n`, and the right half of
+any later row determines the center's past. The algebra suggests one closing-type statement, a
+conservation law across the center gate violated by a periodic center; on the exact theory the gate
+only masks the right column-one defect sequence by the periodic white-center indicator, which
+conserves nothing a periodic mask could violate. The reading adds no identity the register lacks
+and is recorded here so that it is not walked again.
+
 Problem 1 remains unproved.
