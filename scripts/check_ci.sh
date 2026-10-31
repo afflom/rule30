@@ -8,6 +8,7 @@ LOCK_DIR="$(mktemp -d)"
 trap 'rm -rf "$LOCK_DIR"' EXIT
 cp rule30-lexlean/lexlean.lock "$LOCK_DIR/core.lock"
 cp rule30-paper/lexlean.lock "$LOCK_DIR/paper.lock"
+cp rule30-api/lexlean.lock "$LOCK_DIR/api.lock"
 make check-tooling
 make check-research
 make bridge
@@ -15,6 +16,7 @@ make lexlean LEXLEAN="$LEXLEAN_COMPILER"
 # Verification must reproduce the committed locks, not silently repair them.
 cmp "$LOCK_DIR/core.lock" rule30-lexlean/lexlean.lock
 cmp "$LOCK_DIR/paper.lock" rule30-paper/lexlean.lock
+cmp "$LOCK_DIR/api.lock" rule30-api/lexlean.lock
 make release-artifacts
 if [[ "${RULE30_REFRESH_PDFS:-0}" == "1" ]]; then
   python3 scripts/sync_pdfs.py --refresh

@@ -11,6 +11,7 @@ BRIDGE = ROOT / "rule30-bridge"
 PROJECTS = {
     "paper": ROOT / "rule30-paper",
     "core": ROOT / "rule30-lexlean",
+    "api": ROOT / "rule30-api",
 }
 FRONTIER = ROOT / "frontier.toml"
 SCRATCH = ROOT / ".r30"

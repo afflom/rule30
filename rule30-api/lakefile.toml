@@ -1,0 +1,7 @@
+name = "rule30_api"
+version = "0.1.0"
+defaultTargets = ["Rule30Api"]
+
+[[lean_lib]]
+name = "Rule30Api"
+srcDir = ".lexlean/generated/lean"

@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LEXLEAN_BIN="${1:-${LEXLEAN_BIN:-lexlean}}"
 
-for project in rule30-lexlean rule30-paper; do
+for project in rule30-lexlean rule30-paper rule30-api; do
   (
     cd "$ROOT_DIR/$project"
     mkdir -p .lexlean

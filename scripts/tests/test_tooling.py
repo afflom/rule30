@@ -146,7 +146,7 @@ class VerificationTests(unittest.TestCase):
         self.repo = Path(self.temp.name)
         (self.repo / "scripts").mkdir()
         shutil.copy(ROOT / "scripts/verify_lexlean.sh", self.repo / "scripts")
-        for project in ("rule30-lexlean", "rule30-paper"):
+        for project in ("rule30-lexlean", "rule30-paper", "rule30-api"):
             cache = self.repo / project / ".lexlean"
             cache.mkdir(parents=True)
             (cache / "latest-verified.json").write_text(json.dumps({"success": True, "attestation_id": "old"}))
@@ -168,7 +168,8 @@ class VerificationTests(unittest.TestCase):
 
     def cache_env(self, key="k1"):
         return {"RULE30_LEXLEAN_CACHE": str(self.repo / "cache"),
-                "RULE30_LEXLEAN_KEY_rule30_lexlean": key, "RULE30_LEXLEAN_KEY_rule30_paper": key}
+                "RULE30_LEXLEAN_KEY_rule30_lexlean": key, "RULE30_LEXLEAN_KEY_rule30_paper": key,
+                "RULE30_LEXLEAN_KEY_rule30_api": key}
 
     def test_accepted_verification_is_reused_for_the_same_inputs(self):
         first = self.run_verify(self.SUCCESS, self.cache_env())
@@ -210,7 +211,7 @@ class VerificationTests(unittest.TestCase):
     def test_success_records_both_results(self):
         result = self.run_verify('if [[ "$1" == lock ]]; then exit 0; fi\nprintf \'{"success":true,"attestation_id":"new"}\\n\'\n')
         self.assertEqual(result.returncode, 0, result.stderr)
-        for project in ("rule30-lexlean", "rule30-paper"):
+        for project in ("rule30-lexlean", "rule30-paper", "rule30-api"):
             record = json.loads((self.repo / project / ".lexlean/latest-verified.json").read_text())
             self.assertEqual(record["attestation_id"], "new")
 

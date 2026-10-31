@@ -17,7 +17,7 @@ from sync_pdfs import GENERATED, source_digest
 # decides what to rebuild from content traces, so a stale entry costs a rebuild,
 # never a wrong result; the cache is keyed by the proof tools' digest.
 LAKE_PACKAGES = ("Rule30PrizeKit/lean", "rule30-core-lean", "rule30-bridge",
-                 "rule30-lexlean", "rule30-paper")
+                 "rule30-lexlean", "rule30-paper", "rule30-api")
 # Tracked inputs of a LexLean project's verification: the project itself, the
 # host Lean it elaborates its external-interface probe against, and the script.
 LEXLEAN_INPUTS = {
@@ -25,6 +25,7 @@ LEXLEAN_INPUTS = {
                        "scripts/verify_lexlean.sh"),
     "rule30-paper": ("rule30-paper/", "rule30-core-lean/", "Rule30PrizeKit/lean/",
                      "scripts/verify_lexlean.sh"),
+    "rule30-api": ("rule30-api/", "scripts/verify_lexlean.sh"),
 }
 
 
@@ -123,7 +124,7 @@ def main():
                            ".github/lexlean-revision and set LEXLEAN_BIN or git config rule30.lexlean")
     compiler = str(Path(compiler).resolve())
     version = output(compiler, "--version")
-    for project in ("rule30-lexlean", "rule30-paper"):
+    for project in ("rule30-lexlean", "rule30-paper", "rule30-api"):
         lock = tomllib.loads(output("git", "show", f"{tree}:{project}/lexlean.lock"))
         if "compiler-semantics " + lock["compiler_semantics"] not in version.splitlines():
             raise RuntimeError("LexLean does not match staged lockfiles; install the compiler "

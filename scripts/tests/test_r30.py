@@ -255,15 +255,57 @@ class ModuleRegisterTests(unittest.TestCase):
             self.modules.register("Rule30UOR.bad-name", lakefile=self.lakefile, audit=self.audit)
 
 
+class ApiModelTests(unittest.TestCase):
+    """The command surface is a LexLean semantic module generated from the CLI
+    parser; the committed module must match the parser (the gate verifies the
+    module with lexlean, so the API's description carries kernel evidence)."""
+
+    def test_render_is_a_semantic_module_with_a_count_theorem(self):
+        from tools.r30 import apimodel
+        rows = apimodel.surface()
+        text = apimodel.render(rows)
+        self.assertIn("\\begin{semanticmodule}", text)
+        self.assertIn("structure{\n  name: Command", text)
+        self.assertIn(f"statement: ((commandCount) = {len(rows)})", text)
+        self.assertTrue(any(r["name"] == "api_sync" for r in rows))
+
+    def test_committed_module_matches_the_cli(self):
+        from tools.r30 import apimodel
+        r = apimodel.check()
+        self.assertTrue(r["ok"], r["reason"])
+
+
 class McpTests(unittest.TestCase):
+    """The MCP tools are derived from the CLI parser: every leaf subcommand is a
+    tool, and a tool call rebuilds an argv the parser accepts."""
+
+    SAMPLE = {"names": ["X"], "query": "q", "id": "i", "message": "m", "name": "n", "statement": "s",
+              "qids": ["p::q"], "prefixes": ["Rule30UOR"]}
+
     def test_every_tool_maps_to_argv(self):
         for tool in tool_list():
             if tool["name"] == "tail_log":
                 continue
-            argv = argv_for(tool["name"], {"names": ["X"], "query": "q", "id": "i", "message": "m",
-                                           "name": "n", "statement": "s"})
+            argv = argv_for(tool["name"], self.SAMPLE)
             self.assertIsInstance(argv, list)
             self.assertTrue(argv)
+
+    def test_tools_are_the_cli_leaves_and_round_trip(self):
+        from tools.r30 import cli
+        parser = cli.build_parser()
+        names = {t["name"] for t in tool_list()}
+        self.assertIn("theorem_add", names)
+        self.assertIn("frontier_set", names)
+        self.assertIn("interface", names)
+        for tool in tool_list():
+            if tool["name"] == "tail_log":
+                continue
+            argv = argv_for(tool["name"], self.SAMPLE)
+            try:
+                ns = parser.parse_args(argv)
+            except SystemExit as e:
+                self.fail(f"{tool['name']}: argv {argv} rejected by the CLI parser ({e})")
+            self.assertTrue(callable(ns.fn))
 
 
 if __name__ == "__main__":

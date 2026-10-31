@@ -31,7 +31,7 @@ for p in "${staged[@]}"; do
     has_compiler_pin_edit=1
   fi
   case "$p" in
-    rule30-lexlean/src/*.lex.tex|rule30-lexlean/src/**/*.lex.tex|rule30-paper/src/*.lex.tex|rule30-paper/src/**/*.lex.tex|rule30-lexlean/glossary/*|rule30-paper/glossary/*)
+    rule30-lexlean/src/*.lex.tex|rule30-lexlean/src/**/*.lex.tex|rule30-paper/src/*.lex.tex|rule30-paper/src/**/*.lex.tex|rule30-api/src/*.lex.tex|rule30-lexlean/glossary/*|rule30-paper/glossary/*)
       has_lexlean_source=1
       ;;
   esac
@@ -69,7 +69,7 @@ if [[ $has_host_proof_edit -eq 1 && $has_lexlean_source -eq 0 ]]; then
 pre-commit: blocked by LexLean authoring policy.
 
 Detected staged proof-surface Lean edits in rule30-core-lean/Rule30UOR or rule30-bridge,
-but no staged LexLean source edits under rule30-lexlean/src or rule30-paper/src.
+but no staged LexLean source edits under rule30-lexlean/src, rule30-paper/src or rule30-api/src.
 
 Policy: the paper/LexLean sources are the authoring surface; host Lean and bridge are
 derived/bridge artifacts.

@@ -70,6 +70,16 @@ gate once per batch.
 
 `--json` on any command gives the same report as JSON. The same commands are
 available as MCP tools: `claude mcp add r30 -- python3 <repo>/tools/r30/mcp_server.py`.
+The tool list is derived from the CLI parser (`cli.build_parser`): adding a
+subcommand adds a tool, with its arguments as the input schema, and no
+endpoint is registered by hand. The API is also written in LexLean:
+`rule30-api/src/Api.lex.tex` is a semantic module declaring the command
+surface as data (`Argument`, `Command`, `commands`) with a kernel-checked
+count theorem; `bin/r30 api sync` regenerates it from the parser, `api check`
+(run by the tests) refuses a parser that drifted from it, and the gate
+verifies the module with `lexlean` like the paper. LexLean emits Lean for it
+now and, under PrismPM, Rust (`lexlean production`), so the runtime can be
+generated from the same declarations when that toolchain is pinned.
 
 ## A theorem's life
 

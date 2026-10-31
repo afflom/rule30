@@ -18,126 +18,82 @@ from . import cli, repo
 
 PROTOCOL = "2025-06-18"
 
-TOOLS = [
-    ("status", "Repository status: HEAD, dirty files, frontier counts, whether a gate is running.", {}),
-    ("brief", "The one-screen session briefing: open claims, proved reductions, refuted routes, the loop.", {}),
-    ("claim", "One frontier claim in full: register entry, Lean type, published statement, dependents.", {"id": "string"}),
-    ("gate", "Is the pre-commit gate running, its last stage and log tail.", {}),
-    ("chain", "The reduction tree of the register: which claims rest on which, with status and Lean names.", {}),
-    ("interface", "The labeled interface sheet of a claim: its chain from the root, the notions of its statement with defining equations, the exact facts about each, the handles.",
-     {"id": "string", "write": "boolean"}),
-    ("lexicon_search", "Find lexemes by id, surface or Lean name.",
-     {"query": "string", "limit": "integer"}),
-    ("lexicon_show", "Show one lexeme (by qualified id or Lean name).", {"id": "string"}),
-    ("sig", "Lean types of declarations as s-expressions.", {"names": "array"}),
-    ("mentions", "Theorems whose statements mention all of the given Lean constants (the exact facts already proved about a notion).",
-     {"names": "array", "prefixes": "array"}),
-    ("theorem_preview", "Translate Lean theorems to a LexLean entry and statement without writing.",
-     {"names": "array", "lexicon": "string"}),
-    ("theorem_add", "Publish Lean theorems on the LexLean surface: entry, statement, check, probe.",
-     {"names": "array", "lexicon": "string", "slug": "string", "target": "string"}),
-    ("unpublished", "Theorems without a lexeme and whether the converter can publish them.",
-     {"prefixes": "array", "lexicon": "string", "only_ok": "boolean"}),
-    ("define", "Publish host definitions' defining equations as lemmas in the Notions section.",
-     {"names": "array", "lexicon": "string"}),
-    ("probe", "Elaborate the verify-time probe for declarations (seconds).", {"names": "array", "lexicon": "string"}),
-    ("check", "lexlean check. project: paper|core|all; modules: paths like src/Observations.lex.tex (seconds).",
-     {"project": "string", "modules": "array"}),
-    ("verify", "lexlean verify. With modules: seconds; whole project: minutes.",
-     {"project": "string", "modules": "array"}),
-    ("axioms", "Axioms of declarations.", {"names": "array"}),
-    ("choice_audit", "Theorems under module prefixes that depend on Classical.choice.", {"prefixes": "array"}),
-    ("frontier_list", "Claims in frontier.toml.", {"status": "string"}),
-    ("frontier_add", "Add a claim.", {"id": "string", "statement": "string", "status": "string",
-                                      "lean": "string", "lexeme": "string", "note": "string"}),
-    ("frontier_set", "Update a claim.", {"id": "string", "status": "string", "lean": "string",
-                                         "lexeme": "string", "note": "string"}),
-    ("frontier_check", "Check frontier.toml against the kernel: proved claims are checked and published.", {}),
-    ("commit", "Commit through the pre-commit gate in the background; returns a log path.",
-     {"message": "string", "push": "boolean", "paths": "array"}),
-    ("tail_log", "Last lines of a log file under .r30/.", {"path": "string", "lines": "integer"}),
-    ("experiment_run", "Run experiments/<name>.py with arguments.", {"name": "string", "args": "array"}),
-    ("module_add", "Register a Rule30UOR research module (Lake root + axiom-audit import), creating it if absent; optionally build it.",
-     {"name": "string", "build": "boolean"}),
-    ("module_build", "lake build research modules (all when none are given); returns only errors.", {"names": "array"}),
-]
+import argparse
 
-JSON_TYPES = {"string": {"type": "string"}, "integer": {"type": "integer"},
-              "boolean": {"type": "boolean"}, "array": {"type": "array", "items": {"type": "string"}}}
+TAIL_LOG = {"name": "tail_log", "description": "Last lines of a log file under .r30/.",
+            "inputSchema": {"type": "object", "properties": {"path": {"type": "string"}, "lines": {"type": "integer"}}}}
+
+
+def _leaves(parser, path=(), help_text=None):
+    """Every leaf subcommand of the CLI parser as (path, parser, help)."""
+    subs = [a for a in parser._actions if isinstance(a, argparse._SubParsersAction)]
+    if not subs:
+        yield path, parser, help_text
+        return
+    helps = {c.dest: c.help for c in subs[0]._choices_actions}
+    for name, sub in subs[0].choices.items():
+        yield from _leaves(sub, path + (name,), helps.get(name) or help_text)
+
+
+def _arguments(parser):
+    """The positional and optional arguments of a leaf, in declaration order."""
+    return [a for a in parser._actions
+            if not isinstance(a, (argparse._HelpAction, argparse._SubParsersAction))]
+
+
+def _schema(action):
+    if isinstance(action, argparse._StoreTrueAction):
+        t = {"type": "boolean"}
+    elif action.nargs in ("+", "*"):
+        t = {"type": "array", "items": {"type": "string"}}
+    elif action.type is int:
+        t = {"type": "integer"}
+    else:
+        t = {"type": "string"}
+    if action.help:
+        t["description"] = action.help
+    return t
+
+
+def _tool_name(path):
+    return "_".join(path).replace("-", "_")
+
+
+def tools():
+    """{tool name: (path, parser)} derived from the CLI; discovery is automatic."""
+    return {_tool_name(path): (path, parser, help_text) for path, parser, help_text in _leaves(cli.build_parser())}
 
 
 def tool_list():
-    return [{"name": n, "description": d,
-             "inputSchema": {"type": "object", "properties": {k: JSON_TYPES[v] for k, v in props.items()}}}
-            for n, d, props in TOOLS]
+    rows = []
+    for name, (path, parser, help_text) in tools().items():
+        props = {a.dest: _schema(a) for a in _arguments(parser)}
+        desc = help_text or parser.description or ("r30 " + " ".join(path))
+        rows.append({"name": name, "description": desc, "inputSchema": {"type": "object", "properties": props}})
+    rows.append(TAIL_LOG)
+    return rows
 
 
 def argv_for(name, a):
-    g = lambda k, d=None: a.get(k, d)
-    names = list(g("names", []) or [])
-    if name == "status":
-        return ["status"]
-    if name == "gate":
-        return ["gate"]
-    if name == "chain":
-        return ["chain"]
-    if name == "interface":
-        return ["interface", g("id", "")] + (["--write"] if g("write") else [])
-    if name == "brief":
-        return ["brief"]
-    if name == "claim":
-        return ["claim", g("id", "")]
-    if name == "lexicon_search":
-        return ["lexicon", "search", g("query", ""), "--limit", str(g("limit", 40))]
-    if name == "lexicon_show":
-        return ["lexicon", "show", g("id", "")]
-    if name == "sig":
-        return ["sig", *names]
-    if name == "mentions":
-        return ["mentions", *names] + (["--prefixes", *g("prefixes")] if g("prefixes") else [])
-    if name in ("theorem_preview", "theorem_add"):
-        argv = ["theorem", name.split("_")[1], *names, "--lexicon", g("lexicon", "r30.observation")]
-        if g("slug"):
-            argv += ["--slug", g("slug")]
-        if g("target"):
-            argv += ["--target", g("target")]
-        return argv
-    if name == "unpublished":
-        return ["unpublished", *(g("prefixes") or ["Rule30UOR"]), "--lexicon", g("lexicon", "r30.observation")] + \
-            (["--only-ok"] if g("only_ok") else [])
-    if name == "define":
-        return ["define", *names, "--lexicon", g("lexicon", "r30.observation")]
-    if name == "probe":
-        return ["probe", *names, "--lexicon", g("lexicon", "r30.observation")]
-    if name == "check":
-        return ["check", g("project", "all")] + (["--modules", *g("modules")] if g("modules") else [])
-    if name == "verify":
-        return ["verify", g("project", "paper")] + (["--modules", *g("modules")] if g("modules") else [])
-    if name == "axioms":
-        return ["axioms", *names]
-    if name == "choice_audit":
-        return ["choice-audit", *(g("prefixes") or ["Rule30UOR"])]
-    if name == "frontier_list":
-        return ["frontier", "list"] + (["--status", g("status")] if g("status") else [])
-    if name in ("frontier_add", "frontier_set"):
-        argv = ["frontier", name.split("_")[1], g("id", "")]
-        if name == "frontier_add":
-            argv.append(g("statement", ""))
-        for k in ("status", "lean", "lexeme", "note"):
-            if g(k):
-                argv += ["--" + k, g(k)]
-        return argv
-    if name == "frontier_check":
-        return ["frontier", "check"]
-    if name == "commit":
-        return ["commit", "-m", g("message", "")] + (["--push"] if g("push") else []) + list(g("paths") or [])
-    if name == "experiment_run":
-        return ["experiment", "run", g("name", ""), *(g("args") or [])]
-    if name == "module_add":
-        return ["module", "add", g("name", "")] + (["--build"] if g("build") else [])
-    if name == "module_build":
-        return ["module", "build", *names]
-    raise KeyError(name)
+    """Rebuild the CLI argv of a tool call from the parser's own argument list."""
+    path, parser, _ = tools()[name]
+    argv = list(path)
+    for action in _arguments(parser):
+        value = a.get(action.dest)
+        if not action.option_strings:  # positional
+            if action.nargs in ("+", "*"):
+                argv += [str(v) for v in (value or [])]
+            elif value is not None:
+                argv.append(str(value))
+        elif isinstance(action, argparse._StoreTrueAction):
+            if value:
+                argv.append(action.option_strings[0])
+        elif action.nargs in ("+", "*"):
+            if value:
+                argv += [action.option_strings[0], *[str(v) for v in value]]
+        elif value is not None:
+            argv += [action.option_strings[0], str(value)]
+    return argv
 
 
 def call(name, a):

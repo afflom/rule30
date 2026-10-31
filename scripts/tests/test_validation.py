@@ -47,7 +47,7 @@ class SnapshotHookTests(unittest.TestCase):
             target = self.repo / path
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(ROOT / path, target)
-        for project in ("rule30-lexlean", "rule30-paper"):
+        for project in ("rule30-lexlean", "rule30-paper", "rule30-api"):
             self.write(project + "/lexlean.lock", 'compiler_semantics = "' + "a" * 64 + '"\n')
         self.write("rule30-core-lean/lean-toolchain", "test-toolchain\n")
         self.write("rule30-paper/src/Observations.lex.tex", "valid\n")
@@ -264,7 +264,7 @@ class CompleteGateTests(unittest.TestCase):
             (repo / "scripts").mkdir()
             shutil.copy(ROOT / "scripts/check_ci.sh", repo / "scripts")
             shutil.copy(ROOT / "scripts/sync_pdfs.py", repo / "scripts")
-            for project in ("rule30-lexlean", "rule30-paper"):
+            for project in ("rule30-lexlean", "rule30-paper", "rule30-api"):
                 (repo / project).mkdir()
                 (repo / project / "lexlean.lock").write_text("original\n")
             stages = ["check-tooling", "check-research", "bridge", "lexlean", "release-artifacts"]
@@ -300,7 +300,7 @@ class CompleteGateTests(unittest.TestCase):
                 self.assertEqual(stages[-1], stage)
 
     def test_either_lockfile_drifting_blocks_packaging(self):
-        for project in ("rule30-lexlean", "rule30-paper"):
+        for project in ("rule30-lexlean", "rule30-paper", "rule30-api"):
             with self.subTest(project=project):
                 result, stages = self.run_gate(drift=project)
                 self.assertNotEqual(result.returncode, 0)

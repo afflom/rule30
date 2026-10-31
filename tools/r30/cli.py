@@ -78,6 +78,21 @@ def cmd_interface(args):
     out(args, data, interface.render(data))
 
 
+def cmd_api(args):
+    """The API as a LexLean semantic module (rule30-api/src/Api.lex.tex)."""
+    from . import apimodel
+    if args.sub == "sync":
+        r = apimodel.sync()
+        if r["changed"]:
+            checks.lock("api")
+        out(args, r, f"{r['module']}: {r['commands']} commands" + (" (rewritten; lock updated)" if r["changed"] else " (current)"))
+    else:
+        r = apimodel.check()
+        out(args, r, "Api.lex.tex matches the CLI" if r["ok"] else r["reason"])
+        if not r["ok"]:
+            sys.exit(1)
+
+
 def cmd_chain(args):
     """The reduction tree: from each root claim, the claims that rest on it
     (`depends`), with status and Lean name, so the proof plan is read as a DAG."""
@@ -430,7 +445,9 @@ def cmd_experiment(args):
         sys.exit(code)
 
 
-def main(argv=None):
+def build_parser():
+    """The command surface. The MCP server derives its tools from this parser,
+    so a new subcommand is a new tool without further registration."""
     ap = argparse.ArgumentParser(prog="r30", description=__doc__)
     ap.add_argument("--json", action="store_true")
     sp = ap.add_subparsers(dest="cmd", required=True)
@@ -438,6 +455,9 @@ def main(argv=None):
     sp.add_parser("status").set_defaults(fn=cmd_status)
     sp.add_parser("brief", help="the one-screen briefing to start a session").set_defaults(fn=cmd_brief)
     sp.add_parser("chain", help="the reduction tree of the register (depends), with status and Lean names").set_defaults(fn=cmd_chain)
+    api = sp.add_parser("api", help="the API as a LexLean semantic module: sync regenerates it from the CLI, check compares").add_subparsers(dest="sub", required=True)
+    api.add_parser("sync", help="regenerate rule30-api/src/Api.lex.tex from the CLI parser and lock").set_defaults(fn=cmd_api)
+    api.add_parser("check", help="refuse a CLI that drifted from Api.lex.tex").set_defaults(fn=cmd_api)
     s = sp.add_parser("interface", help="the labeled interface sheet of a claim: chain, notions, exact facts, handles")
     s.add_argument("id"); s.add_argument("--write", action="store_true", help="also write interfaces/<id>.md")
     s.add_argument("--no-related", action="store_true"); s.set_defaults(fn=cmd_interface)
@@ -513,7 +533,11 @@ def main(argv=None):
     ex.add_parser("list").set_defaults(fn=cmd_experiment)
     s = ex.add_parser("run"); s.add_argument("name"); s.add_argument("args", nargs="*"); s.set_defaults(fn=cmd_experiment)
 
-    args = ap.parse_args(argv)
+    return ap
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
     args.fn(args)
 
 
