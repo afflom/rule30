@@ -749,6 +749,92 @@ def DyadicResponseAperiodic : Prop := ∀ K d, 0 < d → ¬ DyadicResponsePeriod
 theorem dyadicColumnAperiodic_of_response (h : DyadicResponseAperiodic) : DyadicColumnAperiodic :=
   fun K d hd hp => h K d hd (dyadicResponsePeriodic_of_dilationPeriodic K d hp)
 
+/-! ### The converse: a periodic dyadic diagonal makes the dyadic column periodic
+
+Unflipping the column, `v j = center (2^j) ⊕ [j odd]` is the running XOR of
+the responses `ρ j = response (2^j) j`; a period `d` of `ρ` from `K` gives
+`v (j + 2d) = v j`, hence a period `2d` of the column. So the leaf
+`dyadic-response-aperiodic` is equivalent to `dyadic-column-aperiodic`. -/
+
+/-- The parity of `response (2^i) i` over `i ∈ [j, j+n)`. -/
+def responseParity (j : Nat) : Nat → Bool
+  | 0 => false
+  | n + 1 => bxor (responseParity j n) (Rule30UOR.Scale.response (twopow (j + n)) (j + n))
+
+def unflipped (j : Nat) : Bool := bxor (center (twopow j)) (decide (j % 2 = 1))
+
+theorem unflipped_succ (j : Nat) :
+    unflipped (j + 1) = bxor (unflipped j) (Rule30UOR.Scale.response (twopow j) j) := by
+  unfold unflipped
+  rw [dyadic_column_step]
+  rcases Nat.mod_two_eq_zero_or_one j with h | h
+  · have h1 : (j + 1) % 2 = 1 := by cfomega
+    rw [h, h1]
+    cases center (twopow j) <;> cases Rule30UOR.Scale.response (twopow j) j <;> rfl
+  · have h1 : (j + 1) % 2 = 0 := by cfomega
+    rw [h, h1]
+    cases center (twopow j) <;> cases Rule30UOR.Scale.response (twopow j) j <;> rfl
+
+theorem unflipped_add (j : Nat) : ∀ n, unflipped (j + n) = bxor (unflipped j) (responseParity j n) := by
+  intro n
+  induction n with
+  | zero => rw [Nat.add_zero]; cases unflipped j <;> rfl
+  | succ n ih =>
+    rw [← Nat.add_assoc, unflipped_succ, ih]
+    show _ = bxor (unflipped j) (bxor (responseParity j n) (Rule30UOR.Scale.response (twopow (j + n)) (j + n)))
+    cases unflipped j <;> cases responseParity j n <;>
+      cases Rule30UOR.Scale.response (twopow (j + n)) (j + n) <;> rfl
+
+theorem responseParity_add (j a : Nat) : ∀ b,
+    responseParity j (a + b) = bxor (responseParity j a) (responseParity (j + a) b) := by
+  intro b
+  induction b with
+  | zero => rw [Nat.add_zero]; cases responseParity j a <;> rfl
+  | succ b ih =>
+    rw [← Nat.add_assoc]
+    show bxor (responseParity j (a + b)) (Rule30UOR.Scale.response (twopow (j + (a + b))) (j + (a + b))) =
+      bxor (responseParity j a) (bxor (responseParity (j + a) b) (Rule30UOR.Scale.response (twopow (j + a + b)) (j + a + b)))
+    rw [ih, Nat.add_assoc]
+    cases responseParity j a <;> cases responseParity (j + a) b <;>
+      cases Rule30UOR.Scale.response (twopow (j + (a + b))) (j + (a + b)) <;> rfl
+
+theorem responseParity_shift (K d : Nat) (h : DyadicResponsePeriodic K d) (j : Nat) (hj : K ≤ j) :
+    ∀ n, responseParity (j + d) n = responseParity j n := by
+  intro n
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    show bxor (responseParity (j + d) n) (Rule30UOR.Scale.response (twopow (j + d + n)) (j + d + n)) =
+      bxor (responseParity j n) (Rule30UOR.Scale.response (twopow (j + n)) (j + n))
+    rw [ih, show j + d + n = (j + n) + d by cfomega, h (j + n) (by cfomega)]
+
+/-- A period `d` of the dyadic-diagonal responses is a period `2d` of the dyadic column. -/
+theorem dilationPeriodic_of_dyadicResponsePeriodic (K d : Nat) (h : DyadicResponsePeriodic K d) :
+    DilationPeriodic 1 K (2 * d) := by
+  intro j hj
+  rw [Nat.mul_one, Nat.mul_one]
+  have hv := unflipped_add j (2 * d)
+  rw [Nat.two_mul, responseParity_add, responseParity_shift K d h j hj] at hv
+  have hz : bxor (responseParity j d) (responseParity j d) = false := by cases responseParity j d <;> rfl
+  rw [hz] at hv
+  have hv' : unflipped (j + 2 * d) = unflipped j := by
+    rw [show j + 2 * d = j + (d + d) by cfomega, hv]; cases unflipped j <;> rfl
+  unfold unflipped at hv'
+  have hp : (j + 2 * d) % 2 = j % 2 := by cfomega
+  rw [hp] at hv'
+  rcases Nat.mod_two_eq_zero_or_one j with h0 | h0 <;> rw [h0] at hv' <;>
+    rcases Bool.eq_false_or_eq_true (center (twopow (j + 2 * d))) with hc | hc <;>
+    rcases Bool.eq_false_or_eq_true (center (twopow j)) with hc' | hc' <;>
+    rw [hc, hc'] at hv' <;> rw [hc, hc'] <;> first | rfl | exact absurd hv' (by decide)
+
+theorem dyadicResponseAperiodic_of_column (h : DyadicColumnAperiodic) : DyadicResponseAperiodic :=
+  fun K d hd hp => h K (2 * d) (by cfomega) (dilationPeriodic_of_dyadicResponsePeriodic K d hp)
+
+/-- The leaf is an equivalence: the dyadic column is aperiodic iff the
+responses on the dyadic diagonal are. -/
+theorem dyadicColumnAperiodic_iff_response : DyadicColumnAperiodic ↔ DyadicResponseAperiodic :=
+  ⟨dyadicResponseAperiodic_of_column, dyadicColumnAperiodic_of_response⟩
+
 /-- **Problem 1 follows if the responses on the dyadic diagonal are not eventually periodic.** -/
 theorem problem1_of_dyadic_response_aperiodic (h : DyadicResponseAperiodic) :
     Ruliology.CellularAutomata.Rule30Prize.Problem1 :=

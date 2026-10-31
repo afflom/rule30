@@ -2937,5 +2937,30 @@ Close the goal with \(\lexeme{r30.observation::dyadic-response-halves-paper}(j)\
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{dilation-periodic-of-dyadic-response-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\) and natural number \(d\), if \(dyadicresponseperiodic(K, d)\), then \(dilationperiodic(1, K, 2 * d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::dilation-periodic-of-dyadic-response-periodic}(K, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{dyadic-response-aperiodic-of-column}
+\allowaxioms{Quot.sound;propext}
+if \(dyadiccolumnaperiodic\), then \(dyadicresponseaperiodic\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::dyadic-response-aperiodic-of-column}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{dyadic-column-aperiodic-iff-response}
+\allowaxioms{Quot.sound;propext}
+\(dyadiccolumnaperiodic ↔ dyadicresponseaperiodic\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::dyadic-column-aperiodic-iff-response}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

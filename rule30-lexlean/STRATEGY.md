@@ -2886,6 +2886,9 @@ not eventually periodic as soon as `j ↦ response(2^j, j)` is not
 diagonal are not eventually periodic** (`problem1_of_dyadic_response_aperiodic`, registered as
 `dyadic-response-aperiodic`). This is the κ-structure of one window per scale, the window
 `[2^j, 2^(j+1))` read at the center: the leaf is now a statement about the carries of a single
-dyadic block at each scale, and nothing else.
+dyadic block at each scale, and nothing else. The converse holds too: unflipping the column,
+`v(j) = center(2^j) ⊕ [j odd]` is the running XOR of the responses, so a period `d` of the
+responses is a period `2d` of the column (`dilationPeriodic_of_dyadicResponsePeriodic`), and the
+two leaves are one statement (`dyadicColumnAperiodic_iff_response`).
 
 Problem 1 remains unproved.

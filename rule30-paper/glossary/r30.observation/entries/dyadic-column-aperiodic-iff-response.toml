@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dyadic-column-aperiodic-iff-response"
+category = "proof-constant"
+signature = "(app (const lexlean.core::iff) (const r30.observation::dyadic-column-aperiodic) (const r30.observation::dyadic-response-aperiodic))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.dyadicColumnAperiodic_iff_response"
+
+[[form]]
+id = "dyadic-column-aperiodic-iff-response"
+channel = "math"
+surface = "dyadiccolumnaperiodiciffresponse"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name dyadiccolumnaperiodiciffresponse)"
