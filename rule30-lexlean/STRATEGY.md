@@ -2863,4 +2863,18 @@ supplies. The register's open claims are therefore instances of one base-paramet
 and the mechanical task is to find the pair `(b, t)` for which the dilation sequence is
 provably not eventually periodic, with `b` chosen against the orbit's own scale.
 
+**κ-collapse (2026-10-31).** The carries are the whole nonlinearity, and in the cone the window
+response is the carry contribution to the center at scale `k`: `response r k = center r ⊕
+center(r + 2^k)` for `r < 2^k` (`response_cone`). Call the uniform vanishing of these responses
+from scale `K` on a κ-collapse at scale `K` (`KappaCollapse K`): the carries no longer reach the
+center at any scale `≥ K`. Then the center is a function of `n mod 2^K`
+(`center_mod_of_kappaCollapse`, by removing the top bit of `n` scale by scale), so a κ-collapse at
+scale `K` is exactly a center period `2^K` from time `0` (`kappaCollapse_iff`); the horizon
+certificate refutes it for every `K ≤ 7` (`no_kappaCollapse_small`), and Problem 1 is equivalent
+to "no κ-collapse at any scale, and no period that is not a power of two". The collapse of the
+leaves is therefore the root: routing the open leaves to closure means showing that the carries
+never collapse uniformly across scales, and the exact obstruction to a general period `P` is the
+same collapse read at lag `2^k mod P` (`periodic_scale`: under a period the responses collapse
+onto the center's own lag differences). Registered as `kappa-collapse` (proved).
+
 Problem 1 remains unproved.

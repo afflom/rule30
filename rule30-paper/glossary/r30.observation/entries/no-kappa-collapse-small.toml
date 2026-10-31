@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-kappa-collapse-small"
+category = "proof-constant"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat))) (pi ((explicit hK (app (const lexlean.std.nat::le) (local K) (nat 7)))) (app (const lexlean.core::lnot) (app (const r30.observation::kappa-collapse) (local K)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.no_kappaCollapse_small"
+
+[[form]]
+id = "no-kappa-collapse-small"
+channel = "math"
+surface = "nokappacollapsesmall"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name nokappacollapsesmall) (paren (seq (slot 0))))"

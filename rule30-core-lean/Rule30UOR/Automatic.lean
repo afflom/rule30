@@ -1,5 +1,6 @@
 module
 public import Rule30UOR.Interfaces.Part01
+public import Rule30UOR.Horizon
 set_option autoImplicit false
 set_option maxRecDepth 100000
 set_option maxHeartbeats 1000000000
@@ -606,6 +607,103 @@ theorem centerInfiniteKernelIn_of_dilation_aperiodic_paper (b t : Nat) (hb : 2 �
 theorem problem1_of_dilation_aperiodic_in_paper (b t : Nat) (hb : 2 ≤ b) (h : DilationAperiodicIn b t) :
     Ruliology.CellularAutomata.Rule30Prize.Problem1 :=
   problem1_of_dilation_aperiodic_in b hb t h
+
+/-! ## κ-collapse
+
+The carries are the whole nonlinearity (`Ledger`), and in the cone the window
+response is the carry contribution to the center at scale `k`:
+`response r k = center r ⊕ center (r + 2^k)` for `r < 2^k`. Call the uniform
+vanishing of these responses from scale `K` on a *κ-collapse at scale `K`*: the
+carries no longer reach the center at any scale `≥ K`. A κ-collapse is exactly
+a center period `2^K` from time `0`: the collapse of the leaves is the root.
+The horizon certificate refutes it for every `K ≤ 7`. -/
+
+/-- κ-collapse at scale `K`: every cone response at scales `≥ K` vanishes. -/
+def KappaCollapse (K : Nat) : Prop :=
+  ∀ k r, K ≤ k → r < twopow k → Rule30UOR.Scale.response r k = false
+
+theorem twopow_dvd_of_le {K k : Nat} (h : K ≤ k) : ∃ m, twopow k = twopow K * m :=
+  ⟨twopow (k - K), by rw [← twopow_add, Nat.add_sub_cancel' h]⟩
+
+theorem center_mod_of_kappaCollapse (K : Nat) (h : KappaCollapse K) :
+    ∀ k n, K ≤ k → n < twopow k → center n = center (n % twopow K) := by
+  intro k
+  induction k with
+  | zero =>
+    intro n hK hn
+    have hK0 : K = 0 := by cfomega
+    subst hK0
+    have : n = 0 := by
+      have := hn; rw [Rule30UOR.Core.twopow] at this; cfomega
+    subst this; rfl
+  | succ k ih =>
+    intro n hK hn
+    rcases Nat.lt_or_ge n (twopow k) with hlt | hge
+    · rcases Nat.lt_or_ge k K with hkK | hkK
+      · have hkK' : K = k + 1 := by cfomega
+        rw [hkK', Nat.mod_eq_of_lt hn]
+      · exact ih n hkK hlt
+    · have hk2 : twopow (k + 1) = twopow k + twopow k := rfl
+      have hr : n - twopow k < twopow k := by cfomega
+      have hn' : n = (n - twopow k) + twopow k := by cfomega
+      rcases Nat.lt_or_ge k K with hkK | hkK
+      · have hkK' : K = k + 1 := by cfomega
+        rw [hkK', Nat.mod_eq_of_lt hn]
+      · have hc := response_cone (n - twopow k) k hr
+        rw [h k (n - twopow k) hkK hr] at hc
+        have hc' : center (n - twopow k + twopow k) = center (n - twopow k) := by
+          rcases Bool.eq_false_or_eq_true (center (n - twopow k)) with hx | hx <;>
+            rcases Bool.eq_false_or_eq_true (center (n - twopow k + twopow k)) with hy | hy <;>
+            rw [hx, hy] at hc ⊢ <;> first | rfl | exact absurd hc (by decide)
+        obtain ⟨m, hm⟩ := twopow_dvd_of_le hkK
+        have e : (n - twopow k + twopow k) % twopow K = (n - twopow k) % twopow K := by
+          rw [hm, Nat.add_mul_mod_self_left]
+        calc center n = center (n - twopow k + twopow k) := by rw [← hn']
+          _ = center (n - twopow k) := hc'
+          _ = center ((n - twopow k) % twopow K) := ih (n - twopow k) hkK hr
+          _ = center ((n - twopow k + twopow k) % twopow K) := by rw [e]
+          _ = center (n % twopow K) := by rw [← hn']
+
+/-- A κ-collapse at scale `K` is a center period `2^K` from time `0`. -/
+theorem centerPeriodic_of_kappaCollapse (K : Nat) (h : KappaCollapse K) :
+    Rule30UOR.Scale.CenterPeriodic 0 (twopow K) := by
+  intro t _
+  have hb : ∀ n, center n = center (n % twopow K) := by
+    intro n
+    have hk : n < twopow (n + K) := by
+      have := twopow_ge_succ (n + K); cfomega
+    exact center_mod_of_kappaCollapse K h (n + K) n (by cfomega) hk
+  rw [hb (t + twopow K), hb t, Nat.add_mod_right]
+
+/-- Conversely a center period `2^K` from `0` collapses every cone response at scales `≥ K`. -/
+theorem kappaCollapse_of_centerPeriodic (K : Nat) (h : Rule30UOR.Scale.CenterPeriodic 0 (twopow K)) :
+    KappaCollapse K := by
+  intro k r hK hr
+  rw [response_cone r k hr]
+  obtain ⟨m, hm⟩ := twopow_dvd_of_le hK
+  have := Rule30UOR.Scale.center_mul h m r (Nat.zero_le r)
+  rw [Nat.mul_comm, ← hm] at this
+  rw [this]
+  cases center r <;> rfl
+
+/-- **κ-collapse is the period.** -/
+theorem kappaCollapse_iff (K : Nat) : KappaCollapse K ↔ Rule30UOR.Scale.CenterPeriodic 0 (twopow K) :=
+  ⟨centerPeriodic_of_kappaCollapse K, kappaCollapse_of_centerPeriodic K⟩
+
+/-- No κ-collapse at any scale `K ≤ 7` (from the horizon certificate). -/
+theorem no_kappaCollapse_small (K : Nat) (hK : K ≤ 7) : ¬ KappaCollapse K := fun h =>
+  Rule30UOR.Horizon.no_center_period_512_128 0 (twopow K) (Nat.zero_le _)
+    (Nat.lt_of_lt_of_le (Nat.zero_lt_succ K) (twopow_ge_succ K))
+    (Nat.le_trans (twopow_mono hK) (by decide)) (centerPeriodic_of_kappaCollapse K h)
+
+/-- Problem 1 is exactly: no κ-collapse at any scale and no period that is not a power of two. -/
+theorem no_kappaCollapse_of_problem1 (h : Ruliology.CellularAutomata.Rule30Prize.Problem1) (K : Nat) :
+    ¬ KappaCollapse K := fun hc =>
+  Rule30UOR.Scale.problem1_iff.1 h 0 (twopow K)
+    (Nat.lt_of_lt_of_le (Nat.zero_lt_succ K) (twopow_ge_succ K)) (centerPeriodic_of_kappaCollapse K hc)
+
+theorem no_kappaCollapse_of_problem1_paper (K : Nat) (h : Ruliology.CellularAutomata.Rule30Prize.Problem1) :
+    ¬ KappaCollapse K := no_kappaCollapse_of_problem1 h K
 
 /-- **Problem 1 follows from the absence of dyadic self-similarity.** -/
 theorem problem1_of_no_dyadic_self_similarity (h : NoDyadicSelfSimilarity) :

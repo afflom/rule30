@@ -2493,4 +2493,39 @@ For every natural number \(b\) and natural number \(t\), if \(2 \le b\), then if
 \begin{proof}
 The goal follows from \(\operatorname{problem1ofdilationaperiodicinpaper}(b, t)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:kappa-collapse-iff}
+For every natural number \(K\), \(\operatorname{kappacollapse}(K)\) if and only if \(\operatorname{centerperiodic}(0, \operatorname{twopow}(K))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{kappacollapseiff}(K)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-periodic-of-kappa-collapse}
+For every natural number \(K\), if \(\operatorname{kappacollapse}(K)\), then \(\operatorname{centerperiodic}(0, \operatorname{twopow}(K))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerperiodicofkappacollapse}(K)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:kappa-collapse-of-center-periodic}
+For every natural number \(K\), if \(\operatorname{centerperiodic}(0, \operatorname{twopow}(K))\), then \(\operatorname{kappacollapse}(K)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{kappacollapseofcenterperiodic}(K)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-kappa-collapse-small}
+For every natural number \(K\), if \(K \le 7\), then not \(\operatorname{kappacollapse}(K)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{nokappacollapsesmall}(K)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-kappa-collapse-of-problem1-paper}
+For every natural number \(K\), if \(\operatorname{problemone}\), then not \(\operatorname{kappacollapse}(K)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{nokappacollapseofproblem1paper}(K)\).
+\end{proof}
 \end{document}

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-periodic-of-kappa-collapse"
+category = "proof-constant"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat))) (pi ((explicit h (app (const r30.observation::kappa-collapse) (local K)))) (app (const r30.scale::center-periodic) (nat 0) (app (const r30.scale::twopow) (local K)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.centerPeriodic_of_kappaCollapse"
+
+[[form]]
+id = "center-periodic-of-kappa-collapse"
+channel = "math"
+surface = "centerperiodicofkappacollapse"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerperiodicofkappacollapse) (paren (seq (slot 0))))"

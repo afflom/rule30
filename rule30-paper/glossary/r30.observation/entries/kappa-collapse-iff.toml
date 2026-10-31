@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "kappa-collapse-iff"
+category = "proof-constant"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const r30.observation::kappa-collapse) (local K)) (app (const r30.scale::center-periodic) (nat 0) (app (const r30.scale::twopow) (local K)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.kappaCollapse_iff"
+
+[[form]]
+id = "kappa-collapse-iff"
+channel = "math"
+surface = "kappacollapseiff"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name kappacollapseiff) (paren (seq (slot 0))))"

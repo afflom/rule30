@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "kappa-collapse"
+category = "function"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.KappaCollapse"
+
+[[form]]
+id = "kappa-collapse"
+channel = "math"
+surface = "kappacollapse"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name kappacollapse) (paren (seq (slot 0))))"

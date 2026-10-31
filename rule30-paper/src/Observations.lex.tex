@@ -2855,5 +2855,45 @@ Close the goal with \(\lexeme{r30.observation::problem1-of-dilation-aperiodic-in
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{kappa-collapse-iff}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\), \(kappacollapse(K) ↔ centerperiodic(0, twopow(K))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::kappa-collapse-iff}(K)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-periodic-of-kappa-collapse}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\), if \(kappacollapse(K)\), then \(centerperiodic(0, twopow(K))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-of-kappa-collapse}(K)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{kappa-collapse-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\), if \(centerperiodic(0, twopow(K))\), then \(kappacollapse(K)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::kappa-collapse-of-center-periodic}(K)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-kappa-collapse-small}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\), if \(K ≤ 7\), then \(¬ kappacollapse(K)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::no-kappa-collapse-small}(K)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-kappa-collapse-of-problem1-paper}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\), if \(problemone\), then \(¬ kappacollapse(K)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::no-kappa-collapse-of-problem1-paper}(K)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

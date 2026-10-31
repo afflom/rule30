@@ -17,6 +17,7 @@ lean = "Rule30UOR.WittDefect.center_periodic_of_coupling"
 lexeme = "r30.observation::center-periodic-of-coupling"
 since = "2026-10-30"
 note = "Published as center-defect-coupling (the step) and center-periodic-of-coupling (the converse); the iff center_periodic_iff_coupling is host Lean only because LexLean cannot state a quantifier inside an iff. Exact restatement of the lag-P fixed-point difference, not a refutation."
+depends = ["problem1"]
 
 [[claim]]
 id = "aperiodic-compensation"
@@ -24,6 +25,7 @@ status = "open"
 statement = "Under a hypothetical center period, the two column-one defects (each aperiodic by Jen) cannot satisfy the gated mirror forever. This is the remaining obligation."
 since = "2026-10-28"
 note = "Every proved reduction ends here. Shape fixed by left-defect-sourcing (2026-10-31): under a periodic center the entire left defect field is a function of the right column-one defect sequence and the center. Exact form (ledger-diagonal): center t = not ledgerDiagonal t, so the claim is that the diagonal of the carry ledger winWitt 0 t is not eventually periodic; the linear part contributes the constant 1 and all nonlinearity is in the carries. The closing statement is that the orbit's self-referential equation has no periodic solution. Decision point first-failure-2adic (refuted): the first failing comparison is fair-bit random in every 2-adic class, so the obstruction is exact, not statistical. No closing argument is known."
+depends = ["recurrent-central-collision", "coupling-law"]
 
 [[claim]]
 id = "q-adic-descent"
@@ -32,6 +34,7 @@ statement = "The q-adic order of the observer defect carries a descent quantity.
 lean = "Rule30UOR.WittDefect.observer_front_q_rank"
 since = "2026-10-30"
 note = "On the seed, qOrder(E_t) is distributed like a random polynomial (ratio 1/4 per level, all Q); R_t = t + Q - O(1). experiments/diagnose_front_coupling.py."
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "front-slack-descent"
@@ -39,6 +42,7 @@ status = "refuted"
 statement = "Phi_t = R_t - k_t (q-rank minus front depth) is a non-increasing potential."
 since = "2026-10-30"
 note = "Increases on most steps of every class. experiments/diagnose_front_coupling.py."
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "evaluation-point"
@@ -46,6 +50,7 @@ status = "refuted"
 statement = "Evaluating the observer polynomial at a constant point (0, 1, omega, omega^2) constrains the center."
 since = "2026-10-30"
 note = "0 is the center itself, 1 is a coin (parity table in experiments/diagnose_front_coupling.py), omega and omega^2 are conjugate and give the q-order histogram of the same script."
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "gate-phase-opposition"
@@ -55,6 +60,7 @@ lean = "Rule30UOR.WittDefect.head_import_path_rejects_negative_gate"
 lexeme = "r30.observation::head-import-path-rejects-negative-gate"
 since = "2026-10-30"
 note = "The sign is positive on every admissible window (head_import_path_gate_phase); the opposition is false under a periodic center, so no contradiction follows from it."
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "band-engines"
@@ -63,6 +69,7 @@ statement = "The lhBandAgree / prefix-tail / late-scale engine hypothesis bundle
 lean = "Rule30UOR.Interfaces.lhBandAgree_engine_hypotheses_unsat"
 since = "2026-10-28"
 note = "Batch 86: the bundles imply False with no periodicity premise, so they are vacuous as engines. problem1_iff_engine_input is an equivalence, not a discharge."
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "recurrent-central-collision"
@@ -72,6 +79,7 @@ lean = "Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision"
 lexeme = "r30.frontier::problem-one-iff-no-recurrent-central-collision"
 since = "2026-10-27"
 note = "Band form since the choice elimination; the fixed-column form needs the infinite pigeonhole principle."
+depends = ["problem1"]
 
 [[claim]]
 id = "saturation-reexcitation"
@@ -80,7 +88,7 @@ statement = "Under a periodic center, each front arrival injects a unit boundary
 lean = "Rule30UOR.WittDefect.periodic_arrival_no_crossing"
 since = "2026-10-31"
 note = "Backwards: at an arrival the boundary bit is the admitted right defect, and by the coupling law it cancels the arriving left defect, so the next center defect is zero (periodic_arrival_no_crossing). The unit bit protects the center's period. The budget-drain half of the reading is the refuted q-adic-descent: R_t = t + Q - O(1) grows, it never saturates."
-depends = ["coupling-law"]
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "horizon-criterion"
@@ -88,7 +96,7 @@ status = "open"
 statement = "For every T and P > 0 there is an explicit horizon H(T, P) such that CenterPeriodic T P already fails on the window [T, T + H(T, P)]: a flip forced by the doubling zero diagonal of P reaches column -1 inside the window while the gated mirror forbids it there."
 since = "2026-10-31"
 note = "The finite-target shape of batch 35. experiments/agreement_runs.py: the longest center-agreement run at lag Q grows with the transient (max over Q <= 64: 15 at T = 2^8, 17 at 2^11, 18 at 2^13, 20 at 2^16), as for a random sequence, so H must depend on T. Kernel-checked instance: horizon-certificate (H = 32 for all T <= 512, 0 < P <= 128). Coordinate warning (2026-10-31): diagonal_phase_doubles compares diagonal z+1 at t and t+Q, i.e. columns -m and -(m+Q) (ldiag_eq_cell_neg); a leftDefect compares one column at two times. The column-coordinate forcing from the doubling point that exists is a window, not a time: DefectFront.left_edge_defect (unconditional, depth t + mP) with DefectFront.exists_unit_defect_and_white_center_of_periodic or LeftCone.left_defect_sourced gives a column-one arrival somewhere in [t, 2t + mP). A window as long as the transient yields no horizon (arrivals at s_k = 2 s_(k-1) + P already satisfy every window), while the actual first failure is at T + O(log T) (first-failure-2adic). The gap between the exact forcing (exponentially sparse arrivals) and the observed law is where any horizon proof must come from; nothing exact here sees the logarithm."
-depends = ["aperiodic-compensation", "problem1"]
+depends = ["aperiodic-compensation", "horizon-certificate"]
 
 [[claim]]
 id = "horizon-certificate"
@@ -97,6 +105,7 @@ statement = "For every transient T ≤ 512 and period 0 < P ≤ 128 the center d
 lean = "Rule30UOR.Horizon.horizon_thirty_two"
 since = "2026-10-31"
 note = "Rule30UOR.Horizon: rows are Nat bit-vectors, so the kernel evaluates the center column directly; shortPeriodsFail 512 128 32 = true by decide (about 70 s), with the checker proved sound against CenterPeriodic (no_center_period_512_128). Each certificate is finite; the open claim is the uniform H(T, P). Extending the ranges costs kernel time linearly in T0 * P0 * H."
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "left-defect-sourcing"
@@ -105,6 +114,7 @@ statement = "Under a periodic center, a left defect at depth k at time t is sour
 lean = "Rule30UOR.LeftCone.left_defect_sourced"
 since = "2026-10-31"
 note = "Rule30UOR.LeftCone: left-permutivity on temporal defects (defect_left_of_agree, from defect_step_linear) iterated from the center; the center hypothesis is free under CenterPeriodic (left_cone_of_right_agrees, hypothesis RightAgrees decidable); the witness is a bounded search, no choice. The coupling law at every depth: the left defect field at times >= T is a function of the right column-one defect sequence and the periodic center."
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "first-failure-2adic"
@@ -112,6 +122,7 @@ status = "refuted"
 statement = "The first time a hypothetical center period (T, P) fails is governed by the 2-adic data of P and T (the scale mismatch between the periodically seeded right half and the doubling-time reconstruction of the left edge), so the closing invariant can be read off the first failing comparison."
 since = "2026-10-31"
 note = "experiments/first_failure.py (2026-10-31): over T in [256, 4352) and P in [1, 256], delay(T, P) = first d with center(T+d+P) != center(T+d) follows the fair-bit law Pr[d >= k] = 2^-k to within 0.3% for k <= 10 in every class by v2(P), P mod 8, T mod 8, and for P = 2^k by T mod P (residue means 0.73 to 1.23 at P = 32 over 128 samples each, noise). The first failure carries no 2-adic signature; an obstruction, if any, is exact and not statistical, and cannot be read from where a period first breaks."
+depends = ["aperiodic-compensation"]
 
 [[claim]]
 id = "ledger-diagonal"
@@ -120,6 +131,7 @@ statement = "The center column is the complement of the diagonal of the carry le
 lean = "Rule30UOR.Ledger.centerPeriodic_iff_ledgerPeriodic"
 since = "2026-10-31"
 note = "Rule30UOR.Ledger: phi = phiLinear XOR (carry << 1) exactly; row t = phiLinearPow t 1 XOR winWitt 0 t; linear_center proves bit t of q^t is 1 by Frobenius (q^(2m) = q(X^2)^m, phiLinPow_spread) without binomial sums; bits t+1 and t-1 of q^t are the trailing-ones parity a(t) of t (linear_above_center, linear_below_center; a(2m) = 0, a(2m+1) = not a(m)). The center's update in ledger coordinates (center_succ_ledger): center(t+1) = rule(a(t) XOR l(t, t+1), not l(t, t), a(t) XOR l(t, t-1)) with l(t, j) = bit j of winWitt 0 t. The nonlinearity of Rule 30 sits entirely in the carries, and the readout is the single level-crossing operation (decode, accumulate exactly, encode once). aperiodic-compensation in this form: the ledger diagonal is not eventually periodic."
+depends = ["problem1"]
 
 [[claim]]
 id = "periodic-finite-kernel"
@@ -128,6 +140,7 @@ statement = "A periodic center has a finite 2-kernel: under CenterPeriodic T P e
 lean = "Rule30UOR.Automatic.centerKernelFinite_of_centerPeriodic"
 since = "2026-10-31"
 note = "Rule30UOR.Automatic, choice-free with an explicit family (Allouche-Shallit Thm 5.4.2, contrapositive form). Consequence: problem1_of_infinite_kernel, Problem 1 follows from CenterInfiniteKernel."
+depends = ["problem1"]
 
 [[claim]]
 id = "center-infinite-kernel"
@@ -189,3 +202,12 @@ statement = "There are a base b >= 2 and a time t such that the dilation sequenc
 since = "2026-10-31"
 note = "Sufficient for Problem 1 (base-generic-reduction). dyadic-column-aperiodic is the instance b = 2, t = 1 with its 2-adic continuity caveat; a base that is not a power of two has no such caveat supplied by the orbit's Witt structure. The mechanical task is to choose (b, t) against the orbit's own scale and prove the aperiodicity of one sequence."
 depends = ["base-generic-reduction"]
+
+[[claim]]
+id = "kappa-collapse"
+status = "proved"
+statement = "kappa-collapse at scale K (every cone window response at scales >= K vanishes, i.e. the carries no longer reach the center) is exactly a center period 2^K from time 0; the horizon certificate refutes it for K <= 7, and Problem 1 is equivalent to no kappa-collapse at any scale together with no period that is not a power of two."
+lean = "Rule30UOR.Automatic.kappaCollapse_iff"
+since = "2026-10-31"
+note = "Rule30UOR.Automatic: KappaCollapse K := all response r k = false for K <= k, r < 2^k; center_mod_of_kappaCollapse (the center is then a function of n mod 2^K), centerPeriodic_of_kappaCollapse, kappaCollapse_of_centerPeriodic, no_kappaCollapse_small (K <= 7), no_kappaCollapse_of_problem1. The collapse of the leaves is the root: the carries' uniform vanishing across scales is the period itself."
+depends = ["ledger-diagonal", "horizon-certificate"]

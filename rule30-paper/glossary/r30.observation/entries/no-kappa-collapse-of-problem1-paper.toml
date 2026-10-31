@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-kappa-collapse-of-problem1-paper"
+category = "proof-constant"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat))) (pi ((explicit h (const r30.joint::problem-one))) (app (const lexlean.core::lnot) (app (const r30.observation::kappa-collapse) (local K)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Automatic"
+name = "Rule30UOR.Automatic.no_kappaCollapse_of_problem1_paper"
+
+[[form]]
+id = "no-kappa-collapse-of-problem1-paper"
+channel = "math"
+surface = "nokappacollapseofproblem1paper"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name nokappacollapseofproblem1paper) (paren (seq (slot 0))))"
