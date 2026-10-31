@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cross"
+category = "function"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Intersection"
+name = "Rule30UOR.Intersection.cross"
+
+[[form]]
+id = "cross"
+channel = "math"
+surface = "cross"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name cross) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

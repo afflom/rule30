@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "three-class-of-center-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P)))) (app (const r30.observation::three-class-against-trailing) (local k) (app (const lexlean.std.nat::add) (local T) (nat 1)) (local P))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.threeClass_of_centerPeriodic"
+
+[[form]]
+id = "three-class-of-center-periodic"
+channel = "math"
+surface = "threeclassofcenterperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name threeclassofcenterperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

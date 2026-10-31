@@ -3534,5 +3534,45 @@ Close the goal with \(\lexeme{r30.observation::not-three-periodic-of-center-peri
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{center-periodic-twopow-mul}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(centerperiodic(T, P)\), then \(centerperiodic(T, twopow(k) * P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-twopow-mul}(T, P, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{three-off-class-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(centerperiodic(T, P)\), then \(threeoffclassperiodic(k, T + 2, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::three-off-class-of-center-periodic}(T, P, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{three-class-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(centerperiodic(T, P)\), then \(threeclassagainsttrailing(k, T + 1, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::three-class-of-center-periodic}(T, P, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{carry-xor}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\), \(wittcarry(wittxor(a, b)) = wittxor(wittxor(wittcarry(a), wittcarry(b)), cross(a, b))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::carry-xor}(a, b)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{carry-row-split}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\), \(wittcarry(wittrow(m)) = wittxor(wittxor(wittcarry(wittlinpow(m, 1)), wittcarry(wittwin(0, m))), cross(wittlinpow(m, 1), wittwin(0, m)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::carry-row-split}(m)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -93,4 +93,28 @@ theorem linear_self_intersection_odd_one (m : Nat) :
     show (1 : Nat) = 2 * 0 + 1 by rfl, trinomialParity_odd_odd, trinomialParity_zero_right]
   rfl
 
+/-! ## The self-intersection of a sum: linear, cross and ledger terms
+
+`row m = q^m ⊕ W_m` (`row_eq_linear_xor_ledger`), and the intersection of a sum with its translate
+splits into the two self-intersections and the cross term. -/
+
+/-- The cross term of the self-intersection: `a ∧ σb ⊕ b ∧ σa`. -/
+def cross (a b : Nat) : Nat := (a &&& (b <<< 1)) ^^^ (b &&& (a <<< 1))
+
+/-- **`carry (a ⊕ b) = carry a ⊕ carry b ⊕ cross a b`.** -/
+theorem carry_xor (a b : Nat) : carry (a ^^^ b) = (carry a ^^^ carry b) ^^^ cross a b := by
+  apply Nat.eq_of_testBit_eq
+  intro i
+  show ((a ^^^ b) &&& ((a ^^^ b) <<< 1)).testBit i =
+    (((a &&& (a <<< 1)) ^^^ (b &&& (b <<< 1))) ^^^ ((a &&& (b <<< 1)) ^^^ (b &&& (a <<< 1)))).testBit i
+  simp only [Nat.testBit_and, Nat.testBit_xor, Nat.testBit_shiftLeft]
+  cases a.testBit i <;> cases b.testBit i <;> cases decide (1 ≤ i) <;> cases a.testBit (i - 1) <;>
+    cases b.testBit (i - 1) <;> rfl
+
+/-- **The carries of a row are the linear self-intersection, the cross term and the ledger
+self-intersection.** -/
+theorem carry_row_split (m : Nat) :
+    carry (row m) = (carry (phiLinearPow m 1) ^^^ carry (winWitt 0 m)) ^^^ cross (phiLinearPow m 1) (winWitt 0 m) := by
+  rw [row_eq_linear_xor_ledger, carry_xor]
+
 end Rule30UOR.Intersection

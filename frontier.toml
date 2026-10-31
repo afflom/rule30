@@ -327,7 +327,7 @@ status = "proved"
 statement = "The carry is the intersection of a row with its own translate (the characteristic-1 content of rule 30, the idempotent OR, against the characteristic-2 linear part whose Frobenius is the gasket). On the linear rows the self-intersection is exact: carry (q^(2m)) = 0 and carry (q^(2m+1)) is the run boundary of q^m; the linear self-carry lives on odd rows only."
 lean = "Rule30UOR.Intersection.linear_self_intersection_even"
 since = "2026-10-31"
-note = "Rule30UOR.Intersection: rowBit_carry, rowBit_linear, linear_self_intersection_even, linear_self_intersection_odd_rise/_fall/_one, trinomialParity_zero_right. Reading of UOR-Foundation/F1 (intersection theory over the single-element field): the crux there is a positivity of a Frobenius-twisted self-intersection; here it is the parity of gasket-weighted self-intersections, and there is no sign. A facet, not a route: the full self-intersection of row m = q^m XOR W_m has the cross terms and the ledger term W_m AND shift W_m, and the measured linear self-carry diagonal is a nontrivial automatic sequence."
+note = "Rule30UOR.Intersection: rowBit_carry, rowBit_linear, linear_self_intersection_even, linear_self_intersection_odd_rise/_fall/_one, trinomialParity_zero_right, cross, carry_xor (carry (a XOR b) = carry a XOR carry b XOR cross a b), carry_row_split (the carries of row m are the linear self-intersection of q^m, the ledger self-intersection of W_m, and the cross term q^m AND shift W_m XOR W_m AND shift q^m). Reading of UOR-Foundation/F1 (intersection theory over the single-element field): the crux there is a positivity of a Frobenius-twisted self-intersection; here it is the parity of gasket-weighted self-intersections, and there is no sign. A facet, not a route: the measured linear self-carry diagonal is a nontrivial automatic sequence."
 depends = ["ledger-diagonal"]
 
 [[claim]]
@@ -347,3 +347,12 @@ lean = "Rule30UOR.StableKernel.dyadicColumnAperiodic_iff_stable"
 since = "2026-10-31"
 note = "Rule30UOR.StableKernel: trinomialParity_dyadic_stable(_iter), stableKernel, trinomialParity_eq_stableKernel, trinomialParity_row_succ, stableKernel_succ/_zero/_one (the inverse recursion), trinomialParity_twopow_pred, stableKernel_zero, stableConv, conv_eq_stableConv, stableFormula, interiorFormula_twopow_eq_stableFormula, timeParity_twopow, center_twopow_eq_stableFormula, StableFormulaPeriodic, StableFormulaAperiodic, dyadicColumnAperiodic_iff_stable, problem1_of_stableFormulaAperiodic. Equivalent to the step identity dyadic_column_step (the early rows' contribution is constant across scales); an exact restatement with a scale-free kernel, not a route by itself."
 depends = ["dilation-reduction", "edge-parity"]
+
+[[claim]]
+id = "dyadic-renormalization"
+status = "proved"
+statement = "The obligation renormalizes: the ruler trailingParity moves across 2^k P only on the class n = -1 mod 2^k, where it is the ruler one scale up twisted by [k odd]. Under a center period P the deep interior is exactly 2^k P-periodic off the class t = 1 mod 2^k, and on the class the sampled sequence u -> interiorThreeDiagonal (2^k u + 1) satisfies the same equation against the ruler with the same period P, for every k."
+lean = "Rule30UOR.Band.threeClass_of_centerPeriodic"
+since = "2026-10-31"
+note = "Rule30UOR.Band: trailingParity_add_twopow_mul, trailingParity_twopow_mul_sub_one, centerPeriodic_twopow_mul, ThreeOffClassPeriodic, threeOffClass_of_centerPeriodic (the sparsity of Path 1 made exact: the difference across 2^k P vanishes on windows of length 2^k - 1), ThreeClassAgainstTrailing, threeClass_of_centerPeriodic (a periodic center is a fixed point of dyadic renormalization of the obligation). With kernel finiteness the class sequences u -> center (2^k u + 1) repeat across scales, so the sampled deep interiors at two scales differ by a constant. Exact structure; no contradiction derived."
+depends = ["three-diagonal-band"]

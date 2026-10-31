@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "three-off-class-periodic"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.ThreeOffClassPeriodic"
+
+[[form]]
+id = "three-off-class-periodic"
+channel = "math"
+surface = "threeoffclassperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name threeoffclassperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

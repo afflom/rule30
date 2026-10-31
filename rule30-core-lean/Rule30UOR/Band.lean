@@ -575,4 +575,95 @@ theorem not_threePeriodic_of_centerPeriodic (T P S Q : Nat) (hP : 0 < P) (hQ : 0
     (hc : Rule30UOR.Scale.CenterPeriodic T P) : ¬ ThreePeriodic S Q :=
   fun h3 => interiorThree_no_period_of_centerPeriodic T P S Q hP hQ hc h3
 
+/-! ## The obligation is self-similar across the dyadic scales
+
+The ruler `trailingParity` moves across `2^k P` only on the class `n ≡ −1 (mod 2^k)`, and there
+it is the ruler one scale up: `trailingParity (2^k u − 1) = [k odd] ⊕ trailingParity (u − 1)`.
+Under a center period `P` the deep interior is therefore exactly `2^k P`-periodic off the class
+`t ≡ 1 (mod 2^k)`, and on that class the sequence `u ↦ interiorThreeDiagonal (2^k u + 1)`
+satisfies the same equation against the ruler with the same period `P`. -/
+
+/-- The ruler does not move across a multiple of `2^k` unless `2^k ∣ n + 1`. -/
+theorem trailingParity_add_twopow_mul : ∀ k n P, (n + 1) % twopow k ≠ 0 →
+    trailingParity (n + twopow k * P) = trailingParity n
+  | 0, n, P, h => absurd (Nat.mod_one (n + 1)) h
+  | k + 1, n, P, h => by
+    have h2 : twopow (k + 1) = 2 * twopow k := by rw [twopow_succ]; cfomega
+    rw [h2] at h ⊢
+    rw [Nat.mul_assoc]
+    rcases Nat.mod_two_eq_zero_or_one n with he | ho
+    · obtain ⟨m, hm⟩ : ∃ m, n = 2 * m := ⟨n / 2, by cfomega⟩
+      subst hm
+      rw [show 2 * m + 2 * (twopow k * P) = 2 * (m + twopow k * P) by cfomega, trailingParity_even,
+        trailingParity_even]
+    · obtain ⟨m, hm⟩ : ∃ m, n = 2 * m + 1 := ⟨n / 2, by cfomega⟩
+      subst hm
+      have h' : (m + 1) % twopow k ≠ 0 := by
+        intro h0
+        apply h
+        rw [show 2 * m + 1 + 1 = 2 * (m + 1) by cfomega, Nat.mul_mod_mul_left, h0]
+      rw [show 2 * m + 1 + 2 * (twopow k * P) = 2 * (m + twopow k * P) + 1 by cfomega, trailingParity_odd,
+        trailingParity_add_twopow_mul k m P h', trailingParity_odd]
+
+/-- On the class `n = 2^k u − 1` the ruler is the ruler one scale up, twisted by `[k odd]`. -/
+theorem trailingParity_twopow_mul_sub_one : ∀ k u, 1 ≤ u →
+    trailingParity (twopow k * u - 1) = bxor (decide (k % 2 = 1)) (trailingParity (u - 1))
+  | 0, u, _ => by
+    show trailingParity (1 * u - 1) = bxor (decide (0 % 2 = 1)) (trailingParity (u - 1))
+    rw [Nat.one_mul]; cases trailingParity (u - 1) <;> rfl
+  | k + 1, u, hu => by
+    have h2 : twopow (k + 1) = 2 * twopow k := by rw [twopow_succ]; cfomega
+    have hpos : 1 ≤ twopow k * u := Nat.mul_pos (Rule30UOR.Scale.twopow_pos k) hu
+    rw [h2, Nat.mul_assoc, show 2 * (twopow k * u) - 1 = 2 * (twopow k * u - 1) + 1 by cfomega,
+      trailingParity_odd, trailingParity_twopow_mul_sub_one k u hu]
+    rcases Nat.mod_two_eq_zero_or_one k with he | ho
+    · rw [decide_eq_false (by cfomega : ¬ k % 2 = 1), decide_eq_true (by cfomega : (k + 1) % 2 = 1)]
+      cases trailingParity (u - 1) <;> rfl
+    · rw [decide_eq_true ho, decide_eq_false (by cfomega : ¬ (k + 1) % 2 = 1)]
+      cases trailingParity (u - 1) <;> rfl
+
+/-- Off the class `t ≡ 1 (mod 2^k)` the deep interior is `2^k P`-periodic from `T`. -/
+def ThreeOffClassPeriodic (k T P : Nat) : Prop :=
+  ∀ t, T ≤ t → (t - 1) % twopow k ≠ 0 → interiorThreeDiagonal (t + twopow k * P) = interiorThreeDiagonal t
+
+/-- On the class `t = 2^k u + 1` the deep interior satisfies the same equation against the ruler
+with the same period `P`. -/
+def ThreeClassAgainstTrailing (k T P : Nat) : Prop :=
+  ∀ u, T ≤ u → bxor (interiorThreeDiagonal (twopow k * (u + P) + 1)) (interiorThreeDiagonal (twopow k * u + 1)) =
+    bxor (trailingParity (u + P - 1)) (trailingParity (u - 1))
+
+theorem centerPeriodic_twopow_mul (T P k : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T P) :
+    Rule30UOR.Scale.CenterPeriodic T (twopow k * P) :=
+  fun t ht => Rule30UOR.Scale.center_mul hc (twopow k) t ht
+
+/-- **Off-class periodicity.** -/
+theorem threeOffClass_of_centerPeriodic (T P k : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T P) :
+    ThreeOffClassPeriodic k (T + 2) P := by
+  intro t ht hcl
+  have h := (centerPeriodic_iff_threeAgainstTrailing (T + 2) (twopow k * P) (by cfomega)).1
+    (centerPeriodic_twopow_mul (T + 2) P k (fun s hs => hc s (by cfomega))) t ht
+  have hr : trailingParity (t + twopow k * P - 2) = trailingParity (t - 2) := by
+    rw [show t + twopow k * P - 2 = (t - 2) + twopow k * P by cfomega]
+    exact trailingParity_add_twopow_mul k (t - 2) P (by rw [show t - 2 + 1 = t - 1 by cfomega]; exact hcl)
+  rw [hr] at h
+  exact bxor_aux_cancel _ _ (interiorThreeDiagonal t)
+    (by rw [h]; cases trailingParity (t - 2) <;> cases interiorThreeDiagonal t <;> rfl)
+
+/-- **On-class renormalization**: the same obligation, same period, one scale up. -/
+theorem threeClass_of_centerPeriodic (T P k : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T P) :
+    ThreeClassAgainstTrailing k (T + 1) P := by
+  intro u hu
+  have hu1 : 1 ≤ u := by cfomega
+  have hpos : 1 ≤ twopow k * u := Nat.mul_pos (Rule30UOR.Scale.twopow_pos k) hu1
+  have h := (centerPeriodic_iff_threeAgainstTrailing (T + 2) (twopow k * P) (by cfomega)).1
+    (centerPeriodic_twopow_mul (T + 2) P k (fun s hs => hc s (by cfomega))) (twopow k * u + 1)
+    (by have := lt_twopow k; have := Nat.le_mul_of_pos_left u (Rule30UOR.Scale.twopow_pos k); cfomega)
+  rw [show twopow k * u + 1 + twopow k * P = twopow k * (u + P) + 1 by rw [Nat.mul_add]; cfomega] at h
+  rw [h, show twopow k * (u + P) + 1 - 2 = twopow k * (u + P) - 1 by
+      have := Nat.le_mul_of_pos_left (u + P) (Rule30UOR.Scale.twopow_pos k); cfomega,
+    show twopow k * u + 1 - 2 = twopow k * u - 1 by cfomega,
+    trailingParity_twopow_mul_sub_one k (u + P) (by cfomega),
+    trailingParity_twopow_mul_sub_one k u hu1]
+  cases decide (k % 2 = 1) <;> cases trailingParity (u + P - 1) <;> cases trailingParity (u - 1) <;> rfl
+
 end Rule30UOR.Band

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-periodic-twopow-mul"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P)))) (app (const r30.scale::center-periodic) (local T) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local k)) (local P)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.centerPeriodic_twopow_mul"
+
+[[form]]
+id = "center-periodic-twopow-mul"
+channel = "math"
+surface = "centerperiodictwopowmul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerperiodictwopowmul) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

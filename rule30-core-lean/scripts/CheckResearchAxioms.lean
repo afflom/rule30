@@ -49,6 +49,8 @@ import Rule30UOR.KernelParity
 import Rule30UOR.Intersection
 import Rule30UOR.Band
 import Rule30UOR.StableKernel
+import Rule30UOR.DyadicRow
+import Rule30UOR.LeftBand
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

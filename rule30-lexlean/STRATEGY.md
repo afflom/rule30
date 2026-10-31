@@ -3092,4 +3092,29 @@ be `2PQ`-periodic, `trailingDiff_not_periodic`), so a periodic center forces the
 exactly "period-doubling plus periodic", a specific 2-automatic non-periodic sequence, and Problem 1
 is the statement that it never is.
 
+**The obligation renormalizes (2026-10-31, from the reading of Theorems 4.139–4.197).** The ruler
+moves across `2^k P` only on one residue class: `trailingParity (n + 2^k P) = trailingParity n`
+unless `2^k ∣ n + 1` (`trailingParity_add_twopow_mul`), and on that class it is the ruler one scale
+up, `trailingParity (2^k u − 1) = [k odd] ⊕ trailingParity (u − 1)`
+(`trailingParity_twopow_mul_sub_one`). Under a center period `P` (hence `2^k P` for every `k`,
+`centerPeriodic_twopow_mul`), the deep interior is therefore exactly `2^k P`-periodic off the class
+`t ≡ 1 (mod 2^k)` (`threeOffClass_of_centerPeriodic`: `Δ_{2^k P} interiorThreeDiagonal` vanishes on
+windows of length `2^k − 1`, Path 1's sparsity made exact), and on the class the sampled sequence
+`u ↦ interiorThreeDiagonal (2^k u + 1)` satisfies **the same equation against the ruler with the same
+period `P`** (`threeClass_of_centerPeriodic`, `ThreeClassAgainstTrailing k T P`): the twist `[k odd]`
+cancels across the period. So a periodic center forces a fixed point of renormalization: the
+obligation `ThreeAgainstTrailing` reproduces itself on every dyadic class `2^k u + 1`, with the
+same `P`, while off the classes the deep interior is periodic. Combined with the finite kernel a
+period implies (`kernel2Finite_of_centerPeriodic`), the class sequences `u ↦ center (2^k u + 1)` are
+kernel sequences, so two scales `k < k'` agree, and the sampled deep interiors at those scales differ
+by the constant `[k odd] ⊕ [k' odd]`. No contradiction is derived; the structure is exact and in the
+register. Path 2 (peeling the linear self-carry): `interiorThree m` does still contain the
+self-carry of `q^m` (its bits `≥ 3`); the row-level split `carry (a ⊕ b) = carry a ⊕ carry b ⊕
+cross a b` is now a theorem (`Rule30UOR.Intersection.carry_xor`), so the deep carries are the sum of
+the linear self-intersection (odd rows only, run boundaries), the cross term `q^m ∧ σW ⊕ W ∧ σq^m`,
+and the ledger self-intersection `W ∧ σW`; the linear part's diagonal is a measured nontrivial
+automatic sequence, so peeling it does not change the obligation's nature unless its automaticity is
+proved, which would move the obligation to the cross and ledger terms alone. Path 3 (telescoping
+`stableFormula`) is `dyadic_column_step` in the stable vocabulary and is not re-proved.
+
 Problem 1 remains unproved.

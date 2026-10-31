@@ -235,6 +235,12 @@ suite = "register"
 statement = "The trinomial kernel is dyadically stable: trinomialParity (2^(j+1)-1-m) d = trinomialParity (2^j-1-m) d for m, d < 2^j, so the dyadic column reads the carries of row m through the fixed kernel stableKernel m (the inverse 1/q^(m+1); row 2^j-1 is 1/q = 110110... below degree 2^j): center (2^j) = not stableFormula j for j >= 1, and DyadicColumnAperiodic iff StableFormulaAperiodic."
 
 [[id]]
+id = "dyadic-renormalization"
+level = "build"
+suite = "register"
+statement = "The obligation renormalizes: the ruler trailingParity moves across 2^k P only on the class n = -1 mod 2^k, where it is the ruler one scale up twisted by [k odd]. Under a center period P the deep interior is exactly 2^k P-periodic off the class t = 1 mod 2^k, and on the class the sampled sequence u -> interiorThreeDiagonal (2^k u + 1) satisfies the same equation against the ruler with the same period P, for every k."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

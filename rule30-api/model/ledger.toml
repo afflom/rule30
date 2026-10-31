@@ -274,6 +274,13 @@ feature = "interfaces/stable-kernel.md"
 evidence = "frontier check: Rule30UOR.StableKernel.dyadicColumnAperiodic_iff_stable kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "dyadic-renormalization"
+level = "build"
+statement = "The obligation renormalizes: the ruler trailingParity moves across 2^k P only on the class n = -1 mod 2^k, where it is the ruler one scale up twisted by [k odd]. Under a center period P the deep interior is exactly 2^k P-periodic off the class t = 1 mod 2^k, and on the class the sampled sequence u -> interiorThreeDiagonal (2^k u + 1) satisfies the same equation against the ruler with the same period P, for every k."
+feature = "interfaces/dyadic-renormalization.md"
+evidence = "frontier check: Rule30UOR.Band.threeClass_of_centerPeriodic kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."

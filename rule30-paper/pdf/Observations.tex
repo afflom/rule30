@@ -3088,4 +3088,39 @@ For every natural number \(T\) and natural number \(P\) and natural number \(S\)
 \begin{proof}
 The goal follows from \(\operatorname{notthreeperiodicofcenterperiodic}(T, P, S, Q)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:center-periodic-twopow-mul}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{centerperiodic}(T, \operatorname{twopow}(k) \cdot P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerperiodictwopowmul}(T, P, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:three-off-class-of-center-periodic}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{threeoffclassperiodic}(k, T + 2, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{threeoffclassofcenterperiodic}(T, P, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:three-class-of-center-periodic}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then \(\operatorname{threeclassagainsttrailing}(k, T + 1, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{threeclassofcenterperiodic}(T, P, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:carry-xor}
+For every natural number \(a\) and natural number \(b\), \(\operatorname{wittcarry}(\operatorname{wittxor}(a, b)) = \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittcarry}(a), \operatorname{wittcarry}(b)), \operatorname{cross}(a, b))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{carryxor}(a, b)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:carry-row-split}
+For every natural number \(m\), \(\operatorname{wittcarry}(\operatorname{wittrow}(m)) = \operatorname{wittxor}(\operatorname{wittxor}(\operatorname{wittcarry}(\operatorname{wittlinpow}(m, 1)), \operatorname{wittcarry}(\operatorname{wittwin}(0, m))), \operatorname{cross}(\operatorname{wittlinpow}(m, 1), \operatorname{wittwin}(0, m)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{carryrowsplit}(m)\).
+\end{proof}
 \end{document}

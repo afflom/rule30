@@ -235,3 +235,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.StableKernel.dyadicColumnAperiodic_iff_stable for stable-kernel
     When the suite exercises stable-kernel
     Then its oracle accepts it: frontier check: Rule30UOR.StableKernel.dyadicColumnAperiodic_iff_stable kernel-checked under propext and Quot.sound and published
+
+  @dyadic-renormalization @build
+  Scenario: The obligation renormalizes: the ruler trailingParity moves across 2^k P only on the class n = -1 mod 2^k, where it is the ruler one scale up twisted by [k odd]. Under a center period P the deep interior is exactly 2^k P-periodic off the class t = 1 mod 2^k, and on the class the sampled sequence u -> interiorThreeDiagonal (2^k u + 1) satisfies the same equation against the ruler with the same period P, for every k.
+    Given frontier.toml names Rule30UOR.Band.threeClass_of_centerPeriodic for dyadic-renormalization
+    When the suite exercises dyadic-renormalization
+    Then its oracle accepts it: frontier check: Rule30UOR.Band.threeClass_of_centerPeriodic kernel-checked under propext and Quot.sound and published
