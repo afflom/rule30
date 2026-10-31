@@ -7,6 +7,10 @@ This repository is stricter than the verifier: it forbids `Classical.choice` (se
 "No `Classical.choice`" below).
 
 ## Current proof frontier (2026-10-28)
+The machine-readable register of claims is [`frontier.toml`](../frontier.toml)
+(`bin/r30 frontier list`); this file is the prose record. Tooling is described in
+[`AGENTS.md`](../AGENTS.md).
+
 Problem 1 remains open in this repository. The sections below record the development of the
 strategy; earlier proposed obligations are not assumptions or established consequences of a
 periodic center.
@@ -2349,7 +2353,7 @@ refute a stronger theorem about linked windows. Problem 1 remains unproved.
 
 ### Finite diagnostic of white updates versus black resets
 
-Run `python3 scripts/diagnose_qadic_windows.py` to enumerate finite seeded
+Run `bin/r30 experiment run diagnose_qadic_windows` to enumerate finite seeded
 windows. The default bounds are `0<=b<=512`, `1<=Q<=128`, and `3<=k<=Q`.
 The filters check `LeadingAdvance Q b k`, `CenterCleanThrough Q b k`,
 `WhiteCenterGap b (k-1)`, and the actual `HeadImportPath` from `b+k-2` to
@@ -2542,7 +2546,7 @@ black/white-gated mirror forever. Jen's theorem makes each of those columns
 aperiodic; the remaining obligation is to exclude their aperiodic
 compensation. Nothing here does so.
 
-**Finite negatives.** `scripts/diagnose_front_coupling.py` computes the
+**Finite negatives.** `experiments/diagnose_front_coupling.py` computes the
 seeded orbit for `Q <= 64`, `t < 1024`, and checks the coupling law at every
 agreeing step. It also records four measurements that rule out candidate
 descent quantities. These are diagnostics only, not theorem premises.

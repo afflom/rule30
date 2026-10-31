@@ -1,15 +1,15 @@
 name = "rule30core"
 version = "0.1.0"
-defaultTargets = ["LexLeanRuntime", "Ruliology", "Rule30UOR"]
+defaultTargets = ["LexLeanRuntime", "Rule30UOR"]
+
+[[require]]
+name = "rule30prize"
+path = "../Rule30PrizeKit/lean"
 
 [[lean_lib]]
 name = "LexLeanRuntime"
 roots = ["LexLeanRuntime.Portable", "LexLeanRuntime.Collections"]
 
 [[lean_lib]]
-name = "Ruliology"
-roots = ["Ruliology.CellularAutomata.Rule30Jen", "Ruliology.CellularAutomata.Rule30Diagonals", "Ruliology.CellularAutomata.Rule30Prize", "Ruliology.CellularAutomata.Rule30MaskedJen", "Ruliology.CellularAutomata.Rule30Window", "Ruliology.CellularAutomata.Rule30RightPeriods", "Ruliology.CellularAutomata.Rule30XorRigidity"]
-
-[[lean_lib]]
 name = "Rule30UOR"
-roots = ["Rule30UOR.Constructive", "Rule30UOR.KitConstructive", "Rule30UOR.Core", "Rule30UOR.Kit", "Rule30UOR.Intent", "Rule30UOR.ZeroDiagonals", "Rule30UOR.CompilePoints", "Rule30UOR.Right", "Rule30UOR.Fixed", "Rule30UOR.Project", "Rule30UOR.Scale", "Rule30UOR.Rational", "Rule30UOR.Interfaces", "Rule30UOR.TemporalDefect", "Rule30UOR.WittDefect", "Rule30UOR.Collision", "Rule30UOR.DefectSource", "Rule30UOR.DefectFront", "Rule30UOR.MaskedObservation", "Rule30UOR.CentralCollision", "Rule30UOR.Frontier"]
+roots = ["Rule30UOR.Constructive", "Rule30UOR.KitConstructive", "Rule30UOR.Core", "Rule30UOR.Kit", "Rule30UOR.Intent", "Rule30UOR.ZeroDiagonals", "Rule30UOR.CompilePoints", "Rule30UOR.Right", "Rule30UOR.Fixed", "Rule30UOR.Project", "Rule30UOR.Scale", "Rule30UOR.Rational", "Rule30UOR.Interfaces", "Rule30UOR.Interfaces.Part01", "Rule30UOR.Interfaces.Part02", "Rule30UOR.Interfaces.Part03", "Rule30UOR.Interfaces.Part04", "Rule30UOR.Interfaces.Part05", "Rule30UOR.Interfaces.Part06", "Rule30UOR.Interfaces.Part07", "Rule30UOR.Interfaces.Part08", "Rule30UOR.Interfaces.Part09", "Rule30UOR.Interfaces.Part10", "Rule30UOR.Interfaces.Part11", "Rule30UOR.Interfaces.Part12", "Rule30UOR.Interfaces.Part13", "Rule30UOR.Interfaces.Part14", "Rule30UOR.Interfaces.Part15", "Rule30UOR.Interfaces.Part16", "Rule30UOR.Interfaces.Part17", "Rule30UOR.TemporalDefect", "Rule30UOR.WittDefect", "Rule30UOR.Collision", "Rule30UOR.DefectSource", "Rule30UOR.DefectFront", "Rule30UOR.MaskedObservation", "Rule30UOR.CentralCollision", "Rule30UOR.Frontier"]

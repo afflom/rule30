@@ -37,3 +37,7 @@ __pycache__/
 **/verified-latest/*/maps/
 # Historical proof bundles keep their records; current PDFs live at the documented mirrors.
 **/verified-latest/**/*.pdf
+
+# r30 tool scratch
+.r30/
+__pycache__/

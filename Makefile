@@ -1,4 +1,4 @@
-.PHONY: all check-ci core check-research check-research-coverage check-tooling lexlean pdf bridge release-artifacts hooks clean
+.PHONY: r30 all check-ci core check-research check-research-coverage check-tooling lexlean pdf bridge release-artifacts hooks clean
 
 LEXLEAN ?= $(if $(LEXLEAN_BIN),$(LEXLEAN_BIN),$(if $(wildcard .local/bin/lexlean),$(abspath .local/bin/lexlean),lexlean))
 
@@ -24,11 +24,15 @@ lexlean:
 check-tooling:
 	python3 -m unittest discover -s scripts/tests -v
 
+# The command surface: make r30 ARGS="status"
+r30:
+	bin/r30 $(ARGS)
+
 pdf:
 	./scripts/build_release.sh --package-only
 
 bridge:
-	cd rule30-bridge && lake build LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean -i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build
+	cd rule30-bridge && lake build
 	python3 scripts/check_bridge_axioms.py
 
 release-artifacts:

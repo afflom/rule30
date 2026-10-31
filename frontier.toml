@@ -1,0 +1,74 @@
+# The research frontier. Edit with `r30 frontier`; see STRATEGY.md for the prose.
+
+[[claim]]
+id = "problem1"
+status = "open"
+statement = "The center column of Rule 30 from a single black cell is not eventually periodic."
+lean = "Ruliology.CellularAutomata.Rule30Prize.Problem1"
+lexeme = "r30.joint::problem-one"
+since = "2026-10-25"
+note = "Root claim. Every other claim is a reduction, an obstruction, or a refuted route."
+
+[[claim]]
+id = "coupling-law"
+status = "proved"
+statement = "With the center agreeing at t, the next center defect is leftDefect(t,1) XOR ((not center t) AND rightDefect(t,1)); a center period is exactly this coupling at every later time."
+lean = "Rule30UOR.WittDefect.center_periodic_iff_coupling"
+lexeme = "r30.observation::center-defect-coupling"
+since = "2026-10-30"
+note = "Exact restatement of the lag-P difference of the fixed-point equation. Not a refutation."
+
+[[claim]]
+id = "aperiodic-compensation"
+status = "open"
+statement = "Under a hypothetical center period, the two column-one defects (each aperiodic by Jen) cannot satisfy the gated mirror forever. This is the remaining obligation."
+since = "2026-10-28"
+note = "Every proved reduction ends here. A closing argument needs an invariant of the single-seed orbit that the gated mirror violates."
+
+[[claim]]
+id = "q-adic-descent"
+status = "refuted"
+statement = "The q-adic order of the observer defect carries a descent quantity."
+lean = "Rule30UOR.WittDefect.observer_front_q_rank"
+since = "2026-10-30"
+note = "On the seed, qOrder(E_t) is distributed like a random polynomial (ratio 1/4 per level, all Q); R_t = t + Q - O(1). experiments/diagnose_front_coupling.py."
+
+[[claim]]
+id = "front-slack-descent"
+status = "refuted"
+statement = "Phi_t = R_t - k_t (q-rank minus front depth) is a non-increasing potential."
+since = "2026-10-30"
+note = "Increases on most steps of every class. experiments/diagnose_front_coupling.py."
+
+[[claim]]
+id = "evaluation-point"
+status = "refuted"
+statement = "Evaluating the observer polynomial at a constant point (0, 1, omega, omega^2) constrains the center."
+since = "2026-10-30"
+note = "0 is the center itself, 1 is a coin, omega and omega^2 are conjugate and random-polynomial noise."
+
+[[claim]]
+id = "gate-phase-opposition"
+status = "refuted"
+statement = "At a coupled arrival the gate phase is the negative of centerSign * rightPhase(start, 2)."
+lean = "Rule30UOR.WittDefect.head_import_path_rejects_negative_gate"
+lexeme = "r30.observation::head-import-path-rejects-negative-gate"
+since = "2026-10-30"
+note = "The sign is positive on every admissible window (head_import_path_gate_phase); the opposition is false under a periodic center, so no contradiction follows from it."
+
+[[claim]]
+id = "band-engines"
+status = "refuted"
+statement = "The lhBandAgree / prefix-tail / late-scale engine hypothesis bundles refute a periodic center."
+lean = "Rule30UOR.Interfaces.lhBandAgree_engine_hypotheses_unsat"
+since = "2026-10-28"
+note = "Batch 86: the bundles imply False with no periodicity premise, so they are vacuous as engines. problem1_iff_engine_input is an equivalence, not a discharge."
+
+[[claim]]
+id = "recurrent-central-collision"
+status = "proved"
+statement = "Problem 1 is equivalent to: under every hypothetical center period, central collisions do not occur arbitrarily late in the band of width 2P."
+lean = "Rule30UOR.CentralCollision.problem1_iff_no_recurrent_central_collision"
+lexeme = "r30.frontier::problem-one-iff-no-recurrent-central-collision"
+since = "2026-10-27"
+note = "Band form since the choice elimination; the fixed-column form needs the infinite pigeonhole principle."

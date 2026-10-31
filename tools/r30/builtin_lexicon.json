@@ -1,0 +1,1890 @@
+{
+ "entries": {
+  "lexlean.core::a": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.a",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::allowaxioms": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.allowaxioms",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::alternative": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.alternative",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::an": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.an",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::and": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.and",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::and-intro": {
+   "arity": 2,
+   "associativity": null,
+   "category": "proof-constant",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "And.intro"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((implicit a (sort prop)) (implicit b (sort prop)) (explicit left (local a)) (explicit right (local b))) (app (const lexlean.core::land) (local a) (local b)))",
+   "surface": "andintro"
+  },
+  "lexlean.core::apply-verb": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.apply-verb",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::arrow": {
+   "arity": 2,
+   "associativity": "right",
+   "category": "infix-function",
+   "denotation": {
+    "constructor": "logic.arrow",
+    "kind": "core"
+   },
+   "frame": "infix",
+   "precedence": 25,
+   "signature": "(pi ((explicit p (sort prop)) (explicit q (sort prop))) (sort prop))",
+   "surface": "\u2192"
+  },
+  "lexlean.core::as": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.as",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::assume": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.assume",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::at": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.at",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::backward": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.backward",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::begin": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.begin",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::bind": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.bind",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::brace-close": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.brace-close",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::brace-open": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.brace-open",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::bracket-close": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.bracket-close",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::bracket-open": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.bracket-open",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::branch-word": {
+   "arity": 0,
+   "associativity": null,
+   "category": "label-word",
+   "denotation": {
+    "constructor": "concept.branch",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::by": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.by",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::case-word": {
+   "arity": 0,
+   "associativity": null,
+   "category": "label-word",
+   "denotation": {
+    "constructor": "concept.case",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::cases-noun": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.cases-noun",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::close": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.close",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::colon": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.colon",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::comma": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.comma",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::consider": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.consider",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::defined": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.defined",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::display-close": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.display-close",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::display-open": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.display-open",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::end": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.end",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::eq": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "constructor": "logic.eq",
+    "kind": "core"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((implicit a (sort (type u))) (explicit b (local a)) (explicit c (local a))) (sort prop))",
+   "surface": "="
+  },
+  "lexlean.core::establish": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.establish",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::every": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.every",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::exactaxioms": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.exactaxioms",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::exactly": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.exactly",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::exists": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.exists",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::exists-intro": {
+   "arity": 2,
+   "associativity": null,
+   "category": "proof-constant",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Exists.intro"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((implicit a (sort (type u))) (implicit p (pi ((explicit x (local a))) (sort prop))) (explicit w (local a)) (explicit h (app (local p) (local w)))) (app (const lexlean.core::exists-op) (lam ((explicit x (local a))) (app (local p) (local x)))))",
+   "surface": "existsintro"
+  },
+  "lexlean.core::exists-op": {
+   "arity": 1,
+   "associativity": null,
+   "category": "function",
+   "denotation": {
+    "constructor": "logic.exists",
+    "kind": "core"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((implicit a (sort (type u))) (explicit p (pi ((explicit x (local a))) (sort prop)))) (sort prop))",
+   "surface": "Exists"
+  },
+  "lexlean.core::first": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.first",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::follows": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.follows",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::for": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.for",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::forward": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.forward",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::from": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.from",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::goal": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.goal",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::heading": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.heading",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::holds": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.holds",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::hyphen": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.hyphen",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::if": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.if",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::iff": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-function",
+   "denotation": {
+    "constructor": "logic.iff",
+    "kind": "core"
+   },
+   "frame": "infix",
+   "precedence": 20,
+   "signature": "(pi ((explicit p (sort prop)) (explicit q (sort prop))) (sort prop))",
+   "surface": "\u2194"
+  },
+  "lexlean.core::iff-intro": {
+   "arity": 2,
+   "associativity": null,
+   "category": "proof-constant",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Iff.intro"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((implicit a (sort prop)) (implicit b (sort prop)) (explicit mp (pi ((explicit h (local a))) (local b))) (explicit mpr (pi ((explicit h (local b))) (local a)))) (app (const lexlean.core::iff) (local a) (local b)))",
+   "surface": "iffintro"
+  },
+  "lexlean.core::implies": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.implies",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::importmodule": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.importmodule",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::induction-noun": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.induction-noun",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::is": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.is",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::land": {
+   "arity": 2,
+   "associativity": "right",
+   "category": "infix-function",
+   "denotation": {
+    "constructor": "logic.and",
+    "kind": "core"
+   },
+   "frame": "infix",
+   "precedence": 35,
+   "signature": "(pi ((explicit p (sort prop)) (explicit q (sort prop))) (sort prop))",
+   "surface": "\u2227"
+  },
+  "lexlean.core::left": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.left",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::lexeme": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.lexeme",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::lnot": {
+   "arity": 1,
+   "associativity": null,
+   "category": "prefix-function",
+   "denotation": {
+    "constructor": "logic.not",
+    "kind": "core"
+   },
+   "frame": "prefix",
+   "precedence": 40,
+   "signature": "(pi ((explicit p (sort prop))) (sort prop))",
+   "surface": "\u00ac"
+  },
+  "lexlean.core::lor": {
+   "arity": 2,
+   "associativity": "right",
+   "category": "infix-function",
+   "denotation": {
+    "constructor": "logic.or",
+    "kind": "core"
+   },
+   "frame": "infix",
+   "precedence": 30,
+   "signature": "(pi ((explicit p (sort prop)) (explicit q (sort prop))) (sort prop))",
+   "surface": "\u2228"
+  },
+  "lexlean.core::math-close": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.math-close",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::math-open": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.math-open",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::noaxioms": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.noaxioms",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::not": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.not",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::of": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.of",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::on": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.on",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::one": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.one",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::only": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.only",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::or": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.or",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::or-inl": {
+   "arity": 1,
+   "associativity": null,
+   "category": "proof-constant",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Or.inl"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((implicit a (sort prop)) (implicit b (sort prop)) (explicit h (local a))) (app (const lexlean.core::lor) (local a) (local b)))",
+   "surface": "orinl"
+  },
+  "lexlean.core::or-inr": {
+   "arity": 1,
+   "associativity": null,
+   "category": "proof-constant",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Or.inr"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((implicit a (sort prop)) (implicit b (sort prop)) (explicit h (local b))) (app (const lexlean.core::lor) (local a) (local b)))",
+   "surface": "orinr"
+  },
+  "lexlean.core::parameters": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.parameters",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::parameters-concept": {
+   "arity": 0,
+   "associativity": null,
+   "category": "label-word",
+   "denotation": {
+    "constructor": "concept.parameters",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::paren-close": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.paren-close",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::paren-open": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.paren-open",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::period": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.period",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::premise-word": {
+   "arity": 0,
+   "associativity": null,
+   "category": "label-word",
+   "denotation": {
+    "constructor": "concept.premise",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::proceed": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.proceed",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::reference": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.reference",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::reflexivity": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.reflexivity",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::rewrite-verb": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.rewrite-verb",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::right": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.right",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::rule": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.rule",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::select": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.select",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::semicolon": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.semicolon",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::simplify-verb": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.simplify-verb",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::start": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.start",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::step": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.step",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::such": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.such",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::that": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.that",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::the": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.the",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::then": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.then",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::there": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.there",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::title": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.title",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::use": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.use",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::useglossary": {
+   "arity": 0,
+   "associativity": null,
+   "category": "structural",
+   "denotation": {
+    "constructor": "structure.useglossary",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::using": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.using",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::we": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.we",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::when": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.when",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::with": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.with",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.core::witness": {
+   "arity": 0,
+   "associativity": null,
+   "category": "grammar",
+   "denotation": {
+    "constructor": "grammar.witness",
+    "kind": "core"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.std.bool::and": {
+   "arity": 2,
+   "associativity": "right",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Bool.and"
+   },
+   "frame": "infix",
+   "precedence": 55,
+   "signature": "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit b (const lexlean.std.bool::bool))) (const lexlean.std.bool::bool))",
+   "surface": "band"
+  },
+  "lexlean.std.bool::bool": {
+   "arity": 0,
+   "associativity": null,
+   "category": "type-noun",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Bool"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": "(sort (type 0))",
+   "surface": "Bool"
+  },
+  "lexlean.std.bool::false": {
+   "arity": 0,
+   "associativity": null,
+   "category": "term-constant",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Bool.false"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": "(const lexlean.std.bool::bool)",
+   "surface": "false"
+  },
+  "lexlean.std.bool::not": {
+   "arity": 1,
+   "associativity": null,
+   "category": "function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Bool.not"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((explicit a (const lexlean.std.bool::bool))) (const lexlean.std.bool::bool))",
+   "surface": "not"
+  },
+  "lexlean.std.bool::or": {
+   "arity": 2,
+   "associativity": "right",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Bool.or"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit b (const lexlean.std.bool::bool))) (const lexlean.std.bool::bool))",
+   "surface": "bor"
+  },
+  "lexlean.std.bool::true": {
+   "arity": 0,
+   "associativity": null,
+   "category": "term-constant",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Bool.true"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": "(const lexlean.std.bool::bool)",
+   "surface": "true"
+  },
+  "lexlean.std.int::add": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.add"
+   },
+   "frame": "infix",
+   "precedence": 65,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int)) (explicit b (const lexlean.std.int::int))) (const lexlean.std.int::int))",
+   "surface": "intplus"
+  },
+  "lexlean.std.int::ediv": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.ediv"
+   },
+   "frame": "infix",
+   "precedence": 70,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int)) (explicit b (const lexlean.std.int::int))) (const lexlean.std.int::int))",
+   "surface": "intdiv"
+  },
+  "lexlean.std.int::emod": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.emod"
+   },
+   "frame": "infix",
+   "precedence": 70,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int)) (explicit b (const lexlean.std.int::int))) (const lexlean.std.int::int))",
+   "surface": "intmod"
+  },
+  "lexlean.std.int::int": {
+   "arity": 0,
+   "associativity": null,
+   "category": "type-noun",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": "(sort (type 0))",
+   "surface": "\u2124"
+  },
+  "lexlean.std.int::le": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.le"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int)) (explicit b (const lexlean.std.int::int))) (sort prop))",
+   "surface": "intle"
+  },
+  "lexlean.std.int::lt": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.lt"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int)) (explicit b (const lexlean.std.int::int))) (sort prop))",
+   "surface": "intlt"
+  },
+  "lexlean.std.int::mul": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.mul"
+   },
+   "frame": "infix",
+   "precedence": 70,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int)) (explicit b (const lexlean.std.int::int))) (const lexlean.std.int::int))",
+   "surface": "inttimes"
+  },
+  "lexlean.std.int::neg": {
+   "arity": 1,
+   "associativity": null,
+   "category": "prefix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.neg"
+   },
+   "frame": "prefix",
+   "precedence": 75,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int))) (const lexlean.std.int::int))",
+   "surface": "intneg"
+  },
+  "lexlean.std.int::sign": {
+   "arity": 1,
+   "associativity": null,
+   "category": "function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.sign"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int))) (const lexlean.std.int::int))",
+   "surface": "intsign"
+  },
+  "lexlean.std.int::sub": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Int.sub"
+   },
+   "frame": "infix",
+   "precedence": 65,
+   "signature": "(pi ((explicit a (const lexlean.std.int::int)) (explicit b (const lexlean.std.int::int))) (const lexlean.std.int::int))",
+   "surface": "intminus"
+  },
+  "lexlean.std.nat::add": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.add"
+   },
+   "frame": "infix",
+   "precedence": 65,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))",
+   "surface": "+"
+  },
+  "lexlean.std.nat::addition": {
+   "arity": 0,
+   "associativity": null,
+   "category": "label-word",
+   "denotation": {
+    "kind": "defined",
+    "value": "(const lexlean.std.nat::add)"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": null,
+   "surface": null
+  },
+  "lexlean.std.nat::beq": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.beq"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))",
+   "surface": "beq"
+  },
+  "lexlean.std.nat::ble": {
+   "arity": 2,
+   "associativity": null,
+   "category": "function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.ble"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))",
+   "surface": "ble"
+  },
+  "lexlean.std.nat::blt": {
+   "arity": 2,
+   "associativity": null,
+   "category": "function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.blt"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))",
+   "surface": "blt"
+  },
+  "lexlean.std.nat::div": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.div"
+   },
+   "frame": "infix",
+   "precedence": 70,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))",
+   "surface": "/"
+  },
+  "lexlean.std.nat::ge": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "defined",
+    "value": "(lam ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (app (const lexlean.std.nat::le) (local b) (local a)))"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (sort prop))",
+   "surface": "\u2265"
+  },
+  "lexlean.std.nat::gt": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "defined",
+    "value": "(lam ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (app (const lexlean.std.nat::lt) (local b) (local a)))"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (sort prop))",
+   "surface": ">"
+  },
+  "lexlean.std.nat::inter": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "defined",
+    "value": "(lam ((explicit a (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat))) (explicit b (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (app (const lexlean.std.nat::remove-all) (local a) (app (const lexlean.std.nat::remove-all) (local a) (local b))))"
+   },
+   "frame": "infix",
+   "precedence": 70,
+   "signature": "(pi ((explicit a (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat))) (explicit b (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))",
+   "surface": "\u2229"
+  },
+  "lexlean.std.nat::le": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.le"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (sort prop))",
+   "surface": "\u2264"
+  },
+  "lexlean.std.nat::list": {
+   "arity": 1,
+   "associativity": null,
+   "category": "function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "List"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((explicit a (sort (type 0)))) (sort (type 0)))",
+   "surface": "List"
+  },
+  "lexlean.std.nat::lt": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.lt"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (sort prop))",
+   "surface": "<"
+  },
+  "lexlean.std.nat::mem": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "List.Mem"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit l (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (sort prop))",
+   "surface": "\u2208"
+  },
+  "lexlean.std.nat::mul": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.mul"
+   },
+   "frame": "infix",
+   "precedence": 70,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))",
+   "surface": "*"
+  },
+  "lexlean.std.nat::nat": {
+   "arity": 0,
+   "associativity": null,
+   "category": "type-noun",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": "(sort (type 0))",
+   "surface": "\u2115"
+  },
+  "lexlean.std.nat::nat-list": {
+   "arity": 0,
+   "associativity": null,
+   "category": "type-noun",
+   "denotation": {
+    "kind": "defined",
+    "value": "(app (const lexlean.std.nat::list) (const lexlean.std.nat::nat))"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": "(sort (type 0))",
+   "surface": null
+  },
+  "lexlean.std.nat::ne": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "defined",
+    "value": "(lam ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (app (const lexlean.core::lnot) (app (const lexlean.core::eq) (local a) (local b))))"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (sort prop))",
+   "surface": "\u2260"
+  },
+  "lexlean.std.nat::not-mem": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "defined",
+    "value": "(lam ((explicit a (const lexlean.std.nat::nat)) (explicit l (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (app (const lexlean.core::lnot) (app (const lexlean.std.nat::mem) (local a) (local l))))"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit l (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (sort prop))",
+   "surface": "\u2209"
+  },
+  "lexlean.std.nat::prod": {
+   "arity": 2,
+   "associativity": "right",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Prod"
+   },
+   "frame": "infix",
+   "precedence": 35,
+   "signature": "(pi ((explicit a (sort (type 0))) (explicit b (sort (type 0)))) (sort (type 0)))",
+   "surface": "\u00d7"
+  },
+  "lexlean.std.nat::remove-all": {
+   "arity": 2,
+   "associativity": null,
+   "category": "function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "List.removeAll"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((explicit a (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat))) (explicit b (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))",
+   "surface": "removeall"
+  },
+  "lexlean.std.nat::ssubset": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "defined",
+    "value": "(lam ((explicit a (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat))) (explicit b (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (app (const lexlean.core::land) (app (const lexlean.std.nat::subseteq) (local a) (local b)) (app (const lexlean.core::lnot) (app (const lexlean.std.nat::subseteq) (local b) (local a)))))"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat))) (explicit b (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (sort prop))",
+   "surface": "\u2282"
+  },
+  "lexlean.std.nat::sub": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.sub"
+   },
+   "frame": "infix",
+   "precedence": 65,
+   "signature": "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))",
+   "surface": "-"
+  },
+  "lexlean.std.nat::subseteq": {
+   "arity": 2,
+   "associativity": "none",
+   "category": "infix-predicate",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "List.Subset"
+   },
+   "frame": "infix",
+   "precedence": 50,
+   "signature": "(pi ((explicit a (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat))) (explicit b (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (sort prop))",
+   "surface": "\u2286"
+  },
+  "lexlean.std.nat::succ": {
+   "arity": 1,
+   "associativity": null,
+   "category": "function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.succ"
+   },
+   "frame": "call",
+   "precedence": null,
+   "signature": "(pi ((explicit n (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))",
+   "surface": "succ"
+  },
+  "lexlean.std.nat::union": {
+   "arity": 2,
+   "associativity": "left",
+   "category": "infix-function",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "List.append"
+   },
+   "frame": "infix",
+   "precedence": 65,
+   "signature": "(pi ((explicit a (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat))) (explicit b (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))) (app (const lexlean.std.nat::list) (const lexlean.std.nat::nat)))",
+   "surface": "\u222a"
+  },
+  "lexlean.std.nat::zero": {
+   "arity": 0,
+   "associativity": null,
+   "category": "term-constant",
+   "denotation": {
+    "kind": "lean",
+    "module": "Init",
+    "name": "Nat.zero"
+   },
+   "frame": "atom",
+   "precedence": null,
+   "signature": "(const lexlean.std.nat::nat)",
+   "surface": null
+  }
+ },
+ "lexlean_revision": "1a96a19cc5de88d6edaeba05fcd74376678abc74"
+}

@@ -1,6 +1,13 @@
 {"version": "1.2.0",
  "packagesDir": ".lake/packages",
- "packages": [],
+ "packages":
+ [{"type": "path",
+   "scope": "",
+   "name": "rule30prize",
+   "manifestFile": "lake-manifest.json",
+   "inherited": false,
+   "dir": "../Rule30PrizeKit/lean",
+   "configFile": "lakefile.toml"}],
  "name": "rule30core",
  "lakeDir": ".lake",
  "fixedToolchain": false}

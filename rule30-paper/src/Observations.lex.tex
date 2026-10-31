@@ -1820,5 +1820,13 @@ Close the goal with \(\lexeme{r30.observation::coupled-arrival-gate-phase}(Q, st
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{aligned-defect-bit-zero}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(t\), if \(0 < Q\), then \(rowbit(aligneddefect(Q, t), 0) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::aligned-defect-bit-zero}(Q, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

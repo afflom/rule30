@@ -6,7 +6,7 @@ lean_toolchain = "leanprover/lean4:v4.32.1"
 
 [[workspace_file]]
 path = "lake-manifest.json"
-sha256 = "e9ee1df9c8edac1efdf8be8f40b184f61fa8d8461693bb12211978fce0b93a2c"
+sha256 = "a04745e2b365120769e53ef1fc52be1943d1767f2ae3f21d53dd6a46b6732a65"
 
 [[workspace_file]]
 path = "lakefile.toml"
@@ -112,7 +112,7 @@ version = "1.0.0"
 kind = "path"
 source = "glossary/r30.observation"
 revision = "none"
-tree_sha256 = "24bf544715f19e3faa1117e26a10477a0250ae0d09783a723056b366952be3ee"
+tree_sha256 = "28976b05253c595c0efe16a23dce56c3b5743ee91aeb4b6fb84ce72f355504c1"
 manifest_sha256 = "1383ef3de49ef1aa78a9fc790eaa8b36da1ee07c949d4f027aa4ba6faecbad28"
 imports = ["lexlean.core@1.2.0", "lexlean.std.bool@1.2.0", "lexlean.std.int@1.2.0", "lexlean.std.nat@1.2.0", "r30.local@1.0.0", "r30.scale@1.0.0", "r30.time@1.0.0", "r30.witt@1.0.0"]
 

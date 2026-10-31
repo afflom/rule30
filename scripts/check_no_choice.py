@@ -19,7 +19,7 @@ import re
 import sys
 
 LEXLEAN_SOURCES = ["rule30-lexlean/src", "rule30-paper/src"]
-LEAN_SOURCES = ["rule30-core-lean/Rule30UOR", "rule30-bridge/Rule30UOR", "rule30-bridge/Rule30Paper"]
+LEAN_SOURCES = ["rule30-core-lean/Rule30UOR", "rule30-bridge/Rule30Paper"]
 LEAN_TOP_LEVEL = ["rule30-bridge"]
 AUDIT = "rule30-core-lean/scripts/CheckResearchAxioms.lean"
 

@@ -1,5 +1,11 @@
 # Rule 30 — LexLean & Lean 4 Formalization (`v0.1`)
 
+**Working here:** read [AGENTS.md](AGENTS.md). The command surface is `bin/r30`
+(`status`, `frontier`, `lexicon search`, `theorem add`, `check`, `verify`, `axioms`,
+`commit`); it generates glossary entries and statements from Lean declarations, checks
+one module in seconds, and is also an MCP server. The claim register is
+[`frontier.toml`](frontier.toml).
+
 **Research status on `main`: Problem 1 remains unproved.** The `v0.1` tag and release artifacts
 are unchanged. Subsequent host Lean work audits the refutation engines and formalizes exact
 temporal differences, their aperiodic compensation constraint, and a physically aligned Witt
@@ -52,12 +58,14 @@ under the kit's definitions in `Rule30UOR.KitConstructive`.
 ├── Makefile                  # Build targets for core, lexlean, pdf, bridge, and release artifacts
 ├── rule30-lexlean/           # LexLean core specification (src/Core.lex.tex, glossary/, STRATEGY.md)
 │   └── verified-latest/      # Attested LexLean output (0c4efc6363c6...)
-├── rule30-core-lean/         # Lean 4 host package (24 modules: Rule30UOR.Core, Kit, Scale, Interfaces, ...)
+├── rule30-core-lean/         # Lean 4 host package (Rule30UOR.*; Interfaces is split into Interfaces/PartNN)
 ├── rule30-paper/             # LexLean paper (src/Paper.lex.tex) & 9 domain glossaries (glossary/r30.*)
 │   └── verified-latest/      # Historical attested LexLean output
 ├── rule30-bridge/            # Bridge package (54 targets) linking Rule30Paper.Paper to Rule30PrizeKit
 ├── Rule30PrizeKit/           # Wolfram Institute Rule 30 Prize Kit (Lean 4 definitions & equivalents catalog)
-├── scripts/                  # Release packaging script (build_release.sh) & exploratory measurement scripts
+├── scripts/                  # Validation gate, packaging and policy checks
+├── tools/r30/                # The `r30` command surface and MCP server (see AGENTS.md)
+├── experiments/              # Finite diagnostics on the seeded orbit (not proof inputs)
 └── .github/workflows/        # Automated GitHub Actions build & release pipeline (release.yml)
 ```
 

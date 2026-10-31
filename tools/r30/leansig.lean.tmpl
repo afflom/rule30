@@ -1,0 +1,75 @@
+import Lean
+__IMPORTS__
+open Lean Meta Elab Command
+
+partial def r30Sexp (e : Expr) (names : List Name) : MetaM String := do
+  match e with
+  | .forallE n t b bi =>
+    let tS ← r30Sexp t names
+    let bS ← r30Sexp b (n :: names)
+    let kind := match bi with
+      | .default => "explicit" | .implicit => "implicit"
+      | .strictImplicit => "strict" | .instImplicit => "inst"
+    return s!"(pi {kind} {n} {tS} {bS})"
+  | .app .. =>
+    let fS ← r30Sexp e.getAppFn names
+    let aS ← e.getAppArgs.mapM (r30Sexp · names)
+    return s!"(app {fS} {" ".intercalate aS.toList})"
+  | .const n _ => return s!"(const {n})"
+  | .bvar i => return s!"(local {names.getD i .anonymous})"
+  | .lit (.natVal n) => return s!"(nat {n})"
+  | .lit (.strVal _) => return "(str)"
+  | .sort u => return s!"(sort {u})"
+  | .lam n t b _ =>
+    let tS ← r30Sexp t names
+    let bS ← r30Sexp b (n :: names)
+    return s!"(lam {n} {tS} {bS})"
+  | .mdata _ b => r30Sexp b names
+  | .proj s i b => return s!"(proj {s} {i} {← r30Sexp b names})"
+  | .letE .. => return "(let)"
+  | .fvar .. | .mvar .. => return "(?)"
+
+elab "#r30sig " ns:ident* : command => do
+  let env ← getEnv
+  for n in ns do
+    let name := n.getId
+    match env.find? name with
+    | none => logInfo m!"SIG {name} unknown"
+    | some ci =>
+      let s ← liftTermElabM <| r30Sexp ci.type []
+      let kind := match ci with
+        | .thmInfo _ => "theorem" | .defnInfo _ => "def" | .inductInfo _ => "inductive"
+        | .axiomInfo _ => "axiom" | _ => "other"
+      logInfo m!"SIG {name} {kind} {s}"
+
+elab "#r30axioms " ns:ident* : command => do
+  let env ← getEnv
+  for n in ns do
+    let name := n.getId
+    unless env.contains name do
+      logInfo m!"AXIOMS {name} unknown"
+      continue
+    let axs ← liftTermElabM <| Lean.collectAxioms name
+    logInfo m!"AXIOMS {name} {axs.toList}"
+
+elab "#r30choice " prefixes:ident* : command => do
+  let env ← getEnv
+  for (name, info) in env.constants.toList do
+    unless info matches .thmInfo _ do continue
+    if name.isInternal then continue
+    let some i := env.getModuleIdxFor? name | continue
+    let m := env.header.moduleNames[i.toNat]!
+    unless prefixes.any (fun p => p.getId.isPrefixOf m) do continue
+    let axs ← liftTermElabM <| Lean.collectAxioms name
+    if axs.contains ``Classical.choice then
+      logInfo m!"CHOICE {m} {name}"
+
+elab "#r30decls " prefixes:ident* : command => do
+  let env ← getEnv
+  for (name, info) in env.constants.toList do
+    unless info matches .thmInfo _ do continue
+    if name.isInternal || (`_private).isPrefixOf name then continue
+    unless prefixes.any (fun p => p.getId.isPrefixOf name) do continue
+    logInfo m!"DECL {name}"
+
+__COMMANDS__

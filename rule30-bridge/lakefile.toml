@@ -1,18 +1,14 @@
 name = "rule30bridge"
 version = "0.1.0"
-defaultTargets = ["LexLeanRuntime", "Rule30UOR", "Rule30Paper", "Rule30Bridge", "Rule30ZeroState", "Rule30ZeroStateOrbit", "Rule30Phase", "Rule30LeftMask", "Rule30Intent", "Rule30ZeroDiagonals", "Rule30CompilePoints"]
+defaultTargets = ["Rule30Paper", "Rule30Bridge", "Rule30ZeroState", "Rule30ZeroStateOrbit", "Rule30Phase", "Rule30LeftMask", "Rule30Intent", "Rule30ZeroDiagonals", "Rule30CompilePoints"]
 
 [[require]]
 name = "rule30prize"
 path = "../Rule30PrizeKit/lean"
 
-[[lean_lib]]
-name = "LexLeanRuntime"
-roots = ["LexLeanRuntime.Portable", "LexLeanRuntime.Collections"]
-
-[[lean_lib]]
-name = "Rule30UOR"
-roots = ["Rule30UOR.Constructive", "Rule30UOR.KitConstructive", "Rule30UOR.Core", "Rule30UOR.Kit", "Rule30UOR.Intent", "Rule30UOR.ZeroDiagonals", "Rule30UOR.CompilePoints", "Rule30UOR.Right", "Rule30UOR.Fixed", "Rule30UOR.Project", "Rule30UOR.Scale", "Rule30UOR.Rational", "Rule30UOR.Interfaces"]
+[[require]]
+name = "rule30core"
+path = "../rule30-core-lean"
 
 [[lean_lib]]
 name = "Rule30Paper"
