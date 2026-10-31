@@ -2869,4 +2869,39 @@ If not \(\operatorname{interiorkernelfinite}\), then \(\operatorname{problemone}
 Assume \(h\).
 The goal follows from \(\operatorname{problem1ofinteriorinfinitekernel}(h)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-zero-right}
+For every natural number \(n\), \(\operatorname{trinomialparity}(n, 0) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparityzeroright}(n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-self-intersection-even}
+For every natural number \(m\), \(\operatorname{wittcarry}(\operatorname{philinpow}(1, 2 \cdot m, 1)) = 0\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{linearselfintersectioneven}(m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-self-intersection-odd-rise}
+For every natural number \(m\) and natural number \(i\), \(\operatorname{rowbit}(\operatorname{wittcarry}(\operatorname{philinpow}(1, 2 \cdot m + 1, 1)), 2 \cdot (i + 1) + 1) = \operatorname{trinomialparity}(m, i + 1) \operatorname{and} \operatorname{not}(\operatorname{trinomialparity}(m, i))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{linearselfintersectionoddrise}(m, i)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-self-intersection-odd-fall}
+For every natural number \(m\) and natural number \(i\), \(\operatorname{rowbit}(\operatorname{wittcarry}(\operatorname{philinpow}(1, 2 \cdot m + 1, 1)), 2 \cdot i + 2) = \operatorname{trinomialparity}(m, i) \operatorname{and} \operatorname{not}(\operatorname{trinomialparity}(m, i + 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{linearselfintersectionoddfall}(m, i)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-self-intersection-odd-one}
+For every natural number \(m\), \(\operatorname{rowbit}(\operatorname{wittcarry}(\operatorname{philinpow}(1, 2 \cdot m + 1, 1)), 1) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{linearselfintersectionoddone}(m)\).
+\end{proof}
 \end{document}

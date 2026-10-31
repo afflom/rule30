@@ -3033,4 +3033,33 @@ interior alone: `InteriorPeriodic` is the predicate a hypothetical period must s
 background to compensate against beyond the alternation. The dyadic column reads the interior
 alone too: `center (2^j) = ¬interiorDiagonal (2^j)` for `j ≥ 1`.
 
+*Not a route (measured 2026-10-31, `experiments`-style check in the session log).* The cancellation is
+special to the edge pair. The regular side's diagonals `rdiag k` are eventually periodic with
+periods doubling (`1, 2, 2, 4, 8, 8, 16, 32, 32, 64, …` for `k = 0, 1, 2, …`), but the gasket
+contribution of a single periodic diagonal of carries to the center is a Thue–Morse-like automatic
+sequence, not a periodic one (only `k = 2` contributes with period 2); the edge pair cancels because
+the bit-`2t` part is `columnParity (t−1)` and the bit-`1` part is `columnParity ((t−2)/2)`. The
+linear self-carry diagonal (the carries of `q^m` alone, propagated) is likewise a nontrivial
+automatic sequence. Neither the regular side nor the linear part is transparent beyond the edge.
+
+**The characteristic-1 reading (UOR-Foundation/F1, 2026-10-31).** The F1 program names its crux as
+an intersection-positivity on the self-product `Spec ℤ ×_{𝔽₁} Spec ℤ` with Frobenius; its proved
+layer is the characteristic-1 base (idempotent addition), the Frobenius-twisted self-intersection,
+and the independence of the idempotent canonical form κ from the spectrum. Rule 30 carries the same
+split exactly: `rule30 = p ⊕ (q ∨ r)`, the characteristic-2 part is `phiLinear` (whose Frobenius is
+the gasket self-similarity `q^{2n} = q^n(X²)`), the characteristic-1 part is the idempotent `∨`,
+and the carry `carry y = y ∧ (y ≪ 1)` is the **intersection of the row with its own translate**:
+`center t = ¬(timeParity t ⊕ interiorDiagonal t)` reads the gasket-weighted self-intersections of
+every row, and Problem 1 is the aperiodicity of that weighted self-intersection sequence. The
+idempotent closure of the dynamics is the full cone (κ is trivial) and does not determine the
+pattern, the counterpart of F1's "κ does not determine the spectrum". There is no sign and hence no
+Hodge-index analogue over 𝔽₂: the crux here is parity, not positivity. What the reading yields
+exactly (`Rule30UOR.Intersection`): the self-intersection of an even linear row is empty,
+`carry (q^{2m}) = 0` (`linear_self_intersection_even`), and an odd linear row `q^{2m+1} = q·q^m(X²)`
+intersects its translate exactly at the run boundaries of `q^m` (`linear_self_intersection_odd_rise`,
+`_fall`, `_one`), so the linear self-carry lives on odd rows only and is the boundary operator of the
+half row, with `trinomialParity n 0 = true` for every `n`. This is a facet, not a route: the measured
+linear self-carry diagonal is a nontrivial automatic sequence, and the full self-intersection of
+`row m = q^m ⊕ W_m` has the cross terms `q^m ∧ σW_m ⊕ W_m ∧ σq^m` and the ledger term `W_m ∧ σW_m`.
+
 Problem 1 remains unproved.

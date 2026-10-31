@@ -217,6 +217,12 @@ suite = "register"
 statement = "The center is 2-automatic exactly when the interior diagonal is: a finite 2-kernel is closed under negation and under XOR with the time parity, so CenterInfiniteKernel iff not InteriorKernelFinite, and Problem 1 follows if the interior diagonal is not 2-automatic."
 
 [[id]]
+id = "characteristic-one-facet"
+level = "build"
+suite = "register"
+statement = "The carry is the intersection of a row with its own translate (the characteristic-1 content of rule 30, the idempotent OR, against the characteristic-2 linear part whose Frobenius is the gasket). On the linear rows the self-intersection is exact: carry (q^(2m)) = 0 and carry (q^(2m+1)) is the run boundary of q^m; the linear self-carry lives on odd rows only."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

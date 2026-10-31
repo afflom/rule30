@@ -253,6 +253,13 @@ feature = "interfaces/interior-kernel-reduction.md"
 evidence = "frontier check: Rule30UOR.KernelParity.centerInfiniteKernel_iff_interior kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "characteristic-one-facet"
+level = "build"
+statement = "The carry is the intersection of a row with its own translate (the characteristic-1 content of rule 30, the idempotent OR, against the characteristic-2 linear part whose Frobenius is the gasket). On the linear rows the self-intersection is exact: carry (q^(2m)) = 0 and carry (q^(2m+1)) is the run boundary of q^m; the linear self-carry lives on odd rows only."
+feature = "interfaces/characteristic-one-facet.md"
+evidence = "frontier check: Rule30UOR.Intersection.linear_self_intersection_even kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."

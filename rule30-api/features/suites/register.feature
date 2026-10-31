@@ -217,3 +217,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.KernelParity.centerInfiniteKernel_iff_interior for interior-kernel-reduction
     When the suite exercises interior-kernel-reduction
     Then its oracle accepts it: frontier check: Rule30UOR.KernelParity.centerInfiniteKernel_iff_interior kernel-checked under propext and Quot.sound and published
+
+  @characteristic-one-facet @build
+  Scenario: The carry is the intersection of a row with its own translate (the characteristic-1 content of rule 30, the idempotent OR, against the characteristic-2 linear part whose Frobenius is the gasket). On the linear rows the self-intersection is exact: carry (q^(2m)) = 0 and carry (q^(2m+1)) is the run boundary of q^m; the linear self-carry lives on odd rows only.
+    Given frontier.toml names Rule30UOR.Intersection.linear_self_intersection_even for characteristic-one-facet
+    When the suite exercises characteristic-one-facet
+    Then its oracle accepts it: frontier check: Rule30UOR.Intersection.linear_self_intersection_even kernel-checked under propext and Quot.sound and published

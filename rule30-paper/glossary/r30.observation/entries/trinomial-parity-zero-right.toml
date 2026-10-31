@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trinomial-parity-zero-right"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::trinomial-parity) (local n) (nat 0)) (const lexlean.std.bool::true)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Intersection"
+name = "Rule30UOR.Intersection.trinomialParity_zero_right"
+
+[[form]]
+id = "trinomial-parity-zero-right"
+channel = "math"
+surface = "trinomialparityzeroright"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trinomialparityzeroright) (paren (seq (slot 0))))"

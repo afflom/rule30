@@ -3284,5 +3284,45 @@ Close the goal with \(\lexeme{r30.observation::problem1-of-interior-infinite-ker
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{trinomial-parity-zero-right}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(trinomialparity(n, 0) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-zero-right}(n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{linear-self-intersection-even}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\), \(wittcarry(philinpow(1, 2 * m, 1)) = 0\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::linear-self-intersection-even}(m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{linear-self-intersection-odd-rise}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(i\), \(rowbit(wittcarry(philinpow(1, 2 * m + 1, 1)), 2 * (i + 1) + 1) = trinomialparity(m, i + 1) band not(trinomialparity(m, i))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::linear-self-intersection-odd-rise}(m, i)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{linear-self-intersection-odd-fall}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(i\), \(rowbit(wittcarry(philinpow(1, 2 * m + 1, 1)), 2 * i + 2) = trinomialparity(m, i) band not(trinomialparity(m, i + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::linear-self-intersection-odd-fall}(m, i)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{linear-self-intersection-odd-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\), \(rowbit(wittcarry(philinpow(1, 2 * m + 1, 1)), 1) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::linear-self-intersection-odd-one}(m)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}
