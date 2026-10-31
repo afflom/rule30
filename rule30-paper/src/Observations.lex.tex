@@ -2962,5 +2962,21 @@ Close the goal with \(\lexeme{r30.observation::dyadic-column-aperiodic-iff-respo
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{rule-eq-wolfram-thirty}
+\allowaxioms{Quot.sound;propext}
+For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(rule(a, b, c) = wolfram(30, a, b, c)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rule-eq-wolfram-thirty}(a, b, c)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rule-eq-linear-xor-carry}
+\allowaxioms{Quot.sound;propext}
+For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(rule(a, b, c) = bxor(bxor(bxor(a, b), c), b band c)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rule-eq-linear-xor-carry}(a, b, c)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rule-eq-wolfram-thirty"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.bool::bool)) (explicit b (const lexlean.std.bool::bool)) (explicit c (const lexlean.std.bool::bool))) (app (const lexlean.core::eq) (app (const r30.local::rule) (local a) (local b) (local c)) (app (const r30.observation::wolfram) (nat 30) (local a) (local b) (local c))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Rules"
+name = "Rule30UOR.Rules.rule_eq_wolfram_thirty"
+
+[[form]]
+id = "rule-eq-wolfram-thirty"
+channel = "math"
+surface = "ruleeqwolframthirty"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ruleeqwolframthirty) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

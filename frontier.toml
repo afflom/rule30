@@ -229,3 +229,12 @@ lean = "Rule30UOR.Automatic.DyadicResponseAperiodic"
 since = "2026-10-31"
 note = "Equivalent to dyadic-column-aperiodic (dyadicColumnAperiodic_iff_response): unflipping the column, v(j) = center(2^j) XOR [j odd] is the running XOR of the responses, so a period d of the responses is a period 2d of the column. response(2^j, j) = window60 (2^j) (2^j) 0 is out of the cone; by wittRespBool_xor_response_ge it is the complement of wittRespBool(2^j, j), the ledger of the second dyadic block read at the diagonal. Exact handles: duhamel, freshman, Lpow_add, window60_shift, window60_add and dyadic_response_halves (Gasket): the response is the Rule-60 (Sierpinski) propagation of the carry masks of the block [2^j, 2^(j+1)) read at the center, the parity of the carry-mask events on the gasket of the block. The 2-adic continuity caveat here reads: if response(2^j, j) were eventually 1 the column would be eventually constant. The theorem required: this parity is not eventually periodic in j. Not known."
 depends = ["dyadic-response-reduction"]
+
+[[claim]]
+id = "all-rules-facet"
+status = "proved"
+statement = "Every elementary rule has a unique algebraic normal form over F_2 (decided for all 256 codes), every normal form is its linear part XOR its nonlinear part, and Rule 30 is the unique code with normal form a XOR b XOR c XOR bc: the ledger decomposition is coherent across all rules, and the solution is a property of the single carry monomial bc under the linear part 1 + X + X^2."
+lean = "Rule30UOR.Rules.rule_eq_linear_xor_carry"
+since = "2026-10-31"
+note = "Rule30UOR.Rules: wolfram n (code n), ANF with Moebius transform anfOf, wolfram_eq_anf (all 256 codes, decide), ANF.eval_split, anf_thirty, thirty_unique_carry_rule, 16 left-permutive codes (leftPermutiveCodes_count) with 30 among them. The coherence of all rules is not the solution: rules with periodic centers share the decomposition; what is specific to Rule 30 is the carry bc and left-permutivity (bijective row map, backward determinacy, Jen). Published: wolfram, rule_eq_wolfram_thirty, rule_eq_linear_xor_carry; the all-codes theorems are host-level (structures and lists are outside LexLean's first-order surface)."
+depends = ["ledger-diagonal"]

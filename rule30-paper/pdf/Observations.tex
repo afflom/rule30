@@ -2587,4 +2587,18 @@ The goal follows from \(\operatorname{dyadicresponseaperiodicofcolumn}(h)\).
 \begin{proof}
 The goal follows from \(\operatorname{dyadiccolumnaperiodiciffresponse}\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:rule-eq-wolfram-thirty}
+For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(\operatorname{rule}(a, b, c) = \operatorname{wolfram}(30, a, b, c)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ruleeqwolframthirty}(a, b, c)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rule-eq-linear-xor-carry}
+For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(\operatorname{rule}(a, b, c) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(a, b), c), b \operatorname{and} c)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ruleeqlinearxorcarry}(a, b, c)\).
+\end{proof}
 \end{document}

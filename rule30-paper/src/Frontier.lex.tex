@@ -108,6 +108,14 @@ Close the goal with \(\lexeme{r30.observation::problem1-of-dyadic-response-aperi
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-all-rules-facet}
+\allowaxioms{Quot.sound;propext}
+For every truth value \(a\) and truth value \(b\) and truth value \(c\), \(rule(a, b, c) = bxor(bxor(bxor(a, b), c), b band c)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rule-eq-linear-xor-carry}(a, b, c)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

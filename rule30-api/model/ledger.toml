@@ -183,6 +183,13 @@ feature = "interfaces/dyadic-response-aperiodic.md"
 evidence = "register: open (Rule30UOR.Automatic.DyadicResponseAperiodic)"
 
 [[claim]]
+id = "all-rules-facet"
+level = "build"
+statement = "Every elementary rule has a unique algebraic normal form over F_2 (decided for all 256 codes), every normal form is its linear part XOR its nonlinear part, and Rule 30 is the unique code with normal form a XOR b XOR c XOR bc: the ledger decomposition is coherent across all rules, and the solution is a property of the single carry monomial bc under the linear part 1 + X + X^2."
+feature = "interfaces/all-rules-facet.md"
+evidence = "frontier check: Rule30UOR.Rules.rule_eq_linear_xor_carry kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register and the architecture are LexLean semantic modules verified by the gate."

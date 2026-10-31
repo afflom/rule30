@@ -41,6 +41,7 @@ import Rule30UOR.LeftCone
 import Rule30UOR.Ledger
 import Rule30UOR.Automatic
 import Rule30UOR.Gasket
+import Rule30UOR.Rules
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

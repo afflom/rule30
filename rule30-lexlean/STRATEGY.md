@@ -2891,4 +2891,20 @@ dyadic block at each scale, and nothing else. The converse holds too: unflipping
 responses is a period `2d` of the column (`dilationPeriodic_of_dyadicResponsePeriodic`), and the
 two leaves are one statement (`dyadicColumnAperiodic_iff_response`).
 
+**The facet across all rules (`Rule30UOR.Rules`).** Every elementary rule has a unique algebraic
+normal form over `F₂` (constant, linear part in `a, b, c`, nonlinear monomials `ab, ac, bc, abc`),
+and the kernel decides it for all 256 codes (`wolfram_eq_anf`); every normal form is its linear
+part XOR its nonlinear part (`ANF.eval_split`). So the ledger decomposition of the center — the
+linear evolution of the seed XOR the accumulated nonlinear corrections, with a 2-automatic linear
+part — is available for every rule with zero constant term: the facets proved here are coherent
+across the rules. That coherence is not the solution: rules with eventually periodic centers share
+the decomposition. Rule 30 is the rule whose normal form is `a ⊕ b ⊕ c ⊕ bc` (`anf_thirty`,
+`rule_eq_linear_xor_carry`, published), the unique code with the full linear part, zero constant
+and the single quadratic monomial `bc` (`thirty_unique_carry_rule`); and it is one of the 16
+left-permutive rules, `a` occurring only linearly (`leftPermutiveCodes_count`,
+`anf_thirty_leftPermutive`), which is the bijectivity of the row map on every `Z/2^n`, the
+backward determinacy of the center's past, and Jen's theorem. What has to be proved is therefore a
+property of this one nonlinear term, the carry `bc`, under this one linear part, `q = 1 + X + X²`:
+that its ledger, read on the dyadic diagonal, never becomes periodic.
+
 Problem 1 remains unproved.

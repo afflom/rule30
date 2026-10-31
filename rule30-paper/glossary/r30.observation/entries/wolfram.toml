@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "wolfram"
+category = "function"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit a (const lexlean.std.bool::bool)) (explicit b (const lexlean.std.bool::bool)) (explicit c (const lexlean.std.bool::bool))) (const lexlean.std.bool::bool))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Rules"
+name = "Rule30UOR.Rules.wolfram"
+
+[[form]]
+id = "wolfram"
+channel = "math"
+surface = "wolfram"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wolfram) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"
