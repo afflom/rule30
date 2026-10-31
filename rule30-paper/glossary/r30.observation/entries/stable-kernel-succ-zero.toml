@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "stable-kernel-succ-zero"
+category = "proof-constant"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::stable-kernel) (local m) (nat 0)) (app (const r30.observation::stable-kernel) (app (const lexlean.std.nat::add) (local m) (nat 1)) (nat 0))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.stableKernel_succ_zero"
+
+[[form]]
+id = "stable-kernel-succ-zero"
+channel = "math"
+surface = "stablekernelsucczero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name stablekernelsucczero) (paren (seq (slot 0))))"

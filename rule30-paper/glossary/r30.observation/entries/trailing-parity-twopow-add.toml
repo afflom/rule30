@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trailing-parity-twopow-add"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (pi ((explicit h1 (app (const lexlean.std.nat::lt) (app (const lexlean.std.nat::add) (local s) (nat 1)) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local k)) (local s))) (app (const r30.observation::trailing-parity) (local s)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.trailingParity_twopow_add"
+
+[[form]]
+id = "trailing-parity-twopow-add"
+channel = "math"
+surface = "trailingparitytwopowadd"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trailingparitytwopowadd) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

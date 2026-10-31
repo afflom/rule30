@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-iff-three-aperiodic"
+category = "proof-constant"
+signature = "(app (const lexlean.core::iff) (const r30.joint::problem-one) (const r30.observation::three-aperiodic))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.problem1_iff_threeAperiodic"
+
+[[form]]
+id = "problem1-iff-three-aperiodic"
+channel = "math"
+surface = "problem1iffthreeaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name problem1iffthreeaperiodic)"

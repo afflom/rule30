@@ -15,8 +15,8 @@ Feature: register
     Then its oracle accepts it: frontier check: Rule30UOR.WittDefect.center_periodic_of_coupling kernel-checked under propext and Quot.sound and published
 
   @aperiodic-compensation @open
-  Scenario: The interior diagonal, the gasket parity of the bulk carries, is not eventually periodic (InteriorAperiodic). Equivalent to Problem 1 (interior-aperiodicity). This is the remaining obligation.
-    Given the register entry aperiodic-compensation (Rule30UOR.EdgeParity.InteriorAperiodic)
+  Scenario: The deep-interior diagonal (the gasket parity of the carries on diagonals >= 3) is never the period-doubling sequence trailingParity (t-2) plus a periodic sequence: ThreeAperiodic. Equivalent to Problem 1 (three-diagonal-band), and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation.
+    Given the register entry aperiodic-compensation (Rule30UOR.Band.ThreeAperiodic)
     When the suite measures aperiodic-compensation
     Then the claim is reported open and never asserted
 
@@ -223,3 +223,15 @@ Feature: register
     Given frontier.toml names Rule30UOR.Intersection.linear_self_intersection_even for characteristic-one-facet
     When the suite exercises characteristic-one-facet
     Then its oracle accepts it: frontier check: Rule30UOR.Intersection.linear_self_intersection_even kernel-checked under propext and Quot.sound and published
+
+  @three-diagonal-band @build
+  Scenario: The three inner diagonals of the regular side (carry bits 2t, 1, 2 of every row) contribute exactly the period-doubling sequence: center t = trailingParity (t-2) XOR interiorThreeDiagonal t for t >= 2, where interiorThreeDiagonal is the gasket parity of the carries on diagonals >= 3. Hence CenterPeriodic T P iff ThreeAgainstTrailing T P (T >= 2) and Problem 1 iff ThreeAperiodic: the deep interior can never be the period-doubling sequence plus a periodic sequence.
+    Given frontier.toml names Rule30UOR.Band.center_eq_trailingParity_bxor_three for three-diagonal-band
+    When the suite exercises three-diagonal-band
+    Then its oracle accepts it: frontier check: Rule30UOR.Band.center_eq_trailingParity_bxor_three kernel-checked under propext and Quot.sound and published
+
+  @stable-kernel @build
+  Scenario: The trinomial kernel is dyadically stable: trinomialParity (2^(j+1)-1-m) d = trinomialParity (2^j-1-m) d for m, d < 2^j, so the dyadic column reads the carries of row m through the fixed kernel stableKernel m (the inverse 1/q^(m+1); row 2^j-1 is 1/q = 110110... below degree 2^j): center (2^j) = not stableFormula j for j >= 1, and DyadicColumnAperiodic iff StableFormulaAperiodic.
+    Given frontier.toml names Rule30UOR.StableKernel.dyadicColumnAperiodic_iff_stable for stable-kernel
+    When the suite exercises stable-kernel
+    Then its oracle accepts it: frontier check: Rule30UOR.StableKernel.dyadicColumnAperiodic_iff_stable kernel-checked under propext and Quot.sound and published

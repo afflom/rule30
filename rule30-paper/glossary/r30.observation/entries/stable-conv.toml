@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "stable-conv"
+category = "function"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.stableConv"
+
+[[form]]
+id = "stable-conv"
+channel = "math"
+surface = "stableconv"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name stableconv) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

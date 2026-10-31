@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-three"
+category = "function"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.interiorThree"
+
+[[form]]
+id = "interior-three"
+channel = "math"
+surface = "interiorthree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiorthree) (paren (seq (slot 0))))"

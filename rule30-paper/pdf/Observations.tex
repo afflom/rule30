@@ -2904,4 +2904,174 @@ For every natural number \(m\), \(\operatorname{rowbit}(\operatorname{wittcarry}
 \begin{proof}
 The goal follows from \(\operatorname{linearselfintersectionoddone}(m)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:interior-split-three}
+For every natural number \(m\), \(\operatorname{interior}(m) = \operatorname{wittxor}(\operatorname{lowsource}(m), \operatorname{interiorthree}(m))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiorsplitthree}(m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:interior-ledger-split-three}
+For every natural number \(t\), \(\operatorname{interiorledger}(t) = \operatorname{wittxor}(\operatorname{lowledger}(t), \operatorname{interiorthreeledger}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiorledgersplitthree}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:interior-diagonal-split-three}
+For every natural number \(t\), \(\operatorname{interiordiagonal}(t) = \operatorname{bxor}(\operatorname{lowdiagonal}(t), \operatorname{interiorthreediagonal}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiordiagonalsplitthree}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:column-parity-succ-bxor}
+For every natural number \(e\), \(\operatorname{bxor}(\operatorname{columnparity}(e + 1), \operatorname{columnparity}(e)) = \operatorname{not}(\operatorname{trailingparity}(e + 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{columnparitysuccbxor}(e)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:low-diagonal-three}
+For every natural number \(s\), \(\operatorname{lowdiagonal}(s + 2 + 1) = \operatorname{not}(\operatorname{bxor}(\operatorname{columnparity}(s), \operatorname{columnparity}(s / 2)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lowdiagonalthree}(s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:low-diagonal-eq}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{lowdiagonal}(t)) = \operatorname{not}(\operatorname{trailingparity}(t - 2))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lowdiagonaleq}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-trailing-parity-bxor-three}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{center}(t) = \operatorname{bxor}(\operatorname{trailingparity}(t - 2), \operatorname{interiorthreediagonal}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqtrailingparitybxorthree}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-periodic-iff-three-against-trailing}
+For every natural number \(T\) and natural number \(P\), if \(2 \le T\), then \(\operatorname{centerperiodic}(T, P)\) if and only if \(\operatorname{threeagainsttrailing}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerperiodiciffthreeagainsttrailing}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-iff-three-aperiodic}
+\(\operatorname{problemone}\) if and only if \(\operatorname{threeaperiodic}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{problem1iffthreeaperiodic}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-three-aperiodic}
+If \(\operatorname{threeaperiodic}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofthreeaperiodic}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trailing-parity-not-periodic}
+For every natural number \(T\) and natural number \(P\), if \(0 < P\), then not \(\operatorname{trailingparityperiodic}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trailingparitynotperiodic}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:interior-three-aperiodic-of-center-periodic}
+For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(\operatorname{centerperiodic}(T, P)\), then not \(\operatorname{threeperiodic}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{interiorthreeaperiodicofcenterperiodic}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trailing-parity-twopow-add}
+For every natural number \(k\) and natural number \(s\), if \(s + 1 < \operatorname{twopow}(k)\), then \(\operatorname{trailingparity}(\operatorname{twopow}(k) + s) = \operatorname{trailingparity}(s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trailingparitytwopowadd}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-dyadic-stable}
+For every natural number \(j\) and natural number \(m\) and natural number \(d\), if \(m < \operatorname{twopow}(j)\), then if \(d < \operatorname{twopow}(j)\), then \(\operatorname{trinomialparity}(\operatorname{twopow}(j + 1) - 1 - m, d) = \operatorname{trinomialparity}(\operatorname{twopow}(j) - 1 - m, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparitydyadicstable}(j, m, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-eq-stable-kernel}
+For every natural number \(j\) and natural number \(m\) and natural number \(d\), if \(m < \operatorname{twopow}(j)\), then if \(d < \operatorname{twopow}(j)\), then \(\operatorname{trinomialparity}(\operatorname{twopow}(j) - 1 - m, d) = \operatorname{stablekernel}(m, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparityeqstablekernel}(j, m, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:stable-kernel-succ}
+For every natural number \(m\) and natural number \(d\), \(\operatorname{stablekernel}(m, d + 2) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{stablekernel}(m + 1, d + 2), \operatorname{stablekernel}(m + 1, d + 1)), \operatorname{stablekernel}(m + 1, d))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{stablekernelsucc}(m, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:stable-kernel-succ-zero}
+For every natural number \(m\), \(\operatorname{stablekernel}(m, 0) = \operatorname{stablekernel}(m + 1, 0)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{stablekernelsucczero}(m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:stable-kernel-succ-one}
+For every natural number \(m\), \(\operatorname{stablekernel}(m, 1) = \operatorname{bxor}(\operatorname{stablekernel}(m + 1, 1), \operatorname{stablekernel}(m + 1, 0))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{stablekernelsuccone}(m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:trinomial-parity-row-succ}
+For every natural number \(n\) and natural number \(d\), \(\operatorname{trinomialparity}(n + 1, d + 2) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{trinomialparity}(n, d + 2), \operatorname{trinomialparity}(n, d + 1)), \operatorname{trinomialparity}(n, d))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{trinomialparityrowsucc}(n, d)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:time-parity-twopow}
+For every natural number \(j\), if \(1 \le j\), then \(\operatorname{timeparity}(\operatorname{twopow}(j)) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{timeparitytwopow}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:conv-eq-stable-conv}
+For every natural number \(j\) and natural number \(n\) and natural number \(y\) and natural number \(t\), if \(n < \operatorname{twopow}(j)\), then if \(t < \operatorname{twopow}(j)\), then \(\operatorname{conv}(\operatorname{twopow}(j) - 1 - n, y, t) = \operatorname{stableconv}(n, y, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{conveqstableconv}(j, n, y, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-twopow-eq-stable-formula}
+For every natural number \(j\), if \(1 \le j\), then \(\operatorname{center}(\operatorname{twopow}(j)) = \operatorname{not}(\operatorname{stableformula}(j, \operatorname{twopow}(j)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centertwopoweqstableformula}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:dyadic-column-aperiodic-iff-stable}
+\(\operatorname{dyadiccolumnaperiodic}\) if and only if \(\operatorname{stableformulaaperiodic}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{dyadiccolumnaperiodiciffstable}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-stable-formula-aperiodic}
+If \(\operatorname{stableformulaaperiodic}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofstableformulaaperiodic}(h)\).
+\end{proof}
 \end{document}

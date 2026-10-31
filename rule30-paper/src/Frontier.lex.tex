@@ -172,6 +172,22 @@ Close the goal with \(\lexeme{r30.observation::linear-self-intersection-even}(m)
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-three-diagonal-band}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(center(t) = bxor(trailingparity(t - 2), interiorthreediagonal(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-trailing-parity-bxor-three}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-stable-kernel}
+\allowaxioms{Quot.sound;propext}
+\(dyadiccolumnaperiodic ↔ stableformulaaperiodic\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::dyadic-column-aperiodic-iff-stable}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

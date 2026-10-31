@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "column-parity-succ-bxor"
+category = "proof-constant"
+signature = "(pi ((explicit e (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.observation::column-parity) (app (const lexlean.std.nat::add) (local e) (nat 1))) (app (const r30.observation::column-parity) (local e))) (app (const lexlean.std.bool::not) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::add) (local e) (nat 1))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.columnParity_succ_bxor"
+
+[[form]]
+id = "column-parity-succ-bxor"
+channel = "math"
+surface = "columnparitysuccbxor"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name columnparitysuccbxor) (paren (seq (slot 0))))"

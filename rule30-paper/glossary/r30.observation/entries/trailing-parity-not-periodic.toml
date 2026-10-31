@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "trailing-parity-not-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P)))) (app (const lexlean.core::lnot) (app (const r30.observation::trailing-parity-periodic) (local T) (local P)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.trailingParity_not_periodic"
+
+[[form]]
+id = "trailing-parity-not-periodic"
+channel = "math"
+surface = "trailingparitynotperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name trailingparitynotperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -47,6 +47,8 @@ import Rule30UOR.Routes
 import Rule30UOR.EdgeParity
 import Rule30UOR.KernelParity
 import Rule30UOR.Intersection
+import Rule30UOR.Band
+import Rule30UOR.StableKernel
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

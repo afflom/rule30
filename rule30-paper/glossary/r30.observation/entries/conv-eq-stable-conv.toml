@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "conv-eq-stable-conv"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hn (app (const lexlean.std.nat::lt) (local n) (app (const r30.scale::twopow) (local j)))) (explicit ht (app (const lexlean.std.nat::lt) (local t) (app (const r30.scale::twopow) (local j))))) (app (const lexlean.core::eq) (app (const r30.observation::conv) (app (const lexlean.std.nat::sub) (app (const lexlean.std.nat::sub) (app (const r30.scale::twopow) (local j)) (nat 1)) (local n)) (local y) (local t)) (app (const r30.observation::stable-conv) (local n) (local y) (local t)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.conv_eq_stableConv"
+
+[[form]]
+id = "conv-eq-stable-conv"
+channel = "math"
+surface = "conveqstableconv"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name conveqstableconv) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

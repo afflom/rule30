@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-trailing-parity-bxor-three"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 2) (local t)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const r30.local::bxor) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::sub) (local t) (nat 2))) (app (const r30.observation::interior-three-diagonal) (local t))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.center_eq_trailingParity_bxor_three"
+
+[[form]]
+id = "center-eq-trailing-parity-bxor-three"
+channel = "math"
+surface = "centereqtrailingparitybxorthree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqtrailingparitybxorthree) (paren (seq (slot 0))))"

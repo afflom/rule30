@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "stable-kernel-succ"
+category = "proof-constant"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::stable-kernel) (local m) (app (const lexlean.std.nat::add) (local d) (nat 2))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.observation::stable-kernel) (app (const lexlean.std.nat::add) (local m) (nat 1)) (app (const lexlean.std.nat::add) (local d) (nat 2))) (app (const r30.observation::stable-kernel) (app (const lexlean.std.nat::add) (local m) (nat 1)) (app (const lexlean.std.nat::add) (local d) (nat 1)))) (app (const r30.observation::stable-kernel) (app (const lexlean.std.nat::add) (local m) (nat 1)) (local d)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.stableKernel_succ"
+
+[[form]]
+id = "stable-kernel-succ"
+channel = "math"
+surface = "stablekernelsucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name stablekernelsucc) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

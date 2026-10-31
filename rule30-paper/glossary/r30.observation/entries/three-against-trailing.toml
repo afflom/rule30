@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "three-against-trailing"
+category = "function"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.ThreeAgainstTrailing"
+
+[[form]]
+id = "three-against-trailing"
+channel = "math"
+surface = "threeagainsttrailing"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name threeagainsttrailing) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

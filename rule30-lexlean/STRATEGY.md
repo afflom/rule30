@@ -3062,4 +3062,24 @@ half row, with `trinomialParity n 0 = true` for every `n`. This is a facet, not 
 linear self-carry diagonal is a nontrivial automatic sequence, and the full self-intersection of
 `row m = q^m ⊕ W_m` has the cross terms `q^m ∧ σW_m ⊕ W_m ∧ σq^m` and the ledger term `W_m ∧ σW_m`.
 
+**Four lenses, two survivors (2026-10-31).** Four independent proposals for the next exact theorem
+were each judged by two skeptics (truth against the definitions; routing against the refuted
+claims). *Kernel lens*: Problem 1 ⟺ the factor complexity of the interior diagonal exceeds `n` at
+every length (Morse–Hedlund), and superlinear complexity ⟹ not 2-automatic (Cobham); true, generic,
+not a route — not mechanized. *Causal lens*: the cells at `±1` are `thueMorse (t/2)` against the
+interior ledger's band; true closed forms that do not change the obligation — not mechanized.
+*Algebraic lens (survived)*: the three inner diagonals of the regular side (`rdiag 0, 1, 2`: bits
+`2t`, `1`, `2` of the carry row, the only ones the edge-parity theorem had not yet absorbed together)
+contribute exactly the period-doubling sequence: **`center t = trailingParity (t−2) ⊕
+interiorThreeDiagonal t` for `t ≥ 2`** (`Rule30UOR.Band`), where `interiorThreeDiagonal` is the
+gasket parity of the carries on diagonals `≥ 3`. Hence `CenterPeriodic T P ⟺ ThreeAgainstTrailing T P`
+and **Problem 1 ⟺ ThreeAperiodic**: the deep-interior diagonal can never be "the period-doubling
+sequence plus a periodic sequence". This is the 2-adic lever made exact: the regular band injects
+`trailingParity`, which is not eventually periodic for any period, so a periodic center requires the
+deep interior to reproduce that automatic non-periodicity. *Coherence lens (survived)*: the trinomial
+kernel is dyadically stable, `trinomialParity (2^{j+1}−1−m) d = trinomialParity (2^j−1−m) d` for
+`m, d < 2^j`, with `trinomialParity (2^j − 1) d = [d mod 3 ≠ 2]` (the row `2^j − 1` is `1/q`
+below degree `2^j`), so the dyadic column reads the carries through a fixed inverse kernel
+`1/q^{m+1}` (`Rule30UOR.StableKernel`): `DyadicColumnAperiodic ⟺ StableFormulaAperiodic`.
+
 Problem 1 remains unproved.

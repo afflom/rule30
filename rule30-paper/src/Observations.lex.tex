@@ -3324,5 +3324,199 @@ Close the goal with \(\lexeme{r30.observation::linear-self-intersection-odd-one}
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{interior-split-three}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\), \(interior(m) = wittxor(lowsource(m), interiorthree(m))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-split-three}(m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{interior-ledger-split-three}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(interiorledger(t) = wittxor(lowledger(t), interiorthreeledger(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-ledger-split-three}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{interior-diagonal-split-three}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(interiordiagonal(t) = bxor(lowdiagonal(t), interiorthreediagonal(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-diagonal-split-three}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{column-parity-succ-bxor}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(e\), \(bxor(columnparity(e + 1), columnparity(e)) = not(trailingparity(e + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::column-parity-succ-bxor}(e)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{low-diagonal-three}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(lowdiagonal(s + 2 + 1) = not(bxor(columnparity(s), columnparity(s / 2)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::low-diagonal-three}(s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{low-diagonal-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(bxor(timeparity(t), lowdiagonal(t)) = not(trailingparity(t - 2))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::low-diagonal-eq}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-trailing-parity-bxor-three}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(center(t) = bxor(trailingparity(t - 2), interiorthreediagonal(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-trailing-parity-bxor-three}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-periodic-iff-three-against-trailing}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(2 ≤ T\), then \(centerperiodic(T, P) ↔ threeagainsttrailing(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-iff-three-against-trailing}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-iff-three-aperiodic}
+\allowaxioms{Quot.sound;propext}
+\(problemone ↔ threeaperiodic\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::problem1-iff-three-aperiodic}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-three-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(threeaperiodic\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-three-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trailing-parity-not-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(0 < P\), then \(¬ trailingparityperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trailing-parity-not-periodic}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{interior-three-aperiodic-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), if \(0 < P\), then if \(centerperiodic(T, P)\), then \(¬ threeperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::interior-three-aperiodic-of-center-periodic}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trailing-parity-twopow-add}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(s\), if \(s + 1 < twopow(k)\), then \(trailingparity(twopow(k) + s) = trailingparity(s)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trailing-parity-twopow-add}(k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-dyadic-stable}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(m\) and natural number \(d\), if \(m < twopow(j)\), then if \(d < twopow(j)\), then \(trinomialparity(twopow(j + 1) - 1 - m, d) = trinomialparity(twopow(j) - 1 - m, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-dyadic-stable}(j, m, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-eq-stable-kernel}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(m\) and natural number \(d\), if \(m < twopow(j)\), then if \(d < twopow(j)\), then \(trinomialparity(twopow(j) - 1 - m, d) = stablekernel(m, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-eq-stable-kernel}(j, m, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{stable-kernel-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(d\), \(stablekernel(m, d + 2) = bxor(bxor(stablekernel(m + 1, d + 2), stablekernel(m + 1, d + 1)), stablekernel(m + 1, d))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::stable-kernel-succ}(m, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{stable-kernel-succ-zero}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\), \(stablekernel(m, 0) = stablekernel(m + 1, 0)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::stable-kernel-succ-zero}(m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{stable-kernel-succ-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\), \(stablekernel(m, 1) = bxor(stablekernel(m + 1, 1), stablekernel(m + 1, 0))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::stable-kernel-succ-one}(m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{trinomial-parity-row-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(d\), \(trinomialparity(n + 1, d + 2) = bxor(bxor(trinomialparity(n, d + 2), trinomialparity(n, d + 1)), trinomialparity(n, d))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::trinomial-parity-row-succ}(n, d)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{time-parity-twopow}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), if \(1 ≤ j\), then \(timeparity(twopow(j)) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::time-parity-twopow}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{conv-eq-stable-conv}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(n\) and natural number \(y\) and natural number \(t\), if \(n < twopow(j)\), then if \(t < twopow(j)\), then \(conv(twopow(j) - 1 - n, y, t) = stableconv(n, y, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::conv-eq-stable-conv}(j, n, y, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-twopow-eq-stable-formula}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), if \(1 ≤ j\), then \(center(twopow(j)) = not(stableformula(j, twopow(j)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-twopow-eq-stable-formula}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{dyadic-column-aperiodic-iff-stable}
+\allowaxioms{Quot.sound;propext}
+\(dyadiccolumnaperiodic ↔ stableformulaaperiodic\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::dyadic-column-aperiodic-iff-stable}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-stable-formula-aperiodic}
+\allowaxioms{Quot.sound;propext}
+if \(stableformulaaperiodic\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-stable-formula-aperiodic}(h)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

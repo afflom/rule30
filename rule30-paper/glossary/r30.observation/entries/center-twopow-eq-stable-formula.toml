@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-twopow-eq-stable-formula"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::le) (nat 1) (local j)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (app (const r30.scale::twopow) (local j))) (app (const lexlean.std.bool::not) (app (const r30.observation::stable-formula) (local j) (app (const r30.scale::twopow) (local j)))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.center_twopow_eq_stableFormula"
+
+[[form]]
+id = "center-twopow-eq-stable-formula"
+channel = "math"
+surface = "centertwopoweqstableformula"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centertwopoweqstableformula) (paren (seq (slot 0))))"

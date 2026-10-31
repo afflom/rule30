@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "time-parity-twopow"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::le) (nat 1) (local j)))) (app (const lexlean.core::eq) (app (const r30.observation::time-parity) (app (const r30.scale::twopow) (local j))) (const lexlean.std.bool::false))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.timeParity_twopow"
+
+[[form]]
+id = "time-parity-twopow"
+channel = "math"
+surface = "timeparitytwopow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name timeparitytwopow) (paren (seq (slot 0))))"

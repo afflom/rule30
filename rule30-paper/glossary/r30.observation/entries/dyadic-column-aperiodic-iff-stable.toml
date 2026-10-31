@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "dyadic-column-aperiodic-iff-stable"
+category = "proof-constant"
+signature = "(app (const lexlean.core::iff) (const r30.observation::dyadic-column-aperiodic) (const r30.observation::stable-formula-aperiodic))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.dyadicColumnAperiodic_iff_stable"
+
+[[form]]
+id = "dyadic-column-aperiodic-iff-stable"
+channel = "math"
+surface = "dyadiccolumnaperiodiciffstable"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name dyadiccolumnaperiodiciffstable)"

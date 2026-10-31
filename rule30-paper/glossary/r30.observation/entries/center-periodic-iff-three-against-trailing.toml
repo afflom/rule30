@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-periodic-iff-three-against-trailing"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hT (app (const lexlean.std.nat::le) (nat 2) (local T)))) (app (const lexlean.core::iff) (app (const r30.scale::center-periodic) (local T) (local P)) (app (const r30.observation::three-against-trailing) (local T) (local P)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.centerPeriodic_iff_threeAgainstTrailing"
+
+[[form]]
+id = "center-periodic-iff-three-against-trailing"
+channel = "math"
+surface = "centerperiodiciffthreeagainsttrailing"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerperiodiciffthreeagainsttrailing) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

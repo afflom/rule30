@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-diagonal-split-three"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::interior-diagonal) (local t)) (app (const r30.local::bxor) (app (const r30.observation::low-diagonal) (local t)) (app (const r30.observation::interior-three-diagonal) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.interiorDiagonal_split_three"
+
+[[form]]
+id = "interior-diagonal-split-three"
+channel = "math"
+surface = "interiordiagonalsplitthree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiordiagonalsplitthree) (paren (seq (slot 0))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "stable-formula-periodic"
+category = "function"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.StableFormulaPeriodic"
+
+[[form]]
+id = "stable-formula-periodic"
+channel = "math"
+surface = "stableformulaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name stableformulaperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

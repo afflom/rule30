@@ -16,7 +16,7 @@ statement = "With the center agreeing at t, the next center defect is leftDefect
 id = "aperiodic-compensation"
 level = "open"
 suite = "register"
-statement = "The interior diagonal, the gasket parity of the bulk carries, is not eventually periodic (InteriorAperiodic). Equivalent to Problem 1 (interior-aperiodicity). This is the remaining obligation."
+statement = "The deep-interior diagonal (the gasket parity of the carries on diagonals >= 3) is never the period-doubling sequence trailingParity (t-2) plus a periodic sequence: ThreeAperiodic. Equivalent to Problem 1 (three-diagonal-band), and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation."
 
 [[id]]
 id = "q-adic-descent"
@@ -221,6 +221,18 @@ id = "characteristic-one-facet"
 level = "build"
 suite = "register"
 statement = "The carry is the intersection of a row with its own translate (the characteristic-1 content of rule 30, the idempotent OR, against the characteristic-2 linear part whose Frobenius is the gasket). On the linear rows the self-intersection is exact: carry (q^(2m)) = 0 and carry (q^(2m+1)) is the run boundary of q^m; the linear self-carry lives on odd rows only."
+
+[[id]]
+id = "three-diagonal-band"
+level = "build"
+suite = "register"
+statement = "The three inner diagonals of the regular side (carry bits 2t, 1, 2 of every row) contribute exactly the period-doubling sequence: center t = trailingParity (t-2) XOR interiorThreeDiagonal t for t >= 2, where interiorThreeDiagonal is the gasket parity of the carries on diagonals >= 3. Hence CenterPeriodic T P iff ThreeAgainstTrailing T P (T >= 2) and Problem 1 iff ThreeAperiodic: the deep interior can never be the period-doubling sequence plus a periodic sequence."
+
+[[id]]
+id = "stable-kernel"
+level = "build"
+suite = "register"
+statement = "The trinomial kernel is dyadically stable: trinomialParity (2^(j+1)-1-m) d = trinomialParity (2^j-1-m) d for m, d < 2^j, so the dyadic column reads the carries of row m through the fixed kernel stableKernel m (the inverse 1/q^(m+1); row 2^j-1 is 1/q = 110110... below degree 2^j): center (2^j) = not stableFormula j for j >= 1, and DyadicColumnAperiodic iff StableFormulaAperiodic."
 
 [[id]]
 id = "api-modules"

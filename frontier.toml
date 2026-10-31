@@ -22,10 +22,10 @@ depends = ["problem1"]
 [[claim]]
 id = "aperiodic-compensation"
 status = "open"
-statement = "The interior diagonal, the gasket parity of the bulk carries, is not eventually periodic (InteriorAperiodic). Equivalent to Problem 1 (interior-aperiodicity). This is the remaining obligation."
-lean = "Rule30UOR.EdgeParity.InteriorAperiodic"
+statement = "The deep-interior diagonal (the gasket parity of the carries on diagonals >= 3) is never the period-doubling sequence trailingParity (t-2) plus a periodic sequence: ThreeAperiodic. Equivalent to Problem 1 (three-diagonal-band), and to InteriorAperiodic (interior-aperiodicity). This is the remaining obligation."
+lean = "Rule30UOR.Band.ThreeAperiodic"
 since = "2026-10-28"
-note = "Every proved reduction ends here. Exact form (ledger-diagonal, edge-interior-split, edge-parity, interior-aperiodicity): center t = not (timeParity t XOR interiorDiagonal t), so a center period P is an interior period 2P and conversely; the edge background is the alternation of the time and there is nothing to compensate against beyond it. Dyadic form: center (2^j) = not interiorDiagonal (2^j) for j >= 1. Black-center absorption (periodic_black_ledger_absorbs) remains the exact constraint at black-center times. Shape fixed by left-defect-sourcing. Decision point first-failure-2adic (refuted): the obstruction is exact, not statistical. Three proposed routes (A band discharge, B reset mismatch, C rank drop) were decided by the kernel and refuted (Rule30UOR.Routes). No closing argument is known."
+note = "Every proved reduction ends here. Exact form (ledger-diagonal, edge-interior-split, edge-parity, three-diagonal-band): center t = trailingParity (t-2) XOR interiorThreeDiagonal t for t >= 2; CenterPeriodic T P iff ThreeAgainstTrailing T P. The period-doubling sequence has no eventual period (trailingParity_not_periodic), so under a center period the deep interior is itself non-periodic (interiorThree_aperiodic_of_centerPeriodic), in the exact automatic way the regular band dictates. Dyadic form: center (2^j) = not stableFormula j (stable-kernel). Black-center absorption (periodic_black_ledger_absorbs) remains the constraint at black-center times. Shape fixed by left-defect-sourcing. first-failure-2adic (refuted): the obstruction is exact, not statistical. Routes A, B, C refuted by the kernel (Rule30UOR.Routes). Measured non-routes: individual regular-side diagonals >= 3 contribute non-periodic automatic sequences; the linear self-carry diagonal is a nontrivial automatic sequence. No closing argument is known."
 depends = ["recurrent-central-collision", "coupling-law"]
 
 [[claim]]
@@ -329,3 +329,21 @@ lean = "Rule30UOR.Intersection.linear_self_intersection_even"
 since = "2026-10-31"
 note = "Rule30UOR.Intersection: rowBit_carry, rowBit_linear, linear_self_intersection_even, linear_self_intersection_odd_rise/_fall/_one, trinomialParity_zero_right. Reading of UOR-Foundation/F1 (intersection theory over the single-element field): the crux there is a positivity of a Frobenius-twisted self-intersection; here it is the parity of gasket-weighted self-intersections, and there is no sign. A facet, not a route: the full self-intersection of row m = q^m XOR W_m has the cross terms and the ledger term W_m AND shift W_m, and the measured linear self-carry diagonal is a nontrivial automatic sequence."
 depends = ["ledger-diagonal"]
+
+[[claim]]
+id = "three-diagonal-band"
+status = "proved"
+statement = "The three inner diagonals of the regular side (carry bits 2t, 1, 2 of every row) contribute exactly the period-doubling sequence: center t = trailingParity (t-2) XOR interiorThreeDiagonal t for t >= 2, where interiorThreeDiagonal is the gasket parity of the carries on diagonals >= 3. Hence CenterPeriodic T P iff ThreeAgainstTrailing T P (T >= 2) and Problem 1 iff ThreeAperiodic: the deep interior can never be the period-doubling sequence plus a periodic sequence."
+lean = "Rule30UOR.Band.center_eq_trailingParity_bxor_three"
+since = "2026-10-31"
+note = "Rule30UOR.Band: rdiag_two_eq_parity, lowSource, interiorThree, lowLedger, interiorThreeLedger, interior_split_three, interiorLedger_split_three, interiorDiagonal_split_three, columnParity_succ_bxor, lowDiagonal_three, lowDiagonal_eq (timeParity t XOR lowDiagonal t = not trailingParity (t-2)), center_eq_trailingParity_bxor_three, ThreeAgainstTrailing, ThreeAperiodic, centerPeriodic_iff_threeAgainstTrailing, problem1_iff_threeAperiodic, problem1_of_threeAperiodic, TrailingParityPeriodic, trailingParity_not_periodic (the period-doubling sequence has no eventual period), ThreePeriodic, interiorThree_aperiodic_of_centerPeriodic (under a center period the deep interior is itself not periodic), trailingParity_twopow_add. The 2-adic lever made exact: the regular band injects trailingParity, so a periodic center requires the deep interior to reproduce an automatic non-periodicity."
+depends = ["edge-parity"]
+
+[[claim]]
+id = "stable-kernel"
+status = "proved"
+statement = "The trinomial kernel is dyadically stable: trinomialParity (2^(j+1)-1-m) d = trinomialParity (2^j-1-m) d for m, d < 2^j, so the dyadic column reads the carries of row m through the fixed kernel stableKernel m (the inverse 1/q^(m+1); row 2^j-1 is 1/q = 110110... below degree 2^j): center (2^j) = not stableFormula j for j >= 1, and DyadicColumnAperiodic iff StableFormulaAperiodic."
+lean = "Rule30UOR.StableKernel.dyadicColumnAperiodic_iff_stable"
+since = "2026-10-31"
+note = "Rule30UOR.StableKernel: trinomialParity_dyadic_stable(_iter), stableKernel, trinomialParity_eq_stableKernel, trinomialParity_row_succ, stableKernel_succ/_zero/_one (the inverse recursion), trinomialParity_twopow_pred, stableKernel_zero, stableConv, conv_eq_stableConv, stableFormula, interiorFormula_twopow_eq_stableFormula, timeParity_twopow, center_twopow_eq_stableFormula, StableFormulaPeriodic, StableFormulaAperiodic, dyadicColumnAperiodic_iff_stable, problem1_of_stableFormulaAperiodic. Equivalent to the step identity dyadic_column_step (the early rows' contribution is constant across scales); an exact restatement with a scale-free kernel, not a route by itself."
+depends = ["dilation-reduction", "edge-parity"]

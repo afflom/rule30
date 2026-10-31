@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "low-ledger"
+category = "function"
+signature = "(pi ((explicit h1 (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.lowLedger"
+
+[[form]]
+id = "low-ledger"
+channel = "math"
+surface = "lowledger"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lowledger) (paren (seq (slot 0))))"

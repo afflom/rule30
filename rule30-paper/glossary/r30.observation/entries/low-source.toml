@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "low-source"
+category = "function"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.lowSource"
+
+[[form]]
+id = "low-source"
+channel = "math"
+surface = "lowsource"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lowsource) (paren (seq (slot 0))))"

@@ -5,7 +5,7 @@ id = "RULE30-PRIZE"
 name = "Wolfram Rule 30 Prize, Problem 1"
 citation = "https://www.rule30prize.org"
 statement = "The center column of Rule 30 from a single black cell is not eventually periodic."
-realized_by = ["problem1", "coupling-law", "aperiodic-compensation", "recurrent-central-collision", "horizon-criterion", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "center-infinite-kernel", "kernel-self-similarity", "no-dyadic-self-similarity", "dilation-reduction", "dyadic-column-aperiodic", "base-generic-reduction", "some-base-dilation-aperiodic", "kappa-collapse", "dyadic-response-reduction", "dyadic-response-aperiodic", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet"]
+realized_by = ["problem1", "coupling-law", "aperiodic-compensation", "recurrent-central-collision", "horizon-criterion", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "center-infinite-kernel", "kernel-self-similarity", "no-dyadic-self-similarity", "dilation-reduction", "dyadic-column-aperiodic", "base-generic-reduction", "some-base-dilation-aperiodic", "kappa-collapse", "dyadic-response-reduction", "dyadic-response-aperiodic", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel"]
 
 [[authority]]
 id = "LEXLEAN"

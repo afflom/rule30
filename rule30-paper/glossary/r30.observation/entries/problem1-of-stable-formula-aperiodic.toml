@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-of-stable-formula-aperiodic"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.observation::stable-formula-aperiodic))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.StableKernel"
+name = "Rule30UOR.StableKernel.problem1_of_stableFormulaAperiodic"
+
+[[form]]
+id = "problem1-of-stable-formula-aperiodic"
+channel = "math"
+surface = "problem1ofstableformulaaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problem1ofstableformulaaperiodic) (paren (seq (slot 0))))"

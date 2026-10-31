@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "interior-three-aperiodic-of-center-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P)))) (app (const lexlean.core::lnot) (app (const r30.observation::three-periodic) (local T) (local P)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Band"
+name = "Rule30UOR.Band.interiorThree_aperiodic_of_centerPeriodic"
+
+[[form]]
+id = "interior-three-aperiodic-of-center-periodic"
+channel = "math"
+surface = "interiorthreeaperiodicofcenterperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name interiorthreeaperiodicofcenterperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
