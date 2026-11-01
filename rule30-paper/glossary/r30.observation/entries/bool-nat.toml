@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "bool-nat"
+category = "function"
+signature = "(pi ((explicit h1 (const lexlean.std.bool::bool))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.RightPeriods"
+name = "Rule30UOR.RightPeriods.boolNat"
+
+[[form]]
+id = "bool-nat"
+channel = "math"
+surface = "boolnat"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name boolnat) (paren (seq (slot 0))))"

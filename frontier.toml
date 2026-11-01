@@ -455,3 +455,12 @@ lean = "Rule30UOR.LeftTower.ldiag_eventually_periodic"
 since = "2026-11-01"
 note = "Rule30UOR.LeftTower: LeftPeriodic, leftPeriodic_zero/one/mono/mul, leftRun (the forced one-bit system), ldiag_eq_leftRun, leftRun_add, leftRun_shift, leftRun_three (G^3 = G on Bool), leftPeriodic_step, leftPeriod (= twopow j), leftTransient, leftPeriodic_pair, ldiag_eventually_periodic, center_eq_ldiag_self, ldiag_self_periodic_of_centerPeriodic. Measured: true periods 1..16 for d <= 1200 (slowly growing powers of 2), transients linear in d with slope about 1.29; the provable 2^d bounds are loose. The aperiodicity of the center is carried by the wedge between the settled left region (transient about 1.29 d) and the right table's periods (larger than the diagonal index). Not a closing argument."
 depends = ["antidiagonal"]
+
+[[claim]]
+id = "jen-law"
+status = "proved"
+statement = "Jen's law in exact form: if q is a period of the OR-word below, a right diagonal word satisfies W_j(s+q) = W_j(s) XOR W_j(q), so its period is q or 2q according to the single doubling bit W_j(q); the exponent jenExp (k+2) = jenExp (k+1) + [W_{k+2}(2^jenExp(k+1))] is non-decreasing with steps 0 or 1 and every word has period 2^jenExp j. The center reads the same word at position t (its prefix parity over [0,t)), the period structure at position 2^jenExp(j-1) (over one full period)."
+lean = "Rule30UOR.RightPeriods.towerWord_jen_periodic"
+since = "2026-11-01"
+note = "Rule30UOR.RightPeriods: WordPeriodic, OrPeriodic, towerWord_shift (affine shift law), wordPeriodic_of_or, word_antiperiodic_of_or, wordPeriodic_double, orPeriodic_of_words, wordPeriodic_mul, wordPeriodic_twopow_mono, boolNat, jenExp, jenExp_step_periodic, towerWord_jen_periodic, jenExp_two..nine, jenExp_values, jenExp_le_succ, jenExp_succ_le, jenExp_succ_succ_eq, jenExp_le, doublingBit, jenExp_succ_eq (host: max), towerWord_two_readings (host). The replica of jenExp equals the true minimal period exponent for every j <= 33 (Lean proves the upper bound; explicit mismatches show minimality): 1,2,3,3,4,5,5,6,6,6,6,6,6,7,8,...,12, about 0.36 j. Not a closing argument."
+depends = ["diagonal-halving"]

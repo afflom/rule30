@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "tower-word-jen-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (app (const r30.observation::word-periodic) (local j) (app (const r30.scale::twopow) (app (const r30.observation::jen-exp) (local j)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.RightPeriods"
+name = "Rule30UOR.RightPeriods.towerWord_jen_periodic"
+
+[[form]]
+id = "tower-word-jen-periodic"
+channel = "math"
+surface = "towerwordjenperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name towerwordjenperiodic) (paren (seq (slot 0))))"

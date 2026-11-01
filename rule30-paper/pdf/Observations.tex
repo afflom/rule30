@@ -4023,4 +4023,67 @@ For every natural number \(T\) and natural number \(P\) and natural number \(t\)
 \begin{proof}
 The goal follows from \(\operatorname{ldiagselfperiodicofcenterperiodic}(T, P, t)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:word-periodic-of-or}
+For every natural number \(k\) and natural number \(q\), if \(\operatorname{orperiodic}(k, q)\), then if \(\operatorname{towerword}(k + 2, q) = \operatorname{false}\), then \(\operatorname{wordperiodic}(k + 2, q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordperiodicofor}(k, q)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-periodic-double}
+For every natural number \(k\) and natural number \(q\), if \(\operatorname{orperiodic}(k, q)\), then \(\operatorname{wordperiodic}(k + 2, 2 \cdot q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordperiodicdouble}(k, q)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:or-periodic-of-words}
+For every natural number \(k\) and natural number \(q\), if \(\operatorname{wordperiodic}(k + 1, q)\), then if \(\operatorname{wordperiodic}(k, q)\), then \(\operatorname{orperiodic}(k, q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{orperiodicofwords}(k, q)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-jen-periodic}
+For every natural number \(j\), \(\operatorname{wordperiodic}(j, \operatorname{twopow}(\operatorname{jenexp}(j)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordjenperiodic}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:jen-exp-values}
+\(\operatorname{jenexp}(2) = 1\) and \(\operatorname{jenexp}(3) = 2 \land \operatorname{jenexp}(4) = 3 \land \operatorname{jenexp}(5) = 3 \land \operatorname{jenexp}(6) = 4 \land \operatorname{jenexp}(7) = 5 \land \operatorname{jenexp}(8) = 5 \land \operatorname{jenexp}(9) = 6\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{jenexpvalues}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:jen-exp-le-succ}
+For every natural number \(j\), \(\operatorname{jenexp}(j) \le \operatorname{jenexp}(j + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{jenexplesucc}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:jen-exp-succ-le}
+For every natural number \(j\), \(\operatorname{jenexp}(j + 1) \le \operatorname{jenexp}(j) + 1\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{jenexpsuccle}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:jen-exp-succ-succ-eq}
+For every natural number \(k\), \(\operatorname{jenexp}(k + 2) = \operatorname{jenexp}(k + 1) + \operatorname{boolnat}(\operatorname{towerword}(k + 2, \operatorname{twopow}(\operatorname{jenexp}(k + 1))))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{jenexpsuccsucceq}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:jen-exp-le}
+For every natural number \(j\), \(\operatorname{jenexp}(j) \le j\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{jenexple}(j)\).
+\end{proof}
 \end{document}

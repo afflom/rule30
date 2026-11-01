@@ -4602,5 +4602,77 @@ Close the goal with \(\lexeme{r30.observation::ldiag-self-periodic-of-center-per
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{word-periodic-of-or}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(q\), if \(orperiodic(k, q)\), then if \(towerword(k + 2, q) = false\), then \(wordperiodic(k + 2, q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-periodic-of-or}(k, q)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{word-periodic-double}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(q\), if \(orperiodic(k, q)\), then \(wordperiodic(k + 2, 2 * q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-periodic-double}(k, q)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{or-periodic-of-words}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(q\), if \(wordperiodic(k + 1, q)\), then if \(wordperiodic(k, q)\), then \(orperiodic(k, q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::or-periodic-of-words}(k, q)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-jen-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(wordperiodic(j, twopow(jenexp(j)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-jen-periodic}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{jen-exp-values}
+\allowaxioms{Quot.sound;propext}
+\(jenexp(2) = 1 ∧ jenexp(3) = 2 ∧ jenexp(4) = 3 ∧ jenexp(5) = 3 ∧ jenexp(6) = 4 ∧ jenexp(7) = 5 ∧ jenexp(8) = 5 ∧ jenexp(9) = 6\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::jen-exp-values}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{jen-exp-le-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(jenexp(j) ≤ jenexp(j + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::jen-exp-le-succ}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{jen-exp-succ-le}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(jenexp(j + 1) ≤ jenexp(j) + 1\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::jen-exp-succ-le}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{jen-exp-succ-succ-eq}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), \(jenexp(k + 2) = jenexp(k + 1) + boolnat(towerword(k + 2, twopow(jenexp(k + 1))))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::jen-exp-succ-succ-eq}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{jen-exp-le}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(jenexp(j) ≤ j\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::jen-exp-le}(j)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

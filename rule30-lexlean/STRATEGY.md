@@ -3390,3 +3390,19 @@ period `3·2^{a(d)}` (the 3 is the Fibonacci parity of the Pascal diagonal sums:
 contributes the period-3 word `100`), doubling at `d ≈ 3, 8, 29, 36, 44, 81`, cumulatively
 periodic through every distance measured: the aperiodicity of the center is carried entirely by
 the unsettled wedge.
+
+**Jen's law, exact, and the two readings (2026-11-01, `Rule30UOR.RightPeriods`, proved).** The
+affine shift law: if `q` is a period of the OR-word below, `W_j(s + q) = W_j(s) ⊕ W_j(q)`
+(`towerWord_shift`), so word `j` has period `q` or `2q` according to the single bit `W_j(q)`
+(`wordPeriodic_of_or`, `wordPeriodic_double`). Hence the exponent sequence
+`jenExp (k+2) = jenExp (k+1) + [W_{k+2}(2^{jenExp (k+1)})]`, non-decreasing with steps 0 or 1
+(`jenExp_le_succ`, `jenExp_succ_le`, `jenExp_succ_succ_eq`), and every word has period
+`2^{jenExp j}` (`towerWord_jen_periodic`). Its replica equals the true minimal exponent for every
+`j ≤ 33` (1,2,3,3,4,5,5,6,6,6,6,6,6,7,8,…,12; about `0.36·j`). The right table is therefore completely
+described by one bit per diagonal, the doubling bit `W_j(2^{jenExp (j−1)})`: the word's prefix parity
+over one full period of the OR-word below. The center is the *same* word's prefix parity over the
+initial segment `[0, t)`: `center t = W_t(t)` (`towerWord_two_readings`). The two readings of one
+object: the period structure reads the OR-word's weight over its full period, the center reads it
+over the first `t` places, which is shorter than the period by a factor `2^{0.36 t}/t`. Measured:
+the right table repeats visibly only in a strip of width about `2.8·log₂ t` at the right edge, the
+left table is settled for positions `p ≤ −0.22·t`, and the center sits in the wedge between.

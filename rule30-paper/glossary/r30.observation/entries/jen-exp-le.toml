@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "jen-exp-le"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (app (const lexlean.std.nat::le) (app (const r30.observation::jen-exp) (local j)) (local j)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.RightPeriods"
+name = "Rule30UOR.RightPeriods.jenExp_le"
+
+[[form]]
+id = "jen-exp-le"
+channel = "math"
+surface = "jenexple"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name jenexple) (paren (seq (slot 0))))"

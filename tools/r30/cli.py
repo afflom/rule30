@@ -439,7 +439,11 @@ def cmd_commit(args):
     if st and st["running"]:
         fail("R305001", f"{st['log']}; wait for it: bin/r30 gate")
     paths = args.paths or ["-A"]
-    repo.run(["git", "add", *paths])
+    # `git add` refuses a whole list when one path neither exists nor is tracked; committing the
+    # rest of the index anyway once shipped a batch without its proofs, so a failed staging stops here.
+    code, _, err = repo.run(["git", "add", *paths] if paths == ["-A"] else ["git", "add", "-A", "--", *paths])
+    if code != 0:
+        fail("R305006", "git add failed, nothing committed: " + err.strip().splitlines()[-1] if err.strip() else "git add failed")
     log = repo.scratch_dir() / f"commit-{int(time.time())}.log"
     script = f"git commit -F - <<'MSG' && {'git push origin main' if args.push else 'true'}\n{args.message}\n\nCo-Authored-By: {args.coauthor}\nMSG"
     with open(log, "w") as f:

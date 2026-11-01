@@ -145,6 +145,14 @@ statement = "kappa names a module that is not a registered Rule30UOR research mo
 commands = ["kappa"]
 
 [[error]]
+code = "R305006"
+title = "Staging failed"
+class = "workspace"
+exit = 1
+statement = "git add refused the paths given to commit (a path that neither exists nor is tracked); nothing was committed."
+commands = ["commit"]
+
+[[error]]
 code = "R306001"
 title = "Production export failed"
 class = "production"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "word-periodic-of-or"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat))) (pi ((explicit h (app (const r30.observation::or-periodic) (local k) (local q))) (explicit hz (app (const lexlean.core::eq) (app (const r30.observation::tower-word) (app (const lexlean.std.nat::add) (local k) (nat 2)) (local q)) (const lexlean.std.bool::false)))) (app (const r30.observation::word-periodic) (app (const lexlean.std.nat::add) (local k) (nat 2)) (local q))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.RightPeriods"
+name = "Rule30UOR.RightPeriods.wordPeriodic_of_or"
+
+[[form]]
+id = "word-periodic-of-or"
+channel = "math"
+surface = "wordperiodicofor"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wordperiodicofor) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

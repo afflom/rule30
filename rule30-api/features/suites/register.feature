@@ -307,3 +307,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.LeftTower.ldiag_eventually_periodic for left-tower
     When the suite exercises left-tower
     Then its oracle accepts it: frontier check: Rule30UOR.LeftTower.ldiag_eventually_periodic kernel-checked under propext and Quot.sound and published
+
+  @jen-law @build
+  Scenario: Jen's law in exact form: if q is a period of the OR-word below, a right diagonal word satisfies W_j(s+q) = W_j(s) XOR W_j(q), so its period is q or 2q according to the single doubling bit W_j(q); the exponent jenExp (k+2) = jenExp (k+1) + [W_{k+2}(2^jenExp(k+1))] is non-decreasing with steps 0 or 1 and every word has period 2^jenExp j. The center reads the same word at position t (its prefix parity over [0,t)), the period structure at position 2^jenExp(j-1) (over one full period).
+    Given frontier.toml names Rule30UOR.RightPeriods.towerWord_jen_periodic for jen-law
+    When the suite exercises jen-law
+    Then its oracle accepts it: frontier check: Rule30UOR.RightPeriods.towerWord_jen_periodic kernel-checked under propext and Quot.sound and published

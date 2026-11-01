@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "jen-exp-values"
+category = "proof-constant"
+signature = "(app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::jen-exp) (nat 2)) (nat 1)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::jen-exp) (nat 3)) (nat 2)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::jen-exp) (nat 4)) (nat 3)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::jen-exp) (nat 5)) (nat 3)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::jen-exp) (nat 6)) (nat 4)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::jen-exp) (nat 7)) (nat 5)) (app (const lexlean.core::land) (app (const lexlean.core::eq) (app (const r30.observation::jen-exp) (nat 8)) (nat 5)) (app (const lexlean.core::eq) (app (const r30.observation::jen-exp) (nat 9)) (nat 6)))))))))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.RightPeriods"
+name = "Rule30UOR.RightPeriods.jenExp_values"
+
+[[form]]
+id = "jen-exp-values"
+channel = "math"
+surface = "jenexpvalues"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name jenexpvalues)"

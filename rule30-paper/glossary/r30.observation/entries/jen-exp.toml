@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "jen-exp"
+category = "function"
+signature = "(pi ((explicit h1 (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.RightPeriods"
+name = "Rule30UOR.RightPeriods.jenExp"
+
+[[form]]
+id = "jen-exp"
+channel = "math"
+surface = "jenexp"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name jenexp) (paren (seq (slot 0))))"
