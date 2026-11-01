@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-left-cone"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 2) (local t)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const lexlean.std.bool::not) (app (const r30.observation::left-cone) (local t))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.center_eq_leftCone"
+
+[[form]]
+id = "center-eq-left-cone"
+channel = "math"
+surface = "centereqleftcone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqleftcone) (paren (seq (slot 0))))"

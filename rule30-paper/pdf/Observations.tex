@@ -3939,4 +3939,39 @@ For every natural number \(k\) and natural number \(J\), if \(1 \le k\), then if
 \begin{proof}
 The goal follows from \(\operatorname{rightthresholdge}(k, J)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-symm}
+For every natural number \(n\) and natural number \(k\), if \(k \le n\), then \(\operatorname{pascalparity}(n, k) = \operatorname{pascalparity}(n, n - k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparitysymm}(n, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-left-cone}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{center}(t) = \operatorname{not}(\operatorname{leftcone}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqleftcone}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-cone-center-periodic}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(2 \le t\), then \(\operatorname{leftcone}(t + P) = \operatorname{leftcone}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftconecenterperiodic}(T, P, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:cone-term-add-twopow-mul}
+For every natural number \(m\) and natural number \(n\) and natural number \(j\) and natural number \(q\) and natural number \(c\), if \(q < \operatorname{twopow}(m)\), then \(\operatorname{coneterm}(n + \operatorname{twopow}(m) \cdot c, j, q) = \operatorname{coneterm}(n, j, q)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{conetermaddtwopowmul}(m, n, j, q, c)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:lucas-sum-eq-left-cone}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{lucassum}(t - 2, t) = \operatorname{leftcone}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lucassumeqleftcone}(t)\).
+\end{proof}
 \end{document}

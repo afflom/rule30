@@ -295,3 +295,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.Antidiagonal.center_eq_lucas for lucas-frame
     When the suite exercises lucas-frame
     Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.center_eq_lucas kernel-checked under propext and Quot.sound and published
+
+  @left-light-cone @build
+  Scenario: The center is the complement of the Pascal transport of the left run-ends: center t = not leftCone t, with leftCone t the XOR over times j < t and distances q of C(t-1-j, q) mod 2 times the run-end indicator cell j (1-q) AND NOT cell j (-q), sourced only from positions <= 1. The weight is the binomial parity of the age and the distance from column +1, and it obeys Lucas's higher-bit law (an age change by a multiple of 2^m leaves the weight of every distance below 2^m unchanged).
+    Given frontier.toml names Rule30UOR.Antidiagonal.center_eq_leftCone for left-light-cone
+    When the suite exercises left-light-cone
+    Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.center_eq_leftCone kernel-checked under propext and Quot.sound and published

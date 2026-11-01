@@ -344,6 +344,13 @@ feature = "interfaces/lucas-frame.md"
 evidence = "frontier check: Rule30UOR.Antidiagonal.center_eq_lucas kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "left-light-cone"
+level = "build"
+statement = "The center is the complement of the Pascal transport of the left run-ends: center t = not leftCone t, with leftCone t the XOR over times j < t and distances q of C(t-1-j, q) mod 2 times the run-end indicator cell j (1-q) AND NOT cell j (-q), sourced only from positions <= 1. The weight is the binomial parity of the age and the distance from column +1, and it obeys Lucas's higher-bit law (an age change by a multiple of 2^m leaves the weight of every distance below 2^m unchanged)."
+feature = "interfaces/left-light-cone.md"
+evidence = "frontier check: Rule30UOR.Antidiagonal.center_eq_leftCone kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."

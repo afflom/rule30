@@ -4506,5 +4506,45 @@ Close the goal with \(\lexeme{r30.observation::right-threshold-ge}(k, J)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{pascal-parity-symm}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(k\), if \(k ≤ n\), then \(pascalparity(n, k) = pascalparity(n, n - k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-symm}(n, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-left-cone}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(center(t) = not(leftcone(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-left-cone}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-cone-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then if \(2 ≤ t\), then \(leftcone(t + P) = leftcone(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-cone-center-periodic}(T, P, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{cone-term-add-twopow-mul}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(n\) and natural number \(j\) and natural number \(q\) and natural number \(c\), if \(q < twopow(m)\), then \(coneterm(n + twopow(m) * c, j, q) = coneterm(n, j, q)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::cone-term-add-twopow-mul}(m, n, j, q, c)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{lucas-sum-eq-left-cone}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(lucassum(t - 2, t) = leftcone(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::lucas-sum-eq-left-cone}(t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -437,3 +437,12 @@ lean = "Rule30UOR.Antidiagonal.center_eq_lucas"
 since = "2026-10-31"
 note = "Rule30UOR.Antidiagonal: pascalParity (digit recursion), pascalParity_succ (Pascal), pascalParity_gt, pascalParity_self, prefixPow_eq_pascal (host), pascalParity_hockey, constPrefix_eq_lucas, linearTower_eq_lucas, maskPascal, maskWeight, lucasSum, maskTransport_lucas, center_eq_lucas; then exposed_zero (diagonal 0 shows through diagonal 1 at even times), exposed_one (diagonal 1 never shows through diagonal 2), pascalParity_add_twopow_mul (Lucas's higher-bit independence: the frame's freezing law, no side-terms), xorBelow_of_vanish and maskPascal_corner (host: diagonal i reaches the center only through its first i+2 times). Not a closing argument."
 depends = ["mask-transport"]
+
+[[claim]]
+id = "left-light-cone"
+status = "proved"
+statement = "The center is the complement of the Pascal transport of the left run-ends: center t = not leftCone t, with leftCone t the XOR over times j < t and distances q of C(t-1-j, q) mod 2 times the run-end indicator cell j (1-q) AND NOT cell j (-q), sourced only from positions <= 1. The weight is the binomial parity of the age and the distance from column +1, and it obeys Lucas's higher-bit law (an age change by a multiple of 2^m leaves the weight of every distance below 2^m unchanged)."
+lean = "Rule30UOR.Antidiagonal.center_eq_leftCone"
+since = "2026-10-31"
+note = "Rule30UOR.Antidiagonal: pascalParity_symm (C(n,k) = C(n,n-k) mod 2), runEnd, leftEnd, coneTerm, coneRow, leftCone, exposed_eq_leftEnd, lucasPartial_eq_fold, xorBelow_swap (host), coneRow_eq_weight, lucasSum_eq_leftCone, center_eq_leftCone, leftCone_centerPeriodic, coneTerm_add_twopow_mul. The specific consistency condition the seed imposes on the left half-plane (which by leftExtend_rule alone cannot refute a period): a linear Pascal functional of the left run-ends equals the center. Under a period it is a fixed-point equation for the run-end field of the left cone. Not a closing argument."
+depends = ["lucas-frame"]

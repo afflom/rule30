@@ -905,4 +905,141 @@ theorem right_threshold_ge (k J : Nat) (hk : 1 ≤ k) (h : Rule30UOR.Interfaces.
   · exact absurd (Rule30UOR.KitConstructive.per_mono_le (by cfomega) (per_succ_twopow k hk)) h.2
   · exact hJ
 
+/-! ## The left cone: the center from the left run-ends
+
+The center is the complement of the Pascal transport of the left ends of the black runs, sourced
+only from the positions `≤ 1`: a run-end at time `j`, distance `q` left of column `+1`, reaches the
+center at time `t` with the weight `C(t − 1 − j, q) mod 2`. -/
+
+/-- **Binomial symmetry mod 2**: `C(n, k) = C(n, n − k)` for `k ≤ n`. -/
+theorem pascalParity_symm (n : Nat) : ∀ k, k ≤ n → pascalParity n k = pascalParity n (n - k) := by
+  induction n with
+  | zero =>
+    intro k hk
+    rw [show k = 0 by cfomega]
+  | succ n ih =>
+    intro k hk
+    rcases Nat.eq_zero_or_pos k with rfl | hk0
+    · rw [Nat.sub_zero, pascalParity_zero_right, pascalParity_self]
+    · rcases Nat.lt_or_ge k (n + 1) with hkn | hkn
+      · obtain ⟨k', rfl⟩ : ∃ k', k = k' + 1 := ⟨k - 1, by cfomega⟩
+        rw [show n + 1 - (k' + 1) = (n - k' - 1) + 1 by cfomega, pascalParity_succ, pascalParity_succ,
+          ih k' (by cfomega), ih (k' + 1) (by cfomega), show n - (k' + 1) = n - k' - 1 by cfomega,
+          show n - k' - 1 + 1 = n - k' by cfomega]
+        cases pascalParity n (n - k') <;> cases pascalParity n (n - k' - 1) <;> rfl
+      · rw [show n + 1 - k = 0 by cfomega, pascalParity_zero_right, show k = n + 1 by cfomega,
+          pascalParity_self]
+
+/-- The left end of a black run at time `j`, position `p`: a black cell with a white left
+neighbour. -/
+def runEnd (j : Nat) (p : Int) : Bool := cell j p && !(cell j (p - 1))
+
+/-- The run-end at time `j`, distance `q` left of column `+1` (position `1 − q`). -/
+def leftEnd (j q : Nat) : Bool := runEnd j (1 - (q : Int))
+
+/-- A run-end at distance `q`, transported over the age `n`: weight `C(n, q) mod 2`. -/
+def coneTerm (n j q : Nat) : Bool := pascalParity n q && leftEnd j q
+
+/-- The contribution of time `j` to the center at time `t`: the run-ends of time `j` at distances
+`q ≤ t − 1 − j`, each weighted by `C(t − 1 − j, q)`. -/
+def coneRow (t j : Nat) : Bool := xorBelow (fun q => coneTerm (t - 1 - j) j q) (t - j)
+
+/-- The left cone at time `t`: the transport of all the run-ends of the times `j < t`. -/
+def leftCone (t : Nat) : Bool := xorBelow (coneRow t) t
+
+theorem cone_bxor_false (b : Bool) : bxor false b = b := by cases b <;> rfl
+
+/-- The exposed mask is the run-end in the left-cone coordinates. -/
+theorem exposed_eq_leftEnd (i j : Nat) (h : j ≤ i + 1) : exposed i j = leftEnd j (i + 1 - j) := by
+  rw [exposed_eq_cells]
+  unfold leftEnd runEnd
+  rw [show ((j : Int) - (i : Int)) = 1 - ((i + 1 - j : Nat) : Int) by cfomega]
+
+/-- The Lucas partial sum as a fold. -/
+theorem lucasPartial_eq_fold (k s : Nat) :
+    ∀ i, lucasPartial k i s = xorBelow (fun i' => maskPascal i' (k - i') s) (i + 1)
+  | 0 => by
+    show maskPascal 0 k s = bxor false (maskPascal 0 (k - 0) s)
+    rw [Nat.sub_zero, cone_bxor_false]
+  | i + 1 => by
+    show bxor (lucasPartial k i s) (maskPascal (i + 1) (k - (i + 1)) s) =
+      bxor (xorBelow (fun i' => maskPascal i' (k - i') s) (i + 1)) (maskPascal (i + 1) (k - (i + 1)) s)
+    rw [lucasPartial_eq_fold k s i]
+
+/-- A double fold over a rectangle can be swapped. -/
+theorem xorBelow_swap (F : Nat → Nat → Bool) (b : Nat) :
+    ∀ a, xorBelow (fun i => xorBelow (fun j => F i j) b) a = xorBelow (fun j => xorBelow (fun i => F i j) a) b
+  | 0 => by
+    show false = xorBelow (fun _ => false) b
+    rw [xorBelow_false]
+  | a + 1 => by
+    show bxor (xorBelow (fun i => xorBelow (fun j => F i j) b) a) (xorBelow (fun j => F a j) b) =
+      xorBelow (fun j => bxor (xorBelow (fun i => F i j) a) (F a j)) b
+    rw [xorBelow_bxor (fun j => xorBelow (fun i => F i j) a) (fun j => F a j) b, xorBelow_swap F b a]
+
+/-- **One row of the cone**: the contribution of time `j` is its column of the Lucas weights. -/
+theorem coneRow_eq_weight (t j : Nat) (hj : j < t) :
+    coneRow t j = xorBelow (fun i => maskWeight t i j && exposed i j) (t - 1) := by
+  unfold coneRow
+  cases j with
+  | zero =>
+    obtain ⟨s, rfl⟩ : ∃ s, t = s + 1 := ⟨t - 1, by cfomega⟩
+    rw [show s + 1 - 1 - 0 = s by cfomega, show s + 1 - 0 = s + 1 by cfomega, xorBelow_front,
+      show s + 1 - 1 = s by cfomega]
+    show bxor (pascalParity s 0 && leftEnd 0 0) _ = _
+    rw [show leftEnd 0 0 = false by rfl, Bool.and_false, cone_bxor_false]
+    apply xorBelow_congr
+    intro q hq
+    show (pascalParity s (q + 1) && leftEnd 0 (q + 1)) = (maskWeight (s + 1) q 0 && exposed q 0)
+    unfold maskWeight
+    rw [exposed_eq_leftEnd q 0 (by cfomega), show s + 1 - 1 - 0 = s by cfomega,
+      show s + 1 - 2 - q = s - (q + 1) by cfomega, show q + 1 - 0 = q + 1 by cfomega,
+      ← pascalParity_symm s (q + 1) (by cfomega)]
+  | succ j =>
+    have hs := xorBelow_split (fun i => maskWeight t i (j + 1) && exposed i (j + 1)) j (t - 1 - (j + 1) + 1)
+    rw [show j + (t - 1 - (j + 1) + 1) = t - 1 by cfomega] at hs
+    rw [hs]
+    have hf : xorBelow (fun i => maskWeight t i (j + 1) && exposed i (j + 1)) j = false := by
+      rw [xorBelow_congr (fun i => maskWeight t i (j + 1) && exposed i (j + 1)) (fun _ => false) j
+        (fun i hi => by
+          show (pascalParity (t - 1 - (j + 1)) (t - 2 - i) && exposed i (j + 1)) = false
+          rw [pascalParity_gt _ _ (by cfomega), Bool.false_and]),
+        xorBelow_false]
+    rw [hf, cone_bxor_false, show t - (j + 1) = t - 1 - (j + 1) + 1 by cfomega]
+    apply xorBelow_congr
+    intro q hq
+    show (pascalParity (t - 1 - (j + 1)) q && leftEnd (j + 1) q) =
+      (pascalParity (t - 1 - (j + 1)) (t - 2 - (j + q)) && exposed (j + q) (j + 1))
+    rw [exposed_eq_leftEnd (j + q) (j + 1) (by cfomega), show j + q + 1 - (j + 1) = q by cfomega,
+      show t - 2 - (j + q) = t - 1 - (j + 1) - q by cfomega,
+      ← pascalParity_symm (t - 1 - (j + 1)) q (by cfomega)]
+
+/-- The Lucas-weighted sum of the masks is the left cone. -/
+theorem lucasSum_eq_leftCone (t : Nat) (ht : 2 ≤ t) : lucasSum (t - 2) t = leftCone t := by
+  unfold lucasSum leftCone
+  rw [lucasPartial_eq_fold, show t - 2 + 1 = t - 1 by cfomega,
+    xorBelow_congr (fun i => maskPascal i (t - 2 - i) t)
+      (fun i => xorBelow (fun j => maskWeight t i j && exposed i j) t) (t - 1) (fun i _ => rfl),
+    xorBelow_swap (fun i j => maskWeight t i j && exposed i j) t (t - 1)]
+  exact xorBelow_congr _ _ t (fun j hj => (coneRow_eq_weight t j hj).symm)
+
+/-- **The center is the complement of the left cone**: the Pascal transport of the left run-ends,
+sourced only from the positions `≤ 1`. -/
+theorem center_eq_leftCone (t : Nat) (ht : 2 ≤ t) : center t = !(leftCone t) := by
+  rw [center_eq_lucas t ht, lucasSum_eq_leftCone t ht]
+
+/-- Under a center period `P` from `T`, the left cone repeats. -/
+theorem leftCone_centerPeriodic (T P t : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
+    (h2 : 2 ≤ t) : leftCone (t + P) = leftCone t := by
+  have h := hc t ht
+  rw [center_eq_leftCone (t + P) (by cfomega), center_eq_leftCone t h2] at h
+  exact not_inj_aux _ _ h
+
+/-- **Lucas's higher-bit law in the cone**: a run-end at distance `q < 2^m` keeps its weight when
+its age grows by a multiple of `2^m`. -/
+theorem coneTerm_add_twopow_mul (m n j q c : Nat) (hq : q < twopow m) :
+    coneTerm (n + twopow m * c) j q = coneTerm n j q := by
+  unfold coneTerm
+  rw [pascalParity_add_twopow_mul m n q c hq]
+
 end Rule30UOR.Antidiagonal

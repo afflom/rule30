@@ -3352,6 +3352,19 @@ ruler (`secondPrefix = false`) and the late tail must supply it (`rulerCoefficie
 (κ-collapse) the residue-3 late tail flips between the scale indices `2^m` and `2^{m+1}`
 (`trailingParity (2^{m+1} − 1) ⊕ trailingParity (2^m − 1) = 1`; tenth iteration). The halving also
 sharpens the prize kit's right-period threshold: diagonal `k+1` has period `2^k`, so `J(k) ≥ k+1`
-where the kit proves `J(k) ≥ k`.
+where the kit proves `J(k) ≥ k` (`right_threshold_ge`, proved).
+
+**The left light cone (2026-10-31, `center_eq_leftCone`, proved).**
+Reindexing the Lucas sum by age `n = t−1−j` and position `p = j − i`, with the corner lemma and binomial
+symmetry: **`center t = ¬ ⊕_{j<t} ⊕_q C(t−1−j, q) · L(j, 1−q)`**, where `L(j, p) = cell(j,p) ∧
+¬cell(j,p−1)` is a left run-end. The center is the complement of the Pascal transport (the linear
+rule's gasket) of the left run-ends, sourced only from the half-plane at positions `≤ 1`, with weight
+the binomial parity of the age and the distance from column `+1`. This joins the facts the register
+already holds: the left half-plane is a function of columns 0 and `+1` (left-permutivity,
+`left_defect_sourced`), and every center sequence is the center of some consistent half-plane
+(`leftExtend_rule`); the light cone is the *specific* consistency condition the seed imposes, a
+linear (Pascal) functional of the left run-ends equal to the center, with Lucas's higher-bit law as its
+dyadic freezing. Under a period it becomes a fixed-point equation for the run-end field in the
+left cone, which is where the next iteration looks.
 
 Problem 1 remains unproved.

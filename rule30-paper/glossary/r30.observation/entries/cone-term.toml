@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cone-term"
+category = "function"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.coneTerm"
+
+[[form]]
+id = "cone-term"
+channel = "math"
+surface = "coneterm"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name coneterm) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

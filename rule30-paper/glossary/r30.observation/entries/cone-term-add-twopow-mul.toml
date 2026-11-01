@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cone-term-add-twopow-mul"
+category = "proof-constant"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit j (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat)) (explicit c (const lexlean.std.nat::nat))) (pi ((explicit hq (app (const lexlean.std.nat::lt) (local q) (app (const r30.scale::twopow) (local m))))) (app (const lexlean.core::eq) (app (const r30.observation::cone-term) (app (const lexlean.std.nat::add) (local n) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local m)) (local c))) (local j) (local q)) (app (const r30.observation::cone-term) (local n) (local j) (local q)))))"
+surface_arity = 5
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.coneTerm_add_twopow_mul"
+
+[[form]]
+id = "cone-term-add-twopow-mul"
+channel = "math"
+surface = "conetermaddtwopowmul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name conetermaddtwopowmul) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3) (token comma) (space) (slot 4))))"

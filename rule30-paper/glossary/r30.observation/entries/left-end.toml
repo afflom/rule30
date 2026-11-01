@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-end"
+category = "function"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.leftEnd"
+
+[[form]]
+id = "left-end"
+channel = "math"
+surface = "leftend"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftend) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
