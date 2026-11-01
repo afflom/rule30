@@ -104,23 +104,20 @@ fi
 # requires LexLean source edits (or the documented exceptional-maintenance override).
 compiler_lock_refresh=0
 if [[ $has_compiler_pin_edit -eq 1 && $has_non_lock_artifact_edit -eq 0 && ${#lockfiles[@]} -gt 0 ]]; then
-  if python3 - "${lockfiles[@]}" <<'PY'
-import re
-import subprocess
-import sys
-
-revision = subprocess.check_output(["git", "show", ":.github/lexlean-revision"], text=True).strip()
-if not re.fullmatch(r"[0-9a-f]{40}", revision):
-    sys.exit(1)
-for path in sys.argv[1:]:
-    diff = subprocess.check_output(["git", "diff", "--cached", "--unified=0", "--", path], text=True)
-    edits = [line for line in diff.splitlines()
-             if line[:1] in ("+", "-") and not line.startswith(("+++", "---"))]
-    if (len(edits) != 2 or edits[0][:1] != "-" or edits[1][:1] != "+"
-            or any(not re.fullmatch(r'[+-]compiler_semantics = "[0-9a-f]{64}"', line) for line in edits)):
-        sys.exit(1)
-PY
-  then
+  refresh_ok=1
+  revision="$(git show :.github/lexlean-revision | tr -d '[:space:]')"
+  [[ "$revision" =~ ^[0-9a-f]{40}$ ]] || refresh_ok=0
+  for path in "${lockfiles[@]}"; do
+    mapfile -t edits < <(git diff --cached --unified=0 -- "$path" | grep -E '^[+-]' | grep -vE '^(\+\+\+|---)' || true)
+    if [[ ${#edits[@]} -ne 2 || "${edits[0]:0:1}" != "-" || "${edits[1]:0:1}" != "+" ]]; then
+      refresh_ok=0
+      continue
+    fi
+    for line in "${edits[@]}"; do
+      [[ "$line" =~ ^[+-]compiler_semantics\ =\ \"[0-9a-f]{64}\"$ ]] || refresh_ok=0
+    done
+  done
+  if [[ $refresh_ok -eq 1 ]]; then
     compiler_lock_refresh=1
   fi
 fi

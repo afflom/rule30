@@ -98,17 +98,22 @@ it; `api check` refuses drift.
 
 ## No Python: LexLean only
 
-Python is deprecated in this repository (the owner, 2026-11-01: "No more python. LexLean
-only. PrismPM helps."). The implementation is authored in LexLean, using prism-stdlib; PrismPM
-generates and governs the runtime (Rust from `lexlean production`, model registers, gates), and
-no handwritten fallback implementation lives outside the modeled graph. Never add a `.py` file
-and never extend `tools/r30` or `scripts/*.py`: the pre-commit authoring policy
-(`scripts/check_authoring_policy.sh`) refuses a commit that adds a Python file or grows the
-Python it touches, with no bypass. What Python remains (the `bin/r30` runtime, the gate's
-scripts, their tests, a few experiments) is being eliminated incrementally: each step moves a
-capability into LexLean and deletes its Python in the same commit. A capability LexLean,
-PrismPM or prism-stdlib cannot yet express is an upstream issue for those projects, never a
-reason for new Python. The logic already moved: the command surface, the register, the
+Python is deprecated in this repository, and so is any other hand-written runtime (the owner,
+2026-11-01: "No more python. LexLean only. PrismPM helps." "LexLean compiles to rust, so we do not
+need shell scripts or whatever. Use LexLean."). The implementation is authored in LexLean, using
+prism-stdlib, and runs as the Rust that `lexlean production` generates from it; PrismPM governs
+the registers. Never add a `.py` file or a shell script, and never extend `tools/r30`,
+`scripts/*.py` or the shell glue: the pre-commit authoring policy refuses a commit that adds a
+Python file or grows the Python it touches, with no bypass.
+
+At the pinned compiler (0.4.0, revision 3877351) a production root compiles to a Rust library
+with no `main` and no effects beyond allocation, overflow and recursion: no files, processes,
+arguments or exit codes. An executable entry for a root that reads files and runs `lake`,
+`lexlean` and `git` is LexLean issue #271 (the effects boundary). So the logic moves into LexLean
+now, as authored modules with certified roots, and the remaining Python and shell glue is deleted
+as LexLean gains the effect boundary and rule30 pins it. A capability LexLean, PrismPM or
+prism-stdlib cannot yet express is an upstream issue for those projects, never a reason for new
+Python or shell. The logic already moved: the command surface, the register, the
 converter (`rule30-api/src/Convert.lex.tex`), the engine's learning rule and schedule
 (`Engine.lex.tex`), the relation and recurrence engines (`Discovery.lex.tex`), all with
 certified rust-std roots.
@@ -299,7 +304,7 @@ cost explicit and checked, so that effort goes only to `open` claims.
 | `Rule30PrizeKit/` | the Wolfram prize kit, unchanged |
 | `rule30-bridge/` | the bridge from the paper's theorems to the kit's `Problem1` |
 | `frontier.toml` | the claim register (`bin/r30 frontier`) |
-| `tools/r30/` | the command surface and MCP server; `tools/split_interfaces.py` |
+| `tools/r30/` | the command surface and MCP server (deprecated Python runtime, being moved to LexLean) |
 | `scripts/` | the validation gate, packaging and policy checks; tests in `scripts/tests/` |
 | `experiments/` | finite diagnostics on the seed |
 
