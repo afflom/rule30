@@ -3911,4 +3911,32 @@ For every natural number \(k\), if \(2 \le k\), then \(\operatorname{lateruler}(
 \begin{proof}
 The goal follows from \(\operatorname{laterulervalues}(k)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:exposed-zero}
+For every natural number \(i\), \(\operatorname{exposed}(0, i) = \operatorname{not}(\operatorname{timeparity}(i))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposedzero}(i)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed-one}
+For every natural number \(i\), \(\operatorname{exposed}(1, i) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposedone}(i)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-add-twopow-mul}
+For every natural number \(m\) and natural number \(n\) and natural number \(d\) and natural number \(q\), if \(d < \operatorname{twopow}(m)\), then \(\operatorname{pascalparity}(n + \operatorname{twopow}(m) \cdot q, d) = \operatorname{pascalparity}(n, d)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparityaddtwopowmul}(m, n, d, q)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:right-threshold-ge}
+For every natural number \(k\) and natural number \(J\), if \(1 \le k\), then if \(\operatorname{rightthreshold}(k, J)\), then \(k + 1 \le J\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rightthresholdge}(k, J)\).
+\end{proof}
 \end{document}

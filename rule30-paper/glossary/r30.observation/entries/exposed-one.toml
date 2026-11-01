@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exposed-one"
+category = "proof-constant"
+signature = "(pi ((explicit i (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::exposed) (nat 1) (local i)) (const lexlean.std.bool::false)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.exposed_one"
+
+[[form]]
+id = "exposed-one"
+channel = "math"
+surface = "exposedone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name exposedone) (paren (seq (slot 0))))"

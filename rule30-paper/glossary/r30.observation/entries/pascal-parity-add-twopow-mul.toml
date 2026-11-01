@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "pascal-parity-add-twopow-mul"
+category = "proof-constant"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat)) (explicit n (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat))) (pi ((explicit h1 (app (const lexlean.std.nat::lt) (local d) (app (const r30.scale::twopow) (local m))))) (app (const lexlean.core::eq) (app (const r30.observation::pascal-parity) (app (const lexlean.std.nat::add) (local n) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local m)) (local q))) (local d)) (app (const r30.observation::pascal-parity) (local n) (local d)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.pascalParity_add_twopow_mul"
+
+[[form]]
+id = "pascal-parity-add-twopow-mul"
+channel = "math"
+surface = "pascalparityaddtwopowmul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pascalparityaddtwopowmul) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exposed-zero"
+category = "proof-constant"
+signature = "(pi ((explicit i (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::exposed) (nat 0) (local i)) (app (const lexlean.std.bool::not) (app (const r30.observation::time-parity) (local i)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.exposed_zero"
+
+[[form]]
+id = "exposed-zero"
+channel = "math"
+surface = "exposedzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name exposedzero) (paren (seq (slot 0))))"

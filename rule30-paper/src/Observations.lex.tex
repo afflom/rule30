@@ -4474,5 +4474,37 @@ Close the goal with \(\lexeme{r30.observation::late-ruler-values}(k)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{exposed-zero}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(i\), \(exposed(0, i) = not(timeparity(i))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed-zero}(i)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(i\), \(exposed(1, i) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed-one}(i)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-add-twopow-mul}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(m\) and natural number \(n\) and natural number \(d\) and natural number \(q\), if \(d < twopow(m)\), then \(pascalparity(n + twopow(m) * q, d) = pascalparity(n, d)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-add-twopow-mul}(m, n, d, q)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{right-threshold-ge}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(J\), if \(1 ≤ k\), then if \(rightthreshold(k, J)\), then \(k + 1 ≤ J\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::right-threshold-ge}(k, J)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

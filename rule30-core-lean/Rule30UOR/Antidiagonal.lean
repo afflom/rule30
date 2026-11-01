@@ -818,4 +818,91 @@ theorem maskTransport_lucas (k s : Nat) : maskTransport k s = lucasSum k s := ma
 theorem center_eq_lucas (t : Nat) (ht : 2 ≤ t) : center t = !(lucasSum (t - 2) t) := by
   rw [center_eq_not_maskTransport t ht, maskTransport_lucas]
 
+/-! ## The first mask words, the corner, and Lucas's higher-bit law -/
+
+/-- Diagonal `0` shows through diagonal `1` exactly at even times. -/
+theorem exposed_zero (i : Nat) : exposed 0 i = !(timeParity i) := by
+  show (towerWord 0 i && !(towerWord 1 i)) = !(timeParity i)
+  rw [towerWord_zero, towerWord_one]
+  cases timeParity i <;> rfl
+
+/-- Diagonal `1` never shows through diagonal `2` (both are the time parity). -/
+theorem exposed_one (i : Nat) : exposed 1 i = false := by
+  show (towerWord 1 i && !(towerWord 2 i)) = false
+  rw [towerWord_one, ← rdiag_eq_towerWord, Rule30UOR.Band.rdiag_two_eq_parity]
+  show (timeParity i && !(timeParity i)) = false
+  cases timeParity i <;> rfl
+
+/-- **Lucas's higher-bit independence**: below `2^m` the binomial parity ignores the bits of the
+row at and above `2^m`. The freezing law of the diagonal frame, with no side-terms. -/
+theorem pascalParity_add_twopow_mul : ∀ m n d q, d < twopow m →
+    pascalParity (n + twopow m * q) d = pascalParity n d
+  | 0, n, d, q, hd => by
+    have : d = 0 := by
+      have h1 : twopow 0 = 1 := rfl
+      cfomega
+    subst this
+    rw [pascalParity_zero_right, pascalParity_zero_right]
+  | m + 1, n, d, q, hd => by
+    have h2 : twopow (m + 1) = 2 * twopow m := by rw [twopow_succ]; cfomega
+    rw [h2] at hd ⊢
+    rw [Nat.mul_assoc]
+    obtain ⟨a, e, he, rfl⟩ : ∃ a e, e < 2 ∧ n = 2 * a + e := ⟨n / 2, n % 2, Nat.mod_lt _ (by decide), by cfomega⟩
+    obtain ⟨b, f, hf, rfl⟩ : ∃ b f, f < 2 ∧ d = 2 * b + f := ⟨d / 2, d % 2, Nat.mod_lt _ (by decide), by cfomega⟩
+    have hb : b < twopow m := by cfomega
+    have ih := pascalParity_add_twopow_mul m a b q hb
+    rcases Nat.lt_or_ge e 1 with he0 | he1 <;> rcases Nat.lt_or_ge f 1 with hf0 | hf1
+    · rw [show e = 0 by cfomega, show f = 0 by cfomega]
+      simp only [Nat.add_zero]
+      rw [show 2 * a + 2 * (twopow m * q) = 2 * (a + twopow m * q) by cfomega,
+        pascalParity_even_even, pascalParity_even_even, ih]
+    · rw [show e = 0 by cfomega, show f = 1 by cfomega]
+      simp only [Nat.add_zero]
+      rw [show 2 * a + 2 * (twopow m * q) = 2 * (a + twopow m * q) by cfomega,
+        pascalParity_even_odd, pascalParity_even_odd]
+    · rw [show e = 1 by cfomega, show f = 0 by cfomega]
+      simp only [Nat.add_zero]
+      rw [show 2 * a + 1 + 2 * (twopow m * q) = 2 * (a + twopow m * q) + 1 by cfomega,
+        pascalParity_odd_even, pascalParity_odd_even, ih]
+    · rw [show e = 1 by cfomega, show f = 1 by cfomega,
+        show 2 * a + 1 + 2 * (twopow m * q) = 2 * (a + twopow m * q) + 1 by cfomega,
+        pascalParity_odd_odd, pascalParity_odd_odd, ih]
+
+/-- A fold over a window ignores terms that vanish between its first `n` places and `M`. -/
+theorem xorBelow_of_vanish (g : Nat → Bool) (n M : Nat) (hg : ∀ j, n ≤ j → j < M → g j = false) :
+    ∀ m, n ≤ m → m ≤ M → xorBelow g m = xorBelow g n
+  | 0, h, _ => by rw [show n = 0 by cfomega]
+  | m + 1, h, hM => by
+    rcases Nat.lt_or_ge m n with hm | hm
+    · rw [show n = m + 1 by cfomega]
+    · show bxor (xorBelow g m) (g m) = xorBelow g n
+      rw [hg m hm (by cfomega), xorBelow_of_vanish g n M hg m hm (by cfomega)]
+      cases xorBelow g n <;> rfl
+
+/-- **The corner**: diagonal `i` reaches the center at time `t` only through its first `i + 2` times. -/
+theorem maskPascal_corner (t i : Nat) (hi : i + 2 ≤ t) :
+    maskPascal i (t - 2 - i) t = xorBelow (fun j => maskWeight t i j && exposed i j) (i + 2) := by
+  rw [maskPascal_eq_weight]
+  apply xorBelow_of_vanish _ (i + 2) t _ t hi (Nat.le_refl t)
+  intro j hj hjt
+  show (pascalParity (t - 1 - j) (t - 2 - i) && exposed i j) = false
+  rw [pascalParity_gt _ _ (by cfomega)]
+  rfl
+
+/-- In the kit's vocabulary: diagonal `k + 1` has period `2^k` (`k ≥ 1`). -/
+theorem per_succ_twopow (k : Nat) (hk : 1 ≤ k) :
+    Ruliology.CellularAutomata.Rule30RightPeriods.Per (k + 1) (2 ^ k) := by
+  intro t
+  rw [← Rule30UOR.Right.rdiag_eq_R, ← Rule30UOR.Right.rdiag_eq_R, ← twopow_eq_pow]
+  have h := rdiag_period_half (k + 1) t (by cfomega)
+  rwa [show k + 1 - 1 = k by cfomega] at h
+
+/-- **The right-period threshold of scale `k` is at least `k + 1`** (the kit proves `k`): the
+halving gives diagonal `k + 1` the period `2^k`, and periods descend to lower diagonals. -/
+theorem right_threshold_ge (k J : Nat) (hk : 1 ≤ k) (h : Rule30UOR.Interfaces.IsRightThreshold k J) :
+    k + 1 ≤ J := by
+  rcases Nat.lt_or_ge J (k + 1) with hJ | hJ
+  · exact absurd (Rule30UOR.KitConstructive.per_mono_le (by cfomega) (per_succ_twopow k hk)) h.2
+  · exact hJ
+
 end Rule30UOR.Antidiagonal
