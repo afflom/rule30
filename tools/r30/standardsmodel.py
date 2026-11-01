@@ -190,7 +190,7 @@ def rows():
          "coverage": "implemented"},
         {"id": "spdx", "name": "SPDX License Expressions (SPDX 2.3, ISO/IEC 5962:2021)",
          "authority": "https://spdx.github.io/spdx-spec/v2.3/SPDX-license-expressions/", "version": "2.3",
-         "scope": "License identifiers of the vendored sources: the prism-stdlib register carries the SPDX expression of its license files; the repository root has no license file yet, so the citation names none.",
+         "scope": "License identifiers of the vendored sources: the repository is MIT (LICENSE at the root, `license: MIT` in CITATION.cff); the prism-stdlib register carries the SPDX expression of its vendored license files.",
          "realizedBy": ["stdlib-package", "citation"],
          "conformance": tests + ".test_spdx_expressions_are_well_formed",
          "coverage": "implemented"},
@@ -715,6 +715,7 @@ authors:
     given-names: {AUTHOR['given']}
 repository-code: "{REPOSITORY}"
 url: "{PAGES_URL}"
+license: MIT
 abstract: "Work on Wolfram's Rule 30 Prize, Problem 1: a register of kernel-checked reductions, written in LexLean and checked by the Lean 4 kernel under propext and Quot.sound, with the open obligation stated as open."
 keywords:
   - Rule 30
@@ -726,8 +727,8 @@ keywords:
 
 
 def citation_file():
-    """CITATION.cff at the repository root; written when missing, never overwritten."""
-    if not CITATION.exists():
+    """CITATION.cff at the repository root, generated from the model."""
+    if not CITATION.exists() or CITATION.read_text() != CITATION_TEXT:
         CITATION.write_text(CITATION_TEXT)
     return CITATION
 

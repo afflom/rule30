@@ -840,7 +840,8 @@ class StandardsTests(unittest.TestCase):
         self.assertIn("family-names: Flom", text)
         self.assertIn("given-names: Alex", text)
         self.assertIn(f'repository-code: "{sm.REPOSITORY}"', text)
-        self.assertNotIn("license:", text)
+        self.assertIn("license: MIT", text)
+        self.assertTrue((ROOT / "LICENSE").read_text().startswith("MIT License"))
 
     def test_spdx_expressions_are_well_formed(self):
         import re, tomllib
