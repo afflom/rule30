@@ -365,6 +365,27 @@ feature = "interfaces/jen-law.md"
 evidence = "frontier check: Rule30UOR.RightPeriods.towerWord_jen_periodic kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "route-d-lhcolagree-coboundary"
+level = "some-true"
+statement = "Route A of the 2026-11-01 reading: under a center period, settledness of the zero diagonals z, z+2 at two scales forces the left half's column -1 to agree across the lag (LhColAgree), so the conditional refutation not_centerPeriodic_of_lhColAgree_one_scale_step_doubles fires."
+feature = "interfaces/route-d-lhcolagree-coboundary.md"
+evidence = "register: refuted (Rule30UOR.Interfaces.not_periodic_lhColAgree_one_of_doubles)"
+
+[[claim]]
+id = "left-transient-above-diagonal"
+level = "some-true"
+statement = "Target 1 of the 2026-11-01 reading: the minimal transient of the left diagonal d exceeds d for every d >= 8, so the center (t, t) is never in the settled left region."
+feature = "interfaces/left-transient-above-diagonal.md"
+evidence = "register: refuted"
+
+[[claim]]
+id = "single-row-agreement"
+level = "open"
+statement = "Route B of the 2026-11-01 reading: under a center period, the prefix and tail spatial agreements (hpref, htail) of the driven right half rhCenter in one row at scale 2^L hold, so the conditional refutation not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound fires."
+feature = "interfaces/single-row-agreement.md"
+evidence = "register: open"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."

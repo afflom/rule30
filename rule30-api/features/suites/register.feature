@@ -313,3 +313,21 @@ Feature: register
     Given frontier.toml names Rule30UOR.RightPeriods.towerWord_jen_periodic for jen-law
     When the suite exercises jen-law
     Then its oracle accepts it: frontier check: Rule30UOR.RightPeriods.towerWord_jen_periodic kernel-checked under propext and Quot.sound and published
+
+  @route-d-lhcolagree-coboundary @some-true
+  Scenario: Route A of the 2026-11-01 reading: under a center period, settledness of the zero diagonals z, z+2 at two scales forces the left half's column -1 to agree across the lag (LhColAgree), so the conditional refutation not_centerPeriodic_of_lhColAgree_one_scale_step_doubles fires.
+    Given the register entry route-d-lhcolagree-coboundary and the refutation it names (Rule30UOR.Interfaces.not_periodic_lhColAgree_one_of_doubles)
+    When the suite reproduces route-d-lhcolagree-coboundary
+    Then the route is reported refuted from its authority and nothing is established here
+
+  @left-transient-above-diagonal @some-true
+  Scenario: Target 1 of the 2026-11-01 reading: the minimal transient of the left diagonal d exceeds d for every d >= 8, so the center (t, t) is never in the settled left region.
+    Given the register entry left-transient-above-diagonal and the refutation it names (experiment)
+    When the suite reproduces left-transient-above-diagonal
+    Then the route is reported refuted from its authority and nothing is established here
+
+  @single-row-agreement @open
+  Scenario: Route B of the 2026-11-01 reading: under a center period, the prefix and tail spatial agreements (hpref, htail) of the driven right half rhCenter in one row at scale 2^L hold, so the conditional refutation not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound fires.
+    Given the register entry single-row-agreement (experiment)
+    When the suite measures single-row-agreement
+    Then the claim is reported open and never asserted

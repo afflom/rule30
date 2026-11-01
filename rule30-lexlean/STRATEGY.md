@@ -3406,3 +3406,27 @@ object: the period structure reads the OR-word's weight over its full period, th
 over the first `t` places, which is shorter than the period by a factor `2^{0.36 t}/t`. Measured:
 the right table repeats visibly only in a strip of width about `2.8·log₂ t` at the right edge, the
 left table is settled for positions `p ≤ −0.22·t`, and the center sits in the wedge between.
+
+**The reading of 2026-11-01 checked against the repository: no closure, three exact verdicts.**
+The reading proposed to close Problem 1 by two routes through the settled tables. Checked
+theorem by theorem:
+- *The two cited refutations are conditional.* `not_centerPeriodic_of_lhColAgree_one_scale_step_doubles`
+  (Part13) assumes `LhColAgree` (the left half's column `−1` agrees with itself across the lag), and
+  `not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound` (Part17) assumes the
+  prefix and tail agreements `hpref`, `htail` of the driven right half in one row. `Fixed.Lh` and
+  `Fixed.Rh` are the two half-lines driven from white by the center column, so the whole diagram is
+  a function of the center; the question is whether a period forces those spatial agreements.
+- *Route A is refuted by the period itself* (`route-d-lhcolagree-coboundary`): under a period, a
+  doubling zero diagonal and the settledness hypotheses, the repository proves `¬LhColAgree`
+  (`not_periodic_lhColAgree_one_of_doubles`) and that column `−1` flips across the lag. The same
+  shape as `band-engines` and `route-a-band-discharge`: a period forces the driven halves to
+  *disagree* across the lag at a doubling, never to agree.
+- *Target 1 is false as stated* (`left-transient-above-diagonal`, `experiments/left_transients.py`):
+  diagonals `8..17` and `19` settle at or before their index (`d = 9` at time 5); from `d = 20` to
+  `120` every transient exceeds `d`.
+- *Route B stays open with an exact obligation* (`single-row-agreement`): nothing derives `hpref`,
+  `htail` from a period; the doubling diagonal forces anti-agreement where the prefix needs
+  agreement, so the route needs the doubling diagonal outside the prefix window.
+What the check fixes for the next round: a closing argument cannot rest on agreement of the driven
+halves across the lag; at every doubling the period forces disagreement there. The usable positive
+content is the forced flip itself, a statement the period makes about column `−1` at the seams.

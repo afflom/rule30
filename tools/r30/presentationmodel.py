@@ -255,8 +255,8 @@ _STEPS = {
         {"id": "ma-refuted", "pole": "withdrawn", "panel": "refutations", "title": "Refuted routes",
          "goal": "Know the refuted routes toward the obligation and the Lean refutation or experiment behind each, so as not to walk them again.",
          "text": "A refuted claim stays in the register with its refutation: a Lean theorem that shows the route arithmetic or vacuous (routes A, B and C in Rule30UOR.Routes, the engine hypothesis bundles, the observer q-rank), or a finite experiment on the seed (q-adic descent, front slack, the evaluation point, the first-failure 2-adic law).",
-         "evidence": ["q-adic-descent", "front-slack-descent", "evaluation-point", "gate-phase-opposition", "band-engines", "saturation-reexcitation",
-                      "first-failure-2adic", "route-a-band-discharge", "route-c-rank-drop", "route-b-reset-mismatch"]},
+         # derived from the register: every refuted claim, in register order, so the journey never lags it
+         "evidence": [c["id"] for c in __import__("tools.r30.frontier", fromlist=["load"]).load()["claim"] if c["status"] == "refuted"]},
         {"id": "ma-verify", "pole": "verification", "panel": "verify", "title": "Verify the paper",
          "goal": "Verify: the attestation identifiers of the paper, the PDF digests against pdf-manifest.json (also an in-toto statement), the provenance of every proved claim (PROV-O: theorem, module, attestation), bin/r30 claim <id> for any claim, bin/r30 axioms <Lean name> for its axioms; cite the paper from CITATION.cff.",
          "evidence": ["pdf-manifest", "paper-pdf", "statements", "register-json", "attestations", "provenance", "citation"]},

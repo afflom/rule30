@@ -464,3 +464,28 @@ lean = "Rule30UOR.RightPeriods.towerWord_jen_periodic"
 since = "2026-11-01"
 note = "Rule30UOR.RightPeriods: WordPeriodic, OrPeriodic, towerWord_shift (affine shift law), wordPeriodic_of_or, word_antiperiodic_of_or, wordPeriodic_double, orPeriodic_of_words, wordPeriodic_mul, wordPeriodic_twopow_mono, boolNat, jenExp, jenExp_step_periodic, towerWord_jen_periodic, jenExp_two..nine, jenExp_values, jenExp_le_succ, jenExp_succ_le, jenExp_succ_succ_eq, jenExp_le, doublingBit, jenExp_succ_eq (host: max), towerWord_two_readings (host). The replica of jenExp equals the true minimal period exponent for every j <= 33 (Lean proves the upper bound; explicit mismatches show minimality): 1,2,3,3,4,5,5,6,6,6,6,6,6,7,8,...,12, about 0.36 j. Not a closing argument."
 depends = ["diagonal-halving"]
+
+[[claim]]
+id = "route-d-lhcolagree-coboundary"
+status = "refuted"
+statement = "Route A of the 2026-11-01 reading: under a center period, settledness of the zero diagonals z, z+2 at two scales forces the left half's column -1 to agree across the lag (LhColAgree), so the conditional refutation not_centerPeriodic_of_lhColAgree_one_scale_step_doubles fires."
+lean = "Rule30UOR.Interfaces.not_periodic_lhColAgree_one_of_doubles"
+since = "2026-11-01"
+note = "The repository proves the opposite: under CenterPeriodic T P with a doubling zero diagonal and the settledness hypotheses, LhColAgree t (m P) 1 S fails (not_periodic_lhColAgree_one_of_doubles, Part12; and exists_lhCenter_one_flip_of_two_zero_diags_and_periodic: column -1 flips across the lag). So the agreement the conditional refutation assumes is refuted by the period itself and the refutation never fires. Same shape as band-engines and route-a-band-discharge (lhBandAgree_engine_hypotheses_unsat): routes that need the driven halves (Fixed.Lh, Fixed.Rh: the two half-lines driven from white by the center column) to agree spatially across the lag."
+depends = ["aperiodic-compensation"]
+
+[[claim]]
+id = "left-transient-above-diagonal"
+status = "refuted"
+statement = "Target 1 of the 2026-11-01 reading: the minimal transient of the left diagonal d exceeds d for every d >= 8, so the center (t, t) is never in the settled left region."
+since = "2026-11-01"
+note = "False as stated: experiments/left_transients.py (bin/r30 experiment run left_transients) gives transients at or below the index for d = 8..17 and 19 (d = 9 settles at time 5, d = 12 at time 6). From d = 20 to 120 every measured transient exceeds d (slope about 1.29), so the eventual form T(d) > d for d >= 20 remains plausible and open as a quantitative statement; it is not a route by itself (the center reads the anti-diagonal, not a settled cell)."
+depends = ["left-tower"]
+
+[[claim]]
+id = "single-row-agreement"
+status = "open"
+statement = "Route B of the 2026-11-01 reading: under a center period, the prefix and tail spatial agreements (hpref, htail) of the driven right half rhCenter in one row at scale 2^L hold, so the conditional refutation not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound fires."
+since = "2026-11-01"
+note = "No theorem in the repository derives hpref or htail from CenterPeriodic; they are free hypotheses of the conditional refutation (Part17). The analogous agreement for the left half is refuted at a doubling (route-d-lhcolagree-coboundary), and the doubling diagonal forces anti-agreement where the prefix needs agreement, so the route needs an argument that the doubling diagonal falls outside the prefix window; recorded as open with that exact obligation."
+depends = ["aperiodic-compensation"]
