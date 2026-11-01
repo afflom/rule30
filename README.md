@@ -83,7 +83,11 @@ the reduction tree, the register, the open leaves, the interface sheets, the
 modules and the quality measures for the researcher; the paper's statements
 with their Lean names, the attested PDFs, the open obligation and the refuted
 routes for the mathematician; a picture of Rule 30 and a plain-language guide
-for everyone else. It is published at <https://afflom.github.io/rule30/> (GitHub
+for everyone else. The view is a lesson from six vantages: each journey is an
+ordered sequence of steps that `Presentation.lex.tex` declares and the kernel
+decides to run through the Observer's poles in order (what the vantage is, how
+the proof appears from it, what is proved, what is open) and to end in what
+the reader can verify, shown one step at a time. It is published at <https://afflom.github.io/rule30/> (GitHub
 Pages, deployed by `.github/workflows/view.yml` on every push to `main`) and
 kept as the `rule30-current-view` artifact of the same workflow.
 

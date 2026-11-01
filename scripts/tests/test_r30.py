@@ -736,8 +736,10 @@ class SiteTests(unittest.TestCase):
         self.assertEqual({p for p, x in panels.items() if x["viewpoint"] == "plain"}, {"picture", "explainer"})
         journeys = {j["id"]: j for j in pm.JOURNEYS}
         self.assertEqual(journeys["mathematics"]["stakeholder"], "mathematician")
-        self.assertEqual(journeys["mathematics"]["panels"], ["paper", "reduction-tree", "obligation", "refutations", "register"])
-        self.assertEqual((journeys["first-visit"]["stakeholder"], journeys["first-visit"]["panels"]), ("layperson", ["picture", "explainer", "reduction-tree"]))
+        # a journey's panels are its steps' panels in order of first use
+        self.assertEqual(journeys["mathematics"]["panels"], ["paper", "reduction-tree", "register", "obligation", "refutations", "verify"])
+        self.assertEqual((journeys["first-visit"]["stakeholder"], journeys["first-visit"]["panels"]),
+                         ("layperson", ["picture", "explainer", "reduction-tree", "register", "obligation", "verify"]))
         self.assertEqual(len({e["id"] for e in pm.EXPLAINER}), len(pm.EXPLAINER))
         for e in pm.EXPLAINER:
             self.assertTrue(e["title"] and e["text"], e["id"])
@@ -1062,6 +1064,12 @@ class AccessibilityTests(unittest.TestCase):
         self.assertIn('aria-label="Toggle dark or light theme"', html)
         self.assertIn('role="status"', html)
         self.assertIn('data-missing=', html)
+        # one step at a time: the step heading takes focus on navigation, the
+        # progress dots mark the current step, the arrow keys move between steps
+        self.assertIn('<h2 id="step-title" tabindex="-1">', html)
+        self.assertIn('aria-current="step"', html)
+        self.assertIn('e.key === "ArrowLeft" || e.key === "ArrowRight"', html)
+        self.assertIn('aria-label="Toggle dark or light theme"', html)
 
     def test_text_tokens_meet_aa_contrast_in_both_themes(self):
         from tools.r30 import site
@@ -1078,9 +1086,9 @@ class AccessibilityTests(unittest.TestCase):
         from tools.r30 import site, presentationmodel as pm
         self.assertEqual(site.check_journeys(), [])
         broken = [{"id": "j", "stakeholder": "researcher", "panels": ["register", "ghost-panel"]}]
-        self.assertEqual(site.check_journeys(pm.PANELS, broken), ["journey j: panel ghost-panel is not rendered"])
+        self.assertEqual(site.check_journeys(pm.PANELS, broken, steps=[]), ["journey j: panel ghost-panel is not rendered", "journey j: no steps"])
         nobody = [{"id": "j", "stakeholder": "nobody", "panels": ["register"]}]
-        self.assertEqual(site.check_journeys(pm.PANELS, nobody), ["journey j: stakeholder nobody is not declared"])
+        self.assertEqual(site.check_journeys(pm.PANELS, nobody, steps=[]), ["journey j: stakeholder nobody is not declared", "journey j: no steps"])
         old = pm.JOURNEYS[:]
         pm.JOURNEYS[:] = broken
         self.addCleanup(lambda: pm.JOURNEYS.__setitem__(slice(None), old))
@@ -1099,6 +1107,169 @@ class AccessibilityTests(unittest.TestCase):
         for needle in ("## The views and the Pages deployment", pm.PUBLICATION["url"], "statements.json", "explainer.json",
                        "actions/deploy-pages", "github-pages"):
             self.assertIn(needle, api)
+
+
+class PedagogyTests(unittest.TestCase):
+    """The site is a lesson: every journey is an ordered sequence of steps
+    through the Observer's poles, modeled in Presentation.lex.tex, decided by
+    the kernel, mirrored by `step_problems`, and rendered one step at a time
+    with deep links."""
+
+    JARGON = ("Lean", "LexLean", "kernel", "theorem", "lexeme", "2-adic", "propext", "Quot.sound")
+
+    def test_steps_are_modeled_and_the_theorems_are_stated(self):
+        from tools.r30 import presentationmodel as pm, archmodel, observermodel as om
+        self.assertEqual(pm.step_problems([c["id"] for c in frontier.list_claims()]), [])
+        poles = [x["id"] for x in pm.POLES]
+        self.assertEqual(poles, ["sensual-object", "sensual-quality", "real-quality", "withdrawn", "verification"])
+        self.assertEqual(len({s["id"] for s in pm.STEPS}), len(pm.STEPS))
+        for j in pm.JOURNEYS:
+            mine = [s for s in pm.STEPS if s["journey"] == j["id"]]
+            self.assertEqual([s["order"] for s in mine], list(range(1, len(mine) + 1)), j["id"])
+            self.assertEqual([s["next"] for s in mine], [s["id"] for s in mine[1:]] + [""], j["id"])
+            indices = [poles.index(s["pole"]) for s in mine]
+            self.assertEqual(indices, sorted(indices), j["id"])
+            self.assertEqual(set(poles), {s["pole"] for s in mine}, j["id"])
+            self.assertEqual(mine[-1]["pole"], "verification", j["id"])
+            self.assertEqual(mine[-1]["panel"], "verify", j["id"])
+            self.assertIn("obligation", [s["panel"] for s in mine if s["pole"] == "withdrawn"], j["id"])
+            self.assertIn(pm.OBLIGATION, [e for s in mine if s["pole"] == "withdrawn" for e in s["evidence"]], j["id"])
+            self.assertEqual(j["panels"], list(dict.fromkeys(s["panel"] for s in mine)), j["id"])
+            for s in mine:
+                self.assertTrue(s["title"] and s["goal"], s["id"])
+        # every verification command is a command; the Observer reads the steps' panels unchanged
+        self.assertTrue({v["command"] for v in pm.VERIFICATIONS} <= {row["name"] for row in __import__("tools.r30.apimodel", fromlist=["surface"]).surface()})
+        for q, j in zip(om.data()["quadruples"], pm.JOURNEYS):
+            self.assertEqual(q["sensualQualities"], j["panels"])
+        text = pm.render_presentation()
+        self.assertIn("\\importmodule{Register}", text)
+        for name in ("Pole", "Step", "Verification", "steps", "poles", "verifications", "stepPanelsArePanels", "stepJourneysAreJourneys",
+                     "journeysStepsConsecutive", "journeysStepsLinked", "journeysCoverPolesInOrder", "journeysEndInVerification",
+                     "journeyPanelsAreStepPanels", "stepEvidenceDeclared", "stepParagraphsDeclared", "verificationsAreCommands", "everyPanelInAStep"):
+            self.assertIn(f"name: {name},", text)
+        self.assertIn('(appendStrings (Register::idsOf (Register::claims)) (artifactIds (artifacts)))', text)
+        self.assertIn('(prim equal (lastString (stepPoles (stepsOfJourney (project head id) ss)) "") "verification" : Bool)', text)
+        # the quality model measures the pedagogy by the decided predicate
+        measure = next(m for m in archmodel.MEASURES if m["id"] == "pedagogy")
+        requirement = next(r for r in archmodel.REQUIREMENTS if r["id"] == measure["requirement"])
+        sub = next(x for x in archmodel.SUBCHARACTERISTICS if x["id"] == requirement["subcharacteristic"])
+        self.assertEqual((sub["id"], sub["characteristic"], measure["threshold"], measure["command"]), ("learnability", "interaction-capability", 0, "verify"))
+        for name in ("journeysCoverPolesInOrder", "journeysEndInVerification", "stepEvidenceDeclared"):
+            self.assertIn(name, measure["statement"])
+
+    def test_step_problems_name_each_fault(self):
+        from tools.r30 import presentationmodel as pm
+        good = [s for s in pm.STEPS if s["journey"] == "reading"]
+        journeys = [j for j in pm.JOURNEYS if j["id"] == "reading"]
+        claims = [c["id"] for c in frontier.list_claims()]
+        self.assertEqual(pm.step_problems(claims, steps=good, journeys=journeys), [])
+        import copy
+        swapped = copy.deepcopy(good)
+        swapped[1]["pole"], swapped[2]["pole"] = swapped[2]["pole"], swapped[1]["pole"]
+        self.assertIn("journey reading: poles are out of order", pm.step_problems(claims, steps=swapped, journeys=journeys))
+        unlinked = copy.deepcopy(good)
+        unlinked[0]["next"] = "elsewhere"
+        self.assertIn("journey reading: steps are not linked by next", pm.step_problems(claims, steps=unlinked, journeys=journeys))
+        gap = copy.deepcopy(good)
+        gap[2]["order"] = 7
+        self.assertIn("journey reading: orders are not 1..5", pm.step_problems(claims, steps=gap, journeys=journeys))
+        truncated = copy.deepcopy(good)[:-1]
+        truncated[-1]["next"] = ""
+        problems = pm.step_problems(claims, steps=truncated, journeys=journeys)
+        self.assertIn("journey reading: poles not covered: verification", problems)
+        self.assertIn("journey reading: the last step is not the verification step", problems)
+        self.assertIn("journey reading: its panels are not its steps' panels", problems)
+        unbacked = copy.deepcopy(good)
+        unbacked[0]["evidence"] = ["ghost-claim"]; unbacked[0]["paragraphs"] = ["ghost-paragraph"]; unbacked[0]["panel"] = "ghost-panel"
+        problems = pm.step_problems(claims, steps=unbacked, journeys=journeys)
+        for needle in ("step rd-tree: evidence ghost-claim is neither a claim nor an artifact", "step rd-tree: paragraph ghost-paragraph is not declared",
+                       "step rd-tree: panel ghost-panel is not a panel"):
+            self.assertIn(needle, problems)
+
+    def test_layperson_journey_reads_as_a_lesson(self):
+        """The first-visit journey presupposes no formal vocabulary before the
+        step that introduces it: nothing before the kernel-checked step names
+        Lean, LexLean, the kernel, a theorem or a lexeme; the whole lesson is
+        free of the formal tokens the explainer refuses; every explainer
+        paragraph belongs to a step; the picture comes first and its paragraph
+        states the number of rows shown."""
+        from tools.r30 import presentationmodel as pm, site
+        paragraphs = {e["id"]: e for e in pm.EXPLAINER}
+        steps = [s for s in pm.STEPS if s["journey"] == "first-visit"]
+        texts = lambda s: [s["title"], s["goal"], s["text"]] + [paragraphs[q]["title"] + " " + paragraphs[q]["text"] for q in s["paragraphs"]]
+        introduces = next(i for i, s in enumerate(steps) if "kernel-checked" in s["paragraphs"])
+        self.assertLess(introduces, next(i for i, s in enumerate(steps) if s["panel"] == "reduction-tree"))
+        self.assertLess(introduces, next(i for i, s in enumerate(steps) if any(e in {c["id"] for c in frontier.list_claims() if c["status"] == "proved"} for e in s["evidence"])))
+        for s in steps[:introduces]:
+            for text in texts(s):
+                for token in self.JARGON:
+                    self.assertNotIn(token, text, f"{s['id']} presupposes {token}")
+        for s in steps:
+            for text in texts(s):
+                for jargon in ("LexLean", "lexeme", "propext", "Quot.sound", "bxor", "twopow", "2-kernel", "automatic"):
+                    self.assertNotIn(jargon, text, f"{s['id']} uses {jargon}")
+        self.assertEqual(steps[0]["panel"], "picture")
+        self.assertEqual({q for s in steps for q in s["paragraphs"]}, set(paragraphs))
+        self.assertIn(f"first {site.PICTURE_ROWS} rows", paragraphs["the-picture"]["text"])
+        self.assertIn(f"rows 0 to {site.PICTURE_ROWS - 1}", paragraphs["the-picture"]["text"])
+        withdrawn = next(s for s in steps if s["pole"] == "withdrawn")
+        self.assertEqual(withdrawn["panel"], "obligation")
+        self.assertIn("It is open", paragraphs[withdrawn["paragraphs"][0]]["text"])
+        self.assertIn("never reproduces the ruler", paragraphs[withdrawn["paragraphs"][0]]["text"])
+
+    def test_mathematician_journey_introduces_claims_in_dependency_order(self):
+        """Each claim the mathematician's steps cite comes after (or with) the
+        proved claims it rests on, when the journey cites them (an open claim
+        is withdrawn and read in full at the withdrawn pole, after the proved
+        facts about it); the vocabulary comes first, from the paper's Notions
+        section."""
+        from tools.r30 import presentationmodel as pm, site
+        claims = {c["id"]: c for c in frontier.list_claims()}
+        steps = [s for s in pm.STEPS if s["journey"] == "mathematics"]
+        first = {}
+        for i, s in enumerate(steps):
+            for e in s["evidence"]:
+                if e in claims:
+                    first.setdefault(e, i)
+        self.assertGreaterEqual(len(first), 30)
+        for cid, i in first.items():
+            for d in claims[cid].get("depends", []):
+                if d in first and claims[d]["status"] == "proved":
+                    self.assertLessEqual(first[d], i, f"{cid} is introduced before {d}")
+        self.assertEqual(first[pm.OBLIGATION], next(i for i, s in enumerate(steps) if s["pole"] == "withdrawn"))
+        self.assertEqual(steps[0]["panel"], "paper")
+        self.assertIn("statements", steps[0]["evidence"])
+        self.assertIn("Notions", steps[0]["text"])
+        self.assertEqual(site.statements()["sections"][0]["id"], "notions")
+        self.assertEqual({e for s in steps for e in s["evidence"] if e in claims and claims[e]["status"] == "refuted"},
+                         {i for i, c in claims.items() if c["status"] == "refuted"})
+        withdrawn = [s for s in steps if s["pole"] == "withdrawn"]
+        self.assertIn(pm.OBLIGATION, withdrawn[0]["evidence"])
+        self.assertIn(claims[pm.OBLIGATION]["lean"].split(".")[-1], withdrawn[0]["goal"])
+
+    def test_site_renders_one_step_at_a_time_with_deep_links(self):
+        import json
+        from tools.r30 import site, presentationmodel as pm
+        html = site.TEMPLATE.read_text()
+        for needle in ('id="vantages"', 'id="stepbar"', 'id="switch"', "Switch vantage", 'id="progress"', 'id="step-title"', 'id="panel-body"',
+                       'id="detail-slot"', 'id="evidence"', 'id="stepnav"', 'window.addEventListener("hashchange"', 'rel="next"', 'rel="prev"',
+                       'return "#" + encodeURIComponent(s.journey) + "/" + encodeURIComponent(s.id);', '"Step " + (n + 1) + " of " + total',
+                       'String(list[i].order) === ref', 'data-journey='):
+            self.assertIn(needle, html)
+        # every panel of the model has a renderer in the page
+        for panel in pm.PANELS:
+            self.assertIn(f'"{panel["id"]}": function', html, panel["id"])
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "view"
+            site.render_view(out)
+            rendered = (out / "index.html").read_text()
+            start = rendered.index(site.DATA_OPEN) + len(site.DATA_OPEN)
+            data = json.loads(rendered[start:rendered.index(site.DATA_CLOSE, start)].replace("<\\/", "</"))
+        self.assertEqual(data["steps"], pm.STEPS)
+        self.assertEqual(data["poles"], pm.POLES)
+        self.assertEqual(data["verifications"], pm.VERIFICATIONS)
+        self.assertEqual(data["pictureRows"], site.PICTURE_ROWS)
+        self.assertIn(f'<title id="pt">Rule 30, rows 0 to {site.PICTURE_ROWS - 1}</title>', data["picture"])
 
 
 if __name__ == "__main__":

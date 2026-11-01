@@ -6,8 +6,11 @@ declares: the generated ones (the reduction tree, the register as text and
 JSON, the README, the paper's statements with the PDF attestations, the
 explainer, the Rule 30 picture) from the register, the paper and the model,
 the copied ones from their sources (the modules, the sheets, the attested
-PDFs), and the site with the view data embedded in it so that `index.html`
-opened from the downloaded artifact needs no server and no dependency. The
+PDFs), and the site with the view data embedded in it (the register, the
+tree, the paper's statements, the panels, and the journeys as steps with
+their poles, so the page opens on a choice of vantage and shows one step at a
+time) so that `index.html` opened from the downloaded artifact needs no server
+and no dependency; `check_journeys` refuses a step the model would. The
 logo is Rule 30 itself: the first rows of the automaton from a single black
 cell, with the center column (the object of Problem 1) in the accent colour;
 `sync_logo` writes it and `check_logo` refuses a drifted one, like the
@@ -19,8 +22,8 @@ import re
 import shutil
 
 from . import archmodel, frontier, repo
-from .presentationmodel import (APPLICATION_RECORD, ARTIFACTS, BRAND, EXPLAINER, JOURNEYS, OBLIGATION, PANELS,
-                                PUBLICATION, STATUS_MARKS)
+from .presentationmodel import (APPLICATION_RECORD, ARTIFACTS, BRAND, EXPLAINER, JOURNEYS, OBLIGATION, PANELS, POLES,
+                                PUBLICATION, STATUS_MARKS, STEPS, VERIFICATIONS, step_problems)
 
 SITE = repo.ROOT / "rule30-api" / "site"
 LOGO = SITE / "logo.svg"
@@ -31,6 +34,9 @@ DATA_CLOSE = "</script>"
 INK = "#14161a"
 PAPER = "#f4f1ea"
 ACCENT = "#e0a526"
+# rows 0..PICTURE_ROWS-1 of the picture panel and of rule30.svg; the
+# explainer's paragraph on reading the picture states the same number
+PICTURE_ROWS = 48
 
 
 def rule30_rows(count):
@@ -71,7 +77,7 @@ def logo_svg(rows=12):
             f'<rect width="{size}" height="{size}" rx="22" fill="{INK}"/>\n' + "\n".join(cells) + "\n</svg>\n")
 
 
-def picture_svg(rows=48, ink=INK, accent=ACCENT, background=PAPER):
+def picture_svg(rows=PICTURE_ROWS, ink=INK, accent=ACCENT, background=PAPER):
     """The picture panel: a larger triangle than the logo, the center column
     highlighted. With CSS variables as colours it is inlined in the themed
     site; with literal colours it is the standalone `rule30.svg`."""
@@ -203,9 +209,13 @@ def view_data(claims, rows, sheets, commit, paper=None):
         "statusMarks": STATUS_MARKS,
         "panels": PANELS,
         "journeys": JOURNEYS,
+        "poles": POLES,
+        "steps": STEPS,
+        "verifications": VERIFICATIONS,
         "explainer": EXPLAINER,
         "obligation": OBLIGATION,
-        "picture": picture_svg(ink="var(--ink)", accent="var(--accent)", background=None),
+        "pictureRows": PICTURE_ROWS,
+        "picture": picture_svg(rows=PICTURE_ROWS, ink="var(--ink)", accent="var(--accent)", background=None),
         "statements": paper if paper is not None else statements(),
         "artifacts": [{k: a[k] for k in ("id", "path", "media", "command")} for a in ARTIFACTS],
         "conceptualModel": archmodel.CONCEPTUAL_MODEL,
@@ -220,12 +230,15 @@ def view_data(claims, rows, sheets, commit, paper=None):
     }
 
 
-def check_journeys(panels=PANELS, journeys=JOURNEYS):
-    """Every step of every journey is a panel the site renders, and every
-    journey belongs to a declared stakeholder: the runtime's own check of
-    what `Presentation.lex.tex` decides (`journeysThroughPanels`,
-    `journeysOfStakeholders`), so a render cannot publish a journey whose
-    step has no section to scroll to. Returns the problems, empty when none."""
+def check_journeys(panels=PANELS, journeys=JOURNEYS, steps=None, claims=None):
+    """Every panel of every journey is a panel the site renders, every
+    journey belongs to a declared stakeholder, and the steps are the pedagogy
+    `Presentation.lex.tex` decides (`presentationmodel.step_problems`: steps
+    on panels of journeys, consecutive and linked, covering the poles in
+    order, ending in verification, on declared evidence): the runtime's own
+    check of `journeysThroughPanels`, `journeysOfStakeholders` and the step
+    theorems, so a render cannot publish a journey whose step has no panel
+    to show or no evidence to link. Returns the problems, empty when none."""
     ids = {p["id"] for p in panels}
     stakeholders = {s["id"] for s in archmodel.STAKEHOLDERS}
     problems = []
@@ -235,6 +248,8 @@ def check_journeys(panels=PANELS, journeys=JOURNEYS):
                 problems.append(f"journey {j['id']}: panel {step} is not rendered")
         if j["stakeholder"] not in stakeholders:
             problems.append(f"journey {j['id']}: stakeholder {j['stakeholder']} is not declared")
+    claim_ids = [c["id"] for c in (frontier.list_claims() if claims is None else claims)]
+    problems += step_problems(claim_ids, steps=STEPS if steps is None else steps, journeys=journeys, panels=panels)
     return problems
 
 

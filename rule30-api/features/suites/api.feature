@@ -27,7 +27,7 @@ Feature: api
     Then its oracle accepts it: lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check
 
   @current-view @build
-  Scenario: The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.
+  Scenario: The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; the site opens on a choice of vantage and shows one step at a time, every step a rendered panel toward a goal on declared evidence, the journeys covering the Observer's poles in order and ending in verification as the kernel decides, and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.
     Given .github/workflows/view.yml
     When the suite exercises current-view
     Then its oracle accepts it: bin/r30 view render; scripts/tests/test_r30.py

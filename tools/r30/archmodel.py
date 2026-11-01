@@ -106,6 +106,7 @@ CHARACTERISTICS = [
     {"id": "performance-efficiency", "statement": "Validation costs time once, in the gate, and never on the research loop."},
     {"id": "maintainability", "statement": "Every generated module has one generator and one source; nothing is written twice."},
     {"id": "functional-correctness", "statement": "Nothing unproved is called proved, and no proof uses an axiom beyond propext and Quot.sound."},
+    {"id": "interaction-capability", "statement": "The published view is a pedagogy: each vantage is a lesson that reaches the evidence and the open obligation."},
 ]
 
 SUBCHARACTERISTICS = [
@@ -117,6 +118,8 @@ SUBCHARACTERISTICS = [
      "statement": "The architecture and quality entities are the stdlib's, not private copies."},
     {"id": "correctness", "characteristic": "functional-correctness",
      "statement": "The register is read against the kernel on every commit."},
+    {"id": "learnability", "characteristic": "interaction-capability",
+     "statement": "A reader of any vantage follows the state of the proof step by step, each step presupposing only earlier ones."},
 ]
 
 REQUIREMENTS = [
@@ -136,6 +139,8 @@ REQUIREMENTS = [
      "statement": "No proved claim lacks a kernel-checked, published Lean theorem (frontier check)."},
     {"id": "forbidden-axioms", "subcharacteristic": "correctness",
      "statement": "No theorem depends on an axiom beyond propext and Quot.sound (axioms, choice-audit)."},
+    {"id": "pedagogy", "subcharacteristic": "learnability",
+     "statement": "Every journey of the Presentation is an ordered sequence of steps that covers the Observer's poles in their order (what the vantage is, how the proof appears from it, what is proved, what is open) and ends in verification, each step on declared evidence."},
 ]
 
 MEASURES = [
@@ -155,6 +160,8 @@ MEASURES = [
      "statement": "Proved claims whose Lean name is not kernel-checked and published."},
     {"id": "forbidden-axiom-uses", "requirement": "forbidden-axioms", "threshold": 0, "unit": "theorems", "command": "choice_audit",
      "statement": "Theorems depending on Classical.choice or any axiom beyond propext and Quot.sound."},
+    {"id": "pedagogy", "requirement": "pedagogy", "threshold": 0, "unit": "journeys", "command": "verify",
+     "statement": "Journeys whose steps are not consecutive from 1 and linked, do not cover the poles in order, do not end in verification, or cite undeclared evidence: decided by journeysStepsConsecutive, journeysStepsLinked, journeysCoverPolesInOrder, journeysEndInVerification and stepEvidenceDeclared of Presentation.lex.tex (`verify api`); `view render` refuses them."},
 ]
 
 

@@ -5,11 +5,22 @@ view workflow publishes, the panels of the site (the Rule 30 picture, the
 plain-language explainer, the reduction tree, the register, the open leaves,
 the paper's statements, the open obligation, the refuted routes, the
 interface sheets, the modules, the quality measures), the explainer's
-paragraphs as data, the id of the open obligation, and the journey of each
-stakeholder through the panels, with decided theorems that every panel is
-governed by a viewpoint of `Architecture`, every journey belongs to a
-declared stakeholder, every artifact is produced by a command of `Api`, the
-published paths and the explainer's paragraph ids are distinct.
+paragraphs as data, the id of the open obligation, the journey of each
+stakeholder through the panels, and the pedagogy: every journey is an ordered
+sequence of steps (`Step`), each at one of the Observer's poles (`Pole`: what
+the vantage is, how the proof appears from it, what is proved, what is open,
+what the reader can verify), each showing one panel toward one goal and
+resting on declared evidence (claims of `Register` or artifacts), with the
+commands a reader verifies with (`Verification`). The decided theorems: every
+panel is governed by a viewpoint of `Architecture`, every journey belongs to
+a declared stakeholder, every artifact is produced by a command of `Api`, the
+published paths and the explainer's paragraph ids are distinct; every step's
+panel is a panel and its journey a journey, the steps of a journey have
+consecutive orders from 1 and are linked by `next`, every journey covers the
+poles in their canonical order and ends in the verification step, every
+evidence id is a claim or an artifact, every paragraph a step cites is
+declared, and each journey's panels are exactly its steps' panels (what the
+Observer reads as the vantage's sensual qualities).
 
 `rule30-api/src/Application.lex.tex` declares the application (name,
 version, entry page, logo, workflow) and its publication (the view workflow
@@ -25,7 +36,7 @@ uses cover every status of `Register`.
 artifacts into a directory from the same lists (`site.py`)."""
 
 from . import repo
-from .semantic import (BOOL, NAT, STR, all_members, b, ble, call, definition, eq_string, field_of_each, holds, if_,
+from .semantic import (BOOL, NAT, STR, add, all_members, b, beq, ble, call, definition, eq_string, field_of_each, holds, if_,
                        index_of, list_t, lookup_field, lst, match_list, member_string, n, named, proj, record, s, strings,
                        structure, var)
 
@@ -96,29 +107,251 @@ PANELS = [
      "statement": "The command surface, the register, the architecture and this presentation as verified semantic modules."},
     {"id": "quality", "title": "Quality", "viewpoint": "optimal", "artifact": "architecture-module",
      "statement": "The measures of an optimal implementation, each with its threshold and the command that reports it."},
+    {"id": "verify", "title": "Verify it yourself", "viewpoint": "evidence", "artifact": "pdf-manifest",
+     "statement": "The commands that reproduce what this page shows, the attested PDFs with their digests, the attestation of the paper and the published artifacts; nothing here asks to be taken on trust."},
 ]
 
-JOURNEYS = [
-    {"id": "prize-review", "stakeholder": "wolfram", "panels": ["reduction-tree", "register", "open-leaves"]},
-    {"id": "research-session", "stakeholder": "researcher", "panels": ["open-leaves", "interface-sheets", "quality"]},
-    {"id": "reading", "stakeholder": "community", "panels": ["reduction-tree", "interface-sheets", "register"]},
-    {"id": "stdlib-feedback", "stakeholder": "uor-foundation", "panels": ["modules", "quality"]},
-    {"id": "mathematics", "stakeholder": "mathematician", "panels": ["paper", "reduction-tree", "obligation", "refutations", "register"]},
-    {"id": "first-visit", "stakeholder": "layperson", "panels": ["picture", "explainer", "reduction-tree"]},
+# The Observer's poles as the canonical order of every journey: a lesson
+# first says what the vantage is, then shows the proof as it appears from
+# there, then the proved claims as kernel-checked evidence, then the open
+# obligation as open, and ends with what the reader can verify alone.
+POLES = [
+    {"id": "sensual-object", "title": "What this vantage is",
+     "statement": "The object as it appears from here: the picture and the words, the paper, the tree, the leaves or the modules."},
+    {"id": "sensual-quality", "title": "How the proof appears from here",
+     "statement": "The panels that show the proof from this vantage; they depend on the vantage, the proof does not."},
+    {"id": "real-quality", "title": "What is proved",
+     "statement": "The proved claims as kernel-checked evidence, the same from every vantage: each names a Lean theorem checked under propext and Quot.sound."},
+    {"id": "withdrawn", "title": "What is open",
+     "statement": "The open obligation stated as open, with its exact Lean predicate; no panel renders a proof of it."},
+    {"id": "verification", "title": "Verify it yourself",
+     "statement": "The commands, attestations and documents with which the reader reproduces what the page shows."},
 ]
+
+# The commands the verification step offers, each a command of Api.lex.tex.
+VERIFICATIONS = [
+    {"command": "brief", "invocation": "bin/r30 brief",
+     "statement": "One screen: the open claims, the proved reductions, the refuted routes."},
+    {"command": "claim", "invocation": "bin/r30 claim <id>",
+     "statement": "One claim in full: register entry, Lean type, published statement, dependents."},
+    {"command": "frontier_check", "invocation": "bin/r30 frontier check",
+     "statement": "The register against the kernel: every proved claim names a theorem checked under propext and Quot.sound and published."},
+    {"command": "axioms", "invocation": "bin/r30 axioms <Lean names>",
+     "statement": "The axioms a theorem depends on; must print only propext and Quot.sound."},
+    {"command": "kappa", "invocation": "bin/r30 kappa <modules>",
+     "statement": "The kappa-labels of the research modules: the address of the declarations the kernel replays."},
+    {"command": "verify", "invocation": "bin/r30 verify api",
+     "statement": "lexlean verify of the API modules: the kernel decides the theorems this page's model states, the pedagogy among them."},
+    {"command": "api_check", "invocation": "bin/r30 api check",
+     "statement": "Refuses a module, register, schema or feature that drifted from its generator."},
+    {"command": "view_render", "invocation": "bin/r30 view render --out view",
+     "statement": "This view, rendered from the register into a directory; open view/index.html without a server."},
+]
+
+# One stakeholder's lesson, step by step. `panel` is the panel the step shows,
+# `pole` its place in the canonical order, `goal` what the reader can do or
+# verify after it, `text` and `paragraphs` (ids of `EXPLAINER`) its body,
+# `evidence` the claim ids and artifact ids it rests on. `order` and `next`
+# are derived from the sequence.
+_STEPS = {
+    "first-visit": [
+        {"id": "fv-picture", "pole": "sensual-object", "panel": "picture", "title": "What Rule 30 is",
+         "goal": "Read the picture: how each row is made from the one above it, and which cells are the center column.",
+         "paragraphs": ["rule-30", "the-picture"], "evidence": ["picture"]},
+        {"id": "fv-problem", "pole": "sensual-object", "panel": "explainer", "title": "The center column and Problem 1",
+         "goal": "State Problem 1 in your own words: does the center column ever settle into a block that repeats forever? The claim to be proved is that it never does.",
+         "paragraphs": ["center-column", "problem-1"], "evidence": ["explainer", "problem1"]},
+        {"id": "fv-kernel", "pole": "sensual-object", "panel": "explainer", "title": "What kernel-checked means",
+         "goal": "Know what this site means by kernel-checked before any checked statement is shown.",
+         "paragraphs": ["kernel-checked"], "evidence": ["explainer"]},
+        {"id": "fv-tree", "pole": "sensual-quality", "panel": "reduction-tree", "title": "The map of what is proved",
+         "goal": "Read the reduction tree: Problem 1 at the top, and under it the statements it has been reduced to; a check mark is a proved arrow.",
+         "paragraphs": ["what-is-proved", "how-to-read"], "evidence": ["chain", "problem1"]},
+        {"id": "fv-reductions", "pole": "sensual-quality", "panel": "explainer", "title": "The main proved arrows, in words",
+         "goal": "Say in plain words what the main proved arrows reduce Problem 1 to: collisions, edges, bands, a sparser sequence, and a checked certificate.",
+         "paragraphs": ["reduction-collisions", "reduction-edges", "reduction-bands", "reduction-sparse", "reduction-horizon"],
+         "evidence": ["recurrent-central-collision", "edge-parity", "interior-aperiodicity", "three-diagonal-band", "left-band",
+                      "periodic-finite-kernel", "dilation-reduction", "dyadic-response-reduction", "horizon-certificate"]},
+        {"id": "fv-register", "pole": "real-quality", "panel": "register", "title": "The register",
+         "goal": "Find a proved statement in the register and see the name of the checked theorem behind it; filter by proved.",
+         "paragraphs": ["the-register"], "evidence": ["register-json", "edge-parity", "left-band"]},
+        {"id": "fv-open", "pole": "withdrawn", "panel": "obligation", "title": "What remains open",
+         "goal": "State the one remaining obligation in plain words and recognize that it is open, not proved.",
+         "paragraphs": ["what-is-open"], "evidence": ["aperiodic-compensation"]},
+        {"id": "fv-verify", "pole": "verification", "panel": "verify", "title": "What you can check yourself",
+         "goal": "Reproduce what this page shows: the briefing, one statement in full, and the paper as it was verified.",
+         "paragraphs": ["verify-yourself"], "evidence": ["paper-pdf", "pdf-manifest", "readme"]},
+    ],
+    "mathematics": [
+        {"id": "ma-paper", "pole": "sensual-object", "panel": "paper", "title": "The paper's vocabulary",
+         "goal": "Read the paper's statements as mathematics, the defining equations of the Notions section first: every later statement is in their terms.",
+         "text": "Observations.lex.tex is written in a controlled English whose every sentence compiles to a Lean statement and is closed by the lexeme of the theorem it states, so the sentence read here and the theorem the kernel checked are the same object. The Notions section publishes the defining equations of the host notions (the center, the carry ledger, the defects, the trinomial and trailing parities) as lemmas; the Lean name and the lexeme are under each statement, and the attested PDFs carry the same text.",
+         "evidence": ["statements", "paper-pdf", "observations-pdf", "core-pdf"]},
+        {"id": "ma-tree", "pole": "sensual-quality", "panel": "reduction-tree", "title": "The register as a tree",
+         "goal": "Read the register as a tree of reductions from problem1: a proved arrow is a theorem toward Problem 1, an open leaf a sufficient condition, a cross a refuted route; the open obligation is the node every exact decomposition ends at.",
+         "text": "problem1 is Ruliology.CellularAutomata.Rule30Prize.Problem1 as the prize kit states it. A proved child of a node is a kernel-checked implication or equivalence toward the node; an open leaf is a statement that would close Problem 1 through the proved arrows above it; aperiodic-compensation is the open statement the exact decompositions of the next steps end at, read in full once they have been read.",
+         "evidence": ["chain", "problem1"]},
+        {"id": "ma-edges", "pole": "real-quality", "panel": "register", "title": "The edge chain",
+         "goal": "Follow the exact decomposition of the center: ledger-diagonal, edge-interior-split, edge-diagonal-formula, edge-parity (center t = not (timeParity t XOR interiorDiagonal t)), hence Problem 1 iff InteriorAperiodic.",
+         "text": "The center is the complement of the diagonal of the carry ledger (centerPeriodic_iff_ledgerPeriodic); every elementary rule is a linear part plus a carry (rule_eq_linear_xor_carry), and the carry is the intersection of a row with its own translate. The two edge carries of every row, propagated through the trinomial triangle, contribute exactly the time parity (edgeDiagonal_eq_timeParity), so a period of the center is a period of the interior diagonal up to a factor 2 (problem1_iff_interiorAperiodic).",
+         "evidence": ["ledger-diagonal", "all-rules-facet", "characteristic-one-facet", "edge-interior-split", "edge-diagonal-formula",
+                      "interior-diagonal-formula", "edge-parity", "interior-aperiodicity"]},
+        {"id": "ma-bands", "pole": "real-quality", "panel": "register", "title": "Stripping the bands",
+         "goal": "Strip the regular bands exactly: center t = trailingParity (t-2) XOR interiorThreeDiagonal t (three-diagonal-band), center t = rulerBackground t XOR interiorEightDiagonal t (left-band), and the renormalization of the obligation on every dyadic class.",
+         "text": "The three inner diagonals of the regular side inject the period-doubling sequence trailingParity, which has no eventual period (trailingParity_not_periodic); the first diagonals of the chaotic side inject two further ruler terms. Under a center period the deep interior has no eventual period at all (not_threePeriodic_of_centerPeriodic) and the equation against the ruler reproduces itself with the same period on every class 2^k u + 1 (threeClass_of_centerPeriodic). Problem 1 iff ThreeAperiodic iff EightAperiodic.",
+         "evidence": ["three-diagonal-band", "dyadic-renormalization", "left-band"]},
+        {"id": "ma-collisions", "pole": "real-quality", "panel": "register", "title": "Collisions, coupling and certificates",
+         "goal": "Read the nonlinear facts: Problem 1 iff no recurrent central collision, the coupling law of the center defect, left-defect sourcing from column one, and the kernel-checked horizon certificate for T <= 512 and P <= 128.",
+         "text": "problem1_iff_noRecurrentCentralCollision is the band form, choice-free. center_periodic_of_coupling states a center period as the coupling leftDefect(t,1) XOR (not center t AND rightDefect(t,1)) at every later time. left_defect_sourced says where a left defect comes from. horizon_thirty_two is a finite certificate the kernel evaluated directly on the rows; the uniform horizon H(T, P) is the open claim horizon-criterion.",
+         "evidence": ["recurrent-central-collision", "coupling-law", "left-defect-sourcing", "horizon-certificate"]},
+        {"id": "ma-dyadic", "pole": "real-quality", "panel": "register", "title": "The dyadic side",
+         "goal": "Read the 2-kernel reductions: a periodic center has a finite 2-kernel, which forces dyadic self-similarity, the dilation and response reductions, the fixed sequence dyadicRow, and the freezing law of the linear transport (kernel-law).",
+         "text": "centerKernelFinite_of_centerPeriodic: under CenterPeriodic T P every subsequence t -> center(2^k t + r) is eventually periodic with a common period. From it: problem1_of_no_dyadic_self_similarity, problem1_of_dyadic_column_aperiodic, problem1_of_dilation_aperiodic_in_paper (any base), kappaCollapse_iff, problem1_of_dyadic_response_aperiodic; the trinomial kernel is dyadically stable (dyadicColumnAperiodic_iff_stable), each row's contribution to the dyadic column is scale-free (center_twopow_succ_eq), and rowTerm_kernel_law makes every 2-kernel sequence explicit up to the rows at or above the scale.",
+         "evidence": ["periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "interior-kernel-reduction",
+                      "stable-kernel", "kappa-collapse", "dyadic-response-reduction", "scale-free-rows", "kernel-law"]},
+        {"id": "ma-obligation", "pole": "withdrawn", "panel": "obligation", "title": "The open obligation, exactly",
+         "goal": "State the obligation exactly, as open: EightAperiodic (Rule30UOR.LeftBand), its exact forms, its chain to Problem 1, what rests on it, and the open leaves that would also close Problem 1.",
+         "text": "Every proved reduction ends here. The bulk carries, with both edge bands stripped, are never the ruler background plus a periodic sequence. No closing argument is known; the register records what a periodic interior would have to satisfy (renormalization on every dyadic class, black-center absorption, the block tables of the freezing law) and calls none of it a proof. The other open leaves (horizon-criterion, center-infinite-kernel, no-dyadic-self-similarity, dyadic-column-aperiodic, some-base-dilation-aperiodic, dyadic-response-aperiodic) are each sufficient.",
+         "evidence": ["aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic",
+                      "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]},
+        {"id": "ma-refuted", "pole": "withdrawn", "panel": "refutations", "title": "Refuted routes",
+         "goal": "Know the refuted routes toward the obligation and the Lean refutation or experiment behind each, so as not to walk them again.",
+         "text": "A refuted claim stays in the register with its refutation: a Lean theorem that shows the route arithmetic or vacuous (routes A, B and C in Rule30UOR.Routes, the engine hypothesis bundles, the observer q-rank), or a finite experiment on the seed (q-adic descent, front slack, the evaluation point, the first-failure 2-adic law).",
+         "evidence": ["q-adic-descent", "front-slack-descent", "evaluation-point", "gate-phase-opposition", "band-engines", "saturation-reexcitation",
+                      "first-failure-2adic", "route-a-band-discharge", "route-c-rank-drop", "route-b-reset-mismatch"]},
+        {"id": "ma-verify", "pole": "verification", "panel": "verify", "title": "Verify the paper",
+         "goal": "Verify: the attestation identifiers of the paper, the PDF digests against pdf-manifest.json, bin/r30 claim <id> for any claim, bin/r30 axioms <Lean name> for its axioms.",
+         "evidence": ["pdf-manifest", "paper-pdf", "statements", "register-json"]},
+    ],
+    "prize-review": [
+        {"id": "pr-tree", "pole": "sensual-object", "panel": "reduction-tree", "title": "The proof as a tree",
+         "goal": "See the whole effort as one tree from problem1: every arrow a theorem, every leaf an open sufficient condition, every cross a refuted route.",
+         "evidence": ["chain", "problem1"]},
+        {"id": "pr-leaves", "pole": "sensual-quality", "panel": "open-leaves", "title": "The open leaves",
+         "goal": "Read the open leaves: each is a statement that would close Problem 1 through the proved arrows above it, and nothing else is claimed.",
+         "evidence": ["register-json", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic",
+                      "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]},
+        {"id": "pr-register", "pole": "real-quality", "panel": "register", "title": "Proved, against the kernel",
+         "goal": "Check that every proved claim names a Lean theorem, kernel-checked under propext and Quot.sound and published as a lexeme; filter the register by proved.",
+         "evidence": ["register-json", "register-module", "frontier-module"]},
+        {"id": "pr-obligation", "pole": "withdrawn", "panel": "obligation", "title": "The remaining obligation",
+         "goal": "Read the one open obligation every proved reduction ends at, EightAperiodic, stated as open with its chain to Problem 1.",
+         "evidence": ["aperiodic-compensation"]},
+        {"id": "pr-verify", "pole": "verification", "panel": "verify", "title": "Reproduce the evidence",
+         "goal": "Reproduce the register's evidence: bin/r30 frontier check reads every proved claim against the kernel, bin/r30 axioms <Lean name> prints its axioms, the PDFs carry the attested paper.",
+         "evidence": ["frontier", "pdf-manifest", "paper-pdf"]},
+    ],
+    "research-session": [
+        {"id": "rs-leaves", "pole": "sensual-object", "panel": "open-leaves", "title": "Where to work",
+         "goal": "Start where the register allows work: the open leaves, the only places a session works (bin/r30 brief lists them).",
+         "evidence": ["register-json", "dyadic-response-aperiodic", "dyadic-column-aperiodic", "horizon-criterion"]},
+        {"id": "rs-sheet", "pole": "sensual-quality", "panel": "interface-sheets", "title": "The sheet of a leaf",
+         "goal": "Read a leaf's interface sheet: its chain to problem1, its notions, the exact facts about them and the handles to continue (bin/r30 interface <id>).",
+         "evidence": ["interfaces", "dyadic-response-aperiodic"]},
+        {"id": "rs-quality", "pole": "sensual-quality", "panel": "quality", "title": "The gate and its budget",
+         "goal": "Know the cost model: one module checks in seconds, the gate runs once per batch, CI only renders; each measure names its threshold and the command that reports it.",
+         "evidence": ["architecture-module", "agents"]},
+        {"id": "rs-reductions", "pole": "real-quality", "panel": "register", "title": "Proved reductions: use them",
+         "goal": "Use the proved reductions as equivalent forms of the goal and do not re-derive them; the register is the plan and the kernel is the judge.",
+         "evidence": ["register-json", "interior-aperiodicity", "three-diagonal-band", "left-band", "kernel-law"]},
+        {"id": "rs-obligation", "pole": "withdrawn", "panel": "obligation", "title": "The obligation and its exact forms",
+         "goal": "Read the obligation in its exact forms (center t = rulerBackground t XOR interiorEightDiagonal t; the dyadic form) and what is known about it.",
+         "evidence": ["aperiodic-compensation"]},
+        {"id": "rs-refuted", "pole": "withdrawn", "panel": "refutations", "title": "Routes not to walk again",
+         "goal": "Know the refuted routes and the refutation of each, so the session does not walk them again.",
+         "evidence": ["route-a-band-discharge", "route-b-reset-mismatch", "route-c-rank-drop", "band-engines", "q-adic-descent"]},
+        {"id": "rs-verify", "pole": "verification", "panel": "verify", "title": "Run the loop",
+         "goal": "Run the loop: bin/r30 brief, bin/r30 claim <id>, check or verify one module, bin/r30 kappa for the replay labels, and commit through the gate once per batch.",
+         "evidence": ["agents", "strategy"]},
+    ],
+    "reading": [
+        {"id": "rd-tree", "pole": "sensual-object", "panel": "reduction-tree", "title": "The map",
+         "goal": "Read the register as a tree: what rests on what, which arrows are theorems, which leaves are open.",
+         "evidence": ["chain", "problem1"]},
+        {"id": "rd-sheet", "pole": "sensual-quality", "panel": "interface-sheets", "title": "A claim, labeled",
+         "goal": "Read a claim's labeled sheet, written to be reused: chain, notions, exact facts, handles.",
+         "evidence": ["interfaces"]},
+        {"id": "rd-register", "pole": "real-quality", "panel": "register", "title": "Every claim with its evidence",
+         "goal": "Find any claim, its status, its Lean name and lexeme, what it rests on and what rests on it; search by notion.",
+         "evidence": ["register-json", "frontier"]},
+        {"id": "rd-obligation", "pole": "withdrawn", "panel": "obligation", "title": "What is open",
+         "goal": "Read the open obligation as open, with its Lean predicate, and the open leaves that would also close Problem 1.",
+         "evidence": ["aperiodic-compensation"]},
+        {"id": "rd-verify", "pole": "verification", "panel": "verify", "title": "Reproduce the view",
+         "goal": "Reproduce the view: bin/r30 view render writes these artifacts, the PDFs and their digests are the attested paper, the modules are verified with lexlean.",
+         "evidence": ["readme", "pdf-manifest", "site"]},
+    ],
+    "stdlib-feedback": [
+        {"id": "sf-modules", "pole": "sensual-object", "panel": "modules", "title": "The application as modules",
+         "goal": "Read the application as LexLean semantic modules on prism-stdlib: the command surface, the register, the architecture, the presentation, the application and the Observer, each data plus theorems the kernel decides.",
+         "evidence": ["api-module", "register-module", "architecture-module", "presentation-module", "application-module"]},
+        {"id": "sf-quality", "pole": "sensual-quality", "panel": "quality", "title": "What optimal means here",
+         "goal": "Read the quality model on Foundation.Qual: the measures, their thresholds and the command that reports each, the pedagogy among them.",
+         "evidence": ["architecture-module"]},
+        {"id": "sf-register", "pole": "real-quality", "panel": "register", "title": "The register, decided",
+         "goal": "Read the register as Register.lex.tex restates it (every depends target a claim, every proved claim a Lean theorem, decided by the kernel): the same rows as register.json under its schema.",
+         "evidence": ["register-json", "register-module", "frontier-module"]},
+        {"id": "sf-obligation", "pole": "withdrawn", "panel": "obligation", "title": "The obligation as data",
+         "goal": "Read the obligation as Presentation names it and Application decides it to be an open claim (obligationIsOpen): the Observer's withdrawn core.",
+         "evidence": ["aperiodic-compensation", "presentation-module", "application-module"]},
+        {"id": "sf-verify", "pole": "verification", "panel": "verify", "title": "Drive the surface as a machine",
+         "goal": "Drive the same surface as a machine: every command is an MCP tool, --json reports validate against the published schemas, bin/r30 kappa prints the kappa-labels of the modules, bin/r30 api check refuses drift.",
+         "evidence": ["api-module", "readme"]},
+    ],
+}
+
+_JOURNEYS = [
+    {"id": "prize-review", "stakeholder": "wolfram"},
+    {"id": "research-session", "stakeholder": "researcher"},
+    {"id": "reading", "stakeholder": "community"},
+    {"id": "stdlib-feedback", "stakeholder": "uor-foundation"},
+    {"id": "mathematics", "stakeholder": "mathematician"},
+    {"id": "first-visit", "stakeholder": "layperson"},
+]
+
+
+def _steps():
+    rows = []
+    for j in _JOURNEYS:
+        seq = _STEPS[j["id"]]
+        for k, st in enumerate(seq):
+            rows.append({"id": st["id"], "journey": j["id"], "order": k + 1, "pole": st["pole"], "panel": st["panel"],
+                         "title": st["title"], "goal": st["goal"], "text": st.get("text", ""),
+                         "paragraphs": list(st.get("paragraphs", [])), "evidence": list(st["evidence"]),
+                         "next": seq[k + 1]["id"] if k + 1 < len(seq) else ""})
+    return rows
+
+
+STEPS = _steps()
+
+
+def _distinct_in_order(xs):
+    out = []
+    for x in xs:
+        if x not in out:
+            out.append(x)
+    return out
+
+
+# A journey's panels are its steps' panels in order of first use: what the
+# Observer reads as the vantage's sensual qualities.
+JOURNEYS = [{"id": j["id"], "stakeholder": j["stakeholder"],
+             "panels": _distinct_in_order(st["panel"] for st in STEPS if st["journey"] == j["id"])} for j in _JOURNEYS]
 
 # The plain-language panel, as data: short paragraphs a reader without Lean
 # or LexLean can follow. `view render` writes them as explainer.json and the
 # site renders them; the tests refuse formal vocabulary in them.
 EXPLAINER = [
     {"id": "rule-30", "title": "What Rule 30 is",
-     "text": "Rule 30 is a one-line machine. Start with a row of cells, all white except one black cell in the middle. To make the next row, look at each cell together with its left and right neighbours. If the left neighbour is black, the cell below turns black only when the cell and its right neighbour are both white; if the left neighbour is white, the cell below turns black when the cell or its right neighbour is black. Repeat, row after row, forever. The picture above shows the first rows: a regular pattern grows on the left and a tangled one on the right."},
+     "text": "Rule 30 is a one-line machine. Start with a row of cells, all white except one black cell in the middle. To make the next row, look at each cell together with its left and right neighbours. If the left neighbour is black, the cell below turns black only when the cell and its right neighbour are both white; if the left neighbour is white, the cell below turns black when the cell or its right neighbour is black. Repeat, row after row, forever. The picture shows the first rows: a regular pattern grows on the left and a tangled one on the right."},
+    {"id": "the-picture", "title": "Reading the picture",
+     "text": "The picture shows the first 48 rows, rows 0 to 47, from the single black cell at the top; each row is one step of the machine, and the triangle widens by one cell on each side per row. The amber cells are the center column, read from the top down. If the center column eventually repeated, then from some row on the amber cells would show the same block of blacks and whites again and again, like a stripe. Nothing of the kind is visible here, but no number of rows could settle the question, because it asks about every row that will ever come."},
     {"id": "center-column", "title": "The center column",
      "text": "Read the cells straight down from the first black cell: black, black, white, black, black, black, white, white, black, black, white, white, white, black, white, black, and so on. This list of blacks and whites is the center column. It looks random. Nobody has found a pattern in it, and nobody has proved that there is none."},
     {"id": "problem-1", "title": "What Problem 1 asks",
      "text": "Stephen Wolfram's Rule 30 Prize asks three questions about the center column. Problem 1 asks whether it ever settles into a repeating pattern: whether there is a point after which the same block of blacks and whites repeats forever. The statement to be proved is that it never does."},
     {"id": "what-is-proved", "title": "What is proved here",
-     "text": "This work has not solved Problem 1. What it has done is prove, in a form a computer checks, that Problem 1 is the same question as several other, more concrete questions. Each proved arrow in the reduction tree below says: if you could prove the statement at the arrow's end, Problem 1 would follow. The main ones are these."},
+     "text": "This work has not solved Problem 1. What it has done is prove, in a form a computer checks, that Problem 1 is the same question as several other, more concrete questions. Each proved arrow in the reduction tree says: if you could prove the statement at the arrow's end, Problem 1 would follow. The next step says what the main ones are."},
     {"id": "reduction-collisions", "title": "Collisions at the center",
      "text": "If the center column repeated with some period, disturbances travelling in from the left and from the right would have to keep meeting at the center forever, in a band of fixed width. Problem 1 is the same as saying that they cannot keep meeting."},
     {"id": "reduction-edges", "title": "The edges are simple",
@@ -129,12 +362,16 @@ EXPLAINER = [
      "text": "If the center column repeated, then the column read only at rows 1, 2, 4, 8, 16 and so on would also eventually repeat. So it is enough to show that this far sparser sequence does not, and the same holds for the responses read along that diagonal. These are the open leaves on the right of the tree."},
     {"id": "reduction-horizon", "title": "A checked certificate",
      "text": "For every candidate starting point up to 512 and every candidate period up to 128, the computer checked that the center column breaks the pattern within 32 rows. This does not settle Problem 1, which asks about every starting point and every period, but it is a verified fact about the ranges it covers."},
+    {"id": "the-register", "title": "The register",
+     "text": "The register is the list of every statement this work keeps track of, each with a status: proved, open, refuted or retired. A proved statement names the theorem the kernel checked, so the status is not a promise but a pointer to a checked proof; an open statement names nothing of the kind, and the site never shows it as proved. Select a statement to see what it rests on and what rests on it."},
     {"id": "what-is-open", "title": "What remains open",
-     "text": "The register names one remaining obligation, aperiodic-compensation. Roughly: the deep interior of the triangle, with the bands next to both edges stripped away, never settles into a ruler-like rhythm plus a repeating pattern. Proving it would close Problem 1, and so would proving any other open leaf of the tree, such as the sparser sequences above. Nobody knows how yet. Several tempting routes were tried and shown not to work; those are the refuted routes, kept so that nobody walks them again."},
+     "text": "The register names one remaining obligation, aperiodic-compensation. In plain words: the bulk of the pattern, with the few regular diagonals next to both edges stripped away, never reproduces the ruler rhythm plus a repeating pattern. It is open: nobody has proved it, and this site does not claim it. Proving it would close Problem 1, and so would proving any other open leaf of the tree, such as the sparser sequences of the previous step. Several tempting routes were tried and shown not to work; those are the refuted routes, kept so that nobody walks them again."},
     {"id": "kernel-checked", "title": "What kernel-checked means",
      "text": "Every proved statement here was written in a proof language called Lean and checked by its kernel, a small program that accepts a proof only when every step follows from the rules. A reader can misread a long argument; the kernel does not. Kernel-checked means the proof passed that check, using only two standard logical principles and no extra assumptions. The statements are also written in a controlled English that is itself translated to Lean and checked, so the sentence you read and the theorem the kernel checked are the same thing."},
-    {"id": "how-to-read", "title": "How to read this site",
-     "text": "The reduction tree is the map: Problem 1 at the top and, below it, the statements it has been reduced to. A check mark is a proved arrow, a question mark an open statement, a cross a route that was tried and refuted. The register lists every statement with its status; select one for its details. The open leaves are where work continues. The paper panel has every published theorem in full, with the PDFs. The other panels are for people working on the proof or on its tooling."},
+    {"id": "how-to-read", "title": "How to read the tree",
+     "text": "The reduction tree is the map: Problem 1 at the top and, below it, the statements it has been reduced to. A check mark is a proved arrow, a question mark an open statement, a cross a route that was tried and refuted. The small grey name beside a proved statement is the name of its checked theorem. Select a statement to see it in full. The other vantages on this site, for the mathematician, the researcher, the prize committee and the machine, read the same register from their own side."},
+    {"id": "verify-yourself", "title": "What you can check yourself",
+     "text": "Nothing here asks to be taken on trust. The commands below reproduce what this page shows from the repository: the briefing prints the current state in one screen, the claim command prints one statement with its checked theorem, and the register check reads every proved statement against the kernel. The PDFs carry the paper as it was verified, with digests so that a copy can be compared with the published one."},
 ]
 
 APPLICATION_RECORD = {
@@ -168,6 +405,61 @@ STATUS_MARKS = [
 ]
 
 
+def step_problems(claim_ids, steps=None, journeys=None, panels=None, poles=None, paragraphs=None, artifacts=None):
+    """What `Presentation.lex.tex` decides about the pedagogy, checked in
+    Python first so a failure names the step before `lexlean verify` reports
+    a false `decide` and before `view render` publishes it: every step's
+    panel is a panel and its journey a journey, the steps of a journey have
+    consecutive orders from 1 linked by `next`, every journey covers the poles
+    in their order and ends in verification, every evidence id is a claim or
+    an artifact, every paragraph is declared, and a journey's panels are its
+    steps' panels. Returns the problems, empty when none."""
+    steps = STEPS if steps is None else steps
+    journeys = JOURNEYS if journeys is None else journeys
+    panel_ids = {x["id"] for x in (PANELS if panels is None else panels)}
+    pole_ids = [x["id"] for x in (POLES if poles is None else poles)]
+    paragraph_ids = {x["id"] for x in (EXPLAINER if paragraphs is None else paragraphs)}
+    evidence_ids = set(claim_ids) | {a["id"] for a in (ARTIFACTS if artifacts is None else artifacts)}
+    journey_ids = {j["id"] for j in journeys}
+    out = []
+    seen = set()
+    for st in steps:
+        if st["id"] in seen:
+            out.append(f"step {st['id']}: duplicate id")
+        seen.add(st["id"])
+        if st["panel"] not in panel_ids:
+            out.append(f"step {st['id']}: panel {st['panel']} is not a panel")
+        if st["journey"] not in journey_ids:
+            out.append(f"step {st['id']}: journey {st['journey']} is not a journey")
+        if st["pole"] not in pole_ids:
+            out.append(f"step {st['id']}: pole {st['pole']} is not a pole")
+        for e in st["evidence"]:
+            if e not in evidence_ids:
+                out.append(f"step {st['id']}: evidence {e} is neither a claim nor an artifact")
+        for q in st["paragraphs"]:
+            if q not in paragraph_ids:
+                out.append(f"step {st['id']}: paragraph {q} is not declared")
+    for j in journeys:
+        mine = [st for st in steps if st["journey"] == j["id"]]
+        if not mine:
+            out.append(f"journey {j['id']}: no steps")
+            continue
+        if [st["order"] for st in mine] != list(range(1, len(mine) + 1)):
+            out.append(f"journey {j['id']}: orders are not 1..{len(mine)}")
+        if [st["next"] for st in mine] != [st["id"] for st in mine[1:]] + [""]:
+            out.append(f"journey {j['id']}: steps are not linked by next")
+        indices = [pole_ids.index(st["pole"]) if st["pole"] in pole_ids else -1 for st in mine]
+        if indices != sorted(indices):
+            out.append(f"journey {j['id']}: poles are out of order")
+        if set(pole_ids) - {st["pole"] for st in mine}:
+            out.append(f"journey {j['id']}: poles not covered: " + ", ".join(sorted(set(pole_ids) - {st["pole"] for st in mine})))
+        if mine[-1]["pole"] != "verification":
+            out.append(f"journey {j['id']}: the last step is not the verification step")
+        if set(j["panels"]) != {st["panel"] for st in mine}:
+            out.append(f"journey {j['id']}: its panels are not its steps' panels")
+    return out
+
+
 def _distinct(name):
     return definition(name, BOOL,
                       match_list(var("xs"), b(True), "head", "tail",
@@ -175,14 +467,33 @@ def _distinct(name):
                       parameters=[("xs", list_t(STR))], recursive="xs")
 
 
+def _each_journey(name, condition, extra=()):
+    """`name js ss ...`: `condition` (over `head`, the journey, with `st`
+    standing for the journey's steps) holds of every journey; the steps and
+    the extra parameters are fixed through the recursion."""
+    params = [("js", list_t(named("Journey"))), ("ss", list_t(named("Step")))] + list(extra)
+    return definition(name, BOOL,
+                      match_list(var("js"), b(True), "head", "tail",
+                                 if_(condition, call(name, var("tail"), *[var(q) for q, _ in params[1:]]), b(False))),
+                      parameters=params, recursive="js")
+
+
 def presentation_declarations():
     br_t, ar_t, pa_t, jo_t, pg_t = named("Brand"), named("Artifact"), named("Panel"), named("Journey"), named("Paragraph")
+    po_t, st_t, ve_t = named("Pole"), named("Step"), named("Verification")
+    nil_s, nil_n = {"kind": "nil", "element": STR}, {"kind": "nil", "element": NAT}
+    # the steps of the journey under `head`, inside an `_each_journey` condition
+    steps_of_head = call("stepsOfJourney", proj(var("head"), "id"), var("ss"))
     return [
         structure("Brand", [("name", STR), ("tagline", STR), ("description", STR), ("logo", STR)]),
         structure("Artifact", [("id", STR), ("path", STR), ("mediaType", STR), ("command", STR)]),
         structure("Panel", [("id", STR), ("title", STR), ("viewpoint", STR), ("artifact", STR), ("statement", STR)]),
         structure("Journey", [("id", STR), ("stakeholder", STR), ("panels", list_t(STR))]),
         structure("Paragraph", [("id", STR), ("title", STR), ("text", STR)]),
+        structure("Pole", [("id", STR), ("title", STR), ("statement", STR)]),
+        structure("Step", [("id", STR), ("journey", STR), ("order", NAT), ("pole", STR), ("panel", STR), ("title", STR), ("goal", STR),
+                           ("text", STR), ("paragraphs", list_t(STR)), ("evidence", list_t(STR)), ("next", STR)]),
+        structure("Verification", [("command", STR), ("invocation", STR), ("statement", STR)]),
         definition("brand", br_t, record("Brand", **{k: s(v) for k, v in BRAND.items()})),
         definition("artifacts", list_t(ar_t), lst([
             record("Artifact", id=s(a["id"]), path=s(a["path"]), mediaType=s(a["media"]), command=s(a["command"]))
@@ -196,7 +507,16 @@ def presentation_declarations():
         definition("explainer", list_t(pg_t), lst([
             record("Paragraph", id=s(e["id"]), title=s(e["title"]), text=s(e["text"])) for e in EXPLAINER], pg_t)),
         definition("obligation", STR, s(OBLIGATION)),
-        member_string(), all_members(), _distinct("distinctStrings"),
+        definition("poles", list_t(po_t), lst([record("Pole", id=s(x["id"]), title=s(x["title"]), statement=s(x["statement"]))
+                                              for x in POLES], po_t)),
+        definition("steps", list_t(st_t), lst([
+            record("Step", id=s(x["id"]), journey=s(x["journey"]), order=n(x["order"]), pole=s(x["pole"]), panel=s(x["panel"]),
+                   title=s(x["title"]), goal=s(x["goal"]), text=s(x["text"]), paragraphs=strings(x["paragraphs"]),
+                   evidence=strings(x["evidence"]), next=s(x["next"])) for x in STEPS], st_t)),
+        definition("verifications", list_t(ve_t), lst([
+            record("Verification", command=s(x["command"]), invocation=s(x["invocation"]), statement=s(x["statement"]))
+            for x in VERIFICATIONS], ve_t)),
+        member_string(), all_members(), index_of(), _append_strings(), _distinct("distinctStrings"),
         field_of_each("artifactIds", ar_t, "id"),
         field_of_each("artifactPaths", ar_t, "path"),
         field_of_each("artifactCommands", ar_t, "command"),
@@ -209,6 +529,65 @@ def presentation_declarations():
                    match_list(var("js"), {"kind": "nil", "element": STR}, "head", "tail",
                               call("appendStrings", proj(var("head"), "panels"), call("journeyPanels", var("tail")))),
                    parameters=[("js", list_t(jo_t))], recursive="js"),
+        # the pedagogy: the steps of each journey, their orders, poles, panels, links
+        field_of_each("journeyIds", jo_t, "id"),
+        field_of_each("poleIds", po_t, "id"),
+        field_of_each("stepIds", st_t, "id"),
+        field_of_each("stepJourneys", st_t, "journey"),
+        field_of_each("stepPoles", st_t, "pole"),
+        field_of_each("stepPanels", st_t, "panel"),
+        field_of_each("stepOrders", st_t, "order", result=NAT),
+        field_of_each("verificationCommands", ve_t, "command"),
+        definition("stepParagraphs", list_t(STR),
+                   match_list(var("xs"), nil_s, "head", "tail",
+                              call("appendStrings", proj(var("head"), "paragraphs"), call("stepParagraphs", var("tail")))),
+                   parameters=[("xs", list_t(st_t))], recursive="xs"),
+        definition("stepEvidence", list_t(STR),
+                   match_list(var("xs"), nil_s, "head", "tail",
+                              call("appendStrings", proj(var("head"), "evidence"), call("stepEvidence", var("tail")))),
+                   parameters=[("xs", list_t(st_t))], recursive="xs"),
+        definition("stepsOfJourney", list_t(st_t),
+                   match_list(var("xs"), {"kind": "nil", "element": st_t}, "head", "tail",
+                              if_(eq_string(var("journey"), proj(var("head"), "journey")),
+                                  {"kind": "cons", "head": var("head"), "tail": call("stepsOfJourney", var("journey"), var("tail"))},
+                                  call("stepsOfJourney", var("journey"), var("tail")))),
+                   parameters=[("journey", STR), ("xs", list_t(st_t))], recursive="xs"),
+        # the orders are next, next+1, ...
+        definition("consecutiveFrom", BOOL,
+                   match_list(var("xs"), b(True), "head", "tail",
+                              if_(beq(var("head"), var("next")), call("consecutiveFrom", var("tail"), add(var("next"), n(1))), b(False))),
+                   parameters=[("xs", list_t(NAT)), ("next", NAT)], recursive="xs"),
+        # the position of each step's pole in the canonical order
+        definition("poleIndices", list_t(NAT),
+                   match_list(var("xs"), nil_n, "head", "tail",
+                              {"kind": "cons", "head": call("indexOf", var("head"), var("ids")), "tail": call("poleIndices", var("tail"), var("ids"))}),
+                   parameters=[("xs", list_t(STR)), ("ids", list_t(STR))], recursive="xs"),
+        definition("nonDecreasing", BOOL,
+                   match_list(var("xs"), b(True), "head", "tail",
+                              if_(ble(var("previous"), var("head")), call("nonDecreasing", var("tail"), var("head")), b(False))),
+                   parameters=[("xs", list_t(NAT)), ("previous", NAT)], recursive="xs"),
+        definition("lastString", STR,
+                   match_list(var("xs"), var("default"), "head", "tail", call("lastString", var("tail"), var("head"))),
+                   parameters=[("xs", list_t(STR)), ("default", STR)], recursive="xs"),
+        definition("firstStepId", STR,
+                   match_list(var("xs"), s(""), "head", "tail", proj(var("head"), "id")),
+                   parameters=[("xs", list_t(st_t))]),
+        # each step's `next` is the id of the step after it, "" at the end
+        definition("linkedByNext", BOOL,
+                   match_list(var("xs"), b(True), "head", "tail",
+                              if_(eq_string(proj(var("head"), "next"), call("firstStepId", var("tail"))),
+                                  call("linkedByNext", var("tail")), b(False))),
+                   parameters=[("xs", list_t(st_t))], recursive="xs"),
+        definition("sameMembers", BOOL, if_(call("allMembers", var("xs"), var("ys")), call("allMembers", var("ys"), var("xs")), b(False)),
+                   parameters=[("xs", list_t(STR)), ("ys", list_t(STR))]),
+        _each_journey("stepsConsecutive", call("consecutiveFrom", call("stepOrders", steps_of_head), n(1))),
+        _each_journey("stepsLinked", call("linkedByNext", steps_of_head)),
+        _each_journey("polesInOrder",
+                      if_(call("nonDecreasing", call("poleIndices", call("stepPoles", steps_of_head), var("ps")), n(0)),
+                          call("allMembers", var("ps"), call("stepPoles", steps_of_head)), b(False)),
+                      extra=[("ps", list_t(STR))]),
+        _each_journey("endInVerification", eq_string(call("lastString", call("stepPoles", steps_of_head), s("")), s("verification"))),
+        _each_journey("panelsAreStepPanels", call("sameMembers", proj(var("head"), "panels"), call("stepPanels", steps_of_head))),
         holds("panelsGovernedByViewpoints",
               call("allMembers", call("panelViewpoints", call("panels")),
                    call("viewpointIds", call("viewpoints", module="Architecture"), module="Architecture"))),
@@ -224,6 +603,27 @@ def presentation_declarations():
         holds("artifactPathsDistinct", call("distinctStrings", call("artifactPaths", call("artifacts")))),
         holds("artifactIdsDistinct", call("distinctStrings", call("artifactIds", call("artifacts")))),
         holds("paragraphIdsDistinct", call("distinctStrings", call("paragraphIds", call("explainer")))),
+        # the pedagogy, decided: steps show panels of journeys at declared poles,
+        # in consecutive linked order covering the poles in their canonical order,
+        # ending in verification, on declared evidence and paragraphs
+        holds("stepIdsDistinct", call("distinctStrings", call("stepIds", call("steps")))),
+        holds("stepPanelsArePanels", call("allMembers", call("stepPanels", call("steps")), call("panelIds", call("panels")))),
+        holds("stepJourneysAreJourneys", call("allMembers", call("stepJourneys", call("steps")), call("journeyIds", call("journeys")))),
+        holds("everyJourneyHasSteps", call("allMembers", call("journeyIds", call("journeys")), call("stepJourneys", call("steps")))),
+        holds("everyPanelInAStep", call("allMembers", call("panelIds", call("panels")), call("stepPanels", call("steps")))),
+        holds("stepPolesDeclared", call("allMembers", call("stepPoles", call("steps")), call("poleIds", call("poles")))),
+        holds("journeysStepsConsecutive", call("stepsConsecutive", call("journeys"), call("steps"))),
+        holds("journeysStepsLinked", call("stepsLinked", call("journeys"), call("steps"))),
+        holds("journeysCoverPolesInOrder", call("polesInOrder", call("journeys"), call("steps"), call("poleIds", call("poles")))),
+        holds("journeysEndInVerification", call("endInVerification", call("journeys"), call("steps"))),
+        holds("journeyPanelsAreStepPanels", call("panelsAreStepPanels", call("journeys"), call("steps"))),
+        holds("stepParagraphsDeclared", call("allMembers", call("stepParagraphs", call("steps")), call("paragraphIds", call("explainer")))),
+        holds("stepEvidenceDeclared",
+              call("allMembers", call("stepEvidence", call("steps")),
+                   call("appendStrings", call("idsOf", call("claims", module="Register"), module="Register"), call("artifactIds", call("artifacts"))))),
+        holds("verificationsAreCommands",
+              call("allMembers", call("verificationCommands", call("verifications")),
+                   call("commandNames", call("commands", module="Api"), module="Architecture"))),
     ]
 
 
@@ -276,11 +676,7 @@ def application_declarations():
 
 def render_presentation():
     from . import lexmod
-    decls = presentation_declarations()
-    # appendStrings precedes journeyPanels (no forward references)
-    i = next(k for k, d in enumerate(decls) if d["name"] == "journeyPanels")
-    decls.insert(i, _append_strings())
-    return lexmod.module("Presentation", decls, imports=["Api", "Architecture"])
+    return lexmod.module("Presentation", presentation_declarations(), imports=["Api", "Architecture", "Register"])
 
 
 def render_application():
@@ -299,7 +695,7 @@ def sync():
     PRESENTATION.parent.mkdir(parents=True, exist_ok=True)
     p = _write(PRESENTATION, render_presentation())
     a = _write(APPLICATION, render_application())
-    return {"module": str(PRESENTATION.relative_to(repo.ROOT)), "panels": len(PANELS), "changed": p or a}
+    return {"module": str(PRESENTATION.relative_to(repo.ROOT)), "panels": len(PANELS), "steps": len(STEPS), "changed": p or a}
 
 
 def check():

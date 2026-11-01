@@ -339,6 +339,6 @@ evidence = "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api c
 [[claim]]
 id = "current-view"
 level = "build"
-statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured."
+statement = "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; the site opens on a choice of vantage and shows one step at a time, every step a rendered panel toward a goal on declared evidence, the journeys covering the Observer's poles in order and ending in verification as the kernel decides, and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured."
 feature = ".github/workflows/view.yml"
 evidence = "bin/r30 view render; scripts/tests/test_r30.py"

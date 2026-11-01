@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Centerline</title>
-<meta name="description" content="The current view of Wolfram's Rule 30 Prize, Problem 1: what is proved, what is open and what was refuted, with the paper's statements and a plain-language guide, rendered from the kernel-checked register.">
+<meta name="description" content="The current view of Wolfram's Rule 30 Prize, Problem 1, as a lesson from six vantages: what is proved, what is open and what was refuted, with the paper's statements and a plain-language guide, rendered from the kernel-checked register.">
 <link rel="icon" href="logo.svg" type="image/svg+xml">
 <style>
 :root {
@@ -42,14 +42,15 @@ header.top { border-bottom: 1px solid var(--line); background: var(--panel); }
 .brand { display: flex; align-items: center; gap: 14px; padding: 18px 0 14px; flex-wrap: wrap; }
 .brand img { width: 56px; height: 56px; border-radius: 12px; flex: none; }
 .brand h1 { font: 600 1.9rem/1.1 var(--serif); margin: 0; letter-spacing: 0.01em; }
+.brand h1 a { color: inherit; text-decoration: none; }
 .brand .tag { margin: 2px 0 0; color: var(--muted); font-size: 0.98rem; }
 .brand .meta { margin-left: auto; text-align: right; color: var(--muted); font-size: 0.82rem; }
 .brand .meta code { font-size: 0.8rem; }
-button.ghost { background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 0.82rem; cursor: pointer; }
-button.ghost:hover { border-color: var(--accent); }
-nav.panels { display: flex; gap: 6px; overflow-x: auto; padding: 0 0 12px; scrollbar-width: none; }
-nav.panels a { white-space: nowrap; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 0.86rem; color: var(--ink); text-decoration: none; background: var(--bg); }
-nav.panels a:hover { border-color: var(--accent); }
+button.ghost, a.ghost { background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 0.82rem; cursor: pointer; text-decoration: none; display: inline-block; }
+button.ghost:hover, a.ghost:hover { border-color: var(--accent); }
+nav.stepbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 0 0 12px; font-size: 0.86rem; color: var(--muted); }
+nav.stepbar .where { font-weight: 600; color: var(--ink); }
+nav.stepbar .pole { border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; background: var(--bg); color: var(--ink); }
 main { padding: 20px 0 48px; }
 .lede { font-family: var(--serif); font-size: 1.12rem; max-width: 64ch; margin: 0 0 20px; }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 0 0 28px; }
@@ -58,8 +59,43 @@ main { padding: 20px 0 48px; }
 .tile .l { color: var(--muted); font-size: 0.82rem; }
 .tile.open .n { color: var(--open); } .tile.proved .n { color: var(--proved); } .tile.refuted .n { color: var(--refuted); } .tile.retired .n { color: var(--retired); } .tile.leaves .n { color: var(--accent); }
 section { margin: 0 0 36px; scroll-margin-top: 12px; }
-section > h2 { font: 600 1.35rem/1.2 var(--serif); margin: 0 0 4px; }
-section > p.sub { color: var(--muted); margin: 0 0 14px; font-size: 0.93rem; max-width: 70ch; }
+h2 { font: 600 1.35rem/1.2 var(--serif); margin: 0 0 4px; }
+p.sub { color: var(--muted); margin: 0 0 14px; font-size: 0.93rem; max-width: 70ch; }
+/* the choice of vantage */
+.vantages { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin: 0 0 28px; }
+a.vantage { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; color: var(--ink); text-decoration: none; }
+a.vantage:hover { border-color: var(--accent); }
+.vantage .who { font: 600 1.05rem/1.25 var(--serif); margin: 0 0 4px; }
+.vantage .k { color: var(--muted); font-size: 0.8rem; margin: 0 0 6px; }
+.vantage .first { margin: 0; font-size: 0.93rem; }
+.vantage .first strong { color: var(--accent); }
+.poles { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 20px; padding: 0; list-style: none; counter-reset: pole; }
+.poles li { background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px; font-size: 0.86rem; counter-increment: pole; }
+.poles li::before { content: counter(pole) ". "; color: var(--muted); }
+/* one step */
+.crumb { color: var(--muted); font-size: 0.86rem; margin: 0 0 8px; }
+.crumb a { color: var(--link); }
+.crumb .pole { border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; background: var(--panel); color: var(--ink); }
+.polenote { color: var(--muted); font-size: 0.9rem; margin: 0 0 10px; max-width: 70ch; }
+#step h2 { font-size: 1.7rem; margin: 0 0 8px; }
+#step h2:focus { outline: none; }
+.goal { background: var(--panel); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 0 0 16px; font-size: 1.02rem; max-width: 72ch; }
+.goal strong { color: var(--accent); }
+.lesson { margin: 0 0 18px; }
+.panel-block { background: none; border-top: 1px solid var(--line); padding-top: 14px; margin: 0 0 18px; }
+.panel-block h3 { font: 600 1.2rem/1.2 var(--serif); margin: 0 0 4px; }
+.evidence { border-top: 1px solid var(--line); padding-top: 12px; margin: 0 0 18px; }
+.evidence h3 { font: 600 0.82rem/1.4 var(--sans); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 8px; }
+.evidence a { display: inline-block; margin: 0 8px 6px 0; }
+.stepnav { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 14px; }
+.stepnav a.btn { background: var(--panel); border: 1px solid var(--line); color: var(--ink); border-radius: 10px; padding: 8px 14px; text-decoration: none; font-size: 0.93rem; max-width: 100%; }
+.stepnav a.btn:hover { border-color: var(--accent); }
+.stepnav a.btn.next { margin-left: auto; border-color: var(--accent); }
+.stepnav .spacer { flex: 1 1 auto; }
+ol.progress { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+ol.progress a { display: block; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); background: var(--panel); }
+ol.progress a.done { background: var(--line); }
+ol.progress a[aria-current="step"] { border-color: var(--accent); background: var(--accent); }
 .badge { display: inline-block; min-width: 1.6em; text-align: center; border-radius: 6px; padding: 0 5px; font: 600 0.78rem/1.6 var(--mono); vertical-align: middle; }
 .badge.open { color: var(--open); background: var(--open-bg); } .badge.proved { color: var(--proved); background: var(--proved-bg); }
 .badge.refuted { color: var(--refuted); background: var(--refuted-bg); } .badge.retired { color: var(--retired); background: var(--retired-bg); }
@@ -90,6 +126,7 @@ section > p.sub { color: var(--muted); margin: 0 0 14px; font-size: 0.93rem; max
 .detail dt { color: var(--muted); } .detail dd { margin: 0; word-break: break-word; }
 .detail .note { margin: 10px 0 0; font-size: 0.93rem; border-left: 3px solid var(--line); padding-left: 10px; }
 .detail .chips a, .detail .chips span { display: inline-block; margin: 0 6px 4px 0; }
+.detail .close { float: right; }
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
 .card h3 { margin: 0 0 4px; font: 600 1.02rem/1.25 var(--serif); }
@@ -98,17 +135,14 @@ section > p.sub { color: var(--muted); margin: 0 0 14px; font-size: 0.93rem; max
 table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
 th, td { text-align: left; padding: 8px 10px; border-top: 1px solid var(--line); vertical-align: top; }
 th { background: var(--soft); border-top: 0; font-weight: 600; font-size: 0.82rem; color: var(--muted); }
-.table-wrap { overflow-x: auto; border-radius: 12px; }
+.table-wrap { overflow-x: auto; border-radius: 12px; margin: 0 0 14px; }
 pre.sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; overflow-x: auto; white-space: pre-wrap; font-size: 0.82rem; }
-.journeys { display: grid; gap: 8px; }
-.journey { display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline; font-size: 0.92rem; }
-.journey .who { font-weight: 600; min-width: 11em; }
-.journey .step { background: var(--soft); border-radius: 6px; padding: 1px 8px; text-decoration: none; color: var(--ink); font-size: 0.86rem; }
 .picture { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
 .picture svg { display: block; width: 100%; height: auto; }
 .picture p { margin: 8px 0 0; color: var(--muted); font-size: 0.86rem; }
 .prose { max-width: 68ch; }
 .prose h3 { font: 600 1.08rem/1.25 var(--serif); margin: 18px 0 4px; }
+.prose h3:first-child { margin-top: 0; }
 .prose p { margin: 0 0 6px; font-size: 1.02rem; line-height: 1.6; }
 .docs { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin: 0 0 14px; }
 .docs .card .k { word-break: break-all; }
@@ -127,12 +161,16 @@ code.m { background: var(--soft); padding: 0 4px; border-radius: 4px; font-size:
 .notice { background: var(--open-bg); color: var(--ink); border: 1px solid var(--open); border-radius: 12px; padding: 12px 14px; margin: 0 0 20px; }
 footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.82rem; padding: 18px 0 32px; }
 footer p { margin: 4px 0; }
+[hidden] { display: none !important; }
 @media (max-width: 640px) {
   .brand img { width: 44px; height: 44px; }
   .brand h1 { font-size: 1.5rem; }
   .brand .meta { margin-left: 0; text-align: left; width: 100%; }
   .detail dl { grid-template-columns: 1fr; }
-  .journey .who { min-width: 0; width: 100%; }
+  #step h2 { font-size: 1.4rem; }
+  .stepnav a.btn.next { margin-left: 0; }
+  .stepnav a.btn { flex: 1 1 100%; text-align: center; }
+  ol.progress { order: -1; flex: 1 1 100%; justify-content: center; }
 }
 </style>
 </head>
@@ -144,7 +182,7 @@ footer p { margin: 4px 0; }
     <div class="brand">
       <img src="logo.svg" alt="" width="56" height="56">
       <div>
-        <h1 id="brand-name">Centerline</h1>
+        <h1><a id="brand-name" href="#">Centerline</a></h1>
         <p class="tag" id="brand-tagline">Every arrow a theorem.</p>
       </div>
       <div class="meta">
@@ -153,18 +191,43 @@ footer p { margin: 4px 0; }
         <button class="ghost" id="theme" type="button" aria-label="Toggle dark or light theme">Theme</button>
       </div>
     </div>
-    <nav class="panels" id="nav" aria-label="Panels"></nav>
+    <nav class="stepbar" id="stepbar" aria-label="Vantage" hidden>
+      <a class="ghost" id="switch" href="#">Switch vantage</a>
+      <span class="where" id="where"></span>
+      <span id="progress"></span>
+      <span class="pole" id="pole"></span>
+    </nav>
   </div>
 </header>
 <main id="main" class="wrap" tabindex="-1">
   <div id="notice" class="notice" role="status" hidden></div>
-  <p class="lede" id="lede"></p>
-  <div class="tiles" id="tiles"></div>
-  <div id="sections"></div>
+  <div id="home">
+    <p class="lede" id="lede"></p>
+    <div class="tiles" id="tiles"></div>
+    <h2>Choose a vantage</h2>
+    <p class="sub" id="poles-sub"></p>
+    <ol class="poles" id="poles"></ol>
+    <div class="vantages" id="vantages"></div>
+  </div>
+  <article id="step" hidden>
+    <p class="crumb" id="crumb"></p>
+    <p class="polenote" id="polenote" hidden></p>
+    <h2 id="step-title" tabindex="-1"></h2>
+    <p class="goal" id="goal"></p>
+    <div class="lesson prose" id="lesson"></div>
+    <section class="panel-block" aria-labelledby="panel-title">
+      <h3 id="panel-title"></h3>
+      <p class="sub" id="panel-sub"></p>
+      <div id="panel-body"></div>
+    </section>
+    <div id="detail-slot" aria-live="polite"></div>
+    <div class="evidence" id="evidence"></div>
+    <nav class="stepnav" id="stepnav" aria-label="Steps"></nav>
+  </article>
 </main>
 <footer>
   <div class="wrap">
-    <p><strong id="foot-name">Centerline</strong> is the stakeholder view of <a id="foot-repo" href="#">the Rule 30 Problem 1 formalization</a>, rendered by <code>bin/r30 view render</code> from <code>frontier.toml</code>; the register is the source and the kernel is the judge.</p>
+    <p><strong id="foot-name">Centerline</strong> is the stakeholder view of <a id="foot-repo" href="#">the Rule 30 Problem 1 formalization</a>, rendered by <code>bin/r30 view render</code> from <code>frontier.toml</code>; the register is the source and the kernel is the judge. Each vantage is a lesson <code>Presentation.lex.tex</code> declares step by step and the kernel decides to be complete.</p>
     <p id="foot-pages" hidden></p>
     <p>An independent research effort; not affiliated with, endorsed by, or imitating Wolfram Research or the Rule 30 Prize. Logo: the first twelve rows of Rule 30 from a single black cell.</p>
   </div>
@@ -187,6 +250,7 @@ footer p { margin: 4px 0; }
 
   var MARKS = { open: "?", proved: "✓", refuted: "✗", retired: "-" };
   var badge = function (status) { return '<span class="badge ' + esc(status) + '" title="' + esc(status) + '">' + esc(MARKS[status] || status) + "</span>"; };
+  function reducedMotion() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
 
   function parseChain(text) {
     var rows = [];
@@ -209,8 +273,8 @@ footer p { margin: 4px 0; }
         var depended = {};
         rs[0].forEach(function (c) { (c.depends || []).forEach(function (d) { depended[d] = true; }); });
         return { register: rs[0], chain: parseChain(rs[1]), openLeaves: rs[0].filter(function (c) { return c.status === "open" && !depended[c.id]; }).map(function (c) { return c.id; }),
-                 sheets: [], panels: [], journeys: [], measures: [], stakeholders: [], viewpoints: [], views: [], artifacts: [], statusMarks: [],
-                 explainer: [], statements: null, picture: "", obligation: null, publication: null,
+                 sheets: [], panels: [], journeys: [], steps: [], poles: [], verifications: [], measures: [], stakeholders: [], viewpoints: [], views: [], artifacts: [], statusMarks: [],
+                 explainer: [], statements: null, picture: "", pictureRows: 0, obligation: null, publication: null,
                  brand: { name: "Centerline", tagline: "Every arrow a theorem.", description: "" }, application: { repository: "#" } };
       });
   }
@@ -222,7 +286,22 @@ footer p { margin: 4px 0; }
     d.register.forEach(function (c) { (c.depends || []).forEach(function (p) { (dependents[p] = dependents[p] || []).push(c.id); }); });
     var sheets = {};
     (d.sheets || []).forEach(function (s) { sheets[s] = true; });
+    var panelsById = {};
+    (d.panels || []).forEach(function (p) { panelsById[p.id] = p; });
+    var polesById = {};
+    (d.poles || []).forEach(function (p) { polesById[p.id] = p; });
+    var stakeholderName = {};
+    (d.stakeholders || []).forEach(function (s) { stakeholderName[s.id] = s.name; });
+    var artifactsById = {};
+    (d.artifacts || []).forEach(function (a) { artifactsById[a.id] = a; });
+    var paragraphs = {};
+    (d.explainer || []).forEach(function (e) { paragraphs[e.id] = e; });
+    var stepsOf = {};
+    (d.steps || []).forEach(function (s) { (stepsOf[s.journey] = stepsOf[s.journey] || []).push(s); });
+    Object.keys(stepsOf).forEach(function (j) { stepsOf[j].sort(function (a, b) { return a.order - b.order; }); });
+    var journeys = (d.journeys || []).filter(function (j) { return (stepsOf[j.id] || []).length; });
     var selected = null;
+    var current = null;   // the step shown, or null on the home page
 
     $("brand-name").textContent = d.brand.name; $("foot-name").textContent = d.brand.name;
     $("brand-tagline").textContent = d.brand.tagline;
@@ -232,7 +311,6 @@ footer p { margin: 4px 0; }
       var fp = $("foot-pages"); fp.hidden = false;
       fp.innerHTML = "Published at <a href='" + esc(d.publication.url) + "'>" + esc(d.publication.url) + "</a> by <code>" + esc(d.publication.workflow) + "</code> on every push to main.";
     }
-    document.title = d.brand.name + " · Rule 30 Problem 1";
     $("meta-commit").innerHTML = d.commit ? "commit <code>" + esc(d.commit.slice(0, 12)) + "</code>" : "";
     $("meta-generated").textContent = d.generated ? "rendered " + d.generated : "";
 
@@ -242,33 +320,28 @@ footer p { margin: 4px 0; }
       return '<div class="tile ' + s + '"><span class="n">' + counts[s] + '</span><span class="l">' + s + ' claims</span></div>';
     }).join("") + '<div class="tile leaves"><span class="n">' + d.openLeaves.length + '</span><span class="l">open leaves</span></div>';
 
-    var panels = d.panels && d.panels.length ? d.panels : [
-      { id: "reduction-tree", title: "Reduction tree" }, { id: "register", title: "Register" }, { id: "open-leaves", title: "Open leaves" }, { id: "interface-sheets", title: "Interface sheets" }];
-    $("nav").innerHTML = panels.map(function (p) { return '<a href="#' + esc(p.id) + '">' + esc(p.title) + "</a>"; }).join("");
-
-    var html = "";
-    panels.forEach(function (p) {
-      html += '<section id="' + esc(p.id) + '"><h2>' + esc(p.title) + "</h2>" + (p.statement ? '<p class="sub">' + esc(p.statement) + "</p>" : "") + '<div id="body-' + esc(p.id) + '"></div></section>';
-    });
-    if (d.journeys && d.journeys.length) html += '<section id="journeys"><h2>Journeys</h2><p class="sub">Each stakeholder’s way through the panels, as Presentation.lex.tex declares it.</p><div class="journeys" id="body-journeys"></div></section>';
-    $("sections").innerHTML = html;
+    // the home page: the vantages as cards, each opening on its first step
+    var stepHref = function (s) { return "#" + encodeURIComponent(s.journey) + "/" + encodeURIComponent(s.id); };
+    $("poles-sub").textContent = "Six readings of one register. Each is a lesson through the same poles, in this order:";
+    $("poles").innerHTML = (d.poles || []).map(function (p) { return "<li title='" + esc(p.statement) + "'>" + esc(p.title) + "</li>"; }).join("");
+    $("vantages").innerHTML = journeys.map(function (j) {
+      var first = stepsOf[j.id][0];
+      return '<a class="vantage" href="' + stepHref(first) + '" data-journey="' + esc(j.id) + '"><p class="who">' + esc(stakeholderName[j.stakeholder] || j.stakeholder) + '</p>' +
+        '<p class="k">' + esc(j.id) + " · " + stepsOf[j.id].length + ' steps</p><p class="first"><strong>Step 1.</strong> ' + esc(first.goal) + "</p></a>";
+    }).join("") + (journeys.length ? "" : '<p style="color:var(--muted)">No journey in this view.</p>');
 
     // a statement in the paper's controlled English: the math islands \( ... \) as code
     var math = function (s) { return esc(s).replace(/\\\((.*?)\\\)/g, function (_, m) { return '<code class="m">' + m + "</code>"; }); };
+    var legend = function () { return d.statusMarks && d.statusMarks.length ? '<p class="legend">' + d.statusMarks.map(function (m) { return "<span>" + badge(m.status) + " " + esc(m.label) + "</span>"; }).join("") + "</p>" : ""; };
+    var chip = function (x) { return '<a href="#" data-select="' + esc(x) + '">' + badge((byId[x] || {}).status || "open") + " " + esc(x) + "</a>"; };
+    var paragraphHtml = function (ids) {
+      return ids.map(function (id) { var e = paragraphs[id]; return e ? '<h3 id="explainer-' + esc(e.id) + '">' + esc(e.title) + "</h3><p>" + esc(e.text) + "</p>" : ""; }).join("");
+    };
 
-    // the picture: Rule 30 itself, generated by site.py with the page's colour tokens
-    var picBody = $("body-picture");
-    if (picBody && d.picture) picBody.innerHTML = '<div class="picture">' + d.picture + "<p>Rows 0 to 47 from a single black cell. The amber cells are the center column: Problem 1 asks whether this column ever becomes periodic.</p></div>";
+    // the panels, each rendered on demand into the step's panel body
+    var regBody = null, filter = "all", query = "";
+    var paperBody = null, pq = "";
 
-    // the explainer: the paragraphs Presentation.lex.tex declares as data
-    var exBody = $("body-explainer");
-    if (exBody && d.explainer && d.explainer.length) {
-      exBody.innerHTML = '<div class="prose">' + d.explainer.map(function (e) {
-        return '<h3 id="explainer-' + esc(e.id) + '">' + esc(e.title) + "</h3><p>" + esc(e.text) + "</p>"; }).join("") +
-        (d.statusMarks && d.statusMarks.length ? '<p class="legend">' + d.statusMarks.map(function (m) { return "<span>" + badge(m.status) + " " + esc(m.label) + "</span>"; }).join("") + "</p>" : "") + "</div>";
-    }
-
-    // reduction tree
     function treeHtml(rows) {
       // depth is the depth of the li currently open (-1: none); a deeper row
       // nests a ul inside it, a shallower one closes down to its level
@@ -280,211 +353,275 @@ footer p { margin: 4px 0; }
         depth = r.depth;
         var again = seen[r.id];
         seen[r.id] = true;
-        out += '<li>' + badge(r.status) + ' <button class="node" data-id="' + esc(r.id) + '">' + esc(r.id) + "</button>" +
+        out += '<li>' + badge(r.status) + ' <button class="node' + (selected === r.id ? " selected" : "") + '" data-id="' + esc(r.id) + '">' + esc(r.id) + "</button>" +
                (r.lean ? '<span class="lean mono">' + esc(r.lean) + "</span>" : "") + (again ? ' <span class="again">(again)</span>' : "");
       });
       if (depth >= 0) { out += "</li>"; while (depth > 0) { out += "</ul></li>"; depth--; } out += "</ul>"; }
       return out;
     }
-    var treeBody = $("body-reduction-tree");
-    if (treeBody) treeBody.innerHTML = '<div class="tree">' + treeHtml(d.chain) + "</div>" +
-      '<p class="legend">' + (d.statusMarks && d.statusMarks.length ? d.statusMarks.map(function (m) { return "<span>" + badge(m.status) + " " + esc(m.label) + "</span>"; }).join("") :
-      "open leaves are sufficient conditions once every proved arrow above them is read upward; a refuted node is a route not to be walked again.") + "</p>";
-
-    // register
-    var regBody = $("body-register");
-    var filter = "all", query = "";
     function claimCard(c) {
       return '<div class="claim' + (selected === c.id ? " selected" : "") + '" data-id="' + esc(c.id) + '" role="button" tabindex="0" aria-pressed="' + (selected === c.id) + '" aria-label="' + esc(c.id) + ', ' + esc(c.status) + '"><div class="head">' + badge(c.status) +
         '<span class="id">' + esc(c.id) + "</span>" + (c.since ? '<span class="k mono" style="color:var(--muted);font-size:.78rem">' + esc(c.since) + "</span>" : "") + "</div>" +
         '<p class="st">' + esc(c.statement) + "</p>" + (c.lean ? '<div class="lean mono">' + esc(c.lean) + "</div>" : "") + "</div>";
     }
     function detailHtml(c) {
-      var deps = (c.depends || []).map(function (x) { return '<a href="#" data-select="' + esc(x) + '">' + badge((byId[x] || {}).status || "open") + " " + esc(x) + "</a>"; }).join("");
-      var kids = (dependents[c.id] || []).map(function (x) { return '<a href="#" data-select="' + esc(x) + '">' + badge((byId[x] || {}).status || "open") + " " + esc(x) + "</a>"; }).join("");
-      return '<div class="detail"><h3>' + badge(c.status) + " " + esc(c.id) + "</h3><p>" + esc(c.statement) + "</p><dl>" +
+      var deps = (c.depends || []).map(chip).join("");
+      var kids = (dependents[c.id] || []).map(chip).join("");
+      return '<div class="detail"><button class="ghost close" type="button" data-select="" aria-label="Close the claim detail">Close</button><h3>' + badge(c.status) + " " + esc(c.id) + "</h3><p>" + esc(c.statement) + "</p><dl>" +
         (c.lean ? "<dt>Lean</dt><dd><code>" + esc(c.lean) + "</code></dd>" : "") +
         (c.lexeme ? "<dt>lexeme</dt><dd><code>" + esc(c.lexeme) + "</code></dd>" : "") +
         (c.since ? "<dt>since</dt><dd>" + esc(c.since) + "</dd>" : "") +
         (deps ? '<dt>rests on</dt><dd class="chips">' + deps + "</dd>" : "") +
         (kids ? '<dt>rested on by</dt><dd class="chips">' + kids + "</dd>" : "") +
         "<dt>sheet</dt><dd>" + (sheets[c.id] ? '<a href="interfaces/' + esc(c.id) + '.md">interfaces/' + esc(c.id) + ".md</a>" : "<span style='color:var(--muted)'>not written yet (<code>bin/r30 interface " + esc(c.id) + " --write</code>)</span>") + "</dd></dl>" +
-        (c.note ? '<div class="note">' + esc(c.note) + "</div>" : "") + "</div>";
+        (c.note ? '<div class="note">' + esc(c.note) + "</div>" : "") + '<div id="sheet-view"></div></div>';
     }
     function renderRegister() {
-      if (!regBody) return;
+      if (!regBody || !regBody.isConnected) return;
       var q = query.toLowerCase();
       var rows = d.register.filter(function (c) { return (filter === "all" || c.status === filter) &&
         (!q || (c.id + " " + c.statement + " " + (c.lean || "") + " " + (c.note || "")).toLowerCase().indexOf(q) >= 0); });
       regBody.innerHTML = '<div class="filters">' + ["all", "open", "proved", "refuted", "retired"].map(function (s) {
           return '<button type="button" data-filter="' + s + '" aria-pressed="' + (filter === s) + '">' + s + (s === "all" ? "" : " (" + (counts[s] || 0) + ")") + "</button>"; }).join("") +
         '<input type="search" id="q" placeholder="search id, statement, Lean name, note" value="' + esc(query) + '" aria-label="Search the register"></div>' +
-        '<div class="claims">' + rows.map(claimCard).join("") + (rows.length ? "" : '<p style="color:var(--muted)">No claim matches.</p>') + "</div>" +
-        (selected && byId[selected] ? detailHtml(byId[selected]) : "");
+        '<div class="claims">' + rows.map(claimCard).join("") + (rows.length ? "" : '<p style="color:var(--muted)">No claim matches.</p>') + "</div>";
       var q$ = $("q");
       q$.addEventListener("input", function () { query = q$.value; var pos = q$.selectionStart; renderRegister(); var n = $("q"); n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) {} });
     }
-    renderRegister();
-
-    // open leaves
-    var leavesBody = $("body-open-leaves");
-    if (leavesBody) leavesBody.innerHTML = '<div class="cards">' + d.openLeaves.map(function (id) {
-      var c = byId[id] || { id: id, statement: "" };
-      return '<div class="card"><h3>' + badge("open") + " " + esc(id) + "</h3><p>" + esc(c.statement) + "</p>" +
-        (c.lean ? '<p class="k mono">' + esc(c.lean) + "</p>" : "") +
-        '<p><a href="#" data-select="' + esc(id) + '">detail</a>' + (sheets[id] ? ' · <a href="interfaces/' + esc(id) + '.md">sheet</a>' : "") + "</p></div>";
-    }).join("") + "</div>";
-
-    // the paper: every published statement, the attested PDFs, the attestation
-    var paperBody = $("body-paper");
-    var pq = "";
     function renderPaper() {
-      if (!paperBody || !d.statements) return;
+      if (!paperBody || !paperBody.isConnected || !d.statements) return;
       var st = d.statements, q = pq.toLowerCase();
       var docs = (st.pdfs && st.pdfs.documents) || [];
+      var rows = st.statements.filter(function (r) { return !q || (r.id + " " + r.statement + " " + (r.lean || "") + " " + (r.lexeme || "")).toLowerCase().indexOf(q) >= 0; });
+      var bySection = {};
+      rows.forEach(function (r) { (bySection[r.section] = bySection[r.section] || []).push(r); });
+      var first = true;
+      var body = (st.sections || []).filter(function (s) { return bySection[s.id]; }).map(function (s) {
+        var open = q || first; first = false;
+        return '<details class="section" id="paper-' + esc(s.id) + '"' + (open ? " open" : "") + "><summary><h3>" + esc(s.heading) + ' <span class="k" style="color:var(--muted);font-weight:400;font-size:.8rem">' + bySection[s.id].length + "</span></h3></summary>" +
+          '<div class="stmts">' + bySection[s.id].map(function (r) {
+            return '<div class="stmt" id="stmt-' + esc(r.id) + '"><div class="head"><span class="kind">' + esc(r.kind) + '</span><span class="id">' + esc(r.id) + "</span></div>" +
+              '<p class="st">' + math(r.statement) + "</p>" +
+              '<div class="lean mono">' + (r.lean ? esc(r.lean) : "") + (r.lexeme ? " · " + esc(r.lexeme) : "") + "</div></div>"; }).join("") + "</div></details>"; }).join("");
+      paperBody.innerHTML = '<div class="paper">' +
+        '<p class="sub">' + esc(st.module) + ": " + st.statements.length + " published statements (" + esc(st.title) + "), each closed by the lexeme of its Lean theorem; the Lean name and the lexeme are under each statement. " +
+        docs.map(function (x) { return '<a href="' + esc(x.path) + '">' + esc(x.name) + ".pdf</a>"; }).join(" · ") + (docs.length ? " · " : "") + '<a href="statements.json">statements.json</a></p>' +
+        '<div class="filters"><input type="search" id="pq" placeholder="search statement, id, Lean name" value="' + esc(pq) + '" aria-label="Search the published statements"></div>' +
+        body + (rows.length ? "" : '<p style="color:var(--muted)">No statement matches.</p>') + "</div>";
+      var pq$ = $("pq");
+      pq$.addEventListener("input", function () { pq = pq$.value; var pos = pq$.selectionStart; renderPaper(); var n = $("pq"); n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) {} });
+    }
+    function docsHtml() {
+      var st = d.statements || {};
+      var docs = (st.pdfs && st.pdfs.documents) || [];
       var att = st.attestation;
-      var head = '<div class="docs">' + docs.map(function (x) {
+      return '<div class="docs">' + docs.map(function (x) {
         return '<div class="card"><h3><a href="' + esc(x.path) + '">' + esc(x.name) + ".pdf</a></h3>" +
           '<p class="k">sha256 <span class="mono" title="' + esc(x.pdfSha256) + '">' + esc((x.pdfSha256 || "").slice(0, 16)) + "…</span></p>" +
           '<p class="k">source .tex sha256 <span class="mono" title="' + esc(x.texSha256) + '">' + esc((x.texSha256 || "").slice(0, 16)) + "…</span></p></div>"; }).join("") +
         (att ? '<div class="card"><h3>Attestation</h3><p class="k">' + esc(att.spec) + ' <span class="mono" title="' + esc(att.id) + '">' + esc((att.id || "").slice(0, 16)) + "…</span></p>" +
           '<p class="k">' + esc(att.declarations) + " declarations verified by lexlean " + esc(att.lexlean) + '; source <span class="mono" title="' + esc(att.sourceId) + '">' + esc((att.sourceId || "").slice(0, 16)) + "…</span></p>" +
           '<p class="k"><a href="pdf-manifest.json">pdf-manifest.json</a> · <a href="statements.json">statements.json</a></p></div>' : "") + "</div>";
-      var rows = st.statements.filter(function (r) { return !q || (r.id + " " + r.statement + " " + (r.lean || "") + " " + (r.lexeme || "")).toLowerCase().indexOf(q) >= 0; });
-      var bySection = {};
-      rows.forEach(function (r) { (bySection[r.section] = bySection[r.section] || []).push(r); });
-      var body = (st.sections || []).filter(function (s) { return bySection[s.id]; }).map(function (s) {
-        return '<details class="section" id="paper-' + esc(s.id) + '"' + (q ? " open" : "") + "><summary><h3>" + esc(s.heading) + ' <span class="k" style="color:var(--muted);font-weight:400;font-size:.8rem">' + bySection[s.id].length + "</span></h3></summary>" +
-          '<div class="stmts">' + bySection[s.id].map(function (r) {
-            return '<div class="stmt" id="stmt-' + esc(r.id) + '"><div class="head"><span class="kind">' + esc(r.kind) + '</span><span class="id">' + esc(r.id) + "</span></div>" +
-              '<p class="st">' + math(r.statement) + "</p>" +
-              '<div class="lean mono">' + (r.lean ? esc(r.lean) : "") + (r.lexeme ? " · " + esc(r.lexeme) : "") + "</div></div>"; }).join("") + "</div></details>"; }).join("");
-      paperBody.innerHTML = '<div class="paper">' + head +
-        '<p class="sub">' + esc(st.module) + ": " + st.statements.length + " published statements (" + esc(st.title) + "), each closed by the lexeme of its Lean theorem; the Lean name and the lexeme are under each statement.</p>" +
-        '<div class="filters"><input type="search" id="pq" placeholder="search statement, id, Lean name" value="' + esc(pq) + '" aria-label="Search the published statements"></div>' +
-        body + (rows.length ? "" : '<p style="color:var(--muted)">No statement matches.</p>') + "</div>";
-      var pq$ = $("pq");
-      pq$.addEventListener("input", function () { pq = pq$.value; var pos = pq$.selectionStart; renderPaper(); var n = $("pq"); n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) {} });
-    }
-    renderPaper();
-
-    // the open obligation, in full, from the register
-    var obBody = $("body-obligation");
-    if (obBody && d.obligation && byId[d.obligation]) {
-      var ob = byId[d.obligation];
-      var chain = [], seen = {}, todo = (ob.depends || []).slice();
-      while (todo.length) { var x = todo.shift(); if (seen[x]) continue; seen[x] = true; chain.push(x); todo = todo.concat((byId[x] || {}).depends || []); }
-      var chip = function (x) { return '<a href="#" data-select="' + esc(x) + '">' + badge((byId[x] || {}).status || "open") + " " + esc(x) + "</a>"; };
-      obBody.innerHTML = '<div class="detail"><h3>' + badge(ob.status) + " " + esc(ob.id) + "</h3><p>" + esc(ob.statement) + "</p><dl>" +
-        (ob.lean ? "<dt>Lean predicate</dt><dd><code>" + esc(ob.lean) + "</code></dd>" : "") +
-        (ob.lexeme ? "<dt>lexeme</dt><dd><code>" + esc(ob.lexeme) + "</code></dd>" : "") +
-        (ob.since ? "<dt>since</dt><dd>" + esc(ob.since) + "</dd>" : "") +
-        (chain.length ? '<dt>chain to Problem 1</dt><dd class="chips">' + chain.map(chip).join("") + "</dd>" : "") +
-        '<dt>rests on it</dt><dd class="chips">' + (dependents[ob.id] || []).map(chip).join("") + "</dd>" +
-        "<dt>sheet</dt><dd>" + (sheets[ob.id] ? '<a href="interfaces/' + esc(ob.id) + '.md">interfaces/' + esc(ob.id) + ".md</a>" : "<span style='color:var(--muted)'>not written yet</span>") + "</dd></dl>" +
-        (ob.note ? '<div class="note"><strong>Exact forms and what is known.</strong> ' + esc(ob.note) + "</div>" : "") + "</div>";
     }
 
-    // the refuted routes with their refutations
-    var rfBody = $("body-refutations");
-    if (rfBody) {
-      var refuted = d.register.filter(function (c) { return c.status === "refuted"; });
-      rfBody.innerHTML = '<div class="claims">' + refuted.map(function (c) {
-        var exp = /experiments\/[A-Za-z0-9_./-]+/.exec(c.note || "");
-        var how = c.lean ? "Lean refutation <code>" + esc(c.lean) + "</code>" + (c.lexeme ? " (lexeme <code>" + esc(c.lexeme) + "</code>)" : "") :
-                  exp ? "experiment <code>" + esc(exp[0]) + "</code>" : "see the note";
-        return '<div class="claim" data-id="' + esc(c.id) + '" role="button" tabindex="0" aria-pressed="false" aria-label="' + esc(c.id) + ', refuted"><div class="head">' + badge("refuted") +
-          '<span class="id">' + esc(c.id) + "</span>" + (c.since ? '<span class="k mono" style="color:var(--muted);font-size:.78rem">' + esc(c.since) + "</span>" : "") + "</div>" +
-          '<p class="st">' + esc(c.statement) + "</p><p class='st'>Refuted by " + how + ".</p>" +
-          (c.note ? '<div class="note" style="font-size:.88rem;border-left:3px solid var(--line);padding-left:10px;margin-top:6px">' + esc(c.note) + "</div>" : "") +
-          (c.depends && c.depends.length ? '<p class="k" style="color:var(--muted);font-size:.8rem">a route toward ' + c.depends.map(esc).join(", ") + "</p>" : "") + "</div>"; }).join("") +
-        (refuted.length ? "" : '<p style="color:var(--muted)">No refuted route in the register.</p>') + "</div>";
-    }
+    var PANEL = {
+      "picture": function (el) {
+        el.innerHTML = d.picture ? '<div class="picture">' + d.picture + "<p>Rows 0 to " + (d.pictureRows ? d.pictureRows - 1 : "") + " from a single black cell. The amber cells are the center column: Problem 1 asks whether this column ever becomes periodic.</p></div>" : "";
+      },
+      "explainer": function (el, step) {
+        var ids = step && step.paragraphs && step.paragraphs.length ? step.paragraphs : (d.explainer || []).map(function (e) { return e.id; });
+        el.innerHTML = '<div class="prose">' + paragraphHtml(ids) + "</div>";
+      },
+      "reduction-tree": function (el) {
+        el.innerHTML = '<div class="tree">' + treeHtml(d.chain) + "</div>" + legend();
+      },
+      "register": function (el) { regBody = el; renderRegister(); },
+      "open-leaves": function (el) {
+        el.innerHTML = '<div class="cards">' + d.openLeaves.map(function (id) {
+          var c = byId[id] || { id: id, statement: "" };
+          return '<div class="card"><h3>' + badge("open") + " " + esc(id) + "</h3><p>" + esc(c.statement) + "</p>" +
+            (c.lean ? '<p class="k mono">' + esc(c.lean) + "</p>" : "") +
+            '<p><a href="#" data-select="' + esc(id) + '">detail</a>' + (sheets[id] ? ' · <a href="interfaces/' + esc(id) + '.md">sheet</a>' : "") + "</p></div>";
+        }).join("") + "</div>";
+      },
+      "paper": function (el) { paperBody = el; renderPaper(); },
+      "obligation": function (el) {
+        if (!d.obligation || !byId[d.obligation]) { el.innerHTML = ""; return; }
+        var ob = byId[d.obligation];
+        var chain = [], seen = {}, todo = (ob.depends || []).slice();
+        while (todo.length) { var x = todo.shift(); if (seen[x]) continue; seen[x] = true; chain.push(x); todo = todo.concat((byId[x] || {}).depends || []); }
+        el.innerHTML = '<div class="detail"><h3>' + badge(ob.status) + " " + esc(ob.id) + "</h3><p>" + esc(ob.statement) + "</p><dl>" +
+          "<dt>status</dt><dd>" + esc(ob.status) + (ob.status === "open" ? ": no kernel-checked proof exists; nothing on this site claims one" : "") + "</dd>" +
+          (ob.lean ? "<dt>Lean predicate</dt><dd><code>" + esc(ob.lean) + "</code></dd>" : "") +
+          (ob.lexeme ? "<dt>lexeme</dt><dd><code>" + esc(ob.lexeme) + "</code></dd>" : "") +
+          (ob.since ? "<dt>since</dt><dd>" + esc(ob.since) + "</dd>" : "") +
+          (chain.length ? '<dt>chain to Problem 1</dt><dd class="chips">' + chain.map(chip).join("") + "</dd>" : "") +
+          '<dt>rests on it</dt><dd class="chips">' + (dependents[ob.id] || []).map(chip).join("") + "</dd>" +
+          "<dt>sheet</dt><dd>" + (sheets[ob.id] ? '<a href="interfaces/' + esc(ob.id) + '.md">interfaces/' + esc(ob.id) + ".md</a>" : "<span style='color:var(--muted)'>not written yet</span>") + "</dd></dl>" +
+          (ob.note ? '<div class="note"><strong>Exact forms and what is known.</strong> ' + esc(ob.note) + "</div>" : "") + "</div>";
+      },
+      "refutations": function (el) {
+        var refuted = d.register.filter(function (c) { return c.status === "refuted"; });
+        el.innerHTML = '<div class="claims">' + refuted.map(function (c) {
+          var exp = /experiments\/[A-Za-z0-9_./-]+/.exec(c.note || "");
+          var how = c.lean ? "Lean refutation <code>" + esc(c.lean) + "</code>" + (c.lexeme ? " (lexeme <code>" + esc(c.lexeme) + "</code>)" : "") :
+                    exp ? "experiment <code>" + esc(exp[0]) + "</code>" : "see the note";
+          return '<div class="claim" data-id="' + esc(c.id) + '" role="button" tabindex="0" aria-pressed="false" aria-label="' + esc(c.id) + ', refuted"><div class="head">' + badge("refuted") +
+            '<span class="id">' + esc(c.id) + "</span>" + (c.since ? '<span class="k mono" style="color:var(--muted);font-size:.78rem">' + esc(c.since) + "</span>" : "") + "</div>" +
+            '<p class="st">' + esc(c.statement) + "</p><p class='st'>Refuted by " + how + ".</p>" +
+            (c.note ? '<div class="note" style="font-size:.88rem;border-left:3px solid var(--line);padding-left:10px;margin-top:6px">' + esc(c.note) + "</div>" : "") +
+            (c.depends && c.depends.length ? '<p class="k" style="color:var(--muted);font-size:.8rem">a route toward ' + c.depends.map(esc).join(", ") + "</p>" : "") + "</div>"; }).join("") +
+          (refuted.length ? "" : '<p style="color:var(--muted)">No refuted route in the register.</p>') + "</div>";
+      },
+      "interface-sheets": function (el) {
+        var list = (d.sheets || []).length ? d.sheets.map(function (s) { return '<a href="#" data-select="' + esc(s) + '">' + badge((byId[s] || {}).status || "open") + " " + esc(s) + "</a> (<a href='interfaces/" + esc(s) + ".md'>sheet</a>)"; }).join(" · ") :
+          '<span style="color:var(--muted)">no sheets in this view; write one with <code>bin/r30 interface &lt;id&gt; --write</code></span>';
+        el.innerHTML = "<p>" + list + "</p><p class='sub'>Select a claim to read its sheet below (served next to this page) with its register detail.</p>";
+      },
+      "modules": function (el) {
+        var mods = (d.artifacts || []).filter(function (a) { return a.media === "text/x-lexlean"; });
+        el.innerHTML = '<div class="table-wrap"><table><tr><th>module</th><th>produced by</th></tr>' + mods.map(function (a) {
+          return "<tr><td><a href='" + esc(a.path) + "'>" + esc(a.path) + "</a></td><td><code>r30 " + esc(a.command.replace(/_/g, " ")) + "</code></td></tr>"; }).join("") + "</table></div>" +
+          (d.viewpoints && d.viewpoints.length ? '<h3 style="font:600 1.05rem/1.2 var(--serif);margin:18px 0 6px">Stakeholders, concerns, viewpoints, views</h3><div class="table-wrap"><table><tr><th>viewpoint</th><th>stakeholder</th><th>concern</th><th>view</th><th>command</th></tr>' +
+            d.viewpoints.map(function (v) {
+              var vw = (d.views || []).filter(function (w) { return w.viewpoint === v.id; });
+              return "<tr><td>" + esc(v.id) + "<br><span class='k' style='color:var(--muted);font-size:.8rem'>" + esc(v.statement) + "</span></td><td>" + esc(stakeholderName[v.stakeholder] || v.stakeholder) + "</td><td>" + esc(v.concern) + "</td><td>" +
+                vw.map(function (w) { return esc(w.id); }).join(", ") + "</td><td>" + vw.map(function (w) { return "<code>" + esc(w.command) + "</code>"; }).join(", ") + "</td></tr>"; }).join("") + "</table></div>" : "");
+      },
+      "quality": function (el) {
+        var req = {}; (d.requirements || []).forEach(function (r) { req[r.id] = r; });
+        el.innerHTML = '<div class="table-wrap"><table><tr><th>measure</th><th>requirement</th><th>threshold</th><th>reported by</th></tr>' + (d.measures || []).map(function (m) {
+          return "<tr><td>" + esc(m.id) + "<br><span style='color:var(--muted);font-size:.8rem'>" + esc(m.statement) + "</span></td><td>" + esc((req[m.requirement] || {}).statement || m.requirement) +
+            "</td><td class='mono'>" + (m.threshold === 0 ? "0" : "≤ " + esc(m.threshold)) + " " + esc(m.unit) + "</td><td><code>r30 " + esc(m.command.replace(/_/g, " ")) + "</code></td></tr>"; }).join("") + "</table></div>";
+      },
+      "verify": function (el) {
+        el.innerHTML = '<div class="table-wrap"><table><tr><th>command</th><th>what it reproduces</th></tr>' + (d.verifications || []).map(function (v) {
+          return "<tr><td><code>" + esc(v.invocation) + "</code></td><td>" + esc(v.statement) + "</td></tr>"; }).join("") +
+          "<tr><td><code>claude mcp add r30 -- python3 &lt;repo&gt;/tools/r30/mcp_server.py</code></td><td>The same commands as MCP tools, derived from the parser; <code>--json</code> gives every report under the schemas in <code>rule30-api/schemas/</code>.</td></tr></table></div>" +
+          docsHtml() +
+          '<div class="table-wrap"><table><tr><th>published artifact</th><th>media</th><th>produced by</th></tr>' + (d.artifacts || []).map(function (a) {
+            return "<tr><td><a href='" + esc(a.path) + "'>" + esc(a.path) + "</a></td><td>" + esc(a.media) + "</td><td><code>r30 " + esc(a.command.replace(/_/g, " ")) + "</code></td></tr>"; }).join("") + "</table></div>";
+      }
+    };
 
-    // interface sheets
-    var sheetBody = $("body-interface-sheets");
-    if (sheetBody) {
-      var list = (d.sheets || []).length ? d.sheets.map(function (s) { return '<a href="interfaces/' + esc(s) + '.md">' + badge((byId[s] || {}).status || "open") + " " + esc(s) + "</a>"; }).join(" · ") :
-        '<span style="color:var(--muted)">no sheets in this view; write one with <code>bin/r30 interface &lt;id&gt; --write</code></span>';
-      sheetBody.innerHTML = "<p>" + list + "</p><div id='sheet-view'></div>";
+    // one step at a time
+    function stepByRef(journey, ref) {
+      var list = stepsOf[journey] || [];
+      if (!list.length) return null;
+      for (var i = 0; i < list.length; i++) if (list[i].id === ref || String(list[i].order) === ref) return list[i];
+      return list[0];
     }
-
-    // modules and architecture
-    var modBody = $("body-modules");
-    if (modBody) {
-      var mods = (d.artifacts || []).filter(function (a) { return a.media === "text/x-lexlean"; });
-      modBody.innerHTML = '<div class="table-wrap"><table><tr><th>module</th><th>produced by</th></tr>' + mods.map(function (a) {
-        return "<tr><td><a href='" + esc(a.path) + "'>" + esc(a.path) + "</a></td><td><code>r30 " + esc(a.command.replace(/_/g, " ")) + "</code></td></tr>"; }).join("") + "</table></div>" +
-        (d.viewpoints && d.viewpoints.length ? '<h3 style="font:600 1.05rem/1.2 var(--serif);margin:18px 0 6px">Stakeholders, concerns, viewpoints, views</h3><div class="table-wrap"><table><tr><th>viewpoint</th><th>stakeholder</th><th>concern</th><th>view</th><th>command</th></tr>' +
-          d.viewpoints.map(function (v) {
-            var sh = (d.stakeholders || []).filter(function (s) { return s.id === v.stakeholder; })[0] || { name: v.stakeholder };
-            var vw = (d.views || []).filter(function (w) { return w.viewpoint === v.id; });
-            return "<tr><td>" + esc(v.id) + "<br><span class='k' style='color:var(--muted);font-size:.8rem'>" + esc(v.statement) + "</span></td><td>" + esc(sh.name) + "</td><td>" + esc(v.concern) + "</td><td>" +
-              vw.map(function (w) { return esc(w.id); }).join(", ") + "</td><td>" + vw.map(function (w) { return "<code>" + esc(w.command) + "</code>"; }).join(", ") + "</td></tr>"; }).join("") + "</table></div>" : "");
+    function showHome() {
+      current = null;
+      $("home").hidden = false; $("step").hidden = true; $("stepbar").hidden = true;
+      document.title = d.brand.name + " · Rule 30 Problem 1";
     }
-
-    // quality
-    var qBody = $("body-quality");
-    if (qBody && d.measures) {
-      var req = {}; (d.requirements || []).forEach(function (r) { req[r.id] = r; });
-      qBody.innerHTML = '<div class="table-wrap"><table><tr><th>measure</th><th>requirement</th><th>threshold</th><th>reported by</th></tr>' + d.measures.map(function (m) {
-        return "<tr><td>" + esc(m.id) + "<br><span style='color:var(--muted);font-size:.8rem'>" + esc(m.statement) + "</span></td><td>" + esc((req[m.requirement] || {}).statement || m.requirement) +
-          "</td><td class='mono'>" + (m.threshold === 0 ? "0" : "≤ " + esc(m.threshold)) + " " + esc(m.unit) + "</td><td><code>r30 " + esc(m.command.replace(/_/g, " ")) + "</code></td></tr>"; }).join("") + "</table></div>";
-    }
-
-    // journeys
-    var jBody = $("body-journeys");
-    if (jBody) {
-      var ptitle = {}; panels.forEach(function (p) { ptitle[p.id] = p.title; });
-      // the journeys check: every step of every journey is a rendered panel
-      // (what Presentation.lex.tex decides as journeysThroughPanels), else the
-      // step is marked and the notice says which journey is broken
-      var broken = [];
-      jBody.innerHTML = d.journeys.map(function (j) {
-        var sh = (d.stakeholders || []).filter(function (s) { return s.id === j.stakeholder; })[0] || { name: j.stakeholder };
-        return '<div class="journey" data-journey="' + esc(j.id) + '"><span class="who">' + esc(sh.name) + "</span>" + j.panels.map(function (p) {
-          var ok = !!document.getElementById(p);
-          if (!ok) broken.push(j.id + ": " + p);
-          return ok ? '<a class="step" href="#' + esc(p) + '">' + esc(ptitle[p] || p) + "</a>"
-                    : '<span class="step" data-missing="' + esc(p) + '" aria-label="panel ' + esc(p) + ' is missing">' + esc(p) + " (missing)</span>";
-        }).join(" → ") + "</div>";
+    function showStep(step) {
+      current = step;
+      var list = stepsOf[step.journey], n = list.indexOf(step), total = list.length;
+      var journey = journeys.filter(function (j) { return j.id === step.journey; })[0] || { stakeholder: "" };
+      var who = stakeholderName[journey.stakeholder] || journey.stakeholder;
+      var pole = polesById[step.pole] || { id: step.pole, title: step.pole, statement: "" };
+      var panel = panelsById[step.panel] || { id: step.panel, title: step.panel, statement: "" };
+      $("home").hidden = true; $("step").hidden = false; $("stepbar").hidden = false;
+      $("where").textContent = who;
+      $("progress").textContent = "Step " + (n + 1) + " of " + total;
+      $("pole").textContent = pole.title;
+      $("crumb").innerHTML = '<a href="#">Vantages</a> › ' + esc(who) + " › Step " + (n + 1) + " of " + total + ' · <span class="pole">' + esc(pole.title) + "</span>";
+      var firstOfPole = n === 0 || list[n - 1].pole !== step.pole;
+      $("polenote").hidden = !firstOfPole; $("polenote").textContent = firstOfPole ? pole.statement : "";
+      $("step-title").textContent = step.title;
+      $("goal").innerHTML = "<strong>Goal.</strong> " + esc(step.goal);
+      var lesson = (step.text ? "<p>" + esc(step.text) + "</p>" : "") + (step.panel !== "explainer" && step.paragraphs && step.paragraphs.length ? paragraphHtml(step.paragraphs) : "");
+      $("lesson").innerHTML = lesson; $("lesson").hidden = !lesson;
+      $("panel-title").textContent = panel.title;
+      $("panel-sub").textContent = panel.statement || "";
+      regBody = null; paperBody = null;
+      var body = $("panel-body");
+      if (PANEL[step.panel]) { PANEL[step.panel](body, step); }
+      else { body.innerHTML = '<span data-missing="' + esc(step.panel) + '" aria-label="panel ' + esc(step.panel) + ' is missing">' + esc(step.panel) + " (missing)</span>"; }
+      $("detail-slot").innerHTML = "";
+      selected = null;
+      var ev = (step.evidence || []).map(function (e) {
+        if (byId[e]) return chip(e);
+        var a = artifactsById[e];
+        return a ? '<a href="' + esc(a.path) + '" title="' + esc(a.media) + ', r30 ' + esc(a.command.replace(/_/g, " ")) + '">' + esc(a.path) + "</a>" : "<span>" + esc(e) + "</span>";
       }).join("");
-      if (broken.length) { var nb = $("notice"); nb.hidden = false; nb.textContent = "Journeys with a step that has no panel: " + broken.join(", "); }
+      $("evidence").innerHTML = ev ? "<h3>Evidence</h3>" + ev : "";
+      var prev = n > 0 ? list[n - 1] : null, next = n + 1 < total ? list[n + 1] : null;
+      $("stepnav").innerHTML = (prev ? '<a class="btn prev" href="' + stepHref(prev) + '" rel="prev">← ' + esc(prev.title) + "</a>" : '<a class="btn prev" href="#">← Vantages</a>') +
+        '<ol class="progress" aria-label="Steps of this vantage">' + list.map(function (s, i) {
+          return '<li><a href="' + stepHref(s) + '" title="' + esc(s.title) + '" aria-label="Step ' + (i + 1) + ': ' + esc(s.title) + '"' + (i === n ? ' aria-current="step"' : i < n ? ' class="done"' : "") + "></a></li>"; }).join("") + "</ol>" +
+        (next ? '<a class="btn next" href="' + stepHref(next) + '" rel="next">Next: ' + esc(next.title) + " →</a>" : '<a class="btn next" href="#">Choose another vantage →</a>');
+      document.title = d.brand.name + " · " + who + " · " + step.title;
+    }
+    function route(userNavigation) {
+      var h = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
+      var notice = $("notice"); notice.hidden = true;
+      if (!h || h === "main") { showHome(); return; }
+      var parts = h.split("/");
+      var step = stepsOf[parts[0]] ? stepByRef(parts[0], parts[1] || "") : null;
+      if (!step) {
+        // an older link to a panel: the first step that shows it, the layperson's first
+        var candidates = (d.steps || []).filter(function (s) { return s.panel === h; });
+        candidates.sort(function (a, b) { return (a.journey === "first-visit" ? 0 : 1) - (b.journey === "first-visit" ? 0 : 1); });
+        step = candidates[0] || null;
+      }
+      if (!step) {
+        showHome();
+        if (h) { notice.hidden = false; notice.textContent = "No vantage or step is called " + h + "; choose a vantage below."; }
+        return;
+      }
+      showStep(step);
+      if (!PANEL[step.panel]) { notice.hidden = false; notice.textContent = "The step " + step.id + " names a panel that this page does not render: " + step.panel; }
+      if (userNavigation) {
+        window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
+        $("step-title").focus({ preventScroll: true });
+      }
     }
 
     function select(id) {
       selected = id;
       renderRegister();
       document.querySelectorAll(".tree .node").forEach(function (b) { b.classList.toggle("selected", b.getAttribute("data-id") === id); });
+      document.querySelectorAll(".claim").forEach(function (c) { var on = c.getAttribute("data-id") === id; c.classList.toggle("selected", on); c.setAttribute("aria-pressed", String(on)); });
+      var slot = $("detail-slot");
+      slot.innerHTML = id && byId[id] ? detailHtml(byId[id]) : "";
       var sv = $("sheet-view");
-      if (sv) {
-        sv.innerHTML = "";
-        if (sheets[id] && location.protocol !== "file:") {
-          fetch("interfaces/" + id + ".md").then(function (r) { return r.ok ? r.text() : ""; }).then(function (t) { if (t) sv.innerHTML = '<pre class="sheet">' + esc(t) + "</pre>"; }).catch(function () {});
-        }
+      if (sv && id && sheets[id] && location.protocol !== "file:") {
+        fetch("interfaces/" + id + ".md").then(function (r) { return r.ok ? r.text() : ""; }).then(function (t) { if (t) sv.innerHTML = '<pre class="sheet">' + esc(t) + "</pre>"; }).catch(function () {});
       }
-      var el = $("register"); if (el) el.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+      if (id && byId[id]) slot.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "nearest" });
     }
     function activate(e) {
       var t = e.target.closest("[data-select], .node, .claim, [data-filter]");
       if (!t) return;
       if (t.hasAttribute("data-filter")) { filter = t.getAttribute("data-filter"); renderRegister(); return; }
-      var id = t.getAttribute("data-select") || t.getAttribute("data-id");
-      if (!id) return;
+      var id = t.hasAttribute("data-select") ? t.getAttribute("data-select") : t.getAttribute("data-id");
       e.preventDefault();
+      if (!id) { select(null); return; }
       select(id === selected && t.classList.contains("claim") ? null : id);
       if (t.classList.contains("claim")) { var again = document.querySelector('.claim[data-id="' + id + '"]'); if (again) again.focus(); }
     }
     document.addEventListener("click", activate);
-    // keyboard: a claim card is a button (role, tabindex); Enter and Space activate it like a click
+    // keyboard: a claim card is a button (role, tabindex); Enter and Space activate it like a click;
+    // the arrow keys move between steps when no field has the focus
     document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        if (!current || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+        if (/^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || "")) return;
+        var list = stepsOf[current.journey], n = list.indexOf(current);
+        var to = e.key === "ArrowRight" ? list[n + 1] : list[n - 1];
+        if (to) { e.preventDefault(); location.hash = stepHref(to); }
+        return;
+      }
       if (e.key !== "Enter" && e.key !== " ") return;
       var t = e.target.closest(".claim");
       if (t) activate({ target: t, preventDefault: function () { e.preventDefault(); } });
     });
+    window.addEventListener("hashchange", function () { route(true); });
+    route(false);
   }
-
-  function reducedMotion() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
 
   load().then(render).catch(function (err) {
     var n = $("notice"); n.hidden = false;

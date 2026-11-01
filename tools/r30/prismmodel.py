@@ -90,7 +90,7 @@ API_IDS = [
      "statement": "Observer.lex.tex records the object quadruple of every stakeholder vantage (the proof as the real object, the journey as the sensual object, the proved claims its panels render as real qualities, the panels as sensual qualities, the open claims as withdrawn) and the kernel decides withdrawal, nonempty overlap, symmetric interaction and gauge covariance over the register and the presentation.",
      "feature": "rule30-api/src/Observer.lex.tex", "evidence": "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check"},
     {"id": "current-view", "level": "build", "suite": "api",
-     "statement": "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; every journey step is a rendered panel and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.",
+     "statement": "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; the site opens on a choice of vantage and shows one step at a time, every step a rendered panel toward a goal on declared evidence, the journeys covering the Observer's poles in order and ending in verification as the kernel decides, and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.",
      "feature": ".github/workflows/view.yml", "evidence": "bin/r30 view render; scripts/tests/test_r30.py"},
 ]
 
@@ -140,6 +140,9 @@ PROJECTION = {
         {"module": "Presentation", "type_name": "Panel", "target": "panels"},
         {"module": "Presentation", "type_name": "Journey", "target": "journeys"},
         {"module": "Presentation", "type_name": "Paragraph", "target": "explainer"},
+        {"module": "Presentation", "type_name": "Pole", "target": "poles"},
+        {"module": "Presentation", "type_name": "Step", "target": "steps"},
+        {"module": "Presentation", "type_name": "Verification", "target": "verifications"},
         {"module": "Application", "type_name": "StatusMark", "target": "statusMarks"},
         {"module": "Observer", "type_name": "Quadruple", "target": "quadruples"},
         {"module": "Observer", "type_name": "Overlap", "target": "overlaps"},

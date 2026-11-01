@@ -77,6 +77,21 @@ type_name = "Paragraph"
 target = "explainer"
 
 [[entity]]
+module = "Presentation"
+type_name = "Pole"
+target = "poles"
+
+[[entity]]
+module = "Presentation"
+type_name = "Step"
+target = "steps"
+
+[[entity]]
+module = "Presentation"
+type_name = "Verification"
+target = "verifications"
+
+[[entity]]
 module = "Application"
 type_name = "StatusMark"
 target = "statusMarks"

@@ -3,6 +3,7 @@
 \useglossary{lexlean.std.nat@1.2.0}
 \importmodule{Api}
 \importmodule{Architecture}
+\importmodule{Register}
 \title{Boolean}
 \begin{semanticmodule}
 structure{
@@ -64,6 +65,47 @@ structure{
   ]
 }
 
+structure{
+  name: Pole,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: title, type: String},
+    {name: statement, type: String}
+  ]
+}
+
+structure{
+  name: Step,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: journey, type: String},
+    {name: order, type: Nat},
+    {name: pole, type: String},
+    {name: panel, type: String},
+    {name: title, type: String},
+    {name: goal, type: String},
+    {name: text, type: String},
+    {name: paragraphs, type: (List String)},
+    {name: evidence, type: (List String)},
+    {name: next, type: String}
+  ]
+}
+
+structure{
+  name: Verification,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: command, type: String},
+    {name: invocation, type: String},
+    {name: statement, type: String}
+  ]
+}
+
 definition{
   name: brand,
   parameters: [],
@@ -84,7 +126,7 @@ definition{
   name: panels,
   parameters: [],
   result: (List Panel),
-  body: (cons (record Panel {id := "picture", title := "Rule 30", viewpoint := "plain", artifact := "picture", statement := "The first rows of Rule 30 from a single black cell; the center column, the object of Problem 1, in amber."}) (cons (record Panel {id := "explainer", title := "In plain words", viewpoint := "plain", artifact := "explainer", statement := "What Rule 30 is, what Problem 1 asks, what is proved here, what remains open, what kernel-checked means, and how to read the rest."}) (cons (record Panel {id := "reduction-tree", title := "Reduction tree", viewpoint := "reduction", artifact := "chain", statement := "The register as a tree from problem1: proved arrows, open leaves, refuted routes."}) (cons (record Panel {id := "register", title := "Register", viewpoint := "evidence", artifact := "register-json", statement := "Every claim with its status, statement, Lean name and lexeme; filter by status, search by notion."}) (cons (record Panel {id := "open-leaves", title := "Open leaves", viewpoint := "reduction", artifact := "register-json", statement := "The open claims no open claim rests on: each is a sufficient condition for Problem 1 once the proved arrows above it are read upward."}) (cons (record Panel {id := "paper", title := "Paper", viewpoint := "paper", artifact := "statements", statement := "Every published theorem of Observations.lex.tex in the paper's controlled English with its Lean name, lexeme and section; the attested PDFs with their digests."}) (cons (record Panel {id := "obligation", title := "Open obligation", viewpoint := "paper", artifact := "register-json", statement := "The open claim every proved reduction ends at, in full: statement, Lean predicate, exact forms, the chain to Problem 1 and what rests on it."}) (cons (record Panel {id := "refutations", title := "Refuted routes", viewpoint := "paper", artifact := "register-json", statement := "Each refuted claim with the Lean refutation or the experiment that refutes it."}) (cons (record Panel {id := "interface-sheets", title := "Interface sheets", viewpoint := "comprehension", artifact := "interfaces", statement := "The labeled sheet of the selected claim: chain, notions, exact facts, handles."}) (cons (record Panel {id := "modules", title := "LexLean modules", viewpoint := "stdlib", artifact := "api-module", statement := "The command surface, the register, the architecture and this presentation as verified semantic modules."}) (cons (record Panel {id := "quality", title := "Quality", viewpoint := "optimal", artifact := "architecture-module", statement := "The measures of an optimal implementation, each with its threshold and the command that reports it."}) (nil Panel)))))))))))),
+  body: (cons (record Panel {id := "picture", title := "Rule 30", viewpoint := "plain", artifact := "picture", statement := "The first rows of Rule 30 from a single black cell; the center column, the object of Problem 1, in amber."}) (cons (record Panel {id := "explainer", title := "In plain words", viewpoint := "plain", artifact := "explainer", statement := "What Rule 30 is, what Problem 1 asks, what is proved here, what remains open, what kernel-checked means, and how to read the rest."}) (cons (record Panel {id := "reduction-tree", title := "Reduction tree", viewpoint := "reduction", artifact := "chain", statement := "The register as a tree from problem1: proved arrows, open leaves, refuted routes."}) (cons (record Panel {id := "register", title := "Register", viewpoint := "evidence", artifact := "register-json", statement := "Every claim with its status, statement, Lean name and lexeme; filter by status, search by notion."}) (cons (record Panel {id := "open-leaves", title := "Open leaves", viewpoint := "reduction", artifact := "register-json", statement := "The open claims no open claim rests on: each is a sufficient condition for Problem 1 once the proved arrows above it are read upward."}) (cons (record Panel {id := "paper", title := "Paper", viewpoint := "paper", artifact := "statements", statement := "Every published theorem of Observations.lex.tex in the paper's controlled English with its Lean name, lexeme and section; the attested PDFs with their digests."}) (cons (record Panel {id := "obligation", title := "Open obligation", viewpoint := "paper", artifact := "register-json", statement := "The open claim every proved reduction ends at, in full: statement, Lean predicate, exact forms, the chain to Problem 1 and what rests on it."}) (cons (record Panel {id := "refutations", title := "Refuted routes", viewpoint := "paper", artifact := "register-json", statement := "Each refuted claim with the Lean refutation or the experiment that refutes it."}) (cons (record Panel {id := "interface-sheets", title := "Interface sheets", viewpoint := "comprehension", artifact := "interfaces", statement := "The labeled sheet of the selected claim: chain, notions, exact facts, handles."}) (cons (record Panel {id := "modules", title := "LexLean modules", viewpoint := "stdlib", artifact := "api-module", statement := "The command surface, the register, the architecture and this presentation as verified semantic modules."}) (cons (record Panel {id := "quality", title := "Quality", viewpoint := "optimal", artifact := "architecture-module", statement := "The measures of an optimal implementation, each with its threshold and the command that reports it."}) (cons (record Panel {id := "verify", title := "Verify it yourself", viewpoint := "evidence", artifact := "pdf-manifest", statement := "The commands that reproduce what this page shows, the attested PDFs with their digests, the attestation of the paper and the published artifacts; nothing here asks to be taken on trust."}) (nil Panel))))))))))))),
   axioms: []
 }
 
@@ -92,7 +134,7 @@ definition{
   name: journeys,
   parameters: [],
   result: (List Journey),
-  body: (cons (record Journey {id := "prize-review", stakeholder := "wolfram", panels := (cons "reduction-tree" (cons "register" (cons "open-leaves" (nil String))))}) (cons (record Journey {id := "research-session", stakeholder := "researcher", panels := (cons "open-leaves" (cons "interface-sheets" (cons "quality" (nil String))))}) (cons (record Journey {id := "reading", stakeholder := "community", panels := (cons "reduction-tree" (cons "interface-sheets" (cons "register" (nil String))))}) (cons (record Journey {id := "stdlib-feedback", stakeholder := "uor-foundation", panels := (cons "modules" (cons "quality" (nil String)))}) (cons (record Journey {id := "mathematics", stakeholder := "mathematician", panels := (cons "paper" (cons "reduction-tree" (cons "obligation" (cons "refutations" (cons "register" (nil String))))))}) (cons (record Journey {id := "first-visit", stakeholder := "layperson", panels := (cons "picture" (cons "explainer" (cons "reduction-tree" (nil String))))}) (nil Journey))))))),
+  body: (cons (record Journey {id := "prize-review", stakeholder := "wolfram", panels := (cons "reduction-tree" (cons "open-leaves" (cons "register" (cons "obligation" (cons "verify" (nil String))))))}) (cons (record Journey {id := "research-session", stakeholder := "researcher", panels := (cons "open-leaves" (cons "interface-sheets" (cons "quality" (cons "register" (cons "obligation" (cons "refutations" (cons "verify" (nil String))))))))}) (cons (record Journey {id := "reading", stakeholder := "community", panels := (cons "reduction-tree" (cons "interface-sheets" (cons "register" (cons "obligation" (cons "verify" (nil String))))))}) (cons (record Journey {id := "stdlib-feedback", stakeholder := "uor-foundation", panels := (cons "modules" (cons "quality" (cons "register" (cons "obligation" (cons "verify" (nil String))))))}) (cons (record Journey {id := "mathematics", stakeholder := "mathematician", panels := (cons "paper" (cons "reduction-tree" (cons "register" (cons "obligation" (cons "refutations" (cons "verify" (nil String)))))))}) (cons (record Journey {id := "first-visit", stakeholder := "layperson", panels := (cons "picture" (cons "explainer" (cons "reduction-tree" (cons "register" (cons "obligation" (cons "verify" (nil String)))))))}) (nil Journey))))))),
   axioms: []
 }
 
@@ -100,7 +142,7 @@ definition{
   name: explainer,
   parameters: [],
   result: (List Paragraph),
-  body: (cons (record Paragraph {id := "rule-30", title := "What Rule 30 is", text := "Rule 30 is a one-line machine. Start with a row of cells, all white except one black cell in the middle. To make the next row, look at each cell together with its left and right neighbours. If the left neighbour is black, the cell below turns black only when the cell and its right neighbour are both white; if the left neighbour is white, the cell below turns black when the cell or its right neighbour is black. Repeat, row after row, forever. The picture above shows the first rows: a regular pattern grows on the left and a tangled one on the right."}) (cons (record Paragraph {id := "center-column", title := "The center column", text := "Read the cells straight down from the first black cell: black, black, white, black, black, black, white, white, black, black, white, white, white, black, white, black, and so on. This list of blacks and whites is the center column. It looks random. Nobody has found a pattern in it, and nobody has proved that there is none."}) (cons (record Paragraph {id := "problem-1", title := "What Problem 1 asks", text := "Stephen Wolfram's Rule 30 Prize asks three questions about the center column. Problem 1 asks whether it ever settles into a repeating pattern: whether there is a point after which the same block of blacks and whites repeats forever. The statement to be proved is that it never does."}) (cons (record Paragraph {id := "what-is-proved", title := "What is proved here", text := "This work has not solved Problem 1. What it has done is prove, in a form a computer checks, that Problem 1 is the same question as several other, more concrete questions. Each proved arrow in the reduction tree below says: if you could prove the statement at the arrow's end, Problem 1 would follow. The main ones are these."}) (cons (record Paragraph {id := "reduction-collisions", title := "Collisions at the center", text := "If the center column repeated with some period, disturbances travelling in from the left and from the right would have to keep meeting at the center forever, in a band of fixed width. Problem 1 is the same as saying that they cannot keep meeting."}) (cons (record Paragraph {id := "reduction-edges", title := "The edges are simple", text := "The center column is the exact combination of two parts: one coming from the two straight edges of the triangle and one from its interior. The edge part turns out to be nothing but whether the row number is even or odd. So Problem 1 is the same as saying that the interior part never settles into a repeating pattern."}) (cons (record Paragraph {id := "reduction-bands", title := "Stripping the bands", text := "A few diagonals next to each edge carry known, regular rhythms, and they can be removed exactly. What is left is the deep interior. Problem 1 is the same as saying that the deep interior is never a simple ruler-like rhythm plus a repeating pattern. That last statement is the remaining obligation."}) (cons (record Paragraph {id := "reduction-sparse", title := "A sparser sequence is enough", text := "If the center column repeated, then the column read only at rows 1, 2, 4, 8, 16 and so on would also eventually repeat. So it is enough to show that this far sparser sequence does not, and the same holds for the responses read along that diagonal. These are the open leaves on the right of the tree."}) (cons (record Paragraph {id := "reduction-horizon", title := "A checked certificate", text := "For every candidate starting point up to 512 and every candidate period up to 128, the computer checked that the center column breaks the pattern within 32 rows. This does not settle Problem 1, which asks about every starting point and every period, but it is a verified fact about the ranges it covers."}) (cons (record Paragraph {id := "what-is-open", title := "What remains open", text := "The register names one remaining obligation, aperiodic-compensation. Roughly: the deep interior of the triangle, with the bands next to both edges stripped away, never settles into a ruler-like rhythm plus a repeating pattern. Proving it would close Problem 1, and so would proving any other open leaf of the tree, such as the sparser sequences above. Nobody knows how yet. Several tempting routes were tried and shown not to work; those are the refuted routes, kept so that nobody walks them again."}) (cons (record Paragraph {id := "kernel-checked", title := "What kernel-checked means", text := "Every proved statement here was written in a proof language called Lean and checked by its kernel, a small program that accepts a proof only when every step follows from the rules. A reader can misread a long argument; the kernel does not. Kernel-checked means the proof passed that check, using only two standard logical principles and no extra assumptions. The statements are also written in a controlled English that is itself translated to Lean and checked, so the sentence you read and the theorem the kernel checked are the same thing."}) (cons (record Paragraph {id := "how-to-read", title := "How to read this site", text := "The reduction tree is the map: Problem 1 at the top and, below it, the statements it has been reduced to. A check mark is a proved arrow, a question mark an open statement, a cross a route that was tried and refuted. The register lists every statement with its status; select one for its details. The open leaves are where work continues. The paper panel has every published theorem in full, with the PDFs. The other panels are for people working on the proof or on its tooling."}) (nil Paragraph))))))))))))),
+  body: (cons (record Paragraph {id := "rule-30", title := "What Rule 30 is", text := "Rule 30 is a one-line machine. Start with a row of cells, all white except one black cell in the middle. To make the next row, look at each cell together with its left and right neighbours. If the left neighbour is black, the cell below turns black only when the cell and its right neighbour are both white; if the left neighbour is white, the cell below turns black when the cell or its right neighbour is black. Repeat, row after row, forever. The picture shows the first rows: a regular pattern grows on the left and a tangled one on the right."}) (cons (record Paragraph {id := "the-picture", title := "Reading the picture", text := "The picture shows the first 48 rows, rows 0 to 47, from the single black cell at the top; each row is one step of the machine, and the triangle widens by one cell on each side per row. The amber cells are the center column, read from the top down. If the center column eventually repeated, then from some row on the amber cells would show the same block of blacks and whites again and again, like a stripe. Nothing of the kind is visible here, but no number of rows could settle the question, because it asks about every row that will ever come."}) (cons (record Paragraph {id := "center-column", title := "The center column", text := "Read the cells straight down from the first black cell: black, black, white, black, black, black, white, white, black, black, white, white, white, black, white, black, and so on. This list of blacks and whites is the center column. It looks random. Nobody has found a pattern in it, and nobody has proved that there is none."}) (cons (record Paragraph {id := "problem-1", title := "What Problem 1 asks", text := "Stephen Wolfram's Rule 30 Prize asks three questions about the center column. Problem 1 asks whether it ever settles into a repeating pattern: whether there is a point after which the same block of blacks and whites repeats forever. The statement to be proved is that it never does."}) (cons (record Paragraph {id := "what-is-proved", title := "What is proved here", text := "This work has not solved Problem 1. What it has done is prove, in a form a computer checks, that Problem 1 is the same question as several other, more concrete questions. Each proved arrow in the reduction tree says: if you could prove the statement at the arrow's end, Problem 1 would follow. The next step says what the main ones are."}) (cons (record Paragraph {id := "reduction-collisions", title := "Collisions at the center", text := "If the center column repeated with some period, disturbances travelling in from the left and from the right would have to keep meeting at the center forever, in a band of fixed width. Problem 1 is the same as saying that they cannot keep meeting."}) (cons (record Paragraph {id := "reduction-edges", title := "The edges are simple", text := "The center column is the exact combination of two parts: one coming from the two straight edges of the triangle and one from its interior. The edge part turns out to be nothing but whether the row number is even or odd. So Problem 1 is the same as saying that the interior part never settles into a repeating pattern."}) (cons (record Paragraph {id := "reduction-bands", title := "Stripping the bands", text := "A few diagonals next to each edge carry known, regular rhythms, and they can be removed exactly. What is left is the deep interior. Problem 1 is the same as saying that the deep interior is never a simple ruler-like rhythm plus a repeating pattern. That last statement is the remaining obligation."}) (cons (record Paragraph {id := "reduction-sparse", title := "A sparser sequence is enough", text := "If the center column repeated, then the column read only at rows 1, 2, 4, 8, 16 and so on would also eventually repeat. So it is enough to show that this far sparser sequence does not, and the same holds for the responses read along that diagonal. These are the open leaves on the right of the tree."}) (cons (record Paragraph {id := "reduction-horizon", title := "A checked certificate", text := "For every candidate starting point up to 512 and every candidate period up to 128, the computer checked that the center column breaks the pattern within 32 rows. This does not settle Problem 1, which asks about every starting point and every period, but it is a verified fact about the ranges it covers."}) (cons (record Paragraph {id := "the-register", title := "The register", text := "The register is the list of every statement this work keeps track of, each with a status: proved, open, refuted or retired. A proved statement names the theorem the kernel checked, so the status is not a promise but a pointer to a checked proof; an open statement names nothing of the kind, and the site never shows it as proved. Select a statement to see what it rests on and what rests on it."}) (cons (record Paragraph {id := "what-is-open", title := "What remains open", text := "The register names one remaining obligation, aperiodic-compensation. In plain words: the bulk of the pattern, with the few regular diagonals next to both edges stripped away, never reproduces the ruler rhythm plus a repeating pattern. It is open: nobody has proved it, and this site does not claim it. Proving it would close Problem 1, and so would proving any other open leaf of the tree, such as the sparser sequences of the previous step. Several tempting routes were tried and shown not to work; those are the refuted routes, kept so that nobody walks them again."}) (cons (record Paragraph {id := "kernel-checked", title := "What kernel-checked means", text := "Every proved statement here was written in a proof language called Lean and checked by its kernel, a small program that accepts a proof only when every step follows from the rules. A reader can misread a long argument; the kernel does not. Kernel-checked means the proof passed that check, using only two standard logical principles and no extra assumptions. The statements are also written in a controlled English that is itself translated to Lean and checked, so the sentence you read and the theorem the kernel checked are the same thing."}) (cons (record Paragraph {id := "how-to-read", title := "How to read the tree", text := "The reduction tree is the map: Problem 1 at the top and, below it, the statements it has been reduced to. A check mark is a proved arrow, a question mark an open statement, a cross a route that was tried and refuted. The small grey name beside a proved statement is the name of its checked theorem. Select a statement to see it in full. The other vantages on this site, for the mathematician, the researcher, the prize committee and the machine, read the same register from their own side."}) (cons (record Paragraph {id := "verify-yourself", title := "What you can check yourself", text := "Nothing here asks to be taken on trust. The commands below reproduce what this page shows from the repository: the briefing prints the current state in one screen, the claim command prints one statement with its checked theorem, and the register check reads every proved statement against the kernel. The PDFs carry the paper as it was verified, with digests so that a copy can be compared with the published one."}) (nil Paragraph)))))))))))))))),
   axioms: []
 }
 
@@ -109,6 +151,30 @@ definition{
   parameters: [],
   result: String,
   body: "aperiodic-compensation",
+  axioms: []
+}
+
+definition{
+  name: poles,
+  parameters: [],
+  result: (List Pole),
+  body: (cons (record Pole {id := "sensual-object", title := "What this vantage is", statement := "The object as it appears from here: the picture and the words, the paper, the tree, the leaves or the modules."}) (cons (record Pole {id := "sensual-quality", title := "How the proof appears from here", statement := "The panels that show the proof from this vantage; they depend on the vantage, the proof does not."}) (cons (record Pole {id := "real-quality", title := "What is proved", statement := "The proved claims as kernel-checked evidence, the same from every vantage: each names a Lean theorem checked under propext and Quot.sound."}) (cons (record Pole {id := "withdrawn", title := "What is open", statement := "The open obligation stated as open, with its exact Lean predicate; no panel renders a proof of it."}) (cons (record Pole {id := "verification", title := "Verify it yourself", statement := "The commands, attestations and documents with which the reader reproduces what the page shows."}) (nil Pole)))))),
+  axioms: []
+}
+
+definition{
+  name: steps,
+  parameters: [],
+  result: (List Step),
+  body: (cons (record Step {id := "pr-tree", journey := "prize-review", order := 1, pole := "sensual-object", panel := "reduction-tree", title := "The proof as a tree", goal := "See the whole effort as one tree from problem1: every arrow a theorem, every leaf an open sufficient condition, every cross a refuted route.", text := "", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "pr-leaves"}) (cons (record Step {id := "pr-leaves", journey := "prize-review", order := 2, pole := "sensual-quality", panel := "open-leaves", title := "The open leaves", goal := "Read the open leaves: each is a statement that would close Problem 1 through the proved arrows above it, and nothing else is claimed.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))), next := "pr-register"}) (cons (record Step {id := "pr-register", journey := "prize-review", order := 3, pole := "real-quality", panel := "register", title := "Proved, against the kernel", goal := "Check that every proved claim names a Lean theorem, kernel-checked under propext and Quot.sound and published as a lexeme; filter the register by proved.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "register-module" (cons "frontier-module" (nil String)))), next := "pr-obligation"}) (cons (record Step {id := "pr-obligation", journey := "prize-review", order := 4, pole := "withdrawn", panel := "obligation", title := "The remaining obligation", goal := "Read the one open obligation every proved reduction ends at, EightAperiodic, stated as open with its chain to Problem 1.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "pr-verify"}) (cons (record Step {id := "pr-verify", journey := "prize-review", order := 5, pole := "verification", panel := "verify", title := "Reproduce the evidence", goal := "Reproduce the register's evidence: bin/r30 frontier check reads every proved claim against the kernel, bin/r30 axioms <Lean name> prints its axioms, the PDFs carry the attested paper.", text := "", paragraphs := (nil String), evidence := (cons "frontier" (cons "pdf-manifest" (cons "paper-pdf" (nil String)))), next := ""}) (cons (record Step {id := "rs-leaves", journey := "research-session", order := 1, pole := "sensual-object", panel := "open-leaves", title := "Where to work", goal := "Start where the register allows work: the open leaves, the only places a session works (bin/r30 brief lists them).", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "dyadic-response-aperiodic" (cons "dyadic-column-aperiodic" (cons "horizon-criterion" (nil String))))), next := "rs-sheet"}) (cons (record Step {id := "rs-sheet", journey := "research-session", order := 2, pole := "sensual-quality", panel := "interface-sheets", title := "The sheet of a leaf", goal := "Read a leaf's interface sheet: its chain to problem1, its notions, the exact facts about them and the handles to continue (bin/r30 interface <id>).", text := "", paragraphs := (nil String), evidence := (cons "interfaces" (cons "dyadic-response-aperiodic" (nil String))), next := "rs-quality"}) (cons (record Step {id := "rs-quality", journey := "research-session", order := 3, pole := "sensual-quality", panel := "quality", title := "The gate and its budget", goal := "Know the cost model: one module checks in seconds, the gate runs once per batch, CI only renders; each measure names its threshold and the command that reports it.", text := "", paragraphs := (nil String), evidence := (cons "architecture-module" (cons "agents" (nil String))), next := "rs-reductions"}) (cons (record Step {id := "rs-reductions", journey := "research-session", order := 4, pole := "real-quality", panel := "register", title := "Proved reductions: use them", goal := "Use the proved reductions as equivalent forms of the goal and do not re-derive them; the register is the plan and the kernel is the judge.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "interior-aperiodicity" (cons "three-diagonal-band" (cons "left-band" (cons "kernel-law" (nil String)))))), next := "rs-obligation"}) (cons (record Step {id := "rs-obligation", journey := "research-session", order := 5, pole := "withdrawn", panel := "obligation", title := "The obligation and its exact forms", goal := "Read the obligation in its exact forms (center t = rulerBackground t XOR interiorEightDiagonal t; the dyadic form) and what is known about it.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "rs-refuted"}) (cons (record Step {id := "rs-refuted", journey := "research-session", order := 6, pole := "withdrawn", panel := "refutations", title := "Routes not to walk again", goal := "Know the refuted routes and the refutation of each, so the session does not walk them again.", text := "", paragraphs := (nil String), evidence := (cons "route-a-band-discharge" (cons "route-b-reset-mismatch" (cons "route-c-rank-drop" (cons "band-engines" (cons "q-adic-descent" (nil String)))))), next := "rs-verify"}) (cons (record Step {id := "rs-verify", journey := "research-session", order := 7, pole := "verification", panel := "verify", title := "Run the loop", goal := "Run the loop: bin/r30 brief, bin/r30 claim <id>, check or verify one module, bin/r30 kappa for the replay labels, and commit through the gate once per batch.", text := "", paragraphs := (nil String), evidence := (cons "agents" (cons "strategy" (nil String))), next := ""}) (cons (record Step {id := "rd-tree", journey := "reading", order := 1, pole := "sensual-object", panel := "reduction-tree", title := "The map", goal := "Read the register as a tree: what rests on what, which arrows are theorems, which leaves are open.", text := "", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "rd-sheet"}) (cons (record Step {id := "rd-sheet", journey := "reading", order := 2, pole := "sensual-quality", panel := "interface-sheets", title := "A claim, labeled", goal := "Read a claim's labeled sheet, written to be reused: chain, notions, exact facts, handles.", text := "", paragraphs := (nil String), evidence := (cons "interfaces" (nil String)), next := "rd-register"}) (cons (record Step {id := "rd-register", journey := "reading", order := 3, pole := "real-quality", panel := "register", title := "Every claim with its evidence", goal := "Find any claim, its status, its Lean name and lexeme, what it rests on and what rests on it; search by notion.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "frontier" (nil String))), next := "rd-obligation"}) (cons (record Step {id := "rd-obligation", journey := "reading", order := 4, pole := "withdrawn", panel := "obligation", title := "What is open", goal := "Read the open obligation as open, with its Lean predicate, and the open leaves that would also close Problem 1.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "rd-verify"}) (cons (record Step {id := "rd-verify", journey := "reading", order := 5, pole := "verification", panel := "verify", title := "Reproduce the view", goal := "Reproduce the view: bin/r30 view render writes these artifacts, the PDFs and their digests are the attested paper, the modules are verified with lexlean.", text := "", paragraphs := (nil String), evidence := (cons "readme" (cons "pdf-manifest" (cons "site" (nil String)))), next := ""}) (cons (record Step {id := "sf-modules", journey := "stdlib-feedback", order := 1, pole := "sensual-object", panel := "modules", title := "The application as modules", goal := "Read the application as LexLean semantic modules on prism-stdlib: the command surface, the register, the architecture, the presentation, the application and the Observer, each data plus theorems the kernel decides.", text := "", paragraphs := (nil String), evidence := (cons "api-module" (cons "register-module" (cons "architecture-module" (cons "presentation-module" (cons "application-module" (nil String)))))), next := "sf-quality"}) (cons (record Step {id := "sf-quality", journey := "stdlib-feedback", order := 2, pole := "sensual-quality", panel := "quality", title := "What optimal means here", goal := "Read the quality model on Foundation.Qual: the measures, their thresholds and the command that reports each, the pedagogy among them.", text := "", paragraphs := (nil String), evidence := (cons "architecture-module" (nil String)), next := "sf-register"}) (cons (record Step {id := "sf-register", journey := "stdlib-feedback", order := 3, pole := "real-quality", panel := "register", title := "The register, decided", goal := "Read the register as Register.lex.tex restates it (every depends target a claim, every proved claim a Lean theorem, decided by the kernel): the same rows as register.json under its schema.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "register-module" (cons "frontier-module" (nil String)))), next := "sf-obligation"}) (cons (record Step {id := "sf-obligation", journey := "stdlib-feedback", order := 4, pole := "withdrawn", panel := "obligation", title := "The obligation as data", goal := "Read the obligation as Presentation names it and Application decides it to be an open claim (obligationIsOpen): the Observer's withdrawn core.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (cons "presentation-module" (cons "application-module" (nil String)))), next := "sf-verify"}) (cons (record Step {id := "sf-verify", journey := "stdlib-feedback", order := 5, pole := "verification", panel := "verify", title := "Drive the surface as a machine", goal := "Drive the same surface as a machine: every command is an MCP tool, --json reports validate against the published schemas, bin/r30 kappa prints the kappa-labels of the modules, bin/r30 api check refuses drift.", text := "", paragraphs := (nil String), evidence := (cons "api-module" (cons "readme" (nil String))), next := ""}) (cons (record Step {id := "ma-paper", journey := "mathematics", order := 1, pole := "sensual-object", panel := "paper", title := "The paper's vocabulary", goal := "Read the paper's statements as mathematics, the defining equations of the Notions section first: every later statement is in their terms.", text := "Observations.lex.tex is written in a controlled English whose every sentence compiles to a Lean statement and is closed by the lexeme of the theorem it states, so the sentence read here and the theorem the kernel checked are the same object. The Notions section publishes the defining equations of the host notions (the center, the carry ledger, the defects, the trinomial and trailing parities) as lemmas; the Lean name and the lexeme are under each statement, and the attested PDFs carry the same text.", paragraphs := (nil String), evidence := (cons "statements" (cons "paper-pdf" (cons "observations-pdf" (cons "core-pdf" (nil String))))), next := "ma-tree"}) (cons (record Step {id := "ma-tree", journey := "mathematics", order := 2, pole := "sensual-quality", panel := "reduction-tree", title := "The register as a tree", goal := "Read the register as a tree of reductions from problem1: a proved arrow is a theorem toward Problem 1, an open leaf a sufficient condition, a cross a refuted route; the open obligation is the node every exact decomposition ends at.", text := "problem1 is Ruliology.CellularAutomata.Rule30Prize.Problem1 as the prize kit states it. A proved child of a node is a kernel-checked implication or equivalence toward the node; an open leaf is a statement that would close Problem 1 through the proved arrows above it; aperiodic-compensation is the open statement the exact decompositions of the next steps end at, read in full once they have been read.", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "ma-edges"}) (cons (record Step {id := "ma-edges", journey := "mathematics", order := 3, pole := "real-quality", panel := "register", title := "The edge chain", goal := "Follow the exact decomposition of the center: ledger-diagonal, edge-interior-split, edge-diagonal-formula, edge-parity (center t = not (timeParity t XOR interiorDiagonal t)), hence Problem 1 iff InteriorAperiodic.", text := "The center is the complement of the diagonal of the carry ledger (centerPeriodic_iff_ledgerPeriodic); every elementary rule is a linear part plus a carry (rule_eq_linear_xor_carry), and the carry is the intersection of a row with its own translate. The two edge carries of every row, propagated through the trinomial triangle, contribute exactly the time parity (edgeDiagonal_eq_timeParity), so a period of the center is a period of the interior diagonal up to a factor 2 (problem1_iff_interiorAperiodic).", paragraphs := (nil String), evidence := (cons "ledger-diagonal" (cons "all-rules-facet" (cons "characteristic-one-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (nil String))))))))), next := "ma-bands"}) (cons (record Step {id := "ma-bands", journey := "mathematics", order := 4, pole := "real-quality", panel := "register", title := "Stripping the bands", goal := "Strip the regular bands exactly: center t = trailingParity (t-2) XOR interiorThreeDiagonal t (three-diagonal-band), center t = rulerBackground t XOR interiorEightDiagonal t (left-band), and the renormalization of the obligation on every dyadic class.", text := "The three inner diagonals of the regular side inject the period-doubling sequence trailingParity, which has no eventual period (trailingParity_not_periodic); the first diagonals of the chaotic side inject two further ruler terms. Under a center period the deep interior has no eventual period at all (not_threePeriodic_of_centerPeriodic) and the equation against the ruler reproduces itself with the same period on every class 2^k u + 1 (threeClass_of_centerPeriodic). Problem 1 iff ThreeAperiodic iff EightAperiodic.", paragraphs := (nil String), evidence := (cons "three-diagonal-band" (cons "dyadic-renormalization" (cons "left-band" (nil String)))), next := "ma-collisions"}) (cons (record Step {id := "ma-collisions", journey := "mathematics", order := 5, pole := "real-quality", panel := "register", title := "Collisions, coupling and certificates", goal := "Read the nonlinear facts: Problem 1 iff no recurrent central collision, the coupling law of the center defect, left-defect sourcing from column one, and the kernel-checked horizon certificate for T <= 512 and P <= 128.", text := "problem1_iff_noRecurrentCentralCollision is the band form, choice-free. center_periodic_of_coupling states a center period as the coupling leftDefect(t,1) XOR (not center t AND rightDefect(t,1)) at every later time. left_defect_sourced says where a left defect comes from. horizon_thirty_two is a finite certificate the kernel evaluated directly on the rows; the uniform horizon H(T, P) is the open claim horizon-criterion.", paragraphs := (nil String), evidence := (cons "recurrent-central-collision" (cons "coupling-law" (cons "left-defect-sourcing" (cons "horizon-certificate" (nil String))))), next := "ma-dyadic"}) (cons (record Step {id := "ma-dyadic", journey := "mathematics", order := 6, pole := "real-quality", panel := "register", title := "The dyadic side", goal := "Read the 2-kernel reductions: a periodic center has a finite 2-kernel, which forces dyadic self-similarity, the dilation and response reductions, the fixed sequence dyadicRow, and the freezing law of the linear transport (kernel-law).", text := "centerKernelFinite_of_centerPeriodic: under CenterPeriodic T P every subsequence t -> center(2^k t + r) is eventually periodic with a common period. From it: problem1_of_no_dyadic_self_similarity, problem1_of_dyadic_column_aperiodic, problem1_of_dilation_aperiodic_in_paper (any base), kappaCollapse_iff, problem1_of_dyadic_response_aperiodic; the trinomial kernel is dyadically stable (dyadicColumnAperiodic_iff_stable), each row's contribution to the dyadic column is scale-free (center_twopow_succ_eq), and rowTerm_kernel_law makes every 2-kernel sequence explicit up to the rows at or above the scale.", paragraphs := (nil String), evidence := (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "interior-kernel-reduction" (cons "stable-kernel" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "scale-free-rows" (cons "kernel-law" (nil String))))))))))), next := "ma-obligation"}) (cons (record Step {id := "ma-obligation", journey := "mathematics", order := 7, pole := "withdrawn", panel := "obligation", title := "The open obligation, exactly", goal := "State the obligation exactly, as open: EightAperiodic (Rule30UOR.LeftBand), its exact forms, its chain to Problem 1, what rests on it, and the open leaves that would also close Problem 1.", text := "Every proved reduction ends here. The bulk carries, with both edge bands stripped, are never the ruler background plus a periodic sequence. No closing argument is known; the register records what a periodic interior would have to satisfy (renormalization on every dyadic class, black-center absorption, the block tables of the freezing law) and calls none of it a proof. The other open leaves (horizon-criterion, center-infinite-kernel, no-dyadic-self-similarity, dyadic-column-aperiodic, some-base-dilation-aperiodic, dyadic-response-aperiodic) are each sufficient.", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))), next := "ma-refuted"}) (cons (record Step {id := "ma-refuted", journey := "mathematics", order := 8, pole := "withdrawn", panel := "refutations", title := "Refuted routes", goal := "Know the refuted routes toward the obligation and the Lean refutation or experiment behind each, so as not to walk them again.", text := "A refuted claim stays in the register with its refutation: a Lean theorem that shows the route arithmetic or vacuous (routes A, B and C in Rule30UOR.Routes, the engine hypothesis bundles, the observer q-rank), or a finite experiment on the seed (q-adic descent, front slack, the evaluation point, the first-failure 2-adic law).", paragraphs := (nil String), evidence := (cons "q-adic-descent" (cons "front-slack-descent" (cons "evaluation-point" (cons "gate-phase-opposition" (cons "band-engines" (cons "saturation-reexcitation" (cons "first-failure-2adic" (cons "route-a-band-discharge" (cons "route-c-rank-drop" (cons "route-b-reset-mismatch" (nil String))))))))))), next := "ma-verify"}) (cons (record Step {id := "ma-verify", journey := "mathematics", order := 9, pole := "verification", panel := "verify", title := "Verify the paper", goal := "Verify: the attestation identifiers of the paper, the PDF digests against pdf-manifest.json, bin/r30 claim <id> for any claim, bin/r30 axioms <Lean name> for its axioms.", text := "", paragraphs := (nil String), evidence := (cons "pdf-manifest" (cons "paper-pdf" (cons "statements" (cons "register-json" (nil String))))), next := ""}) (cons (record Step {id := "fv-picture", journey := "first-visit", order := 1, pole := "sensual-object", panel := "picture", title := "What Rule 30 is", goal := "Read the picture: how each row is made from the one above it, and which cells are the center column.", text := "", paragraphs := (cons "rule-30" (cons "the-picture" (nil String))), evidence := (cons "picture" (nil String)), next := "fv-problem"}) (cons (record Step {id := "fv-problem", journey := "first-visit", order := 2, pole := "sensual-object", panel := "explainer", title := "The center column and Problem 1", goal := "State Problem 1 in your own words: does the center column ever settle into a block that repeats forever? The claim to be proved is that it never does.", text := "", paragraphs := (cons "center-column" (cons "problem-1" (nil String))), evidence := (cons "explainer" (cons "problem1" (nil String))), next := "fv-kernel"}) (cons (record Step {id := "fv-kernel", journey := "first-visit", order := 3, pole := "sensual-object", panel := "explainer", title := "What kernel-checked means", goal := "Know what this site means by kernel-checked before any checked statement is shown.", text := "", paragraphs := (cons "kernel-checked" (nil String)), evidence := (cons "explainer" (nil String)), next := "fv-tree"}) (cons (record Step {id := "fv-tree", journey := "first-visit", order := 4, pole := "sensual-quality", panel := "reduction-tree", title := "The map of what is proved", goal := "Read the reduction tree: Problem 1 at the top, and under it the statements it has been reduced to; a check mark is a proved arrow.", text := "", paragraphs := (cons "what-is-proved" (cons "how-to-read" (nil String))), evidence := (cons "chain" (cons "problem1" (nil String))), next := "fv-reductions"}) (cons (record Step {id := "fv-reductions", journey := "first-visit", order := 5, pole := "sensual-quality", panel := "explainer", title := "The main proved arrows, in words", goal := "Say in plain words what the main proved arrows reduce Problem 1 to: collisions, edges, bands, a sparser sequence, and a checked certificate.", text := "", paragraphs := (cons "reduction-collisions" (cons "reduction-edges" (cons "reduction-bands" (cons "reduction-sparse" (cons "reduction-horizon" (nil String)))))), evidence := (cons "recurrent-central-collision" (cons "edge-parity" (cons "interior-aperiodicity" (cons "three-diagonal-band" (cons "left-band" (cons "periodic-finite-kernel" (cons "dilation-reduction" (cons "dyadic-response-reduction" (cons "horizon-certificate" (nil String)))))))))), next := "fv-register"}) (cons (record Step {id := "fv-register", journey := "first-visit", order := 6, pole := "real-quality", panel := "register", title := "The register", goal := "Find a proved statement in the register and see the name of the checked theorem behind it; filter by proved.", text := "", paragraphs := (cons "the-register" (nil String)), evidence := (cons "register-json" (cons "edge-parity" (cons "left-band" (nil String)))), next := "fv-open"}) (cons (record Step {id := "fv-open", journey := "first-visit", order := 7, pole := "withdrawn", panel := "obligation", title := "What remains open", goal := "State the one remaining obligation in plain words and recognize that it is open, not proved.", text := "", paragraphs := (cons "what-is-open" (nil String)), evidence := (cons "aperiodic-compensation" (nil String)), next := "fv-verify"}) (cons (record Step {id := "fv-verify", journey := "first-visit", order := 8, pole := "verification", panel := "verify", title := "What you can check yourself", goal := "Reproduce what this page shows: the briefing, one statement in full, and the paper as it was verified.", text := "", paragraphs := (cons "verify-yourself" (nil String)), evidence := (cons "paper-pdf" (cons "pdf-manifest" (cons "readme" (nil String)))), next := ""}) (nil Step)))))))))))))))))))))))))))))))))))))))),
+  axioms: []
+}
+
+definition{
+  name: verifications,
+  parameters: [],
+  result: (List Verification),
+  body: (cons (record Verification {command := "brief", invocation := "bin/r30 brief", statement := "One screen: the open claims, the proved reductions, the refuted routes."}) (cons (record Verification {command := "claim", invocation := "bin/r30 claim <id>", statement := "One claim in full: register entry, Lean type, published statement, dependents."}) (cons (record Verification {command := "frontier_check", invocation := "bin/r30 frontier check", statement := "The register against the kernel: every proved claim names a theorem checked under propext and Quot.sound and published."}) (cons (record Verification {command := "axioms", invocation := "bin/r30 axioms <Lean names>", statement := "The axioms a theorem depends on; must print only propext and Quot.sound."}) (cons (record Verification {command := "kappa", invocation := "bin/r30 kappa <modules>", statement := "The kappa-labels of the research modules: the address of the declarations the kernel replays."}) (cons (record Verification {command := "verify", invocation := "bin/r30 verify api", statement := "lexlean verify of the API modules: the kernel decides the theorems this page's model states, the pedagogy among them."}) (cons (record Verification {command := "api_check", invocation := "bin/r30 api check", statement := "Refuses a module, register, schema or feature that drifted from its generator."}) (cons (record Verification {command := "view_render", invocation := "bin/r30 view render --out view", statement := "This view, rendered from the register into a directory; open view/index.html without a server."}) (nil Verification))))))))),
   axioms: []
 }
 
@@ -132,6 +198,28 @@ definition{
     | List.cons head tail => (if (memberString head ids) then (allMembers tail ids) else false)),
   axioms: [],
   recursive_argument: values
+}
+
+definition{
+  name: indexOf,
+  parameters: [value : String, values : (List String)],
+  result: Nat,
+  body: (match values
+    | List.nil => 0
+    | List.cons head tail => (if (prim equal value head : Bool) then 0 else (1 + (indexOf value tail)))),
+  axioms: [],
+  recursive_argument: values
+}
+
+definition{
+  name: appendStrings,
+  parameters: [xs : (List String), ys : (List String)],
+  result: (List String),
+  body: (match xs
+    | List.nil => ys
+    | List.cons head tail => (cons head (appendStrings tail ys))),
+  axioms: [],
+  recursive_argument: xs
 }
 
 definition{
@@ -234,23 +322,261 @@ definition{
 }
 
 definition{
-  name: appendStrings,
-  parameters: [xs : (List String), ys : (List String)],
-  result: (List String),
-  body: (match xs
-    | List.nil => ys
-    | List.cons head tail => (cons head (appendStrings tail ys))),
-  axioms: [],
-  recursive_argument: xs
-}
-
-definition{
   name: journeyPanels,
   parameters: [js : (List Journey)],
   result: (List String),
   body: (match js
     | List.nil => (nil String)
     | List.cons head tail => (appendStrings (project head panels) (journeyPanels tail))),
+  axioms: [],
+  recursive_argument: js
+}
+
+definition{
+  name: journeyIds,
+  parameters: [xs : (List Journey)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (journeyIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: poleIds,
+  parameters: [xs : (List Pole)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (poleIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepIds,
+  parameters: [xs : (List Step)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (stepIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepJourneys,
+  parameters: [xs : (List Step)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head journey) (stepJourneys tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepPoles,
+  parameters: [xs : (List Step)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head pole) (stepPoles tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepPanels,
+  parameters: [xs : (List Step)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head panel) (stepPanels tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepOrders,
+  parameters: [xs : (List Step)],
+  result: (List Nat),
+  body: (match xs
+    | List.nil => (nil Nat)
+    | List.cons head tail => (cons (project head order) (stepOrders tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: verificationCommands,
+  parameters: [xs : (List Verification)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head command) (verificationCommands tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepParagraphs,
+  parameters: [xs : (List Step)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (appendStrings (project head paragraphs) (stepParagraphs tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepEvidence,
+  parameters: [xs : (List Step)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (appendStrings (project head evidence) (stepEvidence tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepsOfJourney,
+  parameters: [journey : String, xs : (List Step)],
+  result: (List Step),
+  body: (match xs
+    | List.nil => (nil Step)
+    | List.cons head tail => (if (prim equal journey (project head journey) : Bool) then (cons head (stepsOfJourney journey tail)) else (stepsOfJourney journey tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: consecutiveFrom,
+  parameters: [xs : (List Nat), next : Nat],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (head =? next) then (consecutiveFrom tail (next + 1)) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: poleIndices,
+  parameters: [xs : (List String), ids : (List String)],
+  result: (List Nat),
+  body: (match xs
+    | List.nil => (nil Nat)
+    | List.cons head tail => (cons (indexOf head ids) (poleIndices tail ids))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: nonDecreasing,
+  parameters: [xs : (List Nat), previous : Nat],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (previous <=? head) then (nonDecreasing tail head) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: lastString,
+  parameters: [xs : (List String), default : String],
+  result: String,
+  body: (match xs
+    | List.nil => default
+    | List.cons head tail => (lastString tail head)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: firstStepId,
+  parameters: [xs : (List Step)],
+  result: String,
+  body: (match xs
+    | List.nil => ""
+    | List.cons head tail => (project head id)),
+  axioms: []
+}
+
+definition{
+  name: linkedByNext,
+  parameters: [xs : (List Step)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (prim equal (project head next) (firstStepId tail) : Bool) then (linkedByNext tail) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: sameMembers,
+  parameters: [xs : (List String), ys : (List String)],
+  result: Bool,
+  body: (if (allMembers xs ys) then (allMembers ys xs) else false),
+  axioms: []
+}
+
+definition{
+  name: stepsConsecutive,
+  parameters: [js : (List Journey), ss : (List Step)],
+  result: Bool,
+  body: (match js
+    | List.nil => true
+    | List.cons head tail => (if (consecutiveFrom (stepOrders (stepsOfJourney (project head id) ss)) 1) then (stepsConsecutive tail ss) else false)),
+  axioms: [],
+  recursive_argument: js
+}
+
+definition{
+  name: stepsLinked,
+  parameters: [js : (List Journey), ss : (List Step)],
+  result: Bool,
+  body: (match js
+    | List.nil => true
+    | List.cons head tail => (if (linkedByNext (stepsOfJourney (project head id) ss)) then (stepsLinked tail ss) else false)),
+  axioms: [],
+  recursive_argument: js
+}
+
+definition{
+  name: polesInOrder,
+  parameters: [js : (List Journey), ss : (List Step), ps : (List String)],
+  result: Bool,
+  body: (match js
+    | List.nil => true
+    | List.cons head tail => (if (if (nonDecreasing (poleIndices (stepPoles (stepsOfJourney (project head id) ss)) ps) 0) then (allMembers ps (stepPoles (stepsOfJourney (project head id) ss))) else false) then (polesInOrder tail ss ps) else false)),
+  axioms: [],
+  recursive_argument: js
+}
+
+definition{
+  name: endInVerification,
+  parameters: [js : (List Journey), ss : (List Step)],
+  result: Bool,
+  body: (match js
+    | List.nil => true
+    | List.cons head tail => (if (prim equal (lastString (stepPoles (stepsOfJourney (project head id) ss)) "") "verification" : Bool) then (endInVerification tail ss) else false)),
+  axioms: [],
+  recursive_argument: js
+}
+
+definition{
+  name: panelsAreStepPanels,
+  parameters: [js : (List Journey), ss : (List Step)],
+  result: Bool,
+  body: (match js
+    | List.nil => true
+    | List.cons head tail => (if (sameMembers (project head panels) (stepPanels (stepsOfJourney (project head id) ss))) then (panelsAreStepPanels tail ss) else false)),
   axioms: [],
   recursive_argument: js
 }
@@ -323,6 +649,118 @@ theorem{
   name: paragraphIdsDistinct,
   parameters: [],
   statement: ((distinctStrings (paragraphIds (explainer))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: stepIdsDistinct,
+  parameters: [],
+  statement: ((distinctStrings (stepIds (steps))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: stepPanelsArePanels,
+  parameters: [],
+  statement: ((allMembers (stepPanels (steps)) (panelIds (panels))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: stepJourneysAreJourneys,
+  parameters: [],
+  statement: ((allMembers (stepJourneys (steps)) (journeyIds (journeys))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyJourneyHasSteps,
+  parameters: [],
+  statement: ((allMembers (journeyIds (journeys)) (stepJourneys (steps))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyPanelInAStep,
+  parameters: [],
+  statement: ((allMembers (panelIds (panels)) (stepPanels (steps))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: stepPolesDeclared,
+  parameters: [],
+  statement: ((allMembers (stepPoles (steps)) (poleIds (poles))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: journeysStepsConsecutive,
+  parameters: [],
+  statement: ((stepsConsecutive (journeys) (steps)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: journeysStepsLinked,
+  parameters: [],
+  statement: ((stepsLinked (journeys) (steps)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: journeysCoverPolesInOrder,
+  parameters: [],
+  statement: ((polesInOrder (journeys) (steps) (poleIds (poles))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: journeysEndInVerification,
+  parameters: [],
+  statement: ((endInVerification (journeys) (steps)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: journeyPanelsAreStepPanels,
+  parameters: [],
+  statement: ((panelsAreStepPanels (journeys) (steps)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: stepParagraphsDeclared,
+  parameters: [],
+  statement: ((allMembers (stepParagraphs (steps)) (paragraphIds (explainer))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: stepEvidenceDeclared,
+  parameters: [],
+  statement: ((allMembers (stepEvidence (steps)) (appendStrings (Register::idsOf (Register::claims)) (artifactIds (artifacts)))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: verificationsAreCommands,
+  parameters: [],
+  statement: ((allMembers (verificationCommands (verifications)) (Architecture::commandNames (Api::commands))) = true),
   proof: decide{},
   axioms: []
 }
