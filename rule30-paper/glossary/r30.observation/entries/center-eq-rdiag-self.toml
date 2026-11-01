@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-rdiag-self"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const r30.right::rdiag) (local t) (local t))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.center_eq_rdiag_self"
+
+[[form]]
+id = "center-eq-rdiag-self"
+channel = "math"
+surface = "centereqrdiagself"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqrdiagself) (paren (seq (slot 0))))"

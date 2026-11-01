@@ -3295,4 +3295,33 @@ true`), and the residue-3 obligation at the first index is a three-row local sta
 `lateTail k 3 (1+P) = lateTail k 3 1 ⊕ trailingParity P`, with `lateTail k 3 1` a Boolean
 expression in the cells within distance 3 of the center at times `2^k, 2^k+1, 2^k+2`.
 
+**The tower (2026-10-31, `Rule30UOR.Antidiagonal`, in progress).** The right half-plane is already
+exact in the repository: `rdiag j t = cell t (t−j)`, the permutive recursion read from the right
+edge `rdiag (k+2) (s+1) = rdiag (k+2) s ⊕ (rdiag (k+1) s ∨ rdiag k s)` (`rdiag_step`), and every
+diagonal exactly `2^j`-periodic from time 0 (`Right.rdiag_periodic`), so each diagonal is a word
+`towerWord j` of length `2^j`, the tower is generated from the two constant words `1` and the
+time parity by the recursion, and the center is the anti-diagonal `center t = towerWord t t`. The
+anti-diagonal form of a period, `Right.CenterPer`, becomes a registered reduction: **Problem 1 ⟺
+the anti-diagonal of the tower is not eventually periodic** (`problem1_iff_antidiagonal`). This is
+the formulation with no free input at all: two constant words, one local recursion, one diagonal
+read; the bands and rulers of the earlier reductions are the first words of the tower read on the
+anti-diagonal, and the frozen tables are the carries' shadow of the same object. The recursion is
+left-permutive in `s` and transparent through the OR-gate wherever the previous word is 0, which is
+where an expansivity or injectivity argument on the tower would have to live.
+
+*The tower integrates, and Jen's bound halves.* The recursion is a running parity:
+`towerWord (k+2) s = ⊕_{i<s} (towerWord (k+1) i ∨ towerWord k i)` (`towerWord_eq_prefix`), so
+**the center at time `t` is the parity of the OR of the diagonals `t−1` and `t−2` over the first `t`
+times** (`center_eq_prefix_or`). A word's second half is its first half XOR the weight of the
+OR-word over one period (`towerWord_half_period`, `wordWeight k`): the period halves when the weight
+is even and doubles when it is odd (`towerWord_period_halves/_doubles`, Jen's doubling law as a
+decided identity). The weight is even for `k ≤ 5` by kernel evaluation, and the measured periods of
+`rdiag j`, `2, 4, 8, 8, 16, 32, 32, 64, 64, 64, 64, 64` for `j = 2..13`, never exceed `2^{j−1}`.
+The reason is an induction the tower makes exact: if words `k+1` and `k+2` have periods dividing
+`2^k` and `2^{k+1}`, the OR-word has period `2^{k+1}`, its weight over `2^{k+2}` is the parity of two
+equal halves, hence even, and word `k+3` has period `2^{k+2}`; with words 2 and 3 of periods 2 and 4
+as the base, **every diagonal `rdiag j`, `j ≥ 2`, has period `2^{j−1}`**, half of Jen's `2^j`, and
+`wordWeight k = false` for every `k` (next iteration). The true periods are much smaller still
+(about `2^{j/2}`), which the OR structure, not the parity, controls.
+
 Problem 1 remains unproved.

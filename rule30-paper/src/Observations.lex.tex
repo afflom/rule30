@@ -4033,5 +4033,166 @@ Close the goal with \(\lexeme{r30.observation::three-rows-against-ruler}(T, P, k
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{center-eq-rdiag-self}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = rdiag(t, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-rdiag-self}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-periodic-iff-center-per}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\), \(centerperiodic(T, P) ↔ readoutperiodic(T, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-periodic-iff-center-per}(T, P)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-iff-antidiagonal}
+\allowaxioms{Quot.sound;propext}
+\(problemone ↔ antidiagonalaperiodic\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::problem1-iff-antidiagonal}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-antidiagonal}
+\allowaxioms{Quot.sound;propext}
+if \(antidiagonalaperiodic\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-antidiagonal}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag-eq-tower-word}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(t\), \(rdiag(j, t) = towerword(j, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-eq-tower-word}(j, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-tower-word}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = towerword(t, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-tower-word}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-step}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(s\), \(towerword(k + 2, s + 1) = bxor(towerword(k + 2, s), towerword(k + 1, s) bor towerword(k, s))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-step}(k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-zero}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(towerword(0, s) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-zero}(s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(towerword(1, s) = timeparity(s)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-one}(s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-succ-zero}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(towerword(j + 1, 0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-succ-zero}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag-add-twopow-mul}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(q\) and natural number \(t\), \(rdiag(j, t + twopow(j) * q) = rdiag(j, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-add-twopow-mul}(j, q, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{or-word-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(s\), \(orword(k, s + twopow(k + 1)) = orword(k, s)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::or-word-periodic}(k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-half-period}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(s\), \(towerword(k + 2, s + twopow(k + 1)) = bxor(towerword(k + 2, s), wordweight(k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-half-period}(k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{word-weight-zero}
+\allowaxioms{Quot.sound;propext}
+\(wordweight(0) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-weight-zero}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{word-weight-one}
+\allowaxioms{Quot.sound;propext}
+\(wordweight(1) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-weight-one}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{word-weight-two}
+\allowaxioms{Quot.sound;propext}
+\(wordweight(2) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-weight-two}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{word-weight-three}
+\allowaxioms{Quot.sound;propext}
+\(wordweight(3) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-weight-three}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{word-weight-four}
+\allowaxioms{Quot.sound;propext}
+\(wordweight(4) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-weight-four}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{word-weight-five}
+\allowaxioms{Quot.sound;propext}
+\(wordweight(5) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-weight-five}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-add-twopow}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(s\), \(towerword(j, s + twopow(j)) = towerword(j, s)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-add-twopow}(j, s)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

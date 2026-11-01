@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "word-weight"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.wordWeight"
+
+[[form]]
+id = "word-weight"
+channel = "math"
+surface = "wordweight"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wordweight) (paren (seq (slot 0))))"

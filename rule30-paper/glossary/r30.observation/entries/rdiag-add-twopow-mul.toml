@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-add-twopow-mul"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit q (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (local j) (app (const lexlean.std.nat::add) (local t) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local j)) (local q)))) (app (const r30.right::rdiag) (local j) (local t))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.rdiag_add_twopow_mul"
+
+[[form]]
+id = "rdiag-add-twopow-mul"
+channel = "math"
+surface = "rdiagaddtwopowmul"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagaddtwopowmul) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

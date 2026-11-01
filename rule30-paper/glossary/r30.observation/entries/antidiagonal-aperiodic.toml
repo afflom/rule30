@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "antidiagonal-aperiodic"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.AntidiagonalAperiodic"
+
+[[form]]
+id = "antidiagonal-aperiodic"
+channel = "math"
+surface = "antidiagonalaperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name antidiagonalaperiodic)"

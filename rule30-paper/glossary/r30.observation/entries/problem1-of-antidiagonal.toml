@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-of-antidiagonal"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.observation::antidiagonal-aperiodic))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.problem1_of_antidiagonal"
+
+[[form]]
+id = "problem1-of-antidiagonal"
+channel = "math"
+surface = "problem1ofantidiagonal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problem1ofantidiagonal) (paren (seq (slot 0))))"

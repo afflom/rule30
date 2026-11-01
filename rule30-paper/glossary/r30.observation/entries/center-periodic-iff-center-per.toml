@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-periodic-iff-center-per"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const r30.scale::center-periodic) (local T) (local P)) (app (const r30.right::center-per) (local T) (local P))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.centerPeriodic_iff_centerPer"
+
+[[form]]
+id = "center-periodic-iff-center-per"
+channel = "math"
+surface = "centerperiodiciffcenterper"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centerperiodiciffcenterper) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

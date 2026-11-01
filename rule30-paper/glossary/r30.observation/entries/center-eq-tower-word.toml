@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-tower-word"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const r30.observation::tower-word) (local t) (local t))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.center_eq_towerWord"
+
+[[form]]
+id = "center-eq-tower-word"
+channel = "math"
+surface = "centereqtowerword"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqtowerword) (paren (seq (slot 0))))"

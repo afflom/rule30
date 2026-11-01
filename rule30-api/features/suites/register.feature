@@ -271,3 +271,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.ClassObligation.secondPrefix_three for second-table
     When the suite exercises second-table
     Then its oracle accepts it: frontier check: Rule30UOR.ClassObligation.secondPrefix_three kernel-checked under propext and Quot.sound and published
+
+  @antidiagonal @build
+  Scenario: The right half-plane is a tower of words: every right diagonal rdiag j is exactly 2^j-periodic from time 0 (Right.rdiag_periodic), so it is a word towerWord j of length 2^j; the tower is generated from the two constant words (true, and the time parity) by the permutive recursion read from the right edge, towerWord (k+2) (s+1) = towerWord (k+2) s XOR (towerWord (k+1) s OR towerWord k s); and the center is its anti-diagonal, center t = towerWord t t. Problem 1 iff AntidiagonalAperiodic: the anti-diagonal of the tower is not eventually periodic. The formulation with no free input: two constant words, one local recursion, one diagonal read.
+    Given frontier.toml names Rule30UOR.Antidiagonal.problem1_iff_antidiagonal for antidiagonal
+    When the suite exercises antidiagonal
+    Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.problem1_iff_antidiagonal kernel-checked under propext and Quot.sound and published

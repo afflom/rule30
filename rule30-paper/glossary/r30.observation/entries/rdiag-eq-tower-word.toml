@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-eq-tower-word"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (local j) (local t)) (app (const r30.observation::tower-word) (local j) (local t))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.rdiag_eq_towerWord"
+
+[[form]]
+id = "rdiag-eq-tower-word"
+channel = "math"
+surface = "rdiageqtowerword"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiageqtowerword) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

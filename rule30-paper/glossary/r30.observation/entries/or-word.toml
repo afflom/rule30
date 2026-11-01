@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "or-word"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.orWord"
+
+[[form]]
+id = "or-word"
+channel = "math"
+surface = "orword"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name orword) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

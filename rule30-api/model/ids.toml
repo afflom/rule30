@@ -271,6 +271,12 @@ suite = "register"
 statement = "The frozen rows' second table is exact on the first four residues: second k 2 m = false for every row, and second k 3 m = pairRow m (the rows carrying the diagonal-2 pair, m odd and m >= 3), so secondPrefix k 2 = false and secondPrefix k 3 = true for every k >= 2. With secondPrefix k 0 = secondPrefix k 1 = false, the late tail of the kernel law is P-periodic in u on residues 0, 1, 2 and carries the ruler difference on residue 3, at every scale; and the residue-1 late tail at the first index is the single bit center (2^k) AND cell (2^k) 1."
 
 [[id]]
+id = "antidiagonal"
+level = "build"
+suite = "register"
+statement = "The right half-plane is a tower of words: every right diagonal rdiag j is exactly 2^j-periodic from time 0 (Right.rdiag_periodic), so it is a word towerWord j of length 2^j; the tower is generated from the two constant words (true, and the time parity) by the permutive recursion read from the right edge, towerWord (k+2) (s+1) = towerWord (k+2) s XOR (towerWord (k+1) s OR towerWord k s); and the center is its anti-diagonal, center t = towerWord t t. Problem 1 iff AntidiagonalAperiodic: the anti-diagonal of the tower is not eventually periodic. The formulation with no free input: two constant words, one local recursion, one diagonal read."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

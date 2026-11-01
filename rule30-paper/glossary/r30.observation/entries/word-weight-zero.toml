@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "word-weight-zero"
+category = "proof-constant"
+signature = "(app (const lexlean.core::eq) (app (const r30.observation::word-weight) (nat 0)) (const lexlean.std.bool::false))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.wordWeight_zero"
+
+[[form]]
+id = "word-weight-zero"
+channel = "math"
+surface = "wordweightzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name wordweightzero)"

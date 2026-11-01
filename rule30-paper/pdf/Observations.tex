@@ -3525,4 +3525,145 @@ For every natural number \(T\) and natural number \(P\) and natural number \(k\)
 \begin{proof}
 The goal follows from \(\operatorname{threerowsagainstruler}(T, P, k)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-rdiag-self}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{rdiag}(t, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqrdiagself}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-periodic-iff-center-per}
+For every natural number \(T\) and natural number \(P\), \(\operatorname{centerperiodic}(T, P)\) if and only if \(\operatorname{readoutperiodic}(T, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerperiodiciffcenterper}(T, P)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-iff-antidiagonal}
+\(\operatorname{problemone}\) if and only if \(\operatorname{antidiagonalaperiodic}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{problem1iffantidiagonal}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-antidiagonal}
+If \(\operatorname{antidiagonalaperiodic}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofantidiagonal}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag-eq-tower-word}
+For every natural number \(j\) and natural number \(t\), \(\operatorname{rdiag}(j, t) = \operatorname{towerword}(j, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiageqtowerword}(j, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-tower-word}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{towerword}(t, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqtowerword}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-step}
+For every natural number \(k\) and natural number \(s\), \(\operatorname{towerword}(k + 2, s + 1) = \operatorname{bxor}(\operatorname{towerword}(k + 2, s), \operatorname{towerword}(k + 1, s) \operatorname{or} \operatorname{towerword}(k, s))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordstep}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-zero}
+For every natural number \(s\), \(\operatorname{towerword}(0, s) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordzero}(s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-one}
+For every natural number \(s\), \(\operatorname{towerword}(1, s) = \operatorname{timeparity}(s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordone}(s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-succ-zero}
+For every natural number \(j\), \(\operatorname{towerword}(j + 1, 0) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordsucczero}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag-add-twopow-mul}
+For every natural number \(j\) and natural number \(q\) and natural number \(t\), \(\operatorname{rdiag}(j, t + \operatorname{twopow}(j) \cdot q) = \operatorname{rdiag}(j, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiagaddtwopowmul}(j, q, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:or-word-periodic}
+For every natural number \(k\) and natural number \(s\), \(\operatorname{orword}(k, s + \operatorname{twopow}(k + 1)) = \operatorname{orword}(k, s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{orwordperiodic}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-half-period}
+For every natural number \(k\) and natural number \(s\), \(\operatorname{towerword}(k + 2, s + \operatorname{twopow}(k + 1)) = \operatorname{bxor}(\operatorname{towerword}(k + 2, s), \operatorname{wordweight}(k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordhalfperiod}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-weight-zero}
+\(\operatorname{wordweight}(0) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordweightzero}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-weight-one}
+\(\operatorname{wordweight}(1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordweightone}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-weight-two}
+\(\operatorname{wordweight}(2) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordweighttwo}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-weight-three}
+\(\operatorname{wordweight}(3) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordweightthree}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-weight-four}
+\(\operatorname{wordweight}(4) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordweightfour}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-weight-five}
+\(\operatorname{wordweight}(5) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordweightfive}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-add-twopow}
+For every natural number \(j\) and natural number \(s\), \(\operatorname{towerword}(j, s + \operatorname{twopow}(j)) = \operatorname{towerword}(j, s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordaddtwopow}(j, s)\).
+\end{proof}
 \end{document}
