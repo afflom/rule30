@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "white-defect-in-window"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ResidueJen"
+name = "Rule30UOR.ResidueJen.WhiteDefectInWindow"
+
+[[form]]
+id = "white-defect-in-window"
+channel = "math"
+surface = "whitedefectinwindow"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name whitedefectinwindow)"

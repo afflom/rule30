@@ -64,7 +64,8 @@ def _and(a, b):
 
 
 def rows():
-    return [{"id": c["id"], "status": c["status"], "lean": c.get("lean") or "", "depends": c.get("depends", [])}
+    return [{"id": c["id"], "status": c["status"], "lean": c.get("lean") or "", "depends": c.get("depends", []),
+             "relation": c.get("relation", []), "kappa": c.get("kappa") or ""}
             for c in frontier.load()["claim"]]
 
 
@@ -73,12 +74,16 @@ def declarations(claims):
     rec = lambda c: {"kind": "record", "type": {"name": "Claim"}, "fields": [
         {"field": "id", "value": _s(c["id"])}, {"field": "status", "value": _s(c["status"])},
         {"field": "lean", "value": _s(c["lean"])},
-        {"field": "depends", "value": _list([_s(d) for d in c["depends"]], STR)}]}
+        {"field": "depends", "value": _list([_s(d) for d in c["depends"]], STR)},
+        {"field": "relation", "value": _list([_s(d) for d in c.get("relation", [])], STR)},
+        {"field": "kappa", "value": _s(c.get("kappa", ""))}]}
     proj = lambda v, f: {"kind": "project", "value": v, "field": f}
+    length = lambda x: {"kind": "primitive", "operation": "length", "result": {"kind": "nat"}, "arguments": [x]}
     return [
         {"kind": "structure", "name": "Claim", "parameters": [], "type_parameters": [], "fields": [
             {"name": "id", "type": STR}, {"name": "status", "type": STR}, {"name": "lean", "type": STR},
-            {"name": "depends", "type": _list_t(STR)}]},
+            {"name": "depends", "type": _list_t(STR)}, {"name": "relation", "type": _list_t(STR)},
+            {"name": "kappa", "type": STR}]},
         {"kind": "definition", "name": "claims", "parameters": [], "result": _list_t(claim_t), "axioms": [],
          "body": _list([rec(c) for c in claims], claim_t)},
         {"kind": "definition", "name": "memberString", "axioms": [], "result": BOOL, "recursive_argument": "values",
@@ -104,6 +109,20 @@ def declarations(claims):
                              _and(_if(_eq(proj(_var("head"), "status"), _s("proved")),
                                       _if(_eq(proj(_var("head"), "lean"), _s("")), _b(False), _b(True)), _b(True)),
                                   _call("provedHaveLean", _var("tail"))))},
+        # an observed claim (a relation certified on a window by `bin/r30
+        # discover`) carries its relation and its κ-label; Discovery.lex.tex
+        # decides that every relation of the register vanishes on its window
+        {"kind": "definition", "name": "observedHaveRelations", "axioms": [], "result": BOOL, "recursive_argument": "cs",
+         "parameters": [{"name": "cs", "type": _list_t(claim_t)}],
+         "body": _match_list(_var("cs"), _b(True), "head", "tail",
+                             _and(_if(_eq(proj(_var("head"), "status"), _s("observed")),
+                                      _if({"kind": "beq", "left": length(proj(_var("head"), "relation")), "right": {"kind": "nat", "value": 0}},
+                                          _b(False), _if(_eq(proj(_var("head"), "kappa"), _s("")), _b(False), _b(True))),
+                                      _b(True)),
+                                  _call("observedHaveRelations", _var("tail"))))},
+        {"kind": "theorem", "name": "registerObservedHaveRelations", "parameters": [], "axioms": [],
+         "statement": {"kind": "eq", "left": _call("observedHaveRelations", _call("claims")), "right": _b(True)},
+         "proof": {"kind": "decide"}},
         {"kind": "theorem", "name": "registerDependsResolve", "parameters": [], "axioms": [],
          "statement": {"kind": "eq", "left": _call("dependsResolve", _call("claims"), _call("idsOf", _call("claims"))),
                        "right": _b(True)}, "proof": {"kind": "decide"}},

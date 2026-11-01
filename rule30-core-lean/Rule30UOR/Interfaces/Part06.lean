@@ -66,7 +66,7 @@ theorem rhCenter_scale_step_le (t k p : Nat) (hp : p ≤ t) :
         rw [d2, Bool.false_and, rhCenter_gt_eq_false t (p + twopow (k + 1)) (by omega)]
     rw [h0, h1, h2]
   rw [hsc, hphi]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
 
 /-- **Unrestricted `2^k`-Scale Inward Step of `rhCenter` (`rhCenter_scale_inward_step_le`)**:
     for ALL `p ≤ t` (right up to the right edge `p = t`), `rhCenter t p` is determined by `rhCenter (t + 2^k) (p + 2^k)`, `rhCenter t (p + 2^k)`, `rhCenter t (p + 2^(k+1))`, and `(winWitt t (2^k)).testBit (t - p)`. -/
@@ -77,7 +77,7 @@ theorem rhCenter_scale_inward_step_le (t k p : Nat) (hp : p ≤ t) :
           (rhCenter t (p + twopow (k + 1))))
         ((winWitt t (twopow k)).testBit (t - p)) := by
   rw [rhCenter_scale_step_le t k p hp]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter t p <;>
     cases rhCenter t (p + twopow k) <;>
     cases rhCenter t (p + twopow (k + 1)) <;>
@@ -158,7 +158,7 @@ theorem winWittAgree_of_rhBandAgree_scale_le (t k Q p0 L : Nat)
     show (t - (p0 + L)) + j = t - (p0 + (L - j)) by omega]
   rw [hbl, hb0, hb1, hb2] at hsQ
   revert hsQ hs0
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter (t + twopow k) ((p0 + twopow k) + (L - j)) <;>
     cases rhCenter t (p0 + (L - j)) <;>
     cases rhCenter t ((p0 + twopow k) + (L - j)) <;>
@@ -220,7 +220,7 @@ theorem rhBandAgree_scale_inward_steps (t k Q p0 L M : Nat)
 theorem rhCenter_inward_of_black_left (t p : Nat)
     (hb : rhCenter t (p + 1) = true) :
     rhCenter t p = !rhCenter (t + 1) (p + 1) := by
-  rw [rhCenter_inward_step t p, hb, Bool.true_or, bxor_eq_xor]
+  rw [rhCenter_inward_step t p, hb, Bool.true_or, Rule30UOR.Scale.bxor_eq]
   cases rhCenter (t + 1) (p + 1) <;> rfl
 
 /-- **Black-Right Masking in `rhCenter` Inward Step (`rhCenter_inward_of_black_right`)**:
@@ -228,7 +228,7 @@ theorem rhCenter_inward_of_black_left (t p : Nat)
 theorem rhCenter_inward_of_black_right (t p : Nat)
     (hb : rhCenter t (p + 2) = true) :
     rhCenter t p = !rhCenter (t + 1) (p + 1) := by
-  rw [rhCenter_inward_step t p, hb, Bool.or_true, bxor_eq_xor]
+  rw [rhCenter_inward_step t p, hb, Bool.or_true, Rule30UOR.Scale.bxor_eq]
   cases rhCenter (t + 1) (p + 1) <;> rfl
 
 /-- **Inward `Q`-Agreement Across a Black Column (`rhCenter_agree_of_black_left`)**:
@@ -251,7 +251,7 @@ theorem rhCenter_white_pair_of_diag_eq (t p : Nat)
   have hs := rhCenter_step_succ t p
   rw [heq] at hs
   revert hs
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter t p <;>
     cases rhCenter t (p + 1) <;>
     cases rhCenter t (p + 2) <;> decide
@@ -262,7 +262,7 @@ theorem rhCenter_diag_eq_of_white_pair (t p : Nat)
     (hw1 : rhCenter t (p + 1) = false)
     (hw2 : rhCenter t (p + 2) = false) :
     rhCenter (t + 1) (p + 1) = rhCenter t p := by
-  rw [rhCenter_step_succ t p, hw1, hw2, Bool.false_or, bxor_eq_xor, Bool.xor_false]
+  rw [rhCenter_step_succ t p, hw1, hw2, Bool.false_or, Rule30UOR.Scale.bxor_eq, Bool.xor_false]
 
 /-- **Right-Threshold Diagonal Shift Law in `rhCenter` (`rhCenter_diag_shift_twopow_eq_of_threshold`)**:
     for `IsRightThreshold k J` and `s ≤ J` (up to the full 2-adic threshold `J` of scale `k`), shifting both time and column by any multiple `u * 2^k` preserves `rhCenter`:
@@ -362,7 +362,7 @@ theorem rhCenter_scale_inward_step_uncond (t k p : Nat) :
           (rhCenter t (p + twopow (k + 1))))
         ((winWitt t (twopow k)).testBit (t - p)) := by
   rw [rhCenter_scale_step_uncond t k p]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter t p <;>
     cases rhCenter t (p + twopow k) <;>
     cases rhCenter t (p + twopow (k + 1)) <;>
@@ -896,7 +896,7 @@ theorem lhCenter_scale_step_uncond (t k p : Nat) :
       cases lhCenter t (p + twopow k) <;>
       cases lhCenter t (p + twopow (k + 1)) <;> rfl
   rw [hsc, hphi]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
 
 theorem lhCenter_scale_step_uncond_prop (t k p : Nat) :
     lhCenter (t + twopow k) (p + twopow k) =
@@ -915,7 +915,7 @@ theorem lhCenter_scale_outward_step_uncond (t k p : Nat) :
           (lhCenter t (p + twopow k)))
         ((winWitt t (twopow k)).testBit (t + p + twopow (k + 1))) := by
   rw [lhCenter_scale_step_uncond t k p]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter t p <;>
     cases lhCenter t (p + twopow k) <;>
     cases lhCenter t (p + twopow (k + 1)) <;>
@@ -975,7 +975,7 @@ theorem lhCenter_scale_cross_step (t k r : Nat) (hr : r ≤ twopow k) :
       cases lhCenter t (twopow k - r) <;>
       cases lhCenter t (twopow (k + 1) - r) <;> rfl
   rw [hsc, hphi]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
 
 theorem lhCenter_scale_cross_step_prop (t k r : Nat) (hr : r ≤ twopow k) :
     lhCenter (t + twopow k) (twopow k - r) =
@@ -994,7 +994,7 @@ theorem rhCenter_eq_lhCenter_scale_cross (t k r : Nat) (hr : r ≤ twopow k) :
           (lhCenter t (twopow (k + 1) - r)))
         ((winWitt t (twopow k)).testBit ((t + twopow (k + 1)) - r)) := by
   rw [lhCenter_scale_cross_step t k r hr]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter t r <;>
     cases lhCenter t (twopow k - r) <;>
     cases lhCenter t (twopow (k + 1) - r) <;>
@@ -1062,7 +1062,7 @@ theorem winWittAgree_of_rhBandAgree_lhBandAgree_scale_cross (t k Q L : Nat)
     show ((t + twopow (k + 1)) - L) + j = (t + twopow (k + 1)) - (L - j) by omega]
   rw [hbr, hbl, hb1, hb2] at hsQ
   revert hsQ hs0
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter t (L - j) <;>
     cases lhCenter (t + twopow k) (twopow k - (L - j)) <;>
     cases lhCenter t (twopow k - (L - j)) <;>
@@ -1429,7 +1429,7 @@ theorem lhCenter_scale_inward_step_uncond (t k p : Nat) :
           (lhCenter t (p + twopow (k + 1))))
         ((winWitt t (twopow k)).testBit (t + p + twopow (k + 1))) := by
   rw [lhCenter_scale_step_uncond t k p]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter t p <;>
     cases lhCenter t (p + twopow k) <;>
     cases lhCenter t (p + twopow (k + 1)) <;>
@@ -1485,10 +1485,6 @@ theorem rdiag_add_eq_lhCenter_uncond (t p : Nat) :
     rdiag (t + p) t = lhCenter t p := by
   rw [lhCenter_eq_row_testBit_uncond t p, row_testBit t (t + p)]
 
-theorem rdiag_add_eq_lhCenter_uncond_prop (t p : Nat) :
-    rdiag (t + p) t = lhCenter t p :=
-  rdiag_add_eq_lhCenter_uncond t p
-
 /-- **Unconditional `2^k`-Scale Readout of `winWitt` in `lhCenter` Coordinates (`winWitt_testBit_eq_lhCenter_scale_uncond`)**:
     for ALL `t, k, p : Nat`, solving `lhCenter_scale_step_uncond` for `(winWitt t (2^k)).testBit (t + p + 2^(k+1))` expresses it as the 4-term XOR of `lhCenter (t + 2^k) (p + 2^k)`, `lhCenter t p`, `lhCenter t (p + 2^k)`, and `lhCenter t (p + 2^(k+1))`! -/
 theorem winWitt_testBit_eq_lhCenter_scale_uncond (t k p : Nat) :
@@ -1498,7 +1494,7 @@ theorem winWitt_testBit_eq_lhCenter_scale_uncond (t k p : Nat) :
           (lhCenter t (p + twopow k)))
         (lhCenter t (p + twopow (k + 1))) := by
   rw [lhCenter_scale_step_uncond t k p]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter t p <;>
     cases lhCenter t (p + twopow k) <;>
     cases lhCenter t (p + twopow (k + 1)) <;>
@@ -1545,7 +1541,7 @@ theorem lhCenter_scale_mid_step_uncond (t k p : Nat) :
           (lhCenter t (p + twopow (k + 1))))
         ((winWitt t (twopow k)).testBit (t + p + twopow (k + 1))) := by
   rw [lhCenter_scale_step_uncond t k p]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter t p <;>
     cases lhCenter t (p + twopow k) <;>
     cases lhCenter t (p + twopow (k + 1)) <;>
@@ -1879,7 +1875,7 @@ theorem winWittAgree_step_outer_left_strip (t k Q p0 L : Nat)
         ((t + Q) + (p0 + i) + twopow (k + 1)) + 2 by omega,
       hp0,
       show ((t + Q) + (p0 + i) + twopow (k + 1)) + 1 = (t + Q) + ((p0 + i) + 1) + twopow (k + 1) by omega,
-      bxor_eq_xor]
+      Rule30UOR.Scale.bxor_eq]
   have hphi0 : (phi (winWitt t (twopow k))).testBit ((t + 1) + ((p0 + i) + 1) + twopow (k + 1)) =
       bxor ((winWitt t (twopow k)).testBit ((t + (p0 + i) + twopow (k + 1)) + 2))
         ((winWitt t (twopow k)).testBit (t + ((p0 + i) + 1) + twopow (k + 1)) ||
@@ -1889,7 +1885,7 @@ theorem winWittAgree_step_outer_left_strip (t k Q p0 L : Nat)
         (t + (p0 + i) + twopow (k + 1)) + 2 by omega,
       hp0,
       show (t + (p0 + i) + twopow (k + 1)) + 1 = t + ((p0 + i) + 1) + twopow (k + 1) by omega,
-      bxor_eq_xor]
+      Rule30UOR.Scale.bxor_eq]
   rw [show (t + 1) + Q = (t + Q) + 1 by omega,
     show ((t + 1) + (p0 + 1) + twopow (k + 1)) + i + Q =
       ((t + Q) + 1) + ((p0 + i) + 1) + twopow (k + 1) by omega,
@@ -1941,7 +1937,7 @@ theorem winWitt_outward_step_outer_left_strip (t k p : Nat)
     show (t + p + twopow (k + 1)) + 2 = t + (p + 2) + twopow (k + 1) by omega,
     show (t + p + twopow (k + 1)) + 1 = t + (p + 1) + twopow (k + 1) by omega] at hs
   rw [show (t + 1) + (p + 1) + twopow (k + 1) = t + (p + 2) + twopow (k + 1) by omega, hs]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit (t + (p + 2) + twopow (k + 1)) <;>
     cases ((winWitt t (twopow k)).testBit (t + (p + 1) + twopow (k + 1)) ||
       (winWitt t (twopow k)).testBit (t + p + twopow (k + 1))) <;>
@@ -2369,7 +2365,7 @@ theorem winWitt_step_lhCenter_defect_uncond (t k p : Nat) :
     lhCenter_step_succ t p,
     lhCenter_step_succ t (p + twopow k),
     lhCenter_step_succ t (p + twopow (k + 1))]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + twopow k) ((p + twopow k) + 2) <;>
     cases (lhCenter (t + twopow k) ((p + twopow k) + 1) || lhCenter (t + twopow k) (p + twopow k)) <;>
     cases lhCenter t (p + 2) <;>
@@ -2474,7 +2470,7 @@ theorem winWittAgree_outward_of_lhBandAgree_scale_uncond (t k Q p0 L : Nat)
     show (t + (p0 + 2) + twopow (k + 1)) + i =
       t + ((p0 + i) + 2) + twopow (k + 1) by omega]
   revert hwn
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt (t + Q) (twopow k)).testBit ((t + Q) + ((p0 + i) + 2) + twopow (k + 1)) <;>
     cases (winWitt t (twopow k)).testBit (t + ((p0 + i) + 2) + twopow (k + 1)) <;>
     cases ((((lhCenter (t + twopow k) (((p0 + i) + 1) + twopow k) ||

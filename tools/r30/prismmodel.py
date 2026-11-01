@@ -55,7 +55,8 @@ SCHEMAS = API / "schemas"
 FEATURES = API / "features" / "suites"
 CONFORMANCE = API / "CONFORMANCE.md"
 
-LEVEL = {"proved": "build", "open": "open", "refuted": "some-true", "retired": "some-true"}
+# An observed relation is measured on a window and reported, never asserted.
+LEVEL = {"proved": "build", "open": "open", "refuted": "some-true", "retired": "some-true", "observed": "open"}
 
 AUTHORITIES = [
     {"id": "RULE30-PRIZE", "name": "Wolfram Rule 30 Prize, Problem 1",
@@ -65,7 +66,7 @@ AUTHORITIES = [
     {"id": "LEXLEAN", "name": "UOR-Foundation/LexLean",
      "citation": "https://github.com/UOR-Foundation/LexLean",
      "statement": "A closed-lexicon LaTeX-to-Lean 4 compiler; the paper, the register and the API are its modules.",
-     "realized_by": lambda claims: ["api-modules", "verified-core"]},
+     "realized_by": lambda claims: ["api-modules", "verified-core", "relation-search", "recurrence-search"]},
     {"id": "PRISMPM", "name": "UOR-Foundation/PrismPM",
      "citation": "https://github.com/UOR-Foundation/PrismPM",
      "statement": "Model registers (authorities, ids, ledger, commands, standards, projection, contracts, errors, dependencies, runtime-roots, stdlib-package) and the generated runtime of LexLean application models.",
@@ -101,6 +102,42 @@ API_IDS = [
     {"id": "standards-register", "level": "build", "suite": "api",
      "statement": "Standards.lex.tex names every external standard the implementation realizes (architecture, quality, accessibility, markup, graphics, metadata, provenance, schemas, API description, citation, licensing, canonical forms, attestations, the toolchains) with its authority, version, scope, realizers and check; the kernel decides that the ids are distinct, every standard has an authority and a realizer, every realizer is declared, every panel, artifact, journey, command, navigation and visualization id names a standard, and the toolchain rows carry the pinned versions; view render writes the artifacts the standards call for (openapi.json, sitemap.xml, provenance.jsonld, schema.json, attestations.intoto.json, standards.json, CITATION.cff).",
      "feature": "rule30-api/src/Standards.lex.tex", "evidence": "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check; scripts/tests/test_r30.py"},
+    # induction mechanized (Sequences.lex.tex, Discovery.lex.tex, bin/r30 sequences|discover, the observed status)
+    {"id": "discovery-basis", "level": "build", "suite": "discovery",
+     "statement": "Sequences.lex.tex declares the basis of the map: 79 sequences of the paper's notions (the constant, the time and trailing parities, the ruler background, the center, the cells at positions -8..8, the right and left diagonals and the tower words j <= 12, the exposed masks k <= 8, the masked column, the two cones and the seven ledger diagonals), each with its lexeme, Lean constant, parameters and κ-label (sequence <lexeme> <parameters>), and its window for t < 512 evaluated from the host Lean definitions by bin/r30 sequences --write in one Lean file that proves every evaluation form equal to its host constant; the kernel decides that the ids and the κ-labels are distinct and that every window has 16 words below 2^32, and api check refuses data that is not the basis or whose labels are not the labels of its entries. dyadicRow, blockParity and wittRespBool are excluded, with the reason recorded.",
+     "feature": "rule30-api/src/Sequences.lex.tex", "evidence": "bin/r30 sequences --write; bin/r30 api check; lexlean verify rule30-api; scripts/tests/test_r30.py DiscoveryTests"},
+    {"id": "relation-search", "level": "build", "suite": "discovery",
+     "statement": "Discovery.lex.tex declares the contract RelationSearch (input a window of chunked Nat bit-vectors, output masks over the sequences; precondition IsWindow, postcondition AllRelationsHold, each with an executable validator and a soundness theorem), the realization RelationEngine (Gaussian elimination over F2 with a mask per pivot), the model RelationSearchModel, the transforms of the extended basis (shift, even and odd dilations, AND) as data, and the kernel decides on 64 times of the real data that the engine finds the edge parity, the left light cone, the cone identity cone-zero = cell(-1) and the increment law in the basis, and that its output passes the postcondition.",
+     "feature": "rule30-api/src/Discovery.lex.tex", "evidence": "lexlean verify rule30-api; bin/r30 api check; scripts/tests/test_r30.py DiscoveryTests"},
+    {"id": "recurrence-search", "level": "build", "suite": "discovery",
+     "statement": "Discovery.lex.tex declares the contract RecurrenceSearch (input one window as bits, output a connection polynomial with leading 1; precondition IsSequenceWindow, postcondition SatisfiesRecurrence: the recurrence holds for every L <= t < N), the realization RecurrenceEngine (Berlekamp-Massey over F2) and the model RecurrenceSearchModel; the certificate is the recurrence on the window, not its minimality; the kernel decides s(t) = s(t-2) for the time parity and the tower word 2 and s(t) = s(t-3) for the period-3 word 100.",
+     "feature": "rule30-api/src/Discovery.lex.tex", "evidence": "lexlean verify rule30-api; bin/r30 api check; scripts/tests/test_r30.py DiscoveryTests"},
+    {"id": "discovery-roots", "level": "build", "suite": "discovery",
+     "statement": "The production roots buildColumns, findRelations and findRecurrence of Discovery.lex.tex are executable, admit the allocation, overflow and recursion effects on rust-std, and apply their models through checked_apply with both the precondition and the postcondition checked at run time, so every output is accepted by a validator the kernel proved sound; they are requested beside the roots of Api and Rule30Core in production/request.json and runtime-roots.toml.",
+     "feature": "rule30-api/production/request.json", "evidence": "bin/r30 api production; bin/r30 api check; scripts/tests/test_r30.py DiscoveryTests"},
+    {"id": "discover-command", "level": "build", "suite": "discovery",
+     "statement": "bin/r30 discover [--window W] [--degree 1|2] [--write] runs the engines on the basis (the certified Rust of the roots when they are built and cargo runs them, otherwise the Python mirror re-checked by the mirror of the validators, and says which), reports every relation with its columns, κ-label (relation <sorted column labels>), class (register, trivial, consequence, new) and certificate (the rank before its dependent column), and the recurrence of every base window; --write appends the new relations to the register as status observed.",
+     "feature": "tools/r30/discover.py", "evidence": "scripts/tests/test_r30.py DiscoveryTests; bin/r30 discover --window 256 --degree 2"},
+    {"id": "observed-status", "level": "build", "suite": "discovery",
+     "statement": "The register has the status observed: a relation certified on a window (relation, window, κ-label), re-validated by frontier check against the committed windows and refused when it does not vanish; Register.lex.tex carries every claim's relation and κ-label and decides that every observed claim has both; Discovery.lex.tex decides that every relation of the register vanishes on its window; the Observer counts an observed claim as neither a real quality nor withdrawn, and the site renders its mark.",
+     "feature": "frontier.toml", "evidence": "bin/r30 frontier check; scripts/tests/test_r30.py DiscoveryTests"},
+    {"id": "discovery-candidates", "level": "open", "suite": "discovery",
+     "statement": "The relations and recurrences bin/r30 discover --window 256 --degree 2 finds on the committed basis beyond the register are candidates for deduction: measured on the window and reported, never asserted.",
+     "feature": "tools/r30/discover.py", "evidence": "bin/r30 discover --window 256 --degree 2"},
+]
+
+# The pruning of the register's routes: the audit of the conditional
+# refutations (auditmodel) and the induce phase of the saved round workflow.
+# Each id has its scenario and a test whose name ends in the id.
+API_IDS += [
+    {"id": "conditional-audit", "level": "build", "suite": "register",
+     "statement": "bin/r30 audit reads, in one Lean introspection of the research library, every theorem concluding not CenterPeriodic T P, Problem1 or not CenterPer T P (or False under a CenterPeriodic hypothesis), identifies each hypothesis beyond the period and the arithmetic side conditions by its head, and classifies the conditional refutation dead (a hypothesis refuted under a period by a named theorem), live-discharged (every hypothesis discharged and the composition kernel-checked in Lean) or open (the hypotheses neither refuted nor discharged); --write records it in model/audit.toml and Audit.lex.tex, whose kernel-decided theorems are that every dead entry names a refuting theorem, the statuses are declared, the theorem names are distinct, and the count of each status; claim --related lists the open hypotheses of the conditional refutations a claim concerns.",
+     "feature": "rule30-api/src/Audit.lex.tex",
+     "evidence": "bin/r30 audit; bin/r30 verify api --modules src/Audit.lex.tex; scripts/tests/test_audit.py AuditTests.test_classification_of_recorded_statements_conditional_audit"},
+    {"id": "induce-phase", "level": "build", "suite": "register",
+     "statement": "The saved round workflow .claude/workflows/rule30-round.js opens with an Induce phase before Propose: one agent runs bin/r30 discover --window 256 --degree 2 --json and bin/r30 audit --json (a missing command is reported and contributes nothing) and returns the observed relations not in the register and the open audit obligations, which every lens receives as context and which enter Refute and Mechanize as proposals of their own (an observed relation is a candidate theorem for all t whose window certificate is already decided); the view publishes the workflow.",
+     "feature": ".claude/workflows/rule30-round.js",
+     "evidence": "scripts/tests/test_audit.py RoundWorkflowTests.test_the_round_opens_with_the_induce_phase_induce_phase"},
 ]
 
 # What each command mutates (`never` when it only reads). A leaf of the
@@ -110,8 +147,9 @@ MUTATES = {
     "define": "paper-modules-and-glossary", "frontier_add": "register", "frontier_set": "register", "frontier_render": "paper-modules",
     "module_add": "lean-workspace", "module_build": "lake-build", "commit": "repository", "verify": "lexlean-build",
     "check": "lexlean-build", "interface": "interface-sheets", "view_render": "view-directory", "experiment_run": "never",
-    "api_production": "lexlean-build",
+    "api_production": "lexlean-build", "sequences": "sequences-data", "discover": "register",
 }
+MUTATES["audit"] = "audit-register-and-module"  # --write: model/audit.toml and src/Audit.lex.tex
 
 # Commands whose result is a published contract rather than a result schema
 # of its own: `frontier list` prints the register, `interface` the sheet.
@@ -175,8 +213,11 @@ CONTRACTS = [
     {"schema": f"r30/{name}/1", "path": f"schemas/{name}.schema.json", "media_type": f"application/vnd.r30.{name}.v1+json",
      "identity": "sha256-canonical-json", "maximum_bytes": 1048576, "maximum_items": 4096, "extension_policy": "closed",
      "compatibility": "exact-major", "produced_by": name[:-len("-result")].replace("-", "_"), "artifact": "--json"}
-    for name in ("status-result", "brief-result", "chain-result", "claim-result", "kappa-result", "api-check-result", "api-production-result")
+    for name in ("status-result", "brief-result", "chain-result", "claim-result", "kappa-result", "api-check-result", "api-production-result",
+                 "sequences-result", "discover-result")
 ]
+from . import auditmodel  # noqa: E402
+CONTRACTS.append(auditmodel.CONTRACT)  # the audit's --json report (auditmodel.RESULT_SCHEMA)
 
 REGISTER_SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -196,6 +237,9 @@ REGISTER_SCHEMA = {
             "since": {"type": "string"},
             "note": {"type": "string"},
             "depends": {"type": "array", "items": {"type": "string"}},
+            "relation": {"type": "array", "items": {"type": "string"}},
+            "window": {"type": "integer"},
+            "kappa": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
         },
     },
 }
@@ -421,13 +465,14 @@ def features(claims):
     for row in ids_.values():
         suites.setdefault(row["suite"], []).append(row)
     about = {"register": "The claims of frontier.toml: the kernel is the judge of every proved one.",
-             "api": "The LexLean API modules, the PrismPM model and the stakeholder view."}
+             "api": "The LexLean API modules, the PrismPM model and the stakeholder view.",
+             "discovery": "Induction mechanized: the basis of the map, the relation and recurrence engines, their certified roots, bin/r30 discover and the observed status."}
     out = {}
     for suite, rws in suites.items():
         lines = [f"Feature: {suite}", "", f"  {about[suite]}", ""]
         for r in rws:
-            source = (r["lean"] or "experiment") if suite == "register" else r["feature"]
-            if r["level"] == "build" and suite == "register":
+            source = r["feature"] if "feature" in r else (r["lean"] or "experiment")
+            if r["level"] == "build" and r.get("lean"):
                 source = f"frontier.toml names {r['lean']} for {r['id']}"
             g, w, t = (s.format(id=r["id"], source=source, evidence=r["evidence"]) for s in STEPS[r["level"]])
             lines += [f"  @{r['id']} @{r['level']}", f"  Scenario: {r['statement']}", f"    {g}", f"    {w}", f"    {t}", ""]
@@ -450,7 +495,7 @@ def conformance(claims):
              "| Authority | Citation | Realized by |", "| --- | --- | --- |"]
     for a in AUTHORITIES:
         lines.append(f"| {a['name']} | {a['citation']} | {', '.join('`' + x + '`' for x in a['realized_by'](claims))} |")
-    for suite in ("register", "api"):
+    for suite in ("register", "api", "discovery"):
         lines += ["", f"## {suite}", "", "| ID | Level | Statement | Evidence |", "| --- | --- | --- | --- |"]
         for r in ids_.values():
             if r["suite"] == suite:
@@ -480,6 +525,7 @@ def files(claims):
         CONFORMANCE: conformance(claims),
     }
     out.update(production.files())
+    out.update(auditmodel.files())
     for name in schema.RESULTS:
         out[SCHEMAS / f"{name}.schema.json"] = json.dumps(schema.document(name), indent=1) + "\n"
     for suite, text in features(claims).items():

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "word-periodic-iff-mahler"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (app (const r30.observation::word-periodic) (local j) (app (const r30.scale::twopow) (local m))) (app (const r30.observation::word-mahler-vanish) (local j) (local m))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelRoot"
+name = "Rule30UOR.KernelRoot.wordPeriodic_iff_mahler"
+
+[[form]]
+id = "word-periodic-iff-mahler"
+channel = "math"
+surface = "wordperiodiciffmahler"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wordperiodiciffmahler) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

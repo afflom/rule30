@@ -41,20 +41,10 @@ theorem lhCenter_late_shift_eq_of_winWittAgree_outer_left_strip (t k Q p a L : N
     winWitt_testBit_outer_left_strip t k p (by omega),
     hp] at hi
   revert hi
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter ((t + Q) + twopow k) (p + twopow k) <;>
     cases lhCenter (t + twopow k) (p + twopow k) <;>
     cases lhCenter t p <;> decide
-
-theorem lhCenter_late_shift_eq_of_winWittAgree_outer_left_strip_prop (t k Q p a L : Nat)
-    (hcone : (t + Q) + p < twopow k)
-    (ha : a ≤ (t + p) + twopow (k + 1))
-    (hL : (t + p) + twopow (k + 1) ≤ a + L)
-    (hp : lhCenter (t + Q) p = lhCenter t p)
-    (hw : WinWittAgree t k Q a L) :
-    lhCenter ((t + Q) + twopow k) (p + twopow k) =
-      lhCenter (t + twopow k) (p + twopow k) :=
-  lhCenter_late_shift_eq_of_winWittAgree_outer_left_strip t k Q p a L hcone ha hL hp hw
 
 /-- **Refutation of `WinWittAgree t k 2 a L` in the outer left strip across any settled zero diagonal `t - p` (9.638)**:
 for all `t, k, p, a, L ∈ ℕ` with `p ≤ t` and `(t - p) + 2 ≤ k`, if `t - p` is a zero diagonal, `settle (t - p) ≤ t + 2^k`, `settle ((t - p) + 2) ≤ (t + 2) + 2^k`, `a ≤ (t + p) + 2^(k+1) ≤ a + L`, and `lhCenter (t + 2) p = lhCenter t p`, then `¬ WinWittAgree t k 2 a L`. -/
@@ -78,7 +68,7 @@ theorem not_winWittAgree_two_outer_left_strip_of_zero_diag (t k p a L : Nat)
     show ((t + p) + twopow (k + 1)) + 2 = ((t + 2) + p) + twopow (k + 1) by omega,
     hw0, hw2, h0, h2, hcol] at hi
   revert hi
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter t p <;> decide
 
 theorem not_winWittAgree_two_outer_left_strip_of_zero_diag_prop (t k p a L : Nat)
@@ -110,7 +100,7 @@ theorem zcenter_shift_xor_eq_center_xor_of_winWittAgree_sector_two_center_slot
   rw [winWitt_testBit_sector_two_center_slot_zcenter (t + Q) k hk hsetQ,
     winWitt_testBit_sector_two_center_slot_zcenter t k (by omega) hset0,
     hi]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit (t + twopow (k + 1)) <;>
     cases Rule30UOR.Core.center (t + Q) <;>
     cases Rule30UOR.Core.center t <;> decide
@@ -142,7 +132,7 @@ theorem zcenter_shift_eq_of_winWittAgree_sector_two_center_slot
     zcenter (t + Q) = zcenter t := by
   have hx := zcenter_shift_xor_eq_center_xor_of_winWittAgree_sector_two_center_slot
     t k Q a L hk hset0 hsetQ ha hL hw
-  simp only [hc, bxor_eq_xor, Bool.xor_self] at hx
+  simp only [hc, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hx
   revert hx
   cases zcenter (t + Q) <;> cases zcenter t <;> decide
 
@@ -158,7 +148,7 @@ theorem zcenter_shift_eq_of_winWittAgree_sector_two_center_slot_prop
     ZCenterXorEq (t + Q) t false := by
   unfold ZCenterXorEq
   rw [zcenter_shift_eq_of_winWittAgree_sector_two_center_slot t k Q a L hk hset0 hsetQ ha hL hc hw,
-    bxor_eq_xor, Bool.xor_self]
+    Rule30UOR.Scale.bxor_eq, Bool.xor_self]
 
 /-- **Periodic `zcenter (t + m * P) = zcenter t` from Sector-2 center-slot `WinWittAgree` under `CenterPeriodic T P` (9.641)**:
 under `CenterPeriodic T P` (`0 < P`), for all `m, t, k, a, L ∈ ℕ` with `T ≤ t`, `t + m * P ≤ k`, `settle t ≤ t + 2^k`, `settle (t + m * P) ≤ (t + m * P) + 2^k`, and `a ≤ t + 2^(k+1) ≤ a + L`, if `WinWittAgree t k (m * P) a L` holds, then `zcenter (t + m * P) = zcenter t`. -/
@@ -189,7 +179,7 @@ theorem periodic_zcenter_shift_eq_of_winWittAgree_sector_two_center_slot_prop
   unfold ZCenterXorEq
   rw [periodic_zcenter_shift_eq_of_winWittAgree_sector_two_center_slot
     T P hP h m t k a L ht hk hset0 hsetQ ha hL hw,
-    bxor_eq_xor, Bool.xor_self]
+    Rule30UOR.Scale.bxor_eq, Bool.xor_self]
 
 /-- **Refutation of `WinWittAgree z k 2 a L` at the Sector-2 center slot `z + 2^(k+1)` of any settled zero diagonal (9.642)**:
 for all `z, k, a, L ∈ ℕ` with `z + 2 ≤ k`, if `z` is a zero diagonal, `settle z ≤ z + 2^k`, `settle (z + 2) ≤ (z + 2) + 2^k`, `a ≤ z + 2^(k+1) ≤ a + L`, and `center (z + 2) = center z`, then `¬ WinWittAgree z k 2 a L`. -/
@@ -578,14 +568,6 @@ theorem lhCenter_late_cross_step (t k r : Nat)
     show (twopow k - (r + 3)) + 2 = twopow k - (r + 1) by omega] at hstep
   exact hstep
 
-theorem lhCenter_late_cross_step_prop (t k r : Nat)
-    (hr : r + 3 ≤ twopow k) :
-    lhCenter ((t + 1) + twopow k) (twopow k - (r + 2)) =
-      bxor (lhCenter (t + twopow k) (twopow k - (r + 1)))
-        (lhCenter (t + twopow k) (twopow k - (r + 2)) ||
-          lhCenter (t + twopow k) (twopow k - (r + 3))) :=
-  lhCenter_late_cross_step t k r hr
-
 /-- **Forced two-cell OR gate `(lhCenter (t + 2^k) (2^k - (r + 2)) || lhCenter (t + 2^k) (2^k - (r + 3))) = true` from 1-step cross-center complementation (9.653)**:
 for all `t, k, r ∈ ℕ` with `r + 3 ≤ 2^k`, if `lhCenter ((t + 1) + 2^k) (2^k - (r + 2)) = !lhCenter (t + 2^k) (2^k - (r + 1))`, then `(lhCenter (t + 2^k) (2^k - (r + 2)) || lhCenter (t + 2^k) (2^k - (r + 3))) = true`. -/
 theorem lhCenter_late_cross_or_eq_true_of_step_flip (t k r : Nat)
@@ -596,18 +578,10 @@ theorem lhCenter_late_cross_or_eq_true_of_step_flip (t k r : Nat)
       lhCenter (t + twopow k) (twopow k - (r + 3))) = true := by
   rw [lhCenter_late_cross_step t k r hr] at hflip
   revert hflip
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + twopow k) (twopow k - (r + 1)) <;>
     cases (lhCenter (t + twopow k) (twopow k - (r + 2)) ||
       lhCenter (t + twopow k) (twopow k - (r + 3))) <;> decide
-
-theorem lhCenter_late_cross_or_eq_true_of_step_flip_prop (t k r : Nat)
-    (hr : r + 3 ≤ twopow k)
-    (hflip : lhCenter ((t + 1) + twopow k) (twopow k - (r + 2)) =
-      !lhCenter (t + twopow k) (twopow k - (r + 1))) :
-    (lhCenter (t + twopow k) (twopow k - (r + 2)) ||
-      lhCenter (t + twopow k) (twopow k - (r + 3))) = true :=
-  lhCenter_late_cross_or_eq_true_of_step_flip t k r hr hflip
 
 /-- **Forced two-cell `lhCenter` OR gate `Q` diagonals below `z + 2` at a doubling zero diagonal under `WinWittAgree` at `t` and `t + 1` (9.654)**:
 for all `Q, t, k, r, a, L ∈ ℕ` with `t + Q ≤ r` and `((t + Q) + r) + 2 ≤ k`, if `(t + Q) + r` is a zero diagonal where period `Q` doubles, `((t + Q) + r) + 1` and `((t + Q) + r) + 2` have settled by `t + 2^k`, `a ≤ (t + 2^(k+1)) - (r + 1) ≤ a + L`, and both `WinWittAgree t k Q a L` and `WinWittAgree (t + 1) k Q a L` hold, then `(lhCenter (t + 2^k) (2^k - (r + 2)) || lhCenter (t + 2^k) (2^k - (r + 3))) = true`. -/
@@ -1473,7 +1447,7 @@ theorem lhCenter_late_cross_step_flip_at_shift_after_zero_diag_of_single_winWitt
   have h7 := gt_twopow_of_zero_diag_le ((t + Q) + r) k hk hz
   have htrue := lhCenter_late_cross_eq_true_at_shift_after_zero_diag_and_winWittAgree_zero_gap
     Q t k r a L hr hk hz hset2 ha hL hw
-  rw [lhCenter_late_cross_step t k r (by omega), htrue, Bool.true_or, bxor_eq_xor]
+  rw [lhCenter_late_cross_step t k r (by omega), htrue, Bool.true_or, Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + twopow k) (twopow k - (r + 1)) <;> decide
 
 theorem lhCenter_late_cross_step_flip_at_shift_after_zero_diag_of_single_winWittAgree_zero_gap_prop

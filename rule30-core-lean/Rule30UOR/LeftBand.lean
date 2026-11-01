@@ -308,7 +308,7 @@ theorem interiorThreeLedger_split_eight : ∀ t, interiorThreeLedger t = leftBan
     show phiLinear (interiorThreeLedger t) ^^^ (interiorThree t <<< 1) =
       (phiLinear (leftBandLedger t) ^^^ (leftBandSource t <<< 1)) ^^^
         (phiLinear (interiorEightLedger t) ^^^ (interiorEight t <<< 1))
-    rw [ih, phiLinear_xor, interiorThree_split_eight, Nat.shiftLeft_xor_distrib]
+    rw [ih, Rule30UOR.Interfaces.phiLinear_xor, interiorThree_split_eight, Nat.shiftLeft_xor_distrib]
     simp only [Nat.xor_assoc, Nat.xor_comm, Rule30UOR.Ledger.xor_left_comm]
 
 /-- The diagonal of the left-band ledger. -/
@@ -337,7 +337,7 @@ theorem phiLinear_leftLedgerSum (t : Nat) : ∀ n, n ≤ t →
     intro hn
     show phiLinear (leftLedgerSum t n ^^^ phiLinearPow (t - 1 - n) (leftBandSource n <<< 1)) =
       leftLedgerSum (t + 1) n ^^^ phiLinearPow (t + 1 - 1 - n) (leftBandSource n <<< 1)
-    rw [phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
+    rw [Rule30UOR.Interfaces.phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
 
 theorem leftBandLedger_eq_sum : ∀ t, leftBandLedger t = leftLedgerSum t t := by
   intro t
@@ -384,13 +384,13 @@ theorem leftTerm_of_odd (t m : Nat) (hm : 5 ≤ m) (h : m % 2 = 1) :
   unfold leftTerm
   rw [leftBandSource_of_odd m hm h, ← Nat.shiftLeft_add, show 2 * m - 5 + 1 = 2 * m - 4 by cfomega,
     seven_shiftLeft, show 2 * m - 4 + 1 = 2 * m - 3 by cfomega, show 2 * m - 4 + 2 = 2 * m - 2 by cfomega,
-    phiLinearPow_xor, phiLinearPow_xor, Nat.testBit_xor, Nat.testBit_xor, phiLinearPow_shiftLeft,
+    Rule30UOR.Interfaces.phiLinearPow_xor, Rule30UOR.Interfaces.phiLinearPow_xor, Nat.testBit_xor, Nat.testBit_xor, phiLinearPow_shiftLeft,
     phiLinearPow_shiftLeft, phiLinearPow_shiftLeft, testBit_phiLinearPow_shift, testBit_phiLinearPow_shift,
     testBit_phiLinearPow_shift, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
 
 theorem leftTerm_eq_false (t m : Nat) (h : leftBandSource m = 0) : leftTerm t m = false := by
   unfold leftTerm
-  rw [h, show (0 : Nat) <<< 1 = 0 from rfl, phiLinearPow_zero, Nat.zero_testBit]
+  rw [h, show (0 : Nat) <<< 1 = 0 from rfl, Rule30UOR.WittDefect.q_power_zero, Nat.zero_testBit]
 
 /-- A guarded mirrored coefficient is the unguarded coefficient: palindromy inside the degree
 bound, and `0` outside it. -/

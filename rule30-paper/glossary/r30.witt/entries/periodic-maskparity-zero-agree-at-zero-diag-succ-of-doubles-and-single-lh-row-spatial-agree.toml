@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree_prop"
+name = "Rule30UOR.Interfaces.periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree"
 
 [[form]]
 id = "periodic-maskparity-zero-agree-at-zero-diag-succ-of-doubles-and-single-lh-row-spatial-agree"

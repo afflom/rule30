@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.not_isZeroDiag_add_three_prop"
+name = "Rule30UOR.Interfaces.not_isZeroDiag_add_three"
 
 [[form]]
 id = "not-iszerodiag-add-three"

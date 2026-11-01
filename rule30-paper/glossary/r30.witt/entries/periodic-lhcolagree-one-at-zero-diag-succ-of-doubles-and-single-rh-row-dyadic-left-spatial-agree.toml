@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree_prop"
+name = "Rule30UOR.Interfaces.periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree"
 
 [[form]]
 id = "periodic-lhcolagree-one-at-zero-diag-succ-of-doubles-and-single-rh-row-dyadic-left-spatial-agree"

@@ -50,7 +50,7 @@ theorem crossCarry_testBit_succ (a b j : Nat) :
       bxor (a.testBit (j + 1) && b.testBit j) (b.testBit (j + 1) && a.testBit j) := by
   change ((a &&& (b <<< 1)) ^^^ (b &&& (a <<< 1))).testBit (j + 1) =
     bxor (a.testBit (j + 1) && b.testBit j) (b.testBit (j + 1) && a.testBit j)
-  simp [Nat.testBit_xor, Nat.testBit_and, Nat.testBit_shiftLeft, bxor_eq_xor]
+  simp [Nat.testBit_xor, Nat.testBit_and, Nat.testBit_shiftLeft, Rule30UOR.Scale.bxor_eq]
 
 /-- **Pointwise Bit-LevelCarry Polarization (`carry_xor_testBit_succ`)**: at bit `j + 1`, `carry (a ^^^ b)` decomposes into `(a_{j+1} && a_j) ⊕ (b_{j+1} && b_j) ⊕ (a_{j+1} && b_j) ⊕ (b_{j+1} && a_j)`. -/
 theorem carry_xor_testBit_succ (a b j : Nat) :
@@ -59,7 +59,7 @@ theorem carry_xor_testBit_succ (a b j : Nat) :
         (bxor (a.testBit (j + 1) && b.testBit j) (b.testBit (j + 1) && a.testBit j)) := by
   rw [carry_xor a b, Nat.testBit_xor, Nat.testBit_xor,
     carry_testBit_succ a j, carry_testBit_succ b j, crossCarry_testBit_succ a b j]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
 
 /-- **In Sector 1 (`r < 2^k`, `2 * t0 < r + 2^k`), `phiScale k (carry (row t0))` Reads `carry (row t0)`**: bit `(r + 1) + 2^k` of `phiScale k (carry (row t0))` equals `rdiag (r + 1) t0 && rdiag r t0`. -/
 theorem phiScale_carry_row_testBit_sector_one (t0 k r : Nat) (hr : r + 1 < twopow k)
@@ -101,7 +101,7 @@ theorem carry_row_scale_center_slot (t0 k : Nat) (hcone : 2 * t0 + 1 < twopow k)
     rfl
   rw [hwc] at hbit
   rw [hbit]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
 
 /-- **Direct Bilinear AND-Evaluation of `crossCarry (phiScale k (row t0)) (winWitt t0 (2^k))` at the Center Slot (`j = t0 + 2^k`)**: for `t0 + 1 < 2^k` and `2 * t0 < t0 + 2^k` (`t0 < 2^k`), the cross-carry at bit `(t0 + 1) + 2^k` equals `(rdiag (t0 + 1) t0 && wittRespBool t0 k) ⊕ ((winWitt t0 (2^k)).testBit ((t0 + 1) + 2^k) && center t0)`. -/
 theorem crossCarry_row_scale_center_slot_and (t0 k : Nat) (ht0 : t0 + 1 < twopow k) :
@@ -159,7 +159,7 @@ theorem crossCarry_row_scale_at_threshold_eq_rdiag (t0 k J : Nat)
     winWitt_zero_gap_of_threshold t0 k J J hJ (by omega) (by omega),
     winWitt_leading_bit_of_threshold t0 k J hJ hJlt,
     phiScale_row_testBit_sector_zero t0 k J (by omega),
-    Bool.and_false, Bool.true_and, bxor_eq_xor, Bool.false_xor]
+    Bool.and_false, Bool.true_and, Rule30UOR.Scale.bxor_eq, Bool.false_xor]
 
 /-- **Exact Sector-0 Carry Decomposition at the Right Threshold (`j = J`, `J + 1 < 2^k`)**: applying Theorem 9.53 (`carry_xor`) to Theorem 9.12 (`row_scale`) at bit `J + 1` (`IsRightThreshold k J`, `J + 1 < 2^k`) proves that the late carry `rdiag (J + 1) (t0 + 2^k) && rdiag J (t0 + 2^k)` equals the early carry `rdiag (J + 1) t0 && rdiag J t0` XORed with the cross-carry `rdiag J t0` (since `carry (winWitt t0 (2^k))` vanishes at `J + 1` by the threshold zero gap). -/
 theorem carry_row_scale_at_threshold (t0 k J : Nat)
@@ -177,7 +177,7 @@ theorem carry_row_scale_at_threshold (t0 k J : Nat)
     rw [carry_testBit_succ (phiScale k (row t0)) J,
       phiScale_row_testBit_sector_zero t0 k (J + 1) hJlt,
       phiScale_row_testBit_sector_zero t0 k J (by omega)]
-  rw [hcw, hcp, Bool.xor_false, ← bxor_eq_xor] at hbit
+  rw [hcw, hcp, Bool.xor_false, ← Rule30UOR.Scale.bxor_eq] at hbit
   exact hbit
 
 /-- **Exact Sector-0 Next-Bit Cross-Carry at `J + 1` (`j = J + 1`, `J + 2 < 2^k`)**: at bit `J + 2`, where `(winWitt t0 (2^k)).testBit (J + 1) = true`, the cross-carry `(crossCarry (phiScale k (row t0)) (winWitt t0 (2^k))).testBit (J + 2)` equals `rdiag (J + 2) t0 ⊕ ((winWitt t0 (2^k)).testBit (J + 2) && rdiag (J + 1) t0)`! -/
@@ -215,7 +215,7 @@ theorem winWitt_cone_step_testBit_add_two (t0 k j : Nat) (hcone : 2 * t0 + 1 < t
   rw [d1, Bool.true_and, Bool.true_and, show j + 2 - 1 = j + 1 by omega,
     carry_testBit_succ (winWitt t0 (twopow k)) j] at hstep
   rw [hstep]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
 
 /-- **Exact Center-Slot Step Law of `winWitt` at `(t0 + 2) + 2^k` under `CenterPeriodic T P`**: combining `winWitt_cone_step_testBit_add_two` at `j = t0 + 2^k` (`2 * t0 + 1 < 2^k`, `T ≤ t0`) with the carry AND-structure and `periodic_crossCarry_center_slot_and` expresses `(winWitt (t0 + 1) (2^k)).testBit ((t0 + 2) + 2^k)` (`= wittRespBool (t0 + 1) k` shifted by 1) in terms of `(phiLinear (winWitt t0 (2^k))).testBit ((t0 + 2) + 2^k)` and the exact AND-coupled `center` and `rdiag (t0 + 1)` terms:
 `((rdiag (t0 + 1 + 2^k) (t0 + 2^k) ⊕ rdiag (t0 + 1) t0) && center (t0 + lag P k)) ⊕ (rdiag (t0 + 1) t0 && (center (t0 + lag P k) ⊕ center t0))`! -/
@@ -239,7 +239,7 @@ theorem periodic_winWitt_step_center_slot_and (T P : Nat) (hP : 0 < P)
       bxor (rdiag ((t0 + 1) + twopow k) (t0 + twopow k)) (rdiag (t0 + 1) t0) :=
     winWitt_testBit_middle_ray t0 k (t0 + 1) (by omega) (by omega)
   rw [hj, hcc, hw0, hw1]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phiLinear (winWitt t0 (twopow k))).testBit ((t0 + 2) + twopow k) <;>
     cases rdiag ((t0 + 1) + twopow k) (t0 + twopow k) <;>
     cases rdiag (t0 + 1) t0 <;>
@@ -285,7 +285,7 @@ theorem periodic_carry_plus_crossCarry_center_slot_and (T P : Nat) (hP : 0 < P)
       show (winWitt t0 (twopow k)).testBit (t0 + twopow k) = wittRespBool t0 k from rfl,
       periodic_witt_cone T P hP h k t0 ht (by omega)]
   rw [hcw, periodic_crossCarry_center_slot_and T P hP h t0 k ht ht0]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag ((t0 + 1) + twopow k) (t0 + twopow k) <;>
     cases rdiag (t0 + 1) t0 <;>
     cases Rule30UOR.Core.center (t0 + Rule30UOR.Scale.lag P k) <;>
@@ -301,7 +301,7 @@ theorem periodic_carry_row_scale_center_slot_and (T P : Nat) (hP : 0 < P)
       bxor ((carry (winWitt t0 (twopow k))).testBit ((t0 + 1) + twopow k))
         ((crossCarry (phiScale k (row t0)) (winWitt t0 (twopow k))).testBit ((t0 + 1) + twopow k)) := by
   rw [periodic_carry_plus_crossCarry_center_slot_and T P hP h t0 k ht (by omega)]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag ((t0 + 1) + twopow k) (t0 + twopow k) <;>
     cases rdiag (t0 + 1) t0 <;>
     cases Rule30UOR.Core.center (t0 + Rule30UOR.Scale.lag P k) <;>
@@ -324,7 +324,7 @@ theorem phiLinear_winWitt_center_slot_testBit (t0 k : Nat) (hcone : 2 * t0 + 2 <
     winWitt_testBit_middle_ray t0 k (t0 + 2) (by omega) (by omega),
     winWitt_testBit_middle_ray t0 k (t0 + 1) (by omega) (by omega),
     show (winWitt t0 (twopow k)).testBit (t0 + twopow k) = wittRespBool t0 k from rfl]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag ((t0 + 2) + twopow k) (t0 + twopow k) <;>
     cases rdiag (t0 + 2) t0 <;>
     cases rdiag ((t0 + 1) + twopow k) (t0 + twopow k) <;>
@@ -456,7 +456,7 @@ theorem periodic_crossCarry_at_white_center_eq_maskparity (T P : Nat) (hP : 0 < 
   rw [periodic_crossCarry_at_center_bit_and T P hP h s k ht hcone,
     maskparity_succ_zero_eq_rdiag s,
     ← core_center_eq_rdiag (s + 1), hw]
-  simp only [bxor_eq_xor, Bool.false_and, Bool.xor_false, Bool.false_xor, Bool.not_false, Bool.true_and]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.false_and, Bool.xor_false, Bool.false_xor, Bool.not_false, Bool.true_and]
 
 /-- **Universal Connection Between `carry (row (s + 1))` at the Center Bit `s + 1` and `maskparity (s + 1) 0` (`carry_row_xor_maskparity_zero_eq_col1`)**: at every time `s + 1`, the Witt row carry `(carry (row (s + 1))).testBit (s + 1) = center (s + 1) && rdiag s (s + 1)` and the Rule-60 masked carry `maskparity (s + 1) 0 = (!center (s + 1)) && rdiag s (s + 1)` are complementary AND-projections of column `1` (`rdiag s (s + 1)`), so their XOR is `rdiag s (s + 1)` unconditionally! -/
 theorem carry_row_xor_maskparity_zero_eq_col1 (s : Nat) :
@@ -464,7 +464,7 @@ theorem carry_row_xor_maskparity_zero_eq_col1 (s : Nat) :
       rdiag s (s + 1) := by
   rw [carry_row_testBit_succ (s + 1) s,
     maskparity_succ_zero_eq_rdiag s,
-    bxor_eq_xor]
+    Rule30UOR.Scale.bxor_eq]
   cases rdiag (s + 1) (s + 1) <;> cases rdiag s (s + 1) <;> rfl
 
 /-- Paper-facing `BitCrossCarryEq` wrapper for `periodic_crossCarry_at_center_bit_and`. -/
@@ -497,7 +497,7 @@ theorem carry_row_xor_maskparity_zero_eq_col1_prop (s : Nat) :
   rw [BitCarryEq, bit_eq_bton_testBit]
   have hc := carry_row_xor_maskparity_zero_eq_col1 s
   revert hc
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (carry (row (s + 1))).testBit (s + 1) <;>
     cases Rule30UOR.Scale.maskparity (s + 1) 0 <;>
     cases rdiag s (s + 1) <;> decide
@@ -510,7 +510,7 @@ theorem periodic_crossCarry_colm1_at_white_center (T P : Nat) (hP : 0 < P)
     (crossCarry (phiScale k (row (d + 1))) (winWitt (d + 1) (twopow k))).testBit ((d + 2) + twopow k) =
       (ldiag d (d + 1) && Rule30UOR.Core.center ((d + 1) + Rule30UOR.Scale.lag P k)) := by
   rw [periodic_crossCarry_colm1_and T P hP h d k ht hd, hw]
-  simp only [bxor_eq_xor, Bool.and_false, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.and_false, Bool.xor_false]
 
 /-- **Repeat-Lag Scale Invariance of `crossCarry` at `(d + 2) + 2^k` on White Center Steps (`periodic_crossCarry_colm1_white_center_lag_eq`)**: under `CenterPeriodic T P` (`0 < P`, `T ≤ d + 1`), whenever `center (d + 1) = false`, for any two scales `k1, k2` with `lag P k1 = lag P k2` (`d + 2 < 2^k1`, `d + 2 < 2^k2`), the cross-carry at bit `(d + 2) + 2^k` takes the exact same value at scales `k1` and `k2`! -/
 theorem periodic_crossCarry_colm1_white_center_lag_eq (T P : Nat) (hP : 0 < P)
@@ -590,7 +590,7 @@ theorem periodic_crossCarry_sector_one_xor_two_colm1_settled (T P : Nat) (hP : 0
           Rule30UOR.Core.center (d + 1)) := by
   rw [periodic_crossCarry_colm1_and T P hP h d k ht hd,
     crossCarry_row_scale_sector_two_colm1_settled_and d k hk hset0 hset1]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag d (d + 1) <;>
     cases Rule30UOR.Core.center ((d + 1) + Rule30UOR.Scale.lag P k) <;>
     cases Rule30UOR.Core.center (d + 1) <;>
@@ -709,7 +709,7 @@ theorem periodic_crossCarry_sector_one_xor_two_colm1_and (T P : Nat) (hP : 0 < P
           Rule30UOR.Core.center (d + 1)) := by
   rw [periodic_crossCarry_colm1_and T P hP h d k ht hd,
     crossCarry_row_scale_sector_two_colm1_and d k hk]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag d (d + 1) <;>
     cases Rule30UOR.Core.center ((d + 1) + Rule30UOR.Scale.lag P k) <;>
     cases Rule30UOR.Core.center (d + 1) <;>
@@ -764,7 +764,7 @@ theorem crossCarry_row_scale_sector_two_colm1_at_white_center (d k : Nat) (hk : 
     (crossCarry (phiScale k (row (d + 1))) (winWitt (d + 1) (twopow k))).testBit ((d + 2) + twopow (k + 1)) =
       (ldiag d (d + 1) && ldiag (d + 1) ((d + 1) + twopow k)) := by
   rw [crossCarry_row_scale_sector_two_colm1_and d k hk, hw]
-  simp only [bxor_eq_xor, Bool.false_xor, Bool.and_false, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.false_xor, Bool.and_false, Bool.xor_false]
 
 /-- Paper-facing `BitCrossCarryXorEq` predicate: `bxor ((crossCarry a b).testBit j1) ((crossCarry a b).testBit j2) = c`. -/
 def BitCrossCarryXorEq (a b j1 j2 : Nat) (c : Bool) : Prop :=
@@ -841,7 +841,7 @@ theorem carry_row_late_at_threshold_center_eq_maskparity (k J : Nat)
       Rule30UOR.Scale.maskparity (J + 1) 0 := by
   rw [carry_row_scale_at_threshold (J + 1) k J hJ hJlt,
     maskparity_succ_zero_eq_rdiag J]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 1) (J + 1) <;> cases rdiag J (J + 1) <;> rfl
 
 /-- **Exact Center-Right Carry Polarization (`carry_row_scale_center_bit`)**: for `s + 2 < 2^k`, applying Theorem 9.53 (`carry_xor`) to Theorem 9.12 (`row_scale`) at base time `t0 = s + 1` and bit `(s + 1) + 2^k` proves that `(center ((s + 1) + 2^k) && rdiag (s + 2^k) ((s + 1) + 2^k)) ⊕ (center (s + 1) && rdiag s (s + 1))` equals `(carry (winWitt (s + 1) (2^k))).testBit ((s + 1) + 2^k) ⊕ (crossCarry (phiScale k (row (s + 1))) (winWitt (s + 1) (2^k))).testBit ((s + 1) + 2^k)`. -/
@@ -867,7 +867,7 @@ theorem carry_row_scale_center_bit (s k : Nat) (hcone : s + 2 < twopow k) :
   have hbit := congrArg (fun n => n.testBit ((s + 1) + twopow k)) (carry_row_scale_decomp (s + 1) k)
   rw [Nat.testBit_xor, Nat.testBit_xor, h1, h2] at hbit
   revert hbit
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (Rule30UOR.Core.center ((s + 1) + twopow k) && rdiag (s + twopow k) ((s + 1) + twopow k)) <;>
     cases (Rule30UOR.Core.center (s + 1) && rdiag s (s + 1)) <;>
     cases (carry (winWitt (s + 1) (twopow k))).testBit ((s + 1) + twopow k) <;>
@@ -888,7 +888,7 @@ theorem maskparity_zero_dyadic_jump_eq_witt_carry_crossCarry (s k : Nat) (hcone 
     show (s + twopow k) + 1 = (s + 1) + twopow k by omega,
     ← core_center_eq_rdiag ((s + 1) + twopow k),
     ← core_center_eq_rdiag (s + 1)]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center ((s + 1) + twopow k) <;>
     cases Rule30UOR.Core.center (s + 1) <;>
     cases rdiag (s + twopow k) ((s + 1) + twopow k) <;>
@@ -905,7 +905,7 @@ theorem maskparity_zero_dyadic_jump_eq_not_witt_and_xor_crossCarry (s k : Nat)
     carry_testBit_succ (winWitt (s + 1) (twopow k)) (s + twopow k),
     show (s + twopow k) + 1 = (s + 1) + twopow k by omega,
     show (winWitt (s + 1) (twopow k)).testBit ((s + 1) + twopow k) = wittRespBool (s + 1) k from rfl]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases wittRespBool (s + 1) k <;>
     cases (winWitt (s + 1) (twopow k)).testBit (s + twopow k) <;>
     cases (crossCarry (phiScale k (row (s + 1))) (winWitt (s + 1) (twopow k))).testBit ((s + 1) + twopow k) <;>
@@ -917,7 +917,7 @@ theorem maskparity_dyadic_jump_eq_crossCarry_of_wittResp_true (s k : Nat)
     (crossCarry (phiScale k (row (s + 1))) (winWitt (s + 1) (twopow k))).testBit ((s + 1) + twopow k) =
       bxor (Rule30UOR.Scale.maskparity ((s + 1) + twopow k) 0) (Rule30UOR.Scale.maskparity (s + 1) 0) := by
   rw [maskparity_zero_dyadic_jump_eq_not_witt_and_xor_crossCarry s k hcone, hw]
-  simp only [bxor_eq_xor, Bool.not_true, Bool.false_and, Bool.false_xor]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.not_true, Bool.false_and, Bool.false_xor]
 
 /-- **Exact Equality of the `maskparity · 0` Dyadic Jump on In-Phase Steps (`maskparity_dyadic_jump_eq_not_center_and_witt_of_wittResp_false`)**: whenever `wittRespBool (s + 1) k = false` (`s + 2 < 2^k`), `(carry (winWitt (s + 1) (2^k))).testBit ((s + 1) + 2^k) = false` and `(crossCarry ...).testBit ((s + 1) + 2^k) = center (s + 1) && (winWitt (s + 1) (2^k)).testBit (s + 2^k)`, so `maskparity ((s + 1) + 2^k) 0 ⊕ maskparity (s + 1) 0 = (!center (s + 1)) && (winWitt (s + 1) (2^k)).testBit (s + 2^k)`! -/
 theorem maskparity_dyadic_jump_eq_not_center_and_witt_of_wittResp_false (s k : Nat)
@@ -928,7 +928,7 @@ theorem maskparity_dyadic_jump_eq_not_center_and_witt_of_wittResp_false (s k : N
     crossCarry_row_scale_at_center_bit_and s k hcone,
     ← winWitt_testBit_middle_ray (s + 1) k s (by omega) (by omega),
     hw]
-  simp only [bxor_eq_xor, Bool.not_false, Bool.true_and, Bool.false_and, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.not_false, Bool.true_and, Bool.false_and, Bool.xor_false]
   cases Rule30UOR.Core.center (s + 1) <;>
     cases (winWitt (s + 1) (twopow k)).testBit (s + twopow k) <;> rfl
 
@@ -969,7 +969,7 @@ theorem crossCarry_winWitt_cocycle_at_threshold_succ (t0 k J : Nat)
   rw [show J + 2 = (J + 1) + 1 by omega,
     crossCarry_testBit_succ (winWitt t0 (twopow (k + 1))) (phiScale k (winWitt t0 (twopow k))) (J + 1),
     show (J + 1) + 1 = J + 2 by omega,
-    hv1, hu1, Bool.and_true, Bool.and_false, bxor_eq_xor, Bool.xor_false,
+    hv1, hu1, Bool.and_true, Bool.and_false, Rule30UOR.Scale.bxor_eq, Bool.xor_false,
     winWitt_testBit_lt_twopow t0 (k + 1) (J + 2) (by omega)]
 
 /-- Paper-facing `BitCarryEq` wrapper for `carry_row_late_at_threshold_center_eq_maskparity`. -/
@@ -1000,7 +1000,7 @@ theorem maskparity_zero_dyadic_jump_eq_witt_carry_crossCarry_prop (s k : Nat)
     simp only [Bool.and_comm]
   rw [hcw, crossCarry_row_scale_at_center_bit_and s k hcone] at hm
   revert hm
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt (s + 1) (twopow k)).testBit (s + twopow k) <;>
     cases (Rule30UOR.Scale.maskparity ((s + 1) + twopow k) 0 ^^ Rule30UOR.Scale.maskparity (s + 1) 0) <;>
     cases ((rdiag (s + twopow k) ((s + 1) + twopow k) ^^ rdiag s (s + 1)) && wittRespBool (s + 1) k) <;>
@@ -1017,7 +1017,7 @@ theorem maskparity_zero_dyadic_jump_eq_not_witt_and_xor_crossCarry_prop (s k : N
   have hm := maskparity_zero_dyadic_jump_eq_not_witt_and_xor_crossCarry s k hcone
   rw [winWitt_testBit_middle_ray (s + 1) k s (by omega) (by omega)] at hm
   revert hm
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (crossCarry (phiScale k (row (s + 1))) (winWitt (s + 1) (twopow k))).testBit ((s + 1) + twopow k) <;>
     cases (Rule30UOR.Scale.maskparity ((s + 1) + twopow k) 0 ^^ Rule30UOR.Scale.maskparity (s + 1) 0) <;>
     cases ((!wittRespBool (s + 1) k) && (rdiag (s + twopow k) ((s + 1) + twopow k) ^^ rdiag s (s + 1))) <;>
@@ -1092,7 +1092,7 @@ theorem periodic_crossCarry_colm1_wronskian (T P : Nat) (hP : 0 < P)
       bxor (ldiag d (d + 1) && Rule30UOR.Core.center ((d + 1) + Rule30UOR.Scale.lag P k))
         (ldiag (d + twopow k) ((d + 1) + twopow k) && Rule30UOR.Core.center (d + 1)) := by
   rw [periodic_crossCarry_colm1_and T P hP h d k ht hd]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag d (d + 1) <;>
     cases Rule30UOR.Core.center ((d + 1) + Rule30UOR.Scale.lag P k) <;>
     cases Rule30UOR.Core.center (d + 1) <;>
@@ -1104,7 +1104,7 @@ theorem crossCarry_row_scale_sector_two_colm1_wronskian (d k : Nat) (hk : d + 1 
       bxor (ldiag d (d + 1) && ldiag (d + 1) ((d + 1) + twopow k))
         (ldiag d ((d + 1) + twopow k) && Rule30UOR.Core.center (d + 1)) := by
   rw [crossCarry_row_scale_sector_two_colm1_and d k hk]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag d (d + 1) <;>
     cases Rule30UOR.Core.center (d + 1) <;>
     cases ldiag (d + 1) ((d + 1) + twopow k) <;>
@@ -1138,7 +1138,7 @@ theorem periodic_colm1_defect_and_center_eq_false (T P : Nat) (hP : 0 < P)
   have hm2 := maskparity_zero_and_center_eq_false (d + 1)
   rw [h (d + 1) ht] at hm1
   revert hm1 hm2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.maskparity ((d + 1) + P) 0 <;>
     cases Rule30UOR.Scale.maskparity (d + 1) 0 <;>
     cases Rule30UOR.Core.center (d + 1) <;> decide
@@ -1201,7 +1201,7 @@ theorem periodic_crossCarry_colm1_shift_P_eq_leftresponse_and_witt (T P : Nat) (
     show (d + 1) + 1 = d + 2 by omega] at hj
   rw [← hj, ← hdef1, ← hdef2, hw]
   revert ha_early ha_late
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag (d + P) ((d + P) + 1) <;>
     cases ldiag d (d + 1) <;>
     cases ldiag ((d + P) + twopow k) (((d + P) + 1) + twopow k) <;>
@@ -1219,7 +1219,7 @@ theorem periodic_crossCarry_colm1_shift_P_eq_of_wittResp_false (T P : Nat) (hP :
   have hxor := periodic_crossCarry_colm1_shift_P_eq_leftresponse_and_witt T P hP h d k ht hdP
   rw [hw, Bool.and_false] at hxor
   revert hxor
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (crossCarry (phiScale k (row ((d + P) + 1))) (winWitt ((d + P) + 1) (twopow k))).testBit (((d + P) + 2) + twopow k) <;>
     cases (crossCarry (phiScale k (row (d + 1))) (winWitt (d + 1) (twopow k))).testBit ((d + 2) + twopow k) <;> decide
 
@@ -1244,7 +1244,7 @@ theorem periodic_crossCarry_colm1_shift_P_eq_center_bit_of_wittResp_true (T P : 
     show ((d + P) + 1) + 1 = (d + P) + 2 by omega,
     show (d + 1) + 1 = d + 2 by omega] at hj
   rw [← hj]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.maskparity (((d + P) + 1) + twopow k) 0 <;>
     cases Rule30UOR.Scale.maskparity ((d + 1) + twopow k) 0 <;>
     cases Rule30UOR.Scale.maskparity ((d + P) + 1) 0 <;>
@@ -1266,7 +1266,7 @@ theorem periodic_leftresponse_step_diff_eq_witt_of_in_phase_black (T P : Nat) (h
   have hw2 := periodic_witt_cone T P hP h k (s + 2) (by omega) hcone
   rw [hw] at hw1
   revert hj hw1 hw2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse (s + 2) k <;>
     cases Rule30UOR.Scale.leftresponse (s + 1) k <;>
     cases wittRespBool (s + 2) k <;>
@@ -1318,7 +1318,7 @@ theorem periodic_crossCarry_colm1_shift_P_eq_leftresponse_and_witt_prop (T P : N
   have hc := periodic_crossCarry_colm1_wronskian T P hP h d k ht (by omega)
   rw [hc] at hs
   revert hs
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (crossCarry (phiScale k (row ((d + P) + 1))) (winWitt ((d + P) + 1) (twopow k))).testBit (((d + P) + 2) + twopow k) <;>
     cases ((ldiag d (d + 1) && Rule30UOR.Core.center ((d + 1) + Rule30UOR.Scale.lag P k)) ^^
       (ldiag (d + twopow k) ((d + 1) + twopow k) && Rule30UOR.Core.center (d + 1))) <;>
@@ -1334,7 +1334,7 @@ theorem phiScale_row_testBit_outside_cone (t0 k r : Nat) (hr : twopow k ≤ r) :
       bxor (bxor (rdiag (r + twopow k) t0) (rdiag r t0)) (rdiag (r - twopow k) t0) := by
   change (((row t0) ^^^ ((row t0) <<< twopow k)) ^^^
       ((row t0) <<< (twopow k + twopow k))).testBit (r + twopow k) = _
-  simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, bxor_eq_xor]
+  simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, Rule30UOR.Scale.bxor_eq]
   have d1 : decide (r + twopow k ≥ twopow k) = true := decide_eq_true (by omega)
   have d2 : decide (r + twopow k ≥ twopow k + twopow k) = true := decide_eq_true (by omega)
   rw [d1, d2, Bool.true_and, Bool.true_and,
@@ -1353,7 +1353,7 @@ theorem winWitt_testBit_outside_cone (t0 k r : Nat) (hr : twopow k ≤ r) :
   rw [Nat.testBit_xor, row_testBit (t0 + twopow k) (r + twopow k),
     phiScale_row_testBit_outside_cone t0 k r hr] at hs
   revert hs
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag (r + twopow k) (t0 + twopow k) <;>
     cases (rdiag (r + twopow k) t0 ^^ rdiag r t0 ^^ rdiag (r - twopow k) t0) <;>
     cases (winWitt t0 (twopow k)).testBit (r + twopow k) <;> decide
@@ -1413,7 +1413,7 @@ theorem periodic_crossCarry_colm1_outside_cone_and (T P : Nat) (hP : 0 < P)
       Rule30UOR.Scale.center_mod hP h (d + 1) (twopow k) ht,
       show twopow k % P = Rule30UOR.Scale.lag P k from rfl, ha0] at hs
     revert hs
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases Rule30UOR.Core.center ((d + 1) + Rule30UOR.Scale.lag P k) <;>
       cases (ldiag ((d + 1) - twopow k) (d + 1) ^^ Rule30UOR.Core.center (d + 1) ^^ rdiag ((d + 1) - twopow k) (d + 1)) <;>
       cases (winWitt (d + 1) (twopow k)).testBit ((d + 1) + twopow k) <;> decide
@@ -1429,7 +1429,7 @@ theorem periodic_crossCarry_colm1_outside_cone_and (T P : Nat) (hP : 0 < P)
         ← ldiag_eq_rdiag (d + twopow k) 1]
     rw [Nat.testBit_xor, hlate, ha1] at hs
     revert hs
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases ldiag (d + twopow k) ((d + 1) + twopow k) <;>
       cases (ldiag (d - twopow k) (d + 1) ^^ ldiag d (d + 1) ^^ rdiag ((d + 2) - twopow k) (d + 1)) <;>
       cases (winWitt (d + 1) (twopow k)).testBit ((d + 2) + twopow k) <;> decide
@@ -1450,7 +1450,7 @@ theorem periodic_crossCarry_colm1_outside_cone_wronskian (T P : Nat) (hP : 0 < P
           bxor (bxor (ldiag ((d + 1) - twopow k) (d + 1)) (Rule30UOR.Core.center (d + 1)))
             (rdiag ((d + 1) - twopow k) (d + 1))) := by
   rw [periodic_crossCarry_colm1_outside_cone_and T P hP h d k ht hd]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (ldiag (d - twopow k) (d + 1) ^^ ldiag d (d + 1) ^^ rdiag ((d + 2) - twopow k) (d + 1)) <;>
     cases Rule30UOR.Core.center ((d + 1) + Rule30UOR.Scale.lag P k) <;>
     cases ldiag (d + twopow k) ((d + 1) + twopow k) <;>
@@ -1469,7 +1469,7 @@ theorem periodic_crossCarry_colm1_outside_cone_at_white_center (T P : Nat) (hP :
         (ldiag (d + twopow k) ((d + 1) + twopow k) &&
           bxor (ldiag ((d + 1) - twopow k) (d + 1)) (rdiag ((d + 1) - twopow k) (d + 1))) := by
   rw [periodic_crossCarry_colm1_outside_cone_wronskian T P hP h d k ht hd, hw]
-  simp only [bxor_eq_xor, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.xor_false]
 
 /-- **Pure Non-Center AND-Product at `(d + 2) + 2^k` Outside the Cone on White Early and Late Centers (`periodic_crossCarry_colm1_outside_cone_at_both_white_centers`)**: for fixed `k` and all `d ≥ max(T, 2^k)` under `CenterPeriodic T P` (`0 < P`), whenever `center (d + 1) = false` and `center ((d + 1) + lag P k) = false`, the cross-carry at bit `(d + 2) + 2^k` collapses to the single AND-product `ldiag (d + 2^k) ((d + 1) + 2^k) && (ldiag ((d + 1) - 2^k) (d + 1) ⊕ rdiag ((d + 1) - 2^k) (d + 1))`, whose two factors are both non-center values! -/
 theorem periodic_crossCarry_colm1_outside_cone_at_both_white_centers (T P : Nat) (hP : 0 < P)
@@ -1481,7 +1481,7 @@ theorem periodic_crossCarry_colm1_outside_cone_at_both_white_centers (T P : Nat)
       (ldiag (d + twopow k) ((d + 1) + twopow k) &&
         bxor (ldiag ((d + 1) - twopow k) (d + 1)) (rdiag ((d + 1) - twopow k) (d + 1))) := by
   rw [periodic_crossCarry_colm1_outside_cone_at_white_center T P hP h d k ht hd hw1, hw2]
-  simp only [bxor_eq_xor, Bool.and_false, Bool.false_xor]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.and_false, Bool.false_xor]
 
 /-- **Universal Reduction of Column-`-1` Cross-Carry on White Late Center Steps (`crossCarry_colm1_at_white_late_center_eq_and_witt`)**: at EVERY time `d` and scale `k` (inside OR outside the cone!), whenever `center ((d + 1) + 2^k) = false`, the first Wronskian branch in `crossCarry (phiScale k (row (d + 1))) (winWitt (d + 1) (2^k))` at bit `(d + 2) + 2^k` vanishes and `(phiScale k (row (d + 1))).testBit ((d + 1) + 2^k) = wittRespBool (d + 1) k`, so the cross-carry equals `ldiag (d + 2^k) ((d + 1) + 2^k) && wittRespBool (d + 1) k`! -/
 theorem crossCarry_colm1_at_white_late_center_eq_and_witt (d k : Nat)
@@ -1493,7 +1493,7 @@ theorem crossCarry_colm1_at_white_late_center_eq_and_witt (d k : Nat)
     crossCarry_testBit_succ (phiScale k (row (d + 1))) (row ((d + 1) + twopow k)) ((d + 1) + twopow k),
     show ((d + 1) + twopow k) + 1 = (d + 2) + twopow k by omega,
     row_testBit_center ((d + 1) + twopow k), hw_late,
-    Bool.and_false, bxor_eq_xor, Bool.false_xor]
+    Bool.and_false, Rule30UOR.Scale.bxor_eq, Bool.false_xor]
   have hlate : (row ((d + 1) + twopow k)).testBit ((d + 2) + twopow k) =
       ldiag (d + twopow k) ((d + 1) + twopow k) := by
     rw [row_testBit, show (d + 2) + twopow k = (d + twopow k) + 2 * 1 by omega,
@@ -1520,7 +1520,7 @@ theorem crossCarry_colm1_outside_cone_at_white_late_center_via_response (d k : N
   have hw : wittRespBool (d + 1) k =
       bxor (Rule30UOR.Scale.response (d + 1) k) (rdiag ((d + 1) - twopow k) (d + 1)) := by
     revert hdu
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases wittRespBool (d + 1) k <;>
       cases Rule30UOR.Scale.response (d + 1) k <;>
       cases rdiag ((d + 1) - twopow k) (d + 1) <;> decide
@@ -1656,7 +1656,7 @@ theorem crossCarry_row_scale_at_center_bit_outside_cone_and (s k : Nat) (hs : tw
     have hs0 := congrArg (fun n => n.testBit (s + twopow k)) (row_scale (s + 1) k)
     rw [Nat.testBit_xor, row_testBit ((s + 1) + twopow k) (s + twopow k), ha0] at hs0
     revert hs0
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases rdiag (s + twopow k) ((s + 1) + twopow k) <;>
       cases (ldiag ((s + 2) - twopow k) (s + 1) ^^ rdiag s (s + 1) ^^ rdiag (s - twopow k) (s + 1)) <;>
       cases (winWitt (s + 1) (twopow k)).testBit (s + twopow k) <;> decide
@@ -1678,7 +1678,7 @@ theorem crossCarry_at_white_center_outside_cone_noncenter_and (s k : Nat) (hs : 
           bxor (bxor (ldiag ((s + 2) - twopow k) (s + 1)) (rdiag s (s + 1)))
             (rdiag (s - twopow k) (s + 1))) := by
   rw [crossCarry_row_scale_at_center_bit_outside_cone_and s k hs, hw]
-  simp only [bxor_eq_xor, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.xor_false]
 
 /-- **Universal Wronskian Form of the Center-Slot Cross-Carry Outside the Cone (`crossCarry_at_center_bit_outside_cone_wronskian`)**: for fixed `k` and all `s ≥ 2^k` (with NO upper bound on `s`), cancelling the scaled-row self-carry reduces `(crossCarry (phiScale k (row (s + 1))) (winWitt (s + 1) (2^k))).testBit ((s + 1) + 2^k)` to `((ldiag ((s + 1) - 2^k) (s + 1) ⊕ center (s + 1) ⊕ rdiag ((s + 1) - 2^k) (s + 1)) && rdiag (s + 2^k) (s + 1 + 2^k)) ⊕ (center (s + 1 + 2^k) && (ldiag ((s + 2) - 2^k) (s + 1) ⊕ rdiag s (s + 1) ⊕ rdiag (s - 2^k) (s + 1)))`! -/
 theorem crossCarry_at_center_bit_outside_cone_wronskian (s k : Nat) (hs : twopow k ≤ s) :
@@ -1717,7 +1717,7 @@ theorem periodic_crossCarry_at_both_white_centers_outside_cone_eq_maskparity (T 
       Bool.not_false, Bool.true_and] at hm0
     exact hm0
   rw [crossCarry_at_center_bit_outside_cone_wronskian s k hs, hw1, hw_late, hm_late]
-  simp only [bxor_eq_xor, Bool.xor_false, Bool.false_and]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.xor_false, Bool.false_and]
 
 /-- **Universal Reduction of Center-Slot Cross-Carry on White Late Center Steps (`crossCarry_at_white_late_center_eq_witt_and_maskparity`)**: at EVERY time `s` and scale `k` (inside OR outside the cone!), whenever `center ((s + 1) + 2^k) = false`, the second Wronskian branch in `(crossCarry (phiScale k (row (s + 1))) (winWitt (s + 1) (2^k))).testBit ((s + 1) + 2^k)` vanishes, `(phiScale k (row (s + 1))).testBit ((s + 1) + 2^k) = wittRespBool (s + 1) k`, and `rdiag (s + 2^k) (s + 1 + 2^k) = maskparity (s + 1 + 2^k) 0`, so the center-slot cross-carry equals `wittRespBool (s + 1) k && maskparity (s + 1 + 2^k) 0`! -/
 theorem crossCarry_at_white_late_center_eq_witt_and_maskparity (s k : Nat)
@@ -1727,7 +1727,7 @@ theorem crossCarry_at_white_late_center_eq_witt_and_maskparity (s k : Nat)
   have hc := crossCarry_testBit_succ (phiScale k (row (s + 1))) (row ((s + 1) + twopow k)) (s + twopow k)
   rw [show (s + twopow k) + 1 = (s + 1) + twopow k by omega,
     row_testBit_center ((s + 1) + twopow k), hw_late,
-    Bool.false_and, bxor_eq_xor, Bool.xor_false,
+    Bool.false_and, Rule30UOR.Scale.bxor_eq, Bool.xor_false,
     row_testBit ((s + 1) + twopow k) (s + twopow k)] at hc
   rw [crossCarry_row_scale_eq_crossCarry_late_row (s + 1) k, hc]
   have ha1 : (phiScale k (row (s + 1))).testBit ((s + 1) + twopow k) = wittRespBool (s + 1) k := by
@@ -1808,15 +1808,6 @@ theorem crossCarry_at_white_late_center_eq_witt_and_maskparity_prop (s k : Nat)
 
 /-! ### Fixed-`k` Unbounded-`t` Period-Shift Laws Outside the Cone (Masked-Jen Form) -/
 
-/-- **Universal Periodicity of `CenterPeriodic T P` at Multiples `m * P`**: if `CenterPeriodic T P` holds (`0 < P`), then for every `t ≥ T` and every multiple `m * P`, `center (t + m * P) = center t`. -/
-theorem center_periodic_mul (T P : Nat) (h : Rule30UOR.Scale.CenterPeriodic T P) :
-    ∀ m t : Nat, T ≤ t → Rule30UOR.Core.center (t + m * P) = Rule30UOR.Core.center t
-  | 0, t, _ => by simp
-  | m + 1, t, ht => by
-    rw [show t + (m + 1) * P = (t + m * P) + P by rw [Nat.succ_mul]; omega,
-      h (t + m * P) (by omega),
-      center_periodic_mul T P h m t ht]
-
 /-- **Under `CenterPeriodic T P`, `m * P`-Periodicity of `maskparity · 0` Equals `m * P`-Periodicity of Column `-1` (`periodic_maskparity_zero_defect_mul_eq_colm1_defect_mul`)**: for every `m : Nat` and all `d + 1 ≥ T`, `maskparity (d + m * P + 1) 0 ⊕ maskparity (d + 1) 0 = ldiag (d + m * P) (d + m * P + 1) ⊕ ldiag d (d + 1)`. -/
 theorem periodic_maskparity_zero_defect_mul_eq_colm1_defect_mul (T P : Nat) (hP : 0 < P)
     (h : Rule30UOR.Scale.CenterPeriodic T P)
@@ -1832,15 +1823,15 @@ theorem periodic_maskparity_zero_defect_mul_eq_colm1_defect_mul (T P : Nat) (hP 
     (ldiag_eq_cell_neg d 1).symm
   have hl2 : Rule30UOR.Core.cell ((d + m * P) + 1) (-1) = ldiag (d + m * P) ((d + m * P) + 1) :=
     (ldiag_eq_cell_neg (d + m * P) 1).symm
-  have hc1 := center_periodic_mul T P h m (d + 1) ht
-  have hc2 := center_periodic_mul T P h m (d + 2) (by omega)
+  have hc1 := Rule30UOR.Scale.center_mul h m (d + 1) ht
+  have hc2 := Rule30UOR.Scale.center_mul h m (d + 2) (by omega)
   rw [show (d + 1) + m * P = (d + m * P) + 1 by omega] at hc1
   rw [show (d + 2) + m * P = ((d + m * P) + 1) + 1 by omega,
     show d + 2 = (d + 1) + 1 by omega] at hc2
   rw [hl1] at hs1
   rw [hl2, hc1, hc2] at hs2
   revert hs1 hs2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center ((d + 1) + 1) <;>
     cases Rule30UOR.Core.center (d + 1) <;>
     cases ldiag (d + m * P) ((d + m * P) + 1) <;>
@@ -1876,14 +1867,14 @@ theorem periodic_wittRespBool_shift_mul_outside_cone (T P : Nat) (hP : 0 < P)
     have h0 := ldiag_eq_cell_neg (t - twopow k) (twopow k)
     rw [show t - twopow k + twopow k = t by omega] at h0
     exact h0.symm
-  have hc1 := center_periodic_mul T P h m (t + Rule30UOR.Scale.lag P k) (by omega)
-  have hc2 := center_periodic_mul T P h m t ht
+  have hc1 := Rule30UOR.Scale.center_mul h m (t + Rule30UOR.Scale.lag P k) (by omega)
+  have hc2 := Rule30UOR.Scale.center_mul h m t ht
   rw [show (t + Rule30UOR.Scale.lag P k) + m * P = (t + m * P) + Rule30UOR.Scale.lag P k by omega] at hc1
   rw [hl1, hc1, hc2] at hs1
   rw [hl2] at hs2
   have hw := wittRespBool_xor_response_shift_mul_outside_cone t k m P hk
   revert hs1 hs2 hw
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases wittRespBool (t + m * P) k <;>
     cases wittRespBool t k <;>
     cases Rule30UOR.Scale.response (t + m * P) k <;>
@@ -1913,7 +1904,7 @@ theorem periodic_crossCarry_colm1_shift_mul_at_white_late_center (T P : Nat) (hP
     exact hw_late
   have hw2 : Rule30UOR.Core.center (((d + m * P) + 1) + twopow k) = false := by
     rw [show ((d + m * P) + 1) + twopow k = ((d + 1) + twopow k) + m * P by omega,
-      center_periodic_mul T P h m ((d + 1) + twopow k) (by omega)]
+      Rule30UOR.Scale.center_mul h m ((d + 1) + twopow k) (by omega)]
     exact hw1
   rw [crossCarry_colm1_at_white_late_center_eq_and_witt (d + m * P) k hw2,
     crossCarry_colm1_at_white_late_center_eq_and_witt d k hw1]
@@ -1922,7 +1913,7 @@ theorem periodic_crossCarry_colm1_shift_mul_at_white_late_center (T P : Nat) (hP
     show ((d + m * P) + twopow k) + 1 = ((d + m * P) + 1) + twopow k by omega,
     show (d + twopow k) + 1 = (d + 1) + twopow k by omega] at hm
   revert hm
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.maskparity (((d + m * P) + 1) + twopow k) 0 <;>
     cases Rule30UOR.Scale.maskparity ((d + 1) + twopow k) 0 <;>
     cases ldiag ((d + m * P) + twopow k) (((d + m * P) + 1) + twopow k) <;>
@@ -1948,11 +1939,11 @@ theorem periodic_crossCarry_center_bit_shift_mul_at_white_late_center (T P : Nat
     exact hw_late
   have hw2 : Rule30UOR.Core.center (((s + m * P) + 1) + twopow k) = false := by
     rw [show ((s + m * P) + 1) + twopow k = ((s + 1) + twopow k) + m * P by omega,
-      center_periodic_mul T P h m ((s + 1) + twopow k) (by omega)]
+      Rule30UOR.Scale.center_mul h m ((s + 1) + twopow k) (by omega)]
     exact hw1
   rw [crossCarry_at_white_late_center_eq_witt_and_maskparity (s + m * P) k hw2,
     crossCarry_at_white_late_center_eq_witt_and_maskparity s k hw1]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases wittRespBool ((s + m * P) + 1) k <;>
     cases wittRespBool (s + 1) k <;>
     cases Rule30UOR.Scale.maskparity (((s + m * P) + 1) + twopow k) 0 <;>
@@ -1978,7 +1969,7 @@ theorem periodic_crossCarry_colm1_shift_mul_at_white_late_center_prop (T P : Nat
     exact hw_late
   rw [crossCarry_colm1_at_white_late_center_eq_and_witt d k hw1] at hs
   revert hs
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (crossCarry (phiScale k (row ((d + m * P) + 1))) (winWitt ((d + m * P) + 1) (twopow k))).testBit
       (((d + m * P) + 2) + twopow k) <;>
     cases (ldiag (d + twopow k) ((d + 1) + twopow k) && wittRespBool (d + 1) k) <;>
@@ -2008,7 +1999,7 @@ theorem periodic_crossCarry_center_bit_shift_mul_at_white_late_center_prop (T P 
     exact hw_late
   rw [crossCarry_at_white_late_center_eq_witt_and_maskparity s k hw1] at hs
   revert hs
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (crossCarry (phiScale k (row ((s + m * P) + 1))) (winWitt ((s + m * P) + 1) (twopow k))).testBit
       (((s + m * P) + 1) + twopow k) <;>
     cases (wittRespBool (s + 1) k && Rule30UOR.Scale.maskparity ((s + 1) + twopow k) 0) <;>

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "le-of-doubles-at-mul-twopow"
+category = "proof-constant"
+signature = "(pi ((explicit w (const lexlean.std.nat::nat)) (explicit K (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat))) (pi ((explicit hd (app (const r30.joint::doubles-at) (app (const lexlean.std.nat::mul) (local w) (app (const r30.scale::twopow) (local K))) (local z)))) (app (const lexlean.std.nat::le) (local K) (local z))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DoublingDepth"
+name = "Rule30UOR.DoublingDepth.le_of_doublesAt_mul_twopow"
+
+[[form]]
+id = "le-of-doubles-at-mul-twopow"
+channel = "math"
+surface = "leofdoublesatmultwopow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leofdoublesatmultwopow) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

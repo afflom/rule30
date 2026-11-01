@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-iff-no-block-cone-period"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::iff) (const r30.joint::problem-one) (app (const r30.observation::no-block-cone-period) (local k))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ColumnCone"
+name = "Rule30UOR.ColumnCone.problem1_iff_noBlockConePeriod"
+
+[[form]]
+id = "problem1-iff-no-block-cone-period"
+channel = "math"
+surface = "problem1iffnoblockconeperiod"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problem1iffnoblockconeperiod) (paren (seq (slot 0))))"

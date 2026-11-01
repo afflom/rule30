@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-periodic-isolated-black-consistent-iff"
+category = "proof-constant"
+signature = "(app (const lexlean.core::iff) (const r30.observation::no-periodic-isolated-black-consistent) (app (const lexlean.core::lnot) (const r30.observation::walled-ap)))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Walled"
+name = "Rule30UOR.Walled.noPeriodicIsolatedBlackConsistent_iff"
+
+[[form]]
+id = "no-periodic-isolated-black-consistent-iff"
+channel = "math"
+surface = "noperiodicisolatedblackconsistentiff"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name noperiodicisolatedblackconsistentiff)"

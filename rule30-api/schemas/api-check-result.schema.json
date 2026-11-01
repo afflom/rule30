@@ -13,6 +13,8 @@
   "convert",
   "standards",
   "core",
+  "sequences",
+  "discovery",
   "model",
   "logo"
  ],
@@ -151,6 +153,44 @@
    }
   },
   "core": {
+   "type": "object",
+   "required": [
+    "ok",
+    "reason"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "ok": {
+     "type": "boolean"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   }
+  },
+  "sequences": {
+   "type": "object",
+   "required": [
+    "ok",
+    "reason"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "ok": {
+     "type": "boolean"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   }
+  },
+  "discovery": {
    "type": "object",
    "required": [
     "ok",

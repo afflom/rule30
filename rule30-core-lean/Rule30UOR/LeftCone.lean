@@ -88,19 +88,13 @@ theorem left_cone_aux (Q t m : Nat)
           rw [e2]
           exact ih s k' hs (by cfomega) (by cfomega)
 
-theorem kit_periodic_of_centerPeriodic {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P) :
-    ∀ t, T ≤ t → Ruliology.CellularAutomata.Rule30Prize.center (t + P) =
-      Ruliology.CellularAutomata.Rule30Prize.center t := fun t ht => by
-  rw [← Rule30UOR.Scale.center_eq_kit, ← Rule30UOR.Scale.center_eq_kit]
-  exact hc t ht
-
 /-- Under a periodic center, column-one agreement on `[t, t+k)` forces the whole
 left cone of depth `k` at time `t` to agree. -/
 theorem left_cone_of_right_agrees (T P m t k : Nat)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
     (hr : RightAgrees (m * P) t k) : leftDefect (m * P) t k = false := by
   have hc0 : ∀ s, t ≤ s → s ≤ t + k → defect (m * P) s 0 = false := fun s hs _ =>
-    Rule30UOR.DefectFront.center_defect_zero (kit_periodic_of_centerPeriodic hc) m s (by cfomega)
+    Rule30UOR.DefectFront.center_defect_zero (Rule30UOR.MaskedObservation.kit_period hc) m s (by cfomega)
   have hr' : ∀ s, t ≤ s → s < t + k → defect (m * P) s 1 = false := by
     intro s hs hsk
     have := hr (s - t) (by cfomega)

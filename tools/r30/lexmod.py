@@ -9,6 +9,7 @@ a constructor `Foundation.Arch::ModelKind.qualityModel`); the data form carries
 the module in the member's `module` field, which `qualified` renders."""
 
 import json
+import re
 
 
 def lit(s):
@@ -36,11 +37,19 @@ def type_(t):
         return f"(Option {type_(t['value'])})"
     if k == "named":
         return qualified(t["member"])
+    if k == "prop":
+        return "Prop"
+    if k == "product":
+        return f"({type_(t['left'])} * {type_(t['right'])})"
+    if k == "result":
+        return f"(Result {type_(t['ok'])} {type_(t['error'])})"
+    if k == "contract_violation":
+        return "ContractViolation"
     raise ValueError(f"no notation for type {k}")
 
 
 _INFIX = {"add": "+", "eq": "=", "le": "<=", "lt": "<", "beq": "=?", "ble": "<=?", "blt": "<?",
-          "and": "&&", "or": "||"}
+          "and": "&&", "or": "||", "prop_and": "/\\", "iff": "<->"}
 
 
 def expr(node, indent="    "):
@@ -75,6 +84,19 @@ def expr(node, indent="    "):
         return f"({expr(node['left'], indent)} {_INFIX[k]} {expr(node['right'], indent)})"
     if k == "not":
         return f"(not {expr(node['value'], indent)})"
+    if k == "implies":
+        return f"({expr(node['premise'], indent)} -> {expr(node['conclusion'], indent)})"
+    if k == "pair":
+        return f"({expr(node['left'], indent)}, {expr(node['right'], indent)})"
+    if k in ("first", "second"):
+        return f"({k} {expr(node['value'], indent)})"
+    if k == "let":
+        b = node["binder"]
+        return (f"(let {b['name']} : {type_(b['type'])} := {expr(node['value'], indent)}; "
+                f"{expr(node['body'], indent)})")
+    if k == "checked_apply":
+        args = " ".join(expr(a, indent) for a in node["arguments"])
+        return f"(checked {qualified(node['model'])} {args} with [{', '.join(node['checks'])}])"
     if k == "if":
         return (f"(if {expr(node['condition'], indent)} then {expr(node['then_value'], indent)} "
                 f"else {expr(node['else_value'], indent)})")
@@ -87,8 +109,68 @@ def expr(node, indent="    "):
     raise ValueError(f"no notation for {k}")
 
 
+# The member order of the generic notation (SPEC §17.21.3): these first, the
+# others in key order.
+_ORDER = ["name", "type_parameters", "parameters", "type", "result", "statement", "fields", "constructors",
+          "arguments", "body", "proof", "axioms"]
+# Positions whose value is a term or a type (read in their readable forms).
+_TERMS = {"statement", "body"}
+_TYPES = {"type", "result", "output"}
+_NAME = re.compile(r"[A-Za-z_][A-Za-z0-9_.'/-]*")
+
+
+def generic(value, key=None, indent=""):
+    """A value in the generic notation, with terms, types, parameters and
+    members in their readable forms at the positions that read them: the
+    declarations the readable layout of `decl` does not cover (theorems with
+    parameters or a proof payload, contracts, realizations, evidence, models)."""
+    inner = indent + "  "
+    if key in _TERMS and isinstance(value, dict):
+        return expr(value)
+    if key in _TYPES and isinstance(value, dict) and "kind" in value:
+        return type_(value)
+    if key == "parameters" and isinstance(value, list):
+        return "[" + ", ".join(f"{p['name']} : {type_(p['type'])}" for p in value) + "]"
+    if isinstance(value, dict):
+        if set(value) <= {"name", "module"} and "name" in value:
+            return qualified(value)
+        keys = [k for k in _ORDER if k in value] + sorted(k for k in value if k not in _ORDER and k != "kind")
+        fields = [f"{k}: {generic(value[k], k, inner)}" for k in keys]
+        head = value.get("kind", "")
+        flat = head + "{" + ", ".join(fields) + "}"
+        if len(indent) + len(flat) <= 100 and "\n" not in flat:
+            return flat
+        return head + "{\n" + ",\n".join(inner + f for f in fields) + "\n" + indent + "}"
+    if isinstance(value, list):
+        items = [generic(v, None, inner) for v in value]
+        flat = "[" + ", ".join(items) + "]"
+        if len(indent) + len(flat) <= 100 and "\n" not in flat:
+            return flat
+        return "[\n" + ",\n".join(inner + i for i in items) + "\n" + indent + "]"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, int):
+        return str(value)
+    if isinstance(value, str):
+        return value if _NAME.fullmatch(value) and value not in ("true", "false") else lit(value)
+    raise ValueError(f"no generic notation for {value!r}")
+
+
+def _general_theorem(d):
+    """A theorem with parameters, a statement other than an equation, or a
+    proof with a payload (induction, simplify, linear arithmetic)."""
+    fields = [f"name: {d['name']}", "parameters: " + generic(d.get("parameters", []), "parameters"),
+              f"statement: {expr(d['statement'])}", "proof: " + generic(d["proof"], None, "  "),
+              "axioms: [" + ", ".join(d.get("axioms", [])) + "]"]
+    return "theorem{\n" + ",\n".join("  " + f for f in fields) + "\n}"
+
+
 def decl(d):
     k = d["kind"]
+    if k in ("contract", "realization", "evidence", "model"):
+        return generic(d)
+    if k == "theorem" and (d.get("parameters") or d["statement"]["kind"] != "eq" or set(d["proof"]) != {"kind"}):
+        return _general_theorem(d)
     if k == "structure":
         fields = ",\n".join(f"    {{name: {f['name']}, type: {type_(f['type'])}}}" for f in d["fields"])
         return (f"structure{{\n  name: {d['name']},\n  type_parameters: [],\n  parameters: [],\n"

@@ -25,13 +25,8 @@ open Rule30UOR.Core Rule30UOR.Ledger Rule30UOR.EdgeSplit Rule30UOR.EdgeParity
 
 /-! ## The right diagonal `2` alternates -/
 
-theorem rdiag_zero_eq (t : Nat) : rdiag 0 t = true := by
-  cases t with
-  | zero => rfl
-  | succ s => exact rdiag_zero s
-
 theorem rdiag_two_succ (s : Nat) : rdiag 2 (s + 1) = !(rdiag 2 s) := by
-  rw [show rdiag 2 (s + 1) = bxor (rdiag 2 s) (rdiag 1 s || rdiag 0 s) from rdiag_step 0 s, rdiag_zero_eq,
+  rw [show rdiag 2 (s + 1) = bxor (rdiag 2 s) (rdiag 1 s || rdiag 0 s) from rdiag_step 0 s, Rule30UOR.Interfaces.rdiag_zero_all,
     Bool.or_true]
   cases rdiag 2 s <;> rfl
 
@@ -187,7 +182,7 @@ theorem interiorLedger_split_three : ∀ t, interiorLedger t = lowLedger t ^^^ i
     show phiLinear (interiorLedger t) ^^^ (interior t <<< 1) =
       (phiLinear (lowLedger t) ^^^ (lowSource t <<< 1)) ^^^
         (phiLinear (interiorThreeLedger t) ^^^ (interiorThree t <<< 1))
-    rw [ih, phiLinear_xor, interior_split_three, Nat.shiftLeft_xor_distrib]
+    rw [ih, Rule30UOR.Interfaces.phiLinear_xor, interior_split_three, Nat.shiftLeft_xor_distrib]
     simp only [Nat.xor_assoc, Nat.xor_comm, Rule30UOR.Ledger.xor_left_comm]
 
 /-- The diagonal of the low-band ledger. -/
@@ -216,7 +211,7 @@ theorem phiLinear_lowLedgerSum (t : Nat) : ∀ n, n ≤ t →
     intro hn
     show phiLinear (lowLedgerSum t n ^^^ phiLinearPow (t - 1 - n) (lowSource n <<< 1)) =
       lowLedgerSum (t + 1) n ^^^ phiLinearPow (t + 1 - 1 - n) (lowSource n <<< 1)
-    rw [phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
+    rw [Rule30UOR.Interfaces.phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
 
 theorem lowLedger_eq_sum : ∀ t, lowLedger t = lowLedgerSum t t := by
   intro t
@@ -258,7 +253,7 @@ theorem lowTerm_of_odd (t m : Nat) (hm : 2 ≤ m) (h : m % 2 = 1) :
 
 theorem lowTerm_eq_false (t m : Nat) (h : lowSource m = 0) : lowTerm t m = false := by
   unfold lowTerm
-  rw [h, show (0 : Nat) <<< 1 = 0 from rfl, phiLinearPow_zero, Nat.zero_testBit]
+  rw [h, show (0 : Nat) <<< 1 = 0 from rfl, Rule30UOR.WittDefect.q_power_zero, Nat.zero_testBit]
 
 /-! ## The column parities step by the trailing-ones parity -/
 
@@ -406,12 +401,6 @@ theorem problem1_of_threeAperiodic (h : ThreeAperiodic) : Ruliology.CellularAuto
 
 /-! ## The trailing-ones parity is not eventually periodic -/
 
-theorem lt_twopow : ∀ k, k < twopow k := by
-  intro k
-  induction k with
-  | zero => decide
-  | succ k ih => rw [twopow_succ]; cfomega
-
 /-- `trailingParity (2^k − 1) = [k odd]`. -/
 theorem trailingParity_twopow_sub_one : ∀ k, trailingParity (twopow k - 1) = decide (k % 2 = 1) := by
   intro k
@@ -451,7 +440,7 @@ def TrailingParityPeriodic (T P : Nat) : Prop := ∀ t, T ≤ t → trailingPari
 /-- **The trailing-ones parity has no eventual period.** -/
 theorem trailingParity_not_periodic (T P : Nat) (hP : 0 < P) : ¬ TrailingParityPeriodic T P := by
   intro h
-  have hk := lt_twopow (T + P)
+  have hk := Rule30UOR.Interfaces.twopow_gt_self (T + P)
   have hk1 : twopow (T + P + 1) = twopow (T + P) + twopow (T + P) := twopow_succ (T + P)
   have h1 := h (twopow (T + P) - 1) (by cfomega)
   have h2 := h (twopow (T + P + 1) - 1) (by cfomega)
@@ -657,7 +646,7 @@ theorem threeClass_of_centerPeriodic (T P k : Nat) (hc : Rule30UOR.Scale.CenterP
   have hpos : 1 ≤ twopow k * u := Nat.mul_pos (Rule30UOR.Scale.twopow_pos k) hu1
   have h := (centerPeriodic_iff_threeAgainstTrailing (T + 2) (twopow k * P) (by cfomega)).1
     (centerPeriodic_twopow_mul (T + 2) P k (fun s hs => hc s (by cfomega))) (twopow k * u + 1)
-    (by have := lt_twopow k; have := Nat.le_mul_of_pos_left u (Rule30UOR.Scale.twopow_pos k); cfomega)
+    (by have := Rule30UOR.Interfaces.twopow_gt_self k; have := Nat.le_mul_of_pos_left u (Rule30UOR.Scale.twopow_pos k); cfomega)
   rw [show twopow k * u + 1 + twopow k * P = twopow k * (u + P) + 1 by rw [Nat.mul_add]; cfomega] at h
   rw [h, show twopow k * (u + P) + 1 - 2 = twopow k * (u + P) - 1 by
       have := Nat.le_mul_of_pos_left (u + P) (Rule30UOR.Scale.twopow_pos k); cfomega,

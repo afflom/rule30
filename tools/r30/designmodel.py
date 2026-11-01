@@ -91,6 +91,9 @@ TOKENS = [
     {"id": "refuted-bg", "role": "surface", "light": "#f9dfdc", "dark": "#3f1f1c", "statement": "Behind a refuted mark."},
     {"id": "retired", "role": "text", "light": "#575b61", "dark": "#a4a9b2", "statement": "A retired claim."},
     {"id": "retired-bg", "role": "surface", "light": "#e8e7e4", "dark": "#2a2d33", "statement": "Behind a retired mark."},
+    {"id": "observed", "role": "text", "light": "#4b3f8f", "dark": "#b9a8f0",
+     "statement": "An observed relation: certified on a window by the discovery engines, pending deduction."},
+    {"id": "observed-bg", "role": "surface", "light": "#e9e4f7", "dark": "#26213d", "statement": "Behind an observed mark."},
 ]
 
 MINIMUM = {"text": 45, "large-text": 30, "ui": 30}
@@ -101,6 +104,7 @@ PAIRS = [(fg, bg_, "text") for fg in ("ink", "muted", "link") for bg_ in ("bg", 
     ("muted", "accent-soft", "text"),
     ("open", "open-bg", "text"), ("open", "panel", "text"), ("proved", "proved-bg", "text"), ("proved", "panel", "text"),
     ("refuted", "refuted-bg", "text"), ("refuted", "panel", "text"), ("retired", "retired-bg", "text"), ("retired", "panel", "text"),
+    ("observed", "observed-bg", "text"), ("observed", "panel", "text"),
     ("ink", "open-bg", "text"),
     ("focus", "bg", "ui"), ("focus", "panel", "ui"), ("line-strong", "bg", "ui"), ("line-strong", "panel", "ui"),
     ("accent", "bg", "ui"), ("accent", "panel", "ui"), ("cell", "bg", "ui"), ("cell", "panel", "ui"),

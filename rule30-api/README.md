@@ -19,12 +19,15 @@ published on every push to `main` at <https://afflom.github.io/rule30/>.
 | --- | --- | --- |
 | `Api.lex.tex` | the `r30` command surface (`Argument`, `Command`, `commands`) | the command count |
 | `Register.lex.tex` | the claims of `frontier.toml` | every `depends` target is a claim; every proved claim names a Lean theorem |
+| `Audit.lex.tex` | the conditional refutations of the period (`Conditional`: theorem, as the segments of its Lean name, hypotheses, status, refutedBy, dischargedBy), rendered from `model/audit.toml` | every dead entry names a refuting theorem; the statuses are dead, live-discharged or open; the theorem names are distinct; the count of each status |
 | `Architecture.lex.tex` | the conceptual model, stakeholders, concerns, viewpoints, views and the quality model, on prism-stdlib's `Foundation.Arch` and `Foundation.Qual` | the stdlib's index references agree with the labeled ids; every concern is framed by a viewpoint of a stakeholder who holds it; every viewpoint governs a view; every command a view or a measure names is a command of `Api` |
 | `Presentation.lex.tex` | the brand, the published artifacts, the panels of the site, the explainer's paragraphs, the open obligation's id, the journey of each stakeholder and its steps (`Pole`, `Step`, `Verification`: the pedagogy), and the central navigation as WAI-ARIA APG patterns (`Pattern`, `Navigation`, `NavItem`) | panels are governed by `Architecture` viewpoints; journeys belong to declared stakeholders; artifacts come from `Api` commands; published paths and paragraph ids are distinct; every step shows a panel of a journey at a declared pole, the steps of a journey are consecutive from 1 and linked, cover the poles in the Observer's order and end in verification, cite claims of `Register` or artifacts and declared paragraphs, and a journey's panels are its steps' panels; navigation ids are distinct, every item names a declared pattern and navigation, every journey is reachable from the primary navigation and listed by the stepper, targets are journeys, steps or artifacts, the breadcrumb is vantage > pole > step and resolves for every step, the verification step of every journey is a primary target, the register search opens a register step |
 | `Application.lex.tex` | the application and its publication (the view workflow, the Pages environment and URL) | the entry page and the logo are published artifacts; the publication's workflow is the application's; its timeout is within the quality threshold; the obligation is an open claim of `Register`; the status marks cover every status of `Register` |
 | `Observer.lex.tex` | the Observer: for every journey of `Presentation`, the object quadruple (`Quadruple`: the problem, the proof as real object, the journey as sensual object, the proved claims its panels render as real qualities, its panels as sensual qualities, the open claims as withdrawn), the `Overlap` and `Interaction` rows between vantages, the `Facet` rows correlating the proof's own vantages, and a declared `gauge` renaming of the panel ids | every vantage is a declared journey and every journey a vantage; the object is the declared problem; real qualities are proved claims, withdrawn ids open claims, sensual qualities the journey's panels; no panel renders a withdrawn claim; every vantage sees part of the real object; interactions are symmetric and through shared panels; the facets are claims of the stated status; the gauge keeps the real qualities and transforms the sensual ones |
 | `Convert.lex.tex` | the converter from Lean signatures to LexLean statements (`tools/r30/convert.py`): the signature language (`Node`, `Signature`), a snapshot of the glossary entries the fixtures resolve (`Lexeme`), the operator-class, hint and rewrite tables, and `convert` (`check`, `prop`, `math`, binder naming) as definitions | on 28 real signatures of the research modules (`tools/r30/convert_fixtures.json`), `convert` yields exactly the statement, or the refusal, the Python converter produces; the fixture count |
 | `Rule30Core.lex.tex` | the automaton's computational core as executable definitions (`tools/r30/coremodel.py`): `rule` on three cells, the row step (`walk`, `step`), `rows`, `center`, the right diagonals `rdiag` (the cell at position t-j) and `rightRecursion` (the right-edge recursion `rdiag` of `Core.lex.tex`), `twopow`, `towerWord`, `timeParity`, `trailingParity`, `rulerBackground`, and the vectors `centersFrom`, `rulerFrom`; seven of them are production roots | the first 32 centers are 1,1,0,1,1,1,0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,1,1,1,0,1,0,1,1,1,0 and the first 32 ruler values a literal; row t has 2t+1 cells (t < 32); `rdiag 1 t = timeParity t` (t < 64); `center t = towerWord t t` (t < 32); the tower recursion `towerWord (k+2) (s+1) = towerWord (k+2) s XOR (towerWord (k+1) s OR towerWord k s)` on words 2..5 at every position; period `2^j` of words 0..4 and half period `2^(j-1)` of diagonals 2..5; the row cells agree with the right-edge recursion (t < 10) |
+| `Sequences.lex.tex` | the basis of the map (`tools/r30/sequencemodel.py`, data in `model/sequences.toml`): 79 sequences of the paper's notions (`Sequence`: id, lexeme, κ-label, window of 16 words of 32 bits) evaluated from the host Lean definitions for t < 512 | the ids and the κ-labels are distinct; every window has `windowLength / 32` words; every word is below 2^32; the sequence count |
+| `Discovery.lex.tex` | induction mechanized (`tools/r30/discoverymodel.py`): the contracts `RelationSearch` and `RecurrenceSearch` with their validators and soundness theorems, the realizations `RelationEngine` (Gaussian elimination over F2) and `RecurrenceEngine` (Berlekamp-Massey), the models, the transforms of the extended basis, and the production roots `buildColumns`, `findRelations`, `findRecurrence` (both checks at run time) | the validators are sound; `zeroWord w = true` iff every word of `w` is zero (structural induction); on 64 times of the real data the engine finds the edge parity, the left light cone, `cone-zero = cell(-1)` and the increment law in the basis, and nothing false; Berlekamp-Massey finds the recurrences of the time parity, the tower word 2 and the word 100; every relation of the register vanishes on its window |
 | `Standards.lex.tex` | the standards register: every external standard the implementation realizes (`Standard`: id, name, authority, version, scope, `realizedBy`, conformance check, coverage), and the ids of the site's navigation and visualizations | standard ids distinct; every standard has an authority and at least one realizer; every realizer is a declared module, artifact, panel, journey, command, workflow, register, navigation or visualization id; every panel, artifact, journey and command of `Presentation` and `Api`, and every navigation and visualization id, names at least one standard; the Lean and LexLean rows carry the pinned versions |
 
 ## The converter in LexLean, and what stays in Python
@@ -120,6 +123,55 @@ covariance `gaugeKeepsRealQualities` / `gaugeTransformsSensualQualities`.
 the stakeholders, journeys, panels and artifacts of `archmodel` and
 `presentationmodel` at `api sync` (nothing is copied), writes the same rows to
 `model/observer.toml`, and `api check` refuses drift.
+
+## The audit: pruning conditional refutations
+
+A conditional refutation is a theorem of the research library that refutes
+the period under hypotheses: its conclusion is `¬ CenterPeriodic T P`,
+`Problem1` or `¬ CenterPer T P`, or `False` under a `CenterPeriodic`
+hypothesis. The route it opens is "derive the hypotheses from the period",
+and a route dies when the library already refutes one of those hypotheses
+under a period (route-d-lhcolagree-coboundary died that way). `bin/r30 audit`
+(`tools/r30/auditmodel.py`, with the Lean side in `tools/r30/audit.lean.tmpl`)
+mechanizes that pruning with exact facts about theorems and no heuristic:
+
+1. One Lean introspection of every module `scripts/check_research_coverage.py
+   --modules` lists prints every public theorem of the `Rule30UOR` namespace
+   (no auxiliary, private or internal constant) with its binders, each marked
+   propositional or not by Lean, and its conclusion, as s-expressions.
+2. The hypotheses of each conditional refutation are its propositional
+   binders minus the period and the side conditions (order, equality and
+   divisibility relations over arithmetic only); each is identified by its
+   head (`LhColAgree`, `IsZeroDiag`, `DoublesAt`, `SettledUpTo`, and for a
+   ∀-statement of `rhCenter` agreements `forall Eq[Rule30UOR.Interfaces.rhCenter]`).
+3. For each head the library is searched for refutations under a period
+   (a theorem with a period hypothesis concluding the negation) and
+   discharges by head; Lean then decides whether a discharge proves the
+   hypothesis at its own instance (`#r30discharge`) and whether the whole
+   composition closes for every period (`#r30compose`, added to the
+   environment so the kernel checks it).
+4. Each conditional refutation is `dead` (a hypothesis refuted under a
+   period, with the refuting theorems named), `live-discharged` (the
+   composition closed: a proof of Problem 1, reported first and loudly) or
+   `open` (with its hypotheses neither refuted nor discharged).
+
+`bin/r30 audit --write` records the result in `model/audit.toml` (with the
+head table: refutations, discharges under a period and without) and in
+`src/Audit.lex.tex`, whose kernel-decided theorems are that every dead entry
+names a refuting theorem, the statuses come from the declared set, the
+theorem names are distinct, and the count of each status. A name is stored
+as its segments (`Rule30UOR`, `.Interfaces`, `.not`, `_centerPeriodic`, ...,
+joining to the name), so that two names part at their first differing
+segment: comparing 222 whole names pairwise exceeded lexlean's ten-minute
+child timeout (about ten milliseconds a pair under `decide`), segment lists
+take about one. `api sync`
+re-renders the module from the record, `api check` refuses drift, the
+`--json` report has its schema (`schemas/audit-result.schema.json`). The
+report also lists the dead routes the register does not record as refuted.
+`bin/r30 claim <id> --related` lists the audited conditional refutations a
+claim concerns with their open hypotheses (its open obligations), and
+`bin/r30 audit --cached` reads the record without Lean, which the Induce
+phase of the round uses while the gate runs.
 
 ## What "optimal implementation" means here
 
@@ -436,6 +488,115 @@ generated text and must be prefixes of the vectors, and every decided
 identity is re-checked on the whole published range. `api check` refuses a
 drifted file.
 
+## Discovery: induction mechanized
+
+Deduction is mechanized by Lean and the register; this is the other half:
+the step from finite data to an exact conjecture, without heuristics and
+without enumerating Rule 30. It has three parts, all LexLean, all generated
+and drift-checked like the rest of the API.
+
+**The basis** (`Sequences.lex.tex`, `bin/r30 sequences [--window N]
+[--write]`). Every notion of the paper that is a sequence `Nat -> Bool` once
+its parameters are fixed: the constant, `timeParity`, `trailingParity`,
+`rulerBackground`, `center`, the cell columns `t -> cell t p` for `p` in
+[-8, 8], the right and left diagonals `rdiag j`, `ldiag d` and the tower words
+`towerWord j` for `j, d <= 12`, the exposed masks `exposed k` (`k <= 8`),
+`maskedColumn`, `coneZero`, `leftCone`, and the ledger diagonals
+(`edgeDiagonal`, `interiorDiagonal`, `lowDiagonal`, `interiorThreeDiagonal`,
+`leftBandDiagonal`, `interiorEightDiagonal`, `ledgerDiagonal`). Each entry is
+its lexeme, its Lean constant, its parameters, its κ-label (the SHA-256 of
+the Rivest canonical S-expression `(sequence <lexeme> <parameters>)`, so a
+label addresses the notion, never its values) and its window for `t < 512`,
+stored as 32-bit words. The window is the meaning: `--write` generates one
+Lean file that `#eval`uates every entry from the host definitions in
+`rule30-core-lean` (`lake env lean`, about six minutes), and where a host
+definition is exponential as written (`Core.cell` recurses three ways) the
+file evaluates it through the rows and proves in the same file that the
+evaluated form is the host constant (`cell_memo` from `Ledger.cell_eq_rdiag`
+and `Interfaces.row_testBit`, `ldiag_memo` from `Interfaces.ldiag_eq_cell_neg`,
+and the cones, the masked column, the tower words and the exposed masks by
+unfolding to those); Lean refuses the file, and nothing is written, if one of
+these equalities fails. `dyadicRow`, `blockParity` and `wittRespBool` are
+excluded, with the reason in `model/sequences.toml` (`dyadicRow m` iterates
+the linear map `2^(m+1)` times). `api sync` renders the module from the data;
+`api check` refuses data that is not the declared basis, a κ-label that is not
+the label of its entry, or a window of the wrong shape.
+
+**The engines** (`Discovery.lex.tex`). Each is a LexLean model in the MNIST
+pattern: a `contract` (input, output, precondition and postcondition, each
+with an executable Boolean validator and its soundness theorem), an
+executable `realization`, a `model`, and a production root that applies the
+model through `checked_apply`. Unlike MNIST, whose postcondition is proved,
+both roots check the precondition AND the postcondition at run time, so every
+output the certified Rust returns was accepted by a validator the kernel
+proved sound, whatever the engine did.
+
+| Contract | Input / output | Precondition | Postcondition | Realization |
+| --- | --- | --- | --- | --- |
+| `RelationSearch` | a window (`N` and the sequences as `N / 32` words of 32 bits: `Nat` bit-vectors chunked so no value leaves the target's 64-bit naturals) / masks over the sequences | `IsWindow`: every sequence has `N / 32` words, every word below `2^32` (`windowMisfits = 0`) | `AllRelationsHold`: every mask selects a sequence, has one entry per sequence, and its selected windows XOR to the zero word (`relationResidue = 0`) | `RelationEngine`: Gaussian elimination over F2 with a mask per pivot; a column that reduces to zero yields its expression through the earlier independent columns |
+| `RecurrenceSearch` | one window as bits / a connection polynomial `[1, c1, ..., cL]` | `IsSequenceWindow`: nonempty, at most 65536 bits | `SatisfiesRecurrence`: leading coefficient 1 and `s(t) = c1 s(t-1) + ... + cL s(t-L)` for every `L <= t < N` (`recurrenceDefects = 0`) | `RecurrenceEngine`: Berlekamp-Massey over F2 |
+
+The predicates are linear facts about counts the module computes, so the
+soundness theorems are `linear_arithmetic` over the predicate and its
+validator; what a zero count means is proved by structural induction
+(`zero_word_iff`: the residue counts the relations whose XOR fails
+`zeroWord`, and `zeroWord w = true` iff every word of `w` is zero). The relation certificate certifies that each returned relation holds
+on the window; that the relations form a basis of the relation space is the
+algorithm's, not proved. The recurrence certificate certifies the recurrence
+on the window; its minimality is Massey's theorem (1969), not proved here.
+`buildColumns` builds the extended basis from the base windows: the
+transforms `base`, `shift` (s(t+1)), `even` (s(2t)), `odd` (s(2t+1)) and `and`
+(of two windows), declared as data with κ-labels composed from the base
+labels (`(shift <κ>)`, `(and <κ> <κ>)` with the labels sorted), so the
+degree-2 relations (the rule itself, carries, run-ends) are in scope through
+the pairwise ANDs of the cell columns `|p| <= 3`. The decided fixtures: on
+the first 64 times of the real data the realization finds exactly four
+relations, the edge parity (`edge-diagonal = time-parity`), the left light
+cone (`left-cone = one + center`), `cone-zero = cell(-1)` and the increment
+law in the basis (`center(t+1) = center + cell(-1) + masked-column`), and its
+output passes the postcondition; Berlekamp-Massey finds `s(t) = s(t-2)` for the
+time parity and the tower word 2 and `s(t) = s(t-3)` for the word `100`; and
+every relation the register attaches to a claim vanishes on the discovery
+window of the committed data (`registerRelationsHold`).
+
+**The runtime** (`bin/r30 discover [--window W] [--degree 1|2] [--write]`,
+`tools/r30/discover.py`). It builds the extended basis (79 base columns,
+their shifts and dilations, and with `--degree 2` the 21 ANDs: 337 columns on
+`W = 256`, half the stored window because the odd dilation reads `s(2t+1)`),
+runs the relation engine and the recurrence engine of every base window, and
+reports each relation with its columns, its κ-label `(relation <sorted column
+labels>)`, the rank of the columns before its dependent column (so `2^(rank -
+W)` bounds the chance that a random column lands in their span) and its class:
+`register` (the κ-label of a register claim's relation), `trivial` (a
+combination of the definitional relations: the rule `Core.cell_succ`, the
+masked column's definition, `towerWord j = rdiag j`, the constant diagonals,
+the parities' definitions, and their images under `t -> t+1, 2t, 2t+1`),
+`consequence` (a combination of those, the register's relations and the
+relations reported before it, with the same images), or `new`. Each
+recurrence comes with its margin `N - 2L`, the number of values it predicts
+beyond the `2L` that determine it. The runtime is the certified Rust of the
+three roots when `bin/r30 api production` has exported them and `cargo`
+builds the generated harness (`tools/r30/discover_rust.py`, in
+`.r30/discover-harness/`, never committed); otherwise the Python mirror of the
+realizations (`discoverymodel.Mirror`), every output of which is re-checked by
+the mirror of the validators. The report says which ran and why. `--write`
+appends the new relations to the register as status `observed`.
+
+**The `observed` status** (`frontier.toml`). An observed claim is a relation
+certified on a window, pending deduction: it carries `relation` (the column
+ids), `window` and `kappa`. `frontier check` re-validates it against the
+committed windows and refuses one that does not vanish; a proved claim may
+carry the window relation its theorem implies (the edge parity, the left
+light cone, the increment law, the ledger diagonal and the edge/interior
+split do), checked the same way. `Register.lex.tex` carries every claim's
+relation and κ-label and decides that every observed claim has both;
+`Discovery.lex.tex` decides that every relation of the register vanishes on
+its window. The Observer counts an observed claim as neither a real quality
+(not proved) nor withdrawn (not an open obligation): it is a sensual quality
+pending deduction and enters no pole until it is proved. Promotion is the
+usual path: a Lean theorem, `bin/r30 theorem add`, `bin/r30 frontier set <id>
+--status proved --lean <name>`.
+
 ## LexLean features in use
 
 Every feature of the pinned binary (`lexlean 0.4.0`, language 1.2), and
@@ -445,7 +606,10 @@ where this repository uses it or why it does not.
 | --- | --- | --- |
 | Semantic modules (the `lexlean/semantic-module/1` data form, emitted as the 1.2 notation) | yes | every module of `src/`, generated from the data form by `tools/r30/*model.py` through `semantic.py` and `lexmod.py`; the paper's `rule30-paper/src/*.lex.tex` |
 | Decided theorems (`proof: decide{}`) | yes | every module of `src/`; `Rule30Core.lex.tex` decides computations (rows, centers, words), the others decide membership and shape of the model data |
-| Executable definitions and production roots (`executable`, `production: {effects, targets}`) | yes | `commands`, `commandCount` of `Api`; seven roots of `Rule30Core` |
+| Executable definitions and production roots (`executable`, `production: {effects, targets}`) | yes | `commands`, `commandCount` of `Api`; seven roots of `Rule30Core`; `buildColumns`, `findRelations`, `findRecurrence` of `Discovery` |
+| Models (`contract`, `realization`, `model`, `checked_apply`, the `ContractViolation` result) | yes | `Discovery`: `RelationSearch` and `RecurrenceSearch` with their validators, `RelationEngine` and `RecurrenceEngine` (`deterministic` descriptors), the two models, and the roots that check the precondition and the postcondition at run time |
+| `evidence` claims (`satisfies_contract`, `dataset_agreement`, `equivalent_to`) | no | the engines' correctness (that elimination returns only vanishing relations, that Berlekamp-Massey returns a satisfied recurrence) is not proved, so no claim discharges a check: the roots check both predicates at run time, and the fixtures are decided theorems rather than a `dataset_agreement`, whose comparison soundness (`c e o = true -> e = o` on lists) the closed proof forms cannot reach without modus ponens on an induction hypothesis |
+| Proofs with a payload (`linear_arithmetic`, `simplify`, `induction`, theorems with parameters) | yes | `Discovery`: the validators' soundness by `linear_arithmetic`; `zero_word_iff` by structural `induction` with `simplify` over the definitions, the Boolean bridges and the induction hypothesis (an `iff` closed by `omega` would reach for `Classical.choice`, so none is) |
 | `lexlean production targets` | yes | `bin/r30 api production --targets`; the digests are pinned in `production.py` and the request, and the tests compare them with the binary |
 | `lexlean production build` | yes | `bin/r30 api production`: certified `rust-std` crates for every root (`rust-core` is unused: every root allocates) |
 | `lexlean production verify-artifact` | yes | `bin/r30 api production` replays the published bundle without source, Lean or network |
@@ -460,7 +624,7 @@ where this repository uses it or why it does not.
 | Builtin lexicons (`lexlean.std.bool`, `lexlean.std.nat`) | yes | `rule30-api/lexlean.toml`; the paper adds the research lexicons |
 | Path lexicons (`kind = "path"`) | yes | `prism.arch`, `prism.qual` here; the paper's `r30.*` lexicons, generated by `bin/r30 theorem add` |
 | Git lexicons (`kind = "git"`, `lock --allow-network`) | no | every lexicon is vendored or generated in the repository, so the lock needs no network |
-| Imports (`\importmodule`, `Module::name`) | yes | `Presentation` imports `Api`, `Architecture`, `Register`; `Architecture` imports `Api` and the stdlib (`Foundation.Arch`, `Foundation.Qual`); `Application`, `Observer` and `Standards` import `Presentation`; `Rule30Core` imports nothing (it is self-contained so its roots link alone) |
+| Imports (`\importmodule`, `Module::name`) | yes | `Presentation` imports `Api`, `Architecture`, `Register`; `Architecture` imports `Api` and the stdlib (`Foundation.Arch`, `Foundation.Qual`); `Application`, `Observer` and `Standards` import `Presentation`; `Discovery` imports `Register` and `Sequences`; `Rule30Core` and `Sequences` import nothing (`Rule30Core` is self-contained so its roots link alone) |
 | The external-interface probe (host Lean elaborating a statement against `rule30-core-lean`) | yes | the paper: `bin/r30 theorem add` and `bin/r30 verify paper --modules` run the probe `verify` runs; the API modules state no host theorem, so they have no probe |
 | `lexlean explain <code>` | no | not called by the tooling; reports carry the diagnostic code and message, and `explain` is the manual lookup |
 | `lexlean init`, `clean` | no | the projects exist; `clean` would discard the warm `.lexlean` the gate reuses |

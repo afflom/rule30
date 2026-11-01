@@ -18,6 +18,7 @@ rejected commits), else in `.r30/replay`."""
 
 import argparse
 import hashlib
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -25,15 +26,9 @@ import sys
 import tempfile
 
 from check_research_coverage import covered_modules
-from kappa_research import SCHEME, module_labels
+from kappa_research import SCHEME, artifact_paths, duplicates, memo_labels, working_memo
 
 ROOT = Path(__file__).resolve().parents[1]
-ARTIFACT_PARTS = (".olean", ".olean.private")
-
-
-def artifact_paths(core, module):
-    base = core / ".lake" / "build" / "lib" / "lean" / Path(*module.split("."))
-    return [base.with_name(base.name + part) for part in ARTIFACT_PARTS]
 
 
 def tool_digest(core, leanchecker):
@@ -60,35 +55,23 @@ def write_receipt(cache, key, module, kappa, tools):
     os.replace(temporary, cache / (key + ".ok"))
 
 
-def artifact_digest(core, module):
-    """The bytes of a module's compiled artifact: a memo key for its κ, never a receipt key."""
-    digest = hashlib.sha256(SCHEME.encode())
-    for path in artifact_paths(core, module):
-        if path.exists():
-            digest.update(path.name.encode() + b"\0" + path.read_bytes() + b"\0")
-    return digest.hexdigest()
+def module_labels_memo(core, modules, cache, exporter=None):
+    """The labels of the modules, memoized by artifact bytes (`kappa_research.memo_labels`): in the
+    gate's memo when the gate runs (`RULE30_KAPPA_MEMO`, written by the gate alone), else in the
+    working store `bin/r30 kappa` and `consolidate` share, reading the gate's memo without writing it."""
+    memo = os.environ.get("RULE30_KAPPA_MEMO")
+    if memo:
+        return memo_labels(core, modules, Path(memo), exporter=exporter)
+    store, read_only = working_memo(core)
+    if read_only == [None]:
+        # outside a repository (the fixture checkouts of the tests): beside the receipts
+        store = cache / "kappa"
+    return memo_labels(core, modules, store, exporter=exporter, read_only=read_only)
 
 
 def module_kappas(core, modules, cache, exporter=None):
-    """κ of each module. The κ is a pure function of the artifact bytes, so it is memoized
-    under `<cache>/kappa/<artifact digest>`; only modules whose artifact changed are exported.
-    The memo is a cache of the computation; receipts stay keyed by the κ itself."""
-    memo = cache / "kappa"
-    memo.mkdir(parents=True, exist_ok=True)
-    kappas, digests = {}, {module: artifact_digest(core, module) for module in modules}
-    for module in modules:
-        entry = memo / digests[module]
-        if entry.exists():
-            kappas[module] = entry.read_text().strip()
-    fresh = [module for module in modules if module not in kappas]
-    if fresh:
-        labels = module_labels(core, fresh, exporter=exporter)
-        for module in fresh:
-            kappas[module] = labels[module]["kappa"]
-            tmp = memo / (digests[module] + ".tmp")
-            tmp.write_text(kappas[module] + "\n")
-            os.replace(tmp, memo / digests[module])
-    return kappas
+    labels = module_labels_memo(core, modules, cache, exporter=exporter)
+    return {module: labels[module]["kappa"] for module in modules}
 
 
 def replay(core, modules, leanchecker, cache, log=print, exporter=None):
@@ -98,7 +81,15 @@ def replay(core, modules, leanchecker, cache, log=print, exporter=None):
             raise FileNotFoundError(f"{module} has no compiled artifact at {artifact_paths(core, module)[0]}; "
                                     "build first")
     tools = tool_digest(core, leanchecker)
-    kappas = module_kappas(core, modules, cache, exporter=exporter)
+    labels = module_labels_memo(core, modules, cache, exporter=exporter)
+    kappas = {module: labels[module]["kappa"] for module in modules}
+    groups = duplicates(labels)
+    if groups:
+        lines = "\n".join("  " + " = ".join(f"{m}: {n}" for m, n in v) for v in groups.values())
+        raise RuntimeError(f"{len(groups)} redundant theorem group(s): the same statement is proved more "
+                           f"than once (one statement κ); keep one proof and use it "
+                           f"('bin/r30 consolidate'):\n{lines}")
+    log("redundant statements: none")
     keys = {module: receipt_key(kappas[module], tools) for module in modules}
     pending = [module for module in modules if not (cache / (keys[module] + ".ok")).exists()]
     for module in modules:

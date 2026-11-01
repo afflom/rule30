@@ -624,20 +624,6 @@ theorem not_centerPeriodic_of_corridor_gate_sub_twopow
     (fun u hu => hc1 u (by omega))
     (fun u hu => hc2 u (by omega))
 
-theorem not_centerPeriodic_of_corridor_gate_sub_twopow_prop
-    (T P m k S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (hmP : m * P ≤ twopow k) (ht : T + m * P ≤ twopow k)
-    (hS : twopow k ≤ S + 1)
-    (hc1 : ∀ u : Nat, u ≤ S →
-      rhCenter (((twopow k - m * P) + m * P) + u) (u + 1) =
-      rhCenter ((twopow k - m * P) + u) (u + 1))
-    (hc2 : ∀ u : Nat, u ≤ S →
-      rhCenter ((twopow k - m * P) + u) (u + 1) = false →
-      rhCenter (((twopow k - m * P) + m * P) + u) (u + 2) =
-      rhCenter ((twopow k - m * P) + u) (u + 2)) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_corridor_gate_sub_twopow T P m k S hP hm hmP ht hS hc1 hc2
-
 /-- **Dyadic-Window Refutation of `CenterPeriodic` from a Single Black First Super-Diagonal (`not_centerPeriodic_of_black_first_superdiag_sub_twopow`, 9.1205)**:
     if `0 < P`, `0 < m`, `m * P ≤ 2^k`, `T + m * P ≤ 2^k`, `2^k ≤ S + 1`, and the first super-diagonal `(u, u + 1)` is black at `2^k - m * P` over `u ≤ S`, then `¬ CenterPeriodic T P`! -/
 theorem not_centerPeriodic_of_black_first_superdiag_sub_twopow
@@ -654,17 +640,6 @@ theorem not_centerPeriodic_of_black_first_superdiag_sub_twopow
     (fun u hu hw => ?_)
   rw [hb1 u hu] at hw
   cases hw
-
-theorem not_centerPeriodic_of_black_first_superdiag_sub_twopow_prop
-    (T P m k S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (hmP : m * P ≤ twopow k) (ht : T + m * P ≤ twopow k)
-    (hS : twopow k ≤ S + 1)
-    (hb2 : ∀ u : Nat, u ≤ S →
-      rhCenter (((twopow k - m * P) + m * P) + u) (u + 1) = true)
-    (hb1 : ∀ u : Nat, u ≤ S →
-      rhCenter ((twopow k - m * P) + u) (u + 1) = true) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_black_first_superdiag_sub_twopow T P m k S hP hm hmP ht hS hb2 hb1
 
 /-- **Dyadic-Window Refutation of `CenterPeriodic` from `RhBandAgree` and a Super-Diagonal `(u, u + (B + 1))` Gate (`not_centerPeriodic_of_superdiag_gate_sub_twopow`, 9.1206)**:
     if `0 < P`, `0 < m`, `m * P ≤ 2^k`, `T + m * P ≤ 2^k`, `2^k ≤ S + 1`, `RhBandAgree (2^k - m * P) (m * P) 1 B`, and the super-diagonal `B + 1` gate holds over `u ≤ S`, then `¬ CenterPeriodic T P`! -/
@@ -688,21 +663,6 @@ theorem not_centerPeriodic_of_superdiag_gate_sub_twopow
     (fun u hu => hc1 u (by omega))
     (fun u hu => hc2 u (by omega))
 
-theorem not_centerPeriodic_of_superdiag_gate_sub_twopow_prop
-    (T P m k B S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (hmP : m * P ≤ twopow k) (ht : T + m * P ≤ twopow k)
-    (hS : twopow k ≤ S + 1)
-    (hband : RhBandAgree (twopow k - m * P) (m * P) 1 B)
-    (hc1 : ∀ u : Nat, u ≤ S →
-      rhCenter (((twopow k - m * P) + m * P) + u) (u + (B + 1)) =
-      rhCenter ((twopow k - m * P) + u) (u + (B + 1)))
-    (hc2 : ∀ u : Nat, u ≤ S →
-      rhCenter ((twopow k - m * P) + u) (u + (B + 1)) = false →
-      rhCenter (((twopow k - m * P) + m * P) + u) (u + (B + 2)) =
-      rhCenter ((twopow k - m * P) + u) (u + (B + 2))) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_superdiag_gate_sub_twopow T P m k B S hP hm hmP ht hS hband hc1 hc2
-
 /-! ### Batch 61: White-Drive Black Persistence (`black_stays`), Inward Black-Front Arrival (`black_reaches_boundary`), and White-Run Synchronization of `rdrv` (`kit [33]`, 9.1207–9.1221) -/
 
 /-- **1-Step Black Persistence Behind a Left White Cell in `rdrv` (`rdrv_black_stays_step`, 9.1207, `kit [33]`)**:
@@ -711,7 +671,7 @@ theorem rdrv_black_stays_step (td tx k p : Nat)
     (hw : rdrv td tx k p = false)
     (hb : rdrv td tx k (p + 1) = true) :
     rdrv td tx (k + 1) (p + 1) = true := by
-  rw [rdrv_step_succ td tx k p, hw, hb, Bool.true_or, bxor_eq_xor]
+  rw [rdrv_step_succ td tx k p, hw, hb, Bool.true_or, Rule30UOR.Scale.bxor_eq]
   rfl
 
 /-- **Multi-Step Black Persistence Behind a White Left Boundary Run in `rdrv` (`rdrv_black_stays`, 9.1208, `Rule30FiniteBlackRuns.black_stays` in `rdrv`, `kit [33]`)**:
@@ -748,7 +708,7 @@ theorem rdrv_col_one_flip_after_white_drive (td tx a r : Nat)
     rdrv td tx (a + (r + 1)) 1 = false := by
   have h1 := rdrv_col_one_black_stays_of_white_drive td tx a r r hw hb (by omega)
   rw [show a + (r + 1) = (a + r) + 1 by omega,
-      rdrv_step_succ td tx (a + r) 0, rdrv_col0, hbend, h1, Bool.true_or, bxor_eq_xor]
+      rdrv_step_succ td tx (a + r) 0, rdrv_col0, hbend, h1, Bool.true_or, Rule30UOR.Scale.bxor_eq]
   rfl
 
 /-- **Unconditional Inward Arrival of a Black Cell Across `n` White Boundary Steps in `rdrv` (`rdrv_black_reaches_boundary`, 9.1211, `Rule30WhitePulse.black_reaches_boundary` in `rdrv`, `kit [33]`)**:
@@ -781,7 +741,7 @@ theorem rdrv_black_reaches_boundary (td tx a p n : Nat)
       rw [show (a + n) + 1 = a + (n + 1) by omega,
           hf, hw n (by omega), h1 n (by omega),
           show p + 2 = (p + 1) + 1 by omega, ihn,
-          Bool.false_or, bxor_eq_xor] at hstep
+          Bool.false_or, Rule30UOR.Scale.bxor_eq] at hstep
       cases hstep
     · rfl
 
@@ -1016,7 +976,7 @@ theorem rdrv_subdiag_accum_shift_xor (td tx c a H k : Nat)
         show (a + k) + 2 = a + (k + 2) by omega,
         hor k (by omega),
         ← ih (fun u hu => hor u (by omega))]
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases rdrv td tx (((a + H) + k) + (c + 2)) ((a + H) + k) <;>
       cases rdrv td tx ((a + k) + (c + 2)) (a + k) <;>
       cases (rdrv td tx ((a + (k + 1)) + (c + 1)) (a + (k + 1)) ||
@@ -1038,7 +998,7 @@ theorem rdrv_subdiag_period_double_of_prev_or_period (td tx c a H k : Nat)
       show a + (H + k) = (a + H) + k by omega,
       ← hx1] at hx2
   revert hx2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdrv td tx (((a + 2 * H) + k) + (c + 2)) ((a + 2 * H) + k) <;>
     cases rdrv td tx (((a + H) + k) + (c + 2)) ((a + H) + k) <;>
     cases rdrv td tx ((a + k) + (c + 2)) (a + k) <;> decide
@@ -1062,7 +1022,7 @@ theorem rdrv_subdiag_period_double_of_two_prev_periods (td tx c a H k : Nat)
 theorem rdrv_subdiag_succ_two_step_of_black_prev (td tx c u : Nat)
     (hb : rdrv td tx ((u + 1) + (c + 1)) (u + 1) = true) :
     rdrv td tx ((u + 1) + (c + 2)) (u + 1) = !rdrv td tx (u + (c + 2)) u := by
-  rw [rdrv_subdiag_succ_two_step td tx c u, hb, Bool.true_or, bxor_eq_xor]
+  rw [rdrv_subdiag_succ_two_step td tx c u, hb, Bool.true_or, Rule30UOR.Scale.bxor_eq]
   cases rdrv td tx (u + (c + 2)) u <;> rfl
 
 /-- **Sub-Diagonal `1` Period-`2` Invariance Under Two Consecutive Black Main-Diagonal Cells (`rdrv_subdiag_one_period_two_of_black_main_diag`, 9.1231, `kit [33]`)**:
@@ -1099,7 +1059,7 @@ theorem rdrv_subdiag_two_step_of_black_main_diag (td tx u : Nat)
     (hb : rdrv td tx (u + 2) (u + 2) = true) :
     rdrv td tx ((u + 1) + 2) (u + 1) = !rdrv td tx (u + 2) u := by
   have hs := rdrv_subdiag_succ_two_step td tx 0 u
-  rw [Nat.add_zero, Nat.add_zero, hb, Bool.or_true, bxor_eq_xor] at hs
+  rw [Nat.add_zero, Nat.add_zero, hb, Bool.or_true, Rule30UOR.Scale.bxor_eq] at hs
   rw [hs]
   cases rdrv td tx (u + 2) u <;> rfl
 
@@ -1466,40 +1426,6 @@ theorem rdrv_inward_cone_agree_of_init_agree (td tx2 tx B k p : Nat)
   have h := rdrv_inward_cone_agree_from_step td tx2 tx 0 B k p hinit hpk
   rwa [Nat.zero_add] at h
 
-/-- **Gate-Free Inward Light-Cone Determination from `RhBandAgree tx Q 1 B` (`rdrv_inward_cone_agree_of_rhBandAgree`, 9.1254, `kit [33]`)**:
-    for all `td, tx, Q, B, k, p ∈ ℕ`, if `RhBandAgree tx Q 1 B` holds at time `tx` and `p + k ≤ B + 1`, then `rdrv td (tx + Q) k p = rdrv td tx k p` — with ZERO temporal boundary gates! -/
-theorem rdrv_inward_cone_agree_of_rhBandAgree (td tx Q B k p : Nat)
-    (hband : RhBandAgree tx Q 1 B)
-    (hpk : p + k ≤ B + 1) :
-    rdrv td (tx + Q) k p = rdrv td tx k p := by
-  refine rdrv_inward_cone_agree_of_init_agree td (tx + Q) tx B k p (fun q hq => ?_) hpk
-  rcases q with _ | i
-  · rw [rdrv_col0, rdrv_col0]
-  · rw [rdrv_init td (tx + Q) (i + 1) (by omega),
-        rdrv_init td tx (i + 1) (by omega)]
-    have h := hband i (by omega)
-    rwa [show 1 + i = i + 1 by omega] at h
-
-/-- **Gate-Free Column-`1` Determination from `RhBandAgree tx Q 1 B` (`rdrv_col_one_agree_of_rhBandAgree`, 9.1255, `kit [33]`)**:
-    for all `td, tx, Q, B, k ∈ ℕ`, if `RhBandAgree tx Q 1 B` and `k ≤ B`, then `rdrv td (tx + Q) k 1 = rdrv td tx k 1`! -/
-theorem rdrv_col_one_agree_of_rhBandAgree (td tx Q B k : Nat)
-    (hband : RhBandAgree tx Q 1 B)
-    (hk : k ≤ B) :
-    rdrv td (tx + Q) k 1 = rdrv td tx k 1 :=
-  rdrv_inward_cone_agree_of_rhBandAgree td tx Q B k 1 hband (by omega)
-
-/-- **Gate-Free Collapse to the Pure-Drive White Seed `rdrv td 0` Inside the Inward Light Cone (`rdrv_inward_cone_eq_white_seed_of_initial_white_band`, 9.1256, `kit [33]`)**:
-    for all `td, tx, B, k, p ∈ ℕ`, if `rhCenter tx (1 + i) = false` for all `i ≤ B` and `p + k ≤ B + 1`, then `rdrv td tx k p = rdrv td 0 k p`! -/
-theorem rdrv_inward_cone_eq_white_seed_of_initial_white_band (td tx B k p : Nat)
-    (hw : ∀ i : Nat, i ≤ B → rhCenter tx (1 + i) = false)
-    (hpk : p + k ≤ B + 1) :
-    rdrv td tx k p = rdrv td 0 k p := by
-  have h := rdrv_inward_cone_agree_of_rhBandAgree td 0 tx B k p
-    (fun i hi => by
-      rw [Nat.zero_add, hw i hi, rhCenter_gt_eq_false 0 (1 + i) (by omega)])
-    hpk
-  rwa [Nat.zero_add] at h
-
 /-- **Gate-Free Collapse of `rhCenter (t + k) p` to `rdrv t 0 k p` Inside the Inward Light Cone (`rhCenter_inward_cone_eq_white_seed_of_initial_white_band`, 9.1257, `kit [33]`)**:
     for all `t, B, k, p ∈ ℕ`, if `rhCenter t (1 + i) = false` for all `i ≤ B` and `p + k ≤ B + 1`, then `rhCenter (t + k) p = rdrv t 0 k p`! -/
 theorem rhCenter_inward_cone_eq_white_seed_of_initial_white_band (t B k p : Nat)
@@ -1507,7 +1433,7 @@ theorem rhCenter_inward_cone_eq_white_seed_of_initial_white_band (t B k p : Nat)
     (hpk : p + k ≤ B + 1) :
     rhCenter (t + k) p = rdrv t 0 k p := by
   rw [← rdrv_diag_eq_rhCenter t k p]
-  exact rdrv_inward_cone_eq_white_seed_of_initial_white_band t t B k p hw hpk
+  exact Rule30UOR.Interfaces.rdrv_eq_white_seed_of_initial_white_band t t B k p hw hpk
 
 /-- **Gate-Free Right-Half Inward Light-Cone Agreement Under `CenterPeriodic` (`periodic_rhCenter_inward_cone_agree_of_rhBandAgree`, 9.1258, `kit [33]`)**:
     under `CenterPeriodic T P` (`0 < P`), for all `m, t, B, s, p ∈ ℕ` with `T ≤ t`, if `RhBandAgree t (m * P) 1 B` and `p + s ≤ B + 1`, then `rhCenter ((t + s) + m * P) p = rhCenter (t + s) p`! -/
@@ -1520,7 +1446,7 @@ theorem periodic_rhCenter_inward_cone_agree_of_rhBandAgree
   rw [show (t + s) + m * P = (t + m * P) + s by omega,
       periodic_rhCenter_shift_eq_rdrv_same_drive T P hP hper m t s p ht,
       ← rdrv_diag_eq_rhCenter t s p]
-  exact rdrv_inward_cone_agree_of_rhBandAgree t t (m * P) B s p hband hps
+  exact Rule30UOR.Interfaces.rdrv_init_causal_cone t t (m * P) B s p hband hps
 
 /-- **Stepwise Contraction of `RhBandAgree` Under `CenterPeriodic` (`periodic_rhBandAgree_step_of_rhBandAgree`, 9.1259, `kit [33]`)**:
     under `CenterPeriodic T P` (`0 < P`), for all `m, t, B, s ∈ ℕ` with `T ≤ t` and `s ≤ B`, if `RhBandAgree t (m * P) 1 B`, then `RhBandAgree (t + s) (m * P) 1 (B - s)`! -/
@@ -1544,34 +1470,6 @@ theorem periodic_rhCenter_one_agree_of_rhBandAgree
     rhCenter ((t + s) + m * P) 1 = rhCenter (t + s) 1 :=
   periodic_rhCenter_inward_cone_agree_of_rhBandAgree T P hP hper m t B s 1 ht hband (by omega)
 
-/-- **Gate-Free `maskparity · 0` Agreement from Single-Slice `RhBandAgree t (m * P) 1 B` (`periodic_maskparity_zero_agree_of_rhBandAgree`, 9.1261, `kit [33]`)**:
-    under `CenterPeriodic T P` (`0 < P`), for all `m, t, B, s ∈ ℕ` with `T ≤ t`, if `RhBandAgree t (m * P) 1 B` holds at the single time `t` and `s ≤ B`, then `maskparity ((t + s) + m * P) 0 = maskparity (t + s) 0`! -/
-theorem periodic_maskparity_zero_agree_of_rhBandAgree
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (m t B s : Nat) (ht : T ≤ t)
-    (hband : RhBandAgree t (m * P) 1 B)
-    (hs : s ≤ B) :
-    Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
-      Rule30UOR.Scale.maskparity (t + s) 0 := by
-  refine periodic_maskparity_zero_agree_of_rdrv_one_agree T P hP hper m t s ht (fun _ => ?_)
-  exact rdrv_col_one_agree_of_rhBandAgree t t (m * P) B s hband hs
-
-/-- **Single-Slice Refutation of `CenterPeriodic` from `RhBandAgree` at a Doubling Zero Diagonal (`not_centerPeriodic_of_rhBandAgree_at_zero_diag_doubles`, 9.1262, `kit [33]`)**:
-    if `T ≤ z + (p + 1)`, `IsZeroDiag z`, `DoublesAt (m * P) z`, `settle (z + 1) ≤ z + (p + 1)`, `settle ((z + 1) - m * P) ≤ z + (p + 1)`, `p + 3 * (m * P) ≤ B + 1`, and `RhBandAgree (z + (p + 1)) (m * P) 1 B` holds at the single time slice `z + (p + 1)` (with NO temporal boundary gate!), then `¬ CenterPeriodic T P`! -/
-theorem not_centerPeriodic_of_rhBandAgree_at_zero_diag_doubles
-    (T P m z p B : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ z + (p + 1))
-    (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : settle (z + 1) ≤ z + (p + 1))
-    (hset2 : settle ((z + 1) - m * P) ≤ z + (p + 1))
-    (hB : p + 3 * (m * P) ≤ B + 1)
-    (hband : RhBandAgree (z + (p + 1)) (m * P) 1 B) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P := by
-  intro hper
-  refine not_centerPeriodic_of_maskparity_zero_agree_at_zero_diag_doubles
-    T P m z p B hP hm ht hz hd hset1 hset2 hB (fun s hs => ?_) hper
-  exact periodic_maskparity_zero_agree_of_rhBandAgree T P hP hper m (z + (p + 1)) B s ht hband hs
-
 theorem not_centerPeriodic_of_rhBandAgree_at_zero_diag_doubles_prop
     (T P m z p B : Nat) (hP : 0 < P) (hm : 0 < m)
     (ht : T ≤ z + (p + 1))
@@ -1581,7 +1479,7 @@ theorem not_centerPeriodic_of_rhBandAgree_at_zero_diag_doubles_prop
     (hB : p + 3 * (m * P) ≤ B + 1)
     (hband : RhBandAgree (z + (p + 1)) (m * P) 1 B) :
     ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_rhBandAgree_at_zero_diag_doubles T P m z p B hP hm ht hz hd hset1 hset2 hB hband
+  Rule30UOR.Interfaces.not_centerPeriodic_of_rhBandAgree_one_at_zero_diag_step_two T P m z p B hP hm ht hz hd hset1 hset2 hB hband
 
 /-- **Single-Slice Dyadic Refutation of `CenterPeriodic` from `RhBandAgree` (`not_centerPeriodic_of_rhBandAgree_twopow`, 9.1263, `kit [33]`)**:
     if `T ≤ t`, `t + m * P = 2^k`, `2^k ≤ B + 1`, and `RhBandAgree t (m * P) 1 B` holds at the single time slice `t`, then `¬ CenterPeriodic T P`! -/
@@ -1594,7 +1492,7 @@ theorem not_centerPeriodic_of_rhBandAgree_twopow
   intro hper
   refine not_centerPeriodic_of_maskparity_zero_agree_at_twopow
     T P m t k B hP hm ht htm hB (fun s hs => ?_) hper
-  exact periodic_maskparity_zero_agree_of_rhBandAgree T P hP hper m t B s ht hband hs
+  exact Rule30UOR.Interfaces.periodic_maskparity_zero_agree_of_rhBandAgree_one T P hP hper m t B s ht hband hs
 
 /-- **Single-Slice Zero-Diagonal Pair Refutation of `CenterPeriodic` from `RhBandAgree` (`not_centerPeriodic_of_rhBandAgree_at_zero_diag_pair`, 9.1264, `kit [33]`)**:
     if `IsZeroDiag z`, `2 ≤ z + m * P`, `IsZeroDiag ((z + m * P) - 2)`, `T ≤ z + 2^k`, `settle z ≤ z + 2^k`, `settle (z + m * P) ≤ (z + m * P) + 2^k`, `2^k ≤ B + 1`, and `RhBandAgree (z + 2^k) (m * P) 1 B` holds at `z + 2^k`, then `¬ CenterPeriodic T P`! -/
@@ -1610,7 +1508,7 @@ theorem not_centerPeriodic_of_rhBandAgree_at_zero_diag_pair
   intro hper
   refine not_centerPeriodic_of_maskparity_zero_agree_of_two_zero_diags
     T P m z k B hP hz0 h2 hz1 ht hset0 hset1 hB (fun s hs => ?_) hper
-  exact periodic_maskparity_zero_agree_of_rhBandAgree T P hP hper m (z + twopow k) B s ht hband hs
+  exact Rule30UOR.Interfaces.periodic_maskparity_zero_agree_of_rhBandAgree_one T P hP hper m (z + twopow k) B s ht hband hs
 
 theorem not_centerPeriodic_of_rhBandAgree_at_zero_diag_pair_prop
     (T P m z k B : Nat) (hP : 0 < P) (hz0 : IsZeroDiag z)
@@ -1678,7 +1576,7 @@ theorem rdrv_col_succ_flip_after_white_col_and_black_cell (td tx a p n r : Nat)
     rdrv td tx (a + (r + 1)) (p + 1) = false := by
   have h1 := rdrv_black_reaches_and_stays_boundary td tx a p n r r hw hb hnr (by omega)
   rw [show a + (r + 1) = (a + r) + 1 by omega,
-      rdrv_step_succ td tx (a + r) p, hbend, h1, Bool.true_or, bxor_eq_xor]
+      rdrv_step_succ td tx (a + r) p, hbend, h1, Bool.true_or, Rule30UOR.Scale.bxor_eq]
   rfl
 
 /-- **Synchronization of Column `p + 1` Across Two States During a White Run on Column `p` (`rdrv_col_succ_agree_of_white_col_and_black_cells`, 9.1269, `kit [33]`)**:
@@ -1771,7 +1669,7 @@ theorem rdrv_white_step_of_three_white (td tx k p : Nat)
     (hw1 : rdrv td tx k (p + 1) = false)
     (hw2 : rdrv td tx k (p + 2) = false) :
     rdrv td tx (k + 1) (p + 1) = false := by
-  rw [rdrv_step_succ td tx k p, hw0, hw1, hw2, Bool.false_or, bxor_eq_xor]
+  rw [rdrv_step_succ td tx k p, hw0, hw1, hw2, Bool.false_or, Rule30UOR.Scale.bxor_eq]
   rfl
 
 /-- **Outward Right-Going White Triangle from a White Boundary Column `p` and Spatial White Interval (`rdrv_white_triangle_of_white_col_and_spatial_interval`, 9.1276, `kit [33]`)**:
@@ -1873,16 +1771,6 @@ theorem rdrv_trapezoid_eq_white_seed_of_wide_white_band (td tx B k p : Nat)
 
 /-! ### Batch 66: Main-Diagonal & Sub-Diagonal `accum_shift` Defect Laws and Unconditional `2^(k + 1 + c)`-Periodicity in `u` of `rdrv` (`kit [33]`, 9.1282–9.1296) -/
 
-/-- **1-Step Main-Diagonal Recurrence of `rdrv` Driven by Super-Diagonals `1` and `2` of `rhCenter` (`rdrv_main_diag_step_eq_rhCenter`, 9.1282, `kit [33]`)**:
-    for all `td, tx, u ∈ ℕ`, `rdrv td tx (u + 1) (u + 1) = bxor (rdrv td tx u u) (rhCenter (tx + u) (u + 1) || rhCenter (tx + u) (u + 2))`! -/
-theorem rdrv_main_diag_step_eq_rhCenter (td tx u : Nat) :
-    rdrv td tx (u + 1) (u + 1) =
-      bxor (rdrv td tx u u)
-        (rhCenter (tx + u) (u + 1) || rhCenter (tx + u) (u + 2)) := by
-  rw [rdrv_step_succ td tx u u,
-      rdrv_outside_cone_eq_rhCenter td tx u (u + 1) (by omega),
-      rdrv_outside_cone_eq_rhCenter td tx u (u + 2) (by omega)]
-
 /-- **Main-Diagonal `H`-Shift Defect Invariance (`accum_shift`) in `rdrv` (`rdrv_main_diag_accum_shift_xor`, 9.1283, `kit [33]`)**:
     for all `td, tx, a, H, n ∈ ℕ`, if the OR of super-diagonals `1` and `2` of `rhCenter` repeats with shift `H` across `[a, a + n)`, then `bxor (rdrv td tx ((a + H) + n) ((a + H) + n)) (rdrv td tx (a + n) (a + n)) = bxor (rdrv td tx (a + H) (a + H)) (rdrv td tx a a)`! -/
 theorem rdrv_main_diag_accum_shift_xor (td tx a H n : Nat)
@@ -1901,11 +1789,11 @@ theorem rdrv_main_diag_accum_shift_xor (td tx a H n : Nat)
   | succ n ih =>
     rw [show (a + H) + (n + 1) = ((a + H) + n) + 1 by omega,
         show a + (n + 1) = (a + n) + 1 by omega,
-        rdrv_main_diag_step_eq_rhCenter td tx ((a + H) + n),
-        rdrv_main_diag_step_eq_rhCenter td tx (a + n),
+        Rule30UOR.Interfaces.rdrv_main_diag_step_rhCenter td tx ((a + H) + n),
+        Rule30UOR.Interfaces.rdrv_main_diag_step_rhCenter td tx (a + n),
         hor n (by omega),
         ← ih (fun u hu => hor u (by omega))]
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases rdrv td tx ((a + H) + n) ((a + H) + n) <;>
       cases rdrv td tx (a + n) (a + n) <;>
       cases (rhCenter (tx + (a + n)) ((a + n) + 1) ||
@@ -1927,7 +1815,7 @@ theorem rdrv_main_diag_period_double_of_superdiag_or_period (td tx a H n : Nat)
       show a + (H + n) = (a + H) + n by omega,
       ← hx1] at hx2
   revert hx2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdrv td tx ((a + 2 * H) + n) ((a + 2 * H) + n) <;>
     cases rdrv td tx ((a + H) + n) ((a + H) + n) <;>
     cases rdrv td tx (a + n) (a + n) <;> decide
@@ -2037,7 +1925,7 @@ theorem rdrv_subdiag_one_accum_shift_xor (td tx a H n : Nat)
         show (a + n) + 1 = a + (n + 1) by omega,
         hor n (by omega),
         ← ih (fun u hu => hor u (by omega))]
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases rdrv td tx (((a + H) + n) + 1) ((a + H) + n) <;>
       cases rdrv td tx ((a + n) + 1) (a + n) <;>
       cases (rdrv td tx (a + (n + 1)) (a + (n + 1)) ||
@@ -2059,7 +1947,7 @@ theorem rdrv_subdiag_one_period_double_of_or_period (td tx a H n : Nat)
       show a + (H + n) = (a + H) + n by omega,
       ← hx1] at hx2
   revert hx2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdrv td tx (((a + 2 * H) + n) + 1) ((a + 2 * H) + n) <;>
     cases rdrv td tx (((a + H) + n) + 1) ((a + H) + n) <;>
     cases rdrv td tx ((a + n) + 1) (a + n) <;> decide

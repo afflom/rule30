@@ -589,10 +589,6 @@ theorem not_isBlackDiag_add_four_of_zero_diag (z : Nat) (hz : IsZeroDiag z) :
     (Rule30UOR.CompilePoints.zero_before_black_diag (z + 2)
       (by rw [show (z + 2) + 2 = z + 4 by omega]; exact hb4))
 
-theorem not_isBlackDiag_add_four_of_zero_diag_prop (z : Nat) (hz : IsZeroDiag z) :
-    ¬ Rule30UOR.CompilePoints.IsBlackDiag (z + 4) :=
-  not_isBlackDiag_add_four_of_zero_diag z hz
-
 /-- **Five diagonals past any zero diagonal is never all-black (`¬ IsBlackDiag (z + 5)`) (9.773)**:
 if `IsBlackDiag (z + 5)`, then `zero_before_black_diag` forces `IsZeroDiag (z + 3)`, contradicting `not_isZeroDiag_add_three` (`9.730`). -/
 theorem not_isBlackDiag_add_five_of_zero_diag (z : Nat) (hz : IsZeroDiag z) :
@@ -602,10 +598,6 @@ theorem not_isBlackDiag_add_five_of_zero_diag (z : Nat) (hz : IsZeroDiag z) :
     (Rule30UOR.CompilePoints.zero_before_black_diag (z + 3)
       (by rw [show (z + 3) + 2 = z + 5 by omega]; exact hb5))
 
-theorem not_isBlackDiag_add_five_of_zero_diag_prop (z : Nat) (hz : IsZeroDiag z) :
-    ¬ Rule30UOR.CompilePoints.IsBlackDiag (z + 5) :=
-  not_isBlackDiag_add_five_of_zero_diag z hz
-
 /-- **Six diagonals past any zero diagonal is never all-black (`¬ IsBlackDiag (z + 6)`) (9.774)**:
 if `IsBlackDiag (z + 6)`, then `zero_before_black_diag` forces `IsZeroDiag (z + 4)`, contradicting `not_isZeroDiag_add_four` (`9.732`). -/
 theorem not_isBlackDiag_add_six_of_zero_diag (z : Nat) (hz : IsZeroDiag z) :
@@ -614,10 +606,6 @@ theorem not_isBlackDiag_add_six_of_zero_diag (z : Nat) (hz : IsZeroDiag z) :
   exact not_isZeroDiag_add_four z hz
     (Rule30UOR.CompilePoints.zero_before_black_diag (z + 4)
       (by rw [show (z + 4) + 2 = z + 6 by omega]; exact hb6))
-
-theorem not_isBlackDiag_add_six_of_zero_diag_prop (z : Nat) (hz : IsZeroDiag z) :
-    ¬ Rule30UOR.CompilePoints.IsBlackDiag (z + 6) :=
-  not_isBlackDiag_add_six_of_zero_diag z hz
 
 /-- **Exact characterization of gap-5 zero-diagonal pairs (`IsZeroDiag z ∧ IsZeroDiag (z + 5) → IsBlackDiag (z - 1)`) (9.775)**:
 if both `z` and `z + 5` are zero diagonals, `twin_before_zero` equates `z + 3` and `z + 4`, so `E_step (z + 2)` behind the all-black diagonal `z + 2` forces `z + 3` (and hence `z + 1`, by `reset_three_after_zero`) to alternate at every time step, which by `accumulate_after_zero` forces `z - 1` to be all-black. -/
@@ -652,11 +640,6 @@ theorem isBlackDiag_sub_one_of_zero_diag_and_add_five
   revert hstep3 hres1
   cases E (z - 1) t <;> cases E (z + 1) t <;> cases E (z + 3) (t + 2) <;> decide
 
-theorem isBlackDiag_sub_one_of_zero_diag_and_add_five_prop
-    (z : Nat) (hz : IsZeroDiag z) (hz5 : IsZeroDiag (z + 5)) :
-    Rule30UOR.CompilePoints.IsBlackDiag (z - 1) :=
-  isBlackDiag_sub_one_of_zero_diag_and_add_five z hz hz5
-
 /-- **Uniqueness of the gap-5 zero-diagonal pair `(2, 7)` (`IsZeroDiag z ∧ IsZeroDiag (z + 5) → z ≤ 2`) (9.776)**:
 for `z ≥ 3`, `IsBlackDiag (z - 1)` (`9.775`) forces `IsZeroDiag (z - 3)` (`zero_before_black_diag`), contradicting `zero_diag_gap_ge_five (z - 3) z` (`9.733`). -/
 theorem zero_diag_le_two_of_add_five
@@ -670,11 +653,6 @@ theorem zero_diag_le_two_of_add_five
   have hgap := zero_diag_gap_ge_five (z - 3) z hz3 hz (by omega)
   omega
 
-theorem zero_diag_le_two_of_add_five_prop
-    (z : Nat) (hz : IsZeroDiag z) (hz5 : IsZeroDiag (z + 5)) :
-    z ≤ 2 :=
-  zero_diag_le_two_of_add_five z hz hz5
-
 /-- **Five diagonals past any zero diagonal `z > 2` is never a zero diagonal (`2 < z → IsZeroDiag z → ¬ IsZeroDiag (z + 5)`) (9.777)**:
 immediate from `zero_diag_le_two_of_add_five` (`9.776`). -/
 theorem not_isZeroDiag_add_five_of_gt_two
@@ -683,11 +661,6 @@ theorem not_isZeroDiag_add_five_of_gt_two
   intro hz5
   have hle := zero_diag_le_two_of_add_five z hz hz5
   omega
-
-theorem not_isZeroDiag_add_five_of_gt_two_prop
-    (z : Nat) (hgt : 2 < z) (hz : IsZeroDiag z) :
-    ¬ IsZeroDiag (z + 5) :=
-  not_isZeroDiag_add_five_of_gt_two z hgt hz
 
 /-- **Sharp zero-diagonal gap theorem above `z = 2` (`2 < z₁ → z₁ < z₂ → z₁ + 6 ≤ z₂`) (9.778)**:
 combines `zero_diag_gap_ge_five` (`9.733`) with `not_isZeroDiag_add_five_of_gt_two` (`9.777`). -/
@@ -700,11 +673,6 @@ theorem zero_diag_gap_ge_six_of_gt_two
   have heq5 : z2 = z1 + 5 := by omega
   exact hn5 (heq5 ▸ hz2)
 
-theorem zero_diag_gap_ge_six_of_gt_two_prop
-    (z1 z2 : Nat) (hgt : 2 < z1) (hz1 : IsZeroDiag z1) (hz2 : IsZeroDiag z2) (hlt : z1 < z2) :
-    z1 + 6 ≤ z2 :=
-  zero_diag_gap_ge_six_of_gt_two z1 z2 hgt hz1 hz2 hlt
-
 /-- **Seven diagonals past any zero diagonal `z > 2` is never all-black (`2 < z → IsZeroDiag z → ¬ IsBlackDiag (z + 7)`) (9.779)**:
 if `IsBlackDiag (z + 7)`, then `zero_before_black_diag` forces `IsZeroDiag (z + 5)`, contradicting `not_isZeroDiag_add_five_of_gt_two` (`9.777`). -/
 theorem not_isBlackDiag_add_seven_of_gt_two_and_zero_diag
@@ -714,11 +682,6 @@ theorem not_isBlackDiag_add_seven_of_gt_two_and_zero_diag
   exact not_isZeroDiag_add_five_of_gt_two z hgt hz
     (Rule30UOR.CompilePoints.zero_before_black_diag (z + 5)
       (by rw [show (z + 5) + 2 = z + 7 by omega]; exact hb7))
-
-theorem not_isBlackDiag_add_seven_of_gt_two_and_zero_diag_prop
-    (z : Nat) (hgt : 2 < z) (hz : IsZeroDiag z) :
-    ¬ Rule30UOR.CompilePoints.IsBlackDiag (z + 7) :=
-  not_isBlackDiag_add_seven_of_gt_two_and_zero_diag z hgt hz
 
 /-- **Period-4 doubling 1-step Sector-2 window bit pinning `(winWitt (t + 1) (2^k)).testBit ((t + 2^(k+1)) - (r + 3)) = false` on diagonal `z + 1` from a SINGLE `WinWittAgree t k 4 a L` at time `t` without `WinWittAgree (t + 1)` (9.780)**:
 translates `9.753` into `winWitt (t + 1) (2^k)` at bit `((t + 1) + 2^(k+1)) - (r + 4) = (t + 2^(k+1)) - (r + 3)`. -/
@@ -1151,7 +1114,7 @@ theorem lhCenter_late_cross_step_one_at_shift_plus_three_eq_not_of_single_winWit
   rw [show (r + 1) + 2 = r + 3 by clear ha hL; omega,
     show (r + 1) + 1 = r + 2 by clear ha hL; omega,
     show (r + 1) + 3 = r + 4 by clear ha hL; omega,
-    h2, ← htwin, Bool.or_self, bxor_eq_xor] at hstep
+    h2, ← htwin, Bool.or_self, Rule30UOR.Scale.bxor_eq] at hstep
   rw [hstep]
   cases lhCenter (t + twopow k) (twopow k - (r + 3)) <;> rfl
 
@@ -1257,7 +1220,7 @@ theorem lhCenter_late_cross_step_two_eq_r_plus_one_of_single_winWittAgree_and_ze
     rwa [show (r + 1) + 1 = r + 2 by clear ha hL; omega] at ht
   have hstep := lhCenter_late_cross_step (t + 1) k r (by clear ha hL; omega)
   rw [show (t + 1) + 1 = t + 2 by clear ha hL; omega,
-    h1_1, ← htwin1, Bool.or_self, h1_2, bxor_eq_xor] at hstep
+    h1_1, ← htwin1, Bool.or_self, h1_2, Rule30UOR.Scale.bxor_eq] at hstep
   rw [htwin2, hstep]
   cases lhCenter (t + twopow k) (twopow k - (r + 1)) <;> rfl
 

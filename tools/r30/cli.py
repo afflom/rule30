@@ -60,6 +60,10 @@ def cmd_brief(args):
     lines += ["", "REFUTED ROUTES (do not walk again):"]
     for c in by["refuted"]:
         lines.append(f"  {c['id']}: {c['statement'][:120]}")
+    if by["observed"]:
+        lines += ["", "OBSERVED (relations bin/r30 discover certified on a window; candidates for a Lean proof):"]
+        for c in by["observed"]:
+            lines.append(f"  {c['id']}: " + " + ".join(c.get("relation", [])) + f" = 0 on t < {c.get('window')}")
     lines += ["", "LOOP: edit Rule30UOR/*.lean -> lake build Rule30UOR.<Module> -> bin/r30 theorem add <name>",
               "      -> bin/r30 verify paper --modules src/Observations.lex.tex (seconds) -> bin/r30 frontier set/add",
               "      -> bin/r30 commit -m ... --push (gate; minutes with warm caches). Details: AGENTS.md.",
@@ -83,15 +87,21 @@ def cmd_interface(args):
 def cmd_api(args):
     """The API as a LexLean semantic module (rule30-api/src/Api.lex.tex)."""
     from . import apimodel, registermodel, archmodel, presentationmodel, observermodel, convertmodel, standardsmodel, coremodel, prismmodel, site
+    from . import sequencemodel, discoverymodel
     if args.sub == "sync":
         a, r, h, p = apimodel.sync(), registermodel.sync(), archmodel.sync(), presentationmodel.sync()
         o, c, d = observermodel.sync(), convertmodel.sync(fixtures=args.fixtures), standardsmodel.sync()
         k = coremodel.sync()
+        q, v = sequencemodel.sync(), discoverymodel.sync()
         m, g = prismmodel.sync(), site.sync_logo()
-        if a["changed"] or r["changed"] or h["changed"] or p["changed"] or o["changed"] or c["changed"] or d["changed"] or k["changed"]:
-            checks.lock("api")
+        if (a["changed"] or r["changed"] or h["changed"] or p["changed"] or o["changed"] or c["changed"] or d["changed"] or k["changed"]
+                or q["changed"] or v["changed"]):
+            locked = checks.lock("api")
+        else:
+            locked = {"ok": True}
         state = lambda x: " (rewritten)" if x["changed"] else " (current)"
-        out(args, {"api": a, "register": r, "architecture": h, "presentation": p, "observer": o, "convert": c, "standards": d, "core": k, "model": m, "logo": g},
+        out(args, {"api": a, "register": r, "architecture": h, "presentation": p, "observer": o, "convert": c, "standards": d, "core": k,
+                   "sequences": q, "discovery": v, "model": m, "logo": g},
             f"{a['module']}: {a['commands']} commands" + state(a) +
             f"\n{r['module']}: {r['claims']} claims" + state(r) +
             f"\n{h['module']}: {h['stakeholders']} stakeholders" + state(h) +
@@ -100,8 +110,12 @@ def cmd_api(args):
             f"\n{c['module']}: {c['fixtures']} fixtures" + state(c) +
             f"\n{d['module']}: {d['standards']} standards" + state(d) +
             f"\n{k['module']}: {k['theorems']} decided theorems, {k['vectors']}" + state(k) +
+            f"\n{q['module']}: {q['sequences']} sequences" + state(q) + "".join("\n  " + x for x in q.get("problems", [])) +
+            f"\n{v['module']}: {v['theorems']} decided theorems" + state(v) +
             f"\n{m['model']}: {m['claims']} claims, {m['registers']} registers" + state(m) +
             f"\n{g['logo']}" + state(g))
+        if not locked["ok"]:
+            fail("R303001", "lexlean lock refused api after the sync:\n" + locked["output"])
     elif args.sub == "production":
         from . import production
         if args.targets:
@@ -115,7 +129,8 @@ def cmd_api(args):
     else:
         results = {"api": apimodel.check(), "register": registermodel.check(), "architecture": archmodel.check(),
                    "presentation": presentationmodel.check(), "observer": observermodel.check(),
-                   "convert": convertmodel.check(), "standards": standardsmodel.check(), "core": coremodel.check(), "model": prismmodel.check(),
+                   "convert": convertmodel.check(), "standards": standardsmodel.check(), "core": coremodel.check(),
+                   "sequences": sequencemodel.check(), "discovery": discoverymodel.check(), "model": prismmodel.check(),
                    "logo": site.check_logo()}
         names = {"api": "Api.lex.tex matches the CLI", "register": "Register.lex.tex matches frontier.toml",
                  "architecture": "Architecture.lex.tex is current", "presentation": "Presentation.lex.tex and Application.lex.tex are current",
@@ -123,6 +138,8 @@ def cmd_api(args):
                  "convert": "Convert.lex.tex matches convert.py, the glossary and the fixtures",
                  "standards": "Standards.lex.tex is current and every panel, artifact, journey and command names a standard",
                  "core": "Rule30Core.lex.tex and production/core-vectors.json match coremodel.py",
+                 "sequences": "Sequences.lex.tex and model/sequences.toml are the basis, with their κ-labels",
+                 "discovery": "Discovery.lex.tex matches discoverymodel.py, the basis and the register's relations",
                  "model": "model/ registers, schemas, features and CONFORMANCE.md are current", "logo": "site/logo.svg is current"}
         out(args, results, "\n".join(names[k] if v["ok"] else v["reason"] for k, v in results.items()))
         if not all(v["ok"] for v in results.values()):
@@ -176,7 +193,13 @@ def cmd_claim(args):
             if s:
                 heads |= {n for n in _constants(s["type"]) if n.startswith("Rule30UOR.") and n != c["lean"]}
         data["related"] = {h: leansig.mentions([h]) for h in sorted(heads)}
-    text = "\n".join(f"{k}: {v}" for k, v in data.items() if k != "related")
+    if getattr(args, "related", False):
+        from . import auditmodel  # the conditional refutations this claim concerns, with their open hypotheses
+        data["audit"] = auditmodel.related(c)
+    text = "\n".join(f"{k}: {v}" for k, v in data.items() if k not in ("related", "audit"))
+    for a in data.get("audit", []):
+        text += f"\naudit {a['status'].upper()}: {a['theorem']}" + (f"; open: {'; '.join(a['open'])}" if a["open"] else "") \
+            + (f"; refuted by {', '.join(a['refutedBy'][:3])}" if a["refutedBy"] else "")
     if data.get("related"):
         for h, rows in data["related"].items():
             text += f"\nrelated via {h} ({len(rows)}):\n  " + "\n  ".join(rows[:40]) + ("\n  ..." if len(rows) > 40 else "")
@@ -195,6 +218,33 @@ def _constants(node):
                 walk(x)
     walk(node)
     return found
+
+
+def cmd_audit(args):
+    """The conditional refutations of the period in the research library, each
+    classified dead, live-discharged or open by exact facts about theorems
+    (`tools/r30/auditmodel.py`); `--write` records them in model/audit.toml and
+    src/Audit.lex.tex, `--cached` reads the last record without Lean."""
+    from . import auditmodel
+    if args.cached:
+        record = auditmodel.load()
+        if record is None:
+            fail("R308001", "no audit recorded yet (rule30-api/model/audit.toml); run bin/r30 audit --write")
+        rep = auditmodel.report(*record)
+    else:
+        try:
+            rep = auditmodel.run()
+        except RuntimeError as e:
+            fail("R308001", str(e)[:800])
+    if args.write:
+        bad = auditmodel.write(rep)
+        if bad:
+            fail("R308002", "; ".join(bad[:5]))
+        checks.lock("api")
+    if args.status:
+        rep = {**rep, "conditionals": [e for e in rep["conditionals"] if e["status"] == args.status]}
+    out(args, rep, auditmodel.render_table(rep) + (f"\nwrote {auditmodel.REGISTER.relative_to(repo.ROOT)} and "
+                                                    f"{auditmodel.MODULE.relative_to(repo.ROOT)}" if args.write else ""))
 
 
 def cmd_lexicon(args):
@@ -360,7 +410,9 @@ def _sync_register():
     changed = presentationmodel.sync()["changed"] or changed
     changed = observermodel.sync()["changed"] or changed
     if changed:
-        checks.lock("api")
+        locked = checks.lock("api")
+        if not locked["ok"]:
+            fail("R303001", "lexlean lock refused api after the register changed:\n" + locked["output"])
     from . import prismmodel
     prismmodel.sync()
 
@@ -373,13 +425,20 @@ def cmd_frontier(args):
     elif args.sub in ("add", "set"):
         try:
             if args.sub == "add":
-                c = frontier.add(args.id, args.statement, args.status, args.lean, args.lexeme, args.note, args.depends)
+                c = frontier.add(args.id, args.statement, args.status, args.lean, args.lexeme, args.note, args.depends,
+                                 relation=args.relation, window=args.window)
             else:
                 c = frontier.update(args.id, status=args.status, lean=args.lean, lexeme=args.lexeme, note=args.note,
-                                    depends=args.depends, statement=args.statement)
+                                    depends=args.depends, statement=args.statement, relation=args.relation,
+                                    window=args.window)
         except ValueError as e:
             fail("R301003", str(e))
-        frontier.render_file()
+        # Frontier.lex.tex restates the proved and refuted claims with a Lean
+        # name; a change that touches neither (an observed relation, a note)
+        # leaves it as it is, and needs no Lean.
+        if (c["status"] in ("proved", "refuted") if args.sub == "add" else
+                any(x is not None for x in (args.status, args.lean, args.lexeme, args.statement))):
+            frontier.render_file()
         _sync_register()
         out(args, c, f"{'added' if args.sub == 'add' else 'updated'} {c['id']} [{c['status']}]")
     elif args.sub == "render":
@@ -487,22 +546,145 @@ def cmd_module(args):
 def cmd_kappa(args):
     """The κ-label of research modules: the address of the declarations the
     kernel replays (scripts/kappa_research.py), the key of the replay receipts."""
-    import importlib.util
     from . import modules
     try:
         names = [modules.qualify(n) for n in args.names]
     except ValueError as e:
         fail("R305005", str(e))
+    names = names or list(modules.list_modules())
     unknown = [n for n in names if n not in modules.list_modules()]
     if unknown:
         fail("R305005", " ".join(unknown))
-    spec = importlib.util.spec_from_file_location("kappa_research", repo.ROOT / "scripts/kappa_research.py")
-    kappa_research = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(kappa_research)
-    labels = kappa_research.module_labels(repo.CORE_LEAN, names)
+    kappa_research = _kappa_research()
+    memo, read_only = kappa_research.working_memo(repo.CORE_LEAN)
+    labels = kappa_research.memo_labels(repo.CORE_LEAN, names, memo, read_only=read_only)
+    if args.duplicates:
+        every = list(modules.list_modules())
+        # the parents of generated names may live in modules outside the requested ones
+        full = labels if set(names) == set(every) else \
+            kappa_research.memo_labels(repo.CORE_LEAN, every, memo, read_only=read_only)
+        groups = kappa_research.duplicates(labels, kappa_research.library_kinds(full))
+        rows = [{"statement": k, "theorems": [f"{m}: {n}" for m, n in v]} for k, v in sorted(groups.items())]
+        text = "\n".join(f"! {r['statement'][:19]}  " + "  =  ".join(r["theorems"]) for r in rows) \
+            or "no two theorems state the same thing"
+        out(args, rows, text)
+        return
     data = {m: {"kappa": r["kappa"], **({"declarations": [{"name": n, "kappa": k} for n, k in r["declarations"]]}
                                         if args.declarations else {})} for m, r in labels.items()}
     out(args, data, kappa_research.render(labels, args.declarations))
+
+
+def _kappa_research():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("kappa_research", repo.ROOT / "scripts/kappa_research.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def cmd_consolidate(args):
+    """One proof per statement: plan, from the freshly built library, the consolidation of the
+    theorems proved more than once (statement κ shared, `kappa --duplicates`, refused by the
+    gate); with --apply, carry it out completely: remove the redundant declarations, rewrite every
+    reference to the canonical theorem, add the imports, relock, rebuild, regenerate the interface
+    sheets that named a removed theorem, and relabel."""
+    from . import consolidate, interface, modules
+    ok, errors = modules.build([])
+    if not ok:
+        fail("R305003", "the research library does not build; consolidation plans from the built library:\n" + errors)
+    kr = _kappa_research()
+    names = list(modules.list_modules())
+    memo, read_only = kr.working_memo(repo.CORE_LEAN)
+    labels = kr.memo_labels(repo.CORE_LEAN, names, memo, read_only=read_only)
+    groups = kr.duplicates(labels)
+    exact = {name: e for row in labels.values() for name, _, e in row.get("statements", [])}
+    planned = consolidate.plan(groups, exact=exact)
+    reason = lambda r: ("import cycle via " + ", ".join(r["cycle"]) if r.get("cycle") else
+                        "binder info differs" if r.get("binders") else
+                        "private, used outside its module" if r.get("hidden") else
+                        "declared after a reference it would take" if r.get("early") else
+                        "promoted name clashes in " + ", ".join(r["clash"]) if r.get("clash") else "wrapper")
+    summary = (f"{len(groups)} redundant groups: {len(planned['keep'])} consolidable, "
+               f"{len(planned['manual'])} for a person")
+    lines = [f"  {r['canonical']}  <-  " + ", ".join(x["name"] for x in r["removed"])
+             + (f"  (imports into {', '.join(r['imports'])})" if r["imports"] else "") for r in planned["keep"]]
+    lines += [f"! {r['canonical']}  <-  " + ", ".join(x["name"] for x in r["removed"]) + f"  ({reason(r)})"
+              for r in planned["manual"]]
+    if not args.apply:
+        out(args, planned, summary + ("\n" + "\n".join(lines) if lines else ""))
+        return
+    sheets = consolidate.stale_sheets(planned)
+    touched = consolidate.apply(planned)
+    for project, prefix in (("paper", "rule30-paper/"), ("core", "rule30-lexlean/")):
+        if any(t.startswith(prefix + "glossary/") or t.startswith(prefix + "src/") for t in touched):
+            locked = checks.lock(project)
+            if not locked["ok"]:
+                fail("R303001", f"lexlean lock refused {project} after the rewrite (git diff shows the edits):\n"
+                                + locked["output"])
+    ok, errors = modules.build([])
+    if not ok:
+        fail("R305003", "the consolidated library does not build (git diff shows the edits):\n" + errors)
+    if "frontier.toml" in touched:
+        # rendered from the rebuilt library, where a promoted canonical is public
+        frontier.render_file()
+        _sync_register()
+    for claim in sheets:
+        interface.write(claim)
+    gone = {x["name"] for r in planned["keep"] for x in r["removed"]}
+    audit_record = repo.ROOT / "rule30-api" / "model" / "audit.toml"
+    if gone and audit_record.exists() and any(n in audit_record.read_text() for n in gone):
+        # the audit record names a removed theorem: re-audit the rebuilt library
+        rerun = subprocess.run([str(repo.ROOT / "bin" / "r30"), "audit", "--write"], cwd=repo.ROOT,
+                               capture_output=True, text=True)
+        if rerun.returncode != 0:
+            fail("R308001", "audit --write failed after the consolidation:\n" + (rerun.stdout + rerun.stderr)[-800:])
+    if any(t in ("tools/r30/convert_fixtures.json", "tools/r30/convertmodel.py") for t in touched):
+        # the converter's fixtures name theorems: recapture their signatures from the rebuilt library
+        sync = subprocess.run([str(repo.ROOT / "bin" / "r30"), "api", "sync", "--fixtures"], cwd=repo.ROOT,
+                              capture_output=True, text=True)
+        if sync.returncode != 0:
+            fail("R303001", "api sync --fixtures failed after the rewrite:\n" + (sync.stdout + sync.stderr)[-800:])
+    left = kr.duplicates(kr.memo_labels(repo.CORE_LEAN, names, memo, read_only=read_only))
+    report = {"consolidated": len(planned["keep"]), "manual": planned["manual"], "touched": touched,
+              "sheets": sheets, "remaining": len(left)}
+    out(args, report, f"consolidated {len(planned['keep'])} groups across {len(touched)} files; "
+                      f"{len(sheets)} interface sheets regenerated; {len(left)} redundant groups remain"
+                      + ("\n" + "\n".join(lines[len(planned['keep']):]) if planned["manual"] else ""))
+
+
+def cmd_sequences(args):
+    """The basis of the map (Sequences.lex.tex): report it, or evaluate every
+    entry in Lean and write model/sequences.toml and the module."""
+    from . import sequencemodel
+    if args.write:
+        try:
+            r = sequencemodel.write(args.window)
+        except RuntimeError as e:
+            fail("R307001", str(e)[:1200])
+        checks.lock("api")
+        out(args, r, f"{r['data']}: {r['sequences']} sequences, window {r['window']}"
+            + (" (rewritten)" if r["changed"] else " (current)") + f"\n{r['module']}")
+        return
+    r = sequencemodel.report(args.window)
+    lines = [f"{len(r['sequences'])} sequences in the basis; committed window {r['window']}"]
+    lines += [f"  {x['id']}: {x['lexeme']} {x['parameters'] or ''} {x['kappa'][:19]}" for x in r["sequences"]]
+    lines += ["excluded:"] + [f"  {x['id']}: {x['reason']}" for x in r["excluded"]]
+    out(args, r, "\n".join(lines) + ("\nPROBLEMS:\n  " + "\n  ".join(r["problems"]) if r["problems"] else ""))
+    if r["problems"]:
+        fail("R307002", r["problems"][0])
+
+
+def cmd_discover(args):
+    """Induction mechanized: the relation and recurrence engines of
+    Discovery.lex.tex on the basis (tools/r30/discover.py)."""
+    from . import discover
+    try:
+        r = discover.run(window=args.window, degree=args.degree, write=args.write)
+    except discover.BasisError as e:
+        fail("R307002", str(e))
+    except discover.Refused as e:
+        fail("R307003", str(e)[:1200])
+    out(args, r, discover.render(r))
 
 
 def cmd_experiment(args):
@@ -546,6 +728,11 @@ def build_parser():
     s = sp.add_parser("claim", help="one frontier claim in full"); s.add_argument("id")
     s.add_argument("--related", action="store_true", help="also list the theorems mentioning the claim's constants")
     s.set_defaults(fn=cmd_claim)
+    s = sp.add_parser("audit", help="the conditional refutations of the period, each dead, live-discharged or open by exact facts about theorems")
+    s.add_argument("--write", action="store_true", help="record the audit in rule30-api/model/audit.toml and src/Audit.lex.tex")
+    s.add_argument("--cached", action="store_true", help="report the last recorded audit (model/audit.toml) without running Lean")
+    s.add_argument("--status", choices=["dead", "live-discharged", "open"], help="only the conditional refutations of this status")
+    s.set_defaults(fn=cmd_audit)
     sp.add_parser("gate", help="is the pre-commit gate running, and where is it").set_defaults(fn=cmd_gate)
 
     lex = sp.add_parser("lexicon").add_subparsers(dest="sub", required=True)
@@ -593,9 +780,14 @@ def build_parser():
     s = fr.add_parser("list"); s.add_argument("--status"); s.set_defaults(fn=cmd_frontier)
     s = fr.add_parser("add"); s.add_argument("id"); s.add_argument("statement")
     s.add_argument("--status", default="open"); s.add_argument("--lean"); s.add_argument("--lexeme"); s.add_argument("--note")
-    s.add_argument("--depends", nargs="*"); s.set_defaults(fn=cmd_frontier)
+    s.add_argument("--depends", nargs="*")
+    s.add_argument("--relation", nargs="*", help="the column ids of Sequences.lex.tex whose XOR vanishes (an observed claim needs one)")
+    s.add_argument("--window", type=int, help="the window of the relation (default: the discovery window)")
+    s.set_defaults(fn=cmd_frontier)
     s = fr.add_parser("set"); s.add_argument("id"); s.add_argument("--status"); s.add_argument("--lean")
     s.add_argument("--lexeme"); s.add_argument("--note"); s.add_argument("--depends", nargs="*")
+    s.add_argument("--relation", nargs="*", help="the column ids of Sequences.lex.tex whose XOR vanishes")
+    s.add_argument("--window", type=int, help="the window of the relation (default: the discovery window)")
     s.add_argument("--statement", help="restate the claim"); s.set_defaults(fn=cmd_frontier)
     fr.add_parser("check").set_defaults(fn=cmd_frontier)
     fr.add_parser("render", help="write src/Frontier.lex.tex from the register").set_defaults(fn=cmd_frontier)
@@ -612,9 +804,23 @@ def build_parser():
     s = mo.add_parser("build", help="lake build the given modules (all research modules when none)")
     s.add_argument("names", nargs="*"); s.set_defaults(fn=cmd_module)
 
+    s = sp.add_parser("consolidate", help="one proof per statement: plan, or with --apply carry out, the removal of theorems proved more than once (statement κ shared, refused by the gate), rebuilding and regenerating what named them")
+    s.add_argument("--apply", action="store_true", help="edit the sources, relock, rebuild, regenerate the interface sheets that named a removed theorem, and relabel")
+    s.set_defaults(fn=cmd_consolidate)
     s = sp.add_parser("kappa", help="the κ-label of research modules: the address of the declarations the kernel replays (uor-addr), the key of the replay receipts")
-    s.add_argument("names", nargs="+", help="Rule30UOR module names"); s.add_argument("--declarations", action="store_true", help="also each declaration's κ")
+    s.add_argument("names", nargs="*", help="Rule30UOR module names (default: every research module)"); s.add_argument("--declarations", action="store_true", help="also each declaration's κ")
+    s.add_argument("--duplicates", action="store_true", help="theorems across the modules whose statements share a κ-label (the same theorem proved twice)")
     s.set_defaults(fn=cmd_kappa)
+
+    s = sp.add_parser("sequences", help="the basis of the map (Sequences.lex.tex): every sequence with its lexeme, parameters, κ-label and window; --write evaluates the windows in Lean")
+    s.add_argument("--window", type=int, default=512, help="the number of times t < N to evaluate (default 512: twice the discovery window, which the dilations read)")
+    s.add_argument("--write", action="store_true", help="evaluate the basis from the host Lean definitions and write model/sequences.toml and Sequences.lex.tex")
+    s.set_defaults(fn=cmd_sequences)
+    s = sp.add_parser("discover", help="induction mechanized: the relations (Gaussian elimination over F2) and the recurrences (Berlekamp-Massey) of the basis, minus the register's, through the certified roots of Discovery.lex.tex")
+    s.add_argument("--window", type=int, default=256, help="the discovery window W (at most half the stored window)")
+    s.add_argument("--degree", type=int, choices=[1, 2], default=2, help="2 adds the pairwise ANDs of the cell columns |p| <= 3")
+    s.add_argument("--write", action="store_true", help="append the new relations to the register as status observed")
+    s.set_defaults(fn=cmd_discover)
 
     ex = sp.add_parser("experiment").add_subparsers(dest="sub", required=True)
     ex.add_parser("list").set_defaults(fn=cmd_experiment)

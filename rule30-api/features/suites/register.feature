@@ -52,9 +52,9 @@ Feature: register
 
   @recurrent-central-collision @build
   Scenario: Problem 1 is equivalent to: under every hypothetical center period, central collisions do not occur arbitrarily late in the band of width 2P.
-    Given frontier.toml names Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision for recurrent-central-collision
+    Given frontier.toml names Rule30UOR.CentralCollision.problem1_iff_no_recurrent_central_collision for recurrent-central-collision
     When the suite exercises recurrent-central-collision
-    Then its oracle accepts it: frontier check: Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision kernel-checked under propext and Quot.sound and published
+    Then its oracle accepts it: frontier check: Rule30UOR.CentralCollision.problem1_iff_no_recurrent_central_collision kernel-checked under propext and Quot.sound and published
 
   @saturation-reexcitation @some-true
   Scenario: Under a periodic center, each front arrival injects a unit boundary bit that re-excites the observer polynomial, so the center cannot settle (the RF/photonics heat-death reading).
@@ -326,11 +326,11 @@ Feature: register
     When the suite reproduces left-transient-above-diagonal
     Then the route is reported refuted from its authority and nothing is established here
 
-  @single-row-agreement @open
+  @single-row-agreement @some-true
   Scenario: Route B of the 2026-11-01 reading: under a center period, the prefix and tail spatial agreements (hpref, htail) of the driven right half rhCenter in one row at scale 2^L hold, so the conditional refutation not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound fires.
-    Given the register entry single-row-agreement (experiment)
-    When the suite measures single-row-agreement
-    Then the claim is reported open and never asserted
+    Given the register entry single-row-agreement and the refutation it names (Rule30UOR.DoublingDepth.two_scale_single_rh_row_engine_hypotheses_unsat)
+    When the suite reproduces single-row-agreement
+    Then the route is reported refuted from its authority and nothing is established here
 
   @driven-left-cone @some-true
   Scenario: A left half-line driven from white by an eventually periodic boundary has an eventually periodic Pascal cone at column 0 (which, with the increment law and masked Jen, would contradict a center period).
@@ -349,3 +349,51 @@ Feature: register
     Given frontier.toml names Rule30UOR.Antidiagonal.center_increment_all for increment-law
     When the suite exercises increment-law
     Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.center_increment_all kernel-checked under propext and Quot.sound and published
+
+  @black-time-consistency @open
+  Scenario: No eventually periodic boundary with black times is black-time consistent: if a boundary column c with c 0 = true satisfies c (t+1) = NOT (column -1 of the left half it drives) at every black time t, and is eventually periodic, it is eventually white (NoPeriodicBlackConsistent). This left-only statement implies Problem 1.
+    Given the register entry black-time-consistency (Rule30UOR.DiagonalCone.NoPeriodicBlackConsistent)
+    When the suite measures black-time-consistency
+    Then the claim is reported open and never asserted
+
+  @duhamel-and-tails @build
+  Scenario: Duhamel form of the rule: every cell is the seed's Pascal transport plus the Pascal cone of the run-end sources (cell_eq_seedAt_bxor_coneAt); the light cone splits by left diagonal into a head of finitely many eventually periodic diagonal cones (period 3 2^d from 2^d) and a tail (problem1_iff_leftTail); the block cone form (problem1_iff_noBlockConePeriod); and the Mahler form of periodicity (a word is periodic iff its Mahler coefficients vanish above a degree; towerWord's Mahler degree).
+    Given frontier.toml names Rule30UOR.ColumnCone.cell_eq_seedAt_bxor_coneAt for duhamel-and-tails
+    When the suite exercises duhamel-and-tails
+    Then its oracle accepts it: frontier check: Rule30UOR.ColumnCone.cell_eq_seedAt_bxor_coneAt kernel-checked under propext and Quot.sound and published
+
+  @single-seed-mask @build
+  Scenario: The left-only obligation is exactly the single-seed mask: NoPeriodicBlackConsistent iff SingleSeedMask (no eventually periodic boundary with infinitely many black times is black-time consistent with the left half it drives from the unit seed). With it, the kit's period-two question decides the obligation's period-two slice, and the obligation implies the zero-state center is aperiodic (NoZCenterPeriod).
+    Given frontier.toml names Rule30UOR.UnitSeedMask.noPeriodicBlackConsistent_iff_singleSeedMask for single-seed-mask
+    When the suite exercises single-seed-mask
+    Then its oracle accepts it: frontier check: Rule30UOR.UnitSeedMask.noPeriodicBlackConsistent_iff_singleSeedMask kernel-checked under propext and Quot.sound and published
+
+  @isolated-black-slice @build
+  Scenario: The obligation restricted to boundaries whose black times are isolated holds exactly when no walled arithmetic progression exists (NoPeriodicIsolatedBlackConsistent iff not WalledAP), and the obligation implies that restriction.
+    Given frontier.toml names Rule30UOR.Walled.noPeriodicIsolatedBlackConsistent_iff for isolated-black-slice
+    When the suite exercises isolated-black-slice
+    Then its oracle accepts it: frontier check: Rule30UOR.Walled.noPeriodicIsolatedBlackConsistent_iff kernel-checked under propext and Quot.sound and published
+
+  @eventual-cycle-invariants @some-true
+  Scenario: Decide the left-only obligation from the eventual cycles of the driven left diagonals (each diagonal of the half driven by any boundary is eventually periodic with a power-of-two period).
+    Given the register entry eventual-cycle-invariants and the refutation it names (Rule30UOR.TowerBoundary.cycle_barrier)
+    When the suite reproduces eventual-cycle-invariants
+    Then the route is reported refuted from its authority and nothing is established here
+
+  @residue-class-jen @some-true
+  Scenario: Generalize Jen's argument from two periodic columns to column 0 periodic and column -1 periodic on the black residues of the boundary, so the edge front cannot advance.
+    Given the register entry residue-class-jen and the refutation it names (Rule30UOR.ResidueJen.whiteDefectInWindow)
+    When the suite reproduces residue-class-jen
+    Then the route is reported refuted from its authority and nothing is established here
+
+  @conditional-audit @build
+  Scenario: bin/r30 audit reads, in one Lean introspection of the research library, every theorem concluding not CenterPeriodic T P, Problem1 or not CenterPer T P (or False under a CenterPeriodic hypothesis), identifies each hypothesis beyond the period and the arithmetic side conditions by its head, and classifies the conditional refutation dead (a hypothesis refuted under a period by a named theorem), live-discharged (every hypothesis discharged and the composition kernel-checked in Lean) or open (the hypotheses neither refuted nor discharged); --write records it in model/audit.toml and Audit.lex.tex, whose kernel-decided theorems are that every dead entry names a refuting theorem, the statuses are declared, the theorem names are distinct, and the count of each status; claim --related lists the open hypotheses of the conditional refutations a claim concerns.
+    Given rule30-api/src/Audit.lex.tex
+    When the suite exercises conditional-audit
+    Then its oracle accepts it: bin/r30 audit; bin/r30 verify api --modules src/Audit.lex.tex; scripts/tests/test_audit.py AuditTests.test_classification_of_recorded_statements_conditional_audit
+
+  @induce-phase @build
+  Scenario: The saved round workflow .claude/workflows/rule30-round.js opens with an Induce phase before Propose: one agent runs bin/r30 discover --window 256 --degree 2 --json and bin/r30 audit --json (a missing command is reported and contributes nothing) and returns the observed relations not in the register and the open audit obligations, which every lens receives as context and which enter Refute and Mechanize as proposals of their own (an observed relation is a candidate theorem for all t whose window certificate is already decided); the view publishes the workflow.
+    Given .claude/workflows/rule30-round.js
+    When the suite exercises induce-phase
+    Then its oracle accepts it: scripts/tests/test_audit.py RoundWorkflowTests.test_the_round_opens_with_the_induce_phase_induce_phase

@@ -67,7 +67,7 @@ definition{
   name: statusMarks,
   parameters: [],
   result: (List StatusMark),
-  body: (cons (record StatusMark {status := "open", mark := "?", label := "open: a claim to work on"}) (cons (record StatusMark {status := "proved", mark := "\u2713", label := "proved: kernel-checked under propext and Quot.sound and published"}) (cons (record StatusMark {status := "refuted", mark := "\u2717", label := "refuted: a route not to be walked again"}) (cons (record StatusMark {status := "retired", mark := "-", label := "retired: superseded by an exact restatement"}) (nil StatusMark))))),
+  body: (cons (record StatusMark {status := "open", mark := "?", label := "open: a claim to work on"}) (cons (record StatusMark {status := "proved", mark := "\u2713", label := "proved: kernel-checked under propext and Quot.sound and published"}) (cons (record StatusMark {status := "refuted", mark := "\u2717", label := "refuted: a route not to be walked again"}) (cons (record StatusMark {status := "retired", mark := "-", label := "retired: superseded by an exact restatement"}) (cons (record StatusMark {status := "observed", mark := "~", label := "observed: a relation certified on a window by bin/r30 discover, pending deduction"}) (nil StatusMark)))))),
   axioms: []
 }
 

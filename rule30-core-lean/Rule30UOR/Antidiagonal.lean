@@ -22,20 +22,16 @@ open Rule30UOR.Core Rule30UOR.Ledger Rule30UOR.EdgeSplit Rule30UOR.EdgeParity Ru
 
 /-! ## The center is the anti-diagonal of the right system -/
 
-/-- `center t = rdiag t t`: the right diagonal `t` read at time `t` is the cell at position `0`. -/
-theorem center_eq_rdiag_self (t : Nat) : center t = rdiag t t :=
-  cell_eq_rdiag t t 0 (by cfomega)
-
 /-- A center period is exactly a period of the anti-diagonal readout `rdiag t t`. -/
 theorem centerPeriodic_iff_centerPer (T P : Nat) :
     Rule30UOR.Scale.CenterPeriodic T P ↔ Rule30UOR.Right.CenterPer T P := by
   unfold Rule30UOR.Scale.CenterPeriodic Rule30UOR.Right.CenterPer
   constructor
   · intro h t ht
-    rw [← center_eq_rdiag_self, ← center_eq_rdiag_self]
+    rw [← Rule30UOR.Interfaces.core_center_eq_rdiag, ← Rule30UOR.Interfaces.core_center_eq_rdiag]
     exact h t ht
   · intro h t ht
-    rw [center_eq_rdiag_self, center_eq_rdiag_self]
+    rw [Rule30UOR.Interfaces.core_center_eq_rdiag, Rule30UOR.Interfaces.core_center_eq_rdiag]
     exact h t ht
 
 /-- The anti-diagonal readout of the right system has no eventual period. -/
@@ -55,18 +51,12 @@ theorem problem1_of_antidiagonal (h : AntidiagonalAperiodic) : Ruliology.Cellula
 
 /-! ## The tower of words -/
 
-theorem twopow_eq_pow : ∀ j, twopow j = 2 ^ j
-  | 0 => rfl
-  | j + 1 => by
-    rw [twopow_succ, twopow_eq_pow j, Nat.pow_succ]
-    cfomega
-
 /-- Diagonal `j` repeats with every multiple of `2^j`. -/
 theorem rdiag_add_twopow_mul (j : Nat) : ∀ q t, rdiag j (t + twopow j * q) = rdiag j t
   | 0, t => by rw [Nat.mul_zero, Nat.add_zero]
   | q + 1, t => by
-    rw [Nat.mul_add, Nat.mul_one, ← Nat.add_assoc, twopow_eq_pow, Rule30UOR.Right.rdiag_periodic,
-      ← twopow_eq_pow, rdiag_add_twopow_mul j q t]
+    rw [Nat.mul_add, Nat.mul_one, ← Nat.add_assoc, Rule30UOR.Interfaces.twopow_eq_pow, Rule30UOR.Right.rdiag_periodic,
+      ← Rule30UOR.Interfaces.twopow_eq_pow, rdiag_add_twopow_mul j q t]
 
 /-- The word of diagonal `j`: its `2^j` values, read cyclically. -/
 def towerWord (j s : Nat) : Bool := rdiag j (s % twopow j)
@@ -84,7 +74,7 @@ theorem towerWord_mod (j s : Nat) : towerWord j (s % twopow j) = towerWord j s :
 
 /-- **The center is the anti-diagonal of the tower of words.** -/
 theorem center_eq_towerWord (t : Nat) : center t = towerWord t t := by
-  rw [center_eq_rdiag_self, rdiag_eq_towerWord]
+  rw [Rule30UOR.Interfaces.core_center_eq_rdiag, rdiag_eq_towerWord]
 
 /-- The permutive recursion on the words, read from the right edge. -/
 theorem towerWord_step (k s : Nat) :
@@ -95,7 +85,7 @@ theorem towerWord_step (k s : Nat) :
 /-- The base word `0` is constant `1`. -/
 theorem towerWord_zero (s : Nat) : towerWord 0 s = true := by
   rw [← rdiag_eq_towerWord]
-  exact rdiag_zero_eq s
+  exact Rule30UOR.Interfaces.rdiag_zero_all s
 
 /-- The base word `1` is the time parity. -/
 theorem towerWord_one (s : Nat) : towerWord 1 s = timeParity s := by
@@ -812,11 +802,9 @@ theorem maskTransport_eq_lucas (k : Nat) : ∀ s, maskTransport k s = lucasSum k
       rw [xorBelow_congr (exposed (k + 1)) (fun j => pascalParity (s - 1 - j) 0 && exposed (k + 1) j) s
         (fun j _ => by rw [pascalParity_zero_right, Bool.true_and])]
 
-theorem maskTransport_lucas (k s : Nat) : maskTransport k s = lucasSum k s := maskTransport_eq_lucas k s
-
 /-- **The center is the complement of the Lucas-weighted sum of the exposed masks.** -/
 theorem center_eq_lucas (t : Nat) (ht : 2 ≤ t) : center t = !(lucasSum (t - 2) t) := by
-  rw [center_eq_not_maskTransport t ht, maskTransport_lucas]
+  rw [center_eq_not_maskTransport t ht, Rule30UOR.Antidiagonal.maskTransport_eq_lucas]
 
 /-! ## The first mask words, the corner, and Lucas's higher-bit law -/
 
@@ -893,7 +881,7 @@ theorem maskPascal_corner (t i : Nat) (hi : i + 2 ≤ t) :
 theorem per_succ_twopow (k : Nat) (hk : 1 ≤ k) :
     Ruliology.CellularAutomata.Rule30RightPeriods.Per (k + 1) (2 ^ k) := by
   intro t
-  rw [← Rule30UOR.Right.rdiag_eq_R, ← Rule30UOR.Right.rdiag_eq_R, ← twopow_eq_pow]
+  rw [← Rule30UOR.Right.rdiag_eq_R, ← Rule30UOR.Right.rdiag_eq_R, ← Rule30UOR.Interfaces.twopow_eq_pow]
   have h := rdiag_period_half (k + 1) t (by cfomega)
   rwa [show k + 1 - 1 = k by cfomega] at h
 

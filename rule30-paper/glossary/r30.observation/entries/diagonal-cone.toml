@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "diagonal-cone"
+category = "function"
+signature = "(pi ((explicit d (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DiagonalCone"
+name = "Rule30UOR.DiagonalCone.diagonalCone"
+
+[[form]]
+id = "diagonal-cone"
+channel = "math"
+surface = "diagonalcone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name diagonalcone) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

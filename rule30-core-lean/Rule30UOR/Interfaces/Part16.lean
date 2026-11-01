@@ -239,7 +239,7 @@ theorem periodic_maskparity_zero_agree_of_dyadic_row_shift_agree
     (hs : s ≤ B) :
     Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
       Rule30UOR.Scale.maskparity (t + s) 0 :=
-  periodic_maskparity_zero_agree_of_rhBandAgree T P hP hper m t B s ht
+  Rule30UOR.Interfaces.periodic_maskparity_zero_agree_of_rhBandAgree_one T P hP hper m t B s ht
     (rhBandAgree_of_dyadic_row_shift_agree t (m * P) k v 1 B htc hband) hs
 
 /-- **Refutation of `CenterPeriodic` from Shifted Dyadic Row `RhBandAgree` at a Doubling Zero Diagonal (`not_centerPeriodic_of_dyadic_row_shift_agree_at_zero_diag_doubles`, 9.1326, `kit [33]`)**:
@@ -254,7 +254,7 @@ theorem not_centerPeriodic_of_dyadic_row_shift_agree_at_zero_diag_doubles
     (hB : p + 3 * (m * P) ≤ B)
     (hband : RhBandAgree ((z + (p + 1)) + v * twopow (k + 1)) (m * P) (v * twopow (k + 1) + 1) B) :
     ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_rhBandAgree_at_zero_diag_doubles T P m z p B hP hm ht hz hd hset1 hset2 (by omega)
+  Rule30UOR.Interfaces.not_centerPeriodic_of_rhBandAgree_one_at_zero_diag_step_two T P m z p B hP hm ht hz hd hset1 hset2 (by omega)
     (rhBandAgree_of_dyadic_row_shift_agree (z + (p + 1)) (m * P) k v 1 B htc hband)
 
 theorem not_centerPeriodic_of_dyadic_row_shift_agree_at_zero_diag_doubles_prop
@@ -291,7 +291,7 @@ theorem rdrv_white_seed_subdiag_one_period_two_all (td u : Nat) :
   rw [show u + 2 = (u + 1) + 1 by omega,
       rdrv_white_seed_subdiag_one_step_eq_center td (u + 1),
       rdrv_white_seed_subdiag_one_step_eq_center td u]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdrv td 0 (u + 1) u <;> cases Rule30UOR.Core.center td <;> rfl
 
 /-- **Universal `2^c`-Periodicity in `u` of All Sub-Diagonals `c` in the Pure-Drive White Seed `rdrv td 0` (`rdrv_white_seed_subdiag_period_twopow_all`, 9.1329, `kit [33]`)**:
@@ -600,7 +600,7 @@ theorem periodic_maskparity_zero_agree_of_dyadic_row_scale_agree
     (hs : s ≤ B) :
     Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
       Rule30UOR.Scale.maskparity (t + s) 0 :=
-  periodic_maskparity_zero_agree_of_rhBandAgree T P hP hper m t B s ht
+  Rule30UOR.Interfaces.periodic_maskparity_zero_agree_of_rhBandAgree_one T P hP hper m t B s ht
     (rhBandAgree_of_dyadic_row_scale_agree t (m * P) K v 1 B htK hband) hs
 
 /-! ### Batch 71: Finite-Support Right-Half Termination (`tx < q → rdrv td tx 0 q = false`), Exterior White Cone (`tx + k < p → rdrv td tx k p = false`), All-Horizon Expansion of `RhBandAgree tx Q 1 (tx + Q)`, and Horizon-Independent Refutation of `CenterPeriodic` (`kit [33]`, 9.1357–9.1371) -/
@@ -652,7 +652,7 @@ theorem rhBandAgree_all_of_support_agree (tx Q B : Nat)
 theorem rdrv_agree_all_of_support_rhBandAgree (td tx Q k p : Nat)
     (hband : RhBandAgree tx Q 1 (tx + Q)) :
     rdrv td (tx + Q) k p = rdrv td tx k p :=
-  rdrv_inward_cone_agree_of_rhBandAgree td tx Q (p + k) k p
+  Rule30UOR.Interfaces.rdrv_init_causal_cone td tx Q (p + k) k p
     (rhBandAgree_all_of_support_agree tx Q (p + k) hband) (by omega)
 
 /-- **All-Time All-Column Agreement of `rhCenter` Under `CenterPeriodic` from Support-Width `RhBandAgree` (`periodic_rhCenter_agree_all_of_support_rhBandAgree`, 9.1363, `kit [33]`)**:
@@ -673,7 +673,7 @@ theorem periodic_maskparity_zero_agree_all_of_support_rhBandAgree
     (hband : RhBandAgree t (m * P) 1 (t + m * P)) :
     Rule30UOR.Scale.maskparity ((t + s) + m * P) 0 =
       Rule30UOR.Scale.maskparity (t + s) 0 :=
-  periodic_maskparity_zero_agree_of_rhBandAgree T P hP hper m t s s ht
+  Rule30UOR.Interfaces.periodic_maskparity_zero_agree_of_rhBandAgree_one T P hP hper m t s s ht
     (rhBandAgree_all_of_support_agree t (m * P) s hband) (by omega)
 
 /-- **Support-Width (`(z + (p + 1)) + m * P`) Single-Slice Refutation of `CenterPeriodic` at a Doubling Zero Diagonal (`not_centerPeriodic_of_support_rhBandAgree_at_zero_diag_doubles`, 9.1365, `kit [33]`)**:
@@ -686,7 +686,7 @@ theorem not_centerPeriodic_of_support_rhBandAgree_at_zero_diag_doubles
     (hset2 : settle ((z + 1) - m * P) ≤ z + (p + 1))
     (hband : RhBandAgree (z + (p + 1)) (m * P) 1 ((z + (p + 1)) + m * P)) :
     ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_rhBandAgree_at_zero_diag_doubles T P m z p (p + 3 * (m * P))
+  Rule30UOR.Interfaces.not_centerPeriodic_of_rhBandAgree_one_at_zero_diag_step_two T P m z p (p + 3 * (m * P))
     hP hm ht hz hd hset1 hset2 (by omega)
     (rhBandAgree_all_of_support_agree (z + (p + 1)) (m * P) (p + 3 * (m * P)) hband)
 
@@ -772,38 +772,15 @@ theorem periodic_maskparity_zero_agree_all_of_dyadic_row_support_agree
 
 /-! ### Batch 72: Left-Inversion of `rdrv` and `rhCenter` Across Dyadic Centers `U = v * 2^(t + C)`, Full Two-Sided Embedding of the Left Half `lhCenter` Inside the Right Half `rhCenter`, and Left-Side White Isolation Corridors (`kit [33]`, 9.1372–9.1386) -/
 
-/-- **Spatial Left-Inversion Law of `rdrv` (`rdrv_left_step_inv`, 9.1372, `kit [33]`)**:
-    for all `td, tx, k, p ∈ ℕ`, `rdrv td tx k p = bxor (rdrv td tx (k + 1) (p + 1)) (rdrv td tx k (p + 1) || rdrv td tx k (p + 2))`! -/
-theorem rdrv_left_step_inv (td tx k p : Nat) :
-    rdrv td tx k p =
-      bxor (rdrv td tx (k + 1) (p + 1))
-        (rdrv td tx k (p + 1) || rdrv td tx k (p + 2)) := by
-  rw [rdrv_step_succ td tx k p]
-  simp only [bxor_eq_xor]
-  cases rdrv td tx k p <;>
-    cases (rdrv td tx k (p + 1) || rdrv td tx k (p + 2)) <;> rfl
-
 /-- **Subtracted-Column Left-Inversion Law of `rdrv` (`rdrv_left_step_inv_sub`, 9.1373, `kit [33]`)**:
     for all `td, tx, k, U, d ∈ ℕ` with `d + 1 ≤ U`, `rdrv td tx k (U - (d + 1)) = bxor (rdrv td tx (k + 1) (U - d)) (rdrv td tx k (U - d) || rdrv td tx k ((U - d) + 1))`! -/
 theorem rdrv_left_step_inv_sub (td tx k U d : Nat) (hdU : d + 1 ≤ U) :
     rdrv td tx k (U - (d + 1)) =
       bxor (rdrv td tx (k + 1) (U - d))
         (rdrv td tx k (U - d) || rdrv td tx k ((U - d) + 1)) := by
-  have h := rdrv_left_step_inv td tx k (U - (d + 1))
+  have h := Rule30UOR.Interfaces.rdrv_inward_bxor td tx k (U - (d + 1))
   rwa [show (U - (d + 1)) + 1 = U - d by omega,
        show (U - (d + 1)) + 2 = (U - d) + 1 by omega] at h
-
-/-- **Spatial Left-Inversion Law of `rhCenter` (`rhCenter_left_step_inv`, 9.1374, `kit [33]`)**:
-    for all `t, p ∈ ℕ`, `rhCenter t p = bxor (rhCenter (t + 1) (p + 1)) (rhCenter t (p + 1) || rhCenter t (p + 2))`! -/
-theorem rhCenter_left_step_inv (t p : Nat) :
-    rhCenter t p =
-      bxor (rhCenter (t + 1) (p + 1))
-        (rhCenter t (p + 1) || rhCenter t (p + 2)) := by
-  rw [← rdrv_zero_eq_rhCenter t p,
-      ← rdrv_zero_eq_rhCenter (t + 1) (p + 1),
-      ← rdrv_zero_eq_rhCenter t (p + 1),
-      ← rdrv_zero_eq_rhCenter t (p + 2)]
-  exact rdrv_left_step_inv 0 0 t p
 
 /-- **Subtracted-Column Left-Inversion Law of `rhCenter` (`rhCenter_left_step_inv_sub`, 9.1375, `kit [33]`)**:
     for all `t, U, d ∈ ℕ` with `d + 1 ≤ U`, `rhCenter t (U - (d + 1)) = bxor (rhCenter (t + 1) (U - d)) (rhCenter t (U - d) || rhCenter t ((U - d) + 1))`! -/
@@ -811,7 +788,7 @@ theorem rhCenter_left_step_inv_sub (t U d : Nat) (hdU : d + 1 ≤ U) :
     rhCenter t (U - (d + 1)) =
       bxor (rhCenter (t + 1) (U - d))
         (rhCenter t (U - d) || rhCenter t ((U - d) + 1)) := by
-  have h := rhCenter_left_step_inv t (U - (d + 1))
+  have h := Rule30UOR.Interfaces.rhCenter_inward_step t (U - (d + 1))
   rwa [show (U - (d + 1)) + 1 = U - d by omega,
        show (U - (d + 1)) + 2 = (U - d) + 1 by omega] at h
 
@@ -1142,17 +1119,6 @@ theorem rhCenter_dyadic_sub_doubling_diag_antiperiodic (K v Q z d : Nat)
 
 /-! ### Batch 74: Bilateral Interior Light-Cone Determination for `rhCenter` & Left/Right White Isolation Corridors Around `v * 2^K` (`kit [33]`, 9.1402–9.1416) -/
 
-/-- **Interior Step Recurrence of `rhCenter` (`rhCenter_step_succ_interior`, 9.1402, `kit [33]`)**:
-    for all `t, p ∈ ℕ`, `rhCenter (t + 1) (p + 1) = bxor (rhCenter t p) (rhCenter t (p + 1) || rhCenter t (p + 2))`! -/
-theorem rhCenter_step_succ_interior (t p : Nat) :
-    rhCenter (t + 1) (p + 1) =
-      bxor (rhCenter t p) (rhCenter t (p + 1) || rhCenter t (p + 2)) := by
-  rw [← rdrv_zero_eq_rhCenter (t + 1) (p + 1),
-      ← rdrv_zero_eq_rhCenter t p,
-      ← rdrv_zero_eq_rhCenter t (p + 1),
-      ← rdrv_zero_eq_rhCenter t (p + 2)]
-  exact rdrv_step_succ 0 0 t p
-
 /-- **Single-Step Bilateral Light-Cone Contraction of `rhCenter` (`rhCenter_bilateral_cone_agree_step`, 9.1403, `kit [33]`)**:
     for all `t2, t1, a, L, i ∈ ℕ`, if `∀ q ≤ L + 2, rhCenter t2 (a + q) = rhCenter t1 (a + q)` and `i ≤ L`, then `rhCenter (t2 + 1) ((a + 1) + i) = rhCenter (t1 + 1) ((a + 1) + i)`! -/
 theorem rhCenter_bilateral_cone_agree_step (t2 t1 a L i : Nat)
@@ -1160,8 +1126,8 @@ theorem rhCenter_bilateral_cone_agree_step (t2 t1 a L i : Nat)
     (hi : i ≤ L) :
     rhCenter (t2 + 1) ((a + 1) + i) = rhCenter (t1 + 1) ((a + 1) + i) := by
   rw [show (a + 1) + i = (a + i) + 1 by omega,
-      rhCenter_step_succ_interior t2 (a + i),
-      rhCenter_step_succ_interior t1 (a + i),
+      Rule30UOR.Interfaces.rhCenter_step_succ t2 (a + i),
+      Rule30UOR.Interfaces.rhCenter_step_succ t1 (a + i),
       show (a + i) + 1 = a + (i + 1) by omega,
       show (a + i) + 2 = a + (i + 2) by omega,
       h i (by omega),

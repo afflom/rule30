@@ -41,3 +41,6 @@ __pycache__/
 # r30 tool scratch
 .r30/
 __pycache__/
+
+# Agent worktrees (the saved workflows in .claude/workflows ARE tracked)
+.claude/worktrees/

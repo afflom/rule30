@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.rdrv_inward_cone_agree_of_rhBandAgree"
+name = "Rule30UOR.Interfaces.rdrv_init_causal_cone"
 
 [[form]]
 id = "rdrv-inward-cone-agree-of-rhbandagree"

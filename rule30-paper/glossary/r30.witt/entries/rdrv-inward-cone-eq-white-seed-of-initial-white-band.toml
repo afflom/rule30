@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.rdrv_inward_cone_eq_white_seed_of_initial_white_band"
+name = "Rule30UOR.Interfaces.rdrv_eq_white_seed_of_initial_white_band"
 
 [[form]]
 id = "rdrv-inward-cone-eq-white-seed-of-initial-white-band"

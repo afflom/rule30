@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-periodic-isolated-black-consistent"
+category = "term-constant"
+signature = "(sort prop)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Walled"
+name = "Rule30UOR.Walled.NoPeriodicIsolatedBlackConsistent"
+
+[[form]]
+id = "no-periodic-isolated-black-consistent"
+channel = "math"
+surface = "noperiodicisolatedblackconsistent"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name noperiodicisolatedblackconsistent)"

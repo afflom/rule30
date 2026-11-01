@@ -21,7 +21,8 @@
     "open",
     "proved",
     "refuted",
-    "retired"
+    "retired",
+    "observed"
    ]
   },
   "statement": {
@@ -45,6 +46,19 @@
     "type": "string"
    }
   },
+  "relation": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "window": {
+   "type": "integer"
+  },
+  "kappa": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}$"
+  },
   "dependents": {
    "type": "array",
    "items": {
@@ -66,6 +80,44 @@
     "type": "array",
     "items": {
      "type": "string"
+    }
+   }
+  },
+  "audit": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "theorem",
+     "status",
+     "open",
+     "refutedBy"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "theorem": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "dead",
+       "live-discharged",
+       "open"
+      ]
+     },
+     "open": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "refutedBy": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
     }
    }
   }

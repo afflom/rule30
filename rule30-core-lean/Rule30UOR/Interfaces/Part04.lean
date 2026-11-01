@@ -79,7 +79,7 @@ theorem winWitt_step_frobDefect_testBit_succ (t0 k j : Nat) :
   simp only [Nat.testBit_xor, Nat.testBit_shiftLeft,
     show decide (j + 1 ≥ 1) = true from decide_eq_true (by omega),
     Bool.true_and, Nat.add_sub_cancel] at hs
-  rw [hs, bxor_eq_xor, bxor_eq_xor]
+  rw [hs, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
 
 /-- **General Outside-the-Cone Bit Readout of `frobDefect k (row t0)` at `(r + 1) + 2^k` (`frobDefect_row_testBit_outside_cone`)**:
     for fixed `k` and all `r ≥ 2^k` (outside the light cone), the three diagonal self-carry terms cancel between `carry (phiScale k (row t0))` and `phiScale k (carry (row t0))`, leaving the exact sum of products of cells of `row t0` at distance `2^k` and `2^(k+1)` apart! -/
@@ -107,7 +107,7 @@ theorem frobDefect_row_testBit_outside_cone (t0 k r : Nat) (hr : twopow k ≤ r)
         (rdiag ((r + 1) - twopow k) t0 && rdiag (r - twopow k) t0) := by
     change (((carry (row t0)) ^^^ ((carry (row t0)) <<< twopow k)) ^^^
         ((carry (row t0)) <<< (twopow k + twopow k))).testBit ((r + 1) + twopow k) = _
-    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, bxor_eq_xor]
+    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, Rule30UOR.Scale.bxor_eq]
     have d1 : decide ((r + 1) + twopow k ≥ twopow k) = true := decide_eq_true (by omega)
     have d2 : decide ((r + 1) + twopow k ≥ twopow k + twopow k) = true := decide_eq_true (by omega)
     have hb1 : (carry (row t0)).testBit ((r + 1) + twopow k) =
@@ -131,7 +131,7 @@ theorem frobDefect_row_testBit_outside_cone (t0 k r : Nat) (hr : twopow k ≤ r)
       hb1, hb2, hb3]
   unfold frobDefect
   rw [Nat.testBit_xor, hc1, hc2]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag ((r + 1) + twopow k) t0 <;>
     cases rdiag (r + 1) t0 <;>
     cases rdiag ((r + 1) - twopow k) t0 <;>
@@ -185,7 +185,7 @@ theorem frobDefect_row_center_slot_at_white_center_outside_cone (s k : Nat) (hs 
     rw [← core_center_eq_rdiag (s + 1), hw, Bool.not_false, Bool.true_and] at hm0
     exact hm0.symm
   rw [frobDefect_row_center_slot_outside_cone s k hs, hw, hm]
-  simp only [bxor_eq_xor, Bool.false_and, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.false_and, Bool.xor_false]
 
 /-- **Frobenius Defect `δ_k` at the Column-`-1` Slot `(d + 2) + 2^k` Outside the Cone (`frobDefect_row_colm1_slot_outside_cone`)**:
     for fixed `k` and all `d ≥ 2^k` (with NO upper bound on `d`), at time `t0 = d + 1`, the column-`-1` slot `(d + 2) + 2^k` of `frobDefect k (row (d + 1))` (which shifts under `↑` to the column-`-1` bit `(d + 3) + 2^k` of `winWitt (d + 2) (2^k)`) is the 3-term sum of products of cells of `row (d + 1)` at distance `2^k` and `2^(k+1)` apart! -/
@@ -228,7 +228,7 @@ theorem frobDefect_row_colm1_slot_at_white_center_outside_cone (d k : Nat) (hd :
           bxor (ldiag ((d + 1) - twopow k) (d + 1)) (rdiag ((d + 1) - twopow k) (d + 1))))
         (rdiag ((d + 2) - twopow k) (d + 1) && ldiag ((d + 1) - twopow k) (d + 1)) := by
   rw [frobDefect_row_colm1_slot_outside_cone d k hd, hw]
-  simp only [bxor_eq_xor, Bool.false_xor, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.false_xor, Bool.xor_false]
 
 /-- **Frobenius Defect `δ_k` at the Column-`+1` Slot `(s + 1) + 2^k` of `row (s + 2)` Outside the Cone (`frobDefect_row_col1_slot_outside_cone`)**:
     for fixed `k` and all `s ≥ 2^k` (with NO upper bound on `s`), at time `t0 = s + 2`, the column-`+1` slot `(s + 1) + 2^k` of `frobDefect k (row (s + 2))` (which shifts under `↑` to the column-`+1` bit `(s + 2) + 2^k` of `winWitt (s + 3) (2^k)`) is the 3-term sum of products of cells of `row (s + 2)` at distance `2^k` and `2^(k+1)` apart! -/
@@ -429,7 +429,7 @@ theorem periodic_winWitt_step_center_slot_shift_mul_at_white_late_center (T P : 
   change wittRespBool ((s + m * P) + 2) k = _ at hsm
   have hcc := periodic_crossCarry_center_bit_shift_mul_at_white_late_center T P hP h m s k ht hw_late
   rw [hs1, hsm, ← hcc]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phi (winWitt ((s + m * P) + 1) (twopow k))).testBit (((s + m * P) + 2) + twopow k) <;>
     cases (crossCarry (phiScale k (row ((s + m * P) + 1))) (winWitt ((s + m * P) + 1) (twopow k))).testBit
       (((s + m * P) + 1) + twopow k) <;>
@@ -714,7 +714,7 @@ theorem frobDefect_row_late_center_slot_at_both_white_centers_eq_zcenter_and_mas
       ← core_center_eq_rdiag ((d + 1) + twopow k), hw2, Bool.not_false, Bool.true_and] at hm0
     exact hm0.symm
   rw [frobDefect_row_late_center_slot_rperiodic d k hk, hz, hw1, hw2, hm1, hm2]
-  simp only [bxor_eq_xor, Bool.false_and, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.false_and, Bool.xor_false]
 
 /-- **Tying `R_periodic` to the Column-`-1` Frobenius Defect at `t0 = (d + 1) + 2^k` (`frobDefect_row_late_colm1_slot_rperiodic`)**:
     for `d + 2 ≤ k`, `R_periodic` folds the right-wing cells at distance `2^k` into `ldiag d (d + 1)` (the early column-`-1` cell!) and `center (d + 1)`! -/
@@ -758,7 +758,7 @@ theorem frobDefect_row_late_colm1_slot_of_in_phase_eq_colm1_jump_and_damage
   have hz : ldiag (d + 1) ((d + 1) + twopow k) = zcenter (d + 1) :=
     ldiag_settled_eq_zcenter (d + 1) k (by omega) hset
   rw [frobDefect_row_late_colm1_slot_rperiodic d k hk, hz, hphase]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag d ((d + 1) + twopow k) <;>
     cases ldiag (d + twopow k) ((d + 1) + twopow k) <;>
     cases ldiag d (d + 1) <;>
@@ -795,7 +795,7 @@ theorem frobDefect_row_late_colm1_xor_center_slot_at_both_white_centers
   rw [hl2, hw2, show ((d + 1) + twopow k) + 1 = (d + 2) + twopow k by omega] at hs2
   rw [hf_col, hf_cent]
   revert hs1 hs2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag (d + twopow k) ((d + 1) + twopow k) <;>
     cases ldiag d (d + 1) <;>
     cases Rule30UOR.Scale.maskparity ((d + 1) + twopow k) 0 <;>
@@ -856,7 +856,7 @@ theorem periodic_winWitt_step_late_center_slot_at_white_centers_eq_zcenter_and_m
   rw [show ((d + 1) + twopow k) + twopow k = (d + 1) + twopow (k + 1) by
       rw [Rule30UOR.Core.twopow_succ]; omega] at hstep hf
   rw [hstep, hcc, hf]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phi (winWitt ((d + 1) + twopow k) (twopow k))).testBit (((d + 2) + twopow k) + twopow k) <;>
     cases zcenter (d + 1) <;>
     cases Rule30UOR.Scale.maskparity ((d + 1) + twopow (k + 1)) 0 <;>
@@ -917,7 +917,7 @@ theorem periodic_winWitt_step_late_colm1_slot_at_white_centers_eq_zcenter_and_co
   rw [show ((d + 2) + twopow k) + twopow k = (d + 2) + twopow (k + 1) by
       rw [Rule30UOR.Core.twopow_succ]; omega] at hstep hcc hf
   rw [hstep, hcc, hf]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phi (winWitt ((d + 1) + twopow k) (twopow k))).testBit (((d + 3) + twopow k) + twopow k) <;>
     cases zcenter (d + 1) <;>
     cases ldiag (d + twopow (k + 1)) ((d + 1) + twopow (k + 1)) <;>
@@ -977,7 +977,7 @@ theorem frobDefect_row_late_colm1_slot_of_in_phase_eq_colm1_jump_and_damage_prop
           bxor (ldiag (d + twopow k) ((d + 1) + twopow k)) (ldiag d (d + 1)))) := by
   unfold ZCenterAndEq wittBitBool
   rw [frobDefect_row_late_colm1_slot_of_in_phase_eq_colm1_jump_and_damage d k hk hset hphase]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases zcenter (d + 1) <;>
     cases Rule30UOR.Core.center (d + 1) <;>
     cases (ldiag (d + twopow k) ((d + 1) + twopow k) ^^ ldiag d (d + 1)) <;> rfl
@@ -1013,7 +1013,7 @@ theorem periodic_winWitt_step_late_center_slot_at_white_centers_eq_zcenter_and_m
   have hs := periodic_winWitt_step_late_center_slot_at_white_centers_eq_zcenter_and_maskparity_triality
     T P hP h d k ht hk hset hw0 hw1 hw2
   rw [hs]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phi (winWitt ((d + 1) + twopow k) (twopow k))).testBit (((d + 2) + twopow k) + twopow k) <;>
     cases (zcenter (d + 1) &&
       (Rule30UOR.Scale.maskparity ((d + 1) + twopow (k + 1)) 0 ^^
@@ -1037,7 +1037,7 @@ theorem periodic_winWitt_step_late_colm1_slot_at_white_centers_eq_zcenter_and_co
   have hs := periodic_winWitt_step_late_colm1_slot_at_white_centers_eq_zcenter_and_colm1_triality
     T P hP h d k ht hk hset hw0 hw1 hw2
   rw [hs]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phi (winWitt ((d + 1) + twopow k) (twopow k))).testBit (((d + 3) + twopow k) + twopow k) <;>
     cases (zcenter (d + 1) &&
       (ldiag (d + twopow (k + 1)) ((d + 1) + twopow (k + 1)) ^^
@@ -1073,7 +1073,7 @@ theorem wittRespBool_late_eq_zcenter_xor_center_triality
     show ((d + 1) + twopow k) + twopow k = (d + 1) + twopow (k + 1) by
       rw [Rule30UOR.Core.twopow_succ]; omega] at hw
   rw [hw]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center ((d + 1) + twopow (k + 1)) <;>
     cases zcenter (d + 1) <;>
     cases Rule30UOR.Core.center ((d + 1) + twopow k) <;>
@@ -1088,7 +1088,7 @@ theorem wittRespBool_late_at_white_centers_eq_zcenter
     (hw2 : Rule30UOR.Core.center ((d + 1) + twopow (k + 1)) = false) :
     wittRespBool ((d + 1) + twopow k) k = zcenter (d + 1) := by
   rw [wittRespBool_late_eq_zcenter_xor_center_triality d k hk hset, hw0, hw1, hw2]
-  simp only [bxor_eq_xor, Bool.xor_false]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.xor_false]
 
 /-- **Uniform-in-`m` Shift of `wittRespBool` from the `R_periodic` Anchor `t0 = (d + 1) + 2^k` (`periodic_wittRespBool_late_shift_mul_eq_zcenter_xor`)**:
     under `CenterPeriodic T P` (`0 < P`), for fixed `d, k` (`T ≤ d + 1`, `d + 1 ≤ k`, `SettledAt (d + 1) k`) and ALL `m : Nat` (unbounded time `t0 + m * P`), `R_periodic` and settledness anchor the base point `t0 = (d + 1) + 2^k` so `wittRespBool (((d + m * P) + 1) + 2^k) k ⊕ wittRespBool ((d + 1) + 2^k) k` equals `(ldiag ((d + m * P) + 1) (((d + m * P) + 1) + 2^k) ⊕ zcenter (d + 1)) ⊕ (rdiag ((d + m * P) + 1) (((d + m * P) + 1) + 2^k) ⊕ center (d + 1))`! -/
@@ -1240,7 +1240,7 @@ theorem periodic_winWitt_step_late_center_slot_shift_mul_at_white_centers
     exact hw2
   have hc_m_k1 : Rule30UOR.Core.center (((d + m * P) + 1) + twopow (k + 1)) = false := by
     rw [show ((d + m * P) + 1) + twopow (k + 1) = ((d + 1) + twopow (k + 1)) + m * P by omega,
-      center_periodic_mul T P h m ((d + 1) + twopow (k + 1)) (by omega)]
+      Rule30UOR.Scale.center_mul h m ((d + 1) + twopow (k + 1)) (by omega)]
     exact hc_k1
   have hc_m_lag : Rule30UOR.Core.center ((((d + m * P) + 1) + twopow k) + Rule30UOR.Scale.lag P k) = false := by
     rw [show Rule30UOR.Scale.lag P k = twopow k % P from rfl,
@@ -1271,7 +1271,7 @@ theorem periodic_winWitt_step_late_center_slot_shift_mul_at_white_centers
   rw [hstep_m, hstep_0,
     show ((((d + m * P) + 1) + twopow k) + twopow k) = ((d + m * P) + 1) + twopow (k + 1) by
       rw [Rule30UOR.Core.twopow_succ]; omega]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phi (winWitt (((d + m * P) + 1) + twopow k) (twopow k))).testBit ((((d + m * P) + 2) + twopow k) + twopow k) <;>
     cases (phi (winWitt ((d + 1) + twopow k) (twopow k))).testBit (((d + 2) + twopow k) + twopow k) <;>
     cases (wittRespBool (((d + m * P) + 1) + twopow k) k &&
@@ -1292,7 +1292,7 @@ theorem wittRespBool_late_eq_zcenter_xor_center_triality_prop
             (Rule30UOR.Core.center (d + 1))))) := by
   unfold ZCenterEq
   rw [wittRespBool_late_eq_zcenter_xor_center_triality d k hk hset]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases zcenter (d + 1) <;>
     cases (Rule30UOR.Core.center ((d + 1) + twopow (k + 1)) ^^
       (Rule30UOR.Core.center ((d + 1) + twopow k) ^^
@@ -1320,7 +1320,7 @@ theorem periodic_wittRespBool_late_shift_mul_eq_zcenter_xor_prop
             (Rule30UOR.Core.center (d + 1))))) := by
   unfold ZCenterEq
   rw [periodic_wittRespBool_late_shift_mul_eq_zcenter_xor T P hP h m d k ht hk hset]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases zcenter (d + 1) <;>
     cases ldiag ((d + m * P) + 1) (((d + m * P) + 1) + twopow k) <;>
     cases rdiag ((d + m * P) + 1) (((d + m * P) + 1) + twopow k) <;>
@@ -1348,7 +1348,7 @@ theorem periodic_crossCarry_late_center_bit_shift_mul_at_white_centers_prop
   have hcc := periodic_crossCarry_late_center_bit_shift_mul_at_white_centers
     T P hP h m d k ht hk hset hw0 hw1 hw2
   revert hcc
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (crossCarry (phiScale k (row (((d + m * P) + 1) + twopow k)))
     (winWitt (((d + m * P) + 1) + twopow k) (twopow k))).testBit ((((d + m * P) + 1) + twopow k) + twopow k) <;>
     cases (crossCarry (phiScale k (row ((d + 1) + twopow k)))
@@ -1384,7 +1384,7 @@ theorem periodic_crossCarry_late_colm1_shift_mul_at_white_centers_prop
   have hcc := periodic_crossCarry_late_colm1_shift_mul_at_white_centers
     T P hP h m d k ht hk hset hw0 hw1 hw2
   revert hcc
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (crossCarry (phiScale k (row (((d + m * P) + 1) + twopow k)))
     (winWitt (((d + m * P) + 1) + twopow k) (twopow k))).testBit ((((d + m * P) + 2) + twopow k) + twopow k) <;>
     cases (crossCarry (phiScale k (row ((d + 1) + twopow k)))
@@ -1422,7 +1422,7 @@ theorem periodic_winWitt_step_late_center_slot_shift_mul_at_white_centers_prop
   have hs := periodic_winWitt_step_late_center_slot_shift_mul_at_white_centers
     T P hP h m d k ht hk hset hw0 hw1 hw2
   rw [hs]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ((phi (winWitt (((d + m * P) + 1) + twopow k) (twopow k))).testBit ((((d + m * P) + 2) + twopow k) + twopow k) ^^
     (phi (winWitt ((d + 1) + twopow k) (twopow k))).testBit (((d + 2) + twopow k) + twopow k)) <;>
     cases ((wittRespBool (((d + m * P) + 1) + twopow k) k &&
@@ -1498,7 +1498,7 @@ theorem frobDefect_row_testBit_sector_one (t0 k r : Nat) (hr : r + 1 < twopow k)
         (rdiag ((r + 1) + twopow k) t0 && rdiag r t0)
         (rdiag (r + 1) t0 && rdiag (r + twopow k) t0) := by
   change (carry (phiScale k (row t0)) ^^^ phiScale k (carry (row t0))).testBit ((r + 1) + twopow k) = _
-  simp only [Nat.testBit_xor, bxor_eq_xor]
+  simp only [Nat.testBit_xor, Rule30UOR.Scale.bxor_eq]
   have hc1 : (carry (phiScale k (row t0))).testBit ((r + 1) + twopow k) =
       ((phiScale k (row t0)).testBit ((r + 1) + twopow k) &&
         (phiScale k (row t0)).testBit (r + twopow k)) := by
@@ -1510,7 +1510,7 @@ theorem frobDefect_row_testBit_sector_one (t0 k r : Nat) (hr : r + 1 < twopow k)
       bxor (rdiag ((r + 1) + twopow k) t0) (rdiag (r + 1) t0) := by
     change (((row t0) ^^^ ((row t0) <<< twopow k)) ^^^
       ((row t0) <<< (twopow k + twopow k))).testBit ((r + 1) + twopow k) = _
-    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, bxor_eq_xor]
+    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, Rule30UOR.Scale.bxor_eq]
     have d1 : decide ((r + 1) + twopow k ≥ twopow k) = true := decide_eq_true (by omega)
     have d2 : decide ((r + 1) + twopow k ≥ twopow k + twopow k) = false := decide_eq_false (by omega)
     rw [d1, d2, Bool.true_and, Bool.false_and, Bool.xor_false,
@@ -1520,7 +1520,7 @@ theorem frobDefect_row_testBit_sector_one (t0 k r : Nat) (hr : r + 1 < twopow k)
       bxor (rdiag (r + twopow k) t0) (rdiag r t0) := by
     change (((row t0) ^^^ ((row t0) <<< twopow k)) ^^^
       ((row t0) <<< (twopow k + twopow k))).testBit (r + twopow k) = _
-    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, bxor_eq_xor]
+    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, Rule30UOR.Scale.bxor_eq]
     have d1 : decide (r + twopow k ≥ twopow k) = true := decide_eq_true (by omega)
     have d2 : decide (r + twopow k ≥ twopow k + twopow k) = false := decide_eq_false (by omega)
     rw [d1, d2, Bool.true_and, Bool.false_and, Bool.xor_false,
@@ -1540,7 +1540,7 @@ theorem frobDefect_row_testBit_sector_one (t0 k r : Nat) (hr : r + 1 < twopow k)
       carry_row_testBit_succ t0 (r + twopow k), carry_row_testBit_succ t0 r,
       show (r + twopow k) + 1 = (r + 1) + twopow k by omega]
   rw [hc1, hs1, hs2, hc2]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag ((r + 1) + twopow k) t0 <;>
     cases rdiag (r + twopow k) t0 <;>
     cases rdiag (r + 1) t0 <;>
@@ -1598,7 +1598,7 @@ theorem frobDefect_winWitt_sector_two_wronskian (t0 k r : Nat) (hr : r + 1 ≤ k
     bxor
       (w.testBit ((r + 1) + twopow (k + 1)) && w.testBit (r + twopow k))
       (w.testBit ((r + 1) + twopow k) && w.testBit (r + twopow (k + 1)))
-  simp only [Nat.testBit_xor, bxor_eq_xor]
+  simp only [Nat.testBit_xor, Rule30UOR.Scale.bxor_eq]
   have hc1 : (carry (phiScale k w)).testBit ((r + 1) + twopow (k + 1)) =
       ((phiScale k w).testBit ((r + 1) + twopow (k + 1)) &&
         (phiScale k w).testBit (r + twopow (k + 1))) := by
@@ -1869,7 +1869,7 @@ theorem periodic_ldiag_shift_mul_eq_response_shift_mul
   rw [hl1] at hs1
   rw [hl2, hc0, hc1, ← hs1] at hs2
   revert hs2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag ((t + m * P) - twopow k) (t + m * P) <;>
     cases ldiag (t - twopow k) t <;>
     cases Rule30UOR.Scale.response (t + m * P) k <;>
@@ -1914,7 +1914,7 @@ theorem not_periodic_colm1_mul
   have hcol' : ldiag (t + m * P) ((t + m * P) + 1) = ldiag t (t + 1) := by
     rw [show (t + m * P) + 1 = (t + 1) + m * P by omega]
     exact hcol t (by omega)
-  rw [hcol', bxor_eq_xor, bxor_eq_xor, Bool.xor_self] at hdef
+  rw [hcol', Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hdef
   rw [show (t + 1) + m * P = (t + m * P) + 1 by omega]
   revert hdef
   cases Rule30UOR.Scale.maskparity ((t + m * P) + 1) 0 <;>
@@ -2148,7 +2148,7 @@ theorem crossCarry_row_winWitt_sector_two_center_slot (d k : Nat)
       hm1, Bool.false_xor, Bool.false_xor]
   have hw1 : (winWitt (d + 1) (twopow k)).testBit ((d + 1) + twopow (k + 1)) =
       zcenter (d + 1) := by
-    rw [winWitt_testBit_archimedean (d + 1) k hk, hc, bxor_eq_xor, Bool.false_xor]
+    rw [winWitt_testBit_archimedean (d + 1) k hk, hc, Rule30UOR.Scale.bxor_eq, Bool.false_xor]
     exact ldiag_settled_eq_zcenter (d + 1) k hk hset
   change (zcenter (d + 1) && Rule30UOR.Scale.maskparity (d + 1) 0) =
     (((phiScale k (row (d + 1)) &&& (winWitt (d + 1) (twopow k) <<< 1)) ^^^

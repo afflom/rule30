@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "doubles-at-two-mul-lt"
+category = "proof-constant"
+signature = "(pi ((explicit Q (const lexlean.std.nat::nat)) (explicit z (const lexlean.std.nat::nat)) (explicit y (const lexlean.std.nat::nat))) (pi ((explicit hQ (app (const lexlean.std.nat::lt) (nat 0) (local Q))) (explicit hd (app (const r30.joint::doubles-at) (local Q) (local z))) (explicit hy (app (const r30.joint::doubles-at) (app (const lexlean.std.nat::mul) (nat 2) (local Q)) (local y)))) (app (const lexlean.std.nat::lt) (local z) (local y))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DoublingDepth"
+name = "Rule30UOR.DoublingDepth.doublesAt_two_mul_lt"
+
+[[form]]
+id = "doubles-at-two-mul-lt"
+channel = "math"
+surface = "doublesattwomullt"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name doublesattwomullt) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

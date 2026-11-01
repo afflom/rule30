@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "tower-word-mahler-degree"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (pi ((explicit hmin (app (const lexlean.core::lnot) (app (const r30.observation::word-periodic) (local j) (app (const r30.scale::twopow) (local m)))))) (app (const r30.observation::word-mahler-above) (local j) (local m))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelRoot"
+name = "Rule30UOR.KernelRoot.towerWord_mahler_degree"
+
+[[form]]
+id = "tower-word-mahler-degree"
+channel = "math"
+surface = "towerwordmahlerdegree"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name towerwordmahlerdegree) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

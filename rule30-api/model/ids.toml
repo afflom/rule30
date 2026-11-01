@@ -326,7 +326,7 @@ statement = "Target 1 of the 2026-11-01 reading: the minimal transient of the le
 
 [[id]]
 id = "single-row-agreement"
-level = "open"
+level = "some-true"
 suite = "register"
 statement = "Route B of the 2026-11-01 reading: under a center period, the prefix and tail spatial agreements (hpref, htail) of the driven right half rhCenter in one row at scale 2^L hold, so the conditional refutation not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound fires."
 
@@ -347,6 +347,42 @@ id = "increment-law"
 level = "build"
 suite = "register"
 statement = "The center's increment is Jen's masked column plus the left half's own Pascal cone: center (t+1) XOR center t = (cell t 1 AND NOT center t) XOR coneZero t for every t, where coneZero is the Pascal cone of the left run-ends at positions <= 0. Hence, by masked Jen (prize kit), under any center period P the left half's cone coneZero is not P-periodic from any start."
+
+[[id]]
+id = "black-time-consistency"
+level = "open"
+suite = "register"
+statement = "No eventually periodic boundary with black times is black-time consistent: if a boundary column c with c 0 = true satisfies c (t+1) = NOT (column -1 of the left half it drives) at every black time t, and is eventually periodic, it is eventually white (NoPeriodicBlackConsistent). This left-only statement implies Problem 1."
+
+[[id]]
+id = "duhamel-and-tails"
+level = "build"
+suite = "register"
+statement = "Duhamel form of the rule: every cell is the seed's Pascal transport plus the Pascal cone of the run-end sources (cell_eq_seedAt_bxor_coneAt); the light cone splits by left diagonal into a head of finitely many eventually periodic diagonal cones (period 3 2^d from 2^d) and a tail (problem1_iff_leftTail); the block cone form (problem1_iff_noBlockConePeriod); and the Mahler form of periodicity (a word is periodic iff its Mahler coefficients vanish above a degree; towerWord's Mahler degree)."
+
+[[id]]
+id = "single-seed-mask"
+level = "build"
+suite = "register"
+statement = "The left-only obligation is exactly the single-seed mask: NoPeriodicBlackConsistent iff SingleSeedMask (no eventually periodic boundary with infinitely many black times is black-time consistent with the left half it drives from the unit seed). With it, the kit's period-two question decides the obligation's period-two slice, and the obligation implies the zero-state center is aperiodic (NoZCenterPeriod)."
+
+[[id]]
+id = "isolated-black-slice"
+level = "build"
+suite = "register"
+statement = "The obligation restricted to boundaries whose black times are isolated holds exactly when no walled arithmetic progression exists (NoPeriodicIsolatedBlackConsistent iff not WalledAP), and the obligation implies that restriction."
+
+[[id]]
+id = "eventual-cycle-invariants"
+level = "some-true"
+suite = "register"
+statement = "Decide the left-only obligation from the eventual cycles of the driven left diagonals (each diagonal of the half driven by any boundary is eventually periodic with a power-of-two period)."
+
+[[id]]
+id = "residue-class-jen"
+level = "some-true"
+suite = "register"
+statement = "Generalize Jen's argument from two periodic columns to column 0 periodic and column -1 periodic on the black residues of the boundary, so the edge front cannot advance."
 
 [[id]]
 id = "api-modules"
@@ -395,3 +431,57 @@ id = "standards-register"
 level = "build"
 suite = "api"
 statement = "Standards.lex.tex names every external standard the implementation realizes (architecture, quality, accessibility, markup, graphics, metadata, provenance, schemas, API description, citation, licensing, canonical forms, attestations, the toolchains) with its authority, version, scope, realizers and check; the kernel decides that the ids are distinct, every standard has an authority and a realizer, every realizer is declared, every panel, artifact, journey, command, navigation and visualization id names a standard, and the toolchain rows carry the pinned versions; view render writes the artifacts the standards call for (openapi.json, sitemap.xml, provenance.jsonld, schema.json, attestations.intoto.json, standards.json, CITATION.cff)."
+
+[[id]]
+id = "discovery-basis"
+level = "build"
+suite = "discovery"
+statement = "Sequences.lex.tex declares the basis of the map: 79 sequences of the paper's notions (the constant, the time and trailing parities, the ruler background, the center, the cells at positions -8..8, the right and left diagonals and the tower words j <= 12, the exposed masks k <= 8, the masked column, the two cones and the seven ledger diagonals), each with its lexeme, Lean constant, parameters and κ-label (sequence <lexeme> <parameters>), and its window for t < 512 evaluated from the host Lean definitions by bin/r30 sequences --write in one Lean file that proves every evaluation form equal to its host constant; the kernel decides that the ids and the κ-labels are distinct and that every window has 16 words below 2^32, and api check refuses data that is not the basis or whose labels are not the labels of its entries. dyadicRow, blockParity and wittRespBool are excluded, with the reason recorded."
+
+[[id]]
+id = "relation-search"
+level = "build"
+suite = "discovery"
+statement = "Discovery.lex.tex declares the contract RelationSearch (input a window of chunked Nat bit-vectors, output masks over the sequences; precondition IsWindow, postcondition AllRelationsHold, each with an executable validator and a soundness theorem), the realization RelationEngine (Gaussian elimination over F2 with a mask per pivot), the model RelationSearchModel, the transforms of the extended basis (shift, even and odd dilations, AND) as data, and the kernel decides on 64 times of the real data that the engine finds the edge parity, the left light cone, the cone identity cone-zero = cell(-1) and the increment law in the basis, and that its output passes the postcondition."
+
+[[id]]
+id = "recurrence-search"
+level = "build"
+suite = "discovery"
+statement = "Discovery.lex.tex declares the contract RecurrenceSearch (input one window as bits, output a connection polynomial with leading 1; precondition IsSequenceWindow, postcondition SatisfiesRecurrence: the recurrence holds for every L <= t < N), the realization RecurrenceEngine (Berlekamp-Massey over F2) and the model RecurrenceSearchModel; the certificate is the recurrence on the window, not its minimality; the kernel decides s(t) = s(t-2) for the time parity and the tower word 2 and s(t) = s(t-3) for the period-3 word 100."
+
+[[id]]
+id = "discovery-roots"
+level = "build"
+suite = "discovery"
+statement = "The production roots buildColumns, findRelations and findRecurrence of Discovery.lex.tex are executable, admit the allocation, overflow and recursion effects on rust-std, and apply their models through checked_apply with both the precondition and the postcondition checked at run time, so every output is accepted by a validator the kernel proved sound; they are requested beside the roots of Api and Rule30Core in production/request.json and runtime-roots.toml."
+
+[[id]]
+id = "discover-command"
+level = "build"
+suite = "discovery"
+statement = "bin/r30 discover [--window W] [--degree 1|2] [--write] runs the engines on the basis (the certified Rust of the roots when they are built and cargo runs them, otherwise the Python mirror re-checked by the mirror of the validators, and says which), reports every relation with its columns, κ-label (relation <sorted column labels>), class (register, trivial, consequence, new) and certificate (the rank before its dependent column), and the recurrence of every base window; --write appends the new relations to the register as status observed."
+
+[[id]]
+id = "observed-status"
+level = "build"
+suite = "discovery"
+statement = "The register has the status observed: a relation certified on a window (relation, window, κ-label), re-validated by frontier check against the committed windows and refused when it does not vanish; Register.lex.tex carries every claim's relation and κ-label and decides that every observed claim has both; Discovery.lex.tex decides that every relation of the register vanishes on its window; the Observer counts an observed claim as neither a real quality nor withdrawn, and the site renders its mark."
+
+[[id]]
+id = "discovery-candidates"
+level = "open"
+suite = "discovery"
+statement = "The relations and recurrences bin/r30 discover --window 256 --degree 2 finds on the committed basis beyond the register are candidates for deduction: measured on the window and reported, never asserted."
+
+[[id]]
+id = "conditional-audit"
+level = "build"
+suite = "register"
+statement = "bin/r30 audit reads, in one Lean introspection of the research library, every theorem concluding not CenterPeriodic T P, Problem1 or not CenterPer T P (or False under a CenterPeriodic hypothesis), identifies each hypothesis beyond the period and the arithmetic side conditions by its head, and classifies the conditional refutation dead (a hypothesis refuted under a period by a named theorem), live-discharged (every hypothesis discharged and the composition kernel-checked in Lean) or open (the hypotheses neither refuted nor discharged); --write records it in model/audit.toml and Audit.lex.tex, whose kernel-decided theorems are that every dead entry names a refuting theorem, the statuses are declared, the theorem names are distinct, and the count of each status; claim --related lists the open hypotheses of the conditional refutations a claim concerns."
+
+[[id]]
+id = "induce-phase"
+level = "build"
+suite = "register"
+statement = "The saved round workflow .claude/workflows/rule30-round.js opens with an Induce phase before Propose: one agent runs bin/r30 discover --window 256 --degree 2 --json and bin/r30 audit --json (a missing command is reported and contributes nothing) and returns the observed relations not in the register and the open audit obligations, which every lens receives as context and which enter Refute and Mechanize as proposals of their own (an observed relation is a candidate theorem for all t whose window certificate is already decided); the view publishes the workflow."

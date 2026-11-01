@@ -22,7 +22,8 @@
      "open",
      "proved",
      "refuted",
-     "retired"
+     "retired",
+     "observed"
     ]
    },
    "statement": {
@@ -45,6 +46,19 @@
     "items": {
      "type": "string"
     }
+   },
+   "relation": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "window": {
+    "type": "integer"
+   },
+   "kappa": {
+    "type": "string",
+    "pattern": "^sha256:[0-9a-f]{64}$"
    }
   }
  }

@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.lhCenter_late_scale_diag_shift_periodic_of_doubles_le_prop"
+name = "Rule30UOR.Interfaces.lhCenter_late_scale_diag_shift_periodic_of_doubles_le"
 
 [[form]]
 id = "lhcenter-late-scale-diag-shift-periodic-of-doubles-le"

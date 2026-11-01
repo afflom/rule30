@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cone-at"
+category = "function"
+signature = "(pi ((explicit p (const lexlean.std.int::int)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ColumnCone"
+name = "Rule30UOR.ColumnCone.coneAt"
+
+[[form]]
+id = "cone-at"
+channel = "math"
+surface = "coneat"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name coneat) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

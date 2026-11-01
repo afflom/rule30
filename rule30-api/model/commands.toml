@@ -64,6 +64,13 @@ requires_digest = false
 result_schema = "r30/claim-result/1"
 
 [[command]]
+name = "audit"
+path = ["audit"]
+mutates = "audit-register-and-module"
+requires_digest = false
+result_schema = "r30/audit-result/1"
+
+[[command]]
 name = "gate"
 path = ["gate"]
 mutates = "never"
@@ -246,11 +253,32 @@ requires_digest = false
 result_schema = "r30/module-build-result/1"
 
 [[command]]
+name = "consolidate"
+path = ["consolidate"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/consolidate-result/1"
+
+[[command]]
 name = "kappa"
 path = ["kappa"]
 mutates = "never"
 requires_digest = false
 result_schema = "r30/kappa-result/1"
+
+[[command]]
+name = "sequences"
+path = ["sequences"]
+mutates = "sequences-data"
+requires_digest = false
+result_schema = "r30/sequences-result/1"
+
+[[command]]
+name = "discover"
+path = ["discover"]
+mutates = "register"
+requires_digest = false
+result_schema = "r30/discover-result/1"
 
 [[command]]
 name = "experiment_list"

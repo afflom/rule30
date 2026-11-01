@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Antidiagonal"
-name = "Rule30UOR.Antidiagonal.maskTransport_lucas"
+name = "Rule30UOR.Antidiagonal.maskTransport_eq_lucas"
 
 [[form]]
 id = "mask-transport-lucas"

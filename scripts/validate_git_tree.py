@@ -172,6 +172,8 @@ def main():
     # Kernel-replay receipts (scripts/replay_research.py), keyed by each module's
     # κ-label: the address of the declarations the kernel replays, not the .olean bytes.
     env["RULE30_REPLAY_CACHE"] = str(cache / "replay" / tools_key)
+    # The κ labels themselves, memoized by artifact bytes and shared with `bin/r30 kappa`.
+    env["RULE30_KAPPA_MEMO"] = str(cache / "kappa")
     for project in LEXLEAN_INPUTS:
         env["RULE30_LEXLEAN_KEY_" + project.replace("-", "_")] = lexlean_input_digest(root, tree, project)
     with (cache / (key + ".lock")).open("w") as guard:

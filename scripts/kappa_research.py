@@ -1,200 +1,165 @@
 #!/usr/bin/env python3
-"""κ-address the research modules: the label of what the kernel replays.
+"""κ-labels of the research modules: memo, redundancy, reports (`kappa_label.py` labels).
 
-A κ-label (UOR-Foundation/uor-addr) is `sha256:<64 hex>`, the SHA-256 of a
-published canonical form of what a value means, with no prefix or framing
-added to the canonical bytes: two values that mean the same get the same
-label. For S-expressions the canonical form is Rivest 1997 §4.3: an atom is
-`<n>:<bytes>`, a list is `(s1 s2 ... sn)` with single-space separators, nil is
-`()`. Labels compose: a label is an atom like any other, so the address of a
-structure of addressed parts is the address of a canonical S-expression whose
-atoms are the parts' 71-byte labels (an address of addresses).
-
-What a Lean module means to the kernel is its declarations: names, universe
-parameters, kinds, types and values. Its `.olean` also carries source
-positions, docstrings, extension data and the order of elaboration, which
-change when no theorem changes, so the κ of a module is computed from the
-declaration stream `rule30-core-lean/scripts/KappaExport.lean` prints (the
-constants of the module's most private object-file part, exactly the set
-`leanchecker` replays), never from the object-file bytes.
-
-The canonical S-expression of a Lean declaration (rule30 profile)
------------------------------------------------------------------
-
-Terms. Every `Level` and `Expr` subterm is a node whose canonical form is
-`(<ctor> <fields...> <κ of child 1> ... <κ of child n>)`, the children's
-labels as atoms, so κ(node) is defined bottom-up and a shared subterm has one
-label wherever it occurs (the exporter's stream names nodes by id to state
-that sharing; the ids are not part of the meaning):
-
-    (lzero)  (lsucc u)  (lmax u v)  (limax u v)  (lparam <name>)
-    (bvar <index>)                         de Bruijn index, so binder names
-                                           are not part of the meaning
-    (sort <κ level>)
-    (const <name> <κ level>...)
-    (app <κ fn> <κ arg>)
-    (lam <binder info> <κ type> <κ body>)        binder info: default |
-    (forallE <binder info> <κ type> <κ body>)    implicit | strictImplicit |
-                                                 instImplicit
-    (letE <nondep: 0|1> <κ type> <κ value> <κ body>)
-    (lit nat <decimal>)   (lit str <bytes>)
-    (proj <structure name> <index> <κ struct>)
-
-`mdata` carries no kernel meaning and is transparent: the label of
-`mdata d e` is the label of `e`. Free variables and metavariables do not
-occur in closed declarations (the exporter refuses them). Names are atoms in
-Lean's printed form (`Name.toString`); numbers are decimal atoms.
-
-Declarations. κ(decl) is the label of
-
-    (decl <name> <kind> (levels <universe names>...) <κ type> <κ value | ()> <extras>...)
-
-with kind and extras by constant kind, the extras being the parts of the
-declaration the kernel checks besides its type and value:
-
-    axiom   (safety safe|unsafe)
-    def     (safety safe|unsafe|partial)      reducibility hints are omitted:
-                                              the kernel accepts any hints
-    thm     (no extras)
-    opaque  (safety safe|unsafe)
-    quot    (kind type|ctor|lift|ind)
-    induct  (params n) (indices n) (ctors <names>...) (all <names>...)
-            (nested n) (safety ...)
-    ctor    (induct <name>) (cidx n) (params n) (fields n) (safety ...)
-    rec     (all <names>...) (params n) (indices n) (motives n) (minors n)
-            (rules (rule <ctor> <nfields> <κ rhs>)...) (k 0|1) (safety ...)
-
-Modules. κ(module) is the label of
-
-    (lean-module <module name> <κ decl 1> ... <κ decl n>)
-
-with the declarations sorted by name (then by label), so the order of
-elaboration is not part of the meaning.
-
-Usage: kappa_research.py [--declarations] [--json] <Lean module names>, run
-in the repository (the research library must be built)."""
+The labeling procedure lives in `kappa_label.py`; this file adds what does not change a label:
+the memo keyed by artifact bytes and the procedure's digest, the authored-theorem test, the
+groups of theorems that state the same thing, and the command-line report."""
 
 import argparse
 import hashlib
 import json
-from pathlib import Path
+import os
+import re
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-EXPORTER = "scripts/KappaExport.lean"
-SCHEME = "sha256:"
-
-# Leading atoms of a term node that are fields; every later element is a child id.
-NODE_FIELDS = {"lzero": 0, "lsucc": 0, "lmax": 0, "limax": 0, "lparam": 1, "bvar": 1, "sort": 0,
-               "const": 1, "app": 0, "lam": 1, "forallE": 1, "letE": 1, "lit": 2, "proj": 2}
-
-
-def canonical(value):
-    """The Rivest canonical bytes of a value: str/bytes atoms, list/tuple lists."""
-    if isinstance(value, (list, tuple)):
-        return b"(" + b" ".join(canonical(v) for v in value) + b")"
-    if isinstance(value, str):
-        value = value.encode()
-    return b"%d:" % len(value) + value
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from kappa_label import (EXPORTER, NODE_FIELDS, ROOT, SCHEME, canonical, export, kappa, label,  # noqa: E402,F401
+                         labels_from_stream, module_labels, parse, positional)
+import kappa_label  # noqa: E402
 
 
-def label(canonical_bytes):
-    """The κ-label of canonical bytes: the SHA-256 of exactly those bytes."""
-    return SCHEME + hashlib.sha256(canonical_bytes).hexdigest()
+def artifact_paths(core, module):
+    base = core / ".lake" / "build" / "lib" / "lean" / Path(*module.split("."))
+    # every part the exporter can read, in its order (the server part decides when there is no private one)
+    return [base.with_name(base.name + part) for part in (".olean", ".olean.server", ".olean.private")]
 
 
-def kappa(value):
-    return label(canonical(value))
+def artifact_digest(core, module):
+    """The bytes of a module's compiled artifact: a memo key for its labels, never a receipt key."""
+    digest = hashlib.sha256(SCHEME.encode())
+    for path in artifact_paths(core, module):
+        if path.exists():
+            digest.update(path.name.encode() + b"\0" + path.read_bytes() + b"\0")
+    return digest.hexdigest()
 
 
-def parse(data):
-    """The top-level values of a canonical S-expression stream, as bytes atoms and lists.
-    About 7 µs per term node in CPython; the 3.1 million nodes of the library take 25 s."""
-    i, n, stack = 0, len(data), []
-    while i < n:
-        c = data[i]
-        if c == 40:  # (
-            stack.append([])
-            i += 1
-        elif c == 41:  # )
-            if not stack:
-                raise ValueError(f"unbalanced ')' at byte {i}")
-            done = stack.pop()
-            i += 1
-            if stack:
-                stack[-1].append(done)
-            else:
-                yield done
-        elif c in b" \t\r\n":
-            i += 1
-        else:
-            j = data.find(b":", i)
-            if j < 0 or not data[i:j].isdigit():
-                raise ValueError(f"not a canonical atom at byte {i}: {data[i:i + 20]!r}")
-            start = j + 1
-            end = start + int(data[i:j])
-            if end > n:
-                raise ValueError(f"truncated atom at byte {i}")
-            atom = data[start:end]
-            i = end
-            if stack:
-                stack[-1].append(atom)
-            else:
-                yield atom
-    if stack:
-        raise ValueError("unterminated list")
+def exporter_digest(core):
+    """The labeling procedure itself (the exporter and this file): labels memoized under one
+    procedure are never read back under another."""
+    digest = hashlib.sha256(SCHEME.encode())
+    for path in (core / EXPORTER, Path(kappa_label.__file__)):
+        digest.update(path.name.encode() + b"\0" + (path.read_bytes() if path.exists() else b"") + b"\0")
+    return digest.hexdigest()[:16]
 
 
-def labels_from_stream(data):
-    """{module: {"kappa": label, "declarations": [(name, label), ...]}} from the exporter's stream."""
-    result, ids, current, decls = {}, {}, None, []
-    for form in parse(data):
-        head = form[0]
-        if head == b"module":
-            current, ids, decls = form[1].decode(), {}, []
-        elif head == b"node":
-            ctor = form[2]
-            split = 3 + NODE_FIELDS[ctor.decode()]
-            ids[form[1]] = kappa([ctor, *form[3:split], *(ids[child] for child in form[split:])])
-        elif head == b"decl":
-            _, name, kind, levels, type_id, value_id, *extras = form
-            parts = [b"decl", name, kind, levels, ids[type_id], [] if value_id == [] else ids[value_id]]
-            for extra in extras:
-                if extra[0] == b"rules":
-                    extra = [b"rules"] + [[b"rule", rule[1], rule[2], ids[rule[3]]] for rule in extra[1:]]
-                parts.append(extra)
-            decls.append((name, kappa(parts)))
-        elif head == b"end":
-            if form[1].decode() != current:
-                raise ValueError(f"stream ends {form[1].decode()!r} inside {current!r}")
-            decls.sort()
-            result[current] = {"kappa": kappa([b"lean-module", current, *(k for _, k in decls)]),
-                               "declarations": [(name.decode(), k) for name, k in decls]}
-            current = None
-    if current is not None:
-        raise ValueError(f"stream ends inside module {current}")
-    return result
+def default_memo(core):
+    """The gate's memo, beside its other caches in the Git common directory. Only the gate writes
+    it (`RULE30_KAPPA_MEMO`); other callers read it and keep what they label in their own store, so
+    the gate never trusts a label written from a mutable working tree."""
+    common = subprocess.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], cwd=core,
+                            capture_output=True, text=True)
+    if common.returncode != 0:
+        return None
+    return Path(common.stdout.strip()) / "rule30-validation" / "kappa"
 
 
-def export(core, modules):
-    """The declaration stream of the modules, from the built research library."""
-    result = subprocess.run(["lake", "env", "lean", "--run", EXPORTER, *modules], cwd=core,
-                            capture_output=True)
-    if result.returncode != 0:
-        detail = result.stderr.decode(errors="replace").strip().splitlines()[-3:]
-        raise RuntimeError(f"the κ exporter failed (exit {result.returncode}): " + " | ".join(detail))
-    return result.stdout
+def read_entry(path):
+    """A memo entry, or None when it is missing, unreadable or malformed (a miss: relabel)."""
+    try:
+        row = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return None
+    if not isinstance(row, dict) or not isinstance(row.get("kappa"), str):
+        return None
+    return {key: [tuple(x) for x in value] if isinstance(value, list) else value for key, value in row.items()}
 
 
-def module_labels(core, modules, exporter=None):
-    """κ of each module, from one exporter run (an injectable one for tests)."""
-    exporter = exporter or export
-    labels = labels_from_stream(exporter(core, modules)) if modules else {}
-    missing = [m for m in modules if m not in labels]
-    if missing:
-        raise RuntimeError(f"the κ exporter returned no declarations for {' '.join(missing)}")
-    return labels
+def memo_labels(core, modules, memo, exporter=None, read_only=()):
+    """The labels of the modules (κ, declarations, theorem statements), memoized by the artifact
+    bytes under the labeling procedure's digest: looked up in `memo`, then in the `read_only`
+    stores; the modules found nowhere are exported in one run and written to `memo` only, under
+    the bytes they were computed from."""
+    procedure = exporter_digest(core)
+    store = memo / procedure
+    store.mkdir(parents=True, exist_ok=True)
+    stores = [store] + [Path(d) / procedure for d in read_only if d]
+    labels, digests = {}, {module: artifact_digest(core, module) for module in modules}
+    for module in modules:
+        for directory in stores:
+            row = read_entry(directory / digests[module])
+            if row is not None:
+                labels[module] = row
+                break
+    fresh = [module for module in modules if module not in labels]
+    if fresh:
+        for module, row in module_labels(core, fresh, exporter=exporter).items():
+            if module not in digests:
+                continue
+            # The exporter read the artifact after it was hashed: refuse to answer if a build
+            # replaced it meanwhile, so a label is only ever stored under its own bytes.
+            if artifact_digest(core, module) != digests[module]:
+                raise RuntimeError(f"{module}: its artifact changed while it was labeled; label again")
+            labels[module] = row
+            descriptor, temporary = tempfile.mkstemp(prefix=digests[module][:12] + ".", suffix=".tmp", dir=store)
+            with os.fdopen(descriptor, "w") as stream:
+                stream.write(json.dumps(row) + "\n")
+            os.replace(temporary, store / digests[module])
+    return {module: labels[module] for module in modules}
+
+
+def working_memo(core):
+    """(memo, read_only) for callers outside the gate: their own store, reading the gate's."""
+    return core.parent / ".r30" / "kappa", [default_memo(core)]
+
+
+AUXILIARY_PART = re.compile(r"^(_.*|proof_\d+|match_\d+)$")
+
+
+def in_library(name):
+    return name.startswith("Rule30UOR.") or name.startswith("_private.Rule30UOR.")
+
+
+def authored(name, kinds=None, reserved=()):
+    """A theorem someone wrote, not one the elaborator generated. Generated: a name Lean reserves
+    (marked by the exporter from `isReservedName`, exact: equation lemmas, functional induction,
+    injectivity, congruence; Lean refuses anyone else's declaration of such a name), or a name
+    with an auxiliary component (`_proof_1`, `_simp_1_2`, `_auxLemma`, `_unary`, `proof_N`,
+    `match_N`) directly under a declaration: one labeled (`kinds`, looked up by the full name or,
+    under a private prefix, by the user-facing name) or one outside the research library, whose
+    kinds are not labeled. Private theorems are authored: a private lemma proved twice is
+    redundant work too."""
+    if name in reserved:
+        return False
+    kinds = kinds or {}
+    parts = name.split(".")
+    first = 0
+    if parts[0] == "_private":
+        first = next((i + 1 for i in range(1, len(parts)) if parts[i].isdigit()), len(parts))
+    if first >= len(parts):
+        return False
+    for i in range(first + 1, len(parts)):
+        if not AUXILIARY_PART.match(parts[i]):
+            continue
+        parent, user_parent = ".".join(parts[:i]), ".".join(parts[first:i])
+        if parent in kinds or user_parent in kinds or not in_library(user_parent):
+            return False
+    return True
+
+
+def library_kinds(labels):
+    """The kinds of every labeled declaration (the parents `authored` looks up)."""
+    kinds = {}
+    for row in labels.values():
+        kinds.update(row.get("kinds", {}))
+    return kinds
+
+
+def duplicates(labels, kinds=None):
+    """Theorems that state the same thing: groups of (module, name) sharing a statement κ, across
+    the given modules. A group of two or more is redundant work: one proof suffices. `kinds`
+    (default: those of `labels`) should cover the whole library when only some modules are grouped."""
+    kinds = library_kinds(labels) if kinds is None else kinds
+    groups = {}
+    for module, row in labels.items():
+        reserved = set(row.get("reserved", ()))
+        for name, k, *_ in row.get("statements", []):
+            if not authored(name, kinds, reserved):
+                continue
+            groups.setdefault(k, []).append((module, name))
+    return {k: sorted(v) for k, v in groups.items() if len(v) > 1}
 
 
 def render(labels, declarations=False):
@@ -213,7 +178,7 @@ def main(argv=None):
     parser.add_argument("--declarations", action="store_true", help="also print each declaration's κ")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
-    labels = module_labels(args.core, args.modules)
+    labels = module_labels(args.core, args.modules, exporter=lambda core, modules: export(core, modules))
     if args.json:
         print(json.dumps({m: {"kappa": r["kappa"], "declarations": [{"name": n, "kappa": k} for n, k in r["declarations"]]}
                           for m, r in labels.items()}, indent=1))

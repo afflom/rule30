@@ -714,7 +714,7 @@ theorem lhCenter_late_cross_step_one_eq_false_at_shift_of_zero_diag_and_single_w
       (by rw [show ((t + Q) + (r + 1)) + 2 = ((t + Q) + r) + 3 by omega]; exact hz)
       (by rw [show ((t + Q) + (r + 1)) + 2 = ((t + Q) + r) + 3 by omega]; exact hset)
       (by rw [show (r + 1) + 1 = r + 2 by omega]; omega) hL hw]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + twopow k) (twopow k - ((r + 1) + 1)) <;> rfl
 
 theorem lhCenter_late_cross_step_one_eq_false_at_shift_of_zero_diag_and_single_winWittAgree_zero_gap_prop
@@ -780,17 +780,6 @@ theorem lhCenter_late_cross_step_one_eq_of_winWittAgree_three_zero_gap
     lhCenter_late_cross_eq_of_winWittAgree_zero_gap t k Q (r + 1) a L (by clear ha hL; omega) (by clear ha hL; omega) (by omega) hL hw,
     lhCenter_late_cross_eq_of_winWittAgree_zero_gap t k Q (r + 2) a L (by clear ha hL; omega) (by clear ha hL; omega) (by omega) (by omega) hw,
     lhCenter_late_cross_eq_of_winWittAgree_zero_gap t k Q (r + 3) a L (by clear ha hL; omega) (by clear ha hL; omega) ha (by omega) hw]
-
-theorem lhCenter_late_cross_step_one_eq_of_winWittAgree_three_zero_gap_prop
-    (Q t k r a L : Nat)
-    (hr : t + Q ≤ r) (hrk : ((t + Q) + r) + 3 < twopow k)
-    (ha : a ≤ (t + twopow (k + 1)) - (r + 3))
-    (hL : (t + twopow (k + 1)) - (r + 1) ≤ a + L)
-    (hw : WinWittAgree t k Q a L) :
-    lhCenter (((t + 1) + Q) + twopow k) (twopow k - (r + 2)) =
-      lhCenter ((t + 1) + twopow k) (twopow k - (r + 2)) :=
-  lhCenter_late_cross_step_one_eq_of_winWittAgree_three_zero_gap
-    Q t k r a L hr hrk ha hL hw
 
 /-- **Unconditional 1-step forward propagation of `WinWittAgree t k Q a L` from a 3-bit interval `[(t + 2^(k+1)) - (r + 3), (t + 2^(k+1)) - (r + 1)]` at time `t` to `winWitt (t + 1) (2^k)` at bit `(t + 2^(k+1)) - (r + 1)` without `WinWittAgree (t + 1)` (9.719)**:
 for all `Q, t, k, r, a, L ∈ ℕ` with `t + Q ≤ r` and `((t + Q) + r) + 3 < 2^k`, if `a ≤ (t + 2^(k+1)) - (r + 3)`, `(t + 2^(k+1)) - (r + 1) ≤ a + L`, and `WinWittAgree t k Q a L` holds at time `t` alone, then `(winWitt ((t + 1) + Q) (2^k)).testBit (((t + Q) + 2^(k+1)) - (r + 1)) = (winWitt (t + 1) (2^k)).testBit ((t + 2^(k+1)) - (r + 1))`. -/
@@ -870,7 +859,7 @@ theorem lhCenter_late_cross_step_one_shift_flip_on_doubling_diag_of_doubles_and_
       (by rw [show (r + 2) + 1 = r + 3 by omega]; omega) hw
   rw [lhCenter_late_cross_step t k (r + Q) (by omega), hfalse, Bool.false_or,
     heq1, hlin1, hflip3]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + twopow k) (twopow k - (r + 1)) <;>
     cases lhCenter (t + twopow k) (twopow k - ((r + Q) + 3)) <;> rfl
 
@@ -1012,7 +1001,7 @@ theorem lhCenter_late_cross_late_step_flip_at_shift_after_zero_diag_of_single_wi
     Q t k r a L hr hk hz hset2 ha hL hw
   rw [show (t + 1) + Q = (t + Q) + 1 by clear ha hL; omega,
     lhCenter_late_cross_step (t + Q) k (r + Q) (by clear ha hL; omega), htrue, Bool.true_or]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter ((t + Q) + twopow k) (twopow k - ((r + Q) + 1)) <;> rfl
 
 theorem lhCenter_late_cross_late_step_flip_at_shift_after_zero_diag_of_single_winWittAgree_zero_gap_prop
@@ -1112,9 +1101,6 @@ theorem zero_diag_ge_two (z : Nat) (hz : IsZeroDiag z) : 2 ≤ z := by
     exact False.elim (absurd h1 (by decide))
   · omega
 
-theorem zero_diag_ge_two_prop (z : Nat) (hz : IsZeroDiag z) : 2 ≤ z :=
-  zero_diag_ge_two z hz
-
 /-- **No two zero diagonals are separated by 2 (`IsZeroDiag z → ¬ IsZeroDiag (z + 2)`) (9.728)**:
 for every `z ∈ ℕ`, if `IsZeroDiag z`, then `z + 2` is all-black (`black_after_zero_diag`), so `¬ IsZeroDiag (z + 2)`. -/
 theorem not_isZeroDiag_add_two (z : Nat) (hz : IsZeroDiag z) :
@@ -1124,10 +1110,6 @@ theorem not_isZeroDiag_add_two (z : Nat) (hz : IsZeroDiag z) :
   have hw := hz2 0
   rw [hb] at hw
   exact Bool.noConfusion hw
-
-theorem not_isZeroDiag_add_two_prop (z : Nat) (hz : IsZeroDiag z) :
-    ¬ IsZeroDiag (z + 2) :=
-  not_isZeroDiag_add_two z hz
 
 /-- **Diagonal `z + 1` after a zero diagonal `z` is never all-black (`IsZeroDiag z → ¬ IsBlackDiag (z + 1)`) (9.729)**:
 if `IsBlackDiag (z + 1)` held, `accumulate_after_zero` would force `IsZeroDiag (z - 1)` adjacent to `IsZeroDiag z`, contradicting `zero_then_nonzero`. Combined with `zero_then_nonzero` (`¬ IsZeroDiag (z + 1)`), diagonal `z + 1` is neither all-white nor all-black. -/
@@ -1144,10 +1126,6 @@ theorem not_isBlackDiag_add_one_of_zero_diag (z : Nat) (hz : IsZeroDiag z) :
       cases E j t <;> decide
     exact Rule30UOR.CompilePoints.zero_then_nonzero j hj hz
 
-theorem not_isBlackDiag_add_one_of_zero_diag_prop (z : Nat) (hz : IsZeroDiag z) :
-    ¬ IsBlackDiag (z + 1) :=
-  not_isBlackDiag_add_one_of_zero_diag z hz
-
 /-- **No two zero diagonals are separated by 3 (`IsZeroDiag z → ¬ IsZeroDiag (z + 3)`) (9.730)**:
 if `IsZeroDiag (z + 3)` held, `twin_before_zero` and `black_after_zero_diag` would force `IsBlackDiag (z + 1)`, contradicting `not_isBlackDiag_add_one_of_zero_diag` (`9.729`). -/
 theorem not_isZeroDiag_add_three (z : Nat) (hz : IsZeroDiag z) :
@@ -1159,10 +1137,6 @@ theorem not_isZeroDiag_add_three (z : Nat) (hz : IsZeroDiag z) :
     (by rw [show (z + 1) + 2 = z + 3 by omega]; exact hz3) t
   rw [htwin]
   exact black_after_zero_diag z hz t
-
-theorem not_isZeroDiag_add_three_prop (z : Nat) (hz : IsZeroDiag z) :
-    ¬ IsZeroDiag (z + 3) :=
-  not_isZeroDiag_add_three z hz
 
 /-- **Diagonal `z + 3` after a zero diagonal `z` is never all-black (`IsZeroDiag z → ¬ IsBlackDiag (z + 3)`) (9.731)**:
 if `IsBlackDiag (z + 3)` held, `reset_three_after_zero` (`E (z + 3) (t + 1) = !E (z + 1) t`) would force `IsZeroDiag (z + 1)`, contradicting `zero_then_nonzero`. Combined with `9.730` (`¬ IsZeroDiag (z + 3)`), diagonal `z + 3` is neither all-white nor all-black. -/
@@ -1176,10 +1150,6 @@ theorem not_isBlackDiag_add_three_of_zero_diag (z : Nat) (hz : IsZeroDiag z) :
   revert hres
   cases E (z + 1) t <;> decide
 
-theorem not_isBlackDiag_add_three_of_zero_diag_prop (z : Nat) (hz : IsZeroDiag z) :
-    ¬ IsBlackDiag (z + 3) :=
-  not_isBlackDiag_add_three_of_zero_diag z hz
-
 /-- **No two zero diagonals are separated by 4 (`IsZeroDiag z → ¬ IsZeroDiag (z + 4)`) (9.732)**:
 if `IsZeroDiag (z + 4)` held, `twin_before_zero` and `black_after_zero_diag` would force `IsBlackDiag (z + 3)`, contradicting `not_isBlackDiag_add_three_of_zero_diag` (`9.731`). -/
 theorem not_isZeroDiag_add_four (z : Nat) (hz : IsZeroDiag z) :
@@ -1191,10 +1161,6 @@ theorem not_isZeroDiag_add_four (z : Nat) (hz : IsZeroDiag z) :
     (by rw [show (z + 2) + 2 = z + 4 by omega]; exact hz4) t
   rw [← htwin]
   exact black_after_zero_diag z hz t
-
-theorem not_isZeroDiag_add_four_prop (z : Nat) (hz : IsZeroDiag z) :
-    ¬ IsZeroDiag (z + 4) :=
-  not_isZeroDiag_add_four z hz
 
 /-- **Sharp Zero-Diagonal Minimum Gap Theorem (`z₁ + 5 ≤ z₂` for all zero diagonals `z₁ < z₂`, sharp at `z₁ = 2, z₂ = 7`) (9.733)**:
 for all `z₁, z₂ ∈ ℕ`, if `IsZeroDiag z₁`, `IsZeroDiag z₂`, and `z₁ < z₂`, then `z₁ + 5 ≤ z₂`. -/
@@ -1208,11 +1174,6 @@ theorem zero_diag_gap_ge_five (z1 z2 : Nat)
   · exact not_isZeroDiag_add_two z1 h1 h2
   · exact not_isZeroDiag_add_three z1 h1 h2
   · exact not_isZeroDiag_add_four z1 h1 h2
-
-theorem zero_diag_gap_ge_five_prop (z1 z2 : Nat)
-    (h1 : IsZeroDiag z1) (h2 : IsZeroDiag z2) (hlt : z1 < z2) :
-    z1 + 5 ≤ z2 :=
-  zero_diag_gap_ge_five z1 z2 h1 h2 hlt
 
 /-- **Upward `Q`-transported Sector-2 bit evaluation `(winWitt (t + Q) (2^k)).testBit ((t + 2^(k+1)) - r) = false` on diagonal `z + Q` from a SINGLE `WinWittAgree t k Q a L` at bit `(t + 2^(k+1)) - (r + Q)` without `DoublesAt` or `WinWittAgree (t + 1)` (9.734)**:
 translates `9.722` into `winWitt (t + Q) (2^k)`, where the `+ Q` time shift and `+ Q` spatial shift cancel to give bit index `(t + 2^(k+1)) - r`. -/

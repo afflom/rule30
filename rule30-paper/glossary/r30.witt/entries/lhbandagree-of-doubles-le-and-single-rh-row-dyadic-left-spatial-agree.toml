@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.lhBandAgree_of_doubles_le_and_single_rh_row_dyadic_left_spatial_agree_prop"
+name = "Rule30UOR.Interfaces.lhBandAgree_of_doubles_le_and_single_rh_row_dyadic_left_spatial_agree"
 
 [[form]]
 id = "lhbandagree-of-doubles-le-and-single-rh-row-dyadic-left-spatial-agree"

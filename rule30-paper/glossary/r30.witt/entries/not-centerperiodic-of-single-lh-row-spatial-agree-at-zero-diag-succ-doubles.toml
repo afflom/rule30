@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles_prop"
+name = "Rule30UOR.Interfaces.not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles"
 
 [[form]]
 id = "not-centerperiodic-of-single-lh-row-spatial-agree-at-zero-diag-succ-doubles"

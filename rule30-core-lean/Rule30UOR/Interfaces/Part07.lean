@@ -60,7 +60,7 @@ theorem lhCenter_scale_same_col_cone (t k p : Nat)
     show (t + twopow k) + p = t + p + twopow k by omega]
   have hsc := congrArg (fun n => n.testBit (t + p + twopow k)) (row_scale t k)
   rw [Nat.testBit_xor, phiScale_row_testBit_lhCenter_sector_one t k p hp] at hsc
-  rw [hsc, bxor_eq_xor]
+  rw [hsc, Rule30UOR.Scale.bxor_eq]
 
 theorem lhCenter_scale_same_col_cone_prop (t k p : Nat)
     (hp : t + p < twopow k) :
@@ -281,7 +281,7 @@ theorem winWittAgree_step_sector_one_lhCenter (t k Q p0 L : Nat)
         ((t + Q) + (p0 + i) + twopow k) + 2 by omega,
       hp0,
       show ((t + Q) + (p0 + i) + twopow k) + 1 = (t + Q) + ((p0 + i) + 1) + twopow k by omega,
-      bxor_eq_xor]
+      Rule30UOR.Scale.bxor_eq]
   have hphi0 : (phi (winWitt t (twopow k))).testBit ((t + 1) + ((p0 + i) + 1) + twopow k) =
       bxor ((winWitt t (twopow k)).testBit ((t + (p0 + i) + twopow k) + 2))
         ((winWitt t (twopow k)).testBit (t + ((p0 + i) + 1) + twopow k) ||
@@ -291,7 +291,7 @@ theorem winWittAgree_step_sector_one_lhCenter (t k Q p0 L : Nat)
         (t + (p0 + i) + twopow k) + 2 by omega,
       hp0,
       show (t + (p0 + i) + twopow k) + 1 = t + ((p0 + i) + 1) + twopow k by omega,
-      bxor_eq_xor]
+      Rule30UOR.Scale.bxor_eq]
   rw [show (t + 1) + Q = (t + Q) + 1 by omega,
     show ((t + 1) + (p0 + 1) + twopow k) + i + Q =
       ((t + Q) + 1) + ((p0 + i) + 1) + twopow k by omega,
@@ -339,7 +339,7 @@ theorem winWittAgree_outward_step_sector_one_lhCenter (t k Q p0 L : Nat)
         hp0,
         show ((t + Q) + (p0 + L) + twopow k) + 2 = (t + Q) + ((p0 + L) + 2) + twopow k by omega,
         show ((t + Q) + (p0 + L) + twopow k) + 1 = (t + Q) + ((p0 + L) + 1) + twopow k by omega,
-        bxor_eq_xor]
+        Rule30UOR.Scale.bxor_eq]
     have hphi0 : (phi (winWitt t (twopow k))).testBit ((t + 1) + ((p0 + L) + 1) + twopow k) =
         bxor ((winWitt t (twopow k)).testBit (t + ((p0 + L) + 2) + twopow k))
           ((winWitt t (twopow k)).testBit (t + ((p0 + L) + 1) + twopow k) ||
@@ -350,12 +350,12 @@ theorem winWittAgree_outward_step_sector_one_lhCenter (t k Q p0 L : Nat)
         hp0,
         show (t + (p0 + L) + twopow k) + 2 = t + ((p0 + L) + 2) + twopow k by omega,
         show (t + (p0 + L) + twopow k) + 1 = t + ((p0 + L) + 1) + twopow k by omega,
-        bxor_eq_xor]
+        Rule30UOR.Scale.bxor_eq]
     rw [hsQ, hs0, hphiQ, hphi0, hb0, hb1, hw0, hw1] at hwn
     rw [show (t + p0 + twopow k) + (L + 2) + Q = (t + Q) + ((p0 + L) + 2) + twopow k by omega,
       show (t + p0 + twopow k) + (L + 2) = t + ((p0 + L) + 2) + twopow k by omega]
     revert hwn
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases (winWitt (t + Q) (twopow k)).testBit ((t + Q) + ((p0 + L) + 2) + twopow k) <;>
       cases (winWitt t (twopow k)).testBit (t + ((p0 + L) + 2) + twopow k) <;>
       cases ((winWitt t (twopow k)).testBit (t + ((p0 + L) + 1) + twopow k) ||
@@ -502,7 +502,7 @@ theorem rhCenter_scale_same_col_cone (t k p : Nat)
   rw [rhCenter_eq_row_testBit (t + twopow k) p (by omega)]
   have hsc := congrArg (fun n => n.testBit ((t + twopow k) - p)) (row_scale t k)
   rw [Nat.testBit_xor, phiScale_row_testBit_rhCenter_cone t k p hp] at hsc
-  rw [hsc, bxor_eq_xor]
+  rw [hsc, Rule30UOR.Scale.bxor_eq]
 
 theorem rhCenter_scale_same_col_cone_prop (t k p : Nat)
     (hp : t + p < twopow k) :
@@ -913,7 +913,7 @@ theorem winWittAgree_step_rhCenter_cone (t k Q p0 L : Nat)
       hp0,
       show (((t + Q) + twopow k) - ((p0 + (L - i)) + 1)) + 1 =
         ((t + Q) + twopow k) - (p0 + (L - i)) by omega,
-      bxor_eq_xor]
+      Rule30UOR.Scale.bxor_eq]
   have hphi0 : (phi (winWitt t (twopow k))).testBit (((t + 1) + twopow k) - (p0 + (L - i))) =
       bxor ((winWitt t (twopow k)).testBit (((t + twopow k) - ((p0 + (L - i)) + 1)) + 2))
         ((winWitt t (twopow k)).testBit ((t + twopow k) - (p0 + (L - i))) ||
@@ -924,7 +924,7 @@ theorem winWittAgree_step_rhCenter_cone (t k Q p0 L : Nat)
       hp0,
       show ((t + twopow k) - ((p0 + (L - i)) + 1)) + 1 =
         (t + twopow k) - (p0 + (L - i)) by omega,
-      bxor_eq_xor]
+      Rule30UOR.Scale.bxor_eq]
   rw [show (t + 1) + Q = (t + Q) + 1 by omega,
     show (((t + 1) + twopow k) - (p0 + L)) + i + Q =
       (((t + Q) + 1) + twopow k) - (p0 + (L - i)) by omega,
@@ -969,7 +969,7 @@ theorem winWittAgree_inward_step_rhCenter_cone (t k Q p0 L : Nat)
           (((t + Q) + twopow k) - (p0 + 1)) + 2 by omega,
         hp0,
         show (((t + Q) + twopow k) - (p0 + 1)) + 1 = ((t + Q) + twopow k) - p0 by omega,
-        bxor_eq_xor]
+        Rule30UOR.Scale.bxor_eq]
     have hphi0 : (phi (winWitt t (twopow k))).testBit (((t + 1) + twopow k) - p0) =
         bxor ((winWitt t (twopow k)).testBit (((t + twopow k) - (p0 + 1)) + 2))
           ((winWitt t (twopow k)).testBit ((t + twopow k) - p0) ||
@@ -979,14 +979,14 @@ theorem winWittAgree_inward_step_rhCenter_cone (t k Q p0 L : Nat)
           ((t + twopow k) - (p0 + 1)) + 2 by omega,
         hp0,
         show ((t + twopow k) - (p0 + 1)) + 1 = (t + twopow k) - p0 by omega,
-        bxor_eq_xor]
+        Rule30UOR.Scale.bxor_eq]
     rw [hsQ, hs0, hphiQ, hphi0, hb0, hb1, hw0, hw1] at hwn
     rw [show ((t + twopow k) - (p0 + L + 1)) + (L + 2) + Q =
         (((t + Q) + twopow k) - (p0 + 1)) + 2 by omega,
       show ((t + twopow k) - (p0 + L + 1)) + (L + 2) =
         ((t + twopow k) - (p0 + 1)) + 2 by omega]
     revert hwn
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases (winWitt (t + Q) (twopow k)).testBit ((((t + Q) + twopow k) - (p0 + 1)) + 2) <;>
       cases (winWitt t (twopow k)).testBit (((t + twopow k) - (p0 + 1)) + 2) <;>
       cases ((winWitt t (twopow k)).testBit ((t + twopow k) - p0) ||
@@ -1016,7 +1016,7 @@ theorem winWitt_step_sector_one_center_slot (t k : Nat)
     show ((t + twopow k) - 1) + 1 = t + twopow k by omega] at hphi
   rw [hs, hphi]
   rw [show (t + 1) + twopow k = t + 1 + twopow k by omega]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit (t + 1 + twopow k) <;>
     cases ((winWitt t (twopow k)).testBit (t + twopow k) ||
       (winWitt t (twopow k)).testBit ((t + twopow k) - 1)) <;>
@@ -1285,7 +1285,7 @@ theorem winWitt_inward_step_frobDefect_testBit_succ (t k b : Nat)
   rw [show (b - 1) + 2 = b + 1 by omega,
     show (b - 1) + 1 = b by omega] at hphi
   rw [hs, hphi]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit (b + 1) <;>
     cases ((winWitt t (twopow k)).testBit b ||
       (winWitt t (twopow k)).testBit (b - 1)) <;>
@@ -1350,7 +1350,7 @@ theorem winWitt_sector_one_one_from_center_and_right (t k : Nat)
             ((winWitt t (twopow k)).testBit (t + twopow k) &&
               rhCenter t 1))) := by
   rw [winWitt_step_sector_one_center_slot t k htk]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit (t + 1 + twopow k) <;>
     cases ((winWitt t (twopow k)).testBit (t + twopow k) ||
       (winWitt t (twopow k)).testBit ((t + twopow k) - 1)) <;>
@@ -1392,7 +1392,7 @@ theorem winWitt_inward_step_sector_one_lhCenter (t k p : Nat)
   rw [show (t + p + twopow k) + 2 = (t + 1) + (p + 1) + twopow k by omega,
     show (t + p + twopow k) + 1 = t + (p + 1) + twopow k by omega] at hphi
   rw [hs, hphi, show (t + 1) + (p + 1) + twopow k = t + (p + 2) + twopow k by omega]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit (t + (p + 2) + twopow k) <;>
     cases ((winWitt t (twopow k)).testBit (t + (p + 1) + twopow k) ||
       (winWitt t (twopow k)).testBit (t + p + twopow k)) <;>
@@ -1436,7 +1436,7 @@ theorem winWitt_inward_step_rhCenter_cone (t k p : Nat)
   rw [hs, hphi,
     show (p + 1) + 1 = p + 2 by omega,
     show ((t + 1) + twopow k) - (p + 1) = (t + twopow k) - p by omega]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit ((t + twopow k) - p) <;>
     cases ((winWitt t (twopow k)).testBit ((t + twopow k) - (p + 1)) ||
       (winWitt t (twopow k)).testBit ((t + twopow k) - (p + 2))) <;>
@@ -1612,26 +1612,10 @@ theorem lhBandAgree_late_steps_sector_one (t k Q p0 L s : Nat)
 
 /-! ### Batch 16: Raw Inter-Cone Pure-`Φ` Window Evolution, Non-Overlapping 3-Sector Copy Laws of `phiScale`, and Early-Free Cross-Sector Window Duality -/
 
-/-- **Vanishing of `phiScale k (row t)` Across the Raw Inter-Cone Gap (`phiScale_row_testBit_inter_cone_gap_eq_false`)**:
-    for all `t, k, b : Nat` with `2 * t < b` and `b < 2^k`, bit `b` lies strictly above the Sector-0 light cone `2 * t` and strictly below the Sector-1 shift `2^k`, so `(phiScale k (row t)).testBit b = false`! -/
-theorem phiScale_row_testBit_inter_cone_gap_eq_false (t k b : Nat)
-    (hb0 : 2 * t < b) (hb1 : b < twopow k) :
-    (phiScale k (row t)).testBit b = false := by
-  have hu : (row t).testBit b = false := by
-    rw [row_testBit]
-    exact rdiag_gt_two_mul t b hb0
-  change (((row t) ^^^ ((row t) <<< twopow k)) ^^^
-    ((row t) <<< (twopow k + twopow k))).testBit b = false
-  simp only [Nat.testBit_xor, Nat.testBit_shiftLeft]
-  have d1 : decide (b ≥ twopow k) = false := decide_eq_false (by omega)
-  have d2 : decide (b ≥ twopow k + twopow k) = false := decide_eq_false (by omega)
-  rw [d1, d2, Bool.false_and, Bool.false_and, hu]
-  rfl
-
 theorem phiScale_row_testBit_inter_cone_gap_eq_false_prop (t k b : Nat)
     (hb0 : 2 * t < b) (hb1 : b < twopow k) :
     wittBitBool (phiScale k (row t)) b = false :=
-  phiScale_row_testBit_inter_cone_gap_eq_false t k b hb0 hb1
+  Rule30UOR.Interfaces.phiScale_row_testBit_sector_zero_gap t k b hb0 hb1
 
 /-- **Direct Readout of Late `row (t + 2^k)` Across the Raw Inter-Cone Gap (`winWitt_testBit_inter_cone_gap_eq_row_late`)**:
     for all `t, k, b : Nat` with `2 * t < b` and `b < 2^k`, because `(phiScale k (row t)).testBit b = false`, `(winWitt t (2^k)).testBit b` equals `(row (t + 2^k)).testBit b` directly! -/
@@ -1640,7 +1624,7 @@ theorem winWitt_testBit_inter_cone_gap_eq_row_late (t k b : Nat)
     (winWitt t (twopow k)).testBit b = (row (t + twopow k)).testBit b := by
   have hsc := congrArg (fun n => n.testBit b) (row_scale t k)
   rw [Nat.testBit_xor,
-    phiScale_row_testBit_inter_cone_gap_eq_false t k b hb0 hb1,
+    Rule30UOR.Interfaces.phiScale_row_testBit_sector_zero_gap t k b hb0 hb1,
     Bool.false_xor] at hsc
   exact hsc.symm
 
@@ -1658,8 +1642,8 @@ theorem crossCarry_row_scale_inter_cone_gap_eq_false (t k b : Nat)
   have hc := crossCarry_testBit_succ (phiScale k (row t)) (winWitt t (twopow k)) (b - 1)
   rw [show (b - 1) + 1 = b by omega] at hc
   rw [hc,
-    phiScale_row_testBit_inter_cone_gap_eq_false t k b (by omega) hb1,
-    phiScale_row_testBit_inter_cone_gap_eq_false t k (b - 1) (by omega) (by omega),
+    Rule30UOR.Interfaces.phiScale_row_testBit_sector_zero_gap t k b (by omega) hb1,
+    Rule30UOR.Interfaces.phiScale_row_testBit_sector_zero_gap t k (b - 1) (by omega) (by omega),
     Bool.false_and, Bool.and_false]
   rfl
 
@@ -1773,7 +1757,7 @@ theorem winWitt_testBit_sector_one_eq_row_xor (t k d : Nat)
   rw [Nat.testBit_xor,
     phiScale_row_testBit_sector_one_eq_row t k d htk hd] at hsc
   rw [hsc]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (row t).testBit d <;>
     cases (winWitt t (twopow k)).testBit (d + twopow k) <;> rfl
 
@@ -1794,7 +1778,7 @@ theorem winWitt_testBit_sector_two_eq_row_xor (t k d : Nat)
   rw [Nat.testBit_xor,
     phiScale_row_testBit_sector_two_eq_row t k d htk] at hsc
   rw [hsc]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (row t).testBit d <;>
     cases (winWitt t (twopow k)).testBit (d + twopow (k + 1)) <;> rfl
 
@@ -1917,7 +1901,7 @@ theorem rhCenter_late_self_from_zero_gap_step (t k : Nat)
     show ((t + 1) + twopow k) - (t + 1) = twopow k by omega] at hs
   rw [hw0, hw1, hg1, hg2] at hs
   revert hs
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter (t + twopow k) t <;>
     cases rhCenter ((t + 1) + twopow k) (t + 1) <;>
     cases (rhCenter (t + twopow k) (t + 1) || rhCenter (t + twopow k) (t + 2)) <;> decide
@@ -1994,7 +1978,7 @@ theorem winWitt_sector_one_xor_sector_two_center_slot_zcenter (t k : Nat)
     lhCenter_zero_eq_center (t + twopow k),
     lhCenter_late_twopow_eq_zcenter t k hk hset] at hd
   revert hd
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases zcenter t <;>
     cases Rule30UOR.Core.center (t + twopow k) <;>
     cases ((winWitt t (twopow k)).testBit (t + twopow k) ^^
@@ -2181,7 +2165,7 @@ theorem winWitt_testBit_sector_two_center_slot_of_zero_diag (z k : Nat)
   have h := winWitt_testBit_sector_two_center_slot_zcenter z k hk hset
   rw [zcenter_of_zero_diag z hz] at h
   revert h
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt z (twopow k)).testBit (z + twopow (k + 1)) <;>
     cases Rule30UOR.Core.center z <;> decide
 
@@ -2202,7 +2186,7 @@ theorem winWitt_sector_one_xor_sector_two_center_slot_of_zero_diag (z k : Nat)
   have h := winWitt_sector_one_xor_sector_two_center_slot_zcenter z k hk hset
   rw [zcenter_of_zero_diag z hz] at h
   revert h
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center (z + twopow k) <;>
     cases ((winWitt z (twopow k)).testBit (z + twopow k) ^^
       (winWitt z (twopow k)).testBit (z + twopow (k + 1))) <;> decide

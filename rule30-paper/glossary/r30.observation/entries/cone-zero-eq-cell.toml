@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cone-zero-eq-cell"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::cone-zero) (local t)) (app (const r30.time::cell) (local t) (app (const lexlean.std.int::neg) (nat 1)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DiagonalCone"
+name = "Rule30UOR.KernelRoot.coneZero_eq_cell"
+
+[[form]]
+id = "cone-zero-eq-cell"
+channel = "math"
+surface = "conezeroeqcell"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name conezeroeqcell) (paren (seq (slot 0))))"

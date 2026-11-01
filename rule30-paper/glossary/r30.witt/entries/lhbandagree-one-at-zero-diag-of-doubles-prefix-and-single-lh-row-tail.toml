@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.lhBandAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail_prop"
+name = "Rule30UOR.Interfaces.lhBandAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail"
 
 [[form]]
 id = "lhbandagree-one-at-zero-diag-of-doubles-prefix-and-single-lh-row-tail"

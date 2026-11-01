@@ -56,6 +56,16 @@ import Rule30UOR.ClassObligation
 import Rule30UOR.Antidiagonal
 import Rule30UOR.LeftTower
 import Rule30UOR.RightPeriods
+import Rule30UOR.DiagonalCone
+import Rule30UOR.DoublingDepth
+import Rule30UOR.ColumnCone
+import Rule30UOR.KernelRoot
+import Rule30UOR.ResidueJen
+import Rule30UOR.TowerBoundary
+import Rule30UOR.DrivenLucas
+import Rule30UOR.UnitSeedMask
+import Rule30UOR.Walled
+import Rule30UOR.MaskSlice
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -86,6 +96,28 @@ elab "#check_research_axioms" : command => do
         checked := checked + 1
   unless checked > audits.size do
     throwError "Rule30UOR theorems were not found"
+  -- Every proof is a `theorem`: a definition whose type is a proposition would escape the axiom
+  -- audit above and the statement-κ redundancy check of the kernel replay, which label theorems.
+  -- Constants are selected by their module, so private declarations are covered too.
+  let mut proofDefs : Array Name := #[]
+  for (name, info) in env.constants.toList do
+    if let some idx := env.getModuleIdxFor? name then
+      if (`Rule30UOR).isPrefixOf (env.header.moduleNames[idx.toNat]!) then
+        let ty? := match info with
+          | .defnInfo d => some d.type
+          | .opaqueInfo d => some d.type
+          | _ => none
+        -- generated declarations are not authored: matchers, recursors (casesOn, recOn, below),
+        -- and auxiliary internal details directly under the declaration that generated them
+        -- (judged on the user-facing name, so an authored private definition is still covered)
+        let user := (privateToUserName? name).getD name
+        let generated := user.isInternalDetail && (env.contains name.getPrefix || env.contains user.getPrefix)
+        if let some ty := ty? then
+          unless generated || Meta.isMatcherCore env name || isAuxRecursor env name do
+            if ← liftTermElabM (Meta.isProp ty) then
+              proofDefs := proofDefs.push name
+  unless proofDefs.isEmpty do
+    throwError "research definitions whose type is a proposition (state them as theorems): {proofDefs.toList.take 20}"
   logInfo m!"Checked {checked} research theorems; all axioms are in propext, Quot.sound."
 
 #check_research_axioms

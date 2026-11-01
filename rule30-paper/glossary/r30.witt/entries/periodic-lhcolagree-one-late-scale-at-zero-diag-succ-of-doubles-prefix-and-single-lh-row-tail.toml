@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.periodic_lhColAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail_prop"
+name = "Rule30UOR.Interfaces.periodic_lhColAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail"
 
 [[form]]
 id = "periodic-lhcolagree-one-late-scale-at-zero-diag-succ-of-doubles-prefix-and-single-lh-row-tail"

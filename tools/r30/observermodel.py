@@ -21,7 +21,13 @@ automorphism of the algebra keeps RQ and transforms SQ). Here:
   sheet is written for), the open leaves show only withdrawn claims; the `Overlap` rows are exactly these pairs;
 - the sensual qualities are the panels of the journey, and two vantages
   interact through the panels they share (`Interaction` rows);
-- the withdrawn ids are the open claims, of which no panel renders a proof.
+- the withdrawn ids are the open claims, of which no panel renders a proof;
+- an `observed` claim (a relation `bin/r30 discover` certified on a window)
+  is neither: it is not proved, so it is no real quality, and it is no open
+  obligation of the proof, so it is not withdrawn; it is a sensual quality
+  pending deduction and enters no pole until a Lean theorem proves it (the
+  theorems below need no change: they range over the proved and the open
+  claims only).
 
 The proof itself is cross-correlated as data (`Facet` rows, not theorems
 about the automaton): the regular side of the pattern is a vantage from which

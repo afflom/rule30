@@ -48,19 +48,6 @@ theorem twopow_ge_succ : ∀ k, k + 1 ≤ twopow k
     have := twopow_ge_succ k
     cfomega
 
-theorem twopow_mono {a b : Nat} (h : a ≤ b) : twopow a ≤ twopow b := by
-  induction b with
-  | zero =>
-    have : a = 0 := by cfomega
-    subst this; exact Nat.le_refl _
-  | succ b ih =>
-    rcases Nat.lt_or_ge a (b + 1) with h1 | h1
-    · have := ih (by cfomega)
-      rw [Rule30UOR.Core.twopow]
-      cfomega
-    · have : a = b + 1 := by cfomega
-      subst this; exact Nat.le_refl _
-
 /-- The family for the large scales: `t ↦ if t = 0 then b else center (T + (u t + v) % P)`. -/
 def largeScale (T P : Nat) (i : Nat) (t : Nat) : Bool :=
   if t = 0 then decide (i % 2 = 1) else center (T + ((i / 2 / P % P) * t + i / 2 % P) % P)
@@ -99,13 +86,13 @@ theorem kernel2Finite_of_centerPeriodic (T P : Nat) (hP : 0 < P)
   rcases Nat.lt_or_ge k (T + P) with hk | hk
   · -- small scale: index directly
     refine ⟨k * twopow (T + P) + r, ?_, ?_⟩
-    · have h1 : r < twopow (T + P) := Nat.lt_of_lt_of_le hr (twopow_mono (Nat.le_of_lt hk))
+    · have h1 : r < twopow (T + P) := Nat.lt_of_lt_of_le hr (Rule30UOR.Interfaces.twopow_mono _ _ (Nat.le_of_lt hk))
       have h2 : (k + 1) * twopow (T + P) ≤ (T + P) * twopow (T + P) :=
         Nat.mul_le_mul_right _ hk
       rw [Nat.succ_mul] at h2
       cfomega
     · intro t
-      have h1 : r < twopow (T + P) := Nat.lt_of_lt_of_le hr (twopow_mono (Nat.le_of_lt hk))
+      have h1 : r < twopow (T + P) := Nat.lt_of_lt_of_le hr (Rule30UOR.Interfaces.twopow_mono _ _ (Nat.le_of_lt hk))
       have hlt : k * twopow (T + P) + r < (T + P) * twopow (T + P) := by
         have h2 : (k + 1) * twopow (T + P) ≤ (T + P) * twopow (T + P) :=
           Nat.mul_le_mul_right _ hk
@@ -119,7 +106,7 @@ theorem kernel2Finite_of_centerPeriodic (T P : Nat) (hP : 0 < P)
         Nat.mod_eq_of_lt h1]
   · -- large scale: residues
     have hbig : T + P ≤ twopow k :=
-      Nat.le_trans (by have := twopow_ge_succ (T + P); cfomega) (twopow_mono hk)
+      Nat.le_trans (by have := twopow_ge_succ (T + P); cfomega) (Rule30UOR.Interfaces.twopow_mono _ _ hk)
     let u := twopow k % P
     let v := (r + (P - T % P)) % P
     let b := if center r then 1 else 0
@@ -206,14 +193,6 @@ theorem kernelSeq_step_late (k r t : Nat) (hs : twopow k ≤ twopow k * t + r) :
   cases kernelSeq k r t <;> cases cell (twopow k * t + r) (Rule30UOR.Scale.negpow k) <;>
     cases Rule30UOR.Interfaces.wittRespBool (twopow k * t + r) k <;>
     cases Rule30UOR.Scale.response (twopow k * t + r) k <;> rfl
-
-/-- The center's past is recovered from late responses (`center_from_late_responses`):
-the value at `d` is the XOR of the two window responses at time `d + 2^k`, for
-every `k ≥ d`. -/
-theorem center_recovered_at_scale (d k : Nat) (hk : d ≤ k) :
-    center d = bxor (Rule30UOR.Interfaces.wittRespBool (d + twopow k) k)
-      (Rule30UOR.Scale.response (d + twopow k) k) :=
-  Rule30UOR.Interfaces.center_from_late_responses d k hk
 
 theorem kernelSeq_even (k r t : Nat) : kernelSeq (k + 1) r t = kernelSeq k r (2 * t) := by
   unfold kernelSeq
@@ -694,7 +673,7 @@ theorem kappaCollapse_iff (K : Nat) : KappaCollapse K ↔ Rule30UOR.Scale.Center
 theorem no_kappaCollapse_small (K : Nat) (hK : K ≤ 7) : ¬ KappaCollapse K := fun h =>
   Rule30UOR.Horizon.no_center_period_512_128 0 (twopow K) (Nat.zero_le _)
     (Nat.lt_of_lt_of_le (Nat.zero_lt_succ K) (twopow_ge_succ K))
-    (Nat.le_trans (twopow_mono hK) (by decide)) (centerPeriodic_of_kappaCollapse K h)
+    (Nat.le_trans (Rule30UOR.Interfaces.twopow_mono _ _ hK) (by decide)) (centerPeriodic_of_kappaCollapse K h)
 
 /-- Problem 1 is exactly: no κ-collapse at any scale and no period that is not a power of two. -/
 theorem no_kappaCollapse_of_problem1 (h : Ruliology.CellularAutomata.Rule30Prize.Problem1) (K : Nat) :

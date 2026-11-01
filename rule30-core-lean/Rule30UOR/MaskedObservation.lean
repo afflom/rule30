@@ -210,7 +210,7 @@ private theorem pow_eq_twopow (n : Nat) : 2 ^ n = Rule30UOR.Core.twopow n := by
   | zero => rfl
   | succ n ih => simp [Rule30UOR.Core.twopow, Nat.pow_succ, ih, Nat.mul_two]
 
-private theorem kit_period {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P) :
+theorem kit_period {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P) :
     ∀ t, T ≤ t → center (t + P) = center t := by
   intro t ht
   simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht

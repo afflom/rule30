@@ -26,6 +26,9 @@ CLAIM_PROPERTIES = {
     "since": {"type": "string"},
     "note": {"type": "string"},
     "depends": {"type": "array", "items": {"type": "string"}},
+    "relation": {"type": "array", "items": {"type": "string"}},
+    "window": {"type": "integer"},
+    "kappa": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
 }
 CLAIM = {"type": "object", "required": ["id", "status", "statement"], "additionalProperties": False,
          "properties": CLAIM_PROPERTIES}
@@ -72,7 +75,14 @@ RESULTS = {
                        "lean_type": {"type": "string"},
                        "published": {"type": "string"},
                        "published_in": {"type": "string"},
-                       "related": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}}},
+                       "related": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}},
+                       # with --related: the audited conditional refutations the claim concerns (auditmodel.related)
+                       "audit": {"type": "array", "items": {
+                           "type": "object", "required": ["theorem", "status", "open", "refutedBy"], "additionalProperties": False,
+                           "properties": {"theorem": {"type": "string"},
+                                          "status": {"type": "string", "enum": ["dead", "live-discharged", "open"]},
+                                          "open": {"type": "array", "items": {"type": "string"}},
+                                          "refutedBy": {"type": "array", "items": {"type": "string"}}}}}},
     },
     "kappa-result": {
         "title": "kappa --json: the κ-label of each module and, with --declarations, of each of its declarations",
@@ -87,8 +97,53 @@ RESULTS = {
     "api-check-result": {
         "title": "api check --json: whether each generated surface of rule30-api matches its sources",
         "type": "object", "additionalProperties": False,
-        "required": ["api", "register", "architecture", "presentation", "observer", "convert", "standards", "core", "model", "logo"],
-        "properties": {k: OK for k in ("api", "register", "architecture", "presentation", "observer", "convert", "standards", "core", "model", "logo")},
+        "required": ["api", "register", "architecture", "presentation", "observer", "convert", "standards", "core", "sequences",
+                     "discovery", "model", "logo"],
+        "properties": {k: OK for k in ("api", "register", "architecture", "presentation", "observer", "convert", "standards", "core",
+                                       "sequences", "discovery", "model", "logo")},
+    },
+    "sequences-result": {
+        "title": "sequences --json: the basis (every sequence with its lexeme, parameters and κ-label), the excluded notions, and the problems of the committed data",
+        "type": "object", "additionalProperties": False, "required": ["window", "requested_window", "sequences", "excluded", "problems"],
+        "properties": {
+            "window": {"type": ["integer", "null"]},
+            "requested_window": {"type": "integer"},
+            "sequences": {"type": "array", "items": {
+                "type": "object", "required": ["id", "lexeme", "parameters", "kappa"], "additionalProperties": False,
+                "properties": {"id": {"type": "string"}, "lexeme": {"type": "string"},
+                               "parameters": {"type": "array", "items": {"type": "integer"}}, "kappa": KAPPA}}},
+            "excluded": {"type": "array", "items": {
+                "type": "object", "required": ["id", "lexeme", "lean", "reason"], "additionalProperties": False,
+                "properties": {k: {"type": "string"} for k in ("id", "lexeme", "lean", "reason")}}},
+            "problems": {"type": "array", "items": {"type": "string"}},
+        },
+    },
+    "discover-result": {
+        "title": "discover --json: the runtime that ran, the relations of the extended basis on the window with their certificates and classes, the recurrences of the base windows, and the claims written",
+        "type": "object", "additionalProperties": False,
+        "required": ["runtime", "why", "window", "stored_window", "degree", "columns", "rank", "relations", "counts", "recurrences", "written"],
+        "properties": {
+            "runtime": {"type": "string", "enum": ["rust", "python"]},
+            "why": {"type": "string"},
+            "window": {"type": "integer"}, "stored_window": {"type": "integer"}, "degree": {"type": "integer"},
+            "columns": {"type": "integer"}, "rank": {"type": "integer"},
+            "relations": {"type": "array", "items": {
+                "type": "object", "additionalProperties": False,
+                "required": ["columns", "kappa", "class", "claim", "scope", "dependent", "rank", "chance_log2"],
+                "properties": {"columns": {"type": "array", "items": {"type": "string"}}, "kappa": KAPPA,
+                               "class": {"type": "string", "enum": ["register", "trivial", "consequence", "new"]},
+                               "claim": {"type": ["string", "null"]}, "scope": {"type": "string", "enum": ["self", "cross"]},
+                               "dependent": {"type": "string"}, "rank": {"type": "integer"}, "chance_log2": {"type": "integer"}}}},
+            "counts": {"type": "object", "required": ["register", "trivial", "consequence", "new"], "additionalProperties": False,
+                       "properties": {k: {"type": "integer"} for k in ("register", "trivial", "consequence", "new")}},
+            "recurrences": {"type": "array", "items": {
+                "type": "object", "additionalProperties": False,
+                "required": ["id", "kappa", "length", "window", "connection", "margin", "determined"],
+                "properties": {"id": {"type": "string"}, "kappa": KAPPA, "length": {"type": "integer"}, "window": {"type": "integer"},
+                               "connection": {"type": "array", "items": {"type": "integer"}}, "margin": {"type": "integer"},
+                               "determined": {"type": "boolean"}}}},
+            "written": {"type": "array", "items": {"type": "string"}},
+        },
     },
     "api-production-result": {
         "title": "api production --json: the certified Rust bundle lexlean production published, or the stage that failed",

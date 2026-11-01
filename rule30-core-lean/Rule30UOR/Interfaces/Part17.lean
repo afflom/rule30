@@ -374,14 +374,6 @@ theorem lhBandAgree_of_single_lh_row_mul_twopow_spatial_agree
   exact lhCenter_eq_shifted_row_of_mul_twopow_and_spatial_agree
     e w t (p0 + i) (by omega) (hset i hi) (hspat i hi)
 
-theorem lhBandAgree_of_single_lh_row_mul_twopow_spatial_agree_prop
-    (e w t p0 L : Nat) (hde : t - p0 ≤ e)
-    (hset : ∀ i : Nat, i ≤ L → SettledBy (t - (p0 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ L →
-      lhCenter (t + w * twopow e) (p0 + i) = lhCenter (t + w * twopow e) ((p0 + i) + w * twopow e)) :
-    LhBandAgree t (w * twopow e) p0 L :=
-  lhBandAgree_of_single_lh_row_mul_twopow_spatial_agree e w t p0 L hde hset hspat
-
 /-- **9.1511**: `LhBandAgree t (w * 2^e) 1 S` from purely spatial shift agreement by `w * 2^e` inside the single left-half row `t + w * 2^e` on `[1, 1 + S]`. -/
 theorem lhBandAgree_one_of_single_lh_row_mul_twopow_spatial_agree
     (e w t S : Nat) (hde : t - 1 ≤ e)
@@ -390,14 +382,6 @@ theorem lhBandAgree_one_of_single_lh_row_mul_twopow_spatial_agree
       lhCenter (t + w * twopow e) (1 + i) = lhCenter (t + w * twopow e) ((1 + i) + w * twopow e)) :
     LhBandAgree t (w * twopow e) 1 S :=
   lhBandAgree_of_single_lh_row_mul_twopow_spatial_agree e w t 1 S hde hset hspat
-
-theorem lhBandAgree_one_of_single_lh_row_mul_twopow_spatial_agree_prop
-    (e w t S : Nat) (hde : t - 1 ≤ e)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy (t - (1 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter (t + w * twopow e) (1 + i) = lhCenter (t + w * twopow e) ((1 + i) + w * twopow e)) :
-    LhBandAgree t (w * twopow e) 1 S :=
-  lhBandAgree_one_of_single_lh_row_mul_twopow_spatial_agree e w t S hde hset hspat
 
 /-- **9.1512**: Dyadic-multiple period `Q = (c * 2^e) * P` specialization of `9.1511`. -/
 theorem lhBandAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree
@@ -411,14 +395,6 @@ theorem lhBandAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree
   rw [hmul] at hspat ⊢
   exact lhBandAgree_one_of_single_lh_row_mul_twopow_spatial_agree e (c * P) t S hde hset hspat
 
-theorem lhBandAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree_prop
-    (e c P t S : Nat) (hde : t - 1 ≤ e)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy (t - (1 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter (t + (c * twopow e) * P) (1 + i) = lhCenter (t + (c * twopow e) * P) ((1 + i) + (c * twopow e) * P)) :
-    LhBandAgree t ((c * twopow e) * P) 1 S :=
-  lhBandAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree e c P t S hde hset hspat
-
 /-- **9.1513**: Under `CenterPeriodic T P`, spatial shift agreement by `(c * 2^e) * P` inside the single left-half row `t + (c * 2^e) * P` on `[1, 1 + S]` implies `LhColAgree t ((c * 2^e) * P) 1 S`. -/
 theorem periodic_lhColAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree
     (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
@@ -429,15 +405,6 @@ theorem periodic_lhColAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree
     LhColAgree t ((c * twopow e) * P) 1 S := by
   refine periodic_lhColAgree_one_of_lhBandAgree_one T P hP hper (c * twopow e) t S ht ?_
   exact lhBandAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree e c P t S hde hset hspat
-
-theorem periodic_lhColAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (c e t S : Nat) (ht : T ≤ t) (hde : t - 1 ≤ e)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy (t - (1 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter (t + (c * twopow e) * P) (1 + i) = lhCenter (t + (c * twopow e) * P) ((1 + i) + (c * twopow e) * P)) :
-    LhColAgree t ((c * twopow e) * P) 1 S :=
-  periodic_lhColAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree T P hP hper c e t S ht hde hset hspat
 
 /-- **9.1514**: Under `CenterPeriodic T P`, spatial shift agreement by `(c * 2^e) * P` inside the single left-half row `t + (c * 2^e) * P` on `[1, 1 + S]` implies `maskparity · 0` agreement over `[t, t + S]`. -/
 theorem periodic_maskparity_zero_agree_of_single_lh_row_dyadic_mul_period_spatial_agree
@@ -451,18 +418,6 @@ theorem periodic_maskparity_zero_agree_of_single_lh_row_dyadic_mul_period_spatia
       Rule30UOR.Scale.maskparity (t + s) 0 := by
   refine periodic_maskparity_zero_agree_of_lhBandAgree_one T P hP hper (c * twopow e) t S s ht ?_ hs
   exact lhBandAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree e c P t S hde hset hspat
-
-theorem periodic_maskparity_zero_agree_of_single_lh_row_dyadic_mul_period_spatial_agree_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (c e t S s : Nat) (ht : T ≤ t) (hde : t - 1 ≤ e)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy (t - (1 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter (t + (c * twopow e) * P) (1 + i) = lhCenter (t + (c * twopow e) * P) ((1 + i) + (c * twopow e) * P))
-    (hs : s ≤ S) :
-    Rule30UOR.Scale.maskparity ((t + s) + (c * twopow e) * P) 0 =
-      Rule30UOR.Scale.maskparity (t + s) 0 :=
-  periodic_maskparity_zero_agree_of_single_lh_row_dyadic_mul_period_spatial_agree
-    T P hP hper c e t S s ht hde hset hspat hs
 
 /-- **9.1515**: Single-row left-half spatial shift agreement by `(c * 2^e) * P` at a doubling zero diagonal refutes `CenterPeriodic T P`. -/
 theorem not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_at_zero_diag_doubles
@@ -484,21 +439,6 @@ theorem not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_at_z
   exact lhBandAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree
     e c P (z + (p + 1)) S hde hset hspat
 
-theorem not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_at_zero_diag_doubles_prop
-    (T P c z p e S : Nat) (hP : 0 < P) (hc : 0 < c)
-    (ht : T ≤ z + (p + 1)) (hz : IsZeroDiag z) (hd : DoublesAt ((c * twopow e) * P) z)
-    (hset1 : SettledBy (z + 1) (z + (p + 1)))
-    (hset2 : SettledBy ((z + 1) - (c * twopow e) * P) (z + (p + 1)))
-    (hS : p + 3 * ((c * twopow e) * P) ≤ S + 1)
-    (hde : (z + (p + 1)) - 1 ≤ e)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + (p + 1)) - (1 + i)) (z + (p + 1)))
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter ((z + (p + 1)) + (c * twopow e) * P) (1 + i) =
-      lhCenter ((z + (p + 1)) + (c * twopow e) * P) ((1 + i) + (c * twopow e) * P)) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_at_zero_diag_doubles
-    T P c z p e S hP hc ht hz hd hset1 hset2 hS hde hset hspat
-
 /-- **9.1516**: Single-row left-half spatial shift agreement by `(c * 2^e) * P` at `t + (c * 2^e) * P = 2^k` refutes `CenterPeriodic T P`. -/
 theorem not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_twopow
     (T P c t k e S : Nat) (hP : 0 < P) (hc : 0 < c)
@@ -514,18 +454,6 @@ theorem not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_twop
   refine not_centerPeriodic_of_lhBandAgree_one_twopow T P (c * twopow e) t k S hP hm ht htm hS ?_
   exact lhBandAgree_one_of_single_lh_row_dyadic_mul_period_spatial_agree e c P t S hde hset hspat
 
-theorem not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_twopow_prop
-    (T P c t k e S : Nat) (hP : 0 < P) (hc : 0 < c)
-    (ht : T ≤ t) (htm : t + (c * twopow e) * P = twopow k)
-    (hS : twopow k ≤ S + 1) (hde : t - 1 ≤ e)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy (t - (1 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter (t + (c * twopow e) * P) (1 + i) =
-      lhCenter (t + (c * twopow e) * P) ((1 + i) + (c * twopow e) * P)) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_twopow
-    T P c t k e S hP hc ht htm hS hde hset hspat
-
 /-- **9.1517**: For ANY shift `Q` and doubling point `z` (`DoublesAt Q z`) with `t - p0 ≤ z` (no dyadic factor `2^e` in `Q` required!), spatial `Q`-periodicity inside the single left-half row `t + Q` on `[p0, p0 + L]` implies `LhBandAgree t Q p0 L`. -/
 theorem lhBandAgree_of_doubles_le_and_single_lh_row_spatial_agree
     (Q z t p0 L : Nat) (hd : DoublesAt Q z) (hdz : t - p0 ≤ z)
@@ -537,14 +465,6 @@ theorem lhBandAgree_of_doubles_le_and_single_lh_row_spatial_agree
   rw [hspat i hi]
   exact lhCenter_diag_shift_periodic_of_doubles_le Q z t (p0 + i) hd (by omega) (hset i hi)
 
-theorem lhBandAgree_of_doubles_le_and_single_lh_row_spatial_agree_prop
-    (Q z t p0 L : Nat) (hd : DoublesAt Q z) (hdz : t - p0 ≤ z)
-    (hset : ∀ i : Nat, i ≤ L → SettledBy (t - (p0 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ L →
-      lhCenter (t + Q) (p0 + i) = lhCenter (t + Q) ((p0 + i) + Q)) :
-    LhBandAgree t Q p0 L :=
-  lhBandAgree_of_doubles_le_and_single_lh_row_spatial_agree Q z t p0 L hd hdz hset hspat
-
 /-- **9.1518**: At `t = z + 1` (one step past a doubling point `z` where `DoublesAt Q z` holds), EVERY cell `(z + 1, 1 + i)` in `[1, 1 + S]` satisfies `(z + 1) - (1 + i) = z - i ≤ z`, so spatial `Q`-periodicity inside the single left-half row `(z + 1) + Q` on `[1, 1 + S]` implies `LhBandAgree (z + 1) Q 1 S` for ANY `Q`! -/
 theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
     (Q z S : Nat) (hd : DoublesAt Q z)
@@ -553,14 +473,6 @@ theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_a
       lhCenter ((z + 1) + Q) (1 + i) = lhCenter ((z + 1) + Q) ((1 + i) + Q)) :
     LhBandAgree (z + 1) Q 1 S :=
   lhBandAgree_of_doubles_le_and_single_lh_row_spatial_agree Q z (z + 1) 1 S hd (by omega) hset hspat
-
-theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree_prop
-    (Q z S : Nat) (hd : DoublesAt Q z)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter ((z + 1) + Q) (1 + i) = lhCenter ((z + 1) + Q) ((1 + i) + Q)) :
-    LhBandAgree (z + 1) Q 1 S :=
-  lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree Q z S hd hset hspat
 
 /-- **9.1519**: Under `CenterPeriodic T P` (`T ≤ z + 1`) and `DoublesAt (m * P) z` (available for EVERY `m` by `9.898`!), spatial `(m * P)`-periodicity of the single left-half row `(z + 1) + m * P` on `[1, 1 + S]` implies `LhColAgree (z + 1) (m * P) 1 S`. -/
 theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
@@ -572,16 +484,6 @@ theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_s
     LhColAgree (z + 1) (m * P) 1 S := by
   refine periodic_lhColAgree_one_of_lhBandAgree_one T P hP hper m (z + 1) S ht ?_
   exact lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree (m * P) z S hd hset hspat
-
-theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (m z S : Nat) (ht : T ≤ z + 1) (hd : DoublesAt (m * P) z)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter ((z + 1) + m * P) (1 + i) = lhCenter ((z + 1) + m * P) ((1 + i) + m * P)) :
-    LhColAgree (z + 1) (m * P) 1 S :=
-  periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
-    T P hP hper m z S ht hd hset hspat
 
 /-- **9.1520**: Under `CenterPeriodic T P` (`T ≤ z + 1`) and `DoublesAt (m * P) z`, spatial `(m * P)`-periodicity of the single left-half row `(z + 1) + m * P` on `[1, 1 + S]` implies `maskparity · 0` agreement over `[z + 1, (z + 1) + S]`. -/
 theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
@@ -595,18 +497,6 @@ theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_l
       Rule30UOR.Scale.maskparity ((z + 1) + s) 0 := by
   refine periodic_maskparity_zero_agree_of_lhBandAgree_one T P hP hper m (z + 1) S s ht ?_ hs
   exact lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree (m * P) z S hd hset hspat
-
-theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (m z S s : Nat) (ht : T ≤ z + 1) (hd : DoublesAt (m * P) z)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter ((z + 1) + m * P) (1 + i) = lhCenter ((z + 1) + m * P) ((1 + i) + m * P))
-    (hs : s ≤ S) :
-    Rule30UOR.Scale.maskparity (((z + 1) + s) + m * P) 0 =
-      Rule30UOR.Scale.maskparity ((z + 1) + s) 0 :=
-  periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
-    T P hP hper m z S s ht hd hset hspat hs
 
 /-- **9.1521**: At `t = z + 1` (`p = 0`), spatial `(m * P)`-periodicity of the single left-half row `(z + 1) + m * P` across `[1, 1 + S]` (`3 * (m * P) ≤ S + 1`) refutes `CenterPeriodic T P` for ANY `m > 0`! -/
 theorem not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles
@@ -627,19 +517,6 @@ theorem not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doub
     (by simpa [h0] using hset1) (by simpa [h0] using hset2) hS0
     (by simpa [h0] using hband)
 
-theorem not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles_prop
-    (T P m z S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ z + 1) (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : SettledBy (z + 1) (z + 1))
-    (hset2 : SettledBy ((z + 1) - m * P) (z + 1))
-    (hS : 3 * (m * P) ≤ S + 1)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter ((z + 1) + m * P) (1 + i) = lhCenter ((z + 1) + m * P) ((1 + i) + m * P)) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles
-    T P m z S hP hm ht hz hd hset1 hset2 hS hset hspat
-
 /-! ### Batch 82: General-p Prefix/Tail Decomposition at Doubling Zero Diagonals & Single-Scale Dyadic Embedding of Single-Row Left-Half Spatial Agreement in rhCenter and rdrv (9.1522–9.1536) -/
 
 /-- **9.1522**: At `t = z + (p + 1)` with `DoublesAt Q z`, `LhBandAgree (z + (p + 1)) Q 1 S` splits into the `p`-cell prefix `i < p` above `z` and the single-row spatial tail `p ≤ i ≤ S` at or below `z`. -/
@@ -658,16 +535,6 @@ theorem lhBandAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail
     rw [htail i hpi hi]
     exact lhCenter_diag_shift_periodic_of_doubles_le Q z (z + (p + 1)) (1 + i) hd (by omega) (hset i hpi hi)
 
-theorem lhBandAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail_prop
-    (Q z p S : Nat) (hd : DoublesAt Q z)
-    (hpref : ∀ i : Nat, i < p →
-      lhCenter ((z + (p + 1)) + Q) (1 + i) = lhCenter (z + (p + 1)) (1 + i))
-    (hset : ∀ i : Nat, p ≤ i → i ≤ S → SettledBy ((z + (p + 1)) - (1 + i)) (z + (p + 1)))
-    (htail : ∀ i : Nat, p ≤ i → i ≤ S →
-      lhCenter ((z + (p + 1)) + Q) (1 + i) = lhCenter ((z + (p + 1)) + Q) ((1 + i) + Q)) :
-    LhBandAgree (z + (p + 1)) Q 1 S :=
-  lhBandAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail Q z p S hd hpref hset htail
-
 /-- **9.1523**: Under `CenterPeriodic T P` (`T ≤ z + (p + 1)`) and `DoublesAt (m * P) z`, the `p`-cell prefix + single-row tail hypotheses imply `LhColAgree (z + (p + 1)) (m * P) 1 S`. -/
 theorem periodic_lhColAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail
     (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
@@ -680,18 +547,6 @@ theorem periodic_lhColAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row
     LhColAgree (z + (p + 1)) (m * P) 1 S := by
   refine periodic_lhColAgree_one_of_lhBandAgree_one T P hP hper m (z + (p + 1)) S ht ?_
   exact lhBandAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail (m * P) z p S hd hpref hset htail
-
-theorem periodic_lhColAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (m z p S : Nat) (ht : T ≤ z + (p + 1)) (hd : DoublesAt (m * P) z)
-    (hpref : ∀ i : Nat, i < p →
-      lhCenter ((z + (p + 1)) + m * P) (1 + i) = lhCenter (z + (p + 1)) (1 + i))
-    (hset : ∀ i : Nat, p ≤ i → i ≤ S → SettledBy ((z + (p + 1)) - (1 + i)) (z + (p + 1)))
-    (htail : ∀ i : Nat, p ≤ i → i ≤ S →
-      lhCenter ((z + (p + 1)) + m * P) (1 + i) = lhCenter ((z + (p + 1)) + m * P) ((1 + i) + m * P)) :
-    LhColAgree (z + (p + 1)) (m * P) 1 S :=
-  periodic_lhColAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail
-    T P hP hper m z p S ht hd hpref hset htail
 
 /-- **9.1524**: The `p`-cell prefix + single-row tail spatial agreement at `t = z + (p + 1)` refutes `CenterPeriodic T P`. -/
 theorem not_centerPeriodic_of_doubles_prefix_and_single_lh_row_tail_at_zero_diag
@@ -709,21 +564,6 @@ theorem not_centerPeriodic_of_doubles_prefix_and_single_lh_row_tail_at_zero_diag
   refine not_centerPeriodic_of_lhBandAgree_one_at_zero_diag_doubles
     T P m z p S hP hm ht hz hd hset1 hset2 hS ?_
   exact lhBandAgree_one_at_zero_diag_of_doubles_prefix_and_single_lh_row_tail (m * P) z p S hd hpref hset htail
-
-theorem not_centerPeriodic_of_doubles_prefix_and_single_lh_row_tail_at_zero_diag_prop
-    (T P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ z + (p + 1)) (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : SettledBy (z + 1) (z + (p + 1)))
-    (hset2 : SettledBy ((z + 1) - m * P) (z + (p + 1)))
-    (hS : p + 3 * (m * P) ≤ S + 1)
-    (hpref : ∀ i : Nat, i < p →
-      lhCenter ((z + (p + 1)) + m * P) (1 + i) = lhCenter (z + (p + 1)) (1 + i))
-    (hset : ∀ i : Nat, p ≤ i → i ≤ S → SettledBy ((z + (p + 1)) - (1 + i)) (z + (p + 1)))
-    (htail : ∀ i : Nat, p ≤ i → i ≤ S →
-      lhCenter ((z + (p + 1)) + m * P) (1 + i) = lhCenter ((z + (p + 1)) + m * P) ((1 + i) + m * P)) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_doubles_prefix_and_single_lh_row_tail_at_zero_diag
-    T P m z p S hP hm ht hz hd hset1 hset2 hS hpref hset htail
 
 /-- **9.1525**: At a SINGLE dyadic scale `K` (`(t + Q) + (d + Q) ≤ K`), leftward `Q`-shift agreement inside the single right-half row `(t + Q) + v * 2^K` transfers directly to `lhCenter (t + Q) d = lhCenter (t + Q) (d + Q)`. -/
 theorem rhCenter_dyadic_left_shift_pair_eq_lhCenter_pair
@@ -749,16 +589,6 @@ theorem lhBandAgree_of_doubles_le_and_single_rh_row_dyadic_left_spatial_agree
   refine lhBandAgree_of_doubles_le_and_single_lh_row_spatial_agree Q z t p0 L hd hdz hset (fun i hi => ?_)
   exact rhCenter_dyadic_left_shift_pair_eq_lhCenter_pair t Q K v (p0 + i) hv (by omega) (hspat i hi)
 
-theorem lhBandAgree_of_doubles_le_and_single_rh_row_dyadic_left_spatial_agree_prop
-    (Q z t p0 L K v : Nat) (hd : DoublesAt Q z) (hdz : t - p0 ≤ z)
-    (hv : 1 ≤ v) (hK : (t + Q) + ((p0 + L) + Q) ≤ K)
-    (hset : ∀ i : Nat, i ≤ L → SettledBy (t - (p0 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ L →
-      rhCenter ((t + Q) + v * twopow K) ((v * twopow K) - (p0 + i)) =
-      rhCenter ((t + Q) + v * twopow K) ((v * twopow K) - ((p0 + i) + Q))) :
-    LhBandAgree t Q p0 L :=
-  lhBandAgree_of_doubles_le_and_single_rh_row_dyadic_left_spatial_agree Q z t p0 L K v hd hdz hv hK hset hspat
-
 /-- **9.1527**: At `t = z + 1` (`p = 0`), single-scale (`K`) single-row `rhCenter (((z + 1) + Q) + v * 2^K)` leftward `Q`-shift agreement on `[1, 1 + S]` implies `LhBandAgree (z + 1) Q 1 S` for ANY `Q` with `DoublesAt Q z`. -/
 theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
     (Q z S K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
@@ -770,17 +600,6 @@ theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_le
     LhBandAgree (z + 1) Q 1 S :=
   lhBandAgree_of_doubles_le_and_single_rh_row_dyadic_left_spatial_agree
     Q z (z + 1) 1 S K v hd (by omega) hv hK hset hspat
-
-theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree_prop
-    (Q z S K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
-    (hK : ((z + 1) + Q) + ((1 + S) + Q) ≤ K)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      rhCenter (((z + 1) + Q) + v * twopow K) ((v * twopow K) - (1 + i)) =
-      rhCenter (((z + 1) + Q) + v * twopow K) ((v * twopow K) - ((1 + i) + Q))) :
-    LhBandAgree (z + 1) Q 1 S :=
-  lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
-    Q z S K v hd hv hK hset hspat
 
 /-- **9.1528**: Under `CenterPeriodic T P` (`T ≤ z + 1`) and `DoublesAt (m * P) z`, single-scale (`K`) single-row `rhCenter (((z + 1) + m * P) + v * 2^K)` leftward `(m * P)`-shift agreement on `[1, 1 + S]` implies `LhColAgree (z + 1) (m * P) 1 S` for ANY `m`! -/
 theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
@@ -795,18 +614,6 @@ theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_d
   refine periodic_lhColAgree_one_of_lhBandAgree_one T P hP hper m (z + 1) S ht ?_
   exact lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
     (m * P) z S K v hd hv hK hset hspat
-
-theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (m z S K v : Nat) (ht : T ≤ z + 1) (hd : DoublesAt (m * P) z)
-    (hv : 1 ≤ v) (hK : ((z + 1) + m * P) + ((1 + S) + m * P) ≤ K)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      rhCenter (((z + 1) + m * P) + v * twopow K) ((v * twopow K) - (1 + i)) =
-      rhCenter (((z + 1) + m * P) + v * twopow K) ((v * twopow K) - ((1 + i) + m * P))) :
-    LhColAgree (z + 1) (m * P) 1 S :=
-  periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
-    T P hP hper m z S K v ht hd hv hK hset hspat
 
 /-- **9.1529**: Under `CenterPeriodic T P` (`T ≤ z + 1`) and `DoublesAt (m * P) z`, single-scale (`K`) single-row `rhCenter (((z + 1) + m * P) + v * 2^K)` leftward `(m * P)`-shift agreement on `[1, 1 + S]` implies `maskparity · 0` agreement over `[z + 1, (z + 1) + S]`. -/
 theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
@@ -824,20 +631,6 @@ theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_r
   exact lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
     (m * P) z S K v hd hv hK hset hspat
 
-theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (m z S K v s : Nat) (ht : T ≤ z + 1) (hd : DoublesAt (m * P) z)
-    (hv : 1 ≤ v) (hK : ((z + 1) + m * P) + ((1 + S) + m * P) ≤ K)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      rhCenter (((z + 1) + m * P) + v * twopow K) ((v * twopow K) - (1 + i)) =
-      rhCenter (((z + 1) + m * P) + v * twopow K) ((v * twopow K) - ((1 + i) + m * P)))
-    (hs : s ≤ S) :
-    Rule30UOR.Scale.maskparity (((z + 1) + s) + m * P) 0 =
-      Rule30UOR.Scale.maskparity ((z + 1) + s) 0 :=
-  periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
-    T P hP hper m z S K v s ht hd hv hK hset hspat hs
-
 /-- **9.1530**: Single-scale (`K`), arbitrary-`m` (`0 < m`), single-row `rhCenter (((z + 1) + m * P) + v * 2^K)` leftward `(m * P)`-shift agreement on `[1, 1 + S]` (`3 * (m * P) ≤ S + 1`) refutes `CenterPeriodic T P`! -/
 theorem not_centerPeriodic_of_single_rh_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles
     (T P m z S K v : Nat) (hP : 0 < P) (hm : 0 < m)
@@ -854,21 +647,6 @@ theorem not_centerPeriodic_of_single_rh_row_dyadic_left_spatial_agree_at_zero_di
   refine not_centerPeriodic_of_single_lh_row_spatial_agree_at_zero_diag_succ_doubles
     T P m z S hP hm ht hz hd hset1 hset2 hS hset (fun i hi => ?_)
   exact rhCenter_dyadic_left_shift_pair_eq_lhCenter_pair (z + 1) (m * P) K v (1 + i) hv (by omega) (hspat i hi)
-
-theorem not_centerPeriodic_of_single_rh_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles_prop
-    (T P m z S K v : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ z + 1) (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : SettledBy (z + 1) (z + 1))
-    (hset2 : SettledBy ((z + 1) - m * P) (z + 1))
-    (hS : 3 * (m * P) ≤ S + 1)
-    (hv : 1 ≤ v) (hK : ((z + 1) + m * P) + ((1 + S) + m * P) ≤ K)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      rhCenter (((z + 1) + m * P) + v * twopow K) ((v * twopow K) - (1 + i)) =
-      rhCenter (((z + 1) + m * P) + v * twopow K) ((v * twopow K) - ((1 + i) + m * P))) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_single_rh_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles
-    T P m z S K v hP hm ht hz hd hset1 hset2 hS hv hK hset hspat
 
 /-- **9.1531**: At a SINGLE dyadic scale `K` (`(t + Q) + (d + Q) ≤ K`), leftward `Q`-shift agreement inside the single driven row `rdrv td (v * 2^K) (t + Q)` transfers directly to `lhCenter (t + Q) d = lhCenter (t + Q) (d + Q)`. -/
 theorem rdrv_dyadic_left_shift_pair_eq_lhCenter_pair
@@ -893,16 +671,6 @@ theorem lhBandAgree_of_doubles_le_and_single_rdrv_row_dyadic_left_spatial_agree
   refine lhBandAgree_of_doubles_le_and_single_lh_row_spatial_agree Q z t p0 L hd hdz hset (fun i hi => ?_)
   exact rdrv_dyadic_left_shift_pair_eq_lhCenter_pair td t Q K v (p0 + i) hv (by omega) (hspat i hi)
 
-theorem lhBandAgree_of_doubles_le_and_single_rdrv_row_dyadic_left_spatial_agree_prop
-    (td Q z t p0 L K v : Nat) (hd : DoublesAt Q z) (hdz : t - p0 ≤ z)
-    (hv : 1 ≤ v) (hK : (t + Q) + ((p0 + L) + Q) ≤ K)
-    (hset : ∀ i : Nat, i ≤ L → SettledBy (t - (p0 + i)) t)
-    (hspat : ∀ i : Nat, i ≤ L →
-      rdrv td (v * twopow K) (t + Q) ((v * twopow K) - (p0 + i)) =
-      rdrv td (v * twopow K) (t + Q) ((v * twopow K) - ((p0 + i) + Q))) :
-    LhBandAgree t Q p0 L :=
-  lhBandAgree_of_doubles_le_and_single_rdrv_row_dyadic_left_spatial_agree td Q z t p0 L K v hd hdz hv hK hset hspat
-
 /-- **9.1533**: At `t = z + 1` (`p = 0`), single-scale (`K`) single-step `rdrv td (v * 2^K) ((z + 1) + Q)` leftward `Q`-shift agreement on `[1, 1 + S]` implies `LhBandAgree (z + 1) Q 1 S` for ANY `Q` with `DoublesAt Q z`. -/
 theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree
     (td Q z S K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
@@ -914,17 +682,6 @@ theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_
     LhBandAgree (z + 1) Q 1 S :=
   lhBandAgree_of_doubles_le_and_single_rdrv_row_dyadic_left_spatial_agree
     td Q z (z + 1) 1 S K v hd (by omega) hv hK hset hspat
-
-theorem lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree_prop
-    (td Q z S K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
-    (hK : ((z + 1) + Q) + ((1 + S) + Q) ≤ K)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      rdrv td (v * twopow K) ((z + 1) + Q) ((v * twopow K) - (1 + i)) =
-      rdrv td (v * twopow K) ((z + 1) + Q) ((v * twopow K) - ((1 + i) + Q))) :
-    LhBandAgree (z + 1) Q 1 S :=
-  lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree
-    td Q z S K v hd hv hK hset hspat
 
 /-- **9.1534**: Under `CenterPeriodic T P` (`T ≤ z + 1`) and `DoublesAt (m * P) z`, single-scale (`K`) single-step `rdrv td (v * 2^K) ((z + 1) + m * P)` leftward `(m * P)`-shift agreement on `[1, 1 + S]` implies `LhColAgree (z + 1) (m * P) 1 S` for ANY `m`! -/
 theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree
@@ -939,18 +696,6 @@ theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row
   refine periodic_lhColAgree_one_of_lhBandAgree_one T P hP hper m (z + 1) S ht ?_
   exact lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree
     td (m * P) z S K v hd hv hK hset hspat
-
-theorem periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (td m z S K v : Nat) (ht : T ≤ z + 1) (hd : DoublesAt (m * P) z)
-    (hv : 1 ≤ v) (hK : ((z + 1) + m * P) + ((1 + S) + m * P) ≤ K)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      rdrv td (v * twopow K) ((z + 1) + m * P) ((v * twopow K) - (1 + i)) =
-      rdrv td (v * twopow K) ((z + 1) + m * P) ((v * twopow K) - ((1 + i) + m * P))) :
-    LhColAgree (z + 1) (m * P) 1 S :=
-  periodic_lhColAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree
-    T P hP hper td m z S K v ht hd hv hK hset hspat
 
 /-- **9.1535**: Under `CenterPeriodic T P` (`T ≤ z + 1`) and `DoublesAt (m * P) z`, single-scale (`K`) single-step `rdrv td (v * 2^K) ((z + 1) + m * P)` leftward `(m * P)`-shift agreement on `[1, 1 + S]` implies `maskparity · 0` agreement over `[z + 1, (z + 1) + S]`. -/
 theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree
@@ -967,20 +712,6 @@ theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_r
   refine periodic_maskparity_zero_agree_of_lhBandAgree_one T P hP hper m (z + 1) S s ht ?_ hs
   exact lhBandAgree_one_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree
     td (m * P) z S K v hd hv hK hset hspat
-
-theorem periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (td m z S K v s : Nat) (ht : T ≤ z + 1) (hd : DoublesAt (m * P) z)
-    (hv : 1 ≤ v) (hK : ((z + 1) + m * P) + ((1 + S) + m * P) ≤ K)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      rdrv td (v * twopow K) ((z + 1) + m * P) ((v * twopow K) - (1 + i)) =
-      rdrv td (v * twopow K) ((z + 1) + m * P) ((v * twopow K) - ((1 + i) + m * P)))
-    (hs : s ≤ S) :
-    Rule30UOR.Scale.maskparity (((z + 1) + s) + m * P) 0 =
-      Rule30UOR.Scale.maskparity ((z + 1) + s) 0 :=
-  periodic_maskparity_zero_agree_at_zero_diag_succ_of_doubles_and_single_rdrv_row_dyadic_left_spatial_agree
-    T P hP hper td m z S K v s ht hd hv hK hset hspat hs
 
 /-- **9.1536**: Single-scale (`K`), arbitrary-`m` (`0 < m`), single-step `rdrv td (v * 2^K) ((z + 1) + m * P)` leftward `(m * P)`-shift agreement on `[1, 1 + S]` (`3 * (m * P) ≤ S + 1`) refutes `CenterPeriodic T P`! -/
 theorem not_centerPeriodic_of_single_rdrv_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles
@@ -999,21 +730,6 @@ theorem not_centerPeriodic_of_single_rdrv_row_dyadic_left_spatial_agree_at_zero_
     T P m z S hP hm ht hz hd hset1 hset2 hS hset (fun i hi => ?_)
   exact rdrv_dyadic_left_shift_pair_eq_lhCenter_pair td (z + 1) (m * P) K v (1 + i) hv (by omega) (hspat i hi)
 
-theorem not_centerPeriodic_of_single_rdrv_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles_prop
-    (T P td m z S K v : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ z + 1) (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : SettledBy (z + 1) (z + 1))
-    (hset2 : SettledBy ((z + 1) - m * P) (z + 1))
-    (hS : 3 * (m * P) ≤ S + 1)
-    (hv : 1 ≤ v) (hK : ((z + 1) + m * P) + ((1 + S) + m * P) ≤ K)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) (z + 1))
-    (hspat : ∀ i : Nat, i ≤ S →
-      rdrv td (v * twopow K) ((z + 1) + m * P) ((v * twopow K) - (1 + i)) =
-      rdrv td (v * twopow K) ((z + 1) + m * P) ((v * twopow K) - ((1 + i) + m * P))) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_single_rdrv_row_dyadic_left_spatial_agree_at_zero_diag_succ_doubles
-    T P td m z S K v hP hm ht hz hd hset1 hset2 hS hv hK hset hspat
-
 /-! ### Batch 83: Late-Scale (t + 2^k, p + 2^k) Diagonal-Shift Periodicity & Scale-Independent Tail Horizon 3mP Refutations (9.1537–9.1551) -/
 
 /-- **9.1537**: Late-scale `(t + 2^k, p + 2^k)` diagonal-shift `Q`-periodicity of `lhCenter` below a doubling point `z`, requiring ONLY late settlement `SettledBy (t - p) (t + 2^k)`! -/
@@ -1028,12 +744,6 @@ theorem lhCenter_late_scale_diag_shift_periodic_of_doubles_le
   exact lhCenter_diag_shift_periodic_of_doubles_le Q z (t + twopow k) (p + twopow k)
     hd (by omega) (by simpa [SettledBy, hsub] using hset)
 
-theorem lhCenter_late_scale_diag_shift_periodic_of_doubles_le_prop
-    (Q z t p k : Nat) (hd : DoublesAt Q z) (hdz : t - p ≤ z)
-    (hset : SettledBy (t - p) (t + twopow k)) :
-    lhCenter ((t + Q) + twopow k) ((p + Q) + twopow k) = lhCenter (t + twopow k) (p + twopow k) :=
-  lhCenter_late_scale_diag_shift_periodic_of_doubles_le Q z t p k hd hdz hset
-
 /-- **9.1538**: Late-scale `(t + 2^k, p + 2^k)` diagonal-shift `w * 2^e`-periodicity of `lhCenter` for `t - p ≤ e`, requiring ONLY late settlement `SettledBy (t - p) (t + 2^k)`! -/
 theorem lhCenter_late_scale_diag_shift_mul_twopow_periodic_le
     (e w t p k : Nat) (hde : t - p ≤ e)
@@ -1047,13 +757,6 @@ theorem lhCenter_late_scale_diag_shift_mul_twopow_periodic_le
   exact lhCenter_diag_shift_mul_twopow_periodic_le e w (t + twopow k) (p + twopow k)
     (by omega) (by simpa [SettledBy, hsub] using hset)
 
-theorem lhCenter_late_scale_diag_shift_mul_twopow_periodic_le_prop
-    (e w t p k : Nat) (hde : t - p ≤ e)
-    (hset : SettledBy (t - p) (t + twopow k)) :
-    lhCenter ((t + w * twopow e) + twopow k) ((p + w * twopow e) + twopow k) =
-      lhCenter (t + twopow k) (p + twopow k) :=
-  lhCenter_late_scale_diag_shift_mul_twopow_periodic_le e w t p k hde hset
-
 /-- **9.1539**: Spatial `Q`-periodicity at `(p + 2^k)` inside the single late row `(t + Q) + 2^k` implies temporal `Q`-periodicity `lhCenter ((t + Q) + 2^k) (p + 2^k) = lhCenter (t + 2^k) (p + 2^k)`, requiring ONLY late settlement `SettledBy (t - p) (t + 2^k)`! -/
 theorem lhCenter_late_scale_eq_of_doubles_le_and_spatial_agree
     (Q z t p k : Nat) (hd : DoublesAt Q z) (hdz : t - p ≤ z)
@@ -1063,14 +766,6 @@ theorem lhCenter_late_scale_eq_of_doubles_le_and_spatial_agree
     lhCenter ((t + Q) + twopow k) (p + twopow k) = lhCenter (t + twopow k) (p + twopow k) := by
   rw [hspat]
   exact lhCenter_late_scale_diag_shift_periodic_of_doubles_le Q z t p k hd hdz hset
-
-theorem lhCenter_late_scale_eq_of_doubles_le_and_spatial_agree_prop
-    (Q z t p k : Nat) (hd : DoublesAt Q z) (hdz : t - p ≤ z)
-    (hset : SettledBy (t - p) (t + twopow k))
-    (hspat : lhCenter ((t + Q) + twopow k) (p + twopow k) =
-             lhCenter ((t + Q) + twopow k) ((p + Q) + twopow k)) :
-    lhCenter ((t + Q) + twopow k) (p + twopow k) = lhCenter (t + twopow k) (p + twopow k) :=
-  lhCenter_late_scale_eq_of_doubles_le_and_spatial_agree Q z t p k hd hdz hset hspat
 
 /-- **9.1540**: `LhBandAgree (t + 2^k) Q (p0 + 2^k) L` from single-row spatial `Q`-periodicity on `[p0 + 2^k, p0 + 2^k + L]` at `(t + Q) + 2^k`, requiring ONLY late settlement `SettledBy (t - (p0 + i)) (t + 2^k)`. -/
 theorem lhBandAgree_late_scale_of_doubles_le_and_single_lh_row_spatial_agree
@@ -1092,15 +787,6 @@ theorem lhBandAgree_late_scale_of_doubles_le_and_single_lh_row_spatial_agree
   exact lhCenter_late_scale_eq_of_doubles_le_and_spatial_agree
     Q z t (p0 + i) k hd (by omega) (hset i hi) hsp
 
-theorem lhBandAgree_late_scale_of_doubles_le_and_single_lh_row_spatial_agree_prop
-    (Q z t p0 L k : Nat) (hd : DoublesAt Q z) (hdz : t - p0 ≤ z)
-    (hset : ∀ i : Nat, i ≤ L → SettledBy (t - (p0 + i)) (t + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      lhCenter ((t + Q) + twopow k) ((p0 + twopow k) + i) =
-      lhCenter ((t + Q) + twopow k) (((p0 + twopow k) + i) + Q)) :
-    LhBandAgree (t + twopow k) Q (p0 + twopow k) L :=
-  lhBandAgree_late_scale_of_doubles_le_and_single_lh_row_spatial_agree Q z t p0 L k hd hdz hset hspat
-
 /-- **9.1541**: At `t = z + 1` (`p0 = 1`), single-row spatial `Q`-periodicity on `[1 + 2^k, 1 + 2^k + S]` at `((z + 1) + Q) + 2^k` implies `LhBandAgree ((z + 1) + 2^k) Q (1 + 2^k) S`, requiring ONLY late settlement at `(z + 1) + 2^k`! -/
 theorem lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
     (Q z S k : Nat) (hd : DoublesAt Q z)
@@ -1111,15 +797,6 @@ theorem lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_lh_row_sp
     LhBandAgree ((z + 1) + twopow k) Q (1 + twopow k) S :=
   lhBandAgree_late_scale_of_doubles_le_and_single_lh_row_spatial_agree
     Q z (z + 1) 1 S k hd (by omega) hset hspat
-
-theorem lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree_prop
-    (Q z S k : Nat) (hd : DoublesAt Q z)
-    (hset : ∀ i : Nat, i ≤ S → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ S →
-      lhCenter (((z + 1) + Q) + twopow k) ((1 + twopow k) + i) =
-      lhCenter (((z + 1) + Q) + twopow k) (((1 + twopow k) + i) + Q)) :
-    LhBandAgree ((z + 1) + twopow k) Q (1 + twopow k) S :=
-  lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree Q z S k hd hset hspat
 
 /-- **9.1542**: Band concatenation for `LhBandAgree`: `LhBandAgree t Q p0 A` and `LhBandAgree t Q (p0 + A) B` imply `LhBandAgree t Q p0 (A + B)`. -/
 theorem lhBandAgree_append_of_split
@@ -1158,17 +835,6 @@ theorem lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_singl
   exact lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_lh_row_spatial_agree
     Q z L k hd hset hspat
 
-theorem lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail_prop
-    (Q z L k : Nat) (hd : DoublesAt Q z)
-    (hpref : ∀ i : Nat, i < twopow k →
-      lhCenter (((z + 1) + twopow k) + Q) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
-    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      lhCenter (((z + 1) + Q) + twopow k) ((1 + twopow k) + i) =
-      lhCenter (((z + 1) + Q) + twopow k) (((1 + twopow k) + i) + Q)) :
-    LhBandAgree ((z + 1) + twopow k) Q 1 (twopow k + L) :=
-  lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail Q z L k hd hpref hset hspat
-
 /-- **9.1545**: Under `CenterPeriodic T P` (`T ≤ (z + 1) + 2^k`) and `DoublesAt (m * P) z`, the `2^k`-prefix + late single-row tail of width `L` implies `LhColAgree ((z + 1) + 2^k) (m * P) 1 (2^k + L)`. -/
 theorem periodic_lhColAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail
     (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
@@ -1183,19 +849,6 @@ theorem periodic_lhColAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_a
   refine periodic_lhColAgree_one_of_lhBandAgree_one T P hP hper m ((z + 1) + twopow k) (twopow k + L) ht ?_
   exact lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail
     (m * P) z L k hd hpref hset hspat
-
-theorem periodic_lhColAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail_prop
-    (T P : Nat) (hP : 0 < P) (hper : Rule30UOR.Scale.CenterPeriodic T P)
-    (m z L k : Nat) (ht : T ≤ (z + 1) + twopow k) (hd : DoublesAt (m * P) z)
-    (hpref : ∀ i : Nat, i < twopow k →
-      lhCenter (((z + 1) + twopow k) + m * P) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
-    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      lhCenter (((z + 1) + m * P) + twopow k) ((1 + twopow k) + i) =
-      lhCenter (((z + 1) + m * P) + twopow k) (((1 + twopow k) + i) + m * P)) :
-    LhColAgree ((z + 1) + twopow k) (m * P) 1 (twopow k + L) :=
-  periodic_lhColAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_lh_row_tail
-    T P hP hper m z L k ht hd hpref hset hspat
 
 /-- **9.1546**: Scale-independent tail width `3 * (m * P) ≤ L + 1` at `t = (z + 1) + 2^k`: because `p = 2^k` cancels out of `p + 3 * (m * P) ≤ (2^k + L) + 1`, the single-row tail width `L` is `3 * (m * P) - 1` (independent of `k` and `z`!) and requires ONLY late settlement at `(z + 1) + 2^k`! -/
 theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_lh_row_tail
@@ -1220,22 +873,6 @@ theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_lh_row_tail
     (by simpa [hzp] using hset1) (by simpa [hzp] using hset2) hS
     (by simpa [hzp] using hband)
 
-theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_lh_row_tail_prop
-    (T P m z L k : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ (z + 1) + twopow k) (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : SettledBy (z + 1) ((z + 1) + twopow k))
-    (hset2 : SettledBy ((z + 1) - m * P) ((z + 1) + twopow k))
-    (hL : 3 * (m * P) ≤ L + 1)
-    (hpref : ∀ i : Nat, i < twopow k →
-      lhCenter (((z + 1) + twopow k) + m * P) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
-    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      lhCenter (((z + 1) + m * P) + twopow k) ((1 + twopow k) + i) =
-      lhCenter (((z + 1) + m * P) + twopow k) (((1 + twopow k) + i) + m * P)) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_late_scale_doubles_prefix_and_single_lh_row_tail
-    T P m z L k hP hm ht hz hd hset1 hset2 hL hpref hset hspat
-
 /-- **9.1547**: Embedding the late-scale single-row tail `((z + 1) + Q) + 2^k` into `rhCenter` at scale `K` yields `LhBandAgree ((z + 1) + 2^k) Q (1 + 2^k) L`, requiring ONLY late settlement at `(z + 1) + 2^k`. -/
 theorem lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
     (Q z L k K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
@@ -1253,17 +890,6 @@ theorem lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_rh_row_dy
     ((z + 1) + twopow k) Q K v ((1 + twopow k) + i) hv (by omega)
     (by simpa [ht] using hspat i hi)
 
-theorem lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree_prop
-    (Q z L k K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
-    (hK : (((z + 1) + Q) + twopow k) + (((1 + twopow k) + L) + Q) ≤ K)
-    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      rhCenter ((((z + 1) + Q) + twopow k) + v * twopow K) ((v * twopow K) - ((1 + twopow k) + i)) =
-      rhCenter ((((z + 1) + Q) + twopow k) + v * twopow K) ((v * twopow K) - (((1 + twopow k) + i) + Q))) :
-    LhBandAgree ((z + 1) + twopow k) Q (1 + twopow k) L :=
-  lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
-    Q z L k K v hd hv hK hset hspat
-
 /-- **9.1548**: Combining the `2^k`-prefix with the `rhCenter`-embedded late single-row tail yields `LhBandAgree ((z + 1) + 2^k) Q 1 (2^k + L)`. -/
 theorem lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_rh_row_tail
     (Q z L k K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
@@ -1278,19 +904,6 @@ theorem lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_singl
   refine lhBandAgree_one_of_prefix_and_shifted_band ((z + 1) + twopow k) Q (twopow k) L hpref ?_
   exact lhBandAgree_late_scale_at_zero_diag_succ_of_doubles_and_single_rh_row_dyadic_left_spatial_agree
     Q z L k K v hd hv hK hset hspat
-
-theorem lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_rh_row_tail_prop
-    (Q z L k K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
-    (hK : (((z + 1) + Q) + twopow k) + (((1 + twopow k) + L) + Q) ≤ K)
-    (hpref : ∀ i : Nat, i < twopow k →
-      lhCenter (((z + 1) + twopow k) + Q) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
-    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      rhCenter ((((z + 1) + Q) + twopow k) + v * twopow K) ((v * twopow K) - ((1 + twopow k) + i)) =
-      rhCenter ((((z + 1) + Q) + twopow k) + v * twopow K) ((v * twopow K) - (((1 + twopow k) + i) + Q))) :
-    LhBandAgree ((z + 1) + twopow k) Q 1 (twopow k + L) :=
-  lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_rh_row_tail
-    Q z L k K v hd hv hK hpref hset hspat
 
 /-- **9.1549**: Refutation of `CenterPeriodic T P` from the `2^k`-prefix and the `rhCenter`-embedded late single-row tail of scale-independent width `3 * (m * P) ≤ L + 1`! -/
 theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rh_row_tail
@@ -1316,23 +929,6 @@ theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rh_row_tail
     (by simpa [hzp] using hset1) (by simpa [hzp] using hset2) hS
     (by simpa [hzp] using hband)
 
-theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rh_row_tail_prop
-    (T P m z L k K v : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ (z + 1) + twopow k) (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : SettledBy (z + 1) ((z + 1) + twopow k))
-    (hset2 : SettledBy ((z + 1) - m * P) ((z + 1) + twopow k))
-    (hL : 3 * (m * P) ≤ L + 1) (hv : 1 ≤ v)
-    (hK : (((z + 1) + m * P) + twopow k) + (((1 + twopow k) + L) + m * P) ≤ K)
-    (hpref : ∀ i : Nat, i < twopow k →
-      lhCenter (((z + 1) + twopow k) + m * P) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
-    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      rhCenter ((((z + 1) + m * P) + twopow k) + v * twopow K) ((v * twopow K) - ((1 + twopow k) + i)) =
-      rhCenter ((((z + 1) + m * P) + twopow k) + v * twopow K) ((v * twopow K) - (((1 + twopow k) + i) + m * P))) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rh_row_tail
-    T P m z L k K v hP hm ht hz hd hset1 hset2 hL hv hK hpref hset hspat
-
 /-- **9.1550**: Combining the `2^k`-prefix with the `rdrv`-embedded late single-row tail yields `LhBandAgree ((z + 1) + 2^k) Q 1 (2^k + L)`. -/
 theorem lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_rdrv_row_tail
     (td Q z L k K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
@@ -1352,19 +948,6 @@ theorem lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_singl
   exact rdrv_dyadic_left_shift_pair_eq_lhCenter_pair
     td ((z + 1) + twopow k) Q K v ((1 + twopow k) + i) hv (by omega)
     (by simpa [ht] using hspat i hi)
-
-theorem lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_rdrv_row_tail_prop
-    (td Q z L k K v : Nat) (hd : DoublesAt Q z) (hv : 1 ≤ v)
-    (hK : (((z + 1) + Q) + twopow k) + (((1 + twopow k) + L) + Q) ≤ K)
-    (hpref : ∀ i : Nat, i < twopow k →
-      lhCenter (((z + 1) + twopow k) + Q) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
-    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      rdrv td (v * twopow K) (((z + 1) + Q) + twopow k) ((v * twopow K) - ((1 + twopow k) + i)) =
-      rdrv td (v * twopow K) (((z + 1) + Q) + twopow k) ((v * twopow K) - (((1 + twopow k) + i) + Q))) :
-    LhBandAgree ((z + 1) + twopow k) Q 1 (twopow k + L) :=
-  lhBandAgree_one_late_scale_at_zero_diag_succ_of_doubles_prefix_and_single_rdrv_row_tail
-    td Q z L k K v hd hv hK hpref hset hspat
 
 /-- **9.1551**: Refutation of `CenterPeriodic T P` from the `2^k`-prefix and the `rdrv`-embedded late single-row tail of scale-independent width `3 * (m * P) ≤ L + 1`! -/
 theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rdrv_row_tail
@@ -1389,23 +972,6 @@ theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rdrv_row_tail
     T P m z (twopow k) (twopow k + L) hP hm (by simpa [hzp] using ht) hz hd
     (by simpa [hzp] using hset1) (by simpa [hzp] using hset2) hS
     (by simpa [hzp] using hband)
-
-theorem not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rdrv_row_tail_prop
-    (T P td m z L k K v : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ (z + 1) + twopow k) (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : SettledBy (z + 1) ((z + 1) + twopow k))
-    (hset2 : SettledBy ((z + 1) - m * P) ((z + 1) + twopow k))
-    (hL : 3 * (m * P) ≤ L + 1) (hv : 1 ≤ v)
-    (hK : (((z + 1) + m * P) + twopow k) + (((1 + twopow k) + L) + m * P) ≤ K)
-    (hpref : ∀ i : Nat, i < twopow k →
-      lhCenter (((z + 1) + twopow k) + m * P) (1 + i) = lhCenter ((z + 1) + twopow k) (1 + i))
-    (hset : ∀ i : Nat, i ≤ L → SettledBy ((z + 1) - (1 + i)) ((z + 1) + twopow k))
-    (hspat : ∀ i : Nat, i ≤ L →
-      rdrv td (v * twopow K) (((z + 1) + m * P) + twopow k) ((v * twopow K) - ((1 + twopow k) + i)) =
-      rdrv td (v * twopow K) (((z + 1) + m * P) + twopow k) ((v * twopow K) - (((1 + twopow k) + i) + m * P))) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_late_scale_doubles_prefix_and_single_rdrv_row_tail
-    T P td m z L k K v hP hm ht hz hd hset1 hset2 hL hv hK hpref hset hspat
 
 /-! ### Batch 84: Monotone Settlement Bound (`settleBound` / `SettledUpTo`), Settlement-Hypothesis-Free Prefix/Tail Reductions, and Single-Row Prefix+Tail Refutations of `CenterPeriodic` (9.1552–9.1566) -/
 

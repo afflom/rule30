@@ -22,8 +22,12 @@ by id. `mdata` is transparent (the inner expression's id is reused), binder
 names are not emitted (bound variables are de Bruijn indices), and free or
 meta variables are an error: a closed declaration has none.
 
-No environment is imported, so the exporter touches only the named modules'
-object files and runs in the interpreter.
+The constants are read from the named modules' object files. The environment of
+those modules is imported once, only to ask Lean which theorem names it reserves
+(`isReservedName`: equation lemmas, functional induction, injectivity and the
+other names Lean realizes on demand and refuses to let anyone declare): such a
+theorem is marked `(reserved)`, so the redundancy check never counts a generated
+lemma as authored. The mark is not part of any κ-label.
 -/
 
 namespace KappaExport
@@ -35,7 +39,9 @@ def lst (xs : List String) : String := "(" ++ " ".intercalate xs ++ ")"
 def flag (b : Bool) : String := atom (if b then "1" else "0")
 
 structure St where
-  exprIds : Std.HashMap Expr Nat := {}
+  -- keyed by structural equality (`Expr.equal` compares binder info, which `Expr`'s own `BEq`
+  -- ignores): a node is shared only with a node that prints the same
+  exprIds : Std.HashMap ExprStructEq Nat := {}
   levelIds : Std.HashMap Level Nat := {}
   next : Nat := 0
   buf : String := ""
@@ -93,11 +99,11 @@ def visitExpr (root : Expr) : M Nat := do
     | [] => break
     | (e, expanded) :: rest =>
       stack := rest
-      if (← get).exprIds.contains e then continue
+      if (← get).exprIds.contains ⟨e⟩ then continue
       if !expanded then
         stack := (children e).map (·, false) ++ (e, true) :: stack
         continue
-      let ids ← (children e).mapM fun c => do pure (← get).exprIds[c]!
+      let ids ← (children e).mapM fun c => do pure (← get).exprIds[(⟨c⟩ : ExprStructEq)]!
       let id ← match e with
         | .bvar i => node "bvar" [natAtom i] []
         | .fvar .. => throw <| IO.userError "free variable in a closed declaration"
@@ -110,10 +116,10 @@ def visitExpr (root : Expr) : M Nat := do
         | .letE _ _ _ _ nonDep => node "letE" [flag nonDep] ids
         | .lit (.natVal n) => node "lit" [atom "nat", natAtom n] []
         | .lit (.strVal s) => node "lit" [atom "str", atom s] []
-        | .mdata _ b => pure (← get).exprIds[b]!
+        | .mdata _ b => pure (← get).exprIds[(⟨b⟩ : ExprStructEq)]!
         | .proj s i _ => node "proj" [nameAtom s, natAtom i] ids
-      modify fun s => { s with exprIds := s.exprIds.insert e id }
-  return (← get).exprIds[root]!
+      modify fun s => { s with exprIds := s.exprIds.insert ⟨e⟩ id }
+  return (← get).exprIds[(⟨root⟩ : ExprStructEq)]!
 
 def safetyAtom : DefinitionSafety → String
   | .safe => "safe"
@@ -132,7 +138,7 @@ def safety (s : String) : String := lst [atom "safety", atom s]
 def count (label : String) (n : Nat) : String := lst [atom label, natAtom n]
 def names (label : String) (ns : List Name) : String := lst (atom label :: ns.map nameAtom)
 
-def emitDecl (ci : ConstantInfo) : M Unit := do
+def emitDecl (isReserved : Name → Bool) (ci : ConstantInfo) : M Unit := do
   let t ← visitExpr ci.type
   let (kind, value, extras) ← match ci with
     | .axiomInfo i => pure ("axiom", none, [safety (unsafeAtom i.isUnsafe)])
@@ -141,7 +147,7 @@ def emitDecl (ci : ConstantInfo) : M Unit := do
       pure ("def", some v, [safety (safetyAtom i.safety)])
     | .thmInfo i => do
       let v ← visitExpr i.value
-      pure ("thm", some v, [])
+      pure ("thm", some v, if isReserved ci.name then [lst [atom "reserved"]] else [])
     | .opaqueInfo i => do
       let v ← visitExpr i.value
       pure ("opaque", some v, [safety (unsafeAtom i.isUnsafe)])
@@ -166,7 +172,7 @@ def emitDecl (ci : ConstantInfo) : M Unit := do
 
 /-- The parts of a module's object file, chosen as `leanchecker` chooses them:
 the last ("most private") part holds every constant the kernel replays. -/
-def exportModule (mod : Name) : IO Unit := do
+def exportModule (isReserved : Name → Bool) (mod : Name) : IO Unit := do
   let mFile ← findOLean mod
   unless (← mFile.pathExists) do
     throw <| IO.userError s!"object file '{mFile}' of module {mod} does not exist"
@@ -183,7 +189,7 @@ def exportModule (mod : Name) : IO Unit := do
   let act : M Unit := do
     emit (lst [atom "module", nameAtom mod, count "constants" data.constants.size])
     for ci in data.constants do
-      emitDecl ci
+      emitDecl isReserved ci
     emit (lst [atom "end", nameAtom mod])
     flush
   act.run' {}
@@ -195,9 +201,12 @@ def main (args : List String) : IO UInt32 := do
   if args.isEmpty then
     IO.eprintln "usage: lake env lean --run scripts/KappaExport.lean <module names>"
     return 2
-  for arg in args do
-    let mod := arg.toName
-    if mod.isAnonymous then
-      throw <| IO.userError s!"not a module name: {arg}"
-    KappaExport.exportModule mod
+  let mods := args.map (·.toName)
+  if let some bad := args.find? (·.toName.isAnonymous) then
+    throw <| IO.userError s!"not a module name: {bad}"
+  let env ← importModules (mods.toArray.map fun m => { module := m }) {}
+  -- a private theorem is reserved when its user-facing name is
+  let isReserved := fun n => isReservedName env n || ((privateToUserName? n).map (isReservedName env)).getD false
+  for mod in mods do
+    KappaExport.exportModule isReserved mod
   return 0

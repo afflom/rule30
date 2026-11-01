@@ -53,8 +53,8 @@ code = "R303001"
 title = "LexLean check failed"
 class = "lexlean"
 exit = 1
-statement = "lexlean check reported a diagnostic for a module of the selected project."
-commands = ["check"]
+statement = "lexlean check reported a diagnostic for a module of the selected project, or a lexlean lock refused a project after a command rewrote it (api sync, consolidate)."
+commands = ["check", "api_sync", "consolidate"]
 
 [[error]]
 code = "R303002"
@@ -126,7 +126,7 @@ title = "Lake build failed"
 class = "workspace"
 exit = 1
 statement = "lake build of the named research modules reported errors."
-commands = ["module_add", "module_build"]
+commands = ["module_add", "module_build", "consolidate"]
 
 [[error]]
 code = "R305004"
@@ -153,6 +153,22 @@ statement = "git add refused the paths given to commit (a path that neither exis
 commands = ["commit"]
 
 [[error]]
+code = "R308001"
+title = "Audit cannot read the library"
+class = "audit"
+exit = 1
+statement = "The audit's Lean introspection of the research library failed (the library is not built, a module is missing, or Lean reported an error), or audit --cached found no recorded audit; consolidate reports it when re-auditing the rebuilt library fails."
+commands = ["audit", "consolidate"]
+
+[[error]]
+code = "R308002"
+title = "Audit record refused"
+class = "audit"
+exit = 1
+statement = "audit --write found data Audit.lex.tex would not decide: a dead conditional refutation without a refuting theorem, a status outside dead, live-discharged and open, or a repeated theorem name; nothing was written."
+commands = ["audit"]
+
+[[error]]
 code = "R306001"
 title = "Production export failed"
 class = "production"
@@ -167,3 +183,27 @@ class = "production"
 exit = 1
 statement = "lexlean production verify-artifact found a disagreement between the published bundle's parts."
 commands = ["api_production"]
+
+[[error]]
+code = "R307001"
+title = "Sequence evaluation failed"
+class = "discovery"
+exit = 1
+statement = "Lean refused the evaluation program of the basis (an evaluation form not proved equal to its host constant, an error, a timeout) or printed no window of the requested length; nothing was written."
+commands = ["sequences"]
+
+[[error]]
+code = "R307002"
+title = "Basis data inconsistent"
+class = "discovery"
+exit = 1
+statement = "model/sequences.toml is missing, is not the basis sequencemodel declares, carries a κ-label that is not the label of its entry, or a window that is not N bits in 32-bit words; run bin/r30 sequences --write."
+commands = ["sequences", "discover"]
+
+[[error]]
+code = "R307003"
+title = "Discovery refused"
+class = "discovery"
+exit = 1
+statement = "The relation or recurrence engine returned a contract violation (a precondition the window fails, or an output the postcondition validator refuses), the discovery window does not fit the stored window, or the certified runtime failed to build or run."
+commands = ["discover"]

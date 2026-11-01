@@ -76,7 +76,7 @@
   "signature": "(pi explicit f (pi explicit a._@._internal._hyg.0 (const Nat) (const Bool)) (pi explicit hf (app (const Rule30UOR.Automatic.Kernel2Finite) (local f)) (app (const Rule30UOR.Automatic.Kernel2Finite) (lam t (const Nat) (app (const Bool.not) (app (local f) (local t)))))))"
  },
  {
-  "lean": "Rule30UOR.Interfaces.bxor_eq_xor",
+  "lean": "Rule30UOR.Scale.bxor_eq",
   "signature": "(pi explicit a (const Bool) (pi explicit b (const Bool) (app (const Eq) (const Bool) (app (const Rule30UOR.Core.bxor) (local a) (local b)) (app (const Bool.xor) (local a) (local b)))))"
  },
  {

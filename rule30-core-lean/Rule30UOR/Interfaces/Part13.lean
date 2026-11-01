@@ -936,7 +936,7 @@ theorem carry60_zero_eq_maskparity_zero (t : Nat) :
 theorem maskcount_succ_eq_xor_maskparity_zero (t n : Nat) :
     Rule30UOR.Scale.maskcount t (n + 1) =
       bxor (Rule30UOR.Scale.maskcount t n) (Rule30UOR.Scale.maskparity (t + n) 0) := by
-  rw [bxor_eq_xor, ← carry60_zero_eq_maskparity_zero (t + n)]
+  rw [Rule30UOR.Scale.bxor_eq, ← carry60_zero_eq_maskparity_zero (t + n)]
   rfl
 
 /-- **Universal-in-`Q` Determination of `maskcount · n` from First-Bit `maskparity · 0` Agreement (`maskcount_eq_of_maskparity_zero_agree`, 9.983)**:
@@ -1067,27 +1067,19 @@ theorem lhCenter_twopow_eq_ldiag (d k : Nat) :
   rw [lhCenter_eq_ldiag (d + twopow k) (twopow k) (by omega),
     show (d + twopow k) - twopow k = d by omega]
 
-/-- **Settled Dyadic Left Wing Equals the Zero-State Center `zcenter d` (`lhCenter_twopow_settled_eq_zcenter`, 9.993)**:
-    for every `d, k ∈ ℕ` with `d ≤ k` and `settle d ≤ d + twopow k`, `lhCenter (d + twopow k) (twopow k) = zcenter d`! -/
-theorem lhCenter_twopow_settled_eq_zcenter (d k : Nat)
-    (hk : d ≤ k) (hset : settle d ≤ d + twopow k) :
-    lhCenter (d + twopow k) (twopow k) = zcenter d := by
-  rw [lhCenter_twopow_eq_ldiag d k]
-  exact ldiag_settled_eq_zcenter d k hk hset
-
 theorem lhCenter_twopow_settled_eq_zcenter_prop (d k : Nat)
     (hk : d ≤ k) (hset : SettledBy d (d + twopow k)) :
     ZCenterEq d (lhCenter (d + twopow k) (twopow k)) :=
-  (lhCenter_twopow_settled_eq_zcenter d k hk hset).symm
+  (Rule30UOR.Interfaces.lhCenter_late_twopow_eq_zcenter d k hk hset).symm
 
 /-- **Scale-Step Invariance of the Settled Dyadic Left Wing `lhCenter (d + 2^k) (2^k)` (`lhCenter_twopow_settled_scale_invariant`, 9.994)**:
     for every `d, k ∈ ℕ` with `d ≤ k` and `settle d ≤ d + twopow k`, `lhCenter (d + twopow (k + 1)) (twopow (k + 1)) = lhCenter (d + twopow k) (twopow k)`! -/
 theorem lhCenter_twopow_settled_scale_invariant (d k : Nat)
     (hk : d ≤ k) (hset : settle d ≤ d + twopow k) :
     lhCenter (d + twopow (k + 1)) (twopow (k + 1)) = lhCenter (d + twopow k) (twopow k) := by
-  have h1 := lhCenter_twopow_settled_eq_zcenter d (k + 1) (by omega)
+  have h1 := Rule30UOR.Interfaces.lhCenter_late_twopow_eq_zcenter d (k + 1) (by omega)
     (by rw [Rule30UOR.Core.twopow_succ]; omega)
-  have h0 := lhCenter_twopow_settled_eq_zcenter d k hk hset
+  have h0 := Rule30UOR.Interfaces.lhCenter_late_twopow_eq_zcenter d k hk hset
   rw [h1, h0]
 
 theorem lhCenter_twopow_settled_scale_invariant_prop (d k : Nat)
@@ -1145,7 +1137,7 @@ theorem lhCenter_twopow_eq_late_scale_center (d k : Nat) :
     rw [Rule30UOR.Core.twopow_succ]; omega
   rw [h2] at hs
   revert hs
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center (d + twopow (k + 1)) <;>
     cases Rule30UOR.Core.center (d + twopow k) <;>
     cases lhCenter (d + twopow k) (twopow k) <;>
@@ -1279,7 +1271,7 @@ theorem periodic_late_response_defect_flip_of_doubles
   have hp1 := lhCenter_twopow_succ_antiperiodic_of_doubles z k hz hd hset1
   rw [show (d + twopow k) + m * P = (z + 1) + twopow k by omega] at hr0 ⊢
   rw [show (d + twopow (k + 1)) + m * P = (z + 1) + twopow (k + 1) by omega] at hr1 ⊢
-  rw [hr1, hr0, hp0, hp1, bxor_eq_xor, bxor_eq_xor]
+  rw [hr1, hr0, hp0, hp1, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases lhCenter ((z + 1) + twopow k) (twopow k) <;>
     cases lhCenter (d + twopow k) (twopow k) <;> decide
 
@@ -1310,7 +1302,7 @@ theorem periodic_late_response_flip_of_doubles_and_eq
   have hf := periodic_late_response_defect_flip_of_doubles T P hP hper m d z k hz hd hdz hdm ht hset0 hset1
   rw [hreq] at hf
   revert hf
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.response (d + twopow k) k <;>
     cases Rule30UOR.Scale.response ((d + twopow (k + 1)) + m * P) (k + 1) <;>
     cases Rule30UOR.Scale.response (d + twopow (k + 1)) (k + 1) <;> decide
@@ -1581,16 +1573,6 @@ theorem not_centerPeriodic_of_maskparity_zero_agree_scale_step_doubles_prop
     T P m d z k S0 S1 hP hz hd hdz hdm ht hset0 hset1 hS0 hS1 hm0 hm1
 
 /-! ### Batch 48: Strict Exponential Growth `n < 2^n`, `LhColAgree` Dyadic Window Refutations, Direct `2^k - m * P` Cone-Boundary Refutations, and Unconditional Flip-Witness Existence Theorems Over `2^k` Windows Under `CenterPeriodic` Alone (9.1012–9.1026) -/
-
-/-- **Strict Exponential Dominance `n < 2^n` (`lt_twopow_self`, 9.1012)**:
-    for every `n ∈ ℕ`, `n < twopow n`! -/
-theorem lt_twopow_self : ∀ n : Nat, n < twopow n
-  | 0 => by decide
-  | n + 1 => by
-    have ih := lt_twopow_self n
-    have hpos := Rule30UOR.Scale.twopow_pos n
-    rw [Rule30UOR.Core.twopow_succ]
-    omega
 
 /-- **Refuting `CenterPeriodic` at the Dyadic Cone Boundary `t + m * P = 2^k` from `LhColAgree t (m * P) 1 S` Over `2^k ≤ S + 1` (`not_centerPeriodic_of_lhColAgree_one_at_twopow`, 9.1013)**:
     for every `T, P, m, t, k, S ∈ ℕ` with `0 < P`, `0 < m`, `T ≤ t`, `t + m * P = twopow k`, and `twopow k ≤ S + 1`, if `LhColAgree t (m * P) 1 S` holds, then `¬ CenterPeriodic T P`! -/
@@ -1925,24 +1907,10 @@ theorem exists_maskparity_zero_flip_at_zero_diag_step_two_of_periodic_prop
 
 /-! ### Batch 49: Monotonicity of `twopow`, Unconditional Scale-`k ≥ T + P` Fundamental-Period `P` Flip Witnesses, Two-Zero-Diagonal Flip Witnesses, and Scale-Step `maskparity ⊕ leftresponse` Defect Flip Across Dyadic Doubling Zero Diagonals (9.1027–9.1041) -/
 
-/-- **Monotonicity of `twopow` (`twopow_mono`, 9.1027)**:
-    for every `a, b ∈ ℕ`, if `a ≤ b`, then `twopow a ≤ twopow b`! -/
-theorem twopow_mono (a : Nat) : ∀ b : Nat, a ≤ b → twopow a ≤ twopow b
-  | 0, h => by
-    have ha : a = 0 := by omega
-    subst ha; omega
-  | b + 1, h => by
-    by_cases hab : a ≤ b
-    · have ih := twopow_mono a b hab
-      rw [Rule30UOR.Core.twopow_succ]
-      omega
-    · have ha : a = b + 1 := by omega
-      subst ha; omega
-
 /-- **Strict Exponential Bound `n < 2^k` from `n ≤ k` (`lt_twopow_of_le`, 9.1028)**:
     for every `n, k ∈ ℕ`, if `n ≤ k`, then `n < twopow k`! -/
 theorem lt_twopow_of_le (n k : Nat) (h : n ≤ k) : n < twopow k :=
-  Nat.lt_of_lt_of_le (lt_twopow_self n) (twopow_mono n k h)
+  Nat.lt_of_lt_of_le (Rule30UOR.Interfaces.twopow_gt_self n) (twopow_mono n k h)
 
 /-- **Refuting `CenterPeriodic` at Every Scale `k ≥ T + m * P` from White-Center Column-`1` Agreement Over `2^k ≤ S + 1` (`not_centerPeriodic_of_white_center_rhCenter_one_sub_twopow_ge`, 9.1029)**:
     for every `T, P, m, k, S ∈ ℕ` with `0 < P`, `0 < m`, `T + m * P ≤ k`, and `twopow k ≤ S + 1`, if `∀ s ≤ S, center ((twopow k - m * P) + s) = false → rhCenter (((twopow k - m * P) + s) + m * P) 1 = rhCenter ((twopow k - m * P) + s) 1`, then `¬ CenterPeriodic T P`! -/

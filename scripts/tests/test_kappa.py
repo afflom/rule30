@@ -73,7 +73,8 @@ class DeclarationProfileTests(unittest.TestCase):
         kd = sha(b"(4:decl 3:Foo 5:axiom (6:levels 1:u) 71:" + k1.encode() + b" () (6:safety 4:safe))")
         km = sha(b"(11:lean-module 3:Foo 71:" + kd.encode() + b")")
         labels = K.labels_from_stream(self.AXIOM)
-        self.assertEqual(labels, {"Foo": {"kappa": km, "declarations": [("Foo", kd)]}})
+        self.assertEqual(labels, {"Foo": {"kappa": km, "declarations": [("Foo", kd)], "statements": [],
+                                          "kinds": {"Foo": "axiom"}, "reserved": []}})
 
     def theorem(self, module, sharing, order="forward", value="0"):
         """A module with a definition `d` of type Prop and value `(lit nat value)`
@@ -165,6 +166,60 @@ class ExporterTests(unittest.TestCase):
         data = json.loads(out.getvalue())
         self.assertEqual(list(data), ["Foo"])
         self.assertEqual(data["Foo"]["declarations"][0]["name"], "Foo")
+
+
+
+class RedundancyTests(unittest.TestCase):
+    """Theorems that state the same thing group whatever their names, privacy, binders or
+    universe names; generated declarations never count."""
+
+    def test_reserved_names_are_generated_and_nothing_else_by_suffix(self):
+        reserved = {"Rule30UOR.A.f.eq_1", "Rule30UOR.A.f.induct", "Rule30UOR.A.C.mk.injEq"}
+        for name in reserved:
+            self.assertFalse(K.authored(name, {}, reserved), name)
+        # the same suffixes, where Lean does not reserve them, are names someone wrote
+        for written in ("Rule30UOR.A.g.induct", "Rule30UOR.A.Periodic.elim", "Rule30UOR.A.t.inj",
+                        "Rule30UOR.A.Col.red.inj", "Rule30UOR.A.Foo.ext_iff", "Rule30UOR.A.t.eq_1",
+                        "_private.Rule30UOR.A.0.Rule30UOR.A.helper", "Rule30UOR.A.eq_of_range"):
+            self.assertTrue(K.authored(written, {}, reserved), written)
+
+    def test_auxiliary_components_count_only_under_a_declaration(self):
+        kinds = {"Rule30UOR.A.t": "thm", "Rule30UOR.A.f": "def"}
+        for generated in ("Rule30UOR.A.t._proof_1", "Rule30UOR.A.t._simp_1_2", "Rule30UOR.A.f.match_1",
+                          "_private.Rule30UOR.A.0.Rule30UOR.A.t._proof_1_4",
+                          "_private.Rule30UOR.A.0.Nat.pow.match_1.eq_1", "Init.Foo._proof_1"):
+            self.assertFalse(K.authored(generated, kinds), generated)
+        for written in ("Rule30UOR.A.helper._aux", "Rule30UOR.A.x.proof_2", "_private.Rule30UOR.A.0.Nat.my_lemma"):
+            self.assertTrue(K.authored(written, kinds), written)
+
+    def test_universe_parameters_are_numbered_by_first_occurrence(self):
+        line = lambda *parts: K.canonical(list(parts)) + b"\n"
+        def module(name, order):
+            return (line("module", name, ["constants", "1"]) + line("node", "0", "lparam", "u") +
+                    line("node", "1", "lparam", "v") + line("node", "2", "sort", "0") + line("node", "3", "sort", "1") +
+                    line("node", "4", "forallE", "default", "2", "3") +
+                    line("decl", name + ".t", "thm", ["levels", *order], "4", "4") + line("end", name))
+        a = K.labels_from_stream(module("A", ["u", "v"]))["A"]["statements"][0]
+        b = K.labels_from_stream(module("B", ["v", "u"]))["B"]["statements"][0]
+        self.assertEqual(a[1], b[1])
+
+    def test_groups_span_privacy(self):
+        labels = {"C": {"statements": [("_private.C.0.C.v", "K", "e1"), ("C.u", "J", "e2")]},
+                  "D": {"statements": [("D.eq_of_x", "J", "e3"), ("D.w", "K", "e1")]}}
+        self.assertEqual(K.duplicates(labels), {"J": [("C", "C.u"), ("D", "D.eq_of_x")],
+                                                "K": [("C", "_private.C.0.C.v"), ("D", "D.w")]})
+
+    def test_binder_info_and_universe_names_do_not_separate_statements(self):
+        line = lambda *parts: K.canonical(list(parts)) + b"\n"
+        def module(name, binder, level):
+            return (line("module", name, ["constants", "1"]) + line("node", "0", "lparam", level) +
+                    line("node", "1", "sort", "0") + line("node", "2", "bvar", "0") +
+                    line("node", "3", "forallE", binder, "1", "2") +
+                    line("decl", name + ".t", "thm", ["levels", level], "3", "2") + line("end", name))
+        a = K.labels_from_stream(module("A", "default", "u"))["A"]["statements"][0]
+        b = K.labels_from_stream(module("B", "implicit", "v"))["B"]["statements"][0]
+        self.assertEqual(a[1], b[1])
+        self.assertNotEqual(a[2], b[2])
 
 
 if __name__ == "__main__":

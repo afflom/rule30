@@ -82,7 +82,7 @@ def sheet(cid, lx=None, with_related=True):
 
 
 def render(data):
-    mark = {"open": "?", "proved": "✓", "refuted": "✗", "retired": "-"}
+    mark = {"open": "?", "proved": "✓", "refuted": "✗", "retired": "-", "observed": "~"}
     out = [f"# Interface: {data['id']} [{data['status']}]", "", data["statement"], ""]
     if data.get("lean"):
         out += [f"Lean: `{data['lean']}`", ""]

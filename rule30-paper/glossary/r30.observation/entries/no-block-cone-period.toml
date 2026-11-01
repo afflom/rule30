@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "no-block-cone-period"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ColumnCone"
+name = "Rule30UOR.ColumnCone.NoBlockConePeriod"
+
+[[form]]
+id = "no-block-cone-period"
+channel = "math"
+surface = "noblockconeperiod"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name noblockconeperiod) (paren (seq (slot 0))))"

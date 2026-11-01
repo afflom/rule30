@@ -1,0 +1,219 @@
+/-! The audit's Lean side (`tools/r30/auditmodel.py`), appended to `leansig.lean.tmpl`.
+
+`#r30audit` walks the environment once: for every public theorem under the
+prefixes (no auxiliary, private or internal constant) it prints the theorem's
+binders, each marked `prop` when Lean says its type is a proposition and `data`
+otherwise, and its conclusion, as the repository's s-expressions (`r30Sexp`).
+Theorems mentioning one of the target constants are printed in full; for the
+others only the conclusion is printed (enough to find a discharge by head).
+
+`#r30compose` attempts the composition of one conditional refutation with
+the discharges the audit found: on the goal `∀ T P, 0 < P → ¬ CenterPeriodic T P`
+(or `Problem1`, or the right-edge form) it introduces the period, applies the
+conditional refutation, and closes each premise by an assumption (the period
+and `0 < P`), by `omega` (an order side condition), or by applying one of the
+discharges found for that premise and closing the discharge's premises the
+same way. Unification is at reducible transparency (no definition of the
+automaton is unfolded to make two statements meet) and every attempt has
+its own heartbeat budget. A composition that closes every goal is added to
+the environment, so the kernel checks it, and its axioms are printed. -/
+
+/-- A binder name not yet in scope; hygienic names lose their macro scopes. -/
+def r30Fresh (n : Name) (names : List Name) : Name := Id.run do
+  let base := if n.isAnonymous then `x else n.eraseMacroScopes
+  if !names.contains base then return base
+  let mut i := 1
+  while names.contains (base.appendIndexAfter i) do
+    i := i + 1
+  return base.appendIndexAfter i
+
+/-- The binders of a type (`(prop|data kind name type)`) and its conclusion. -/
+partial def r30Shape (e : Expr) (names : List Name) (fvars : Array Expr) : MetaM (List String × String) := do
+  match e with
+  | .mdata _ b => r30Shape b names fvars
+  | .forallE n t b bi =>
+    let n' := r30Fresh n names
+    let tS ← r30Sexp t names
+    let tI := t.instantiateRev fvars
+    let prop ← isProp tI
+    withLocalDecl n' bi tI fun x => do
+      let (bs, c) ← r30Shape b (n' :: names) (fvars.push x)
+      let kind := match bi with
+        | .default => "explicit" | .implicit => "implicit"
+        | .strictImplicit => "strict" | .instImplicit => "inst"
+      return (s!"({if prop then "prop" else "data"} {kind} {n'} {tS})" :: bs, c)
+  | _ => return ([], ← r30Sexp e names)
+
+elab "#r30audit " prefixes:ident* " : " targets:ident* : command => do
+  let env ← getEnv
+  for (name, info) in env.constants.toList do
+    unless info matches .thmInfo _ do continue
+    if name.isInternalDetail || isPrivateName name || isAuxRecursor env name || isNoConfusion env name then continue
+    unless prefixes.any (fun p => p.getId.isPrefixOf name) do continue
+    let ty := info.type
+    let full := targets.any (fun w => Option.isSome (ty.find? (fun e => e.isConstOf w.getId)))
+    let (bs, c) ← liftTermElabM <| r30Shape ty [] #[]
+    if full then
+      logInfo m!"R30AUDIT (theorem {name} (binders {" ".intercalate bs}) {c})"
+    else
+      logInfo m!"R30AUDIT (conclusion {name} {c})"
+
+/-- Run one attempt with its own heartbeat budget; a failure, including a
+runtime exception (a heartbeat timeout), is `false`. -/
+def r30Try (x : Term.TermElabM Bool) : Term.TermElabM Bool :=
+  withCurrHeartbeats <| tryCatchRuntimeEx x (fun _ => pure false)
+
+mutual
+/-- Close a goal: under its leading binders, by an assumption, by `omega`
+when it has no metavariables, or (with depth left) by applying one of the
+discharges and closing its premises the same way; on failure the state is
+restored. -/
+partial def r30Close (g : MVarId) (ds : List Name) (depth : Nat) : Term.TermElabM Bool := do
+  if ← g.isAssigned then return true
+  let ty ← instantiateMVars (← g.getType)
+  unless ← isProp ty do return false
+  let s ← saveState
+  if ty.isForall then
+    if ← r30Try (do let (_, g') ← g.intros; r30Close g' ds depth) then return true
+    s.restore
+    return false
+  if ← r30Try (do withReducible g.assumption; pure true) then return true
+  s.restore
+  if !ty.hasExprMVar then
+    if ← r30Try (do
+        let rest ← Tactic.run g (Tactic.evalTactic (← `(tactic| omega)))
+        pure rest.isEmpty) then return true
+    s.restore
+  if depth == 0 then return false
+  for d in ds do
+    let s ← saveState
+    if ← r30Try (do
+        let gs ← withReducible <| g.apply (← mkConstWithFreshMVarLevels d)
+        r30CloseAll (gs.map (·, [])) (depth - 1)) then return true
+    s.restore
+  return false
+
+/-- Close every propositional goal (each with its own discharges), in passes,
+until no pass makes progress; data goals must be assigned by unification. -/
+partial def r30CloseAll (gs : List (MVarId × List Name)) (depth : Nat) : Term.TermElabM Bool := do
+  let mut open_ := gs
+  let mut progress := true
+  while progress && !open_.isEmpty do
+    progress := false
+    let mut next := []
+    for (g, ds) in open_ do
+      if ← g.isAssigned then
+        progress := true
+        continue
+      let ty ← instantiateMVars (← g.getType)
+      if (← isProp ty) && (← r30Close g ds depth) then
+        progress := true
+      else
+        next := next ++ [(g, ds)]
+    open_ := next
+  return (← open_.allM (·.1.isAssigned))
+end
+
+/-- Apply the conditional refutation `c` to the goal `g` (`False` with the
+period `hper?` in context, or `Problem1`) and close its premises. -/
+def r30Apply (g : MVarId) (hper? : Option Expr) (c : Name) (table : List (Nat × List Name)) : Term.TermElabM Bool :=
+  g.withContext do
+    let ce ← mkConstWithFreshMVarLevels c
+    let (ms, _, concl) ← forallMetaTelescope (← inferType ce)
+    let e := mkAppN ce ms
+    if ← isDefEq concl (← g.getType) then
+      g.assign e
+    else
+      let some hper := hper? | throwError "the conclusion is not the goal"
+      unless ← isDefEq concl (mkNot (← inferType hper)) do
+        throwError "the conclusion is neither False nor the negated period"
+      g.assign (mkApp e hper)
+    let goals := (List.range ms.size).map fun i => (ms[i]!.mvarId!, (table.lookup i).getD [])
+    -- the period and the premises with discharges first, then the side conditions
+    let first ← goals.filterM fun (m, ds) => do
+      let ty ← instantiateMVars (← m.getType)
+      return !ds.isEmpty || ty.getAppFn.isConstOf ``Rule30UOR.Scale.CenterPeriodic
+        || ty.getAppFn.isConstOf ``Rule30UOR.Right.CenterPer
+    let rest := goals.filter fun (m, _) => !first.any (·.1 == m)
+    r30CloseAll (first ++ rest) 1
+
+/-- One line per premise of the conditional refutation `c` listed in `table`
+(`i D1 D2;j D3`, binder positions with their discharges by key): the first
+discharge that proves the premise at its own instance, in `c`'s context
+reduced to its data, its side conditions and the period (every premise at a
+position of `content` is cleared), or `-` when none does. -/
+elab "#r30discharge " kind:ident c:ident table:str content:str : command => do
+  let c := c.getId
+  let kind := kind.getId.toString
+  let table : List (Nat × List Name) := (table.getString.splitOn ";").filterMap fun part =>
+    match (part.splitOn " ").filter (· ≠ "") with
+    | i :: ds => i.toNat?.map (·, ds.map String.toName)
+    | [] => none
+  let content := ((content.getString.splitOn " ").filterMap String.toNat?)
+  liftTermElabM do
+    let ty ← inferType (← mkConstWithFreshMVarLevels c)
+    forallTelescope ty fun xs concl => do
+      let cleared := content.filterMap fun j => xs[j]?.map (·.fvarId!)
+      for (i, ds) in table do
+        let some x := xs[i]? | continue
+        let premise ← inferType x
+        -- the period of a refutation `¬ Per T P` is the negated proposition; of `False`, a binder
+        let goalType := if kind != "problem1" && concl.isAppOfArity ``Not 1 then
+          mkForall `hper .default concl.appArg! premise else premise
+        let s ← saveState
+        let mut found := "-"
+        for d in ds do
+          let ok ← r30Try do
+            let g ← mkFreshExprMVar goalType
+            let g ← g.mvarId!.tryClearMany cleared.toArray
+            let g ← if goalType.isForall && goalType != premise then pure (← g.intro1).2 else pure g
+            r30Close g [d] 1
+          s.restore
+          if ok then
+            found := d.toString
+            break
+        logInfo m!"R30DISCHARGE {c} {i} {found}"
+
+/-- One line: the composition of a conditional refutation with discharges,
+or why it did not compose. `kind` is `periodic`, `centerPer` or `problem1`;
+`table` is `i D1 D2;j D3`: the discharges to try on the premise at binder
+position `i` of the conditional refutation. -/
+elab "#r30compose " kind:ident c:ident table:str : command => do
+  let c := c.getId
+  let kind := kind.getId.toString
+  let table : List (Nat × List Name) := (table.getString.splitOn ";").filterMap fun part =>
+    match (part.splitOn " ").filter (· ≠ "") with
+    | i :: ds => i.toNat?.map (·, ds.map String.toName)
+    | [] => none
+  liftTermElabM do
+    let stx ← match kind with
+      | "problem1" => `(Ruliology.CellularAutomata.Rule30Prize.Problem1)
+      | "centerPer" => `(∀ T P : Nat, 0 < P → ¬ Rule30UOR.Right.CenterPer T P)
+      | _ => `(∀ T P : Nat, 0 < P → ¬ Rule30UOR.Scale.CenterPeriodic T P)
+    let target ← instantiateMVars (← Term.elabTermAndSynthesize stx none)
+    let root ← mkFreshExprSyntheticOpaqueMVar target
+    let attempt : Term.TermElabM Bool := do
+      -- `∀ T P, 0 < P → ¬ Per T P`: introduce T, P, 0 < P and the period itself
+      if kind == "problem1" then
+        r30Apply root.mvarId! none c table
+      else
+        let (fvs, g) ← root.mvarId!.introN 4
+        r30Apply g (some (mkFVar fvs[3]!)) c table
+    let res : Except String Bool ← withCurrHeartbeats <| tryCatchRuntimeEx (do pure (.ok (← attempt)))
+      (fun e => do pure (.error (← e.toMessageData.toString)))
+    let (ok, why) := match res with
+      | .ok b => (b, "goals remain")
+      | .error m => (false, m)
+    let value ← instantiateMVars root
+    if !ok || value.hasExprMVar || value.hasSorry then
+      logInfo m!"R30COMPOSE failed {c} {why.replace "\n" " "}"
+      return
+    let name := `R30AuditComposed ++ c
+    try
+      addDecl (.thmDecl { name, levelParams := [], type := target, value })
+    catch e =>
+      logInfo m!"R30COMPOSE failed {c} kernel: {(← e.toMessageData.toString).replace "\n" " "}"
+      return
+    let axs ← Lean.collectAxioms name
+    let pp := toString (← ppExpr value)
+    logInfo m!"R30COMPOSE composed {c} {",".intercalate (axs.toList.map toString)} {pp.replace "\n" " "}"

@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Automatic"
-name = "Rule30UOR.Automatic.center_recovered_at_scale"
+name = "Rule30UOR.Interfaces.center_from_late_responses"
 
 [[form]]
 id = "center-recovered-at-scale"

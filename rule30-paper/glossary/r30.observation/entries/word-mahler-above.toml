@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "word-mahler-above"
+category = "function"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.KernelRoot"
+name = "Rule30UOR.KernelRoot.WordMahlerAbove"
+
+[[form]]
+id = "word-mahler-above"
+channel = "math"
+surface = "wordmahlerabove"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wordmahlerabove) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -173,7 +173,7 @@ private theorem white_prefix_of_traces : ∀ n t : Nat,
         next (n + 1) (Nat.le_refl _), prev (n + 1) (Nat.le_refl _), prev n (by omega)] at hh
       simpa using hh
 
-private theorem white_right_persists (t : Nat) : ∀ n : Nat,
+theorem white_right_persists (t : Nat) : ∀ n : Nat,
     (∀ s : Nat, s < n → cell (t + s) 0 = false) → cell t 1 = true → cell (t + n) 1 = true := by
   intro n
   induction n with
@@ -374,7 +374,7 @@ theorem unit_defect_forces_near_collision (Q t r : Nat)
     (by simpa only [Rule30UOR.Scale.center_eq_kit] using ha)
     (by simpa only [Rule30UOR.Scale.center_eq_kit] using hb)
 
-private theorem black_within_period {T P : Nat} (hP : 0 < P)
+theorem black_within_period {T P : Nat} (hP : 0 < P)
     (hc : ∀ t, T ≤ t → center (t + P) = center t) (t : Nat) (ht : T ≤ t) :
     ∃ r : Nat, r < P ∧ center (t + r) = true := by
   refine Decidable.byContradiction fun hn => ?_
@@ -393,11 +393,6 @@ private theorem black_within_period {T P : Nat} (hP : 0 < P)
   cases hb : center (t + r)
   · rfl
   · exact (hn ⟨r, hr, hb⟩).elim
-
-private theorem kit_period {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P) :
-    ∀ t, T ≤ t → center (t + P) = center t := by
-  intro t ht
-  simpa only [Rule30UOR.Scale.center_eq_kit] using hc t ht
 
 /-- A matching finite center window transports an agreeing left prefix forward.
 Consequently a unit defect at the end has a witness in the initial prefix. -/
@@ -554,7 +549,7 @@ theorem periodic_leading_source_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m)
     (hc : Rule30UOR.Scale.CenterPeriodic T P) (hN : T ≤ N) :
     ∃ t k : Nat, N ≤ t ∧ t + 1 ≤ 2 * N + m * P + 2 * P ∧ k ≤ P ∧
       LeadingAdvance (m * P) t k := by
-  have hp := kit_period hc
+  have hp := Rule30UOR.MaskedObservation.kit_period hc
   obtain ⟨r, hr0, hr, hd, _, hw⟩ := exists_unit_defect_and_white_center_of_periodic
     hP hp m (N + P) hm (by omega)
   let v := N + P + (r - 1)
@@ -606,7 +601,7 @@ theorem periodic_leading_erasure_window (T P m N : Nat) (hP : 0 < P) (hm : 0 < m
   have clean : CenterCleanThrough (m * P) t k := by
     intro j hj
     simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
-      center_defect_zero (kit_period hc) m (t + j) (by omega)
+      center_defect_zero (Rule30UOR.MaskedObservation.kit_period hc) m (t + j) (by omega)
   obtain ⟨hf, he, hg, hw⟩ := leading_first_erasure (m * P) t k hl clean
   exact ⟨t, k, ht, hb, hk, hl, hf, hg⟩
 
@@ -642,7 +637,7 @@ time, or period multiplier. -/
 theorem periodic_unit_defect_forces_near_collision (T P m t : Nat) (hP : 0 < P)
     (_hm : 0 < m) (hc : Rule30UOR.Scale.CenterPeriodic T P) (ht : T ≤ t)
     (hd : leftAdjacentDefect (m * P) t = true) : NearCollision (m * P) t P (2 * P) := by
-  have hp := kit_period hc
+  have hp := Rule30UOR.MaskedObservation.kit_period hc
   obtain ⟨r, hr, hb⟩ := black_within_period hP hp t ht
   have hb' : center ((t + r) + m * P) = true := (periodic_mul hp m (t + r) (by omega)).trans hb
   obtain ⟨s, hs, x, hx1, hx2, hcol⟩ :=
@@ -657,7 +652,7 @@ theorem periodic_central_collision_window (T P m N : Nat) (hP : 0 < P) (hm : 0 <
     ∃ t : Nat, N ≤ t ∧ t + 1 ≤ 2 * N + m * P + P ∧
       CentralCollision (m * P) t (2 * P) := by
   obtain ⟨r, hr0, hr, hd, _, _⟩ :=
-    exists_unit_defect_and_white_center_of_periodic hP (kit_period hc) m N hm hN
+    exists_unit_defect_and_white_center_of_periodic hP (Rule30UOR.MaskedObservation.kit_period hc) m N hm hN
   obtain ⟨s, hs, hcol⟩ := periodic_unit_defect_forces_near_collision
     T P m (N + (r - 1)) hP hm hc (by omega) hd
   exact ⟨N + (r - 1) + s, by omega, by omega, hcol⟩
@@ -779,12 +774,6 @@ theorem problem1_of_no_recurrent_central_collision
     Rule30Prize.Problem1 := by
   exact Rule30UOR.Scale.problem1_of_noPeriod
     (noPeriod_of_no_recurrent_central_collision hno)
-
-/-- Problem 1 implies the recurrent-central-collision obstruction criterion. -/
-theorem no_recurrent_central_collision_of_problem1
-    (h : Rule30Prize.Problem1) : NoRecurrentCentralCollision := by
-  exact no_recurrent_central_collision_of_noPeriod
-    (Rule30UOR.Scale.noPeriod_of_problem1 h)
 
 /-- Exact frontier at this layer: Problem 1 is equivalent to excluding recurrent central
 collision witnesses under every periodic-center hypothesis. -/

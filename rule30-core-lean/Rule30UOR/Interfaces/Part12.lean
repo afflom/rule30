@@ -373,7 +373,7 @@ theorem lhCenter_twin_before_zero_diag (t p : Nat)
   have hstep := lhCenter_step_succ t p
   rw [hz1, hz0] at hstep
   revert hstep
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter t (p + 2) <;> cases lhCenter t (p + 1) <;> decide
 
 theorem lhCenter_twin_before_zero_diag_prop (t p : Nat)
@@ -391,7 +391,7 @@ theorem lhCenter_reset_after_zero_diag (t p : Nat)
   have hstep := lhCenter_step_succ (t + 2) p
   rw [show (t + 2) + 1 = t + 3 by omega, hb] at hstep
   rw [hstep]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + 2) (p + 2) <;> cases lhCenter (t + 2) p <;> rfl
 
 theorem lhCenter_reset_after_zero_diag_prop (t p : Nat)
@@ -528,7 +528,7 @@ theorem lhCenter_step_flip_at_shift_after_zero_diag_of_single_lhBandAgree (Q t p
   have hstep := lhCenter_step_succ t p
   rw [hb] at hstep
   rw [hstep]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter t (p + 2) <;> cases lhCenter t p <;> rfl
 
 theorem lhCenter_step_flip_at_shift_after_zero_diag_of_single_lhBandAgree_prop (Q t p p0 L : Nat)
@@ -785,7 +785,7 @@ theorem lhCenter_late_cross_reset_after_zero_diag_uncond (t k r : Nat)
   have hstep := lhCenter_late_cross_step t k r hr
   rw [hb] at hstep
   rw [hstep]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + twopow k) (twopow k - (r + 1)) <;>
     cases lhCenter (t + twopow k) (twopow k - (r + 3)) <;> rfl
 
@@ -988,7 +988,7 @@ theorem winWitt_scale_cross_periodic_of_doubles_le_uncond (Q z t k r : Nat)
   rw [winWitt_testBit_scale_cross_cone t k (r + Q) (by omega),
     winWitt_testBit_scale_cross_cone (t + Q) k r hlt,
     lhCenter_late_cross_periodic_of_doubles_le_uncond Q z t k r (by omega) hdz hd hset]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + twopow k) (twopow k - (r + Q)) <;>
     cases rhCenter t (r + Q) <;>
     cases rhCenter (t + Q) r <;> decide
@@ -1015,7 +1015,7 @@ theorem winWitt_scale_cross_zero_gap_periodic_of_doubles_le_uncond (Q z t k r : 
   rw [rhCenter_gt_eq_false t (r + Q) (by omega),
     rhCenter_gt_eq_false (t + Q) r ht] at h
   revert h
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit ((t + twopow (k + 1)) - (r + Q)) <;>
     cases (winWitt (t + Q) (twopow k)).testBit (((t + Q) + twopow (k + 1)) - r) <;> decide
 
@@ -1040,7 +1040,7 @@ theorem winWitt_scale_cross_antiperiodic_of_doubles_uncond (Q t k r : Nat)
   rw [winWitt_testBit_scale_cross_cone t k ((r + Q) + 1) (by omega),
     winWitt_testBit_scale_cross_cone (t + Q) k (r + 1) (by omega),
     lhCenter_late_cross_antiperiodic_of_doubles_uncond Q t k r (by omega) hz hd hset]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases lhCenter (t + twopow k) (twopow k - ((r + Q) + 1)) <;>
     cases rhCenter t ((r + Q) + 1) <;>
     cases rhCenter (t + Q) (r + 1) <;> decide
@@ -1067,7 +1067,7 @@ theorem winWitt_scale_cross_zero_gap_antiperiodic_of_doubles_uncond (Q t k r : N
   rw [rhCenter_gt_eq_false t ((r + Q) + 1) (by omega),
     rhCenter_gt_eq_false (t + Q) (r + 1) (by omega)] at h
   revert h
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt t (twopow k)).testBit ((t + twopow (k + 1)) - ((r + Q) + 1)) <;>
     cases (winWitt (t + Q) (twopow k)).testBit (((t + Q) + twopow (k + 1)) - (r + 1)) <;> decide
 

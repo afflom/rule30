@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "problem1-of-no-periodic-black-consistent"
+category = "proof-constant"
+signature = "(pi ((explicit h (const r30.observation::no-periodic-black-consistent))) (const r30.joint::problem-one))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DiagonalCone"
+name = "Rule30UOR.DiagonalCone.problem1_of_noPeriodicBlackConsistent"
+
+[[form]]
+id = "problem1-of-no-periodic-black-consistent"
+channel = "math"
+surface = "problem1ofnoperiodicblackconsistent"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name problem1ofnoperiodicblackconsistent) (paren (seq (slot 0))))"

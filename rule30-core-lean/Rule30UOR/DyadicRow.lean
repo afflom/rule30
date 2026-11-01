@@ -1,5 +1,6 @@
 module
 public import Rule30UOR.StableKernel
+public import Rule30UOR.Antidiagonal
 set_option autoImplicit false
 set_option maxRecDepth 100000
 set_option maxHeartbeats 1000000000
@@ -103,17 +104,6 @@ theorem phiLinearPow_lt_of_lt (n y k : Nat) (hy : y < 2 ^ k) :
       Nat.lt_of_lt_of_le (shiftLeft_lt_two_pow _ _ 2 ih) (Nat.pow_le_pow_right (by decide) (by cfomega))
     exact Nat.xor_lt_two_pow (Nat.xor_lt_two_pow h0 h1) h2
 
-/-- Bit `0` of `q^n · y` is bit `0` of `y`. -/
-theorem phiLinearPow_testBit_zero (n y : Nat) : (phiLinearPow n y).testBit 0 = y.testBit 0 := by
-  induction n with
-  | zero => rfl
-  | succ n ih =>
-    rw [phiLinearPow_step]
-    show ((phiLinearPow n y ^^^ (phiLinearPow n y <<< 1)) ^^^ (phiLinearPow n y <<< 2)).testBit 0 =
-      y.testBit 0
-    rw [Nat.testBit_xor, Nat.testBit_xor, Nat.testBit_shiftLeft, Nat.testBit_shiftLeft, ih]
-    cases y.testBit 0 <;> rfl
-
 /-! ## Scale-freeness -/
 
 /-- Bit `2^(k+1)` of `phiScale k Z` is bit `2^k` of `Z` when `Z` has no bit `0` and
@@ -140,7 +130,7 @@ theorem rowTerm_twopow_succ (j m : Nat) (hm : m < twopow j) :
   have hsub : twopow (j + 1) - 1 - m = twopow j + (twopow j - 1 - m) := by cfomega
   rw [hsub, Rule30UOR.Interfaces.phiLinearPow_add, Rule30UOR.Interfaces.phiLinear_freshman]
   apply phiScale_testBit_double
-  · rw [phiLinearPow_testBit_zero, Nat.testBit_shiftLeft]
+  · rw [Rule30UOR.WittDefect.q_power_bit_zero, Nat.testBit_shiftLeft]
     rfl
   · have hw : interior m <<< 1 < 2 ^ (2 * m + 1 + 1) := shiftLeft_lt_two_pow _ _ 1 (interior_lt m)
     have h := phiLinearPow_lt_of_lt (twopow j - 1 - m) _ _ hw
@@ -154,14 +144,14 @@ theorem rowTerm_twopow_iter (j m n : Nat) (hm : m < twopow j) :
   | succ n ih =>
     show rowTerm (twopow (j + n + 1)) m = rowTerm (twopow j) m
     rw [rowTerm_twopow_succ (j + n) m
-      (Nat.lt_of_lt_of_le hm (Rule30UOR.Automatic.twopow_mono (by cfomega))), ih]
+      (Nat.lt_of_lt_of_le hm (Rule30UOR.Interfaces.twopow_mono _ _ (by cfomega))), ih]
 
 /-- The scale-free row sequence: row `m`'s term at any dyadic time beyond `m`. -/
 def dyadicRow (m : Nat) : Bool := rowTerm (twopow (m + 1)) m
 
 theorem lt_twopow_succ (m : Nat) : m < twopow (m + 1) :=
   Nat.lt_of_lt_of_le (Rule30UOR.Interfaces.twopow_gt_self m)
-    (Rule30UOR.Automatic.twopow_mono (Nat.le_succ m))
+    (Rule30UOR.Interfaces.twopow_mono _ _ (Nat.le_succ m))
 
 theorem rowTerm_twopow_eq_dyadicRow (j m : Nat) (hm : m < twopow j) :
     rowTerm (twopow j) m = dyadicRow m := by
@@ -190,18 +180,6 @@ theorem center_twopow_eq_prefix (j : Nat) (hj : 1 ≤ j) :
 
 /-! ## Block parities -/
 
-theorem xorBelow_add (g : Nat → Bool) (a b : Nat) :
-    xorBelow g (a + b) = bxor (xorBelow g a) (xorBelow (fun i => g (a + i)) b) := by
-  induction b with
-  | zero =>
-    show xorBelow g a = bxor (xorBelow g a) false
-    cases xorBelow g a <;> rfl
-  | succ b ih =>
-    show bxor (xorBelow g (a + b)) (g (a + b)) =
-      bxor (xorBelow g a) (bxor (xorBelow (fun i => g (a + i)) b) (g (a + b)))
-    rw [ih]
-    cases xorBelow g a <;> cases xorBelow (fun i => g (a + i)) b <;> cases g (a + b) <;> rfl
-
 /-- The parity of `dyadicRow` over the block `[2^j, 2^(j+1))`. -/
 def blockParity (j : Nat) : Bool := xorBelow (fun i => dyadicRow (twopow j + i)) (twopow j)
 
@@ -214,7 +192,7 @@ theorem center_twopow_succ_eq (j : Nat) (hj : 1 ≤ j) :
     center (twopow (j + 1)) = bxor (center (twopow j)) (blockParity j) := by
   have h1 : twopow (j + 1) = twopow j + twopow j := twopow_succ j
   rw [center_twopow_eq_prefix (j + 1) (by cfomega), center_twopow_eq_prefix j hj, h1,
-    xorBelow_add]
+    Rule30UOR.Antidiagonal.xorBelow_split]
   unfold blockParity
   cases xorBelow dyadicRow (twopow j) <;> cases xorBelow (fun i => dyadicRow (twopow j + i)) (twopow j) <;> rfl
 

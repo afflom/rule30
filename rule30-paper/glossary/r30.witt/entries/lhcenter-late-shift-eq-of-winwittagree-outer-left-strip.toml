@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.lhCenter_late_shift_eq_of_winWittAgree_outer_left_strip_prop"
+name = "Rule30UOR.Interfaces.lhCenter_late_shift_eq_of_winWittAgree_outer_left_strip"
 
 [[form]]
 id = "lhcenter-late-shift-eq-of-winwittagree-outer-left-strip"

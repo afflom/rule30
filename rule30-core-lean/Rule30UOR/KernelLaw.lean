@@ -1,6 +1,7 @@
 module
 public import Rule30UOR.DyadicRow
 public import Rule30UOR.Band
+public import Rule30UOR.Intersection
 set_option autoImplicit false
 set_option maxRecDepth 100000
 set_option maxHeartbeats 1000000000
@@ -92,37 +93,6 @@ theorem phiLinPow_zero_right (s n : Nat) : phiLinPow s n 0 = 0 := by
 
 /-! ## Three coefficients of `q^s` -/
 
-theorem trinomialParity_zero_right (s : Nat) : trinomialParity s 0 = true := by
-  rw [← testBit_phiLinPow_eq_trinomialParity, ← phiLinearPow_eq_phiLinPow, phiLinearPow_testBit_zero]
-  rfl
-
-/-- The Pascal step of the trinomial triangle at `d = 0`. -/
-theorem trinomialParity_step_zero (s : Nat) : trinomialParity (s + 1) 0 = trinomialParity s 0 := by
-  simp only [← testBit_phiLinPow_eq_trinomialParity]
-  show (phiLin 1 (phiLinPow 1 s 1)).testBit 0 = _
-  rw [testBit_phiLin]
-  cases (phiLinPow 1 s 1).testBit 0 <;> rfl
-
-/-- The Pascal step at `d = 1`. -/
-theorem trinomialParity_step_one (s : Nat) :
-    trinomialParity (s + 1) 1 = bxor (trinomialParity s 1) (trinomialParity s 0) := by
-  simp only [← testBit_phiLinPow_eq_trinomialParity]
-  show (phiLin 1 (phiLinPow 1 s 1)).testBit 1 = _
-  rw [testBit_phiLin]
-  show (((phiLinPow 1 s 1).testBit 1 ^^ (decide (1 ≥ 1) && (phiLinPow 1 s 1).testBit 0)) ^^
-    (decide (1 ≥ 2 * 1) && (phiLinPow 1 s 1).testBit (1 - 2 * 1))) = _
-  cases (phiLinPow 1 s 1).testBit 1 <;> cases (phiLinPow 1 s 1).testBit 0 <;> rfl
-
-/-- The Pascal step at `d + 2`. -/
-theorem trinomialParity_step_two (s d : Nat) :
-    trinomialParity (s + 1) (d + 2) =
-      bxor (bxor (trinomialParity s (d + 2)) (trinomialParity s (d + 1))) (trinomialParity s d) := by
-  simp only [← testBit_phiLinPow_eq_trinomialParity]
-  show (phiLin 1 (phiLinPow 1 s 1)).testBit (d + 2) = _
-  rw [testBit_phiLin, decide_eq_true (by cfomega : d + 2 ≥ 1), decide_eq_true (by cfomega : d + 2 ≥ 2 * 1),
-    Bool.true_and, Bool.true_and, show d + 2 - 1 = d + 1 by cfomega, show d + 2 - 2 * 1 = d by cfomega,
-    Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
-
 /-- Coefficient `s + 1` of `q^s` is the ruler `trailingParity s`. -/
 theorem trinomialParity_succ_self (s : Nat) : trinomialParity s (s + 1) = trailingParity s := by
   rw [← testBit_phiLinPow_eq_trinomialParity, linear_above_center]
@@ -152,7 +122,7 @@ theorem phiLinPow_block_testBit (k : Nat) : ∀ s V i r, V < 2 ^ twopow k → r 
     cases i with
     | zero =>
       rw [Nat.mul_zero, Nat.zero_add, decide_eq_false (by cfomega : ¬ (r ≥ twopow k)),
-        decide_eq_false (by cfomega : ¬ (r ≥ 2 * twopow k)), trinomialParity_step_zero]
+        decide_eq_false (by cfomega : ¬ (r ≥ 2 * twopow k)), Rule30UOR.StableKernel.trinomialParity_row_succ_zero]
       cases trinomialParity s 0 <;> cases V.testBit r <;> rfl
     | succ i =>
       rw [Nat.mul_add, Nat.mul_one,
@@ -162,13 +132,13 @@ theorem phiLinPow_block_testBit (k : Nat) : ∀ s V i r, V < 2 ^ twopow k → r 
       cases i with
       | zero =>
         simp only [Nat.mul_zero, Nat.zero_add]
-        rw [decide_eq_false (by cfomega : ¬ (twopow k + r ≥ 2 * twopow k)), trinomialParity_step_one]
+        rw [decide_eq_false (by cfomega : ¬ (twopow k + r ≥ 2 * twopow k)), Rule30UOR.StableKernel.trinomialParity_row_succ_one]
         cases trinomialParity s 1 <;> cases trinomialParity s 0 <;> cases V.testBit r <;> rfl
       | succ i =>
         rw [Nat.mul_add, Nat.mul_one,
           show twopow k * i + twopow k + twopow k + r - 2 * twopow k = twopow k * i + r by cfomega,
           decide_eq_true (by cfomega : twopow k * i + twopow k + twopow k + r ≥ 2 * twopow k),
-          phiLinPow_block_testBit k s V i r hV hr, show i + 1 + 1 = i + 2 by cfomega, trinomialParity_step_two]
+          phiLinPow_block_testBit k s V i r hV hr, show i + 1 + 1 = i + 2 by cfomega, Rule30UOR.StableKernel.trinomialParity_row_succ]
         cases trinomialParity s (i + 2) <;> cases trinomialParity s (i + 1) <;> cases trinomialParity s i <;>
           cases V.testBit r <;> rfl
 
@@ -195,7 +165,7 @@ theorem block_testBit_zero (k s Y r : Nat) (hr : r < twopow k) :
     Bool.false_and, Bool.xor_false]
   have h := phiLinPow_block_testBit k s (Y % 2 ^ twopow k) 0 r (Nat.mod_lt _ (Nat.two_pow_pos _)) hr
   rw [Nat.mul_zero, Nat.zero_add] at h
-  rw [h, trinomialParity_zero_right, Bool.true_and, Nat.testBit_mod_two_pow, decide_eq_true hr, Bool.true_and]
+  rw [h, Rule30UOR.Intersection.trinomialParity_zero_right, Bool.true_and, Nat.testBit_mod_two_pow, decide_eq_true hr, Bool.true_and]
 
 /-- Bit `2^k (i+1) + r` of `q^(2^k s) · Y`: the low block of `Y` at coefficient `i + 1`,
 plus the same reading of `Y >>> 2^k` one block lower. -/
@@ -304,7 +274,7 @@ theorem rowTerm_kernel_law (k r u m : Nat) (hm : m < twopow k) (hr : r < twopow 
       cases (shiftedRow k r m).testBit r <;> cases (shiftedRow k r m).testBit (twopow k + r) <;>
         cases (shiftedRow k r m).testBit (twopow k + twopow k + r) <;> rfl
     | succ s =>
-      rw [show s + 1 + 1 + 1 = 3 + s by cfomega, xorBelow_add]
+      rw [show s + 1 + 1 + 1 = 3 + s by cfomega, Rule30UOR.Antidiagonal.xorBelow_split]
       show bxor (bxor (bxor (bxor (bxor false
               (trinomialParity (s + 1 + 1) (3 + s - 0) && (shiftedRow k r m).testBit (twopow k * 0 + r)))
               (trinomialParity (s + 1 + 1) (3 + s - 1) && (shiftedRow k r m).testBit (twopow k * 1 + r)))
@@ -342,7 +312,7 @@ theorem interiorFormula_kernel (k r u : Nat) (hr : r < twopow k) (hu : 1 ≤ u) 
     interiorFormula (twopow k * u + r) (twopow k * u + r) =
       bxor (bxor (frozenPrefix k r) (trailingParity (u - 1) && secondPrefix k r)) (lateTail k r u) := by
   have hle : twopow k ≤ twopow k * u := Nat.le_mul_of_pos_right _ hu
-  have hsplit := xorBelow_add (rowTerm (twopow k * u + r)) (twopow k) (twopow k * u + r - twopow k)
+  have hsplit := Rule30UOR.Antidiagonal.xorBelow_split (rowTerm (twopow k * u + r)) (twopow k) (twopow k * u + r - twopow k)
   rw [show twopow k + (twopow k * u + r - twopow k) = twopow k * u + r by cfomega] at hsplit
   rw [interiorFormula_eq_xorBelow_rowTerm, hsplit,
     xorBelow_congr (rowTerm (twopow k * u + r))
@@ -371,7 +341,7 @@ theorem kernelSeq_explicit (k r u : Nat) (hr : r < twopow k) (hu : 1 ≤ u) (hk 
 
 theorem shiftedRow_testBit_zero (k r m : Nat) : (shiftedRow k r m).testBit 0 = false := by
   unfold shiftedRow
-  rw [phiLinearPow_testBit_zero, Nat.testBit_shiftLeft]
+  rw [Rule30UOR.WittDefect.q_power_bit_zero, Nat.testBit_shiftLeft]
   rfl
 
 theorem second_zero (k m : Nat) (hm : m < twopow k) : second k 0 m = false := by
@@ -435,7 +405,7 @@ theorem phiLinearPow_testBit_one (n y : Nat) (h0 : y.testBit 0 = false) :
     rw [phiLinearPow_step]
     show ((phiLinearPow n y ^^^ (phiLinearPow n y <<< 1)) ^^^ (phiLinearPow n y <<< 2)).testBit 1 = y.testBit 1
     rw [Nat.testBit_xor, Nat.testBit_xor, Nat.testBit_shiftLeft, Nat.testBit_shiftLeft, ih,
-      phiLinearPow_testBit_zero, h0]
+      Rule30UOR.WittDefect.q_power_bit_zero, h0]
     cases y.testBit 1 <;> rfl
 
 theorem interior_zero : interior 0 = 1 := by decide

@@ -400,30 +400,17 @@ theorem leading_phase_reset (Q t k : Nat)
 def CommonWhiteBlock (Q b n : Nat) : Prop :=
   ∀ s : Nat, s ≤ n → cell (b + s) 0 = false ∧ cell (b + s + Q) 0 = false
 
-private theorem right_black_persists (t : Nat) : ∀ n : Nat,
-    (∀ s : Nat, s < n → cell (t + s) 0 = false) → cell t 1 = true → cell (t + n) 1 = true := by
-  intro n
-  induction n with
-  | zero => intro _ hb; simpa using hb
-  | succ n ih =>
-    intro hw hb
-    have hprev := ih (fun s hs => hw s (by omega)) hb
-    rw [show t + (n + 1) = (t + n) + 1 by omega]
-    change rule (cell (t + n) 0) (cell (t + n) 1) (cell (t + n) 2) = true
-    rw [hw n (by omega), hprev]
-    rfl
-
 private theorem white_block_mono (Q b n i j : Nat) (hw : CommonWhiteBlock Q b n)
     (hij : i ≤ j) (hjn : j ≤ n) :
     (cell (b + i) 1 = true → cell (b + j) 1 = true) ∧
     (cell (b + i + Q) 1 = true → cell (b + j + Q) 1 = true) := by
   constructor
   · intro hb
-    have hh := right_black_persists (b + i) (j - i) (fun s hs => by
+    have hh := Rule30UOR.CentralCollision.white_right_persists (b + i) (j - i) (fun s hs => by
       simpa only [Nat.add_assoc] using (hw (i + s) (by omega)).1) hb
     simpa only [show b + i + (j - i) = b + j by omega] using hh
   · intro hb
-    have hh := right_black_persists (b + i + Q) (j - i) (fun s hs => by
+    have hh := Rule30UOR.CentralCollision.white_right_persists (b + i + Q) (j - i) (fun s hs => by
       simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using (hw (i + s) (by omega)).2) hb
     simpa only [show b + i + Q + (j - i) = b + j + Q by omega] using hh
 
@@ -897,26 +884,6 @@ private theorem last_black_prefix (f : Nat → Bool) : ∀ n : Nat,
       intro i hni hi
       simpa only [show i = n + 1 by omega] using hn
 
-private theorem black_in_period {T P : Nat} (hP : 0 < P)
-    (hc : ∀ t, T ≤ t → center (t + P) = center t) (t : Nat) (ht : T ≤ t) :
-    ∃ r : Nat, r < P ∧ center (t + r) = true := by
-  refine Decidable.byContradiction fun hn => ?_
-  apply Rule30UOR.KitConstructive.center_not_eventually_constant
-  refine ⟨t, false, fun u hu => ?_⟩
-  let r := (u - t) % P
-  have hr : r < P := Nat.mod_lt _ hP
-  have he : (t + r) + ((u - t) / P) * P = u := by
-    have hh := Nat.mod_add_div (u - t) P
-    rw [Nat.mul_comm P ((u - t) / P)] at hh
-    dsimp [r]
-    omega
-  have hp := periodic_mul hc ((u - t) / P) (t + r) (by omega)
-  rw [he] at hp
-  rw [hp]
-  cases hb : center (t + r)
-  · rfl
-  · exact (hn ⟨r, hr, hb⟩).elim
-
 /-- Both gate orientations recur with their actual leading sources on common
 black boundaries. The entire interval from that boundary to the first erasure
 is retained, so orientation recurrence and source recurrence are correlated. -/
@@ -938,7 +905,7 @@ theorem periodic_black_erasure_origin (T P m N g : Nat) (hP : 0 < P) (hm : 0 < m
   let a := t + 1 - P
   have haT : T ≤ a := by dsimp [a]; omega
   have haN : N ≤ a := by dsimp [a]; omega
-  obtain ⟨s, hs, hblack⟩ := black_in_period hP hp a haT
+  obtain ⟨s, hs, hblack⟩ := Rule30UOR.CentralCollision.black_within_period hP hp a haT
   have hst : a + s ≤ t := by dsimp [a] at *; omega
   obtain ⟨j, hj, hb, hw⟩ := last_black_prefix (fun i => center (a + s + i)) (t - (a + s))
     (by simpa only [Nat.add_zero] using hblack)
@@ -3048,12 +3015,12 @@ private theorem q_power_shl (r a n : Nat) :
   | zero => rfl
   | succ r ih => simp only [phiLinearPow, ih, q_linear_shl]
 
-private theorem q_power_zero (r : Nat) : phiLinearPow r 0 = 0 := by
+theorem q_power_zero (r : Nat) : phiLinearPow r 0 = 0 := by
   induction r with
   | zero => rfl
   | succ r ih => simp [phiLinearPow, ih, phiLinear]
 
-private theorem q_power_bit_zero (r a : Nat) :
+theorem q_power_bit_zero (r a : Nat) :
     (phiLinearPow r a).testBit 0 = a.testBit 0 := by
   induction r with
   | zero => rfl
@@ -4226,12 +4193,6 @@ theorem center_defect_coupling (Q t : Nat) (h0 : leftDefect Q t 0 = false) :
   rw [Rule30UOR.Scale.bxor_eq]
   exact center_defect_coupling_xor Q t h0
 
-private theorem kit_periodic {T P : Nat} (hc : Rule30UOR.Scale.CenterPeriodic T P) :
-    ∀ t, T ≤ t → Rule30Prize.center (t + P) = Rule30Prize.center t := by
-  intro t ht
-  rw [← Rule30UOR.Scale.center_eq_kit, ← Rule30UOR.Scale.center_eq_kit]
-  exact hc t ht
-
 /-- Under a hypothetical center period the left column-one defect equals the gated
 right column-one defect at every later time. -/
 theorem periodic_center_coupling (T P m t : Nat)
@@ -4239,10 +4200,10 @@ theorem periodic_center_coupling (T P m t : Nat)
     leftDefect (m * P) t 1 = centerGate (m * P) t := by
   have h0 : leftDefect (m * P) t 0 = false := by
     simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
-      Rule30UOR.DefectFront.center_defect_zero (kit_periodic hc) m t ht
+      Rule30UOR.DefectFront.center_defect_zero (Rule30UOR.MaskedObservation.kit_period hc) m t ht
   have h1 : leftDefect (m * P) (t + 1) 0 = false := by
     simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
-      Rule30UOR.DefectFront.center_defect_zero (kit_periodic hc) m (t + 1) (Nat.le_succ_of_le ht)
+      Rule30UOR.DefectFront.center_defect_zero (Rule30UOR.MaskedObservation.kit_period hc) m (t + 1) (Nat.le_succ_of_le ht)
   have hl := center_defect_coupling_xor (m * P) t h0
   rw [h1] at hl
   revert hl
@@ -4341,7 +4302,7 @@ private theorem periodic_center_clean_through (T P m b k : Nat)
     CenterCleanThrough (m * P) b k := by
   intro j _
   simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
-    Rule30UOR.DefectFront.center_defect_zero (kit_periodic hc) m (b + j) (by omega)
+    Rule30UOR.DefectFront.center_defect_zero (Rule30UOR.MaskedObservation.kit_period hc) m (b + j) (by omega)
 
 /-- **Silent gap.** Before a rightmost left front of depth `k` arrives, the
 boundary term vanishes and the observer source is the bare carry difference. -/
@@ -4461,6 +4422,6 @@ theorem periodic_arrival_no_crossing (T P m b k : Nat)
   refine ⟨hl, ?_, ?_⟩
   · simp [centerGate, hw, hrd]
   · simpa only [leftDefect, Int.natCast_zero, Int.neg_zero] using
-      Rule30UOR.DefectFront.center_defect_zero (kit_periodic hc) m (b + (k - 1) + 1) (by omega)
+      Rule30UOR.DefectFront.center_defect_zero (Rule30UOR.MaskedObservation.kit_period hc) m (b + (k - 1) + 1) (by omega)
 
 end Rule30UOR.WittDefect

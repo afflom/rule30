@@ -101,7 +101,7 @@ theorem ledger_split : ∀ t, winWitt 0 t = edgeLedger t ^^^ interiorLedger t :=
   | succ t ih =>
     show phiLinear (winWitt 0 t) ^^^ (carry (row (0 + t)) <<< 1) =
       (phiLinear (edgeLedger t) ^^^ (edgeSource t <<< 1)) ^^^ (phiLinear (interiorLedger t) ^^^ (interior t <<< 1))
-    rw [Nat.zero_add, ih, phiLinear_xor, carry_split, Nat.shiftLeft_xor_distrib]
+    rw [Nat.zero_add, ih, Rule30UOR.Interfaces.phiLinear_xor, carry_split, Nat.shiftLeft_xor_distrib]
     simp only [Nat.xor_assoc, Nat.xor_comm, Rule30UOR.Ledger.xor_left_comm]
 
 /-- **The center is the complement of the XOR of the two diagonals.** -/
@@ -131,11 +131,6 @@ center through `trinomialParity (t-1-m) (t-2m-1)`, the right pair through
 `trinomialParity (t-1-m) (t-2)` when `rdiag 1 m`. The background of the
 center is therefore an explicit 2-automatic expression. -/
 
-theorem phiLinearPow_xor (n a b : Nat) : phiLinearPow n (a ^^^ b) = phiLinearPow n a ^^^ phiLinearPow n b := by
-  induction n with
-  | zero => rfl
-  | succ n ih => rw [phiLinearPow_step, phiLinearPow_step, phiLinearPow_step, ih, phiLinear_xor]
-
 theorem phiLinearPow_shiftLeft (n k y : Nat) : phiLinearPow n (y <<< k) = phiLinearPow n y <<< k := by
   induction n with
   | zero => rfl
@@ -160,23 +155,18 @@ theorem phiLinear_zero : phiLinear 0 = 0 := by
   show (0 ^^^ (0 <<< 1)) ^^^ (0 <<< 2) = 0
   simp
 
-theorem phiLinearPow_zero (n : Nat) : phiLinearPow n 0 = 0 := by
-  induction n with
-  | zero => rfl
-  | succ n ih => rw [phiLinearPow_step, ih, phiLinear_zero]
-
 theorem testBit_edge_propagated (t m : Nat) :
     (phiLinearPow (t - 1 - m) (edgeSource m <<< 1)).testBit t = edgeTerm t m := by
   have h2 : (phiLinearPow (t - 1 - m) ((if rdiag 1 m then 2 else 0) <<< 1)).testBit t =
       (if rdiag 1 m then (if 2 ≤ t then trinomialParity (t - 1 - m) (t - 2) else false) else false) := by
     cases rdiag 1 m
     · show (phiLinearPow (t - 1 - m) (0 <<< 1)).testBit t = false
-      rw [phiLinearPow_shiftLeft, phiLinearPow_zero]
+      rw [phiLinearPow_shiftLeft, Rule30UOR.WittDefect.q_power_zero]
       simp
     · show (phiLinearPow (t - 1 - m) (2 <<< 1)).testBit t = (if 2 ≤ t then trinomialParity (t - 1 - m) (t - 2) else false)
       rw [show (2 : Nat) <<< 1 = 1 <<< 2 from rfl, phiLinearPow_shiftLeft, testBit_phiLinearPow_shift]
   unfold edgeSource edgeTerm
-  rw [Nat.shiftLeft_xor_distrib, phiLinearPow_xor, Nat.testBit_xor, ← Nat.shiftLeft_add,
+  rw [Nat.shiftLeft_xor_distrib, Rule30UOR.Interfaces.phiLinearPow_xor, Nat.testBit_xor, ← Nat.shiftLeft_add,
     phiLinearPow_shiftLeft, testBit_phiLinearPow_shift, h2, Rule30UOR.Scale.bxor_eq]
 
 /-- The partial sums of the propagated edge events. -/
@@ -193,7 +183,7 @@ theorem phiLinear_edgeLedgerSum (t : Nat) : ∀ n, n ≤ t →
     intro hn
     show phiLinear (edgeLedgerSum t n ^^^ phiLinearPow (t - 1 - n) (edgeSource n <<< 1)) =
       edgeLedgerSum (t + 1) n ^^^ phiLinearPow (t + 1 - 1 - n) (edgeSource n <<< 1)
-    rw [phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
+    rw [Rule30UOR.Interfaces.phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
 
 theorem edgeLedger_eq_sum : ∀ t, edgeLedger t = edgeLedgerSum t t := by
   intro t
@@ -288,7 +278,7 @@ theorem testBit_phiLinearPow_conv (n : Nat) : ∀ y t, (phiLinearPow n y).testBi
     unfold conv
     rcases Nat.eq_zero_or_pos y with h0 | hpos
     · subst h0
-      rw [phiLinearPow_zero, Nat.zero_testBit]
+      rw [Rule30UOR.WittDefect.q_power_zero, Nat.zero_testBit]
       rfl
     · obtain ⟨f, rfl⟩ : ∃ f, y = f + 1 := ⟨y - 1, by cfomega⟩
       show (phiLinearPow n (f + 1)).testBit t = (if f + 1 = 0 then false else _)
@@ -297,10 +287,10 @@ theorem testBit_phiLinearPow_conv (n : Nat) : ∀ y t, (phiLinearPow n y).testBi
         convFuel_congr n f ((f + 1) / 2) ((f + 1) / 2) t' (by cfomega) (Nat.le_refl _)
       rw [hrec]
       conv => lhs; rw [nat_eq_shift_xor_mod (f + 1)]
-      rw [phiLinearPow_xor, Nat.testBit_xor, phiLinearPow_shiftLeft, Nat.testBit_shiftLeft]
+      rw [Rule30UOR.Interfaces.phiLinearPow_xor, Nat.testBit_xor, phiLinearPow_shiftLeft, Nat.testBit_shiftLeft]
       have hlow : (phiLinearPow n ((f + 1) % 2)).testBit t = (if (f + 1) % 2 = 1 then trinomialParity n t else false) := by
         rcases Nat.mod_two_eq_zero_or_one (f + 1) with h | h
-        · rw [h, phiLinearPow_zero, if_neg (by decide)]; simp
+        · rw [h, Rule30UOR.WittDefect.q_power_zero, if_neg (by decide)]; simp
         · rw [h, if_pos rfl, phiLinearPow_eq_phiLinPow, testBit_phiLinPow_eq_trinomialParity]
       have hlt : (f + 1) / 2 < f + 1 := Nat.div_lt_self (by cfomega) (by decide)
       rw [hlow, ih ((f + 1) / 2) hlt]
@@ -327,7 +317,7 @@ theorem phiLinear_interiorLedgerSum (t : Nat) : ∀ n, n ≤ t →
     intro hn
     show phiLinear (interiorLedgerSum t n ^^^ phiLinearPow (t - 1 - n) (interior n <<< 1)) =
       interiorLedgerSum (t + 1) n ^^^ phiLinearPow (t + 1 - 1 - n) (interior n <<< 1)
-    rw [phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
+    rw [Rule30UOR.Interfaces.phiLinear_xor, ih (by cfomega), show t + 1 - 1 - n = (t - 1 - n) + 1 by cfomega, phiLinearPow_step]
 
 theorem interiorLedger_eq_sum : ∀ t, interiorLedger t = interiorLedgerSum t t := by
   intro t

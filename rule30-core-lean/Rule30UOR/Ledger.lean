@@ -55,16 +55,6 @@ theorem phi_eq_linear_xor_carry (y : Nat) : phi y = phiLinear y ^^^ (carry y <<<
   rw [or_eq_xor_xor_and, shiftLeft_one_and_two]
   simp only [Nat.xor_assoc]
 
-theorem phiLinear_xor (a b : Nat) : phiLinear (a ^^^ b) = phiLinear a ^^^ phiLinear b := by
-  show ((a ^^^ b) ^^^ ((a ^^^ b) <<< 1)) ^^^ ((a ^^^ b) <<< 2) =
-    ((a ^^^ (a <<< 1)) ^^^ (a <<< 2)) ^^^ ((b ^^^ (b <<< 1)) ^^^ (b <<< 2))
-  rw [Nat.shiftLeft_xor_distrib, Nat.shiftLeft_xor_distrib]
-  apply Nat.eq_of_testBit_eq
-  intro i
-  simp only [Nat.testBit_xor]
-  cases a.testBit i <;> cases b.testBit i <;> cases (a <<< 1).testBit i <;> cases (b <<< 1).testBit i <;>
-    cases (a <<< 2).testBit i <;> cases (b <<< 2).testBit i <;> rfl
-
 /-! ## The row as linear evolution plus ledger -/
 
 /-- `row t = q^t · 1 ⊕ ledger t`. -/
@@ -73,7 +63,7 @@ theorem row_eq_linear_xor_ledger (t : Nat) : row t = phiLinearPow t 1 ^^^ winWit
   | zero => rfl
   | succ t ih =>
     show phi (row t) = phiLinearPow (Nat.succ t) 1 ^^^ winWitt 0 (Nat.succ t)
-    rw [phiLinearPow_step, winWitt_step, phi_eq_linear_xor_carry, ih, phiLinear_xor, Nat.zero_add, ← ih]
+    rw [phiLinearPow_step, winWitt_step, phi_eq_linear_xor_carry, ih, Rule30UOR.Interfaces.phiLinear_xor, Nat.zero_add, ← ih]
     show _ = phiLinear (phiLinearPow t 1) ^^^ (phiLinear (winWitt 0 t) ^^^ (carry (row t) <<< 1))
     simp only [Nat.xor_assoc]
 

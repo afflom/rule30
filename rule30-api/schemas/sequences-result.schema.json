@@ -1,0 +1,89 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/sequences-result/1",
+ "title": "sequences --json: the basis (every sequence with its lexeme, parameters and \u03ba-label), the excluded notions, and the problems of the committed data",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "window",
+  "requested_window",
+  "sequences",
+  "excluded",
+  "problems"
+ ],
+ "properties": {
+  "window": {
+   "type": [
+    "integer",
+    "null"
+   ]
+  },
+  "requested_window": {
+   "type": "integer"
+  },
+  "sequences": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "lexeme",
+     "parameters",
+     "kappa"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "lexeme": {
+      "type": "string"
+     },
+     "parameters": {
+      "type": "array",
+      "items": {
+       "type": "integer"
+      }
+     },
+     "kappa": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+     }
+    }
+   }
+  },
+  "excluded": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "lexeme",
+     "lean",
+     "reason"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "lexeme": {
+      "type": "string"
+     },
+     "lean": {
+      "type": "string"
+     },
+     "reason": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "problems": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  }
+ }
+}

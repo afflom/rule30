@@ -194,11 +194,11 @@ class FrontierRenderTests(unittest.TestCase):
         repo.FRONTIER = Path(self.tmp.name) / "frontier.toml"
         self.addCleanup(lambda: setattr(repo, "FRONTIER", self.old))
         frontier.add("rcc", "the collision reduction", status="proved",
-                     lean="Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision")
+                     lean="Rule30UOR.CentralCollision.problem1_iff_no_recurrent_central_collision")
         frontier.add("ghost", "no published theorem", status="refuted", lean="Rule30UOR.Nope.x")
 
     def test_render_restates_published_claims_and_reports_the_rest(self):
-        lean = self.FakeLean({"Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision": self.IFF,
+        lean = self.FakeLean({"Rule30UOR.CentralCollision.problem1_iff_no_recurrent_central_collision": self.IFF,
                               "Rule30UOR.Nope.x": self.IFF})
         text1, skipped = frontier.render(Lexicon(), lean)
         text2, _ = frontier.render(Lexicon(), lean)
@@ -255,6 +255,91 @@ class ModuleRegisterTests(unittest.TestCase):
         self.assertEqual(again["changed"], [])
         with self.assertRaises(ValueError):
             self.modules.register("Rule30UOR.bad-name", lakefile=self.lakefile, audit=self.audit)
+
+
+class ConsolidateTests(unittest.TestCase):
+    """One proof per statement: the planner keeps the proof the others lean on, adds imports only
+    along the grain, and the rewrite never touches a declaration's own name."""
+    A = ("module\npublic import Init\n@[expose] public section\nnamespace Rule30UOR.A\n\n"
+         "/-- the proof -/\ntheorem t (n : Nat) : n + 0 = n := by\n  simp\n\n"
+         "theorem t_prop (n : Nat) : n + 0 = n :=\n  t n\n\n"
+         "theorem use (n : Nat) : n + 0 = n := t_prop n\n\nend Rule30UOR.A\n")
+    B = ("module\npublic import Rule30UOR.A\n@[expose] public section\nnamespace Rule30UOR.B\n\n"
+         "theorem t (m : Nat) : m + 0 = m := Rule30UOR.A.t m\n\n"
+         "theorem w (m : Nat) : m + 0 = m := t m\n\nend Rule30UOR.B\n")
+
+    def setUp(self):
+        from tools.r30 import consolidate
+        self.c = consolidate
+        self.sources = {"Rule30UOR.A": self.A, "Rule30UOR.B": self.B}
+
+    def test_span_takes_the_docstring_and_stops_at_the_next_item(self):
+        a, b = self.c.declaration_span(self.A, "Rule30UOR.A.t")
+        self.assertTrue(self.A[a:b].startswith("/-- the proof -/\ntheorem t "))
+        self.assertTrue(self.A[b:].startswith("theorem t_prop"))
+        self.assertIsNone(self.c.declaration_span(self.A, "Rule30UOR.A.absent"))
+        self.assertIsNone(self.c.declaration_span(self.A, "Rule30UOR.B.t"))
+
+    def test_the_wrapper_goes_and_the_proof_stays(self):
+        groups = {"k1": [("Rule30UOR.A", "Rule30UOR.A.t"), ("Rule30UOR.A", "Rule30UOR.A.t_prop")]}
+        plan = self.c.plan(groups, self.sources)
+        self.assertEqual(plan["keep"][0]["canonical"], "Rule30UOR.A.t")
+        self.assertEqual([r["name"] for r in plan["keep"][0]["removed"]], ["Rule30UOR.A.t_prop"])
+
+    def test_the_upstream_module_keeps_the_proof_and_no_import_is_added(self):
+        groups = {"k": [("Rule30UOR.A", "Rule30UOR.A.t"), ("Rule30UOR.B", "Rule30UOR.B.t")]}
+        row = self.c.plan(groups, self.sources)["keep"][0]
+        self.assertEqual((row["canonical"], row["imports"]), ("Rule30UOR.A.t", []))
+
+    def test_rewrite_spares_declaration_names(self):
+        p = self.c.name_pattern("Rule30UOR.B.t", True)
+        text = self.c.without(self.B, self.c.declaration_span(self.B, "Rule30UOR.B.t"))
+        out = p.sub("Rule30UOR.A.t", text)
+        self.assertIn("theorem w (m : Nat) : m + 0 = m := Rule30UOR.A.t m", out)
+        self.assertEqual(p.sub("X", "theorem t (m : Nat)"), "theorem t (m : Nat)")
+        self.assertNotIn("\n\n\n", out)
+
+    def test_bare_names_are_rewritten_only_where_visible(self):
+        self.assertTrue(self.c.short_visible("Rule30UOR.B.t", self.B, "Rule30UOR.B", "Rule30UOR.B"))
+        self.assertFalse(self.c.short_visible("Rule30UOR.B.t", self.A, "Rule30UOR.A", "Rule30UOR.B"))
+        self.assertTrue(self.c.short_visible("Rule30UOR.B.t", "open B\n", "Rule30UOR.C", "Rule30UOR.B"))
+
+    def test_opens_read_continuation_lines(self):
+        text = "open Rule30UOR.Core\nopen Rule30UOR.Ledger\n  Rule30UOR.DyadicRow Rule30UOR.Band\n\ntheorem x : True := trivial\n"
+        self.assertIn("Rule30UOR.DyadicRow", self.c.opens(text))
+        self.assertTrue(self.c.short_visible("Rule30UOR.DyadicRow.f", text, "Rule30UOR.K", "Rule30UOR.DyadicRow"))
+        self.assertNotIn("theorem", self.c.opens(text))
+
+    def test_private_theorems_keep_their_source_name_and_scope(self):
+        full = "_private.Rule30UOR.A.0.Rule30UOR.A.helper"
+        self.assertEqual(self.c.source_name(full), "Rule30UOR.A.helper")
+        text = "namespace Rule30UOR.A\n\nprivate theorem helper : True := trivial\n\ntheorem u : True := helper\n"
+        self.assertIsNotNone(self.c.declaration_span(text, full))
+        self.assertEqual(self.c.users_of(full, "Rule30UOR.A", {"Rule30UOR.A": text, "Rule30UOR.B": "helper"}),
+                         {"Rule30UOR.A"})
+
+    def test_a_shadowed_or_scoped_open_is_not_visible(self):
+        self.assertFalse(self.c.short_visible("Rule30UOR.B.t", "open Rule30UOR.B in\ntheorem x := t\n", "M", "Rule30UOR.B"))
+        self.assertTrue(self.c.short_visible("Rule30UOR.B.t", "open Rule30UOR.B (t)\n", "M", "Rule30UOR.B"))
+        self.assertFalse(self.c.short_visible("Rule30UOR.B.t", "open Rule30UOR.B (w)\n", "M", "Rule30UOR.B"))
+        self.assertFalse(self.c.short_visible("Rule30UOR.B.t", "open Rule30UOR.B hiding t\n", "M", "Rule30UOR.B"))
+        shadow = "open Rule30UOR.B\nnamespace Rule30UOR.C\ntheorem t : True := trivial\nend Rule30UOR.C\n"
+        self.assertFalse(self.c.short_visible("Rule30UOR.B.t", shadow, "Rule30UOR.C", "Rule30UOR.B"))
+
+    def test_a_canonical_declared_after_a_reference_it_takes_is_not_chosen(self):
+        text = ("namespace Rule30UOR.A\n\ntheorem late_user : 0 + 0 = 0 := early_copy\n\n"
+                "theorem early_copy : 0 + 0 = 0 := rfl\n\ntheorem later : 0 + 0 = 0 := rfl\n\nend Rule30UOR.A\n")
+        groups = {"k": [("Rule30UOR.A", "Rule30UOR.A.early_copy"), ("Rule30UOR.A", "Rule30UOR.A.later")]}
+        plan = self.c.plan(groups, {"Rule30UOR.A": text})
+        self.assertEqual(plan["keep"][0]["canonical"], "Rule30UOR.A.early_copy")
+
+    def test_add_import_is_idempotent(self):
+        once = self.c.add_import(self.B, "Rule30UOR.Z")
+        self.assertEqual(self.c.add_import(once, "Rule30UOR.Z"), once)
+
+    def test_add_import_follows_the_last_import(self):
+        self.assertIn("public import Rule30UOR.A\npublic import Rule30UOR.Z\n",
+                      self.c.add_import(self.B, "Rule30UOR.Z"))
 
 
 class ApiModelTests(unittest.TestCase):
@@ -419,7 +504,9 @@ class ApiModelTests(unittest.TestCase):
                                      {"id": "b", "status": "open", "lean": "", "depends": ["a"]}])
         self.assertIn("name: registerDependsResolve", text)
         self.assertIn("proof: decide{}", text)
-        self.assertIn('(record Claim {id := "b", status := "open", lean := "", depends := (cons "a" (nil String))})', text)
+        self.assertIn('(record Claim {id := "b", status := "open", lean := "", depends := (cons "a" (nil String)), '
+                      'relation := (nil String), kappa := ""})', text)
+        self.assertIn("name: registerObservedHaveRelations", text)
 
 
 class ConvertModelTests(unittest.TestCase):
@@ -2030,6 +2117,206 @@ class CoreModelTests(unittest.TestCase):
             site.render_view(out)
             self.assertEqual((out / "core-vectors.json").read_text(), coremodel.VECTORS.read_text())
 
+
+
+
+class DiscoveryTests(unittest.TestCase):
+    """Induction mechanized (suite `discovery` of ids.toml): the basis of the
+    map, the relation and recurrence engines of Discovery.lex.tex, their
+    certified roots, `bin/r30 discover`, and the register's `observed`
+    status. Each test ends in the id it exercises."""
+
+    def setUp(self):
+        from tools.r30 import sequencemodel
+        self.data = sequencemodel.load()
+        if self.data is None:
+            self.skipTest("model/sequences.toml is absent (bin/r30 sequences --write)")
+
+    def test_basis_is_declared_labelled_and_evaluated_discovery_basis(self):
+        from tools.r30 import sequencemodel, coremodel
+        self.assertEqual(sequencemodel.problems(self.data), [])
+        self.assertTrue(sequencemodel.check()["ok"], sequencemodel.check()["reason"])
+        rows = self.data["sequence"]
+        self.assertEqual([r["id"] for r in rows], [e["id"] for e in sequencemodel.basis()])
+        self.assertEqual(len(rows), 79)
+        for r in rows:
+            self.assertEqual(r["kappa"], sequencemodel.kappa(["sequence", r["lexeme"], *map(str, r["parameters"])]))
+        self.assertEqual(len({r["kappa"] for r in rows}), len(rows))
+        w = sequencemodel.windows(self.data)
+        n = self.data["window"]
+        self.assertEqual(w["center"][:32], coremodel.KNOWN_CENTERS)
+        self.assertEqual(w["time-parity"], [t % 2 for t in range(n)])
+        self.assertEqual(w["one"], [1] * n)
+        self.assertEqual(w["center"][:256], coremodel.REPLICA.centers(256))
+        self.assertEqual(w["rdiag(5)"], [coremodel.REPLICA.rdiag(5, t) for t in range(n)])
+        # the evaluation program proves each evaluation form equal to its host constant
+        program = sequencemodel.lean_program(64)
+        for name in ("cell_memo", "ldiag_memo", "towerWord_memo", "exposed_memo", "coneZero_memo", "leftCone_memo",
+                     "maskedColumn_memo", "rdiag_memo", "center_memo"):
+            self.assertIn(f"theorem {name}", program)
+        self.assertNotIn("sorry", program)
+        text = sequencemodel.MODULE.read_text()
+        for t in sequencemodel.THEOREMS:
+            self.assertIn(f"name: {t['name']},", text)
+        self.assertEqual({x["id"] for x in self.data["excluded"]}, {"dyadic-row", "block-parity", "witt-resp"})
+        bad = {**self.data, "sequence": [{**rows[0], "kappa": rows[1]["kappa"]}] + rows[1:]}
+        self.assertTrue(any("κ-label" in p for p in sequencemodel.problems(bad)))
+
+    def test_relation_engine_contract_fixtures_and_validators_relation_search(self):
+        from tools.r30 import discoverymodel as dm
+        text = dm.MODULE.read_text()
+        self.assertTrue(dm.check()["ok"], dm.check()["reason"])
+        for needle in ("contract{", "name: RelationSearch", "precondition: IsWindow", "postcondition: AllRelationsHold",
+                       "realization{", "name: RelationEngine", "model{", "name: RelationSearchModel",
+                       "name: is_window_check_sound", "name: all_relations_hold_check_sound", "name: zero_word_iff",
+                       "induction{", "name: relationFixtureFindsTheRegister", "name: relationFixtureHasNoFalseRelation"):
+            self.assertIn(needle, text)
+        fx = dm.fixtures(self.data)
+        found = [{dm.FIXTURE_COLUMNS[i] for i, bit in enumerate(r) if bit} for r in fx["relations"]]
+        for rel in ({"edge-diagonal", "time-parity"}, {"left-cone", "one", "center"}, {"cone-zero", "cell(-1)"},
+                    {"shift:center", "center", "cell(-1)", "masked-column"}):
+            self.assertIn(rel, found)
+        self.assertEqual(len(found), 4)
+        words = fx["window"][1]
+        self.assertEqual(dm.Mirror.window_misfits(fx["window"]), 0)
+        self.assertEqual(dm.Mirror.relation_residue(words, fx["relations"]), 0)
+        false = [list(fx["relations"][0])]
+        false[0][2] ^= 1
+        self.assertGreater(dm.Mirror.relation_residue(words, false), 0)
+        self.assertGreater(dm.Mirror.relation_residue(words, [[0] * len(words)]), 0)
+        self.assertGreater(dm.Mirror.window_misfits((fx["window"][0], [words[0] + [1 << 32]] + words[1:])), 0)
+        self.assertEqual(dm.Mirror.find_relations((32, [[5], [3], [6]])), [[1, 1, 1]])
+        self.assertEqual([t["id"] for t in dm.TRANSFORMS], ["base", "shift", "even", "odd", "and"])
+        kappas = dm.kappas_of(self.data)
+        self.assertEqual(dm.column_kappa("and:center:cell(1)", kappas), dm.column_kappa("and:cell(1):center", kappas))
+        self.assertNotEqual(dm.column_kappa("shift:center", kappas), dm.column_kappa("center", kappas))
+
+    def test_berlekamp_massey_certifies_recurrences_recurrence_search(self):
+        from tools.r30 import discoverymodel as dm, sequencemodel
+        text = dm.MODULE.read_text()
+        for needle in ("name: RecurrenceSearch", "precondition: IsSequenceWindow", "postcondition: SatisfiesRecurrence",
+                       "name: RecurrenceEngine", "name: RecurrenceSearchModel", "name: timeParityRecurrence",
+                       "name: towerWordTwoRecurrence", "name: periodThreeRecurrence"):
+            self.assertIn(needle, text)
+        mirror = dm.Mirror
+        self.assertEqual(mirror.find_recurrence([t % 2 for t in range(64)]), [1, 0, 1])
+        self.assertEqual(mirror.find_recurrence(([1, 0, 0] * 22)[:64]), [1, 0, 0, 1])
+        center = sequencemodel.windows(self.data)["center"]
+        conn = mirror.find_recurrence(center)
+        self.assertEqual(mirror.recurrence_defects(center, conn), 0)
+        self.assertGreater(len(conn) - 1, len(center) // 2 - 8)
+        self.assertGreater(mirror.recurrence_defects([t % 2 for t in range(64)], [1, 1]), 0)
+        self.assertEqual(mirror.recurrence_defects([0] * 8, [0, 1]), 1)  # a leading coefficient 0 is refused
+        for rec in dm.fixtures(self.data)["recurrences"]:
+            self.assertEqual(rec["found"], rec["expected"], rec["name"])
+
+    def test_roots_are_checked_both_ways_and_requested_discovery_roots(self):
+        from tools.r30 import discoverymodel as dm, production
+        text = dm.MODULE.read_text()
+        self.assertEqual(set(dm.PRODUCTION_ROOTS), {"buildColumns", "findRelations", "findRecurrence"})
+        self.assertIn("(checked RelationSearchModel window with [postcondition, precondition])", text)
+        self.assertIn("(checked RecurrenceSearchModel sq with [postcondition, precondition])", text)
+        roots = {r["root"]: r for r in production.roots()}
+        for name in dm.PRODUCTION_ROOTS:
+            r = roots[f"{dm.LEAN_MODULE}.{name}"]
+            self.assertEqual(r["effects"], ["allocation", "overflow", "recursion"])
+            self.assertEqual(r["targets"], ["rust-std"])
+        self.assertIn("Rule30Api.Discovery.findRelations", (production.RUNTIME_ROOTS).read_text())
+        self.assertIn("rule30_api_discovery_find_relations", production.REQUEST.read_text())
+
+    def test_certified_runtime_agrees_with_the_mirror_discovery_roots(self):
+        """When `bin/r30 api production` has published the discovery packages and
+        cargo is present, the generated harness drives the certified roots and
+        they return exactly what the mirror returns on the fixture (the bundle is
+        never committed, so without one the check is skipped)."""
+        import shutil
+        from tools.r30 import discover_rust, discoverymodel as dm
+        if not discover_rust.bundles() or not shutil.which("cargo"):
+            self.skipTest("no production bundle with the discovery packages, or no cargo")
+        kind, runner = discover_rust.locate()
+        self.assertEqual(kind, "rust", runner)
+        fx = dm.fixtures(self.data)
+        bases = dm.bases_of(self.data)
+        words = runner.build_columns(dm.FIXTURE_WIDTH, bases, fx["specs"])
+        self.assertEqual(words, fx["window"][1])
+        self.assertEqual(runner.find_relations(dm.FIXTURE_WIDTH, words), fx["relations"])
+        self.assertEqual(runner.find_recurrences([r["bits"] for r in fx["recurrences"]]), [r["found"] for r in fx["recurrences"]])
+
+    def test_discover_classifies_relations_with_certificates_discover_command(self):
+        import json
+        from tools.r30 import discover, discoverymodel as dm, schema, prismmodel
+        before = repo.FRONTIER.read_text()
+        r = discover.run(window=256, degree=2, engine=("python", "test"))
+        self.assertEqual(repo.FRONTIER.read_text(), before)
+        self.assertEqual(r["runtime"], "python")
+        self.assertEqual(r["columns"], 79 * 4 + 21)
+        kappas = dm.kappas_of(self.data)
+        classes = {}
+        for x in r["relations"]:
+            self.assertEqual(x["kappa"], dm.relation_kappa(x["columns"], kappas))
+            self.assertLessEqual(x["chance_log2"], 0)
+            classes.setdefault(x["class"], []).append(set(x["columns"]))
+        # cone-zero = cell(-1) follows from the increment law (register), the rule and the masked column
+        self.assertIn({"cone-zero", "cell(-1)"}, classes["consequence"])
+        self.assertIn({"edge-diagonal", "time-parity"}, classes["register"])
+        self.assertIn({"one", "time-parity", "center", "low-diagonal", "interior-three-diagonal"}, classes["new"])
+        self.assertLess(max(x["rank"] for x in r["relations"]), r["window"])
+        self.assertIn({"one", "rdiag(0)"}, classes["trivial"])
+        self.assertEqual(sum(r["counts"].values()), len(r["relations"]))
+        doc = json.loads((prismmodel.SCHEMAS / "discover-result.schema.json").read_text())
+        schema.validate(doc, json.loads(json.dumps(r)))
+        rec = {x["id"]: x for x in r["recurrences"]}
+        self.assertEqual(rec["time-parity"]["connection"], [1, 0, 1])
+        self.assertEqual(rec["time-parity"]["margin"], self.data["window"] - 4)
+        self.assertLessEqual(rec["center"]["margin"], 8)  # the center's window has no short recurrence
+        with self.assertRaises(discover.Refused):
+            discover.run(window=self.data["window"], degree=1, engine=("python", "test"))
+        self.assertIn("relations:", discover.render(r))
+
+    def test_observed_claims_are_validated_on_their_window_observed_status(self):
+        import tempfile as tf
+        from tools.r30 import observermodel, registermodel
+        self.assertIn("observed", frontier.STATUSES)
+        tmp = tf.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        old = repo.FRONTIER
+        repo.FRONTIER = Path(tmp.name) / "frontier.toml"
+        self.addCleanup(lambda: setattr(repo, "FRONTIER", old))
+        frontier.add("true-one", "cone-zero is cell(-1)", status="observed", relation=["cone-zero", "cell(-1)"], window=64)
+        frontier.add("proved-one", "edge parity", status="proved", lean="X.y", relation=["edge-diagonal", "time-parity"])
+        self.assertEqual(frontier.relation_problems(), [])
+        c = frontier.list_claims()[0]
+        self.assertEqual(c["window"], 64)
+        self.assertTrue(c["kappa"].startswith("sha256:"))
+        with self.assertRaises(ValueError):
+            frontier.add("bare", "no relation", status="observed")
+        with self.assertRaises(ValueError):
+            frontier.add("ghost", "x", status="observed", relation=["no-such-sequence"])
+        frontier.add("false-one", "center is the time parity", status="observed", relation=["center", "time-parity"])
+        problems = frontier.relation_problems()
+        self.assertEqual(len(problems), 1)
+        self.assertIn("false-one: its relation does not vanish", problems[0])
+        claims = frontier.list_claims()
+        d = observermodel.data(claims=claims)
+        for q in d["quadruples"]:
+            self.assertNotIn("true-one", q["realQualities"] + q["withdrawn"])
+        text = registermodel.render(registermodel.rows())
+        self.assertIn("name: observedHaveRelations", text)
+        self.assertIn('"cone-zero"', text)
+
+    def test_candidates_are_reported_never_asserted_discovery_candidates(self):
+        import tomllib
+        from tools.r30 import prismmodel
+        rows = {r["id"]: r for r in tomllib.loads(prismmodel.ids(prismmodel.rows()))["id"]}
+        self.assertEqual(rows["discovery-candidates"]["level"], "open")
+        self.assertEqual(prismmodel.LEVEL["observed"], "open")
+        feature = (prismmodel.FEATURES / "discovery.feature").read_text()
+        self.assertIn("@discovery-candidates @open", feature)
+        self.assertIn("never asserted", feature)
+        for x in prismmodel.API_IDS:
+            if x["suite"] == "discovery":
+                suffix = x["id"].replace("-", "_")
+                self.assertTrue(any(name.endswith(suffix) for name in dir(DiscoveryTests)), x["id"])
 
 
 if __name__ == "__main__":

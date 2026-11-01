@@ -1,0 +1,895 @@
+\begin{lexlean}{Discovery}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Register}
+\importmodule{Sequences}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: xorBits,
+  parameters: [f : Nat, a : Nat, c : Nat],
+  result: Nat,
+  body: (match f
+    | Nat.zero => 0
+    | Nat.succ g => (let v : Nat := (xorBits g (prim quotient a 2 0 : Nat) (prim quotient c 2 0 : Nat)); ((prim remainder (a + c) 2 0 : Nat) + (v + v)))),
+  axioms: [],
+  recursive_argument: f,
+  executable: true
+}
+
+definition{
+  name: xorWord,
+  parameters: [w : (List Nat), u : (List Nat)],
+  result: (List Nat),
+  body: (match w
+    | List.nil => u
+    | List.cons x xs => (match u
+    | List.nil => (cons x xs)
+    | List.cons y ys => (cons (xorBits 32 x y) (xorWord xs ys)))),
+  axioms: [],
+  recursive_argument: w,
+  executable: true
+}
+
+definition{
+  name: zeroWord,
+  parameters: [w : (List Nat)],
+  result: Bool,
+  body: (match w
+    | List.nil => true
+    | List.cons x xs => ((x =? 0) && (zeroWord xs))),
+  axioms: [],
+  recursive_argument: w,
+  executable: true
+}
+
+definition{
+  name: chunkBit,
+  parameters: [k : Nat, c : Nat],
+  result: Bool,
+  body: (match k
+    | Nat.zero => ((prim remainder c 2 0 : Nat) =? 1)
+    | Nat.succ j => (chunkBit j (prim quotient c 2 0 : Nat))),
+  axioms: [],
+  recursive_argument: k,
+  executable: true
+}
+
+definition{
+  name: wordBit,
+  parameters: [w : (List Nat), i : Nat],
+  result: Bool,
+  body: (match w
+    | List.nil => false
+    | List.cons x xs => (if (i <? 32) then (chunkBit i x) else (wordBit xs (prim subtract i 32 : Nat)))),
+  axioms: [],
+  recursive_argument: w,
+  executable: true
+}
+
+definition{
+  name: lowestInChunk,
+  parameters: [f : Nat, c : Nat],
+  result: Nat,
+  body: (match f
+    | Nat.zero => 0
+    | Nat.succ g => (if ((prim remainder c 2 0 : Nat) =? 1) then 0 else (1 + (lowestInChunk g (prim quotient c 2 0 : Nat))))),
+  axioms: [],
+  recursive_argument: f,
+  executable: true
+}
+
+definition{
+  name: lowestBit,
+  parameters: [w : (List Nat)],
+  result: Nat,
+  body: (match w
+    | List.nil => 0
+    | List.cons x xs => (if (x =? 0) then (32 + (lowestBit xs)) else (lowestInChunk 32 x))),
+  axioms: [],
+  recursive_argument: w,
+  executable: true
+}
+
+definition{
+  name: unpackChunk,
+  parameters: [f : Nat, c : Nat],
+  result: (List Bool),
+  body: (match f
+    | Nat.zero => (nil Bool)
+    | Nat.succ g => (cons ((prim remainder c 2 0 : Nat) =? 1) (unpackChunk g (prim quotient c 2 0 : Nat)))),
+  axioms: [],
+  recursive_argument: f,
+  executable: true
+}
+
+definition{
+  name: wordBits,
+  parameters: [w : (List Nat)],
+  result: (List Bool),
+  body: (match w
+    | List.nil => (nil Bool)
+    | List.cons x xs => (prim append (unpackChunk 32 x) (wordBits xs) : (List Bool))),
+  axioms: [],
+  recursive_argument: w,
+  executable: true
+}
+
+definition{
+  name: packFrom,
+  parameters: [bs : (List Bool), pos : Nat, acc : Nat, place : Nat],
+  result: (List Nat),
+  body: (match bs
+    | List.nil => (if (pos =? 0) then (nil Nat) else (cons acc (nil Nat)))
+    | List.cons x xs => (let v : Nat := (acc + (if x then place else 0)); (if ((pos + 1) =? 32) then (cons v (packFrom xs 0 0 1)) else (packFrom xs (pos + 1) v (place + place))))),
+  axioms: [],
+  recursive_argument: bs,
+  executable: true
+}
+
+definition{
+  name: packWord,
+  parameters: [bs : (List Bool)],
+  result: (List Nat),
+  body: (packFrom bs 0 0 1),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: takeBits,
+  parameters: [bs : (List Bool), k : Nat],
+  result: (List Bool),
+  body: (match bs
+    | List.nil => (nil Bool)
+    | List.cons x xs => (if (k =? 0) then (nil Bool) else (cons x (takeBits xs (prim subtract k 1 : Nat))))),
+  axioms: [],
+  recursive_argument: bs,
+  executable: true
+}
+
+definition{
+  name: dropFirst,
+  parameters: [bs : (List Bool)],
+  result: (List Bool),
+  body: (match bs
+    | List.nil => (nil Bool)
+    | List.cons x xs => xs),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: everyOther,
+  parameters: [bs : (List Bool), keep : Bool],
+  result: (List Bool),
+  body: (match bs
+    | List.nil => (nil Bool)
+    | List.cons x xs => (if keep then (cons x (everyOther xs false)) else (everyOther xs true))),
+  axioms: [],
+  recursive_argument: bs,
+  executable: true
+}
+
+definition{
+  name: andBits,
+  parameters: [bs : (List Bool), cs : (List Bool)],
+  result: (List Bool),
+  body: (match bs
+    | List.nil => (nil Bool)
+    | List.cons x xs => (match cs
+    | List.nil => (nil Bool)
+    | List.cons y ys => (cons (x && y) (andBits xs ys)))),
+  axioms: [],
+  recursive_argument: bs,
+  executable: true
+}
+
+definition{
+  name: nthWord,
+  parameters: [ws : (List (List Nat)), i : Nat],
+  result: (List Nat),
+  body: (match ws
+    | List.nil => (nil Nat)
+    | List.cons x xs => (if (i =? 0) then x else (nthWord xs (prim subtract i 1 : Nat)))),
+  axioms: [],
+  recursive_argument: ws,
+  executable: true
+}
+
+definition{
+  name: columnBits,
+  parameters: [width : Nat, bases : (List (List Nat)), spec : (Nat * (Nat * Nat))],
+  result: (List Bool),
+  body: (let baseBits : (List Bool) := (wordBits (nthWord bases (first (second spec)))); (if ((first spec) =? 0) then (takeBits baseBits width) else (if ((first spec) =? 1) then (takeBits (dropFirst baseBits) width) else (if ((first spec) =? 2) then (takeBits (everyOther baseBits true) width) else (if ((first spec) =? 3) then (takeBits (everyOther baseBits false) width) else (andBits (takeBits baseBits width) (takeBits (wordBits (nthWord bases (second (second spec)))) width))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: buildColumns,
+  parameters: [width : Nat, bases : (List (List Nat)), specs : (List (Nat * (Nat * Nat)))],
+  result: (List (List Nat)),
+  body: (match specs
+    | List.nil => (nil (List Nat))
+    | List.cons x xs => (cons (packWord (columnBits width bases x)) (buildColumns width bases xs))),
+  axioms: [],
+  recursive_argument: specs,
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: xorMask,
+  parameters: [ms : (List Bool), ns : (List Bool)],
+  result: (List Bool),
+  body: (match ms
+    | List.nil => ns
+    | List.cons x xs => (match ns
+    | List.nil => (cons x xs)
+    | List.cons y ys => (cons (if x then (not y) else y) (xorMask xs ys)))),
+  axioms: [],
+  recursive_argument: ms,
+  executable: true
+}
+
+definition{
+  name: maskAt,
+  parameters: [m : Nat, i : Nat, pos : Nat],
+  result: (List Bool),
+  body: (match m
+    | Nat.zero => (nil Bool)
+    | Nat.succ k => (cons (pos =? i) (maskAt k i (pos + 1)))),
+  axioms: [],
+  recursive_argument: m,
+  executable: true
+}
+
+structure{
+  name: Pivot,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: position, type: Nat},
+    {name: word, type: (List Nat)},
+    {name: mask, type: (List Bool)}
+  ]
+}
+
+definition{
+  name: reduce,
+  parameters: [ps : (List Pivot), w : (List Nat), mk : (List Bool)],
+  result: ((List Nat) * (List Bool)),
+  body: (match ps
+    | List.nil => (w, mk)
+    | List.cons x xs => (if (wordBit w (project x position)) then (reduce xs (xorWord w (project x word)) (xorMask mk (project x mask))) else (reduce xs w mk))),
+  axioms: [],
+  recursive_argument: ps,
+  executable: true
+}
+
+definition{
+  name: eliminate,
+  parameters: [ws : (List (List Nat)), index : Nat, m : Nat, ps : (List Pivot)],
+  result: (List (List Bool)),
+  body: (match ws
+    | List.nil => (nil (List Bool))
+    | List.cons x xs => (let r : ((List Nat) * (List Bool)) := (reduce ps x (maskAt m index 0)); (if (zeroWord (first r)) then (cons (second r) (eliminate xs (index + 1) m ps)) else (eliminate xs (index + 1) m (prim append ps (cons (record Pivot {position := (lowestBit (first r)), word := (first r), mask := (second r)}) (nil Pivot)) : (List Pivot)))))),
+  axioms: [],
+  recursive_argument: ws,
+  executable: true
+}
+
+definition{
+  name: findRelationsOn,
+  parameters: [window : (Nat * (List (List Nat)))],
+  result: (List (List Bool)),
+  body: (eliminate (second window) 0 (prim length (second window) : Nat) (nil Pivot)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: selectedXor,
+  parameters: [ws : (List (List Nat)), mk : (List Bool)],
+  result: (List Nat),
+  body: (match ws
+    | List.nil => (nil Nat)
+    | List.cons x xs => (match mk
+    | List.nil => (nil Nat)
+    | List.cons y ys => (if y then (xorWord x (selectedXor xs ys)) else (selectedXor xs ys)))),
+  axioms: [],
+  recursive_argument: ws,
+  executable: true
+}
+
+definition{
+  name: maskWeight,
+  parameters: [mk : (List Bool)],
+  result: Nat,
+  body: (match mk
+    | List.nil => 0
+    | List.cons y ys => ((if y then 1 else 0) + (maskWeight ys))),
+  axioms: [],
+  recursive_argument: mk,
+  executable: true
+}
+
+definition{
+  name: chunksAbove,
+  parameters: [w : (List Nat)],
+  result: Nat,
+  body: (match w
+    | List.nil => 0
+    | List.cons x xs => ((if (x <? 4294967296) then 0 else 1) + (chunksAbove xs))),
+  axioms: [],
+  recursive_argument: w,
+  executable: true
+}
+
+definition{
+  name: windowMisfits,
+  parameters: [width : Nat, ws : (List (List Nat))],
+  result: Nat,
+  body: (match ws
+    | List.nil => 0
+    | List.cons x xs => (((if ((prim multiply (prim length x : Nat) 32 : Nat) =? width) then 0 else 1) + (chunksAbove x)) + (windowMisfits width xs))),
+  axioms: [],
+  recursive_argument: ws,
+  executable: true
+}
+
+definition{
+  name: IsWindow,
+  parameters: [window : (Nat * (List (List Nat)))],
+  result: Prop,
+  body: ((windowMisfits (first window) (second window)) = 0),
+  axioms: []
+}
+
+definition{
+  name: isWindowCheck,
+  parameters: [window : (Nat * (List (List Nat)))],
+  result: Bool,
+  body: ((windowMisfits (first window) (second window)) =? 0),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: is_window_check_sound,
+  parameters: [window : (Nat * (List (List Nat)))],
+  statement: (((isWindowCheck window) = true) -> (IsWindow window)),
+  proof: linear_arithmetic{definitions: [IsWindow, isWindowCheck]},
+  axioms: [propext]
+}
+
+definition{
+  name: relationResidue,
+  parameters: [ws : (List (List Nat)), rs : (List (List Bool))],
+  result: Nat,
+  body: (match rs
+    | List.nil => 0
+    | List.cons r rest => ((((if (zeroWord (selectedXor ws r)) then 0 else 1) + (if ((maskWeight r) =? 0) then 1 else 0)) + (if ((prim length r : Nat) =? (prim length ws : Nat)) then 0 else 1)) + (relationResidue ws rest))),
+  axioms: [],
+  recursive_argument: rs,
+  executable: true
+}
+
+definition{
+  name: AllRelationsHold,
+  parameters: [window : (Nat * (List (List Nat))), found : (List (List Bool))],
+  result: Prop,
+  body: ((relationResidue (second window) found) = 0),
+  axioms: []
+}
+
+definition{
+  name: allRelationsHoldCheck,
+  parameters: [window : (Nat * (List (List Nat))), found : (List (List Bool))],
+  result: Bool,
+  body: ((relationResidue (second window) found) =? 0),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: all_relations_hold_check_sound,
+  parameters: [window : (Nat * (List (List Nat))), found : (List (List Bool))],
+  statement: (((allRelationsHoldCheck window found) = true) -> (AllRelationsHold window found)),
+  proof: linear_arithmetic{definitions: [AllRelationsHold, allRelationsHoldCheck]},
+  axioms: [propext]
+}
+
+definition{
+  name: ZeroWords,
+  parameters: [w : (List Nat)],
+  result: Prop,
+  body: (match w
+    | List.nil => (0 = 0)
+    | List.cons x xs => ((x = 0) /\ (ZeroWords xs))),
+  axioms: [],
+  recursive_argument: w
+}
+
+theorem{
+  name: zero_word_iff,
+  parameters: [w : (List Nat)],
+  statement: (((zeroWord w) = true) <-> (ZeroWords w)),
+  proof: induction{
+    branches: [
+      {proof: simplify{definitions: [ZeroWords, zeroWord]}, binders: [], constructor: nil},
+      {
+        proof: simplify{definitions: [Bool.and_eq_true, Nat.beq_eq, ZeroWords, ih, zeroWord]},
+        binders: [x, xs, ih],
+        constructor: cons
+      }
+    ],
+    scrutinee: w
+  },
+  axioms: [propext]
+}
+
+contract{
+  name: RelationSearch,
+  axioms: [propext],
+  input: {name: window, type: (Nat * (List (List Nat)))},
+  output: {name: found, type: (List (List Bool))},
+  postcondition: AllRelationsHold,
+  precondition: IsWindow,
+  validators: [
+    {
+      predicate: postcondition,
+      sound: all_relations_hold_check_sound,
+      validator: allRelationsHoldCheck
+    },
+    {predicate: precondition, sound: is_window_check_sound, validator: isWindowCheck}
+  ]
+}
+
+realization{
+  name: RelationEngine,
+  descriptor: deterministic{body: (findRelationsOn window)},
+  executable: true,
+  input: {name: window, type: (Nat * (List (List Nat)))},
+  output: (List (List Bool))
+}
+
+model{
+  name: RelationSearchModel,
+  contract: {member: RelationSearch},
+  realization: {member: RelationEngine}
+}
+
+definition{
+  name: findRelations,
+  parameters: [window : (Nat * (List (List Nat)))],
+  result: (Result (List (List Bool)) ContractViolation),
+  body: (checked RelationSearchModel window with [postcondition, precondition]),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: dotBits,
+  parameters: [as : (List Bool), cs : (List Bool)],
+  result: Bool,
+  body: (match as
+    | List.nil => false
+    | List.cons x xs => (match cs
+    | List.nil => false
+    | List.cons y ys => (if (x && y) then (not (dotBits xs ys)) else (dotBits xs ys)))),
+  axioms: [],
+  recursive_argument: as,
+  executable: true
+}
+
+definition{
+  name: prependFalse,
+  parameters: [m : Nat, bs : (List Bool)],
+  result: (List Bool),
+  body: (match m
+    | Nat.zero => bs
+    | Nat.succ k => (cons false (prependFalse k bs))),
+  axioms: [],
+  recursive_argument: m,
+  executable: true
+}
+
+definition{
+  name: massey,
+  parameters: [sq : (List Bool), pos : Nat, conn : (List Bool), prev : (List Bool), l : Nat, m : Nat, hist : (List Bool)],
+  result: ((List Bool) * Nat),
+  body: (match sq
+    | List.nil => (conn, l)
+    | List.cons x xs => (let h2 : (List Bool) := (cons x hist); (if (dotBits conn h2) then (let updated : (List Bool) := (xorMask conn (prependFalse m prev)); (if ((l + l) <=? pos) then (massey xs (pos + 1) updated conn (prim subtract (pos + 1) l : Nat) 1 h2) else (massey xs (pos + 1) updated prev l (m + 1) h2))) else (massey xs (pos + 1) conn prev l (m + 1) h2)))),
+  axioms: [],
+  recursive_argument: sq,
+  executable: true
+}
+
+definition{
+  name: takePad,
+  parameters: [k : Nat, bs : (List Bool)],
+  result: (List Bool),
+  body: (match k
+    | Nat.zero => (nil Bool)
+    | Nat.succ j => (match bs
+    | List.nil => (cons false (takePad j (nil Bool)))
+    | List.cons x xs => (cons x (takePad j xs)))),
+  axioms: [],
+  recursive_argument: k,
+  executable: true
+}
+
+definition{
+  name: findRecurrenceOn,
+  parameters: [sq : (List Bool)],
+  result: (List Bool),
+  body: (let r : ((List Bool) * Nat) := (massey sq 0 (cons true (nil Bool)) (cons true (nil Bool)) 0 1 (nil Bool)); (takePad ((second r) + 1) (first r))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: reverseOnto,
+  parameters: [bs : (List Bool), acc : (List Bool)],
+  result: (List Bool),
+  body: (match bs
+    | List.nil => acc
+    | List.cons x xs => (reverseOnto xs (cons x acc))),
+  axioms: [],
+  recursive_argument: bs,
+  executable: true
+}
+
+definition{
+  name: slideDefects,
+  parameters: [rc : (List Bool), sq : (List Bool)],
+  result: Nat,
+  body: (match sq
+    | List.nil => 0
+    | List.cons x xs => ((if ((prim length (cons x xs) : Nat) <? (prim length rc : Nat)) then 0 else (if (dotBits rc (cons x xs)) then 1 else 0)) + (slideDefects rc xs))),
+  axioms: [],
+  recursive_argument: sq,
+  executable: true
+}
+
+definition{
+  name: leadDefect,
+  parameters: [conn : (List Bool)],
+  result: Nat,
+  body: (match conn
+    | List.nil => 1
+    | List.cons x xs => (if x then 0 else 1)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: recurrenceDefects,
+  parameters: [sq : (List Bool), conn : (List Bool)],
+  result: Nat,
+  body: ((leadDefect conn) + (slideDefects (reverseOnto conn (nil Bool)) sq)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: IsSequenceWindow,
+  parameters: [sq : (List Bool)],
+  result: Prop,
+  body: ((0 < (prim length sq : Nat)) /\ ((prim length sq : Nat) <= 65536)),
+  axioms: []
+}
+
+definition{
+  name: isSequenceWindowCheck,
+  parameters: [sq : (List Bool)],
+  result: Bool,
+  body: ((0 <? (prim length sq : Nat)) && ((prim length sq : Nat) <=? 65536)),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: is_sequence_window_check_sound,
+  parameters: [sq : (List Bool)],
+  statement: (((isSequenceWindowCheck sq) = true) -> (IsSequenceWindow sq)),
+  proof: linear_arithmetic{definitions: [IsSequenceWindow, isSequenceWindowCheck]},
+  axioms: [propext]
+}
+
+definition{
+  name: SatisfiesRecurrence,
+  parameters: [sq : (List Bool), conn : (List Bool)],
+  result: Prop,
+  body: ((recurrenceDefects sq conn) = 0),
+  axioms: []
+}
+
+definition{
+  name: satisfiesRecurrenceCheck,
+  parameters: [sq : (List Bool), conn : (List Bool)],
+  result: Bool,
+  body: ((recurrenceDefects sq conn) =? 0),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: satisfies_recurrence_check_sound,
+  parameters: [sq : (List Bool), conn : (List Bool)],
+  statement: (((satisfiesRecurrenceCheck sq conn) = true) -> (SatisfiesRecurrence sq conn)),
+  proof: linear_arithmetic{definitions: [SatisfiesRecurrence, satisfiesRecurrenceCheck]},
+  axioms: [propext]
+}
+
+contract{
+  name: RecurrenceSearch,
+  axioms: [propext],
+  input: {name: sq, type: (List Bool)},
+  output: {name: conn, type: (List Bool)},
+  postcondition: SatisfiesRecurrence,
+  precondition: IsSequenceWindow,
+  validators: [
+    {
+      predicate: postcondition,
+      sound: satisfies_recurrence_check_sound,
+      validator: satisfiesRecurrenceCheck
+    },
+    {
+      predicate: precondition,
+      sound: is_sequence_window_check_sound,
+      validator: isSequenceWindowCheck
+    }
+  ]
+}
+
+realization{
+  name: RecurrenceEngine,
+  descriptor: deterministic{body: (findRecurrenceOn sq)},
+  executable: true,
+  input: {name: sq, type: (List Bool)},
+  output: (List Bool)
+}
+
+model{
+  name: RecurrenceSearchModel,
+  contract: {member: RecurrenceSearch},
+  realization: {member: RecurrenceEngine}
+}
+
+definition{
+  name: findRecurrence,
+  parameters: [sq : (List Bool)],
+  result: (Result (List Bool) ContractViolation),
+  body: (checked RecurrenceSearchModel sq with [postcondition, precondition]),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: sameBits,
+  parameters: [as : (List Bool), cs : (List Bool)],
+  result: Bool,
+  body: (match as
+    | List.nil => ((prim length cs : Nat) =? 0)
+    | List.cons x xs => (match cs
+    | List.nil => false
+    | List.cons y ys => ((if x then y else (not y)) && (sameBits xs ys)))),
+  axioms: [],
+  recursive_argument: as,
+  executable: true
+}
+
+definition{
+  name: sameMasks,
+  parameters: [as : (List (List Bool)), cs : (List (List Bool))],
+  result: Bool,
+  body: (match as
+    | List.nil => ((prim length cs : Nat) =? 0)
+    | List.cons x xs => (match cs
+    | List.nil => false
+    | List.cons y ys => ((sameBits x y) && (sameMasks xs ys)))),
+  axioms: [],
+  recursive_argument: as,
+  executable: true
+}
+
+definition{
+  name: fixtureSpecs,
+  parameters: [],
+  result: (List (Nat * (Nat * Nat))),
+  body: (cons (0, (0, 0)) (cons (0, (1, 0)) (cons (0, (4, 0)) (cons (0, (12, 0)) (cons (0, (69, 0)) (cons (0, (70, 0)) (cons (0, (71, 0)) (cons (0, (72, 0)) (cons (1, (4, 0)) (nil (Nat * (Nat * Nat)))))))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: relationFixture,
+  parameters: [],
+  result: (Nat * (List (List Nat))),
+  body: (64, (buildColumns 64 (Sequences::windows) (fixtureSpecs))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: expectedRelations,
+  parameters: [],
+  result: (List (List Bool)),
+  body: (cons (cons false (cons false (cons false (cons true (cons false (cons true (cons false (cons false (cons false (nil Bool)))))))))) (cons (cons true (cons false (cons true (cons false (cons false (cons false (cons true (cons false (cons false (nil Bool)))))))))) (cons (cons false (cons true (cons false (cons false (cons false (cons false (cons false (cons true (cons false (nil Bool)))))))))) (cons (cons false (cons false (cons true (cons true (cons true (cons false (cons false (cons false (cons true (nil Bool)))))))))) (nil (List Bool)))))),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: relationFixtureIsWindow,
+  parameters: [],
+  statement: ((isWindowCheck (relationFixture)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: relationFixtureFindsTheRegister,
+  parameters: [],
+  statement: ((sameMasks (findRelationsOn (relationFixture)) (expectedRelations)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: relationFixtureHasNoFalseRelation,
+  parameters: [],
+  statement: ((allRelationsHoldCheck (relationFixture) (findRelationsOn (relationFixture))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+definition{
+  name: timeParityBits,
+  parameters: [],
+  result: (List Bool),
+  body: (columnBits 64 (Sequences::windows) (0, (1, 0))),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: timeParityRecurrence,
+  parameters: [],
+  statement: ((sameBits (findRecurrenceOn (timeParityBits)) (cons true (cons false (cons true (nil Bool))))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: timeParityRecurrenceHolds,
+  parameters: [],
+  statement: ((satisfiesRecurrenceCheck (timeParityBits) (findRecurrenceOn (timeParityBits))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+definition{
+  name: towerWordTwoBits,
+  parameters: [],
+  result: (List Bool),
+  body: (columnBits 64 (Sequences::windows) (0, (49, 0))),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: towerWordTwoRecurrence,
+  parameters: [],
+  statement: ((sameBits (findRecurrenceOn (towerWordTwoBits)) (cons true (cons false (cons true (nil Bool))))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: towerWordTwoRecurrenceHolds,
+  parameters: [],
+  statement: ((satisfiesRecurrenceCheck (towerWordTwoBits) (findRecurrenceOn (towerWordTwoBits))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+definition{
+  name: periodThreeBits,
+  parameters: [],
+  result: (List Bool),
+  body: (prim append (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (nil Bool))))))))))))))))))))))))))))))))))))))))) (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons false (cons false (cons true (nil Bool))))))))))))))))))))))))) : (List Bool)),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: periodThreeRecurrence,
+  parameters: [],
+  statement: ((sameBits (findRecurrenceOn (periodThreeBits)) (cons true (cons false (cons false (cons true (nil Bool)))))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: periodThreeRecurrenceHolds,
+  parameters: [],
+  statement: ((satisfiesRecurrenceCheck (periodThreeBits) (findRecurrenceOn (periodThreeBits))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+definition{
+  name: xorAllWords,
+  parameters: [ws : (List (List Nat))],
+  result: (List Nat),
+  body: (match ws
+    | List.nil => (nil Nat)
+    | List.cons x xs => (xorWord x (xorAllWords xs))),
+  axioms: [],
+  recursive_argument: ws,
+  executable: true
+}
+
+definition{
+  name: relationVanishes,
+  parameters: [width : Nat, specs : (List (Nat * (Nat * Nat)))],
+  result: Bool,
+  body: (zeroWord (xorAllWords (buildColumns width (Sequences::windows) specs))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: allVanish,
+  parameters: [width : Nat, rels : (List (List (Nat * (Nat * Nat))))],
+  result: Bool,
+  body: (match rels
+    | List.nil => true
+    | List.cons x xs => ((relationVanishes width x) && (allVanish width xs))),
+  axioms: [],
+  recursive_argument: rels,
+  executable: true
+}
+
+definition{
+  name: registerRelationClaims,
+  parameters: [],
+  result: (List String),
+  body: (cons "ledger-diagonal" (cons "edge-interior-split" (cons "edge-parity" (cons "left-light-cone" (cons "increment-law" (nil String)))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: registerRelations,
+  parameters: [],
+  result: (List (List (Nat * (Nat * Nat)))),
+  body: (cons (cons (0, (0, 0)) (cons (0, (4, 0)) (cons (0, (78, 0)) (nil (Nat * (Nat * Nat)))))) (cons (cons (0, (0, 0)) (cons (0, (4, 0)) (cons (0, (72, 0)) (cons (0, (73, 0)) (nil (Nat * (Nat * Nat))))))) (cons (cons (0, (72, 0)) (cons (0, (1, 0)) (nil (Nat * (Nat * Nat))))) (cons (cons (0, (0, 0)) (cons (0, (4, 0)) (cons (0, (71, 0)) (nil (Nat * (Nat * Nat)))))) (cons (cons (1, (4, 0)) (cons (0, (4, 0)) (cons (0, (69, 0)) (cons (0, (70, 0)) (nil (Nat * (Nat * Nat))))))) (nil (List (Nat * (Nat * Nat))))))))),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: registerRelationClaimsAreClaims,
+  parameters: [],
+  statement: ((Register::allMembers (registerRelationClaims) (Register::idsOf (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: registerRelationsHold,
+  parameters: [],
+  statement: ((allVanish 256 (registerRelations)) = true),
+  proof: decide{},
+  axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Antidiagonal"
-name = "Rule30UOR.Antidiagonal.center_eq_rdiag_self"
+name = "Rule30UOR.Interfaces.core_center_eq_rdiag"
 
 [[form]]
 id = "center-eq-rdiag-self"

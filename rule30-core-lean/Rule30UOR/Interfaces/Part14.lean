@@ -48,7 +48,7 @@ theorem periodic_late_response_reset_defect_flip_of_doubles
   have hp3 := lhCenter_twopow_reset_succ_antiperiodic_of_doubles z k hz hd hset3
   rw [show (d + twopow k) + m * P = (z + 3) + twopow k by omega] at hr0 ⊢
   rw [show (d + twopow (k + 1)) + m * P = (z + 3) + twopow (k + 1) by omega] at hr1 ⊢
-  rw [hr1, hr0, hp0, hp3, bxor_eq_xor, bxor_eq_xor]
+  rw [hr1, hr0, hp0, hp3, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases lhCenter ((z + 3) + twopow k) (twopow k) <;>
     cases lhCenter (d + twopow k) (twopow k) <;> decide
 
@@ -79,7 +79,7 @@ theorem periodic_late_response_reset_flip_of_doubles_and_eq
   have hf := periodic_late_response_reset_defect_flip_of_doubles T P hP hper m d z k hz hd hdz hdm ht hset0 hset3
   rw [hreq] at hf
   revert hf
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.response (d + twopow k) k <;>
     cases Rule30UOR.Scale.response ((d + twopow (k + 1)) + m * P) (k + 1) <;>
     cases Rule30UOR.Scale.response (d + twopow (k + 1)) (k + 1) <;> decide
@@ -657,17 +657,6 @@ theorem not_centerPeriodic_of_rhBandAgree_one_at_zero_diag_step_two
     T P m z p S hP hm ht hz hd hset1 hsetQ hS (fun s hs _hc => ?_)
   exact rdrv_col_one_agree_of_rhBandAgree_one (z + (p + 1)) (z + (p + 1)) (m * P) S s hband hs
 
-theorem not_centerPeriodic_of_rhBandAgree_one_at_zero_diag_step_two_prop
-    (T P m z p S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (ht : T ≤ z + (p + 1)) (hz : IsZeroDiag z) (hd : DoublesAt (m * P) z)
-    (hset1 : SettledBy (z + 1) (z + (p + 1)))
-    (hsetQ : SettledBy ((z + 1) - m * P) (z + (p + 1)))
-    (hS : p + 3 * (m * P) ≤ S + 1)
-    (hband : RhBandAgree (z + (p + 1)) (m * P) 1 S) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_rhBandAgree_one_at_zero_diag_step_two
-    T P m z p S hP hm ht hz hd hset1 hsetQ hS hband
-
 /-- **Refutation of `CenterPeriodic` from Fixed-Width Right-Half Strip Agreement at a Zero Diagonal (`not_centerPeriodic_of_strip_agree_at_zero_diag_step_two`, 9.1069)**:
     for every `T, P, m, z, p, B, S ∈ ℕ` with `0 < P`, `0 < m`, `T ≤ z + (p + 1)`, `IsZeroDiag z`, `DoublesAt (m * P) z`, `settle (z + 1) ≤ z + (p + 1)`, `settle ((z + 1) - m * P) ≤ z + (p + 1)`, and `p + 3 * (m * P) ≤ S + 1`, if `RhBandAgree (z + (p + 1)) (m * P) 1 B` and `RhColAgree (z + (p + 1)) (m * P) (B + 2) S` hold, then `¬ CenterPeriodic T P`! -/
 theorem not_centerPeriodic_of_strip_agree_at_zero_diag_step_two
@@ -716,18 +705,6 @@ theorem not_centerPeriodic_of_rdrv_one_agree_sub_twopow_ge
   rw [show (twopow k - m * P) + m * P = twopow k by omega]
   exact hw s hs hc
 
-theorem not_centerPeriodic_of_rdrv_one_agree_sub_twopow_ge_prop
-    (T P m k S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (hmP : m * P ≤ twopow k) (ht : T + m * P ≤ twopow k)
-    (hS : twopow k ≤ S + 1)
-    (hw : ∀ s : Nat, s ≤ S →
-      Rule30UOR.Core.center ((twopow k - m * P) + s) = false →
-        rdrv (twopow k - m * P) (twopow k) s 1 =
-          rdrv (twopow k - m * P) (twopow k - m * P) s 1) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_rdrv_one_agree_sub_twopow_ge
-    T P m k S hP hm hmP ht hS hw
-
 /-- **Dyadic (`2^k - m * P`) Refutation of `CenterPeriodic` from Spatial Right-Half Slice Agreement `RhBandAgree (2^k - m * P) (m * P) 1 S` (`not_centerPeriodic_of_rhBandAgree_one_sub_twopow_ge`, 9.1071)**:
     for every `T, P, m, k, S ∈ ℕ` with `0 < P`, `0 < m`, `m * P ≤ twopow k`, `T + m * P ≤ twopow k`, and `twopow k ≤ S + 1`, if `RhBandAgree (twopow k - m * P) (m * P) 1 S` holds at time `twopow k - m * P`, then `¬ CenterPeriodic T P`! -/
 theorem not_centerPeriodic_of_rhBandAgree_one_sub_twopow_ge
@@ -741,15 +718,6 @@ theorem not_centerPeriodic_of_rhBandAgree_one_sub_twopow_ge
   have h := rdrv_col_one_agree_of_rhBandAgree_one
     (twopow k - m * P) (twopow k - m * P) (m * P) S s hband hs
   rwa [show (twopow k - m * P) + m * P = twopow k by omega] at h
-
-theorem not_centerPeriodic_of_rhBandAgree_one_sub_twopow_ge_prop
-    (T P m k S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (hmP : m * P ≤ twopow k) (ht : T + m * P ≤ twopow k)
-    (hS : twopow k ≤ S + 1)
-    (hband : RhBandAgree (twopow k - m * P) (m * P) 1 S) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_rhBandAgree_one_sub_twopow_ge
-    T P m k S hP hm hmP ht hS hband
 
 /-! ### Batch 52: Inward Determination of the Driven Right Half `rdrv` (`kit [33]` + `kit [23]`), Drive-Cancelling Column-`1` Defect Laws, Right-Edge `2^e`-Periodicity in `rdrv`, and Multi-Column Inward Propagation to `maskparity · 0` Agreement (9.1072–9.1086) -/
 
@@ -1195,22 +1163,6 @@ theorem not_centerPeriodic_of_rdrv_col_or_agree_sub_twopow_ge
     T P m k S hP hm hmP ht hS (fun s hs _hc => ?_)
   exact rdrv_inward_col_or_propagate
     (twopow k - m * P) (twopow k) (twopow k - m * P) K 1 S s hc ho hs
-
-theorem not_centerPeriodic_of_rdrv_col_or_agree_sub_twopow_ge_prop
-    (T P m k K S : Nat) (hP : 0 < P) (hm : 0 < m)
-    (hmP : m * P ≤ twopow k) (ht : T + m * P ≤ twopow k)
-    (hS : twopow k ≤ S + 1)
-    (hc : ∀ u : Nat, u ≤ S + K →
-      rdrv (twopow k - m * P) (twopow k) u (1 + K) =
-        rdrv (twopow k - m * P) (twopow k - m * P) u (1 + K))
-    (ho : ∀ u : Nat, u < S + K →
-      (rdrv (twopow k - m * P) (twopow k) u (1 + K) ||
-        rdrv (twopow k - m * P) (twopow k) u ((1 + K) + 1)) =
-      (rdrv (twopow k - m * P) (twopow k - m * P) u (1 + K) ||
-        rdrv (twopow k - m * P) (twopow k - m * P) u ((1 + K) + 1))) :
-    ¬ Rule30UOR.Scale.CenterPeriodic T P :=
-  not_centerPeriodic_of_rdrv_col_or_agree_sub_twopow_ge
-    T P m k K S hP hm hmP ht hS hc ho
 
 /-! ### Batch 54: The Pure-Drive All-White-Seed Right Half `rdrv td 0 k p` (`kit [33]`), White-Run Pinning of Column `1`, White-Slice Agreement with the Pure-Drive Evolution, and Pure-Drive Synchronized Refutations (9.1102–9.1116) -/
 

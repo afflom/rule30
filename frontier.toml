@@ -76,7 +76,7 @@ depends = ["aperiodic-compensation"]
 id = "recurrent-central-collision"
 status = "proved"
 statement = "Problem 1 is equivalent to: under every hypothetical center period, central collisions do not occur arbitrarily late in the band of width 2P."
-lean = "Rule30UOR.Frontier.problem1_iff_noRecurrentCentralCollision"
+lean = "Rule30UOR.CentralCollision.problem1_iff_no_recurrent_central_collision"
 lexeme = "r30.frontier::problem-one-iff-no-recurrent-central-collision"
 since = "2026-10-27"
 note = "Band form since the choice elimination; the fixed-column form needs the infinite pigeonhole principle."
@@ -133,6 +133,9 @@ lean = "Rule30UOR.Ledger.centerPeriodic_iff_ledgerPeriodic"
 since = "2026-10-31"
 note = "Rule30UOR.Ledger: phi = phiLinear XOR (carry << 1) exactly; row t = phiLinearPow t 1 XOR winWitt 0 t; linear_center proves bit t of q^t is 1 by Frobenius (q^(2m) = q(X^2)^m, phiLinPow_spread) without binomial sums; bits t+1 and t-1 of q^t are the trailing-ones parity a(t) of t (linear_above_center, linear_below_center; a(2m) = 0, a(2m+1) = not a(m)). The center's update in ledger coordinates (center_succ_ledger): center(t+1) = rule(a(t) XOR l(t, t+1), not l(t, t), a(t) XOR l(t, t-1)) with l(t, j) = bit j of winWitt 0 t. The nonlinearity of Rule 30 sits entirely in the carries, and the readout is the single level-crossing operation (decode, accumulate exactly, encode once). aperiodic-compensation in this form: the ledger diagonal is not eventually periodic."
 depends = ["problem1"]
+relation = ["one", "center", "ledger-diagonal"]
+window = 256
+kappa = "sha256:c342ad6c6b42ac0685ede07d2a55b294bac6a506212d081f568b37ba76d407f0"
 
 [[claim]]
 id = "periodic-finite-kernel"
@@ -248,6 +251,9 @@ lean = "Rule30UOR.EdgeSplit.center_eq_not_bxor_diagonals"
 since = "2026-10-31"
 note = "Rule30UOR.EdgeSplit: carry_row_left_edge (bit 2t of the carry is set), carry_row_right_pair (bit 1 is rdiag 1 t), carry_split, ledger_split, center_eq_not_bxor_diagonals; interior_testBit_* show the interior mask carries no edge event. Next exact step: the edge diagonal in closed form (linear CA readout of a periodic source, 2-automatic), after which aperiodic-compensation reads: the interior diagonal is not eventually periodic against that background."
 depends = ["ledger-diagonal", "all-rules-facet"]
+relation = ["one", "center", "edge-diagonal", "interior-diagonal"]
+window = 256
+kappa = "sha256:932cda80280c69aa8615657aa35737d1d8707bc12541bb3e64bdf311a5cea0e3"
 
 [[claim]]
 id = "edge-diagonal-formula"
@@ -302,6 +308,9 @@ lean = "Rule30UOR.EdgeParity.edgeDiagonal_eq_timeParity"
 since = "2026-10-31"
 note = "Rule30UOR.EdgeParity: trinomialParity_even_even/even_odd/odd_odd/odd_even_succ (digit lemmas), trinomialParity_central, columnParity_zero/odd/even_succ, sameParityColumn, sameParityColumn_eq, edgeRight_eq, edgeFormula_eq_parity, timeParity, edgeDiagonal_eq_timeParity, center_eq_not_timeParity_xor_interior, interiorDiagonal_eq_center. The explicit 2-automatic background predicted by edge-diagonal-formula is the alternation of the time: the two edge carries of every row, propagated through the trinomial triangle, contribute nothing else. The causal-horizon lever on the edge is spent."
 depends = ["edge-diagonal-formula"]
+relation = ["edge-diagonal", "time-parity"]
+window = 256
+kappa = "sha256:ed3f673cf1b3dea00cbee6e58344fdc43b75db668ea54bb9f00aaa890befbe31"
 
 [[claim]]
 id = "interior-aperiodicity"
@@ -446,6 +455,9 @@ lean = "Rule30UOR.Antidiagonal.center_eq_leftCone"
 since = "2026-10-31"
 note = "Rule30UOR.Antidiagonal: pascalParity_symm (C(n,k) = C(n,n-k) mod 2), runEnd, leftEnd, coneTerm, coneRow, leftCone, exposed_eq_leftEnd, lucasPartial_eq_fold, xorBelow_swap (host), coneRow_eq_weight, lucasSum_eq_leftCone, center_eq_leftCone, leftCone_centerPeriodic, coneTerm_add_twopow_mul. The specific consistency condition the seed imposes on the left half-plane (which by leftExtend_rule alone cannot refute a period): a linear Pascal functional of the left run-ends equals the center. Under a period it is a fixed-point equation for the run-end field of the left cone. Not a closing argument."
 depends = ["lucas-frame"]
+relation = ["one", "center", "left-cone"]
+window = 256
+kappa = "sha256:4726873ee28aec0bb13391249b36680f00803514d1aa730148ba67fe6e429c13"
 
 [[claim]]
 id = "left-tower"
@@ -484,10 +496,11 @@ depends = ["left-tower"]
 
 [[claim]]
 id = "single-row-agreement"
-status = "open"
+status = "refuted"
 statement = "Route B of the 2026-11-01 reading: under a center period, the prefix and tail spatial agreements (hpref, htail) of the driven right half rhCenter in one row at scale 2^L hold, so the conditional refutation not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound fires."
+lean = "Rule30UOR.DoublingDepth.two_scale_single_rh_row_engine_hypotheses_unsat"
 since = "2026-11-01"
-note = "No theorem in the repository derives hpref or htail from CenterPeriodic; they are free hypotheses of the conditional refutation (Part17). The analogous agreement for the left half is refuted at a doubling (route-d-lhcolagree-coboundary), and the doubling diagonal forces anti-agreement where the prefix needs agreement, so the route needs an argument that the doubling diagonal falls outside the prefix window; recorded as open with that exact obligation."
+note = "Refuted by the seed (round 4, Rule30UOR.DoublingDepth): a doubling at a dyadic lag w 2^K sits at or beyond diagonal K (le_of_doublesAt_mul_twopow: DoublesAt (w*2^K) z implies K <= z), so the engine's scale condition (z+p+1)+p <= K never holds; and its tail hypothesis is false at every admissible tuple (rhRowTailDefect_of_doubles), so two_scale_single_rh_row_engine_hypotheses_unsat. With route-d and band-engines: doubling-seam engines at dyadic lags are walked. Structural lesson: hypotheses on settled cells are edge-tower facts that do not mention the center; a closing argument must contradict an edge tower directly with a statement about the unsettled wedge, without a seam-agreement step."
 depends = ["aperiodic-compensation"]
 
 [[claim]]
@@ -512,5 +525,62 @@ status = "proved"
 statement = "The center's increment is Jen's masked column plus the left half's own Pascal cone: center (t+1) XOR center t = (cell t 1 AND NOT center t) XOR coneZero t for every t, where coneZero is the Pascal cone of the left run-ends at positions <= 0. Hence, by masked Jen (prize kit), under any center period P the left half's cone coneZero is not P-periodic from any start."
 lean = "Rule30UOR.Antidiagonal.center_increment_all"
 since = "2026-11-01"
-note = "Rule30UOR.Antidiagonal: coneZeroTerm, coneZeroRow, coneZero, maskedColumn, ConeZeroPeriodic, leftEnd_succ, coneTerm_pascal, coneRow_pascal, coneRow_succ, coneRow_last, leftCone_succ (leftCone (t+1) = leftCone t XOR maskedColumn t XOR coneZero t, Pascal's rule), center_increment, center_increment_all, maskedColumn_of_periodic, not_coneZeroPeriodic_from (via Rule30MaskedJen.masked_jen_center and Scale.cell_eq_kit), not_coneZeroPeriodic_of_centerPeriodic. A bridge between the light-cone frame and the prize kit's masked Jen. Not a closing argument: a left half driven by a periodic boundary has an aperiodic cone in general (driven-left-cone, refuted)."
+note = "Rule30UOR.Antidiagonal: coneZeroTerm, coneZeroRow, coneZero, maskedColumn, ConeZeroPeriodic, leftCone_succ, center_increment, center_increment_all, maskedColumn_of_periodic, not_coneZeroPeriodic_from. CORRECTION (round 4, kernel-checked): coneZero t = cell t (-1) for every t (Rule30UOR.KernelRoot.coneZero_eq_cell), so the increment law IS the rule at column 0 rearranged (center_increment_eq_rule) and its masked-Jen corollary is Jen's adjacency theorem (KernelRoot.not_eventuallyPeriodic_coneZero, via Rule30Jen.not_adjacent). True, but no new leverage: the Pascal cone of the left run-ends is column -1 (a Duhamel identity of the rule-60 linearization; ColumnCone.cell_eq_seedAt_bxor_coneAt)."
 depends = ["left-light-cone"]
+relation = ["shift:center", "center", "masked-column", "cone-zero"]
+window = 256
+kappa = "sha256:a6e08801c96f33e6da94f66646ec640c4ee818be0e5b62cf2c4ae98dcf22c579"
+
+[[claim]]
+id = "black-time-consistency"
+status = "open"
+statement = "No eventually periodic boundary with black times is black-time consistent: if a boundary column c with c 0 = true satisfies c (t+1) = NOT (column -1 of the left half it drives) at every black time t, and is eventually periodic, it is eventually white (NoPeriodicBlackConsistent). This left-only statement implies Problem 1."
+lean = "Rule30UOR.DiagonalCone.NoPeriodicBlackConsistent"
+since = "2026-11-01"
+note = "Rule30UOR.DiagonalCone (round 4): BlackTimeConsistent, blackDefect, drivenCone, driven_duhamel, driven_cone_iff_btc (for the left half Lh c driven by any c with c 0 = true, not drivenCone c = c XOR the parity of the black-time defects so far), center_blackTimeConsistent, problem1_of_noPeriodicBlackConsistent, noPeriodicConsistent_of_noPeriodicBlackConsistent, WhiteTimeConsistent, problem1_iff_noPeriodicConsistent (the full fixed point is Problem 1), noPeriodicBlackConsistent_of_drivenLeftMask (from the kit's LeftMask). Jen's argument needs column -1 at all times; black-time consistency supplies it only at black times; at white times column -1 is c (t+1) XOR the effective column +1, which the left half leaves free. Falsification check (not evidence for truth): of 63,754 eventually periodic boundaries with black times (prefix <= 7, period <= 8), none is black-time consistent for 260 steps."
+depends = ["left-light-cone"]
+
+[[claim]]
+id = "duhamel-and-tails"
+status = "proved"
+statement = "Duhamel form of the rule: every cell is the seed's Pascal transport plus the Pascal cone of the run-end sources (cell_eq_seedAt_bxor_coneAt); the light cone splits by left diagonal into a head of finitely many eventually periodic diagonal cones (period 3 2^d from 2^d) and a tail (problem1_iff_leftTail); the block cone form (problem1_iff_noBlockConePeriod); and the Mahler form of periodicity (a word is periodic iff its Mahler coefficients vanish above a degree; towerWord's Mahler degree)."
+lean = "Rule30UOR.ColumnCone.cell_eq_seedAt_bxor_coneAt"
+since = "2026-11-01"
+note = "Rule30UOR.DiagonalCone (diagonalCone, diagonalCone_periodic, leftHead, leftTail, leftCone_eq_head_tail, problem1_iff_leftTail, fibPascal: the Fibonacci parity of Pascal diagonals, period 3 2^a), Rule30UOR.ColumnCone (carry60_eq_runEnd, cell_succ_pascal, seedAt, coneAt, cell_eq_seedAt_bxor_coneAt, center_eq_not_coneAt_zero, blockCone, problem1_iff_noBlockConePeriod), Rule30UOR.KernelRoot (period_iff_mahler_vanish, wordPeriodic_iff_mahler, towerWord_mahler_degree, fixed_iff_column_zero). Exact reformulations; round 4's verdict: each is the local rule integrated, true for every driven half, so none separates the true center from other black-time-consistent boundaries. Not a closing argument."
+depends = ["left-light-cone", "jen-law"]
+
+[[claim]]
+id = "single-seed-mask"
+status = "proved"
+statement = "The left-only obligation is exactly the single-seed mask: NoPeriodicBlackConsistent iff SingleSeedMask (no eventually periodic boundary with infinitely many black times is black-time consistent with the left half it drives from the unit seed). With it, the kit's period-two question decides the obligation's period-two slice, and the obligation implies the zero-state center is aperiodic (NoZCenterPeriod)."
+lean = "Rule30UOR.UnitSeedMask.noPeriodicBlackConsistent_iff_singleSeedMask"
+since = "2026-11-01"
+note = "Round 5 (2026-11-01), Rule30UOR.UnitSeedMask, MaskSlice, TowerBoundary. Exact: noPeriodicBlackConsistent_iff_singleSeedMask; MaskSlice.q01_iff_drivenLeftMaskAt_two (the kit's left mask at period two IS the kit's open Q01, Rule30PeriodTwo.Q01, proved by the kit only for starts of width <= 52); UnitSeedMask.q01_of_drivenLeftMask and noPeriodTwoBlackConsistent_of_q01 (Q01 decides the period-two slice of the obligation); TowerBoundary.noZCenterPeriod_of_noPeriodicBlackConsistent (the obligation implies Problem 1 for the zero state, open). Consequence for routing: any proof of the obligation settles the period-two, unit-seed slice of the kit's open Q01 family; local, strip, finite-state, additive and edge-DFA invariants cannot prove Q01 (kit, Rule30ZeroBoundaryBarriers)."
+depends = ["black-time-consistency"]
+
+[[claim]]
+id = "isolated-black-slice"
+status = "proved"
+statement = "The obligation restricted to boundaries whose black times are isolated holds exactly when no walled arithmetic progression exists (NoPeriodicIsolatedBlackConsistent iff not WalledAP), and the obligation implies that restriction."
+lean = "Rule30UOR.Walled.noPeriodicIsolatedBlackConsistent_iff"
+since = "2026-11-01"
+note = "Round 5 adversary lens (Rule30UOR.Walled): designing a counterexample with isolated black times reduces to one walled column (walled, the column -1 of the half driven by the seed alone), which is not eventually periodic (walled_not_eventuallyPeriodic); Walled.q01_iff_zeroWallQ_two and not_walledAPTwo_of_Q01 tie the step-two progressions to Q01; step three to the kit's Q001 (Rule30EtherThreeLeft, not built here). No counterexample was found by design."
+depends = ["black-time-consistency"]
+
+[[claim]]
+id = "eventual-cycle-invariants"
+status = "refuted"
+statement = "Decide the left-only obligation from the eventual cycles of the driven left diagonals (each diagonal of the half driven by any boundary is eventually periodic with a power-of-two period)."
+lean = "Rule30UOR.TowerBoundary.cycle_barrier"
+since = "2026-11-01"
+note = "Refuted by the cycle barrier (round 5, Rule30UOR.TowerBoundary): every boundary c shares its eventual cycles with its companion c* (cyc_companion), which is black-time consistent, never eventually white and has no transient, so no property of the cycles separates c from c*. The obligation splits into NoPeriodicCompanion (the settled half, containing NoZCenterPeriod, open) and PeriodicBlackConsistentSettles (the front: boundary damage must die out); column -1 always reads the damage band, which the cycle data never reaches."
+depends = ["black-time-consistency"]
+
+[[claim]]
+id = "residue-class-jen"
+status = "refuted"
+statement = "Generalize Jen's argument from two periodic columns to column 0 periodic and column -1 periodic on the black residues of the boundary, so the edge front cannot advance."
+lean = "Rule30UOR.ResidueJen.whiteDefectInWindow"
+since = "2026-11-01"
+note = "Refuted as a route (round 5, Rule30UOR.ResidueJen): the lag defect moves sideways (lagDefect_sideways), black-time consistency pins column -1 only on black-run triangles of depth at most the longest black run (btc_black_window_pinned), and white_defect_in_window proves column -1 has a white-time lag defect in every window [p-Q, 2p-Q): the masked front stops at column -(K+1). Closing needs a mechanism that forces a lag defect of column -1 onto a black residue, i.e. the deep-column nonlinearity at white times."
+depends = ["black-time-consistency"]

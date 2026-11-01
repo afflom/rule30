@@ -1,0 +1,186 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/audit-result/1",
+ "title": "audit --json: the conditional refutations of the period, each dead, live-discharged or open",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "counts",
+  "conditionals",
+  "keys",
+  "live",
+  "unrecorded_dead"
+ ],
+ "properties": {
+  "counts": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "dead",
+    "live-discharged",
+    "open"
+   ],
+   "properties": {
+    "dead": {
+     "type": "integer"
+    },
+    "live-discharged": {
+     "type": "integer"
+    },
+    "open": {
+     "type": "integer"
+    }
+   }
+  },
+  "conditionals": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "theorem",
+     "kind",
+     "status",
+     "hypotheses",
+     "refutedBy",
+     "dischargedBy",
+     "open",
+     "composition",
+     "recordedBy"
+    ],
+    "properties": {
+     "theorem": {
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "periodic",
+       "centerPer",
+       "problem1"
+      ]
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "dead",
+       "live-discharged",
+       "open"
+      ]
+     },
+     "refutedBy": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "dischargedBy": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "open": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "recordedBy": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "composition": {
+      "type": "string"
+     },
+     "hypotheses": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "binder",
+        "position",
+        "key",
+        "label",
+        "status",
+        "dischargedBy"
+       ],
+       "properties": {
+        "binder": {
+         "type": "string"
+        },
+        "position": {
+         "type": "integer"
+        },
+        "key": {
+         "type": "string"
+        },
+        "label": {
+         "type": "string"
+        },
+        "status": {
+         "type": "string",
+         "enum": [
+          "refuted",
+          "discharged",
+          "open"
+         ]
+        },
+        "dischargedBy": {
+         "type": "string"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "keys": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "refutedBy",
+     "dischargedUnderPeriod",
+     "dischargedWithoutPeriod"
+    ],
+    "properties": {
+     "refutedBy": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "dischargedUnderPeriod": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "dischargedWithoutPeriod": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  },
+  "live": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "unrecorded_dead": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  }
+ }
+}

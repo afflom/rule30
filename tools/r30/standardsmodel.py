@@ -53,10 +53,11 @@ AUTHOR = {"family": "Flom", "given": "Alex"}
 # covered by a standard before the page that renders them lands.
 NAVIGATION = ["nav-primary", "nav-breadcrumb", "nav-stepper"]
 VISUALIZATIONS = ["viz-triangle", "viz-tower", "viz-ledger", "viz-rays", "viz-defects", "viz-dyadic"]
-MODULES = ["Api", "Register", "Architecture", "Presentation", "Application", "Observer", "Convert", "Standards", "Rule30Core"]
+MODULES = ["Api", "Register", "Architecture", "Presentation", "Application", "Observer", "Convert", "Standards", "Rule30Core",
+           "Sequences", "Discovery"]
 WORKFLOWS = ["view-workflow"]
 REGISTERS = ["authorities", "ids", "ledger", "commands", "standards", "projection", "contracts", "errors", "dependencies",
-             "runtime-roots", "stdlib-package", "observer"]
+             "runtime-roots", "stdlib-package", "observer", "sequences"]
 
 # The two ISO rows keep the vendored lexicon facets `Architecture.lex.tex`
 # is built on (prism.arch, prism.qual); `prismmodel.check` confirms the
@@ -214,9 +215,9 @@ def rows():
          "coverage": "implemented"},
         {"id": "rivest-csexp", "name": "Rivest, S-Expressions (canonical form, section 4.3)",
          "authority": "https://people.csail.mit.edu/rivest/Sexp.txt", "version": "draft-rivest-sexp-00, 1997-05-04",
-         "scope": "The kappa-label of a research module: the SHA-256 of the canonical S-expression of the declarations the kernel replays, as UOR-Foundation/uor-addr mints labels; the key of the replay receipts.",
-         "realizedBy": ["kappa", "provenance"],
-         "conformance": "python3 -m unittest scripts.tests.test_kappa; bin/r30 kappa <modules>",
+         "scope": "The kappa-label of a research module: the SHA-256 of the canonical S-expression of the declarations the kernel replays, as UOR-Foundation/uor-addr mints labels; the key of the replay receipts. The same canonical form labels the sequences of the basis, (sequence <lexeme> <parameters>), their transforms and the relations the discovery engines find, (relation <sorted column labels>).",
+         "realizedBy": ["kappa", "provenance", "sequences", "discover", "Sequences", "Discovery"],
+         "conformance": "python3 -m unittest scripts.tests.test_kappa; bin/r30 kappa <modules>; bin/r30 api check (sequences)",
          "coverage": "implemented"},
         {"id": "in-toto-statement-v1", "name": "in-toto Attestation Framework, Statement v1",
          "authority": "https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md", "version": "v1",

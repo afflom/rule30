@@ -300,6 +300,30 @@ Close the goal with \(\lexeme{r30.observation::center-increment-all}(t)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-duhamel-and-tails}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and integer \(p\), \(cell(t, p) = bxor(seedat(t, p), coneat(p, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::cell-eq-seed-at-bxor-cone-at}(t, p)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-single-seed-mask}
+\allowaxioms{Quot.sound;propext}
+\(noperiodicblackconsistent ↔ singleseedmask\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::no-periodic-black-consistent-iff-single-seed-mask}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-isolated-black-slice}
+\allowaxioms{Quot.sound;propext}
+\(noperiodicisolatedblackconsistent ↔ ¬ walledap\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::no-periodic-isolated-black-consistent-iff}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}
@@ -342,6 +366,14 @@ Close the goal with \(\lexeme{r30.observation::observer-front-q-rank}(Q, t, k)\)
 For every natural number \(Q\) and natural number \(z\) and natural number \(t\), if \(zerodiagonal(z)\), then if \(settledby(z + 2, t)\), then if \(z + 3 ≤ t\), then \(diagonalphase(Q, z + 3, t + 1) intplus diagonalflux(Q, z + 3, t + 1, 1) = diagonalphase(Q, z + 1, t) intplus diagonalflux(Q, z + 1, t, 1)\).
 \begin{proof}
 Close the goal with \(\lexeme{r30.observation::diagonal-reset-sum-invariant}(Q, z, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-residue-class-jen}
+\allowaxioms{Quot.sound;propext}
+\(whitedefectinwindow\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::white-defect-in-window-holds}\).
 \end{proof}
 \end{theorem}
 

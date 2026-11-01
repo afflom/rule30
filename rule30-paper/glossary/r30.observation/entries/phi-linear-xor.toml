@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Ledger"
-name = "Rule30UOR.Ledger.phiLinear_xor"
+name = "Rule30UOR.Interfaces.phiLinear_xor"
 
 [[form]]
 id = "phi-linear-xor"

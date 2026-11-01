@@ -1,0 +1,891 @@
+spec = "r30/sequences/1"
+window = 512
+chunk_bits = 32
+evaluated_by = "bin/r30 sequences --write (lake env lean in rule30-core-lean)"
+
+[[sequence]]
+id = "one"
+family = "one"
+lexeme = "lexlean.std.bool::true"
+lean = "Bool.true"
+parameters = []
+kappa = "sha256:6f69bf959b5f3417b704d6c48353835ad74a5ff2ee9bf56de8ca252bf0874878"
+evaluation = "true"
+justification = "definition (the constant sequence)"
+window = [4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]
+
+[[sequence]]
+id = "time-parity"
+family = "time-parity"
+lexeme = "r30.observation::time-parity"
+lean = "Rule30UOR.EdgeParity.timeParity"
+parameters = []
+kappa = "sha256:43bf06df53cc99b704f3943c9254ce2407f5f07f11715113f2580e102c7e1e4d"
+evaluation = "EdgeParity.timeParity t"
+justification = "the host constant"
+window = [2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "trailing-parity"
+family = "trailing-parity"
+lexeme = "r30.observation::trailing-parity"
+lean = "Rule30UOR.Ledger.trailingParity"
+parameters = []
+kappa = "sha256:2bc68c99000b60a2dedb7adf466eb6f681a1b5298a8fd0b5e3df9845f91618a7"
+evaluation = "Ledger.trailingParity t"
+justification = "the host constant"
+window = [2728534690, 581051042, 2728534690, 2728534690, 2728534690, 581051042, 2728534690, 581051042, 2728534690, 581051042, 2728534690, 2728534690, 2728534690, 581051042, 2728534690, 2728534690]
+
+[[sequence]]
+id = "ruler-background"
+family = "ruler-background"
+lexeme = "r30.observation::ruler-background"
+lean = "Rule30UOR.LeftBand.rulerBackground"
+parameters = []
+kappa = "sha256:744f16654f062aff82be19d792ba1355ab187c6e860bebfebc0f2dde4fb1a4bb"
+evaluation = "LeftBand.rulerBackground t"
+justification = "the host constant"
+window = [892548413, 892548405, 892548403, 892548405, 892548405, 892548405, 892548403, 892548405, 892548403, 892548405, 892548403, 892548405, 892548405, 892548405, 892548403, 892548405]
+
+[[sequence]]
+id = "center"
+family = "center"
+lexeme = "r30.scale::center"
+lean = "Rule30UOR.Core.center"
+parameters = []
+kappa = "sha256:aa56fa1c1c3b94edc7e49a60d8776dbad32af8f56c984c1ac9905e065c865ed9"
+evaluation = "cellM t 0"
+justification = "R30Sequences.center_memo"
+window = [1976148795, 3584657070, 1211797263, 269932771, 246998495, 2180638246, 2366073279, 4204491149, 3711687515, 3545153544, 1828970899, 2517602462, 629366054, 37214026, 2976479407, 395249784]
+
+[[sequence]]
+id = "cell(-8)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [-8]
+kappa = "sha256:847e673472ce2106f16f3449989342bb92e1163106d2207d5abdd1d6b08d8cdd"
+evaluation = "cellM t (-8)"
+justification = "R30Sequences.cell_memo"
+window = [1034107648, 64627020, 3569908150, 3356809233, 2327116539, 2799747448, 2306601357, 2588057750, 409475684, 403053249, 515886488, 2256342709, 1193221813, 250506552, 102711905, 1436726720]
+
+[[sequence]]
+id = "cell(-7)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [-7]
+kappa = "sha256:444fff3e75717ca7a92c37b6fb12ff89d2b1384309db5213788db0096687062e"
+evaluation = "cellM t (-7)"
+justification = "R30Sequences.cell_memo"
+window = [3602721152, 4251728231, 1733234331, 1335259037, 148263437, 3124722095, 4054342902, 3951179930, 4010787748, 4026264445, 2491447023, 4078297297, 1975894820, 3768792448, 4089607101, 1681693055]
+
+[[sequence]]
+id = "cell(-6)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [-6]
+kappa = "sha256:ac508f5366dc64fd6faadd6e0f3addf3e34e29fb7f8524390274ce87403bb48c"
+evaluation = "cellM t (-6)"
+justification = "R30Sequences.cell_memo"
+window = [2429914816, 2835885498, 1164309738, 1625006278, 236688372, 3553955106, 1362073424, 218336451, 2715842614, 2728922374, 3305088160, 1575403036, 1501134119, 3191723768, 1568430742, 2812864789]
+
+[[sequence]]
+id = "cell(-5)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [-5]
+kappa = "sha256:d65ee4f820a72ae1ddbd9ecb6f09d307f3f5ca2837639ad7d949c91a672c1ee4"
+evaluation = "cellM t (-5)"
+justification = "R30Sequences.cell_memo"
+window = [2652301920, 2313168552, 1169772716, 1063796602, 197302311, 311555644, 1496650334, 3775067768, 1052749723, 1016062458, 1985291455, 335840215, 1090585013, 2340510380, 1224756452, 2965941732]
+
+[[sequence]]
+id = "cell(-4)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [-4]
+kappa = "sha256:4bf5895f32b7e03cead773bad5ae958b6f32753d728dab7fcfe3b8e050cb752b"
+evaluation = "cellM t (-4)"
+justification = "R30Sequences.cell_memo"
+window = [3285857200, 3971496654, 1719737524, 3574568195, 142135237, 3634189352, 1839471723, 3179434927, 2491425514, 685784067, 1536243413, 3353673061, 2046426329, 4076628774, 1912370340, 3746346663]
+
+[[sequence]]
+id = "cell(-3)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [-3]
+kappa = "sha256:022995e8a83b37178fb383c9621825b4f1a8be992b30a749883fb20728ee72ab"
+evaluation = "cellM t (-3)"
+justification = "R30Sequences.cell_memo"
+window = [2104218264, 925641547, 2969159382, 2447566329, 263091524, 1858492448, 2798064712, 2260966693, 3841965228, 2294274042, 2459802437, 1924530437, 212686657, 571936059, 2706789942, 2506543281]
+
+[[sequence]]
+id = "cell(-2)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [-2]
+kappa = "sha256:fa015630039df004285555546e6eeb818efc788c7441b107e5c4c28b8ea3d76d"
+evaluation = "cellM t (-2)"
+justification = "R30Sequences.cell_memo"
+window = [1414355180, 3492162914, 2662103899, 473736878, 176923751, 2742708280, 981833295, 4200764473, 2796213428, 3970601004, 2462509174, 1553726950, 4146480505, 3286622633, 2165513115, 297492190]
+
+[[sequence]]
+id = "cell(-1)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [-1]
+kappa = "sha256:fa112d0cf3103aff70e794efdc7c3aba367b3e92a8e6d2d22fde118f01273ba5"
+evaluation = "cellM t (-1)"
+justification = "R30Sequences.cell_memo"
+window = [1191800486, 523974072, 3945244776, 399815818, 149063472, 1023609900, 721738592, 62048041, 3005355734, 919117768, 3682209626, 2498254512, 2772070829, 2191801550, 3789406952, 472410948]
+
+[[sequence]]
+id = "cell(1)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [1]
+kappa = "sha256:106ccf29d73db3b24a793b14029b049c210ad03499579d8e72ed62ac9a10b311"
+evaluation = "cellM t (1)"
+justification = "R30Sequences.cell_memo"
+window = [426523946, 1691283659, 1328079328, 2681946296, 187576661, 4239309627, 3783593600, 216882918, 2511169640, 2640543692, 2717564562, 3689586411, 3069810234, 60462435, 2567515701, 316796672]
+
+[[sequence]]
+id = "cell(2)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [2]
+kappa = "sha256:b476ef27b76ad5cdc704c68ed6ac9830dbc346b45e7ceba9fcae677987b2ab96"
+evaluation = "cellM t (2)"
+justification = "R30Sequences.cell_memo"
+window = [3912734092, 2806652425, 1636712127, 3228072079, 2284051556, 1461758377, 1019601151, 4104230074, 382275343, 2512191590, 3154936024, 1748159306, 3660484651, 2196281784, 3991784325, 2629744120]
+
+[[sequence]]
+id = "cell(3)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [3]
+kappa = "sha256:520d2ceb05329fa5330cc1b684bc0fc7bf956dfa94e9fd80e45330b2916c8147"
+evaluation = "cellM t (3)"
+justification = "R30Sequences.cell_memo"
+window = [2916280040, 895740878, 3202602112, 2142178549, 3476903687, 1161744078, 3613834754, 1446842499, 2584338912, 3330408379, 3623157358, 265515596, 1137368621, 3255746863, 2796980470, 3363873964]
+
+[[sequence]]
+id = "cell(4)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [4]
+kappa = "sha256:5c4abcb509a2880fe7616b671d3b6f7cf56cad3c74f484231e2bfea742e684ae"
+evaluation = "cellM t (4)"
+justification = "R30Sequences.cell_memo"
+window = [3063719088, 2578974816, 708658431, 3536465, 1637115365, 1904429578, 355511292, 2609257720, 3284942527, 1895585064, 2416323491, 3759690336, 2014014261, 1675852069, 975474522, 1895745318]
+
+[[sequence]]
+id = "cell(5)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [5]
+kappa = "sha256:366ef7a5264db4fc4c1d4ae8a37252dbe991bef84b9f5d67dbe7e9c3f9b8948b"
+evaluation = "cellM t (5)"
+justification = "R30Sequences.cell_memo"
+window = [3499405472, 3912232894, 601126402, 4286927772, 3202810929, 1560110027, 3655256064, 318379695, 2020070533, 503812399, 2683553853, 3218021180, 2949466502, 2998734265, 2474953283, 1353401659]
+
+[[sequence]]
+id = "cell(6)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [6]
+kappa = "sha256:d6cce6ec558ca653676106adf6edd511d4081680057eb30d5a33a73e31933ebb"
+evaluation = "cellM t (6)"
+justification = "R30Sequences.cell_memo"
+window = [1590090944, 2887955755, 960961532, 16145687, 705030108, 1196800109, 1766019068, 313201440, 800755961, 3959070133, 3311226753, 2239090134, 543264496, 2558654161, 3806749306, 1485333890]
+
+[[sequence]]
+id = "cell(7)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [7]
+kappa = "sha256:307ab2e9eeaaa8beb875a2c40d90647ed83183c8701f81477a334c829a4b0134"
+evaluation = "cellM t (7)"
+justification = "R30Sequences.cell_memo"
+window = [1802716800, 3074204706, 2926700884, 4284115217, 602157207, 2051452852, 2893897734, 2603457855, 3400047785, 1208141521, 2031381245, 4182865043, 1069353502, 4009493649, 2721299212, 1827616504]
+
+[[sequence]]
+id = "cell(8)"
+family = "cell"
+lexeme = "r30.time::cell"
+lean = "Rule30UOR.Core.cell"
+parameters = [8]
+kappa = "sha256:5b454476fc9734ca10587a8459669146857b1140694d4decc71a55c6ce88d2de"
+evaluation = "cellM t (8)"
+justification = "R30Sequences.cell_memo"
+window = [1214085888, 3514877752, 3395202630, 2856520094, 943185680, 40946311, 3075850235, 3442786730, 2295252524, 1341880860, 1372008966, 1369200413, 2860911595, 2740449433, 870133236, 2788547118]
+
+[[sequence]]
+id = "rdiag(0)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [0]
+kappa = "sha256:c286f1d0d5ee310af9dab0d77e0d2b8217ba45687f7a7b867923df76294d24ad"
+evaluation = "rdiagM 0 t"
+justification = "R30Sequences.rdiag_memo"
+window = [4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]
+
+[[sequence]]
+id = "rdiag(1)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [1]
+kappa = "sha256:78cda6b32505b451dd22d516ceccc58b4ee2bef02c3c2bfc811012dc612e2d91"
+evaluation = "rdiagM 1 t"
+justification = "R30Sequences.rdiag_memo"
+window = [2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "rdiag(2)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [2]
+kappa = "sha256:9345d8c470fb8256afebc3dfe0061cd9bf2419cb011f8a0987c3b793c0be7535"
+evaluation = "rdiagM 2 t"
+justification = "R30Sequences.rdiag_memo"
+window = [2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "rdiag(3)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [3]
+kappa = "sha256:562de3000c2bb9d2f8d56d14a54eadc3c919eb3169ec217a9e7fd7f466aa9087"
+evaluation = "rdiagM 3 t"
+justification = "R30Sequences.rdiag_memo"
+window = [3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836]
+
+[[sequence]]
+id = "rdiag(4)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [4]
+kappa = "sha256:866cb84420295b136f50fc674fe440ccd678ad69d5bc3944d5e3b731dfc4e612"
+evaluation = "rdiagM 4 t"
+justification = "R30Sequences.rdiag_memo"
+window = [3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620]
+
+[[sequence]]
+id = "rdiag(5)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [5]
+kappa = "sha256:ca8e9333e003a6ba5589352465494ba1ba04496d3da5f9eeabfd37a10110f09c"
+evaluation = "rdiagM 5 t"
+justification = "R30Sequences.rdiag_memo"
+window = [2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512]
+
+[[sequence]]
+id = "rdiag(6)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [6]
+kappa = "sha256:2672e23517d11be29f59de8d981c960b7711941c59a56fbdced9ab1aa4e35fe1"
+evaluation = "rdiagM 6 t"
+justification = "R30Sequences.rdiag_memo"
+window = [3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960]
+
+[[sequence]]
+id = "rdiag(7)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [7]
+kappa = "sha256:d3f12a5bb8132a09113e35db48d5b3d63823870d476fb838cc4041900f8caa50"
+evaluation = "rdiagM 7 t"
+justification = "R30Sequences.rdiag_memo"
+window = [2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480]
+
+[[sequence]]
+id = "rdiag(8)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [8]
+kappa = "sha256:9090d519537aaadd993e8cde4362adf303db71198f8ce370f2041546a9e0d757"
+evaluation = "rdiagM 8 t"
+justification = "R30Sequences.rdiag_memo"
+window = [2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800]
+
+[[sequence]]
+id = "rdiag(9)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [9]
+kappa = "sha256:1cbec8d96cec088afa12dcd34e42de36e5da0cf498f82f5a6357583dee69c402"
+evaluation = "rdiagM 9 t"
+justification = "R30Sequences.rdiag_memo"
+window = [861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063]
+
+[[sequence]]
+id = "rdiag(10)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [10]
+kappa = "sha256:f1cb33dc50c9b7150fed723ced42b1abdc1719fec4e5594698280e5d2572e9d4"
+evaluation = "rdiagM 10 t"
+justification = "R30Sequences.rdiag_memo"
+window = [3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418]
+
+[[sequence]]
+id = "rdiag(11)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [11]
+kappa = "sha256:69a541c21ce70e5172f1488d1e37e6efc4dda86112d5adf230bbff17419c6db8"
+evaluation = "rdiagM 11 t"
+justification = "R30Sequences.rdiag_memo"
+window = [1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037]
+
+[[sequence]]
+id = "rdiag(12)"
+family = "rdiag"
+lexeme = "r30.right::rdiag"
+lean = "Rule30UOR.Core.rdiag"
+parameters = [12]
+kappa = "sha256:77cfd2cadb31404f47ab68a59f11098dd6044701504cb6cb8adffb3c2bc18379"
+evaluation = "rdiagM 12 t"
+justification = "R30Sequences.rdiag_memo"
+window = [2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738]
+
+[[sequence]]
+id = "ldiag(0)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [0]
+kappa = "sha256:99f7f1bb9f15b334e85803b6ed686236c5b5096bd2b03514858bb1e12d68a9c9"
+evaluation = "ldiagM 0 t"
+justification = "R30Sequences.ldiag_memo"
+window = [4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]
+
+[[sequence]]
+id = "ldiag(1)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [1]
+kappa = "sha256:f9de9714d5acc75e0f1f4716b575359cefd408f9d8ddb8005529fc39af543566"
+evaluation = "ldiagM 1 t"
+justification = "R30Sequences.ldiag_memo"
+window = [4294967294, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]
+
+[[sequence]]
+id = "ldiag(2)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [2]
+kappa = "sha256:e9a80cffcfba1027fec3b83054b5513534242d868c05448ac63148d0759262d7"
+evaluation = "ldiagM 2 t"
+justification = "R30Sequences.ldiag_memo"
+window = [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+[[sequence]]
+id = "ldiag(3)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [3]
+kappa = "sha256:22cd4b45db15ff2369893237927a9fa9fb031806044ed47dec2266b44ac80e92"
+evaluation = "ldiagM 3 t"
+justification = "R30Sequences.ldiag_memo"
+window = [2863311528, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "ldiag(4)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [4]
+kappa = "sha256:70e456b4cd8f8c89cd1de5caffb75d903a4b35999cf04b5f48cf854e0578244a"
+evaluation = "ldiagM 4 t"
+justification = "R30Sequences.ldiag_memo"
+window = [4294967292, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]
+
+[[sequence]]
+id = "ldiag(5)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [5]
+kappa = "sha256:8f89a61755d925312219d0a72d2a4e646384714a44de648fce70f1694033483b"
+evaluation = "ldiagM 5 t"
+justification = "R30Sequences.ldiag_memo"
+window = [2863311528, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "ldiag(6)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [6]
+kappa = "sha256:f4da1e5f6e2df09fc24b66856f8b5d1d49fced33059cce5b4e1f9e70a68755c1"
+evaluation = "ldiagM 6 t"
+justification = "R30Sequences.ldiag_memo"
+window = [2863311528, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "ldiag(7)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [7]
+kappa = "sha256:2c9bac42124e1796743056123c10999b6ee549f2199fd5f2b72252ed35794621"
+evaluation = "ldiagM 7 t"
+justification = "R30Sequences.ldiag_memo"
+window = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+[[sequence]]
+id = "ldiag(8)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [8]
+kappa = "sha256:d3c2f25c07e6411fd03e85acab8af0dfb610436d65bee613376ae367bcd8ddfe"
+evaluation = "ldiagM 8 t"
+justification = "R30Sequences.ldiag_memo"
+window = [858993456, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459, 858993459]
+
+[[sequence]]
+id = "ldiag(9)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [9]
+kappa = "sha256:84c441ac31d34901070a21da17c7d06f2c6bea670a5eee2586c788bee07e7d60"
+evaluation = "ldiagM 9 t"
+justification = "R30Sequences.ldiag_memo"
+window = [4294967264, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]
+
+[[sequence]]
+id = "ldiag(10)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [10]
+kappa = "sha256:d8a41b401f4e2e4548633cc57ef02ec9d6d54798a7da6ddeb68ad4aeb6c1028a"
+evaluation = "ldiagM 10 t"
+justification = "R30Sequences.ldiag_memo"
+window = [2576980384, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377, 2576980377]
+
+[[sequence]]
+id = "ldiag(11)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [11]
+kappa = "sha256:d6981948ada142b9cc8056cb75e5da02e20c4edaad29ca56fad5139c7e4b7b90"
+evaluation = "ldiagM 11 t"
+justification = "R30Sequences.ldiag_memo"
+window = [1145324672, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612, 1145324612]
+
+[[sequence]]
+id = "ldiag(12)"
+family = "ldiag"
+lexeme = "r30.time::ldiag"
+lean = "Rule30UOR.Core.ldiag"
+parameters = [12]
+kappa = "sha256:60373c6a254594515bbaf5a6981da9e8c8cbc1bdd543f9a966cd2128faed37fc"
+evaluation = "ldiagM 12 t"
+justification = "R30Sequences.ldiag_memo"
+window = [4008636096, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142, 4008636142]
+
+[[sequence]]
+id = "tower-word(0)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [0]
+kappa = "sha256:9ebe23a4dc576778ddf38041b92243e94440cbd07eae2fa1be213ac941931f6b"
+evaluation = "towerWordM 0 t"
+justification = "R30Sequences.towerWord_memo"
+window = [4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]
+
+[[sequence]]
+id = "tower-word(1)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [1]
+kappa = "sha256:4633e9f792cd8536728bbdd54ceab594a7cae8b70cd33b3bb5542472cd8d68c0"
+evaluation = "towerWordM 1 t"
+justification = "R30Sequences.towerWord_memo"
+window = [2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "tower-word(2)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [2]
+kappa = "sha256:62d2113e9c4e1267204f2e2e7265575de9ea326595978dbb5d7284e394d6e7a8"
+evaluation = "towerWordM 2 t"
+justification = "R30Sequences.towerWord_memo"
+window = [2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "tower-word(3)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [3]
+kappa = "sha256:aa497bd2de44744661ad1054668762ccb88eaaa9f8b062a398280aeff0b55eb0"
+evaluation = "towerWordM 3 t"
+justification = "R30Sequences.towerWord_memo"
+window = [3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836, 3435973836]
+
+[[sequence]]
+id = "tower-word(4)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [4]
+kappa = "sha256:c2dd5e5d57656b1e2409c6a0375a80fe05cf6314bc3852fd7d4c4b111aff0eb5"
+evaluation = "towerWordM 4 t"
+justification = "R30Sequences.towerWord_memo"
+window = [3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620, 3031741620]
+
+[[sequence]]
+id = "tower-word(5)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [5]
+kappa = "sha256:5f91d6cb98fb0f9253ab9ec9f880049c10cc6e156d479cabfe9a11200065b45e"
+evaluation = "towerWordM 5 t"
+justification = "R30Sequences.towerWord_memo"
+window = [2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512, 2829625512]
+
+[[sequence]]
+id = "tower-word(6)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [6]
+kappa = "sha256:adccc312e30d60ab99c3ed880f3810edabbb86ff00209e7aa3f52c287e997c7f"
+evaluation = "towerWordM 6 t"
+justification = "R30Sequences.towerWord_memo"
+window = [3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960, 3609777960]
+
+[[sequence]]
+id = "tower-word(7)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [7]
+kappa = "sha256:4da7863a31748f82a1d384ca4b51e264def0d3fd318e1b3408642fe3ecaae1b4"
+evaluation = "towerWordM 7 t"
+justification = "R30Sequences.towerWord_memo"
+window = [2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480, 2865714480]
+
+[[sequence]]
+id = "tower-word(8)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [8]
+kappa = "sha256:b627d7b21eb77e0d245e0edfe4afdfd18cd918ed3c169f1f25d6de0423f4dfa2"
+evaluation = "towerWordM 8 t"
+justification = "R30Sequences.towerWord_memo"
+window = [2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800, 2864014800]
+
+[[sequence]]
+id = "tower-word(9)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [9]
+kappa = "sha256:d3c5cb22196a1b17bd29c889bc542bc126d9369b4f180f5b1e8b264094ab151e"
+evaluation = "towerWordM 9 t"
+justification = "R30Sequences.towerWord_memo"
+window = [861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063, 861251232, 3433716063]
+
+[[sequence]]
+id = "tower-word(10)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [10]
+kappa = "sha256:db995aeb853fd5010271f962a749b0b353f554eebd5b8c923a5af9b9b7c39eaf"
+evaluation = "towerWordM 10 t"
+justification = "R30Sequences.towerWord_memo"
+window = [3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418, 3534142112, 3033901418]
+
+[[sequence]]
+id = "tower-word(11)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [11]
+kappa = "sha256:320470e8a311b4a3099198a0cfd4facfe707e9fdcfc41788000cc8db16b92927"
+evaluation = "towerWordM 11 t"
+justification = "R30Sequences.towerWord_memo"
+window = [1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037, 1566233792, 2829758037]
+
+[[sequence]]
+id = "tower-word(12)"
+family = "tower-word"
+lexeme = "r30.observation::tower-word"
+lean = "Rule30UOR.Antidiagonal.towerWord"
+parameters = [12]
+kappa = "sha256:bfff198fc85ae9dff4faaadad481a4ea14180dd5218bda706db40413061fb497"
+evaluation = "towerWordM 12 t"
+justification = "R30Sequences.towerWord_memo"
+window = [2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738, 2505354048, 3612685738]
+
+[[sequence]]
+id = "exposed(0)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [0]
+kappa = "sha256:56a00da1ae68ae0e4f1a8db9a5a73a0d5260e1771389d38d0d21c2510a293bd2"
+evaluation = "exposedM 0 t"
+justification = "R30Sequences.exposed_memo"
+window = [1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765, 1431655765]
+
+[[sequence]]
+id = "exposed(1)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [1]
+kappa = "sha256:9bc064317455bef0720bc0167b28cba6718c7da7497e73311c14f3d9e8d8e9a8"
+evaluation = "exposedM 1 t"
+justification = "R30Sequences.exposed_memo"
+window = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+[[sequence]]
+id = "exposed(2)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [2]
+kappa = "sha256:ca3da111ea4b5335fd06ccbf3e6103b18bd4070b53dc4bf6379aaa191bbcb416"
+evaluation = "exposedM 2 t"
+justification = "R30Sequences.exposed_memo"
+window = [572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306, 572662306]
+
+[[sequence]]
+id = "exposed(3)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [3]
+kappa = "sha256:8290c29374160378ab606251ed432a8a285566d4e8a326430517fa83a2441cfd"
+evaluation = "exposedM 3 t"
+justification = "R30Sequences.exposed_memo"
+window = [1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648, 1212696648]
+
+[[sequence]]
+id = "exposed(4)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [4]
+kappa = "sha256:34e4baec0665484de6d38caa7b7e2d5bb3d7eed03128a3bb991c151a4a0fafb3"
+evaluation = "exposedM 4 t"
+justification = "R30Sequences.exposed_memo"
+window = [336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180, 336860180]
+
+[[sequence]]
+id = "exposed(5)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [5]
+kappa = "sha256:d145e17176d9607b92041ab4c1e7f2d58f1793e25f775b79ae810a7e0cfa11ff"
+evaluation = "exposedM 5 t"
+justification = "R30Sequences.exposed_memo"
+window = [679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616, 679487616]
+
+[[sequence]]
+id = "exposed(6)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [6]
+kappa = "sha256:ee9d682a3b8879a3d8d8d380a1c96d954fc9ee24eea284dfbef2f8bf0dd82394"
+evaluation = "exposedM 6 t"
+justification = "R30Sequences.exposed_memo"
+window = [1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800, 1428193800]
+
+[[sequence]]
+id = "exposed(7)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [7]
+kappa = "sha256:dc0b561d675eb8c015f55df70af9848d912207dd3382e0e9bc9cdd3f48f61a02"
+evaluation = "exposedM 7 t"
+justification = "R30Sequences.exposed_memo"
+window = [4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792, 4853792]
+
+[[sequence]]
+id = "exposed(8)"
+family = "exposed"
+lexeme = "r30.observation::exposed"
+lean = "Rule30UOR.Antidiagonal.exposed"
+parameters = [8]
+kappa = "sha256:70eba30d30c2f5fad3ea5a568df41a39c3a05e38cab231d94157e7985a0440eb"
+evaluation = "exposedM 8 t"
+justification = "R30Sequences.exposed_memo"
+window = [2292203856, 571810944, 2292203856, 571810944, 2292203856, 571810944, 2292203856, 571810944, 2292203856, 571810944, 2292203856, 571810944, 2292203856, 571810944, 2292203856, 571810944]
+
+[[sequence]]
+id = "masked-column"
+family = "masked-column"
+lexeme = "r30.observation::masked-column"
+lean = "Rule30UOR.Antidiagonal.maskedColumn"
+parameters = []
+kappa = "sha256:e4ddf54b646a386a389e4591fd278e9e34721d308c5cfb388a69586c45c6d8fb"
+evaluation = "maskedColumnM t"
+justification = "R30Sequences.maskedColumn_memo"
+window = [136584192, 541487169, 117465312, 2412314648, 17174528, 2080774425, 1619002880, 73666146, 8658976, 203505604, 2163744256, 1239420513, 2457371160, 25690145, 134219280, 6350592]
+
+[[sequence]]
+id = "cone-zero"
+family = "cone-zero"
+lexeme = "r30.observation::cone-zero"
+lean = "Rule30UOR.Antidiagonal.coneZero"
+parameters = []
+kappa = "sha256:a0d2ec810a3531dda8dd61c0eadabc988d71eefb82e5054de5ca860ac899a19d"
+evaluation = "coneZeroM t"
+justification = "R30Sequences.coneZero_memo"
+window = [1191800486, 523974072, 3945244776, 399815818, 149063472, 1023609900, 721738592, 62048041, 3005355734, 919117768, 3682209626, 2498254512, 2772070829, 2191801550, 3789406952, 472410948]
+
+[[sequence]]
+id = "left-cone"
+family = "left-cone"
+lexeme = "r30.observation::left-cone"
+lean = "Rule30UOR.Antidiagonal.leftCone"
+parameters = []
+kappa = "sha256:7bba78938cbe9d4d294a6ef4c753768f585fca45810562c562321b96edaff6c3"
+evaluation = "leftConeM t"
+justification = "R30Sequences.leftCone_memo"
+window = [2318818500, 710310225, 3083170032, 4025034524, 4047968800, 2114329049, 1928894016, 90476146, 583279780, 749813751, 2465996396, 1777364833, 3665601241, 4257753269, 1318487888, 3899717511]
+
+[[sequence]]
+id = "edge-diagonal"
+family = "edge-diagonal"
+lexeme = "r30.observation::edge-diagonal"
+lean = "Rule30UOR.EdgeSplit.edgeDiagonal"
+parameters = []
+kappa = "sha256:ceea9d9415899c1d731ca8491575eeaf096084daba45f0c061c562e7c2cd8636"
+evaluation = "EdgeSplit.edgeDiagonal t"
+justification = "the host constant"
+window = [2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530, 2863311530]
+
+[[sequence]]
+id = "interior-diagonal"
+family = "interior-diagonal"
+lexeme = "r30.observation::interior-diagonal"
+lean = "Rule30UOR.EdgeSplit.interiorDiagonal"
+parameters = []
+kappa = "sha256:c3966fd65ef635d0401eafb2448e6f5e12c15dba4f0f2b105d8db95a0f94f867"
+evaluation = "EdgeSplit.interiorDiagonal t"
+justification = "the host constant"
+window = [547157614, 2164052987, 493869658, 1162055094, 1542303882, 3568087923, 3629268202, 2949522648, 2288946702, 2249954653, 945206470, 3277505995, 1893075059, 1466073631, 3829149178, 1121606957]
+
+[[sequence]]
+id = "low-diagonal"
+family = "low-diagonal"
+lexeme = "r30.observation::low-diagonal"
+lean = "Rule30UOR.Band.lowDiagonal"
+parameters = []
+kappa = "sha256:ff0769446bc3e4f864a62e9a53a35dd6bb82f138e2e61680a2bfef0e2d9ee856"
+evaluation = "Band.lowDiagonal t"
+justification = "the host constant"
+window = [3755859934, 3755859935, 3755859933, 3755859935, 3755859935, 3755859935, 3755859933, 3755859935, 3755859933, 3755859935, 3755859933, 3755859935, 3755859935, 3755859935, 3755859933, 3755859935]
+
+[[sequence]]
+id = "interior-three-diagonal"
+family = "interior-three-diagonal"
+lexeme = "r30.observation::interior-three-diagonal"
+lean = "Rule30UOR.Band.interiorThreeDiagonal"
+parameters = []
+kappa = "sha256:a98d42c69bd1f02b606100098a33f00e3aa32a4143390ea39dcc5aad770c4280"
+evaluation = "Band.interiorThreeDiagonal t"
+justification = "the host constant"
+window = [4282460592, 1596001316, 3266446727, 2594067049, 2217766741, 191982764, 126870327, 1880357639, 1471369683, 1506167426, 3884673819, 478616084, 2936788908, 2294242752, 1004663335, 2634515186]
+
+[[sequence]]
+id = "left-band-diagonal"
+family = "left-band-diagonal"
+lexeme = "r30.observation::left-band-diagonal"
+lean = "Rule30UOR.LeftBand.leftBandDiagonal"
+parameters = []
+kappa = "sha256:6b78cd071296ab4eeeb7ea9724b9cd91a69db0bc228b1547ceba0e5d65c6c8fd"
+evaluation = "LeftBand.leftBandDiagonal t"
+justification = "the host constant"
+window = [3216752560, 3216752575, 3216752571, 3216752575, 3216752575, 3216752575, 3216752571, 3216752575, 3216752571, 3216752575, 3216752571, 3216752575, 3216752575, 3216752575, 3216752571, 3216752575]
+
+[[sequence]]
+id = "interior-eight-diagonal"
+family = "interior-eight-diagonal"
+lexeme = "r30.observation::interior-eight-diagonal"
+lean = "Rule30UOR.LeftBand.interiorEightDiagonal"
+parameters = []
+kappa = "sha256:86f0a7f841ca6dfe295c66493fa01aee9dd3acfbda2211eca584ccad2d8d1cb0"
+evaluation = "LeftBand.interiorEightDiagonal t"
+justification = "the host constant"
+window = [1090164224, 3768234907, 2097789500, 623242710, 999018730, 3033191187, 3090439308, 3483911352, 3892899432, 3867014461, 1479595168, 2738660779, 279996435, 923067007, 2220510620, 582761805]
+
+[[sequence]]
+id = "ledger-diagonal"
+family = "ledger-diagonal"
+lexeme = "r30.observation::ledger-diagonal"
+lean = "Rule30UOR.Ledger.ledgerDiagonal"
+parameters = []
+kappa = "sha256:1d21a4ffd63ab1e5b06f4ce9f168daf1c81e3ff23a9db674d5748043aa64ab59"
+evaluation = "Ledger.ledgerDiagonal t"
+justification = "the host constant"
+window = [2318818500, 710310225, 3083170032, 4025034524, 4047968800, 2114329049, 1928894016, 90476146, 583279780, 749813751, 2465996396, 1777364833, 3665601241, 4257753269, 1318487888, 3899717511]
+
+[[excluded]]
+id = "dyadic-row"
+lexeme = "r30.observation::dyadic-row"
+lean = "Rule30UOR.DyadicRow.dyadicRow"
+reason = "dyadicRow m = rowTerm (2^(m+1)) m iterates the linear map phiLinear 2^(m+1) - 1 - m times (Core.phiLinearPow is the plain iteration), so t < 512 needs about 2^512 steps."
+
+[[excluded]]
+id = "block-parity"
+lexeme = "r30.observation::block-parity"
+lean = "Rule30UOR.DyadicRow.blockParity"
+reason = "blockParity j reads dyadicRow at 2^j + i for every i < 2^j, so its window is out of reach for the reason dyadic-row is."
+
+[[excluded]]
+id = "witt-resp"
+lexeme = "r30.witt::witt-resp"
+lean = "Rule30UOR.Interfaces.wittRespBool"
+reason = "wittRespBool t k is a response in two variables whose value at (t, k) runs the Witt window over 2^k rows; it is a sequence in t only once k is fixed, and no k is singled out by the paper, so it is left out rather than instantiated at an arbitrary scale."

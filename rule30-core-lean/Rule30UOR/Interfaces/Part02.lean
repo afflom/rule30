@@ -79,7 +79,7 @@ theorem periodic_late_response_unsettled_decomp (T P : Nat) (hP : 0 < P)
   have hr1 := Rule30UOR.Scale.periodic_scale_cone_paper T P hP h (k + 1) d ht hdk1
   rw [hr0, hr1] at hcob
   revert hcob
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center d <;>
     cases Rule30UOR.Core.center (d + Rule30UOR.Scale.lag P k) <;>
     cases Rule30UOR.Core.center (d + Rule30UOR.Scale.lag P (k + 1)) <;>
@@ -107,7 +107,7 @@ theorem periodic_zcenter_from_lag_and_late_response (T P : Nat) (hP : 0 < P)
         (Rule30UOR.Scale.response (d + twopow k) k) := by
   have hd := periodic_late_response_settled_decomp T P hP h d k ht hk hset
   revert hd
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center (d + Rule30UOR.Scale.lag P (k + 1)) <;>
     cases Rule30UOR.Core.center (d + Rule30UOR.Scale.lag P k) <;>
     cases Rule30UOR.Scale.response (d + twopow k) k <;>
@@ -131,7 +131,7 @@ theorem periodic_zcenter_shift_xor_eq_late_response_xor (T P : Nat)
     rw [show ((d + P) + twopow k) + twopow k = ((d + twopow k) + twopow k) + P by omega]
     exact h ((d + twopow k) + twopow k) (by omega)
   rw [hz1, hz2, hc1, hc2]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center ((d + twopow k) + twopow k) <;>
     cases Rule30UOR.Core.center (d + twopow k) <;>
     cases Rule30UOR.Scale.response ((d + P) + twopow k) k <;>
@@ -151,7 +151,7 @@ theorem periodic_zcenter_shift_xor_eq_late_witt_xor (T P : Nat)
   have hcp := h d ht
   rw [hcp] at hc2
   revert hr hc1 hc2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center d <;>
     cases zcenter (d + P) <;>
     cases zcenter d <;>
@@ -173,7 +173,7 @@ theorem periodic_zcenter_shift_xor_eq_sector_two_xor (T P : Nat)
     ldiag_settled_eq_zcenter (d + P) k hk hset2,
     ldiag_settled_eq_zcenter d k (by omega) hset1,
     h d ht]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center d <;>
     cases zcenter (d + P) <;>
     cases zcenter d <;> rfl
@@ -200,7 +200,7 @@ theorem zcenter_periodic_of_late_response_shift (T P : Nat)
   intro d ht
   obtain ⟨k, _, hk2, hset1, hset2⟩ := exists_settled_scale_pair d (d + P)
   have hxor := periodic_zcenter_shift_xor_eq_late_response_xor T P h d k ht hk2 hset1 hset2
-  rw [hlate d k ht hk2 hset1 hset2, bxor_eq_xor, bxor_eq_xor, Bool.xor_self] at hxor
+  rw [hlate d k ht hk2 hset1 hset2, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hxor
   revert hxor
   cases zcenter (d + P) <;> cases zcenter d <;> decide
 
@@ -213,7 +213,7 @@ theorem zcenter_periodic_of_late_witt_shift (T P : Nat)
   intro d ht
   obtain ⟨k, _, hk2, hset1, hset2⟩ := exists_settled_scale_pair d (d + P)
   have hxor := periodic_zcenter_shift_xor_eq_late_witt_xor T P h d k ht hk2 hset1 hset2
-  rw [hlate d k ht hk2 hset1 hset2, bxor_eq_xor, bxor_eq_xor, Bool.xor_self] at hxor
+  rw [hlate d k ht hk2 hset1 hset2, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hxor
   revert hxor
   cases zcenter (d + P) <;> cases zcenter d <;> decide
 
@@ -329,7 +329,7 @@ theorem phiScale_testBit_triality (k y r : Nat) :
   rw [hm1, hm2, Bool.true_and, Bool.true_and,
     show r + twopow (k + 1) - twopow k = r + twopow k by omega,
     show r + twopow (k + 1) - (twopow k + twopow k) = r by omega]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases y.testBit (r + twopow (k + 1)) <;>
     cases y.testBit (r + twopow k) <;>
     cases y.testBit r <;> rfl
@@ -345,7 +345,7 @@ theorem phiScale_testBit_sector_one (k y r : Nat) (hr : r < twopow k) :
   have hm2 : decide (r + twopow k ≥ twopow k + twopow k) = false := decide_eq_false (by omega)
   rw [hm1, hm2, Bool.true_and, Bool.false_and, Bool.xor_false,
     show r + twopow k - twopow k = r by omega]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases y.testBit (r + twopow k) <;> cases y.testBit r <;> rfl
 
 /-- **Exact Early-Window Triality Decomposition of Late `winWitt` Sector 1 (`r + 2^(k+1)`)**: for any `t0`, `k`, and `r`, bit `r + 2^(k+1)` of the late Witt window `winWitt (t0 + 2^k) (2^k)` equals bit `r + 2^(k+1)` of `winWitt t0 (2^(k+1))` XORed with all three Triality Sectors of `winWitt t0 (2^k)` at slot `r`. -/
@@ -357,7 +357,7 @@ theorem winWitt_late_testBit_triality (t0 k r : Nat) :
           ((winWitt t0 (twopow k)).testBit (r + twopow (k + 1)))) := by
   rw [winWitt_scale_cocycle t0 k, Nat.testBit_xor,
     phiScale_testBit_triality k (winWitt t0 (twopow k)) r]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
 
 /-- Paper-facing `bit` (`wittbit`) wrapper for `winWitt_late_testBit_triality`. -/
 theorem bit_winWitt_late_triality (t0 k r : Nat) :
@@ -379,7 +379,7 @@ theorem wittRespBool_late_from_early_triality (d k : Nat) (hk : d ≤ k) :
   unfold wittRespBool
   rw [hstep, winWitt_late_testBit_triality d k d,
     winWitt_testBit_low d k d hk]
-  simp only [bxor_eq_xor, Bool.false_xor]
+  simp only [Rule30UOR.Scale.bxor_eq, Bool.false_xor]
 
 /-- **Step 1 Reduction of the Late Witt Term `wittRespBool (d + 2^k) k` under `CenterPeriodic T P`**: for `T ≤ d ≤ k`, `wittRespBool (d + 2^k) k` reduces to the lag-class difference `center (d + lag P (k + 1)) ⊕ center (d + lag P k)` XORed with Triality Sector 2 `(winWitt d (2^k)).testBit (d + 2^(k+1))` of the early Witt window. -/
 theorem periodic_late_witt_from_lag_and_sector_two (T P : Nat) (hP : 0 < P)
@@ -394,7 +394,7 @@ theorem periodic_late_witt_from_lag_and_sector_two (T P : Nat) (hP : 0 < P)
   rw [wittRespBool_late_from_early_triality d k hk,
     periodic_witt_cone T P hP h (k + 1) d ht hdk1,
     periodic_witt_cone T P hP h k d ht hdk]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center d <;>
     cases Rule30UOR.Core.center (d + Rule30UOR.Scale.lag P (k + 1)) <;>
     cases Rule30UOR.Core.center (d + Rule30UOR.Scale.lag P k) <;>
@@ -416,7 +416,7 @@ theorem periodic_late_maskparity_decomp (T P : Nat) (hP : 0 < P)
   have hm1 := Rule30UOR.Scale.periodic_mask_paper T P hP h (k + 1) d ht hdk1
   rw [hm0, hm1] at hmc
   revert hmc
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse d (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse d k <;>
     cases Rule30UOR.Core.center d <;>
@@ -450,7 +450,7 @@ theorem zcenter_periodic_of_sector_two_shift (T P : Nat)
   intro d ht
   obtain ⟨k, _, hk2, hset1, hset2⟩ := exists_settled_scale_pair d (d + P)
   have hxor := periodic_zcenter_shift_xor_eq_sector_two_xor T P h d k ht hk2 hset1 hset2
-  rw [hs2 d k ht hk2 hset1 hset2, bxor_eq_xor, bxor_eq_xor, Bool.xor_self] at hxor
+  rw [hs2 d k ht hk2 hset1 hset2, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hxor
   revert hxor
   cases zcenter (d + P) <;> cases zcenter d <;> decide
 
@@ -458,13 +458,13 @@ theorem zcenter_periodic_of_sector_two_shift (T P : Nat)
 theorem zcenter_step (d : Nat) :
     zcenter (d + 2) = bxor (E d (d + 1)) (zcenter (d + 1) || E (d + 2) (d + 1)) := by
   unfold zcenter
-  rw [show d + 2 = (d + 1) + 1 by omega, Rule30UOR.Intent.E_step d (d + 1), bxor_eq_xor]
+  rw [show d + 2 = (d + 1) + 1 by omega, Rule30UOR.Intent.E_step d (d + 1), Rule30UOR.Scale.bxor_eq]
 
 /-- **Zero-State Diagonal Reversibility (`zcenter_back`)**: at every depth `d`, the off-diagonal zero-state bit `E d (d + 1)` is uniquely recovered from `zcenter (d + 1)`, `zcenter (d + 2)`, and `E (d + 2) (d + 1)`. -/
 theorem zcenter_back (d : Nat) :
     E d (d + 1) = bxor (zcenter (d + 2)) (zcenter (d + 1) || E (d + 2) (d + 1)) := by
   unfold zcenter
-  rw [Rule30UOR.ZeroDiagonals.E_back d (d + 1), bxor_eq_xor]
+  rw [Rule30UOR.ZeroDiagonals.E_back d (d + 1), Rule30UOR.Scale.bxor_eq]
 
 /-- **Twin Law for `zcenter` Before a Zero Diagonal**: if `j + 2` is a zero diagonal (`IsZeroDiag (j + 2)`), then `zcenter j = E (j + 1) j` and `E j (j + 1) = zcenter (j + 1)`. -/
 theorem zcenter_twin_before_zero_diag (j : Nat) (hz : IsZeroDiag (j + 2)) :
@@ -520,7 +520,7 @@ theorem wittRespBool_late_from_early_triality_prop (d k : Nat) (hk : d ≤ k) :
   rw [BitWinWittEq, bit_eq_bton_testBit]
   have hw := wittRespBool_late_from_early_triality d k hk
   revert hw
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases wittRespBool (d + twopow k) k <;>
     cases wittRespBool d (k + 1) <;>
     cases wittRespBool d k <;>
@@ -536,7 +536,7 @@ theorem periodic_late_witt_from_lag_and_sector_two_prop (T P : Nat) (hP : 0 < P)
   rw [BitWinWittEq, bit_eq_bton_testBit]
   have hw := periodic_late_witt_from_lag_and_sector_two T P hP h d k ht hk
   revert hw
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases wittRespBool (d + twopow k) k <;>
     cases Rule30UOR.Core.center (d + Rule30UOR.Scale.lag P (k + 1)) <;>
     cases Rule30UOR.Core.center (d + Rule30UOR.Scale.lag P k) <;>
@@ -554,12 +554,12 @@ theorem zcenter_toggle_of_transparent (d : Nat) (htrans : zcenter (d + 1) = fals
 /-- **Zero-State Reset Law (`zcenter_reset_of_opaque`)**: whenever the previous center diagonal bit is black (`zcenter (d + 1) = true`), the next center diagonal bit forgets `E (d + 2) (d + 1)` and equals `!E d (d + 1)`. -/
 theorem zcenter_reset_of_opaque (d : Nat) (hopaq : zcenter (d + 1) = true) :
     zcenter (d + 2) = !E d (d + 1) := by
-  rw [zcenter_step d, hopaq, Bool.true_or, bxor_eq_xor, Bool.xor_true]
+  rw [zcenter_step d, hopaq, Bool.true_or, Rule30UOR.Scale.bxor_eq, Bool.xor_true]
 
 /-- **Zero-State Left-Of-Black Law for `zcenter` (`zcenter_left_of_black`)**: whenever `zcenter (d + 1) = true` (or `E (d + 2) (d + 1) = true`), `E d (d + 1) = !zcenter (d + 2)`. -/
 theorem zcenter_left_of_black (d : Nat) (hb : zcenter (d + 1) = true) :
     E d (d + 1) = !zcenter (d + 2) := by
-  rw [zcenter_back d, hb, Bool.true_or, bxor_eq_xor, Bool.xor_true]
+  rw [zcenter_back d, hb, Bool.true_or, Rule30UOR.Scale.bxor_eq, Bool.xor_true]
 
 /-- **Under `ZCenterPeriodic T Q`, Opaque Reset Transfers Period `Q` to the Off-Diagonal `E d (d + 1)`**: for any `T ≤ d` where both `zcenter (d + 1) = true` and `zcenter ((d + Q) + 1) = true` (which holds automatically from `ZCenterPeriodic T Q` since `T ≤ d + 1`), `E (d + Q) ((d + Q) + 1) = E d (d + 1)`. -/
 theorem zcenter_periodic_offdiag_eq_of_black (T Q : Nat) (h : ZCenterPeriodic T Q)
@@ -598,7 +598,7 @@ theorem maskcount_shift_diff (t s n : Nat) :
   rw [show s + n = n + s by omega] at h1
   rw [h2] at h1
   revert h1
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.maskcount t n <;>
     cases Rule30UOR.Scale.maskcount (t + n) s <;>
     cases Rule30UOR.Scale.maskcount t s <;>
@@ -707,7 +707,7 @@ theorem periodic_maskparity_shift_P_cone (T P : Nat) (hP : 0 < P)
     show (t + P) + Rule30UOR.Scale.lag P k = (t + Rule30UOR.Scale.lag P k) + P by omega,
     h (t + Rule30UOR.Scale.lag P k) (by omega),
     h t ht]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse (t + P) k <;>
     cases Rule30UOR.Scale.leftresponse t k <;>
     cases Rule30UOR.Core.center (t + Rule30UOR.Scale.lag P k) <;>
@@ -736,7 +736,7 @@ theorem periodic_carry60_dyadic_jump_cone (T P : Nat) (hP : 0 < P)
   rw [← maskparity_step_diff t k,
     Rule30UOR.Scale.periodic_mask_paper T P hP h k (t + 1) ht1_T hk,
     Rule30UOR.Scale.periodic_mask_paper T P hP h k t ht ht_k]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse (t + 1) k <;>
     cases Rule30UOR.Scale.leftresponse t k <;>
     cases Rule30UOR.Core.center ((t + 1) + Rule30UOR.Scale.lag P k) <;>
@@ -787,7 +787,7 @@ theorem periodic_late_maskparity_shift_P (T P : Nat) (hP : 0 < P)
     show (d + P) + Rule30UOR.Scale.lag P k = (d + Rule30UOR.Scale.lag P k) + P by omega,
     h (d + Rule30UOR.Scale.lag P (k + 1)) (by omega),
     h (d + Rule30UOR.Scale.lag P k) (by omega)]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse (d + P) (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse (d + P) k <;>
     cases Rule30UOR.Scale.leftresponse d (k + 1) <;>
@@ -817,7 +817,7 @@ theorem periodic_late_carry60_dyadic_jump (T P : Nat) (hP : 0 < P)
   rw [hstep1, ← maskparity_step_diff (d + twopow k) k, hstep2,
     periodic_late_maskparity_decomp T P hP h (d + 1) k hd1_T hk,
     periodic_late_maskparity_decomp T P hP h d k ht hd_k]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse (d + 1) (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse (d + 1) k <;>
     cases Rule30UOR.Scale.leftresponse d (k + 1) <;>
@@ -839,7 +839,7 @@ theorem periodic_late_leftresponse_unsettled_decomp (T P : Nat) (hP : 0 < P)
   have hl := ldiag_eq_leftresponse_coboundary d k hk
   have hm := periodic_late_maskparity_decomp T P hP h d k ht hk
   revert hl hm
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag d (d + twopow k) <;>
     cases Rule30UOR.Scale.leftresponse d (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse d k <;>
@@ -890,7 +890,7 @@ theorem periodic_late_carry60_defect_dyadic_jump (T P : Nat) (hP : 0 < P)
   have h4 := periodic_late_maskparity_shift_P T P hP h d k ht (by omega)
   rw [show (d + 1) + P = (d + P) + 1 by omega] at h3
   rw [h3, h4]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse ((d + P) + 1) (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse ((d + P) + 1) k <;>
     cases Rule30UOR.Scale.leftresponse (d + 1) (k + 1) <;>
@@ -942,7 +942,7 @@ theorem periodic_carry60_defect_eq_colm1_defect (T P : Nat) (hP : 0 < P)
     h (t + Rule30UOR.Scale.lag P 0) (by omega),
     h t ht, ← hs1] at hs2
   revert hs2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.cell (t + P) (-1) <;>
     cases Rule30UOR.Core.carry60 (t + P) 0 <;>
     cases Rule30UOR.Core.cell t (-1) <;>
@@ -958,14 +958,14 @@ theorem maskedPer_iff_colm1_periodic (T P : Nat) (hP : 0 < P)
   constructor
   · intro hm s hs
     have hd := periodic_carry60_defect_eq_colm1_defect T P hP h (s + 1) (by omega)
-    rw [hm s hs, bxor_eq_xor, Bool.xor_self] at hd
+    rw [hm s hs, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hd
     revert hd
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases Rule30UOR.Core.cell ((s + 1) + P) (-1) <;>
       cases Rule30UOR.Core.cell (s + 1) (-1) <;> decide
   · intro hc s hs
     have hd := periodic_carry60_defect_eq_colm1_defect T P hP h (s + 1) (by omega)
-    rw [hc s hs, bxor_eq_xor, bxor_eq_xor, Bool.xor_self] at hd
+    rw [hc s hs, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hd
     revert hd
     cases Rule30UOR.Core.carry60 ((s + 1) + P) 0 <;>
       cases Rule30UOR.Core.carry60 (s + 1) 0 <;> decide
@@ -1125,8 +1125,8 @@ theorem two_halves_witt_scale (r k : Nat) :
   have hs := Rule30UOR.Scale.scale_center (r + twopow k) k
   rw [← ldiag_eq_cell_neg r (twopow k)] at hs
   unfold Rule30UOR.Scale.response at hr
-  rw [bxor_eq_xor] at hr
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, hr, hs]
+  rw [Rule30UOR.Scale.bxor_eq] at hr
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, hr, hs]
   cases Rule30UOR.Core.center (r + twopow k) <;>
     cases ldiag r (r + twopow k) <;>
     cases Rule30UOR.Core.window60 (r + twopow k) (twopow k) 0 <;>
@@ -1150,8 +1150,8 @@ theorem ldiag_eq_response_coboundary_cone (r k : Nat) (hr : r < twopow k) :
     rw [Rule30UOR.Core.twopow_succ]; omega
   rw [hstep, hc2, hc1] at hs
   unfold Rule30UOR.Scale.response at *
-  rw [bxor_eq_xor, bxor_eq_xor] at hs
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq] at hs
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   revert hs
   cases Rule30UOR.Core.center r <;>
     cases Rule30UOR.Core.window60 r (twopow (k + 1)) 0 <;>
@@ -1170,7 +1170,7 @@ theorem ldiag_eq_leftresponse_coboundary_cone (r k : Nat) (hr : r < twopow k) :
     Rule30UOR.Scale.split_paper (r + twopow k) k]
   have hm := maskparity_coboundary r k
   revert hm
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse r (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse r k <;>
     cases Rule30UOR.Scale.leftresponse (r + twopow k) k <;>
@@ -1193,7 +1193,7 @@ theorem two_halves_eq_witt_coboundary_cone (r k : Nat) (hr : r < twopow k) :
     rw [Rule30UOR.Core.twopow_succ]; omega
   rw [hstep, hc2, hc1] at h2h
   rw [h2h]
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center r <;>
     cases wittRespBool r (k + 1) <;>
     cases wittRespBool r k <;>
@@ -1216,8 +1216,8 @@ theorem periodic_maskparity_late_cone (T P : Nat) (hP : 0 < P)
   have h2 := Rule30UOR.Scale.periodic_mask_paper T P hP h (k + 1) r ht hr_k1
   rw [h1, h2] at hm
   revert hm
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor,
-    bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq,
+    Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.maskparity (r + twopow k) k <;>
     cases Rule30UOR.Scale.leftresponse r (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse r k <;>
@@ -1239,7 +1239,7 @@ theorem periodic_two_halves_scale_eq (T P : Nat) (hP : 0 < P)
   rw [two_halves_eq_witt_coboundary_cone r k hr,
     periodic_witt_cone T P hP h (k + 1) r ht hr_k1,
     periodic_witt_cone T P hP h k r ht hr]
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center (r + Rule30UOR.Scale.lag P (k + 1)) <;>
     cases Rule30UOR.Core.center (r + Rule30UOR.Scale.lag P k) <;>
     cases Rule30UOR.Core.center r <;>
@@ -1249,7 +1249,7 @@ theorem periodic_two_halves_scale_eq (T P : Nat) (hP : 0 < P)
 theorem bxor_swap_middle (a b c d : Bool) (h : bxor a b = bxor c d) :
     bxor a d = bxor b c := by
   revert h
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases a <;> cases b <;> cases c <;> cases d <;> decide
 
 /-- **Master Two-Half Dyadic Scale Equation via `leftresponse` under `CenterPeriodic` (`T ≤ r < 2^k`)**: sets `rdiag r (r + 2^k) ⊕ wittRespBool (r + 2^k) k` directly equal to the left-half coboundary `(leftresponse r (k + 1) ⊕ leftresponse r k) ⊕ leftresponse (r + 2^k) k` XORed with the periodic center lag difference `center (r + lag P (k + 1)) ⊕ center (r + lag P k)`. -/
@@ -1391,7 +1391,7 @@ theorem rdiag_defect_step_below_threshold (t k J j : Nat) (hJ : IsRightThreshold
   have hs_early := Rule30UOR.Core.rdiag_step j t
   rw [show (t + 1) + twopow k = (t + twopow k) + 1 by omega,
     hs_late, hs_early, hj_eq, ← or_xor_or_of_eq]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag (j + 2) (t + twopow k) <;>
     cases rdiag (j + 2) t <;>
     cases (rdiag (j + 1) (t + twopow k) || rdiag j t) <;>
@@ -1406,7 +1406,7 @@ theorem rdiag_threshold_plus_two_defect_step (t k J : Nat) (hJ : IsRightThreshol
   have ha : rdiag (J + 1) (t + twopow k) = !rdiag (J + 1) t := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
     exact Rule30UOR.KitConstructive.antiperiod hJ.1 hJ.2 t
-  rw [ha, bxor_eq_xor]
+  rw [ha, Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 1) t <;> cases rdiag J t <;> rfl
 
 /-- **Universal Sector-0 Step Law of `winWitt` at Bit `J + 2`**: for every `k, J` with `IsRightThreshold k J`, `J + 2 < 2^k`, and **every** time `t0 : Nat`, `(winWitt (t0 + 1) (2^k)).testBit (J + 2) ⊕ (winWitt t0 (2^k)).testBit (J + 2) = !rdiag J t0`. -/
@@ -1440,7 +1440,7 @@ theorem rdiag_threshold_plus_two_center_decomp (k J : Nat) (hJ : IsRightThreshol
   rw [← core_center_eq_rdiag J] at hs0
   have hc2 := core_center_eq_rdiag (J + 2)
   revert hs0 hs1 hc2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 2) ((J + 2) + twopow k) <;>
     cases rdiag (J + 2) (J + 2) <;>
     cases Rule30UOR.Core.center (J + 2) <;>
@@ -1478,7 +1478,7 @@ theorem ldiag_damage_step_of_settled (d s k : Nat) (hk : d ≤ k) (hset : Settle
   have hs_early := Rule30UOR.Core.ldiag_step d s
   rw [show (s + 1) + twopow k = (s + twopow k) + 1 by omega,
     hs_late, hs_early, hd_eq]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag d s <;>
     cases (ldiag (d + 1) (s + twopow k) || ldiag (d + 2) (s + twopow k)) <;>
     cases (ldiag (d + 1) s || ldiag (d + 2) s) <;> rfl
@@ -1493,7 +1493,7 @@ theorem ldiag_damage_step_of_settled_pair (d s k : Nat) (hk : d + 1 ≤ k)
     rw [ldiag_settled_eq_E (d + 1) s k hk (by unfold SettledBy at hset1; omega),
       Rule30UOR.Kit.ldiag_eq_D, ← Rule30UOR.Intent.E_eq_D (d + 1) s hset1]
   rw [hd1_eq]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag (d + 1) s <;>
     cases ldiag (d + 2) (s + twopow k) <;>
     cases ldiag (d + 2) s <;> rfl
@@ -1535,7 +1535,7 @@ theorem two_halves_off_center_witt_coboundary (d s k : Nat) (hds : d + 2 * s < t
   have htri := winWitt_late_testBit_triality (d + s) k (d + 2 * s)
   have h02 := winWitt_testBit_sector_zero_xor_two d s k hds
   revert htri h02
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag (d + 2 * s) ((d + s) + twopow k) <;>
     cases ldiag d ((d + s) + twopow k) <;>
     cases (winWitt (d + s) (twopow (k + 1))).testBit ((d + 2 * s) + twopow (k + 1)) <;>
@@ -1556,7 +1556,7 @@ theorem two_halves_off_center_witt_scale (d s k : Nat) (hds : d + 2 * s < twopow
   rw [two_halves_off_center_witt_coboundary d s k hds,
     winWitt_testBit_sector_one_ldiag d s (k + 1) hds_k1,
     winWitt_testBit_sector_one_ldiag d s k hds]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag (d + twopow (k + 1)) ((d + s) + twopow (k + 1)) <;>
     cases ldiag (d + twopow k) ((d + s) + twopow k) <;>
     cases ldiag d (d + s) <;>
@@ -1572,7 +1572,7 @@ theorem off_center_witt_coboundary_settled_below_threshold (d s k J : Nat)
       false := by
   rw [← two_halves_off_center_witt_coboundary d s k hds,
     rdiag_eq_ldiag_of_settled_below_threshold d s k J hJ hk hdJ hds hset,
-    bxor_eq_xor, Bool.xor_self]
+    Rule30UOR.Scale.bxor_eq, Bool.xor_self]
 
 /-- **Antiperiodic Parity (`true`) of the Off-Center Witt Coboundary on Settled Left Diagonals At the Right Threshold (`d + 2 * s = J + 1`)**: when `d + 2 * s = J + 1 < 2^k` and `SettledBy d (d + s)` (`d ≤ k`), the right-threshold flip and left-settledness jointly force the 3-term Witt coboundary at slot `J + 1` to equal `true`. -/
 theorem off_center_witt_coboundary_settled_at_threshold (d s k J : Nat)
@@ -1585,7 +1585,7 @@ theorem off_center_witt_coboundary_settled_at_threshold (d s k J : Nat)
   have hds : d + 2 * s < twopow k := by omega
   have hcob := two_halves_off_center_witt_coboundary d s k hds
   rw [hdJ, rdiag_eq_not_ldiag_of_settled_at_threshold d s k J hJ hk hdJ hJlt hset] at hcob
-  rw [← hcob, bxor_eq_xor]
+  rw [← hcob, Rule30UOR.Scale.bxor_eq]
   cases ldiag d ((d + s) + twopow k) <;> rfl
 
 /-- **Late Off-Center Witt Bit Below the Right Threshold on Settled Left Diagonals (`d + 2 * s ≤ J`)**: when `d + 2 * s ≤ J` (`d + 2 * s < 2^k`) and `SettledBy d (d + s)` (`d ≤ k`), bit `d + 2 * s + 2^(k+1)` of `winWitt (d + s + 2^k) (2^k)` equals the column-`-s` dyadic difference `ldiag (d + 2^(k+1)) (d + s + 2^(k+1)) ⊕ ldiag (d + 2^k) (d + s + 2^k)`. -/
@@ -1597,9 +1597,9 @@ theorem off_center_witt_scale_settled_below_threshold (d s k J : Nat)
         (ldiag (d + twopow k) ((d + s) + twopow k)) := by
   have hsc := two_halves_off_center_witt_scale d s k hds
   rw [rdiag_eq_ldiag_of_settled_below_threshold d s k J hJ hk hdJ hds hset,
-    bxor_eq_xor, Bool.xor_self] at hsc
+    Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hsc
   revert hsc
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (winWitt ((d + s) + twopow k) (twopow k)).testBit ((d + 2 * s) + twopow (k + 1)) <;>
     cases ldiag (d + twopow (k + 1)) ((d + s) + twopow (k + 1)) <;>
     cases ldiag (d + twopow k) ((d + s) + twopow k) <;> decide
@@ -1615,7 +1615,7 @@ theorem off_center_witt_scale_settled_at_threshold (d s k J : Nat)
   have hsc := two_halves_off_center_witt_scale d s k hds
   rw [hdJ, rdiag_eq_not_ldiag_of_settled_at_threshold d s k J hJ hk hdJ hJlt hset] at hsc
   revert hsc
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases ldiag d ((d + s) + twopow k) <;>
     cases (winWitt ((d + s) + twopow k) (twopow k)).testBit ((J + 1) + twopow (k + 1)) <;>
     cases ldiag (d + twopow (k + 1)) ((d + s) + twopow (k + 1)) <;>
@@ -1630,7 +1630,7 @@ theorem two_halves_off_center_witt_scale_prop (d s k : Nat) (hds : d + 2 * s < t
   rw [BitWinWittEq, bit_eq_bton_testBit]
   have hsc := two_halves_off_center_witt_scale d s k hds
   revert hsc
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag (d + 2 * s) ((d + s) + twopow k) <;>
     cases ldiag d ((d + s) + twopow k) <;>
     cases ldiag (d + twopow (k + 1)) ((d + s) + twopow (k + 1)) <;>
@@ -1685,7 +1685,7 @@ theorem colm1_dyadic_jump_eq_maskparity_zero_jump (d k : Nat) :
     rfl
   rw [hl1, hl2]
   revert hc1 hc2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center (((d + 1) + twopow (k + 1)) + 1) <;>
     cases Rule30UOR.Core.center ((d + 1) + twopow (k + 1)) <;>
     cases Rule30UOR.Core.cell ((d + 1) + twopow (k + 1)) (-1) <;>
@@ -1716,7 +1716,7 @@ theorem periodic_colm1_dyadic_jump_eq_leftresponse_diff (T P : Nat) (hP : 0 < P)
     show (d + 1) + 1 = d + 2 by omega,
     hc1, hc2, hc3, hc4]
   unfold Rule30UOR.Scale.lag
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse (d + 2) (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse (d + 2) k <;>
     cases Rule30UOR.Scale.leftresponse (d + 1) (k + 1) <;>
@@ -1764,7 +1764,7 @@ theorem rdiag_threshold_plus_two_defect_cone (t0 k J : Nat)
     (htJ : 2 * t0 ≤ J + 1) :
     bxor (rdiag (J + 2) (t0 + twopow k)) (rdiag (J + 2) t0) =
       rdiag (J + 2) (t0 + twopow k) := by
-  rw [rdiag_gt_two_mul t0 (J + 2) (by omega), bxor_eq_xor, Bool.xor_false]
+  rw [rdiag_gt_two_mul t0 (J + 2) (by omega), Rule30UOR.Scale.bxor_eq, Bool.xor_false]
 
 /-- **2-Step Running Transport of the `rdiag (J + 2)` Defect (`t ↦ t + 2`)**: for every `t : Nat`, stepping `t ↦ t + 2` changes the `2^k`-defect `rdiag (J + 2) (t + 2^k) ⊕ rdiag (J + 2) t` by `rdiag J t ⊕ rdiag J (t + 1)`. -/
 theorem rdiag_threshold_plus_two_defect_two_step (t k J : Nat) (hJ : IsRightThreshold k J) :
@@ -1775,7 +1775,7 @@ theorem rdiag_threshold_plus_two_defect_two_step (t k J : Nat) (hJ : IsRightThre
   have hs1 := rdiag_threshold_plus_two_defect_step (t + 1) k J hJ
   rw [show (t + 1) + 1 = t + 2 by omega] at hs1
   revert hs0 hs1
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 2) ((t + 2) + twopow k) <;>
     cases rdiag (J + 2) (t + 2) <;>
     cases rdiag (J + 2) ((t + 1) + twopow k) <;>

@@ -77,8 +77,8 @@ theorem trinomialParity_dyadic_stable_iter (j m d : Nat) (hm : m < twopow j) (hd
   | succ n ih =>
     rw [show j + (n + 1) = (j + n) + 1 by cfomega,
       trinomialParity_dyadic_stable (j + n) m d
-        (Nat.lt_of_lt_of_le hm (twopow_mono (by cfomega)))
-        (Nat.lt_of_lt_of_le hd (twopow_mono (by cfomega))),
+        (Nat.lt_of_lt_of_le hm (Rule30UOR.Interfaces.twopow_mono _ _ (by cfomega)))
+        (Nat.lt_of_lt_of_le hd (Rule30UOR.Interfaces.twopow_mono _ _ (by cfomega))),
       ih]
 
 /-- **The stable kernel** `K_m(d)`: the coefficient `d` of the power series `q^(-(m+1))`,

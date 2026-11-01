@@ -39,7 +39,8 @@
       "open",
       "proved",
       "refuted",
-      "retired"
+      "retired",
+      "observed"
      ],
      "additionalProperties": false,
      "properties": {
@@ -53,6 +54,9 @@
        "type": "integer"
       },
       "retired": {
+       "type": "integer"
+      },
+      "observed": {
        "type": "integer"
       }
      }

@@ -245,7 +245,7 @@ theorem center_class_eq (T P k r u : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T
       bxor (bxor (frozenRuler k r) (trailingParity (u - 1) && rulerCoefficient r))
         (interiorEightDiagonal (twopow k * u + r)) := by
   have hu1 : 1 ≤ u := by cfomega
-  have h8 : 8 ≤ twopow k := twopow_mono hk
+  have h8 : 8 ≤ twopow k := Rule30UOR.Interfaces.twopow_mono _ _ hk
   have hle : u ≤ twopow k * u := Nat.le_mul_of_pos_left u (Rule30UOR.Scale.twopow_pos k)
   have hle' : twopow k ≤ twopow k * (u + P) := Nat.le_mul_of_pos_right _ (by cfomega)
   have hle'' : twopow k ≤ twopow k * u := Nat.le_mul_of_pos_right _ hu1
@@ -574,7 +574,7 @@ for `k ≥ 2`, `v ≥ 1`, `lateTail (k+1) 3 v = lateTail k 3 (2v) ⊕ frozenPref
 (the two second prefixes are `1`, so the ruler terms `a ∧ 1` and `¬a ∧ 1` sum to `1`). -/
 theorem lateTail_three_scale (k v : Nat) (hk : 2 ≤ k) (hv : 1 ≤ v) :
     lateTail (k + 1) 3 v = bxor (lateTail k 3 (2 * v)) (bxor (bxor (frozenPrefix (k + 1) 3) (frozenPrefix k 3)) true) := by
-  have h4 : 4 ≤ twopow k := twopow_mono hk
+  have h4 : 4 ≤ twopow k := Rule30UOR.Interfaces.twopow_mono _ _ hk
   have h := lateTail_scale k 3 v (by cfomega) (by cfomega) hv
   rw [secondPrefix_three k hk, secondPrefix_three (k + 1) (by cfomega), Bool.and_true, Bool.and_true] at h
   revert h
@@ -585,7 +585,7 @@ theorem lateTail_three_scale (k v : Nat) (hk : 2 ≤ k) (hv : 1 ≤ v) :
 `lateTail k 3 (1 + P) = lateTail k 3 1 ⊕ trailingParity P` for `k ≥ 2`. -/
 theorem lateTail_three_obligation_one (T P k : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T P) (hk : 2 ≤ k)
     (ht : T ≤ twopow k + 3) : lateTail k 3 (1 + P) = bxor (lateTail k 3 1) (trailingParity P) := by
-  have h4 : 4 ≤ twopow k := twopow_mono hk
+  have h4 : 4 ≤ twopow k := Rule30UOR.Interfaces.twopow_mono _ _ hk
   have h := lateTail_obligation T P k 3 1 hc (by cfomega) (by cfomega) (Nat.le_refl 1) (by rw [Nat.mul_one]; exact ht)
   rw [show 1 + P - 1 = P by cfomega, Nat.sub_self, trailingParity_zero, secondPrefix_three k hk, Bool.and_true] at h
   revert h
@@ -659,8 +659,6 @@ theorem rowTerm_three_row_zero (K : Nat) (hK : 4 ≤ K) :
   cases cell K (-2) <;> cases cell K (-1) <;> cases cell K 0 <;> cases cell K 1 <;> cases cell K 2 <;>
     cases cell K 3 <;> rfl
 
-theorem bxor_false_left (a : Bool) : bxor false a = a := rfl
-
 /-- **`lateTail k 3 1` in cells**, for `k ≥ 2`: the three rows `2^k, 2^k + 1, 2^k + 2` read at time
 `2^k + 3`, each a sum of black pairs within distance `3` of the center. -/
 theorem lateTail_three_at_one_cells (k : Nat) (hk : 2 ≤ k) :
@@ -672,13 +670,13 @@ theorem lateTail_three_at_one_cells (k : Nat) (hk : 2 ≤ k) :
               (cell (twopow k + 1) 0 && cell (twopow k + 1) 1))
             (cell (twopow k + 1) 1 && cell (twopow k + 1) 2)))
         (cell (twopow k + 2) 0 && cell (twopow k + 2) 1) := by
-  have h4 : 4 ≤ twopow k := twopow_mono hk
+  have h4 : 4 ≤ twopow k := Rule30UOR.Interfaces.twopow_mono _ _ hk
   unfold lateTail
   rw [Nat.mul_one, show twopow k + 3 - twopow k = 3 by cfomega]
   show bxor (bxor (bxor false (rowTerm (twopow k + 3) (twopow k))) (rowTerm (twopow k + 3) (twopow k + 1)))
     (rowTerm (twopow k + 3) (twopow k + 2)) = _
   rw [rowTerm_three_row_zero _ h4, rowTerm_three_row_one _ h4, rowTerm_three_row_two _ h4,
-    bxor_false_left]
+    Rule30UOR.Antidiagonal.cone_bxor_false]
 
 theorem bxor_cancel_right_aux (E a : Bool) : bxor (bxor E a) E = a := by
   cases E <;> cases a <;> rfl
@@ -708,7 +706,7 @@ theorem bxor_eq_true_aux (a b : Bool) (h : bxor a b = true) : a = !b := by
 `j`, and the second prefix of the class `3` is `1`. -/
 theorem lateTail_three_dyadic_flip (T k m : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T (twopow m)) (hk : 2 ≤ k)
     (ht : T ≤ twopow k * twopow m + 3) : lateTail k 3 (twopow m + twopow m) = !(lateTail k 3 (twopow m)) := by
-  have h4 : 4 ≤ twopow k := twopow_mono hk
+  have h4 : 4 ≤ twopow k := Rule30UOR.Interfaces.twopow_mono _ _ hk
   have hpos : 1 ≤ twopow m := Rule30UOR.Scale.twopow_pos m
   have h := lateTail_obligation T (twopow m) k 3 (twopow m) hc (by cfomega) (by cfomega) hpos ht
   rw [secondPrefix_three k hk, Bool.and_true, show twopow m + twopow m - 1 = twopow (m + 1) - 1 by rw [twopow_succ],

@@ -3450,3 +3450,58 @@ half is simultaneously the half driven by `c` and the tower generated from the r
 double description of the right half is the constraint a closing argument has to exploit: a
 periodic `c` must drive a right half whose diagonals are exactly Jen's words `W_j` with the
 doubling bits of the seed.
+
+**Round 4: the cone is the rule, and the obligation moves to the left half (2026-11-01).** Four
+lenses (Pascal transport, bivariate generating function, fixed point, doubling depth) were proposed,
+refuted by two skeptics each, and their survivors mechanized (`Rule30UOR.DiagonalCone`,
+`DoublingDepth`, `ColumnCone`, `KernelRoot`). Every lens reduced to the local rule: the Duhamel form
+`cell = seedAt ⊕ coneAt` holds at every cell, the left cone `coneZero` *is* column `−1`
+(`coneZero_eq_cell`), so the increment law is the rule at column `0` rearranged and its masked-Jen
+corollary is Jen's adjacency theorem (`not_eventuallyPeriodic_coneZero`). Route B was refuted by the
+seed: a doubling at a dyadic lag `w·2^K` sits at or beyond diagonal `K` (`le_of_doublesAt_mul_twopow`),
+so the two-scale engine's hypotheses are unsatisfiable (`single-row-agreement`). What survives is a
+left-only obligation that implies Problem 1 (`black-time-consistency`,
+`problem1_of_noPeriodicBlackConsistent`): an eventually periodic boundary `c` with `c 0 = 1` whose
+next value at every black time is the complement of column `−1` of the left half it drives must be
+eventually white. A falsification check found no counterexample (0 of 63,754 small-period
+boundaries). The structure the next round works on: the left half driven by any boundary is a
+triangular tower of diagonals, `diag_k(k) = c k` and
+`diag_k(t+1) = diag_{k−2}(t) ⊕ (diag_{k−1}(t) ∨ diag_k(t))` with `diag_0 ≡ 1`; column `−1` is the
+tower read on its subdiagonal, `Lh c t (−1) = diag_{t−1}(t)`; black-time consistency is the same
+recursion at `k = t+1` with the disjunction saturated; and Jen's argument alone makes column `−1`
+aperiodic for every eventually periodic boundary, so a counterexample's aperiodicity must live on
+the boundary's white times.
+
+**Round 5: the left-only obligation is a slice of the kit's open questions (2026-11-01).** Six lenses
+(spatial rotation, diagonal tower, Duhamel/Lucas, the kit's left mask, a counterexample by design,
+residue transducers) each produced exact theorems and none a route; 200-odd theorems were
+mechanized in `Rule30UOR.ResidueJen`, `TowerBoundary`, `DrivenLucas`, `UnitSeedMask`, `Walled` and
+`MaskSlice`, and the new gate already shaped them (an agent dropped a lemma whose statement κ
+matched another module's). The map they draw: the obligation is exactly the single-seed mask
+(`single-seed-mask`); the kit's left mask at period two is exactly the kit's open `Q01`, which the
+kit proves only for starts of width at most 52 and shows out of reach of local, strip,
+finite-state, additive and edge-DFA invariants; `Q01` decides the obligation's period-two slice,
+and the obligation implies Problem 1 for the zero state (`NoZCenterPeriod`). Two routes are
+retired: eventual-cycle invariants (`cycle_barrier`: a boundary and its companion share every
+cycle, and the companion is consistent and never white) and residue-class Jen (the masked front
+stops at the depth of the longest black run; a white-time lag defect lies in every window). The
+design lens found no counterexample and reduced isolated black times to one walled column. What
+a proof must therefore contain is a mechanism that moves a lag defect of column `−1` onto a black
+residue: the nonlinearity of the deep columns at white times, the same content as the period-two
+slice of `Q01`. The next round reads the transient band directly (column `−1` lives in the
+damage band the cycle data never reaches) instead of eventual structure.
+
+**One proof per statement (2026-11-01).** Alex: keep the implementation optimized, no redundant or
+arbitrary work. The κ exporter now labels each theorem's statement as a meaning (the κ of its type
+with binder info omitted and universe parameters named by position; `scripts/kappa_label.py`),
+and the kernel replay refuses any two authored theorems, private ones included, that state the
+same thing. At introduction the library held 112 such groups: 65 generated `_prop` wrappers, 37
+independent re-proofs (among them three proofs of `coneZero = cell (−1)` from round 4) and 10
+more that only binder-insensitive, privacy-aware labeling revealed. `bin/r30 consolidate` removed
+109 of them mechanically (canonical member upstream in the import graph, then public, then
+published; a private canonical needed elsewhere is promoted; references rewritten in every file
+that names them; imports added; sheets regenerated; the library rebuilt) and three whose binders
+differed were aligned by hand, so the gate starts from zero and has no allowlist. An adversarial
+review of this gate (three lenses, two skeptics per finding) confirmed 13 defects in the first
+version, all fixed before the commit; the labels are memoized by artifact bytes under the
+labeling procedure's digest, in a store only the gate writes.

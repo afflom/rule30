@@ -75,7 +75,7 @@ theorem periodic_winWitt_step_late_center_slot_of_zcenter_true
     T P hP h d k ht hk hset hw0 hw1 hw2
   rw [hz, Bool.true_and] at hs
   rw [hs]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phi (winWitt ((d + 1) + twopow k) (twopow k))).testBit (((d + 2) + twopow k) + twopow k) <;>
     cases (Rule30UOR.Scale.maskparity ((d + 1) + twopow (k + 1)) 0 ^^
       (Rule30UOR.Scale.maskparity ((d + 1) + twopow k) 0 ^^
@@ -97,7 +97,7 @@ theorem periodic_winWitt_step_late_colm1_slot_of_zcenter_true
     T P hP h d k ht hk hset hw0 hw1 hw2
   rw [hz, Bool.true_and] at hs
   rw [hs]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases (phi (winWitt ((d + 1) + twopow k) (twopow k))).testBit (((d + 3) + twopow k) + twopow k) <;>
     cases (ldiag (d + twopow (k + 1)) ((d + 1) + twopow (k + 1)) ^^
       (ldiag (d + twopow k) ((d + 1) + twopow k) ^^ ldiag d (d + 1))) <;> rfl
@@ -374,7 +374,7 @@ theorem maskparity_zero_eq_of_rowAgree_steps
   have hcol := colm1_eq_of_rowAgree_steps t0 (m * P) s hs h
   have hdef := periodic_maskparity_zero_defect_mul_eq_colm1_defect_mul T P hP hper m (t0 + s) ht
   rw [show ((t0 + s) + m * P) + 1 = (t0 + s + 1) + m * P by omega] at hdef
-  rw [hcol, bxor_eq_xor, bxor_eq_xor, Bool.xor_self] at hdef
+  rw [hcol, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hdef
   revert hdef
   cases Rule30UOR.Scale.maskparity ((t0 + s + 1) + m * P) 0 <;>
     cases Rule30UOR.Scale.maskparity (t0 + s + 1) 0 <;> decide
@@ -609,10 +609,10 @@ theorem row_testBit_add_two_of_step (t j : Nat) :
         ((row t).testBit (j + 1) || (row t).testBit j) := by
   have hstep : (row (t + 1)).testBit (j + 2) =
       bxor ((row t).testBit (j + 2)) ((row t).testBit (j + 1) || (row t).testBit j) := by
-    rw [bxor_eq_xor]
+    rw [Rule30UOR.Scale.bxor_eq]
     change (phi (row t)).testBit (j + 2) = _
     exact phi_testBit_add_two (row t) j
-  rw [hstep, bxor_eq_xor, bxor_eq_xor]
+  rw [hstep, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases (row t).testBit (j + 2) <;>
     cases ((row t).testBit (j + 1) || (row t).testBit j) <;> rfl
 
@@ -675,10 +675,10 @@ theorem periodic_rowAgree_black_center
       have hand := maskparity_zero_and_center_eq_false ((t + m * P) + 1)
       rw [hblk_mP, Bool.and_true] at hand
       exact hand
-    rw [hm0, hm_mP, bxor_eq_xor, Bool.xor_self] at hdef
+    rw [hm0, hm_mP, Rule30UOR.Scale.bxor_eq, Bool.xor_self] at hdef
     have hcol : ldiag (t + m * P) ((t + m * P) + 1) = ldiag t (t + 1) := by
       revert hdef
-      rw [bxor_eq_xor]
+      rw [Rule30UOR.Scale.bxor_eq]
       cases ldiag (t + m * P) ((t + m * P) + 1) <;> cases ldiag t (t + 1) <;> decide
     have hl1 : (row ((t + 1) + m * P)).testBit (t + 1 + 1 + m * P) =
         ldiag (t + m * P) ((t + m * P) + 1) := by
@@ -819,7 +819,7 @@ theorem winWittAgree_extend_right (t k Q a L : Nat)
     rw [show a + (L + 2) + Q = a + L + 2 + Q by omega,
       show a + (L + 2) = a + L + 2 by omega]
     revert hstep
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases (winWitt (t + Q) (twopow k)).testBit (a + L + 2 + Q) <;>
       cases (winWitt t (twopow k)).testBit (a + L + 2) <;>
       cases ((winWitt t (twopow k)).testBit (a + L + 1) || (winWitt t (twopow k)).testBit (a + L)) <;>
@@ -845,7 +845,7 @@ theorem winWittAgree_of_rowAgree_three_and_late (t k Q a L : Nat)
     have hsc := congrArg (fun n => n.testBit (a + i + Q)) (row_scale (t + Q) k)
     rw [Nat.testBit_xor] at hsc
     revert hsc
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases (row ((t + Q) + twopow k)).testBit (a + i + Q) <;>
       cases (phiScale k (row (t + Q))).testBit (a + i + Q) <;>
       cases (winWitt (t + Q) (twopow k)).testBit (a + i + Q) <;> decide
@@ -855,7 +855,7 @@ theorem winWittAgree_of_rowAgree_three_and_late (t k Q a L : Nat)
     have hsc := congrArg (fun n => n.testBit (a + i)) (row_scale t k)
     rw [Nat.testBit_xor] at hsc
     revert hsc
-    simp only [bxor_eq_xor]
+    simp only [Rule30UOR.Scale.bxor_eq]
     cases (row (t + twopow k)).testBit (a + i) <;>
       cases (phiScale k (row t)).testBit (a + i) <;>
       cases (winWitt t (twopow k)).testBit (a + i) <;> decide
@@ -975,7 +975,7 @@ theorem frobDefect_row_sector_one_lcmPeriod_xor (P d k u : Nat) (hk : d + 1 ≤ 
   rw [hQ,
     frobDefect_row_sector_one_restart d k (u + P / Nat.gcd P (twopow k)) hk,
     frobDefect_row_sector_one_restart d k u hk]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rdiag ((d + 1) + twopow k) ((d + 1) + (u + P / Nat.gcd P (twopow k)) * twopow k) <;>
     cases rdiag ((d + 1) + twopow k) ((d + 1) + u * twopow k) <;>
     cases rdiag d (d + 1) <;>
@@ -1111,7 +1111,7 @@ theorem phiCenter_eq_lhCenter_rhCenter (t : Nat) :
     Rule30UOR.Fixed.phiCenter t =
       bxor (lhCenter t 1) (Rule30UOR.Core.center t || rhCenter t 1) := by
   unfold Rule30UOR.Fixed.phiCenter Rule30UOR.Fixed.Phi lhCenter rhCenter Ruliology.CellularAutomata.Rule30Jen.rule
-  rw [← Rule30UOR.Scale.center_eq_kit t, bxor_eq_xor]
+  rw [← Rule30UOR.Scale.center_eq_kit t, Rule30UOR.Scale.bxor_eq]
   rfl
 
 /-- **The §6 `Φ` Fixed-Point Law Solved for the Left-Half Neighbour (`lhCenter_one_eq_of_center_fixed`)**:
@@ -1122,7 +1122,7 @@ theorem lhCenter_one_eq_of_center_fixed (t : Nat) :
         (Rule30UOR.Core.center t || rhCenter t 1) := by
   have hfix := Rule30UOR.Fixed.center_fixed_readout t
   rw [← Rule30UOR.Scale.center_eq_kit (t + 1), phiCenter_eq_lhCenter_rhCenter t] at hfix
-  rw [hfix, bxor_eq_xor, bxor_eq_xor]
+  rw [hfix, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases lhCenter t 1 <;>
     cases (Rule30UOR.Core.center t || rhCenter t 1) <;> rfl
 
@@ -1142,7 +1142,7 @@ theorem periodic_lhCenter_one_defect_eq_not_center_and_rhCenter_one_defect
   rw [lhCenter_one_eq_of_center_fixed (t + m * P),
     lhCenter_one_eq_of_center_fixed t,
     hc0, hc1]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center (t + 1) <;>
     cases Rule30UOR.Core.center t <;>
     cases rhCenter (t + m * P) 1 <;>
@@ -1159,7 +1159,7 @@ theorem rhCenter_step_succ (t p : Nat) :
   rw [show ((p + 1 : Nat) : Int) - 1 = (p : Int) by omega,
     show ((p + 1 : Nat) : Int) + 1 = ((p + 2 : Nat) : Int) by omega]
   unfold Ruliology.CellularAutomata.Rule30Jen.rule
-  rw [bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq]
 
 /-- **Inward Step Law of the Driven Right Half from the Right Edge Toward Column 1 (`rhCenter_inward_step`)**:
     for all `t, p : Nat`, solving `rhCenter_step_succ` for `rhCenter t p` expresses column `p` at time `t` in terms of columns `p + 1, p + 2` (further toward the right edge) at time `t` and column `p + 1` at time `t + 1`! -/
@@ -1167,7 +1167,7 @@ theorem rhCenter_inward_step (t p : Nat) :
     rhCenter t p =
       bxor (rhCenter (t + 1) (p + 1))
         (rhCenter t (p + 1) || rhCenter t (p + 2)) := by
-  rw [rhCenter_step_succ t p, bxor_eq_xor, bxor_eq_xor]
+  rw [rhCenter_step_succ t p, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases rhCenter t p <;>
     cases (rhCenter t (p + 1) || rhCenter t (p + 2)) <;> rfl
 
@@ -1487,14 +1487,14 @@ theorem lhCenter_step_succ (t p : Nat) :
   rw [show (- ((p + 1 : Nat) : Int)) - 1 = (- ((p + 2 : Nat) : Int)) by omega,
     show (- ((p + 1 : Nat) : Int)) + 1 = (- (p : Int)) by omega]
   unfold Ruliology.CellularAutomata.Rule30Jen.rule
-  rw [bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq]
 
 /-- **Outward Step Law of the Driven Left Half from the Center Toward the Left Edge (`lhCenter_outward_step`)**:
     for all `t, p : Nat`, solving `lhCenter_step_succ` for `lhCenter t (p + 2)` expresses column `-(p + 2)` at time `t` in terms of column `-(p + 1)` at time `t + 1` and columns `-(p + 1), -p` at time `t`. -/
 theorem lhCenter_outward_step (t p : Nat) :
     lhCenter t (p + 2) =
       bxor (lhCenter (t + 1) (p + 1)) (lhCenter t (p + 1) || lhCenter t p) := by
-  rw [lhCenter_step_succ t p, bxor_eq_xor, bxor_eq_xor]
+  rw [lhCenter_step_succ t p, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases lhCenter t (p + 2) <;>
     cases (lhCenter t (p + 1) || lhCenter t p) <;> rfl
 
@@ -1534,7 +1534,7 @@ theorem periodic_rhCenter_or_eq_of_step_one_eq
   rw [show (t + m * P) + 1 = (t + 1) + m * P by omega, hstep, hcm] at hcQ
   rw [hc0] at hcQ
   revert hcQ
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter (t + 1) 1 <;>
     cases (rhCenter (t + m * P) 1 || rhCenter (t + m * P) 2) <;>
     cases (rhCenter t 1 || rhCenter t 2) <;> decide
@@ -1757,7 +1757,7 @@ theorem rhCenter_scale_step (t k p : Nat) (hp : p + twopow (k + 1) ≤ t) :
         (rhCenter t (p + twopow (k + 1))) := by
     change (((row t) ^^^ ((row t) <<< twopow k)) ^^^
       ((row t) <<< (twopow k + twopow k))).testBit (t - p) = _
-    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, bxor_eq_xor]
+    simp only [Nat.testBit_xor, Nat.testBit_shiftLeft, Rule30UOR.Scale.bxor_eq]
     have d1 : decide (t - p ≥ twopow k) = true := decide_eq_true (by omega)
     have d2 : decide (t - p ≥ twopow k + twopow k) = true := decide_eq_true (by omega)
     rw [d1, d2, Bool.true_and, Bool.true_and,
@@ -1767,7 +1767,7 @@ theorem rhCenter_scale_step (t k p : Nat) (hp : p + twopow (k + 1) ≤ t) :
       ← rhCenter_eq_row_testBit t (p + twopow k) (by omega),
       ← rhCenter_eq_row_testBit t (p + twopow (k + 1)) (by omega)]
   rw [hphi]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
 
 theorem rhCenter_scale_inward_step (t k p : Nat) (hp : p + twopow (k + 1) ≤ t) :
     rhCenter t p =
@@ -1776,7 +1776,7 @@ theorem rhCenter_scale_inward_step (t k p : Nat) (hp : p + twopow (k + 1) ≤ t)
           (rhCenter t (p + twopow (k + 1))))
         ((winWitt t (twopow k)).testBit (t - p)) := by
   rw [rhCenter_scale_step t k p hp]
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter t p <;>
     cases rhCenter t (p + twopow k) <;>
     cases rhCenter t (p + twopow (k + 1)) <;>
@@ -1849,7 +1849,7 @@ theorem rhOrAgree_of_col_agree (t Q p0 S : Nat)
   rw [hinQ, hin0, hn] at hc
   rw [show (p0 + 1) + 1 = p0 + 2 by omega]
   revert hc
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases rhCenter (t + (s + 1)) (p0 + 1) <;>
     cases (rhCenter ((t + s) + Q) (p0 + 1) || rhCenter ((t + s) + Q) (p0 + 2)) <;>
     cases (rhCenter (t + s) (p0 + 1) || rhCenter (t + s) (p0 + 2)) <;> decide

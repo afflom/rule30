@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.lhCenter_late_cross_eq_of_winWittAgree_zero_gap_prop"
+name = "Rule30UOR.Interfaces.lhCenter_late_cross_eq_of_winWittAgree_zero_gap"
 
 [[form]]
 id = "lhcenter-late-cross-eq-of-winwittagree-zero-gap"

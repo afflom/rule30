@@ -91,6 +91,10 @@ ARTIFACTS = [
     {"id": "core-vectors", "path": "core-vectors.json", "media": "application/json", "command": "api_sync", "source": "rule30-api/production/core-vectors.json"},
     {"id": "frontier-module", "path": "Frontier.lex.tex", "media": "text/x-lexlean", "command": "frontier_render", "source": "rule30-paper/src/Frontier.lex.tex"},
     {"id": "agents", "path": "AGENTS.md", "media": "text/markdown", "command": "view_render", "source": "AGENTS.md"},
+    # the saved round workflow (Induce, Propose, Refute, Mechanize): artifactsByCommands
+    # demands a producing command, and the view publishes it as it publishes AGENTS.md
+    {"id": "round-workflow", "path": "rule30-round.js", "media": "text/javascript", "command": "view_render",
+     "source": ".claude/workflows/rule30-round.js"},
     {"id": "strategy", "path": "STRATEGY.md", "media": "text/markdown", "command": "view_render", "source": "rule30-lexlean/STRATEGY.md"},
     {"id": "readme", "path": "README.md", "media": "text/markdown", "command": "view_render", "source": None},
     {"id": "logo", "path": "logo.svg", "media": "image/svg+xml", "command": "api_sync", "source": "rule30-api/site/logo.svg"},
@@ -626,6 +630,7 @@ STATUS_MARKS = [
     {"status": "proved", "mark": "✓", "label": "proved: kernel-checked under propext and Quot.sound and published"},
     {"status": "refuted", "mark": "✗", "label": "refuted: a route not to be walked again"},
     {"status": "retired", "mark": "-", "label": "retired: superseded by an exact restatement"},
+    {"status": "observed", "mark": "~", "label": "observed: a relation certified on a window by bin/r30 discover, pending deduction"},
 ]
 
 

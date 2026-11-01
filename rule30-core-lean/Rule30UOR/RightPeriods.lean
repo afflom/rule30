@@ -1,5 +1,6 @@
 module
 public import Rule30UOR.LeftTower
+public import Rule30UOR.Automatic
 set_option autoImplicit false
 set_option maxRecDepth 100000
 set_option maxHeartbeats 1000000000
@@ -68,16 +69,11 @@ theorem wordPeriodic_mul (j q n : Nat) (h : WordPeriodic j q) : WordPeriodic j (
   | zero => intro s; rw [Nat.zero_mul, Nat.add_zero]
   | succ n ih => intro s; rw [Nat.succ_mul, ← Nat.add_assoc, h, ih]
 
-theorem twopow_add (m n : Nat) : twopow (m + n) = twopow m * twopow n := by
-  induction m with
-  | zero => rw [Nat.zero_add]; show twopow n = 1 * twopow n; rw [Nat.one_mul]
-  | succ m ih => rw [Nat.add_right_comm, twopow_succ, twopow_succ, ih, Nat.add_mul]
-
 /-- A word with period `2^a` has every period `2^b` with `a ≤ b`. -/
 theorem wordPeriodic_twopow_mono (j a b : Nat) (hab : a ≤ b) (h : WordPeriodic j (twopow a)) :
     WordPeriodic j (twopow b) := by
   obtain ⟨d, rfl⟩ : ∃ d, b = d + a := ⟨b - a, by cfomega⟩
-  rw [twopow_add]
+  rw [Rule30UOR.Automatic.twopow_add]
   exact wordPeriodic_mul j (twopow a) (twopow d) h
 
 /-! ## The Jen exponent -/

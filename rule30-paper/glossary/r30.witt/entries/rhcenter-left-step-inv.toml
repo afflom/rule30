@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.rhCenter_left_step_inv"
+name = "Rule30UOR.Interfaces.rhCenter_inward_step"
 
 [[form]]
 id = "rhcenter-left-step-inv"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-tail"
+category = "function"
+signature = "(pi ((explicit D (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DiagonalCone"
+name = "Rule30UOR.DiagonalCone.leftTail"
+
+[[form]]
+id = "left-tail"
+channel = "math"
+surface = "lefttail"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lefttail) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

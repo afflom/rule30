@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-eq-not-cone-at-zero"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const lexlean.std.bool::not) (app (const r30.observation::cone-at) (nat 0) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ColumnCone"
+name = "Rule30UOR.ColumnCone.center_eq_not_coneAt_zero"
+
+[[form]]
+id = "center-eq-not-cone-at-zero"
+channel = "math"
+surface = "centereqnotconeatzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centereqnotconeatzero) (paren (seq (slot 0))))"

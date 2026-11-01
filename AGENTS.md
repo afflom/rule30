@@ -59,6 +59,8 @@ bin/r30 choice-audit                   # theorems depending on Classical.choice 
 bin/r30 commit -m "..." [--push]       # commit through the pre-commit gate, in the background
 bin/r30 gate                           # is that gate still running; its last stage and log tail
 bin/r30 experiment run <name> [args]   # a finite diagnostic on the seed
+bin/r30 sequences [--write]            # the basis of the map (Sequences.lex.tex); --write evaluates it in Lean
+bin/r30 discover [--write]             # induction: relations and recurrences of the basis, certified; --write records them as observed
 ```
 
 Costs: `check`/`verify` of one module take seconds; `verify` of the whole paper
@@ -110,6 +112,39 @@ remains outside LexLean is the shell that runs `lake`, `lexlean` and `git`
 and reads files: that shell is generated Rust once PrismPM is pinned
 (`lexlean production`), and the Python package is the interim runtime, kept
 to subprocess calls and file I/O around the LexLean modules.
+
+## A round of the loop
+
+A proposal round is a saved workflow, `.claude/workflows/rule30-round.js`, run with the
+lenses as arguments (`{round, lenses: [{key, prompt}], extra}`): one agent per lens proposes
+the best exact theorem it yields (or the exact point where it stops), two skeptics per proposal
+try to refute it (truth against the Lean definitions; routing against the refuted claims), and
+the survivors and confident salvage are mechanized one at a time in new research modules, each
+waiting for the gate and running one Lean process. Publishing (`theorem add`), the register
+(`frontier add|set`, refuted routes included) and the commit stay with the orchestrator.
+
+Induction feeds the round: `bin/r30 discover --window 256 --degree 2` runs the relation
+engine (Gaussian elimination over F2) and the recurrence engine (Berlekamp-Massey) of
+`rule30-api/src/Discovery.lex.tex` on the basis of `Sequences.lex.tex` (the paper's notions
+evaluated from the host definitions; `bin/r30 sequences --write` refreshes it, one Lean run of
+about six minutes), each output certified by a sound validator, and lists the relations the
+register does not already imply (`new`), each with its κ-label and its window. A `new`
+relation is a candidate statement for a lens, never a result: `--write` records the batch as
+`observed` claims, `frontier check` keeps them true on their window, and one becomes `proved`
+only through a Lean theorem (`theorem add`, then `frontier set --status proved --lean`). Read
+the `consequence` class before proposing: a relation the engine derives from the register is
+already a corollary. Do not widen the basis by enumerating cells or positions: add a notion
+only as a lexeme of the paper.
+
+`bin/r30 audit` classifies every conditional refutation of the period in the library (a theorem
+concluding `¬ CenterPeriodic T P`, `Problem1` or `False` under a period) as dead (a hypothesis
+refuted under a period by a named theorem), live-discharged (the composition closes in Lean: a
+proof) or open with its open hypotheses (`--write` records them in `rule30-api/model/audit.toml`
+and `Audit.lex.tex`, `claim <id> --related` lists them, `--cached` reads them without Lean).
+The round opens with the Induce phase (`induce: false` skips it): one agent runs `bin/r30
+discover --window 256 --degree 2 --json` and `bin/r30 audit --json`, and the observed relations
+not in the register and the open audit obligations reach every lens as context and go straight
+to Refute and Mechanize as proposals of their own.
 
 ## A theorem's life
 
@@ -233,5 +268,5 @@ commit once per batch.
 
 - Do not edit `lexlean.lock`, `pdf-manifest.json`, the PDFs or `verified-latest/`; the gate generates them.
 - Do not add `Classical.*`, `Exists.choose`, `open Classical`, or `\allowaxioms{Classical.choice...}` anywhere; `scripts/check_no_choice.py` rejects them.
-- Do not claim a result the kernel has not checked. `frontier.toml` has `open`, `proved`, `refuted` and `retired`; a conjecture is `open` until `bin/r30 axioms` passes on its Lean name.
+- Do not claim a result the kernel has not checked. `frontier.toml` has `open`, `proved`, `refuted`, `retired` and `observed` (a relation certified on a window by `bin/r30 discover`, pending deduction); a conjecture is `open` or `observed` until `bin/r30 axioms` passes on its Lean name.
 - Do not bypass the hook (`ALLOW_NON_LEXLEAN_AUTHORING=1`) for proof content.

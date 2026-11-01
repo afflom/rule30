@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.lhCenter_late_scale_eq_of_doubles_le_and_spatial_agree_prop"
+name = "Rule30UOR.Interfaces.lhCenter_late_scale_eq_of_doubles_le_and_spatial_agree"
 
 [[form]]
 id = "lhcenter-late-scale-eq-of-doubles-le-and-spatial-agree"

@@ -200,9 +200,6 @@ theorem rdiag_zero_all : ∀ t : Nat, rdiag 0 t = true
   | 0 => rfl
   | _ + 1 => rfl
 
-theorem bxor_eq_xor (a b : Bool) : bxor a b = xor a b := by
-  cases a <;> cases b <;> rfl
-
 /-- Bit `j` of the Witt integer `row t` is depth `j` of the right-diagonal system `rdiag j t`. -/
 theorem row_testBit : ∀ (t j : Nat), (row t).testBit j = rdiag j t
   | 0, 0 => by decide
@@ -225,7 +222,7 @@ theorem row_testBit : ∀ (t j : Nat), (row t).testBit j = rdiag j t
     cases rdiag 1 t <;> rfl
   | t + 1, k + 2 => by
     show (phi (row t)).testBit (k + 2) = bxor (rdiag (k + 2) t) (rdiag (k + 1) t || rdiag k t)
-    rw [phi_testBit_add_two, row_testBit t (k + 2), row_testBit t (k + 1), row_testBit t k, bxor_eq_xor]
+    rw [phi_testBit_add_two, row_testBit t (k + 2), row_testBit t (k + 1), row_testBit t k, Rule30UOR.Scale.bxor_eq]
 
 /-- `bit n k` is `1` when `n.testBit k` is `true` and `0` when `false`. -/
 theorem bit_eq_if_testBit (n k : Nat) : bit n k = if n.testBit k then 1 else 0 := by
@@ -485,7 +482,7 @@ theorem phiScale_row_testBit_cone (t k : Nat) (hk : t < twopow k) :
 theorem center_witt_scale_cone (t k : Nat) (hk : t < twopow k) :
     Rule30UOR.Core.center (t + twopow k) = bxor (Rule30UOR.Core.center t) (wittRespBool t k) := by
   rw [← row_testBit_center (t + twopow k), row_scale, Nat.testBit_xor,
-    phiScale_row_testBit_cone t k hk, bxor_eq_xor]
+    phiScale_row_testBit_cone t k hk, Rule30UOR.Scale.bxor_eq]
   rfl
 
 /-- **Cone duality**: for `t < 2^k`, the symmetric Witt (Rule-150) window response at the center equals the one-sided Rule-60 window response. -/
@@ -497,7 +494,7 @@ theorem wittRespBool_eq_response_cone (t k : Nat) (hk : t < twopow k) :
     Rule30UOR.Scale.cell_left_white t (-(twopow k : Int)) (by omega)
   rw [hw] at h2
   unfold Rule30UOR.Scale.response
-  rw [bxor_eq_xor] at h1
+  rw [Rule30UOR.Scale.bxor_eq] at h1
   rw [h1] at h2
   revert h2
   cases Rule30UOR.Core.center t <;> cases wittRespBool t k <;> cases Rule30UOR.Core.window60 t (twopow k) 0 <;> simp
@@ -541,7 +538,7 @@ theorem wittRespBool_xor_response_ge (t k : Nat) (hk : twopow k ≤ t) :
   rw [phiScale_row_testBit_ge t k hk] at h1
   have h2 := Rule30UOR.Scale.scale_center t k
   unfold Rule30UOR.Scale.response
-  rw [bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq]
   rw [h2] at h1
   revert h1
   cases Rule30UOR.Core.center t <;> cases Rule30UOR.Core.cell t (-(twopow k : Int)) <;>
@@ -592,8 +589,8 @@ theorem two_places_witt_scale (d k : Nat) (hk : d ≤ k) :
   have hs := Rule30UOR.Scale.scale_center (d + twopow k) k
   rw [← ldiag_eq_cell_neg d (twopow k)] at hs
   unfold Rule30UOR.Scale.response at hc
-  rw [bxor_eq_xor] at hc
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, hc, hs]
+  rw [Rule30UOR.Scale.bxor_eq] at hc
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, hc, hs]
   cases Rule30UOR.Core.center (d + twopow k) <;>
     cases ldiag d (d + twopow k) <;>
     cases Rule30UOR.Core.window60 (d + twopow k) (twopow k) 0 <;>
@@ -631,7 +628,7 @@ theorem zcenter_from_late_scale (d k : Nat) (hk : d ≤ k) (hset : settle d ≤ 
   have hs := Rule30UOR.Scale.scale_center (d + twopow k) k
   rw [← ldiag_eq_cell_neg d (twopow k)] at hs
   unfold Rule30UOR.Scale.response
-  rw [bxor_eq_xor, bxor_eq_xor, hs]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, hs]
   cases Rule30UOR.Core.center (d + twopow k) <;>
     cases ldiag d (d + twopow k) <;>
     cases Rule30UOR.Core.window60 (d + twopow k) (twopow k) 0 <;> rfl
@@ -655,6 +652,20 @@ theorem twopow_gt_self : ∀ k : Nat, k < twopow k
     rw [Rule30UOR.Core.twopow_succ]
     omega
 
+/-- **Monotonicity of `twopow` (`twopow_mono`, 9.1027)**:
+    for every `a, b ∈ ℕ`, if `a ≤ b`, then `twopow a ≤ twopow b`! -/
+theorem twopow_mono (a : Nat) : ∀ b : Nat, a ≤ b → twopow a ≤ twopow b
+  | 0, h => by
+    have ha : a = 0 := by omega
+    subst ha; omega
+  | b + 1, h => by
+    by_cases hab : a ≤ b
+    · have ih := twopow_mono a b hab
+      rw [Rule30UOR.Core.twopow_succ]
+      omega
+    · have ha : a = b + 1 := by omega
+      subst ha; omega
+
 /-- **Dyadic coboundary of the Rule-60 response**: for `d ≤ k`, stepping `d → d + 2^k → d + 2^(k+1)` versus `d → d + 2^(k+1)` shows that the coboundary defect `response d (k+1) ⊕ response d k ⊕ response (d + 2^k) k` is the left wing `ldiag d (d + 2^k)`. -/
 theorem ldiag_eq_response_coboundary (d k : Nat) (hk : d ≤ k) :
     ldiag d (d + twopow k) =
@@ -672,8 +683,8 @@ theorem ldiag_eq_response_coboundary (d k : Nat) (hk : d ≤ k) :
     rw [Rule30UOR.Core.twopow_succ]; omega
   rw [hstep, hc2, hc1] at hs
   unfold Rule30UOR.Scale.response at *
-  rw [bxor_eq_xor, bxor_eq_xor] at hs
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq] at hs
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   revert hs
   cases Rule30UOR.Core.center d <;>
     cases Rule30UOR.Core.window60 d (twopow (k + 1)) 0 <;>
@@ -703,7 +714,7 @@ theorem two_places_eq_witt_coboundary (d k : Nat) (hk : d ≤ k) :
     rw [Rule30UOR.Core.twopow_succ]; omega
   rw [hstep, hc2, hc1] at h2p
   rw [h2p]
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center d <;>
     cases wittRespBool d (k + 1) <;>
     cases wittRespBool d k <;>
@@ -741,7 +752,7 @@ theorem maskparity_coboundary (d k : Nat) :
     bxor (bxor (Rule30UOR.Scale.maskparity d (k + 1)) (Rule30UOR.Scale.maskparity d k))
       (Rule30UOR.Scale.maskparity (d + twopow k) k) = false := by
   unfold Rule30UOR.Scale.maskparity
-  rw [Rule30UOR.Core.twopow_succ, maskcount_add d (twopow k) (twopow k), bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Core.twopow_succ, maskcount_add d (twopow k) (twopow k), Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.maskcount d (twopow k) <;>
     cases Rule30UOR.Scale.maskcount (d + twopow k) (twopow k) <;> rfl
 
@@ -756,7 +767,7 @@ theorem ldiag_eq_leftresponse_coboundary (d k : Nat) (hk : d ≤ k) :
     Rule30UOR.Scale.split_paper (d + twopow k) k]
   have hm := maskparity_coboundary d k
   revert hm
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse d (k + 1) <;>
     cases Rule30UOR.Scale.leftresponse d k <;>
     cases Rule30UOR.Scale.leftresponse (d + twopow k) k <;>
@@ -786,7 +797,7 @@ theorem winWitt_testBit_lt_twopow (t0 k j : Nat) (hj : j < twopow k) :
   have hm2 : decide (j ≥ twopow k + twopow k) = false := decide_eq_false (by omega)
   rw [hm1, hm2, Bool.false_and, Bool.false_and, Bool.xor_false, Bool.xor_false,
     row_testBit (t0 + twopow k) j, row_testBit t0 j] at hr
-  rw [bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq]
   revert hr
   cases rdiag j (t0 + twopow k) <;>
     cases rdiag j t0 <;>
@@ -800,7 +811,7 @@ theorem winWitt_testBit_of_per (t0 k j : Nat) (hj : j < twopow k)
   have hp : rdiag j (t0 + twopow k) = rdiag j t0 := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
     exact hper t0
-  rw [hp, bxor_eq_xor, Bool.xor_self]
+  rw [hp, Rule30UOR.Scale.bxor_eq, Bool.xor_self]
 
 /-- **Universal 2-adic leading bit of `winWitt` at the right-doubling threshold `J + 1`**: if right diagonal `J` has period `2^k` and `J + 1` does not (`J + 1 < 2^k`), then bit `J + 1` of `winWitt t0 (2^k)` is `true` for **every** `t0 : Nat`. -/
 theorem winWitt_testBit_antiperiod (t0 k J : Nat) (hJlt : J + 1 < twopow k)
@@ -811,7 +822,7 @@ theorem winWitt_testBit_antiperiod (t0 k J : Nat) (hJlt : J + 1 < twopow k)
   have ha : rdiag (J + 1) (t0 + twopow k) = !rdiag (J + 1) t0 := by
     rw [Rule30UOR.Right.rdiag_eq_R, Rule30UOR.Right.rdiag_eq_R, twopow_eq_pow k]
     exact Rule30UOR.KitConstructive.antiperiod hJ hJ1 t0
-  rw [ha, bxor_eq_xor]
+  rw [ha, Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 1) t0 <;> rfl
 
 /-- **2-adic valuation of the Witt window response**: for every `t0` and every `j ≤ k`, bit `j` of `winWitt t0 (2^k)` is `false` (`2^(k+1) ∣ winWitt t0 (2^k)` for `j ≤ k`). -/
@@ -823,7 +834,7 @@ theorem winWitt_testBit_low (t0 k j : Nat) (hj : j ≤ k) :
     rw [twopow_eq_pow k, show 2 ^ k = 2 ^ (k - j) * 2 ^ j by
       rw [← Nat.pow_add, show k - j + j = k by omega]]
     exact rdiag_periodic_mul j (2 ^ (k - j)) t0
-  rw [hrd, bxor_eq_xor, Bool.xor_self]
+  rw [hrd, Rule30UOR.Scale.bxor_eq, Bool.xor_self]
 
 /-- **Archimedean degree of the Witt window response**: for every `t0` and every `j > 2 * (t0 + 2^k)`, bit `j` of `winWitt t0 (2^k)` is `false`. -/
 theorem winWitt_testBit_gt_two_mul (t0 k j : Nat) (hj : 2 * (t0 + twopow k) < j) :
@@ -863,7 +874,7 @@ theorem winWitt_testBit_middle_ray (t0 k i : Nat) (hi : i < twopow k) (hcone : 2
     row_testBit t0 (i + twopow k),
     row_testBit t0 i,
     rdiag_gt_two_mul t0 (i + twopow k) hcone] at hr
-  rw [bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq]
   revert hr
   cases rdiag (i + twopow k) (t0 + twopow k) <;>
     cases rdiag i t0 <;>
@@ -903,7 +914,7 @@ theorem winWitt_testBit_left_ray (d m k : Nat) (hdm : d + m < twopow k) :
     rdiag_gt_two_mul (d + m) (d + 2 * m + twopow (k + 1)) (by omega),
     rdiag_gt_two_mul (d + m) (d + 2 * m + twopow k) (by omega),
     hld_late, hld_early] at hr
-  rw [bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq]
   revert hr
   cases ldiag d ((d + m) + twopow k) <;>
     cases ldiag d (d + m) <;>
@@ -950,7 +961,7 @@ theorem winWitt_testBit_left_settled_zero (d m k : Nat) (hk : d ≤ k) (hdm : d 
     (winWitt (d + m) (twopow k)).testBit (d + 2 * m + twopow (k + 1)) = false := by
   rw [winWitt_testBit_left_damage d m k hk hdm (by omega),
     Rule30UOR.Kit.ldiag_eq_D, ← Rule30UOR.Intent.E_eq_D d (d + m) hset,
-    bxor_eq_xor, Bool.xor_self]
+    Rule30UOR.Scale.bxor_eq, Bool.xor_self]
 
 /-- **General right-diagonal scale invariance**: for every depth `d`, time `s`, and scale `k ≥ d`, `rdiag d (s + 2^k) = rdiag d s` from time `0`. -/
 theorem rdiag_scale_eq (d s k : Nat) (hk : d ≤ k) :
@@ -1004,7 +1015,7 @@ theorem witt_coboundary_at_zero_diag (z k : Nat) (hz : IsZeroDiag z)
       (wittRespBool (z + twopow k) k) = Rule30UOR.Core.center z := by
   have h := damage_eq_witt_coboundary z k hk hset
   rw [zcenter_of_zero_diag z hz] at h
-  rw [← h, bxor_eq_xor, Bool.xor_false]
+  rw [← h, Rule30UOR.Scale.bxor_eq, Bool.xor_false]
 
 /-- **Two steps past a zero diagonal `z`, the settled Witt coboundary reads `!center (z + 2)`**: for `z + 2 ≤ k` and `settle (z + 2) ≤ (z + 2) + 2^k`, the dyadic coboundary of `wittRespBool` at `z + 2` equals `!center (z + 2)`. -/
 theorem witt_coboundary_after_zero_diag (z k : Nat) (hz : IsZeroDiag z)
@@ -1013,7 +1024,7 @@ theorem witt_coboundary_after_zero_diag (z k : Nat) (hz : IsZeroDiag z)
       (wittRespBool ((z + 2) + twopow k) k) = !Rule30UOR.Core.center (z + 2) := by
   have h := damage_eq_witt_coboundary (z + 2) k hk hset
   rw [zcenter_after_zero_diag z hz] at h
-  rw [← h, bxor_eq_xor]
+  rw [← h, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center (z + 2) <;> rfl
 
 /-! ### Prop-valued paper interfaces for settled two-place and coboundary laws -/
@@ -1081,7 +1092,7 @@ theorem periodic_left_eq_mask_of_lag_eq (T P : Nat) (hP : 0 < P) (h : Rule30UOR.
   have heq := periodic_response_eq_of_lag_eq T P hP h k1 k2 t hlag ht hk1 hk2
   rw [Rule30UOR.Scale.split_paper t k1, Rule30UOR.Scale.split_paper t k2] at heq
   revert heq
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse t k1 <;>
     cases Rule30UOR.Scale.leftresponse t k2 <;>
     cases Rule30UOR.Scale.maskparity t k1 <;>
@@ -1102,9 +1113,9 @@ theorem periodic_coboundary_collapse (T P : Nat) (hP : 0 < P) (h : Rule30UOR.Sca
   rw [hr] at hz
   rw [hw] at hdam
   refine ⟨?_, ?_⟩
-  · rw [hz, bxor_eq_xor, bxor_eq_xor]
+  · rw [hz, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
     cases Rule30UOR.Scale.response d k <;> cases Rule30UOR.Scale.response (d + twopow k) k <;> rfl
-  · rw [hdam, bxor_eq_xor, bxor_eq_xor]
+  · rw [hdam, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
     cases wittRespBool d k <;> cases wittRespBool (d + twopow k) k <;> rfl
 
 /-- Equality of dyadic lags at `k1` and `k2` propagates to `k1 + 1` and `k2 + 1`. -/
@@ -1132,7 +1143,7 @@ theorem periodic_late_response_eq_of_lag_eq (T P : Nat) (hP : 0 < P) (h : Rule30
   have hz2 := zcenter_eq_response_coboundary d k2 hk2 hset2
   rw [hz1, hr0, hr1] at hz2
   revert hz2
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.response d (k2 + 1) <;>
     cases Rule30UOR.Scale.response d k2 <;>
     cases Rule30UOR.Scale.response (d + twopow k1) k1 <;>
@@ -1155,7 +1166,7 @@ theorem periodic_late_witt_eq_of_lag_eq (T P : Nat) (hP : 0 < P) (h : Rule30UOR.
   have hd2 := damage_eq_witt_coboundary d k2 hk2 hset2
   rw [hd1, hw0, hw1] at hd2
   revert hd2
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases wittRespBool d (k2 + 1) <;>
     cases wittRespBool d k2 <;>
     cases wittRespBool (d + twopow k1) k1 <;>
@@ -1174,7 +1185,7 @@ theorem periodic_late_left_eq_mask_of_lag_eq (T P : Nat) (hP : 0 < P) (h : Rule3
   rw [Rule30UOR.Scale.split_paper (d + twopow k1) k1,
     Rule30UOR.Scale.split_paper (d + twopow k2) k2] at heq
   revert heq
-  rw [bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Scale.leftresponse (d + twopow k1) k1 <;>
     cases Rule30UOR.Scale.leftresponse (d + twopow k2) k2 <;>
     cases Rule30UOR.Scale.maskparity (d + twopow k1) k1 <;>
@@ -1423,7 +1434,7 @@ theorem par_winWitt (t0 k : Nat) :
     par (winWitt t0 (twopow k)) = bxor (par (row (t0 + twopow k))) (par (row t0)) := by
   have hp := congrArg par (row_scale t0 k)
   rw [par_xor, par_phiScale] at hp
-  rw [bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq]
   revert hp
   cases par (row (t0 + twopow k)) <;>
     cases par (row t0) <;>
@@ -1629,7 +1640,7 @@ theorem winWitt_testBit_sector_zero_xor_one (t0 k r : Nat) (hr : r < twopow k)
     bxor ((winWitt t0 (twopow k)).testBit r) ((winWitt t0 (twopow k)).testBit (r + twopow k)) =
       bxor (rdiag r (t0 + twopow k)) (rdiag (r + twopow k) (t0 + twopow k)) := by
   rw [winWitt_testBit_lt_twopow t0 k r hr, winWitt_testBit_middle_ray t0 k r hr hcone]
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases rdiag r (t0 + twopow k) <;>
     cases rdiag (r + twopow k) (t0 + twopow k) <;>
     cases rdiag r t0 <;> rfl
@@ -1663,7 +1674,7 @@ theorem threshold_center_resonance (k J : Nat) (hJ : IsRightThreshold k J)
   rw [h0] at hray0
   rw [hray1]
   revert hray0
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 1) ((J + 1) + twopow k) <;>
     cases rdiag (J + 1) (J + 1) <;>
     cases rdiag ((J + 1) + twopow k) ((J + 1) + twopow k) <;> decide
@@ -1689,7 +1700,7 @@ theorem winWitt_testBit_sector_one_below_threshold (t0 k J r : Nat) (hJ : IsRigh
   have hxor := winWitt_testBit_sector_zero_xor_one t0 k r hr hcone
   rw [h0] at hxor
   revert hxor
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases (winWitt t0 (twopow k)).testBit (r + twopow k) <;>
     cases rdiag r (t0 + twopow k) <;>
     cases rdiag (r + twopow k) (t0 + twopow k) <;> decide
@@ -1710,7 +1721,7 @@ theorem winWitt_testBit_sector_one_at_threshold (t0 k J : Nat) (hJ : IsRightThre
   have hxor := winWitt_testBit_sector_zero_xor_one t0 k (J + 1) hJlt hcone
   rw [h1] at hxor
   revert hxor
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases (winWitt t0 (twopow k)).testBit ((J + 1) + twopow k) <;>
     cases rdiag (J + 1) (t0 + twopow k) <;>
     cases rdiag ((J + 1) + twopow k) (t0 + twopow k) <;> decide
@@ -1930,7 +1941,7 @@ theorem winWitt_testBit_sector_one_gap_ldiag (t0 k m : Nat)
       ldiag (twopow k - m) (t0 + twopow k) := by
   rw [winWitt_testBit_middle_ray t0 k (2 * t0 + m) hcone (by omega),
     rdiag_gt_two_mul t0 (2 * t0 + m) (by omega),
-    bxor_eq_xor, Bool.xor_false,
+    Rule30UOR.Scale.bxor_eq, Bool.xor_false,
     show 2 * t0 + m + twopow k = (t0 + twopow k) + (t0 + m) by omega,
     rdiag_add_eq_cell_neg (t0 + twopow k) (t0 + m),
     show t0 + twopow k = (twopow k - m) + (t0 + m) by omega,
@@ -1953,7 +1964,7 @@ theorem winWitt_testBit_sector_one_cone_edge (t0 k : Nat) (hcone : 2 * t0 < twop
     rdiag_add_eq_cell_neg (t0 + twopow k) t0,
     show t0 + twopow k = twopow k + t0 by omega,
     ← ldiag_eq_cell_neg (twopow k) t0,
-    bxor_eq_xor]
+    Rule30UOR.Scale.bxor_eq]
   cases ldiag (twopow k) (twopow k + t0) <;> rfl
 
 /-- Paper-facing `bit` (`wittbit`) wrapper for `winWitt_testBit_sector_one_cone_edge`. -/
@@ -1995,7 +2006,7 @@ theorem crossCarry_sector_one_cone_edge (t0 k : Nat) (hcone : 2 * t0 + 1 < twopo
   have d2 : decide (2 * t0 + 2 + twopow k ≥ 1) = true := decide_eq_true (by omega)
   rw [d2, Bool.true_and,
     show 2 * t0 + 2 + twopow k - 1 = 2 * t0 + 1 + twopow k by omega,
-    hcc, ← bxor_eq_xor] at hstep
+    hcc, ← Rule30UOR.Scale.bxor_eq] at hstep
   exact hstep
 
 theorem winWitt_cone_step_sector_one_edge (t0 k : Nat) (hcone : 2 * t0 + 1 < twopow k) :
@@ -2024,7 +2035,7 @@ theorem rdiag_threshold_sub_eq_ldiag (d s k J : Nat) (hJ : IsRightThreshold k J)
     rdiag (d + 2 * s) ((d + s) + twopow k) = ldiag d (d + s) := by
   have h0 := winWitt_zero_gap_of_threshold (d + s) k J (d + 2 * s) hJ hdsJ hdsk
   have hray0 := winWitt_testBit_lt_twopow (d + s) k (d + 2 * s) hdsk
-  rw [h0, ← ldiag_eq_rdiag d s, bxor_eq_xor] at hray0
+  rw [h0, ← ldiag_eq_rdiag d s, Rule30UOR.Scale.bxor_eq] at hray0
   revert hray0
   cases rdiag (d + 2 * s) ((d + s) + twopow k) <;>
     cases ldiag d (d + s) <;> decide
@@ -2038,7 +2049,7 @@ theorem rdiag_threshold_succ_eq_not_ldiag (d s k J : Nat) (hJ : IsRightThreshold
   have hld : ldiag d (d + s) = rdiag (J + 1) (d + s) := by
     rw [← hdsJ]
     exact ldiag_eq_rdiag d s
-  rw [h1, ← hld, bxor_eq_xor] at hray0
+  rw [h1, ← hld, Rule30UOR.Scale.bxor_eq] at hray0
   revert hray0
   cases rdiag (J + 1) ((d + s) + twopow k) <;>
     cases ldiag d (d + s) <;> decide
@@ -2072,7 +2083,7 @@ theorem winWitt_testBit_sector_one_xor_two (d s k : Nat) (hds : d + 2 * s < twop
       bxor (ldiag (d + twopow k) ((d + s) + twopow k)) (ldiag d ((d + s) + twopow k)) := by
   rw [winWitt_testBit_sector_one_ldiag d s k hds,
     winWitt_testBit_left_ray d s k (by omega)]
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases ldiag (d + twopow k) ((d + s) + twopow k) <;>
     cases ldiag d ((d + s) + twopow k) <;>
     cases ldiag d (d + s) <;> rfl
@@ -2084,7 +2095,7 @@ theorem winWitt_testBit_sector_zero_xor_two (d s k : Nat) (hds : d + 2 * s < two
       bxor (rdiag (d + 2 * s) ((d + s) + twopow k)) (ldiag d ((d + s) + twopow k)) := by
   rw [winWitt_testBit_sector_zero_ldiag d s k hds,
     winWitt_testBit_left_ray d s k (by omega)]
-  rw [bxor_eq_xor, bxor_eq_xor, bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases rdiag (d + 2 * s) ((d + s) + twopow k) <;>
     cases ldiag d ((d + s) + twopow k) <;>
     cases ldiag d (d + s) <;> rfl
@@ -2183,7 +2194,7 @@ theorem rdiag_threshold_plus_two_step_neg (t0 k J : Nat) (hJ : IsRightThreshold 
   rw [show (t0 + 1) + twopow k = (t0 + twopow k) + 1 by omega,
     Rule30UOR.Core.rdiag_step J (t0 + twopow k),
     rdiag_threshold_late_true_plateau t0 k J hJ htJ,
-    Bool.true_or, bxor_eq_xor]
+    Bool.true_or, Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 2) (t0 + twopow k) <;> rfl
 
 /-- **Strict Alternation of Bit `J + 2` of `winWitt` before Cone Collision (`2 * t0 < J`)**: for `2 * t0 < J` and `J + 2 < 2^k`, bit `J + 2` of `winWitt t0 (2^k)` flips at every step `t0 ↦ t0 + 1`. -/
@@ -2196,7 +2207,7 @@ theorem winWitt_testBit_threshold_plus_two_step_neg (t0 k J : Nat) (hJ : IsRight
     rdiag_gt_two_mul (t0 + 1) (J + 2) (by omega),
     rdiag_gt_two_mul t0 (J + 2) (by omega),
     rdiag_threshold_plus_two_step_neg t0 k J hJ (by omega),
-    bxor_eq_xor, bxor_eq_xor]
+    Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 2) (t0 + twopow k) <;> rfl
 
 /-- Paper-facing `bit` (`wittbit`) wrapper for `winWitt_testBit_threshold_plus_two_step_neg`. -/
@@ -2219,7 +2230,7 @@ theorem winWitt_testBit_threshold_plus_two_collision_freeze (t0 k J : Nat) (hJ :
     hearly1,
     rdiag_gt_two_mul t0 (J + 2) (by omega),
     rdiag_threshold_plus_two_step_neg t0 k J hJ (by omega),
-    bxor_eq_xor, bxor_eq_xor]
+    Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 2) (t0 + twopow k) <;> rfl
 
 /-- Paper-facing `bit` (`wittbit`) wrapper for `winWitt_testBit_threshold_plus_two_collision_freeze`. -/
@@ -2260,7 +2271,7 @@ theorem ldiag_three_step_neg (m : Nat) : ldiag 3 (3 + m) = !ldiag 3 (2 + m) := b
     ldiag_one_eq_true (1 + m),
     show 1 + (1 + m) = 2 + m by omega,
     ldiag_two_eq_false m,
-    Bool.false_or, bxor_eq_xor]
+    Bool.false_or, Rule30UOR.Scale.bxor_eq]
   cases ldiag 3 (2 + m) <;> rfl
 
 /-- **Sector 1 Late-Slice Reduction on Settled Left Diagonals (`SettledBy d (d + s)`)**: once left diagonal `d ≤ k` has settled by time `d + s` (`d + 2 * s < 2^k`), Sector 2 vanishes (`ldiag d (d + s + 2^k) = ldiag d (d + s)`), so Sector 1 (`d + 2 * s + 2^k`) reduces to the pure late-time left-diagonal difference `bxor (ldiag (d + 2^k) (d + s + 2^k)) (ldiag d (d + s + 2^k))`. -/
@@ -2272,7 +2283,7 @@ theorem winWitt_testBit_sector_one_settled (d s k : Nat) (hk : d ≤ k)
   have hxor := winWitt_testBit_sector_one_xor_two d s k hds
   rw [h2] at hxor
   revert hxor
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases (winWitt (d + s) (twopow k)).testBit (d + 2 * s + twopow k) <;>
     cases ldiag (d + twopow k) ((d + s) + twopow k) <;>
     cases ldiag d ((d + s) + twopow k) <;> decide
@@ -2294,7 +2305,7 @@ theorem rdiag_eq_ldiag_of_settled_below_threshold (d s k J : Nat) (hJ : IsRightT
   have hxor := winWitt_testBit_sector_zero_xor_two d s k hds
   rw [h0, h2] at hxor
   revert hxor
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases rdiag (d + 2 * s) ((d + s) + twopow k) <;>
     cases ldiag d ((d + s) + twopow k) <;> decide
 
@@ -2311,7 +2322,7 @@ theorem rdiag_eq_not_ldiag_of_settled_at_threshold (d s k J : Nat) (hJ : IsRight
   have hxor := winWitt_testBit_sector_zero_xor_two d s k hds
   rw [h0, h2, hdJ] at hxor
   revert hxor
-  rw [bxor_eq_xor, bxor_eq_xor]
+  rw [Rule30UOR.Scale.bxor_eq, Rule30UOR.Scale.bxor_eq]
   cases rdiag (J + 1) ((d + s) + twopow k) <;>
     cases ldiag d ((d + s) + twopow k) <;> decide
 
@@ -2352,7 +2363,7 @@ theorem winWitt_testBit_center_sector_one_xor_two_witt (d k : Nat) (hk : d ≤ k
   rw [Rule30UOR.Core.twopow_succ, ← Nat.add_assoc] at hc1
   rw [hs1, hs2, htp]
   revert hc0 hc1
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center d <;>
     cases Rule30UOR.Core.center (d + twopow k) <;>
     cases Rule30UOR.Core.center ((d + twopow k) + twopow k) <;>
@@ -2394,7 +2405,7 @@ theorem periodic_ldiag_xor_eq_late_witt_xor_of_lag_eq (T P : Nat) (hP : 0 < P)
   have hx2 := center_late_xor_ldiag_eq_witt_cross_scale d k2 hk2
   rw [hceq, hw1] at hx1
   revert hx1 hx2
-  simp only [bxor_eq_xor]
+  simp only [Rule30UOR.Scale.bxor_eq]
   cases Rule30UOR.Core.center (d + twopow k2) <;>
     cases ldiag d (d + twopow k1) <;>
     cases ldiag d (d + twopow k2) <;>

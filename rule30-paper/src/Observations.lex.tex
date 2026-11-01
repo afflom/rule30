@@ -4706,5 +4706,136 @@ Close the goal with \(\lexeme{r30.observation::not-cone-zero-periodic-from}(T, P
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{cone-zero-eq-cell}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(conezero(t) = cell(t, intneg 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::cone-zero-eq-cell}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-increment-eq-rule}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(bxor(center(t + 1), center(t)) = bxor(maskedcolumn(t), cell(t, intneg 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-increment-eq-rule}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-of-no-periodic-black-consistent}
+\allowaxioms{Quot.sound;propext}
+if \(noperiodicblackconsistent\), then \(problemone\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::problem1-of-no-periodic-black-consistent}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{diagonal-cone-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(d\) and natural number \(t\), if \(twopow(d) ≤ t\), then \(diagonalcone(d, t + 3 * twopow(d)) = diagonalcone(d, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::diagonal-cone-periodic}(d, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{le-of-doubles-at-mul-twopow}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(w\) and natural number \(K\) and natural number \(z\), if \(doublesat(w * twopow(K), z)\), then \(K ≤ z\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::le-of-doubles-at-mul-twopow}(w, K, z)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{doubles-at-two-mul-lt}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(Q\) and natural number \(z\) and natural number \(y\), if \(0 < Q\), then if \(doublesat(Q, z)\), then if \(doublesat(2 * Q, y)\), then \(z < y\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::doubles-at-two-mul-lt}(Q, z, y)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{problem1-iff-no-block-cone-period}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), \(problemone ↔ noblockconeperiod(k)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::problem1-iff-no-block-cone-period}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{cell-eq-seed-at-bxor-cone-at}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\) and integer \(p\), \(cell(t, p) = bxor(seedat(t, p), coneat(p, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::cell-eq-seed-at-bxor-cone-at}(t, p)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-not-cone-at-zero}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = not(coneat(0, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-cone-at-zero}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{word-periodic-iff-mahler}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(m\), \(wordperiodic(j, twopow(m)) ↔ wordmahlervanish(j, m)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::word-periodic-iff-mahler}(j, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-mahler-degree}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(m\), if \(¬ wordperiodic(j, twopow(m))\), then \(wordmahlerabove(j, m)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-mahler-degree}(j, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-periodic-black-consistent-iff-single-seed-mask}
+\allowaxioms{Quot.sound;propext}
+\(noperiodicblackconsistent ↔ singleseedmask\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::no-periodic-black-consistent-iff-single-seed-mask}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-zcenter-period-of-no-periodic-black-consistent}
+\allowaxioms{Quot.sound;propext}
+if \(noperiodicblackconsistent\), then \(nozcenterperiod\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::no-zcenter-period-of-no-periodic-black-consistent}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-periodic-isolated-black-consistent-iff}
+\allowaxioms{Quot.sound;propext}
+\(noperiodicisolatedblackconsistent ↔ ¬ walledap\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::no-periodic-isolated-black-consistent-iff}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{no-periodic-isolated-of-no-periodic-black-consistent}
+\allowaxioms{Quot.sound;propext}
+if \(noperiodicblackconsistent\), then \(noperiodicisolatedblackconsistent\).
+\begin{proof}
+Assume \(h\).
+Close the goal with \(\lexeme{r30.observation::no-periodic-isolated-of-no-periodic-black-consistent}(h)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{white-defect-in-window-holds}
+\allowaxioms{Quot.sound;propext}
+\(whitedefectinwindow\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::white-defect-in-window-holds}\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

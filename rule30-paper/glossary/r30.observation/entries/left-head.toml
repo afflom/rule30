@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-head"
+category = "function"
+signature = "(pi ((explicit D (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.DiagonalCone"
+name = "Rule30UOR.DiagonalCone.leftHead"
+
+[[form]]
+id = "left-head"
+channel = "math"
+surface = "lefthead"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lefthead) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

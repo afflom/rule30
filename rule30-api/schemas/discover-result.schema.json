@@ -1,0 +1,180 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/discover-result/1",
+ "title": "discover --json: the runtime that ran, the relations of the extended basis on the window with their certificates and classes, the recurrences of the base windows, and the claims written",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "runtime",
+  "why",
+  "window",
+  "stored_window",
+  "degree",
+  "columns",
+  "rank",
+  "relations",
+  "counts",
+  "recurrences",
+  "written"
+ ],
+ "properties": {
+  "runtime": {
+   "type": "string",
+   "enum": [
+    "rust",
+    "python"
+   ]
+  },
+  "why": {
+   "type": "string"
+  },
+  "window": {
+   "type": "integer"
+  },
+  "stored_window": {
+   "type": "integer"
+  },
+  "degree": {
+   "type": "integer"
+  },
+  "columns": {
+   "type": "integer"
+  },
+  "rank": {
+   "type": "integer"
+  },
+  "relations": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "columns",
+     "kappa",
+     "class",
+     "claim",
+     "scope",
+     "dependent",
+     "rank",
+     "chance_log2"
+    ],
+    "properties": {
+     "columns": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "kappa": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+     },
+     "class": {
+      "type": "string",
+      "enum": [
+       "register",
+       "trivial",
+       "consequence",
+       "new"
+      ]
+     },
+     "claim": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "scope": {
+      "type": "string",
+      "enum": [
+       "self",
+       "cross"
+      ]
+     },
+     "dependent": {
+      "type": "string"
+     },
+     "rank": {
+      "type": "integer"
+     },
+     "chance_log2": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  "counts": {
+   "type": "object",
+   "required": [
+    "register",
+    "trivial",
+    "consequence",
+    "new"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "register": {
+     "type": "integer"
+    },
+    "trivial": {
+     "type": "integer"
+    },
+    "consequence": {
+     "type": "integer"
+    },
+    "new": {
+     "type": "integer"
+    }
+   }
+  },
+  "recurrences": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "kappa",
+     "length",
+     "window",
+     "connection",
+     "margin",
+     "determined"
+    ],
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "kappa": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+     },
+     "length": {
+      "type": "integer"
+     },
+     "window": {
+      "type": "integer"
+     },
+     "connection": {
+      "type": "array",
+      "items": {
+       "type": "integer"
+      }
+     },
+     "margin": {
+      "type": "integer"
+     },
+     "determined": {
+      "type": "boolean"
+     }
+    }
+   }
+  },
+  "written": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  }
+ }
+}

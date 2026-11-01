@@ -4114,4 +4114,119 @@ For every natural number \(T\) and natural number \(P\) and natural number \(S\)
 \begin{proof}
 The goal follows from \(\operatorname{notconezeroperiodicfrom}(T, P, S)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:cone-zero-eq-cell}
+For every natural number \(t\), \(\operatorname{conezero}(t) = \operatorname{cell}(t, -1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{conezeroeqcell}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-increment-eq-rule}
+For every natural number \(t\), \(\operatorname{bxor}(\operatorname{center}(t + 1), \operatorname{center}(t)) = \operatorname{bxor}(\operatorname{maskedcolumn}(t), \operatorname{cell}(t, -1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerincrementeqrule}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-of-no-periodic-black-consistent}
+If \(\operatorname{noperiodicblackconsistent}\), then \(\operatorname{problemone}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{problem1ofnoperiodicblackconsistent}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:diagonal-cone-periodic}
+For every natural number \(d\) and natural number \(t\), if \(\operatorname{twopow}(d) \le t\), then \(\operatorname{diagonalcone}(d, t + 3 \cdot \operatorname{twopow}(d)) = \operatorname{diagonalcone}(d, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{diagonalconeperiodic}(d, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:le-of-doubles-at-mul-twopow}
+For every natural number \(w\) and natural number \(K\) and natural number \(z\), if \(\operatorname{doublesat}(w \cdot \operatorname{twopow}(K), z)\), then \(K \le z\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leofdoublesatmultwopow}(w, K, z)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:doubles-at-two-mul-lt}
+For every natural number \(Q\) and natural number \(z\) and natural number \(y\), if \(0 < Q\), then if \(\operatorname{doublesat}(Q, z)\), then if \(\operatorname{doublesat}(2 \cdot Q, y)\), then \(z < y\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{doublesattwomullt}(Q, z, y)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:problem1-iff-no-block-cone-period}
+For every natural number \(k\), \(\operatorname{problemone}\) if and only if \(\operatorname{noblockconeperiod}(k)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{problem1iffnoblockconeperiod}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:cell-eq-seed-at-bxor-cone-at}
+For every natural number \(t\) and integer \(p\), \(\operatorname{cell}(t, p) = \operatorname{bxor}(\operatorname{seedat}(t, p), \operatorname{coneat}(p, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{celleqseedatbxorconeat}(t, p)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-not-cone-at-zero}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{not}(\operatorname{coneat}(0, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqnotconeatzero}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-periodic-iff-mahler}
+For every natural number \(j\) and natural number \(m\), \(\operatorname{wordperiodic}(j, \operatorname{twopow}(m))\) if and only if \(\operatorname{wordmahlervanish}(j, m)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordperiodiciffmahler}(j, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-mahler-degree}
+For every natural number \(j\) and natural number \(m\), if not \(\operatorname{wordperiodic}(j, \operatorname{twopow}(m))\), then \(\operatorname{wordmahlerabove}(j, m)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordmahlerdegree}(j, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-periodic-black-consistent-iff-single-seed-mask}
+\(\operatorname{noperiodicblackconsistent}\) if and only if \(\operatorname{singleseedmask}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{noperiodicblackconsistentiffsingleseedmask}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-zcenter-period-of-no-periodic-black-consistent}
+If \(\operatorname{noperiodicblackconsistent}\), then \(\operatorname{nozcenterperiod}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{nozcenterperiodofnoperiodicblackconsistent}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-periodic-isolated-black-consistent-iff}
+\(\operatorname{noperiodicisolatedblackconsistent}\) if and only if not \(\operatorname{walledap}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{noperiodicisolatedblackconsistentiff}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:no-periodic-isolated-of-no-periodic-black-consistent}
+If \(\operatorname{noperiodicblackconsistent}\), then \(\operatorname{noperiodicisolatedblackconsistent}\).
+\end{theorem}
+\begin{proof}
+Assume \(h\).
+The goal follows from \(\operatorname{noperiodicisolatedofnoperiodicblackconsistent}(h)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:white-defect-in-window-holds}
+\(\operatorname{whitedefectinwindow}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{whitedefectinwindowholds}\).
+\end{proof}
 \end{document}

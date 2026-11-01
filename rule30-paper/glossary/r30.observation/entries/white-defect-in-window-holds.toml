@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "white-defect-in-window-holds"
+category = "proof-constant"
+signature = "(const r30.observation::white-defect-in-window)"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ResidueJen"
+name = "Rule30UOR.ResidueJen.whiteDefectInWindow"
+
+[[form]]
+id = "white-defect-in-window-holds"
+channel = "math"
+surface = "whitedefectinwindowholds"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name whitedefectinwindowholds)"

@@ -8,7 +8,7 @@ frame = "call"
 [denotation]
 kind = "lean"
 module = "Rule30UOR.Interfaces"
-name = "Rule30UOR.Interfaces.not_isBlackDiag_add_five_of_zero_diag_prop"
+name = "Rule30UOR.Interfaces.not_isBlackDiag_add_five_of_zero_diag"
 
 [[form]]
 id = "not-isblackdiag-add-five-of-zero-diag"

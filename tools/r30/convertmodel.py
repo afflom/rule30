@@ -73,7 +73,7 @@ FIXTURE_NAMES = [
     "Rule30UOR.DefectSource.advancing_right_colour_table",      # arrows inside a math island
     "Rule30UOR.Constructive.nn_pure",                           # refused: implicit binder
     "Rule30UOR.KernelParity.kernel2Finite_not_of",              # refused: function-typed argument
-    "Rule30UOR.Interfaces.bxor_eq_xor",                         # refused: Bool.xor, with the hint
+    "Rule30UOR.Scale.bxor_eq",                         # refused: Bool.xor, with the hint
     "Rule30UOR.CentralCollision.no_recurrent_central_collision_of_noPeriod",  # refused: not visible
     "Rule30UOR.Automatic.no_kappaCollapse_of_problem1",         # refused: variable after a hypothesis
     "Rule30UOR.WittDefect.rightDefect_eq_defect",               # refused: cast
