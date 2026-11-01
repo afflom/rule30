@@ -468,6 +468,27 @@ def cmd_module(args):
         fail("R305003", " ".join(names) or "Rule30UOR")
 
 
+def cmd_kappa(args):
+    """The κ-label of research modules: the address of the declarations the
+    kernel replays (scripts/kappa_research.py), the key of the replay receipts."""
+    import importlib.util
+    from . import modules
+    try:
+        names = [modules.qualify(n) for n in args.names]
+    except ValueError as e:
+        fail("R305005", str(e))
+    unknown = [n for n in names if n not in modules.list_modules()]
+    if unknown:
+        fail("R305005", " ".join(unknown))
+    spec = importlib.util.spec_from_file_location("kappa_research", repo.ROOT / "scripts/kappa_research.py")
+    kappa_research = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(kappa_research)
+    labels = kappa_research.module_labels(repo.CORE_LEAN, names)
+    data = {m: {"kappa": r["kappa"], **({"declarations": [{"name": n, "kappa": k} for n, k in r["declarations"]]}
+                                        if args.declarations else {})} for m, r in labels.items()}
+    out(args, data, kappa_research.render(labels, args.declarations))
+
+
 def cmd_experiment(args):
     exp = repo.ROOT / "experiments"
     if args.sub == "list":
@@ -574,6 +595,10 @@ def build_parser():
     s.add_argument("name"); s.add_argument("--build", action="store_true"); s.set_defaults(fn=cmd_module)
     s = mo.add_parser("build", help="lake build the given modules (all research modules when none)")
     s.add_argument("names", nargs="*"); s.set_defaults(fn=cmd_module)
+
+    s = sp.add_parser("kappa", help="the κ-label of research modules: the address of the declarations the kernel replays (uor-addr), the key of the replay receipts")
+    s.add_argument("names", nargs="+", help="Rule30UOR module names"); s.add_argument("--declarations", action="store_true", help="also each declaration's κ")
+    s.set_defaults(fn=cmd_kappa)
 
     ex = sp.add_parser("experiment").add_subparsers(dest="sub", required=True)
     ex.add_parser("list").set_defaults(fn=cmd_experiment)

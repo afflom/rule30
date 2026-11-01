@@ -32,6 +32,8 @@ CLAIM = {"type": "object", "required": ["id", "status", "statement"], "additiona
 OK = {"type": "object", "required": ["ok", "reason"], "additionalProperties": False,
       "properties": {"ok": {"type": "boolean"}, "reason": {"type": ["string", "null"]}}}
 
+KAPPA = {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+
 RESULTS = {
     "status-result": {
         "title": "status --json: HEAD, dirty files, the frontier counts, the compiler, the gate",
@@ -71,6 +73,16 @@ RESULTS = {
                        "published": {"type": "string"},
                        "published_in": {"type": "string"},
                        "related": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}}},
+    },
+    "kappa-result": {
+        "title": "kappa --json: the κ-label of each module and, with --declarations, of each of its declarations",
+        "type": "object",
+        "additionalProperties": {
+            "type": "object", "required": ["kappa"], "additionalProperties": False,
+            "properties": {"kappa": KAPPA,
+                           "declarations": {"type": "array", "items": {
+                               "type": "object", "required": ["name", "kappa"], "additionalProperties": False,
+                               "properties": {"name": {"type": "string"}, "kappa": KAPPA}}}}},
     },
     "api-check-result": {
         "title": "api check --json: whether each generated surface of rule30-api matches its sources",

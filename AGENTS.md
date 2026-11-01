@@ -214,10 +214,14 @@ commit once per batch.
   the gate dies before the editor, and the rejection is then not about the proof.
 - The gate reuses its evidence. Lake build directories, LexLean attestations
   (keyed by their exact inputs) and the kernel-replay receipts of
-  `scripts/replay_research.py` (one per research module, keyed by the content
-  of its `.olean` and the proof tools, never by path or Git state) live under
-  the Git common directory in `rule30-validation/` and survive rejections, so a
-  retry replays only what changed. Outside the gate the receipts are in `.r30/replay`.
+  `scripts/replay_research.py` (one per research module, κ-addressed: keyed
+  by the module's κ-label, the SHA-256 of the canonical S-expression of the
+  declarations the kernel replays as UOR-Foundation/uor-addr mints labels,
+  plus the proof tools, never by the `.olean` bytes, the path or the Git
+  state, so a comment, a docstring or a renamed binder replays nothing;
+  `bin/r30 kappa <modules>` prints the labels) live under the Git common
+  directory in `rule30-validation/` and survive rejections, so a retry replays
+  only what changed. Outside the gate the receipts are in `.r30/replay`.
 - Generated modules (`bin/r30 api sync`) chunk every literal list through
   `prim append` below `semantic.CHUNK` elements: the pinned notation's reader
   refuses deeper nesting (LLT4001). Do not build long lists by hand.

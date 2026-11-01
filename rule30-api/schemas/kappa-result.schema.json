@@ -1,0 +1,39 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/kappa-result/1",
+ "title": "kappa --json: the \u03ba-label of each module and, with --declarations, of each of its declarations",
+ "type": "object",
+ "additionalProperties": {
+  "type": "object",
+  "required": [
+   "kappa"
+  ],
+  "additionalProperties": false,
+  "properties": {
+   "kappa": {
+    "type": "string",
+    "pattern": "^sha256:[0-9a-f]{64}$"
+   },
+   "declarations": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "required": [
+      "name",
+      "kappa"
+     ],
+     "additionalProperties": false,
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "kappa": {
+       "type": "string",
+       "pattern": "^sha256:[0-9a-f]{64}$"
+      }
+     }
+    }
+   }
+  }
+ }
+}

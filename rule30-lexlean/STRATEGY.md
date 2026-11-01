@@ -3206,9 +3206,18 @@ substrate behind OCI, Git, S3 and Nix). In the proof the freezing law is a κ: t
 block of rows only through its two tables, the idempotent canonical form of the block with respect
 to the center, `2^{j+2}` bits for `2^{2j+1}` carries, and "κ does not determine the spectrum" is
 exactly that the tables do not determine the carries. In the tooling the same discipline is what
-the gate lacked: evidence must be addressed by the content it certifies, so verifying the same
-content twice is a no-op (per-module kernel-replay receipts keyed by the olean's digest, the
-attestation and Lake caches already keyed by inputs). No registry server is needed for this; the
-local content-addressed caches are the fix, and a kappa-registry would only make them shareable.
+the gate lacked, and the owner's correction is the point: not content-addressed (the bytes) but
+**κ-addressed** (`UOR-Foundation/uor-addr`): a κ-label is `sha256:<hex>` of a published
+*canonical form of what the value means*, so two values that mean the same thing get the same
+label (for S-expressions, Rivest's canonical form; the label is the SHA-256 of the canonical bytes
+with no prefix, checked against the library's own vector). For a Lean module the meaning the kernel
+replays is its declarations: names, universe levels, types and values. Its κ is therefore the
+address of the canonical S-expression of those declarations, with shared subterms addressed once
+and referenced by their labels (uor-addr's κ-label composition), not the `.olean` bytes, which also
+carry source positions, docstrings and extension data that change without any theorem changing.
+Replay receipts keyed by that κ are idempotent in the right sense: a comment or a reordering that
+elaborates to the same constants replays nothing; a changed proof term always replays. No registry
+server is needed; the local κ-addressed receipts are the fix, and a kappa-registry would only make
+them shareable.
 
 Problem 1 remains unproved.

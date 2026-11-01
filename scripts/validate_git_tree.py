@@ -169,7 +169,8 @@ def main():
     lake_cache = cache / "lake" / tools_key
     lexlean_cache = cache / "lexlean" / tools_key
     env["RULE30_LEXLEAN_CACHE"] = str(lexlean_cache)
-    # Kernel-replay receipts (scripts/replay_research.py), keyed by artifact content.
+    # Kernel-replay receipts (scripts/replay_research.py), keyed by each module's
+    # κ-label: the address of the declarations the kernel replays, not the .olean bytes.
     env["RULE30_REPLAY_CACHE"] = str(cache / "replay" / tools_key)
     for project in LEXLEAN_INPUTS:
         env["RULE30_LEXLEAN_KEY_" + project.replace("-", "_")] = lexlean_input_digest(root, tree, project)

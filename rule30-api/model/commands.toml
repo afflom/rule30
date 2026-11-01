@@ -246,6 +246,13 @@ requires_digest = false
 result_schema = "r30/module-build-result/1"
 
 [[command]]
+name = "kappa"
+path = ["kappa"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/kappa-result/1"
+
+[[command]]
 name = "experiment_list"
 path = ["experiment", "list"]
 mutates = "never"

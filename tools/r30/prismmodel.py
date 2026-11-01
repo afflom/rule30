@@ -160,7 +160,7 @@ CONTRACTS = [
     {"schema": f"r30/{name}/1", "path": f"schemas/{name}.schema.json", "media_type": f"application/vnd.r30.{name}.v1+json",
      "identity": "sha256-canonical-json", "maximum_bytes": 1048576, "maximum_items": 4096, "extension_policy": "closed",
      "compatibility": "exact-major", "produced_by": name[:-len("-result")].replace("-", "_"), "artifact": "--json"}
-    for name in ("status-result", "brief-result", "chain-result", "claim-result", "api-check-result", "api-production-result")
+    for name in ("status-result", "brief-result", "chain-result", "claim-result", "kappa-result", "api-check-result", "api-production-result")
 ]
 
 REGISTER_SCHEMA = {
