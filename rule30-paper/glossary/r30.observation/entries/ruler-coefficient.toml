@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ruler-coefficient"
+category = "function"
+signature = "(pi ((explicit r (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.rulerCoefficient"
+
+[[form]]
+id = "ruler-coefficient"
+channel = "math"
+surface = "rulercoefficient"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rulercoefficient) (paren (seq (slot 0))))"

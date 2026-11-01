@@ -220,6 +220,14 @@ Close the goal with \(\lexeme{r30.observation::row-term-kernel-law}(k, r, u, m)\
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-residue-dichotomy}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\) and natural number \(r\), if \(centerperiodic(T, P)\), then if \(3 ≤ k\), then if \(r < twopow(k)\), then if \(r ≠ 1\), then if \(r ≠ 2\), then \(eightclassperiodic(k, r, T + 1, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::eight-off-class-of-center-periodic}(T, P, k, r)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

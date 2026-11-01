@@ -345,9 +345,12 @@ def cmd_choice_audit(args):
 
 
 def _sync_register():
-    """The register module follows frontier.toml (a changed plan is a changed LexLean module)."""
-    from . import registermodel
-    if registermodel.sync()["changed"]:
+    """The register module follows frontier.toml (a changed plan is a changed LexLean module),
+    and so does the Observer, whose real qualities are the register's proved claims."""
+    from . import registermodel, observermodel
+    changed = registermodel.sync()["changed"]
+    changed = observermodel.sync()["changed"] or changed
+    if changed:
         checks.lock("api")
     from . import prismmodel
     prismmodel.sync()

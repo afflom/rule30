@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ruler-coefficient-three"
+category = "proof-constant"
+signature = "(app (const lexlean.core::eq) (app (const r30.observation::ruler-coefficient) (nat 3)) (const lexlean.std.bool::false))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.rulerCoefficient_three"
+
+[[form]]
+id = "ruler-coefficient-three"
+channel = "math"
+surface = "rulercoefficientthree"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name rulercoefficientthree)"

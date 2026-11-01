@@ -259,3 +259,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.KernelLaw.rowTerm_kernel_law for kernel-law
     When the suite exercises kernel-law
     Then its oracle accepts it: frontier check: Rule30UOR.KernelLaw.rowTerm_kernel_law kernel-checked under propext and Quot.sound and published
+
+  @residue-dichotomy @build
+  Scenario: At every dyadic scale k >= 3 the ruler background moves with the scale index u only on the residues r = 1 and r = 2: rulerBackground (2^k u + r) = rulerBackground (2^k + r) XOR trailingParity (u-1) AND [r in {1,2}] (at r = 3 the two rulers cancel). Hence under a center period the deep bulk interiorEightDiagonal is P-periodic in u on every residue class except 1 and 2, where it tracks the ruler; and the late tail of the kernel law carries the ruler difference exactly on the residues where the frozen rows' second table is set.
+    Given frontier.toml names Rule30UOR.ClassObligation.eightOffClass_of_centerPeriodic for residue-dichotomy
+    When the suite exercises residue-dichotomy
+    Then its oracle accepts it: frontier check: Rule30UOR.ClassObligation.eightOffClass_of_centerPeriodic kernel-checked under propext and Quot.sound and published

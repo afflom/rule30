@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "late-tail-scale-zero"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit v (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (nat 1) (local k))) (explicit hv (app (const lexlean.std.nat::le) (nat 1) (local v)))) (app (const lexlean.core::eq) (app (const r30.observation::late-tail) (local k) (nat 0) (app (const lexlean.std.nat::mul) (nat 2) (local v))) (app (const r30.local::bxor) (app (const r30.observation::late-tail) (app (const lexlean.std.nat::add) (local k) (nat 1)) (nat 0) (local v)) (app (const r30.observation::block-parity) (local k))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.lateTail_scale_zero"
+
+[[form]]
+id = "late-tail-scale-zero"
+channel = "math"
+surface = "latetailscalezero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name latetailscalezero) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

@@ -3220,4 +3220,64 @@ elaborates to the same constants replays nothing; a changed proof term always re
 server is needed; the local κ-addressed receipts are the fix, and a kappa-registry would only make
 them shareable.
 
+**Third round, on the collision form (2026-10-31): no closure, four exact reasons.** Four lenses on
+the defect field, each judged by two skeptics; none routes, and each names precisely why, which is
+the data this round was for. (1) *Defect dynamics.* The lag-`P` defect field obeys
+`defect(t+1,p) = defect(t,p−1) ⊕ gateDifference(t,p)` (`DefectSource.defect_step_gate`), and its only
+exact invariants are the integrals along right-moving diagonals: from the lag-`P` edge point
+`(t, −(t+P))`, where the defect is 1 (`left_edge_defect`), to the center at `2t+P`, where it is 0
+under a period, the gate parity along the diagonal is 1 — and the last gate on that diagonal is the
+`centerGate` of the coupling law, so the identity is the center period read along diagonals.
+Counting is not monotone: within center-agreement runs the interior OR-gates create and annihilate
+left-half defects at equal rates (3530/3425, 2514/2498, 4464/4422, 2328/2338, 3980/3943 for lags
+3, 5, 8, 12, 17), the defect field has density about 1/2, and no single-site weight can be monotone
+(transport, creation and annihilation force it to 0). (2) *Collision parity.* An isolated defect
+contributes an even number of carry changes whenever its outer neighbours agree; a maximal defect
+run `[a,b]` contributes `cell(a−1) ⊕ cell(a) ⊕ cell(b) ⊕ cell(b+1)` collisions, so the per-row parity
+of the carry change is a coboundary of defect counts and cells, and summed over rows it telescopes to
+`|row t| ⊕ |row (t+P)|` (popcounts), which has no explicit side to be set against the ruler. (3) *The
+gated column.* The forward chase on the width-3 central band is tautological: column `−1` is a
+function of `(c(s+1), c(s), R(s))` by left-permutivity, the center defect at `s+1` is
+`leftDefect ⊕ centerGate`, identically zero under the period; the band is a transducer open on the
+right (Rule 30 is not right-permutive), and `leftExtend_rule` already shows **every center sequence,
+periodic or not, is the center of a Rule-30-consistent half-plane**: nothing to the left of the
+center can refute a period; the refutation must use the right half-plane, i.e. the seed. (4)
+*Counting.* The far-left edge laws are a triangular bijection with the center prefix (one constraint
+per time), so they pin the center and overdetermine nothing; the window on which column one
+determines itself grows linearly (`≥ (s−P)/2`), and at black times the left half-plane does not see
+column one at all (the coefficient of `cell(s,1)` is `¬center s`). *What the round fixes.* The right
+half-plane is where the proof lives, and its exact structure is the regular side's: by
+left-permutivity read from the right edge, `rdiag (k+1) t = rdiag k (t+1) ⊕ (rdiag k t ∨ rdiag (k−1) t)`,
+every diagonal is eventually periodic with doubling periods (`rdrv_subdiag_period_double_of_prev_or_period`),
+and the center is the anti-diagonal `t ↦ rdiag t t` of that table, sampled, for each diagonal, inside
+its transient (the regular region grows linearly but slower than the diagonal index). Problem 1 is
+that this anti-diagonal of an eventually-periodic-rowed table is not eventually periodic; the rulers
+of the band theorems are the first diagonals' periods read on the anti-diagonal.
+
+**The residue dichotomy (2026-10-31, from the reading of Theorems 4.198–4.235).** Put
+`t = 2^k u + r` with `r < 2^k`, `k ≥ 3`. The ruler background depends on `u` only through
+`trailingParity (u−1)`, and only on two residues: `trailingParity (t−2)` moves with `u` only at
+`r = 1`, `trailingParity (t−4)` only at `r = 3`, `trailingParity ((t−4)/2)` at `r ∈ {2, 3}`, and at
+`r = 3` the two coincide and cancel (`bxor [k odd] a ⊕ bxor [k−1 odd] a = true`): so
+`rulerBackground (2^k u + r) = rulerBackground (2^k + r) ⊕ trailingParity (u−1) · [r ∈ {1, 2}]`
+(`rulerBackground_kernel`, `Rule30UOR.ClassObligation`, in progress). With
+`center = rulerBackground ⊕ interiorEightDiagonal` and the promoted period `2^k P`: **under a center
+period, at every dyadic scale the deep bulk is `P`-periodic on every residue class except `r = 1` and
+`r = 2`, where it tracks the ruler** (`eightOffClass_of_centerPeriodic`,
+`eightClass_of_centerPeriodic`). On the kernel-law side the same period gives the late-tail
+obligation `lateTail (k,r,u+P) ⊕ lateTail (k,r,u) = (trailingParity (u+P−1) ⊕ trailingParity (u−1)) ·
+secondPrefix (k,r)` (`lateTail_obligation`): the rows at or above `2^k` must carry the ruler on
+exactly the residues where the frozen rows' second table is set. Measured (rows to `2^8`):
+`secondPrefix (k, r) = 0` for `r ∈ {0, 1, 2}` and `= 1` for `r = 3` at every `k ∈ [2, 6]`, and an
+irregular pattern beyond (`k = 4`: `0001111001100000`; `k = 5`: `00011111110010010110001101011010`),
+so on residues 1 and 2 the ruler in the background comes entirely from the late tail (as the user's
+reading of `r = 1` says), on residue 3 the frozen rows carry a ruler that the late tail must cancel,
+and beyond `r = 3` the obligation follows the frozen table of the first `2^k` rows. Across one scale
+the late tail renormalizes: `lateTail (k, 0, 2v) = lateTail (k+1, 0, v) ⊕ blockParity k`
+(`lateTail_scale_zero`), and for general `r` the two scales differ by the frozen prefixes and a ruler
+term with coefficient `secondPrefix (k,r) ⊕ secondPrefix (k+1,r)`. None of this closes; it is the
+exact map of where the obligation sits: two residues per scale, nested across scales along the
+2-adic neighbourhoods of 1 and 2, i.e. at each time `t` exactly the scales `k ≤ ν_2(t−1)` or
+`k ≤ ν_2(t−2)`.
+
 Problem 1 remains unproved.

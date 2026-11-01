@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "eight-class-against-ruler"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat)) (explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.EightClassAgainstRuler"
+
+[[form]]
+id = "eight-class-against-ruler"
+channel = "math"
+surface = "eightclassagainstruler"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name eightclassagainstruler) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "late-tail-scale"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat)) (explicit v (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (nat 1) (local k))) (explicit hr (app (const lexlean.std.nat::lt) (local r) (app (const r30.scale::twopow) (local k)))) (explicit hv (app (const lexlean.std.nat::le) (nat 1) (local v)))) (app (const lexlean.core::eq) (app (const r30.local::bxor) (app (const r30.observation::late-tail) (app (const lexlean.std.nat::add) (local k) (nat 1)) (local r) (local v)) (app (const r30.observation::late-tail) (local k) (local r) (app (const lexlean.std.nat::mul) (nat 2) (local v)))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.observation::frozen-prefix) (app (const lexlean.std.nat::add) (local k) (nat 1)) (local r)) (app (const r30.observation::frozen-prefix) (local k) (local r))) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::sub) (local v) (nat 1))) (app (const r30.observation::second-prefix) (app (const lexlean.std.nat::add) (local k) (nat 1)) (local r))) (app (const lexlean.std.bool::and) (app (const lexlean.std.bool::not) (app (const r30.observation::trailing-parity) (app (const lexlean.std.nat::sub) (local v) (nat 1)))) (app (const r30.observation::second-prefix) (local k) (local r))))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.lateTail_scale"
+
+[[form]]
+id = "late-tail-scale"
+channel = "math"
+surface = "latetailscale"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name latetailscale) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

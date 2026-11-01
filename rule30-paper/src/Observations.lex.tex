@@ -3841,5 +3841,85 @@ Close the goal with \(\lexeme{r30.observation::second-prefix-one}(k)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{ruler-coefficient-one}
+\allowaxioms{Quot.sound;propext}
+\(rulercoefficient(1) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ruler-coefficient-one}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ruler-coefficient-two}
+\allowaxioms{Quot.sound;propext}
+\(rulercoefficient(2) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ruler-coefficient-two}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ruler-coefficient-three}
+\allowaxioms{Quot.sound;propext}
+\(rulercoefficient(3) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ruler-coefficient-three}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ruler-coefficient-of-ge-four}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(r\), if \(4 ≤ r\), then \(rulercoefficient(r) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ruler-coefficient-of-ge-four}(r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ruler-background-kernel}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(u\), if \(3 ≤ k\), then if \(r < twopow(k)\), then if \(1 ≤ u\), then \(rulerbackground(twopow(k) * u + r) = bxor(frozenruler(k, r), trailingparity(u - 1) band rulercoefficient(r))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ruler-background-kernel}(k, r, u)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{eight-class-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\) and natural number \(r\), if \(centerperiodic(T, P)\), then if \(3 ≤ k\), then if \(r < twopow(k)\), then if \(r = 1 ∨ r = 2\), then \(eightclassagainstruler(k, r, T + 1, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::eight-class-of-center-periodic}(T, P, k, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{eight-off-class-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\) and natural number \(r\), if \(centerperiodic(T, P)\), then if \(3 ≤ k\), then if \(r < twopow(k)\), then if \(r ≠ 1\), then if \(r ≠ 2\), then \(eightclassperiodic(k, r, T + 1, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::eight-off-class-of-center-periodic}(T, P, k, r)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-obligation}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\) and natural number \(r\) and natural number \(u\), if \(centerperiodic(T, P)\), then if \(1 ≤ k\), then if \(r < twopow(k)\), then if \(1 ≤ u\), then if \(T ≤ twopow(k) * u + r\), then \(bxor(latetail(k, r, u + P), latetail(k, r, u)) = bxor(trailingparity(u + P - 1), trailingparity(u - 1)) band secondprefix(k, r)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-obligation}(T, P, k, r, u)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-scale-zero}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(v\), if \(1 ≤ k\), then if \(1 ≤ v\), then \(latetail(k, 0, 2 * v) = bxor(latetail(k + 1, 0, v), blockparity(k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-scale-zero}(k, v)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-scale}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(r\) and natural number \(v\), if \(1 ≤ k\), then if \(r < twopow(k)\), then if \(1 ≤ v\), then \(bxor(latetail(k + 1, r, v), latetail(k, r, 2 * v)) = bxor(bxor(frozenprefix(k + 1, r), frozenprefix(k, r)), bxor(trailingparity(v - 1) band secondprefix(k + 1, r), not(trailingparity(v - 1)) band secondprefix(k, r)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-scale}(k, r, v)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

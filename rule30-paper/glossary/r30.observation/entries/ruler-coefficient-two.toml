@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ruler-coefficient-two"
+category = "proof-constant"
+signature = "(app (const lexlean.core::eq) (app (const r30.observation::ruler-coefficient) (nat 2)) (const lexlean.std.bool::true))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.rulerCoefficient_two"
+
+[[form]]
+id = "ruler-coefficient-two"
+channel = "math"
+surface = "rulercoefficienttwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name rulercoefficienttwo)"
