@@ -289,3 +289,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.Antidiagonal.center_eq_not_maskTransport for mask-transport
     When the suite exercises mask-transport
     Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.center_eq_not_maskTransport kernel-checked under propext and Quot.sound and published
+
+  @lucas-frame @build
+  Scenario: The dual transport's weights are the binomial parities: the n-fold prefix parity has weights C(s-1-j, n-1) mod 2, mechanized as pascalParity by the digit recursion (Lucas: Pascal's rule, C(n,n) = 1, zero above the diagonal, the hockey stick), so the linear part of the tower is C(s, n+1) mod 2 and center t = not lucasSum (t-2) t, a Lucas-weighted sum of the left run-ends of the right diagonals. In this frame an early diagonal contributes only through its corner of times j <= i+1, a recent diagonal its whole history with sparse weights, and the frame's freezing law is Lucas's higher-bit independence with no ruler side-terms.
+    Given frontier.toml names Rule30UOR.Antidiagonal.center_eq_lucas for lucas-frame
+    When the suite exercises lucas-frame
+    Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.center_eq_lucas kernel-checked under propext and Quot.sound and published

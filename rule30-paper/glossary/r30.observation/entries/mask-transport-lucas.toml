@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "mask-transport-lucas"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::mask-transport) (local k) (local s)) (app (const r30.observation::lucas-sum) (local k) (local s))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.maskTransport_lucas"
+
+[[form]]
+id = "mask-transport-lucas"
+channel = "math"
+surface = "masktransportlucas"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name masktransportlucas) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

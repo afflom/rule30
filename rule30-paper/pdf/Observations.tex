@@ -3778,4 +3778,137 @@ For every natural number \(T\) and natural number \(P\) and natural number \(t\)
 \begin{proof}
 The goal follows from \(\operatorname{masktransportcenterperiodic}(T, P, t)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-split}
+For every natural number \(k\) and natural number \(s\), \(\operatorname{towerword}(k + 2, s) = \operatorname{bxor}(\operatorname{prefixword}(k + 1, s), \operatorname{exposedprefix}(k, s))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordsplit}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-split}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{center}(t) = \operatorname{bxor}(\operatorname{prefixword}(t - 1, t), \operatorname{exposedprefix}(t - 2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centersplit}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-unfolded}
+For every natural number \(k\) and natural number \(s\), \(\operatorname{towerword}(k + 2, s) = \operatorname{bxor}(\operatorname{lineartower}(k + 1, s), \operatorname{masktransport}(k, s))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordunfolded}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-transport}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{center}(t) = \operatorname{bxor}(\operatorname{lineartower}(t - 1, t), \operatorname{masktransport}(t - 2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centertransport}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-zero-right}
+For every natural number \(n\), \(\operatorname{pascalparity}(n, 0) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparityzeroright}(n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-even-even}
+For every natural number \(a\) and natural number \(b\), \(\operatorname{pascalparity}(2 \cdot a, 2 \cdot b) = \operatorname{pascalparity}(a, b)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparityeveneven}(a, b)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-even-odd}
+For every natural number \(a\) and natural number \(b\), \(\operatorname{pascalparity}(2 \cdot a, 2 \cdot b + 1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparityevenodd}(a, b)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-odd-even}
+For every natural number \(a\) and natural number \(b\), \(\operatorname{pascalparity}(2 \cdot a + 1, 2 \cdot b) = \operatorname{pascalparity}(a, b)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparityoddeven}(a, b)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-odd-odd}
+For every natural number \(a\) and natural number \(b\), \(\operatorname{pascalparity}(2 \cdot a + 1, 2 \cdot b + 1) = \operatorname{pascalparity}(a, b)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparityoddodd}(a, b)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-succ}
+For every natural number \(n\) and natural number \(k\), \(\operatorname{pascalparity}(n + 1, k + 1) = \operatorname{bxor}(\operatorname{pascalparity}(n, k), \operatorname{pascalparity}(n, k + 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparitysucc}(n, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-gt}
+For every natural number \(n\) and natural number \(k\), if \(n < k\), then \(\operatorname{pascalparity}(n, k) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparitygt}(n, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:pascal-parity-self}
+For every natural number \(n\), \(\operatorname{pascalparity}(n, n) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{pascalparityself}(n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:const-prefix-eq-lucas}
+For every natural number \(n\) and natural number \(s\), \(\operatorname{constprefix}(n, s) = \operatorname{pascalparity}(s, n)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{constprefixeqlucas}(n, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-tower-eq-lucas}
+For every natural number \(n\) and natural number \(s\), \(\operatorname{lineartower}(n, s) = \operatorname{pascalparity}(s, n + 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lineartowereqlucas}(n, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:mask-transport-lucas}
+For every natural number \(k\) and natural number \(s\), \(\operatorname{masktransport}(k, s) = \operatorname{lucassum}(k, s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{masktransportlucas}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-lucas}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{center}(t) = \operatorname{not}(\operatorname{lucassum}(t - 2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqlucas}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:late-tail-three-dyadic-flip}
+For every natural number \(T\) and natural number \(k\) and natural number \(m\), if \(\operatorname{centerperiodic}(T, \operatorname{twopow}(m))\), then if \(2 \le k\), then if \(T \le \operatorname{twopow}(k) \cdot \operatorname{twopow}(m) + 3\), then \(\operatorname{latetail}(k, 3, \operatorname{twopow}(m) + \operatorname{twopow}(m)) = \operatorname{not}(\operatorname{latetail}(k, 3, \operatorname{twopow}(m)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{latetailthreedyadicflip}(T, k, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:kappa-collapse-late-tail-flip}
+For every natural number \(K\) and natural number \(k\), if \(\operatorname{kappacollapse}(K)\), then if \(2 \le k\), then \(\operatorname{latetail}(k, 3, \operatorname{twopow}(K) + \operatorname{twopow}(K)) = \operatorname{not}(\operatorname{latetail}(k, 3, \operatorname{twopow}(K)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{kappacollapselatetailflip}(K, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:late-ruler-values}
+For every natural number \(k\), if \(2 \le k\), then \(\operatorname{lateruler}(k, 0) = \operatorname{false}\) and \(\operatorname{lateruler}(k, 1) = \operatorname{true} \land \operatorname{lateruler}(k, 2) = \operatorname{true} \land \operatorname{lateruler}(k, 3) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{laterulervalues}(k)\).
+\end{proof}
 \end{document}

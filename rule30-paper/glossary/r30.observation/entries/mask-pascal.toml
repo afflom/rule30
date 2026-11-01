@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "mask-pascal"
+category = "function"
+signature = "(pi ((explicit i (const lexlean.std.nat::nat)) (explicit d (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.maskPascal"
+
+[[form]]
+id = "mask-pascal"
+channel = "math"
+surface = "maskpascal"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskpascal) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "late-ruler"
+category = "function"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit r (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.lateRuler"
+
+[[form]]
+id = "late-ruler"
+channel = "math"
+surface = "lateruler"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lateruler) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

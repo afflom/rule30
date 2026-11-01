@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "center-split"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 2) (local t)))) (app (const lexlean.core::eq) (app (const r30.scale::center) (local t)) (app (const r30.local::bxor) (app (const r30.observation::prefix-word) (app (const lexlean.std.nat::sub) (local t) (nat 1)) (local t)) (app (const r30.observation::exposed-prefix) (app (const lexlean.std.nat::sub) (local t) (nat 2)) (local t))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.center_split"
+
+[[form]]
+id = "center-split"
+channel = "math"
+surface = "centersplit"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name centersplit) (paren (seq (slot 0))))"

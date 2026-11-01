@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "const-prefix-eq-lucas"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::const-prefix) (local n) (local s)) (app (const r30.observation::pascal-parity) (local s) (local n))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.constPrefix_eq_lucas"
+
+[[form]]
+id = "const-prefix-eq-lucas"
+channel = "math"
+surface = "constprefixeqlucas"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name constprefixeqlucas) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

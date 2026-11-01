@@ -3336,6 +3336,22 @@ dual of `center = ¬ ledgerDiagonal` (eighth iteration). The exposed masks are, 
 cells whose left neighbour is white, the left ends of black runs: the tower's "carries" are run
 boundaries, the same objects as the odd rows' linear self-intersection, so the two formulas for the
 center, `¬(gasket of adjacent black pairs)` in time coordinates and `¬(gasket of left run-ends)` in
-diagonal coordinates, are the two readings of one object.
+diagonal coordinates, are the two readings of one object. The dual transport's weights are the
+binomial parities, `prefixPow (n+1) g (s) = ⊕_{j<s} C(s−1−j, n)·g(j)`, mechanized as `pascalParity`
+by the same digit recursion as the trinomial parity (Lucas; Pascal's rule, `C(n,n) = 1`,
+`C(n,k) = 0` above the diagonal, the hockey stick `⊕_{j<s} C(s−1−j, n) = C(s, n+1)`), so
+`linearTower n s = C(s, n+1) mod 2` and **`center t = ¬ lucasSum (t−2) t`**, a Lucas-weighted sum of
+the left run-ends (`center_eq_lucas`). In this frame the roles invert: an early diagonal `i`
+contributes only through its corner of times `j ≤ i+1` (the weight `C(t−1−j, t−2−i)` vanishes
+beyond it), a recent diagonal contributes its whole history with sparse weights, and the frame's
+own freezing law is Lucas's higher-bit independence, `C(n + 2^m q, d) ≡ C(n, d)` for `d < 2^m`,
+with no ruler side-terms at all (`C(n, n−1) = n mod 2`). *From the reading of Theorems 4.236–4.279:*
+the polarity inversion between the residues is exact — at `r ∈ {1, 2}` the frozen rows carry no
+ruler (`secondPrefix = false`) and the late tail must supply it (`rulerCoefficient = true`), at
+`r = 3` the frozen rows carry it and the late tail must cancel it — and under a dyadic period `2^m`
+(κ-collapse) the residue-3 late tail flips between the scale indices `2^m` and `2^{m+1}`
+(`trailingParity (2^{m+1} − 1) ⊕ trailingParity (2^m − 1) = 1`; tenth iteration). The halving also
+sharpens the prize kit's right-period threshold: diagonal `k+1` has period `2^k`, so `J(k) ≥ k+1`
+where the kit proves `J(k) ≥ k`.
 
 Problem 1 remains unproved.

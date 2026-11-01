@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "pascal-parity-even-even"
+category = "proof-constant"
+signature = "(pi ((explicit a (const lexlean.std.nat::nat)) (explicit b (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::pascal-parity) (app (const lexlean.std.nat::mul) (nat 2) (local a)) (app (const lexlean.std.nat::mul) (nat 2) (local b))) (app (const r30.observation::pascal-parity) (local a) (local b))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.pascalParity_even_even"
+
+[[form]]
+id = "pascal-parity-even-even"
+channel = "math"
+surface = "pascalparityeveneven"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pascalparityeveneven) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

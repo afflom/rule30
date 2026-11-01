@@ -698,4 +698,47 @@ theorem three_rows_against_ruler (T P k : Nat) (hc : Rule30UOR.Scale.CenterPerio
   rw [lateTail_three_obligation_one T P k hc hk ht, lateTail_three_at_one_cells k hk]
   exact bxor_cancel_right_aux _ _
 
+/-! ## The residue-`3` tail under a dyadic period -/
+
+theorem bxor_eq_true_aux (a b : Bool) (h : bxor a b = true) : a = !b := by
+  cases a <;> cases b <;> first | rfl | exact absurd h (by decide)
+
+/-- **Under a dyadic center period `2^m` the residue-`3` late tail flips between the scale indices
+`2^m` and `2^(m+1)`**: the ruler `trailingParity (2^j − 1) = [j odd]` changes between consecutive
+`j`, and the second prefix of the class `3` is `1`. -/
+theorem lateTail_three_dyadic_flip (T k m : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T (twopow m)) (hk : 2 ≤ k)
+    (ht : T ≤ twopow k * twopow m + 3) : lateTail k 3 (twopow m + twopow m) = !(lateTail k 3 (twopow m)) := by
+  have h4 : 4 ≤ twopow k := twopow_mono hk
+  have hpos : 1 ≤ twopow m := Rule30UOR.Scale.twopow_pos m
+  have h := lateTail_obligation T (twopow m) k 3 (twopow m) hc (by cfomega) (by cfomega) hpos ht
+  rw [secondPrefix_three k hk, Bool.and_true, show twopow m + twopow m - 1 = twopow (m + 1) - 1 by rw [twopow_succ],
+    trailingParity_twopow_sub_one, trailingParity_twopow_sub_one] at h
+  apply bxor_eq_true_aux
+  rw [h]
+  rcases Nat.mod_two_eq_zero_or_one m with hm | hm
+  · rw [decide_eq_true (by cfomega : (m + 1) % 2 = 1), decide_eq_false (by cfomega : ¬ (m % 2 = 1))]; rfl
+  · rw [decide_eq_true hm, decide_eq_false (by cfomega : ¬ ((m + 1) % 2 = 1))]; rfl
+
+/-- The same under a `κ`-collapse at scale `K` (a center period `2^K` from time `0`). -/
+theorem kappaCollapse_lateTail_flip (K k : Nat) (hK : Rule30UOR.Automatic.KappaCollapse K) (hk : 2 ≤ k) :
+    lateTail k 3 (twopow K + twopow K) = !(lateTail k 3 (twopow K)) :=
+  lateTail_three_dyadic_flip 0 k K ((Rule30UOR.Automatic.kappaCollapse_iff K).1 hK) hk (Nat.zero_le _)
+
+/-! ## The polarity of the ruler on each class -/
+
+/-- The ruler coefficient supplied by the frozen rows `m < 2^k`: the second prefix. -/
+def earlyRuler (k r : Nat) : Bool := secondPrefix k r
+
+/-- The ruler coefficient the late tail must supply: the background's minus the frozen rows'. -/
+def lateRuler (k r : Nat) : Bool := bxor (rulerCoefficient r) (secondPrefix k r)
+
+/-- On the classes `0 .. 3` at every scale `k ≥ 2` the late tail owes the ruler on `1`, `2`, `3`
+and nothing on `0`: the class `3` inverts the polarity of the background. -/
+theorem lateRuler_values (k : Nat) (hk : 2 ≤ k) :
+    lateRuler k 0 = false ∧ lateRuler k 1 = true ∧ lateRuler k 2 = true ∧ lateRuler k 3 = true := by
+  unfold lateRuler
+  rw [secondPrefix_zero, secondPrefix_one k (by cfomega), secondPrefix_two, secondPrefix_three k hk,
+    rulerCoefficient_zero, rulerCoefficient_one, rulerCoefficient_two, rulerCoefficient_three]
+  exact ⟨rfl, rfl, rfl, rfl⟩
+
 end Rule30UOR.ClassObligation

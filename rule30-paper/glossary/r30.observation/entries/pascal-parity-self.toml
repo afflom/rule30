@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "pascal-parity-self"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::pascal-parity) (local n) (local n)) (const lexlean.std.bool::true)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.pascalParity_self"
+
+[[form]]
+id = "pascal-parity-self"
+channel = "math"
+surface = "pascalparityself"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pascalparityself) (paren (seq (slot 0))))"

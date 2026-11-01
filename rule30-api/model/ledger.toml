@@ -337,6 +337,13 @@ feature = "interfaces/mask-transport.md"
 evidence = "frontier check: Rule30UOR.Antidiagonal.center_eq_not_maskTransport kernel-checked under propext and Quot.sound and published"
 
 [[claim]]
+id = "lucas-frame"
+level = "build"
+statement = "The dual transport's weights are the binomial parities: the n-fold prefix parity has weights C(s-1-j, n-1) mod 2, mechanized as pascalParity by the digit recursion (Lucas: Pascal's rule, C(n,n) = 1, zero above the diagonal, the hockey stick), so the linear part of the tower is C(s, n+1) mod 2 and center t = not lucasSum (t-2) t, a Lucas-weighted sum of the left run-ends of the right diagonals. In this frame an early diagonal contributes only through its corner of times j <= i+1, a recent diagonal its whole history with sparse weights, and the frame's freezing law is Lucas's higher-bit independence with no ruler side-terms."
+feature = "interfaces/lucas-frame.md"
+evidence = "frontier check: Rule30UOR.Antidiagonal.center_eq_lucas kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."

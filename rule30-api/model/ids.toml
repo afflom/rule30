@@ -289,6 +289,12 @@ suite = "register"
 statement = "The tower unfolds: the OR of the recursion splits as the previous word plus the exposed part of the word before it (a black cell whose left neighbour is white, the left end of a black run), so every word is the iterated prefix parity of the time parity plus the transport of the exposed masks, and at the anti-diagonal the linear part is C(t,t) = 1: center t = not maskTransport (t-2) t, the exact dual of center = not ledgerDiagonal, with Pascal weights in diagonal coordinates where the carry ledger has trinomial weights in time coordinates."
 
 [[id]]
+id = "lucas-frame"
+level = "build"
+suite = "register"
+statement = "The dual transport's weights are the binomial parities: the n-fold prefix parity has weights C(s-1-j, n-1) mod 2, mechanized as pascalParity by the digit recursion (Lucas: Pascal's rule, C(n,n) = 1, zero above the diagonal, the hockey stick), so the linear part of the tower is C(s, n+1) mod 2 and center t = not lucasSum (t-2) t, a Lucas-weighted sum of the left run-ends of the right diagonals. In this frame an early diagonal contributes only through its corner of times j <= i+1, a recent diagonal its whole history with sparse weights, and the frame's freezing law is Lucas's higher-bit independence with no ruler side-terms."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

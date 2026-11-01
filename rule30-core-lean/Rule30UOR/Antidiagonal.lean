@@ -462,18 +462,18 @@ def linearTower (n s : Nat) : Bool := prefixPow n (towerWord 1) s
 /-- The `n`-fold prefix parity of the constant word `1`. -/
 def constPrefix (n s : Nat) : Bool := prefixPow n (fun _ => true) s
 
-theorem towerWord_eq_prefix_split' (k s : Nat) :
+theorem towerWord_split (k s : Nat) :
     towerWord (k + 2) s = bxor (prefixWord (k + 1) s) (exposedPrefix k s) :=
   towerWord_eq_prefix_split k s
 
-theorem center_eq_prefix_split' (t : Nat) (ht : 2 ≤ t) :
+theorem center_split (t : Nat) (ht : 2 ≤ t) :
     center t = bxor (prefixWord (t - 1) t) (exposedPrefix (t - 2) t) :=
   center_eq_prefix_split t ht
 
-theorem towerWord_unfold' (k s : Nat) : towerWord (k + 2) s = bxor (linearTower (k + 1) s) (maskTransport k s) :=
+theorem towerWord_unfolded (k s : Nat) : towerWord (k + 2) s = bxor (linearTower (k + 1) s) (maskTransport k s) :=
   towerWord_unfold k s
 
-theorem center_eq_transport' (t : Nat) (ht : 2 ≤ t) :
+theorem center_transport (t : Nat) (ht : 2 ≤ t) :
     center t = bxor (linearTower (t - 1) t) (maskTransport (t - 2) t) :=
   center_eq_transport t ht
 
@@ -512,7 +512,7 @@ theorem linearTower_diag (t : Nat) (ht : 1 ≤ t) : linearTower (t - 1) t = true
 /-- **The center is the complement of the transport of the exposed masks**: the exact dual of
 `center = ¬ ledgerDiagonal`, in diagonal coordinates. -/
 theorem center_eq_not_maskTransport (t : Nat) (ht : 2 ≤ t) : center t = !(maskTransport (t - 2) t) := by
-  rw [center_eq_transport' t ht, linearTower_diag t (by cfomega)]
+  rw [center_transport t ht, linearTower_diag t (by cfomega)]
   cases maskTransport (t - 2) t <;> rfl
 
 /-! ## The exposed masks in cells -/
@@ -537,5 +537,285 @@ theorem maskTransport_centerPeriodic (T P t : Nat) (hc : Rule30UOR.Scale.CenterP
   have h := hc t ht
   rw [center_eq_not_maskTransport (t + P) (by cfomega), center_eq_not_maskTransport t h2] at h
   exact not_inj_aux _ _ h
+
+/-! ## Lucas: the parity of the binomial coefficients
+
+`pascalParity n k = C(n, k) mod 2` by the digit recursion (Lucas): `C(n, k)` is odd exactly when
+every binary digit of `k` is at most the digit of `n`. -/
+
+def pascalParityFuel : Nat → Nat → Nat → Bool
+  | 0, _, k => decide (k = 0)
+  | f + 1, n, k =>
+    if k = 0 then true
+    else if n = 0 then false
+    else if k % 2 = 1 ∧ n % 2 = 0 then false
+    else pascalParityFuel f (n / 2) (k / 2)
+
+/-- The parity of `C(n, k)`, by the binary digits (fuel `n`). -/
+def pascalParity (n k : Nat) : Bool := pascalParityFuel n n k
+
+theorem pascalParityFuel_zero_left (k : Nat) : ∀ g, pascalParityFuel g 0 k = decide (k = 0)
+  | 0 => rfl
+  | g + 1 => by
+    show (if k = 0 then true else if (0 : Nat) = 0 then false else _) = decide (k = 0)
+    rcases Nat.eq_zero_or_pos k with rfl | hk
+    · rfl
+    · rw [if_neg (by cfomega), if_pos rfl, decide_eq_false (by cfomega)]
+
+theorem pascalParityFuel_congr : ∀ f g n k, n ≤ f → n ≤ g → pascalParityFuel f n k = pascalParityFuel g n k
+  | 0, g, n, k, hf, _ => by
+    have : n = 0 := by cfomega
+    subst this
+    rw [pascalParityFuel_zero_left, pascalParityFuel_zero_left]
+  | f + 1, 0, n, k, _, hg => by
+    have : n = 0 := by cfomega
+    subst this
+    rw [pascalParityFuel_zero_left, pascalParityFuel_zero_left]
+  | f + 1, g + 1, n, k, hf, hg => by
+    show (if k = 0 then true else if n = 0 then false else if k % 2 = 1 ∧ n % 2 = 0 then false
+        else pascalParityFuel f (n / 2) (k / 2)) =
+      (if k = 0 then true else if n = 0 then false else if k % 2 = 1 ∧ n % 2 = 0 then false
+        else pascalParityFuel g (n / 2) (k / 2))
+    rw [pascalParityFuel_congr f g (n / 2) (k / 2) (by cfomega) (by cfomega)]
+
+theorem pascalParity_fuel (f n k : Nat) (h : n ≤ f) : pascalParity n k = pascalParityFuel f n k :=
+  pascalParityFuel_congr n f n k (Nat.le_refl n) h
+
+/-- `C(n, 0) = 1`. -/
+theorem pascalParity_zero_right (n : Nat) : pascalParity n 0 = true := by
+  cases n with
+  | zero => rfl
+  | succ n => rfl
+
+/-- `C(0, k) = 0` for `k ≥ 1`. -/
+theorem pascalParity_zero_left (k : Nat) (hk : k ≠ 0) : pascalParity 0 k = false := by
+  show decide (k = 0) = false
+  exact decide_eq_false hk
+
+/-- One digit of the Lucas recursion. -/
+theorem pascalParity_step (n k : Nat) (hk : k ≠ 0) (hn : n ≠ 0) :
+    pascalParity n k = (if k % 2 = 1 ∧ n % 2 = 0 then false else pascalParity (n / 2) (k / 2)) := by
+  rw [pascalParity_fuel (n + 1) n k (by cfomega)]
+  show (if k = 0 then true else if n = 0 then false else if k % 2 = 1 ∧ n % 2 = 0 then false
+      else pascalParityFuel n (n / 2) (k / 2)) = _
+  rw [if_neg hk, if_neg hn, pascalParityFuel_congr n (n / 2) (n / 2) (k / 2) (by cfomega) (Nat.le_refl _)]
+  rfl
+
+theorem pascalParity_even_even (a b : Nat) : pascalParity (2 * a) (2 * b) = pascalParity a b := by
+  rcases Nat.eq_zero_or_pos b with rfl | hb
+  · rw [Nat.mul_zero, pascalParity_zero_right, pascalParity_zero_right]
+  · rcases Nat.eq_zero_or_pos a with rfl | ha
+    · rw [Nat.mul_zero, pascalParity_zero_left _ (by cfomega), pascalParity_zero_left _ (by cfomega)]
+    · rw [pascalParity_step (2 * a) (2 * b) (by cfomega) (by cfomega),
+        if_neg (fun h => by cfomega : ¬ (2 * b % 2 = 1 ∧ 2 * a % 2 = 0)),
+        show 2 * a / 2 = a by cfomega, show 2 * b / 2 = b by cfomega]
+
+theorem pascalParity_even_odd (a b : Nat) : pascalParity (2 * a) (2 * b + 1) = false := by
+  rcases Nat.eq_zero_or_pos a with rfl | ha
+  · rw [Nat.mul_zero, pascalParity_zero_left _ (by cfomega)]
+  · rw [pascalParity_step (2 * a) (2 * b + 1) (by cfomega) (by cfomega),
+      if_pos (⟨by cfomega, by cfomega⟩ : (2 * b + 1) % 2 = 1 ∧ 2 * a % 2 = 0)]
+
+theorem pascalParity_odd_even (a b : Nat) : pascalParity (2 * a + 1) (2 * b) = pascalParity a b := by
+  rcases Nat.eq_zero_or_pos b with rfl | hb
+  · rw [Nat.mul_zero, pascalParity_zero_right, pascalParity_zero_right]
+  · rw [pascalParity_step (2 * a + 1) (2 * b) (by cfomega) (by cfomega),
+      if_neg (fun h => by cfomega : ¬ (2 * b % 2 = 1 ∧ (2 * a + 1) % 2 = 0)),
+      show (2 * a + 1) / 2 = a by cfomega, show 2 * b / 2 = b by cfomega]
+
+theorem pascalParity_odd_odd (a b : Nat) : pascalParity (2 * a + 1) (2 * b + 1) = pascalParity a b := by
+  rw [pascalParity_step (2 * a + 1) (2 * b + 1) (by cfomega) (by cfomega),
+    if_neg (fun h => by cfomega : ¬ ((2 * b + 1) % 2 = 1 ∧ (2 * a + 1) % 2 = 0)),
+    show (2 * a + 1) / 2 = a by cfomega, show (2 * b + 1) / 2 = b by cfomega]
+
+/-- **Pascal's rule mod 2**: `C(n+1, k+1) = C(n, k) + C(n, k+1)`. -/
+theorem pascalParity_succ (n : Nat) : ∀ k, pascalParity (n + 1) (k + 1) = bxor (pascalParity n k) (pascalParity n (k + 1)) := by
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    intro k
+    rcases Nat.mod_two_eq_zero_or_one n with hn | hn
+    · obtain ⟨a, rfl⟩ : ∃ a, n = 2 * a := ⟨n / 2, by cfomega⟩
+      rcases Nat.mod_two_eq_zero_or_one k with hk | hk
+      · obtain ⟨b, rfl⟩ : ∃ b, k = 2 * b := ⟨k / 2, by cfomega⟩
+        rw [pascalParity_odd_odd, pascalParity_even_even, pascalParity_even_odd]
+        cases pascalParity a b <;> rfl
+      · obtain ⟨b, rfl⟩ : ∃ b, k = 2 * b + 1 := ⟨k / 2, by cfomega⟩
+        rw [show 2 * b + 1 + 1 = 2 * (b + 1) by cfomega, pascalParity_odd_even, pascalParity_even_odd,
+          pascalParity_even_even]
+        cases pascalParity a (b + 1) <;> rfl
+    · obtain ⟨a, rfl⟩ : ∃ a, n = 2 * a + 1 := ⟨n / 2, by cfomega⟩
+      rcases Nat.mod_two_eq_zero_or_one k with hk | hk
+      · obtain ⟨b, rfl⟩ : ∃ b, k = 2 * b := ⟨k / 2, by cfomega⟩
+        rw [show 2 * a + 1 + 1 = 2 * (a + 1) by cfomega, pascalParity_even_odd, pascalParity_odd_even,
+          pascalParity_odd_odd]
+        cases pascalParity a b <;> rfl
+      · obtain ⟨b, rfl⟩ : ∃ b, k = 2 * b + 1 := ⟨k / 2, by cfomega⟩
+        rw [show 2 * a + 1 + 1 = 2 * (a + 1) by cfomega, show 2 * b + 1 + 1 = 2 * (b + 1) by cfomega,
+          pascalParity_even_even, pascalParity_odd_odd, pascalParity_odd_even, ih a (by cfomega) b]
+
+/-- `C(n, k) = 0` for `n < k`. -/
+theorem pascalParity_gt (n : Nat) : ∀ k, n < k → pascalParity n k = false := by
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    intro k hk
+    rcases Nat.eq_zero_or_pos n with rfl | hn
+    · exact pascalParity_zero_left k (by cfomega)
+    · rcases Nat.mod_two_eq_zero_or_one n with h | h
+      · obtain ⟨a, rfl⟩ : ∃ a, n = 2 * a := ⟨n / 2, by cfomega⟩
+        rcases Nat.mod_two_eq_zero_or_one k with h' | h'
+        · obtain ⟨b, rfl⟩ : ∃ b, k = 2 * b := ⟨k / 2, by cfomega⟩
+          rw [pascalParity_even_even]
+          exact ih a (by cfomega) b (by cfomega)
+        · obtain ⟨b, rfl⟩ : ∃ b, k = 2 * b + 1 := ⟨k / 2, by cfomega⟩
+          exact pascalParity_even_odd a b
+      · obtain ⟨a, rfl⟩ : ∃ a, n = 2 * a + 1 := ⟨n / 2, by cfomega⟩
+        rcases Nat.mod_two_eq_zero_or_one k with h' | h'
+        · obtain ⟨b, rfl⟩ : ∃ b, k = 2 * b := ⟨k / 2, by cfomega⟩
+          rw [pascalParity_odd_even]
+          exact ih a (by cfomega) b (by cfomega)
+        · obtain ⟨b, rfl⟩ : ∃ b, k = 2 * b + 1 := ⟨k / 2, by cfomega⟩
+          rw [pascalParity_odd_odd]
+          exact ih a (by cfomega) b (by cfomega)
+
+/-- `C(n, n) = 1`. -/
+theorem pascalParity_self (n : Nat) : pascalParity n n = true := by
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    rcases Nat.eq_zero_or_pos n with rfl | hn
+    · exact pascalParity_zero_right 0
+    · rcases Nat.mod_two_eq_zero_or_one n with h | h
+      · obtain ⟨a, rfl⟩ : ∃ a, n = 2 * a := ⟨n / 2, by cfomega⟩
+        rw [pascalParity_even_even]
+        exact ih a (by cfomega)
+      · obtain ⟨a, rfl⟩ : ∃ a, n = 2 * a + 1 := ⟨n / 2, by cfomega⟩
+        rw [pascalParity_odd_odd]
+        exact ih a (by cfomega)
+
+/-! ## The iterated prefix is the Pascal transport -/
+
+/-- **The `(n+1)`-fold prefix parity is the binomial transport**:
+`prefixPow (n+1) g s = ⊕_{j<s} C(s−1−j, n) g j`. -/
+theorem prefixPow_eq_pascal (g : Nat → Bool) :
+    ∀ n s, prefixPow (n + 1) g s = xorBelow (fun j => pascalParity (s - 1 - j) n && g j) s
+  | 0, s => by
+    show xorBelow g s = _
+    exact xorBelow_congr g _ s (fun j _ => by rw [pascalParity_zero_right, Bool.true_and])
+  | n + 1, 0 => rfl
+  | n + 1, s + 1 => by
+    have ihs := prefixPow_eq_pascal g (n + 1) s
+    have ihn := prefixPow_eq_pascal g n s
+    show bxor (prefixPow (n + 2) g s) (prefixPow (n + 1) g s) =
+      bxor (xorBelow (fun j => pascalParity (s + 1 - 1 - j) (n + 1) && g j) s)
+        (pascalParity (s + 1 - 1 - s) (n + 1) && g s)
+    rw [ihs, ihn, show s + 1 - 1 - s = 0 by cfomega, pascalParity_zero_left (n + 1) (by cfomega), Bool.false_and,
+      ← xorBelow_bxor,
+      xorBelow_congr (fun m => bxor (pascalParity (s - 1 - m) (n + 1) && g m) (pascalParity (s - 1 - m) n && g m))
+        (fun j => pascalParity (s + 1 - 1 - j) (n + 1) && g j) s (fun j hj => ?_)]
+    · cases xorBelow (fun j => pascalParity (s + 1 - 1 - j) (n + 1) && g j) s <;> rfl
+    · show bxor (pascalParity (s - 1 - j) (n + 1) && g j) (pascalParity (s - 1 - j) n && g j) =
+        (pascalParity (s + 1 - 1 - j) (n + 1) && g j)
+      rw [show s + 1 - 1 - j = s - 1 - j + 1 by cfomega, pascalParity_succ]
+      cases pascalParity (s - 1 - j) n <;> cases pascalParity (s - 1 - j) (n + 1) <;> cases g j <;> rfl
+
+/-- The hockey stick mod 2: `⊕_{j<s} C(s−1−j, n) = C(s, n+1)`. -/
+theorem pascalParity_hockey (n : Nat) : ∀ s, xorBelow (fun j => pascalParity (s - 1 - j) n) s = pascalParity s (n + 1)
+  | 0 => by
+    show false = pascalParity 0 (n + 1)
+    rw [pascalParity_zero_left (n + 1) (by cfomega)]
+  | s + 1 => by
+    rw [xorBelow_front]
+    show bxor (pascalParity (s + 1 - 1 - 0) n) (xorBelow (fun j => pascalParity (s + 1 - 1 - (j + 1)) n) s) = _
+    rw [xorBelow_congr (fun j => pascalParity (s + 1 - 1 - (j + 1)) n) (fun j => pascalParity (s - 1 - j) n) s
+        (fun j _ => by rw [show s + 1 - 1 - (j + 1) = s - 1 - j by cfomega]),
+      pascalParity_hockey n s, show s + 1 - 1 - 0 = s by cfomega, pascalParity_succ]
+
+/-- The iterated prefix of the constant word is the binomial transport of `1`. -/
+theorem constPrefix_eq_pascal (n s : Nat) (hn : 1 ≤ n) :
+    constPrefix n s = xorBelow (fun j => pascalParity (s - 1 - j) (n - 1)) s := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by cfomega⟩
+  rw [Nat.add_sub_cancel]
+  show prefixPow (m + 1) (fun _ => true) s = _
+  rw [prefixPow_eq_pascal]
+  exact xorBelow_congr _ _ s (fun j _ => Bool.and_true _)
+
+/-- **Lucas closed form**: `constPrefix n s = C(s, n) mod 2`. -/
+theorem constPrefix_eq_lucas (n s : Nat) : constPrefix n s = pascalParity s n := by
+  cases n with
+  | zero =>
+    show true = pascalParity s 0
+    rw [pascalParity_zero_right]
+  | succ n =>
+    show prefixPow (n + 1) (fun _ => true) s = pascalParity s (n + 1)
+    rw [prefixPow_eq_pascal, xorBelow_congr _ (fun j => pascalParity (s - 1 - j) n) s (fun j _ => Bool.and_true _),
+      pascalParity_hockey n s]
+
+/-- The linear part of the tower in closed form: `C(s, n+1) mod 2`. -/
+theorem linearTower_eq_lucas (n s : Nat) : linearTower n s = pascalParity s (n + 1) := by
+  rw [linearTower_eq_constPrefix, constPrefix_eq_lucas]
+
+/-! ## The center as a Lucas-weighted sum of the masks -/
+
+/-- The mask `i` transported `d + 1` times: `⊕_{j<s} C(s−1−j, d) ∧ exposed i j`. -/
+def maskPascal (i d s : Nat) : Bool := xorBelow (fun j => pascalParity (s - 1 - j) d && exposed i j) s
+
+/-- The weight of the mask at diagonal `i`, time `j`, at the center time `t`. -/
+def maskWeight (t i j : Nat) : Bool := pascalParity (t - 1 - j) (t - 2 - i)
+
+theorem maskPascal_eq_weight (t i : Nat) :
+    maskPascal i (t - 2 - i) t = xorBelow (fun j => maskWeight t i j && exposed i j) t := rfl
+
+theorem maskPascal_eq_prefixPow (i d s : Nat) : maskPascal i d s = prefixPow (d + 1) (exposed i) s :=
+  (prefixPow_eq_pascal (exposed i) d s).symm
+
+/-- One more integration of a transported mask. -/
+theorem maskPascal_shift (i d s : Nat) : xorBelow (fun s' => maskPascal i d s') s = maskPascal i (d + 1) s := by
+  rw [xorBelow_congr (fun s' => maskPascal i d s') (prefixPow (d + 1) (exposed i)) s
+      (fun s' _ => maskPascal_eq_prefixPow i d s'),
+    maskPascal_eq_prefixPow]
+  rfl
+
+/-- The partial Lucas sums: `lucasPartial k i s = ⊕_{i' ≤ i} maskPascal i' (k − i') s`. -/
+def lucasPartial (k : Nat) : Nat → Nat → Bool
+  | 0, s => maskPascal 0 k s
+  | i + 1, s => bxor (lucasPartial k i s) (maskPascal (i + 1) (k - (i + 1)) s)
+
+/-- The Lucas-weighted sum of the masks `0 .. k` at time `s`. -/
+def lucasSum (k s : Nat) : Bool := lucasPartial k k s
+
+theorem lucasPartial_shift (k : Nat) :
+    ∀ i, i ≤ k → ∀ s, xorBelow (fun s' => lucasPartial k i s') s = lucasPartial (k + 1) i s
+  | 0, _, s => by
+    show xorBelow (fun s' => maskPascal 0 k s') s = maskPascal 0 (k + 1) s
+    exact maskPascal_shift 0 k s
+  | i + 1, hi, s => by
+    show xorBelow (fun s' => bxor (lucasPartial k i s') (maskPascal (i + 1) (k - (i + 1)) s')) s =
+      bxor (lucasPartial (k + 1) i s) (maskPascal (i + 1) (k + 1 - (i + 1)) s)
+    rw [xorBelow_bxor (fun s' => lucasPartial k i s') (fun s' => maskPascal (i + 1) (k - (i + 1)) s') s,
+      lucasPartial_shift k i (by cfomega) s, maskPascal_shift, show k - (i + 1) + 1 = k + 1 - (i + 1) by cfomega]
+
+/-- **The transport of the masks is the Lucas-weighted sum.** -/
+theorem maskTransport_eq_lucas (k : Nat) : ∀ s, maskTransport k s = lucasSum k s
+  | s => by
+    cases k with
+    | zero =>
+      show xorBelow (exposed 0) s = maskPascal 0 0 s
+      unfold maskPascal
+      exact xorBelow_congr _ _ s (fun j _ => by rw [pascalParity_zero_right, Bool.true_and])
+    | succ k =>
+      show bxor (xorBelow (maskTransport k) s) (xorBelow (exposed (k + 1)) s) = lucasPartial (k + 1) (k + 1) s
+      rw [xorBelow_congr (maskTransport k) (fun s' => lucasPartial k k s') s (fun s' _ => maskTransport_eq_lucas k s'),
+        lucasPartial_shift k k (Nat.le_refl k) s]
+      show bxor (lucasPartial (k + 1) k s) (xorBelow (exposed (k + 1)) s) =
+        bxor (lucasPartial (k + 1) k s) (maskPascal (k + 1) (k + 1 - (k + 1)) s)
+      rw [Nat.sub_self]
+      unfold maskPascal
+      rw [xorBelow_congr (exposed (k + 1)) (fun j => pascalParity (s - 1 - j) 0 && exposed (k + 1) j) s
+        (fun j _ => by rw [pascalParity_zero_right, Bool.true_and])]
+
+theorem maskTransport_lucas (k s : Nat) : maskTransport k s = lucasSum k s := maskTransport_eq_lucas k s
+
+/-- **The center is the complement of the Lucas-weighted sum of the exposed masks.** -/
+theorem center_eq_lucas (t : Nat) (ht : 2 ≤ t) : center t = !(lucasSum (t - 2) t) := by
+  rw [center_eq_not_maskTransport t ht, maskTransport_lucas]
 
 end Rule30UOR.Antidiagonal

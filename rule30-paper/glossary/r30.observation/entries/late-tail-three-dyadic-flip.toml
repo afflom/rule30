@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "late-tail-three-dyadic-flip"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit k (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (app (const r30.scale::twopow) (local m)))) (explicit hk (app (const lexlean.std.nat::le) (nat 2) (local k))) (explicit ht (app (const lexlean.std.nat::le) (local T) (app (const lexlean.std.nat::add) (app (const lexlean.std.nat::mul) (app (const r30.scale::twopow) (local k)) (app (const r30.scale::twopow) (local m))) (nat 3))))) (app (const lexlean.core::eq) (app (const r30.observation::late-tail) (local k) (nat 3) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local m)) (app (const r30.scale::twopow) (local m)))) (app (const lexlean.std.bool::not) (app (const r30.observation::late-tail) (local k) (nat 3) (app (const r30.scale::twopow) (local m)))))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.lateTail_three_dyadic_flip"
+
+[[form]]
+id = "late-tail-three-dyadic-flip"
+channel = "math"
+surface = "latetailthreedyadicflip"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name latetailthreedyadicflip) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

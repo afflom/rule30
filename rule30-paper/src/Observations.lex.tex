@@ -4322,5 +4322,157 @@ Close the goal with \(\lexeme{r30.observation::mask-transport-center-periodic}(T
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{tower-word-split}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(s\), \(towerword(k + 2, s) = bxor(prefixword(k + 1, s), exposedprefix(k, s))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-split}(k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-split}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(center(t) = bxor(prefixword(t - 1, t), exposedprefix(t - 2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-split}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{tower-word-unfolded}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(s\), \(towerword(k + 2, s) = bxor(lineartower(k + 1, s), masktransport(k, s))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::tower-word-unfolded}(k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-transport}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(center(t) = bxor(lineartower(t - 1, t), masktransport(t - 2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-transport}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-zero-right}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(pascalparity(n, 0) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-zero-right}(n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-even-even}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\), \(pascalparity(2 * a, 2 * b) = pascalparity(a, b)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-even-even}(a, b)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-even-odd}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\), \(pascalparity(2 * a, 2 * b + 1) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-even-odd}(a, b)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-odd-even}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\), \(pascalparity(2 * a + 1, 2 * b) = pascalparity(a, b)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-odd-even}(a, b)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-odd-odd}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(a\) and natural number \(b\), \(pascalparity(2 * a + 1, 2 * b + 1) = pascalparity(a, b)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-odd-odd}(a, b)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(k\), \(pascalparity(n + 1, k + 1) = bxor(pascalparity(n, k), pascalparity(n, k + 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-succ}(n, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-gt}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(k\), if \(n < k\), then \(pascalparity(n, k) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-gt}(n, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{pascal-parity-self}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\), \(pascalparity(n, n) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::pascal-parity-self}(n)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{const-prefix-eq-lucas}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(s\), \(constprefix(n, s) = pascalparity(s, n)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::const-prefix-eq-lucas}(n, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{linear-tower-eq-lucas}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(n\) and natural number \(s\), \(lineartower(n, s) = pascalparity(s, n + 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::linear-tower-eq-lucas}(n, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{mask-transport-lucas}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(s\), \(masktransport(k, s) = lucassum(k, s)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::mask-transport-lucas}(k, s)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-lucas}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(center(t) = not(lucassum(t - 2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-lucas}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-three-dyadic-flip}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(k\) and natural number \(m\), if \(centerperiodic(T, twopow(m))\), then if \(2 ≤ k\), then if \(T ≤ twopow(k) * twopow(m) + 3\), then \(latetail(k, 3, twopow(m) + twopow(m)) = not(latetail(k, 3, twopow(m)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-three-dyadic-flip}(T, k, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{kappa-collapse-late-tail-flip}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\) and natural number \(k\), if \(kappacollapse(K)\), then if \(2 ≤ k\), then \(latetail(k, 3, twopow(K) + twopow(K)) = not(latetail(k, 3, twopow(K)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::kappa-collapse-late-tail-flip}(K, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-ruler-values}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), if \(2 ≤ k\), then \(lateruler(k, 0) = false ∧ lateruler(k, 1) = true ∧ lateruler(k, 2) = true ∧ lateruler(k, 3) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-ruler-values}(k)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}
