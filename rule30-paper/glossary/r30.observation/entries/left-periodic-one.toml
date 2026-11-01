@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-periodic-one"
+category = "proof-constant"
+signature = "(app (const r30.observation::left-periodic) (nat 1) (nat 1) (nat 1))"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftTower"
+name = "Rule30UOR.LeftTower.leftPeriodic_one"
+
+[[form]]
+id = "left-periodic-one"
+channel = "math"
+surface = "leftperiodicone"
+canonical_source = true
+features = []
+
+[render]
+math = "(operator-name leftperiodicone)"

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-transient"
+category = "function"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (const lexlean.std.nat::nat))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftTower"
+name = "Rule30UOR.LeftTower.leftTransient"
+
+[[form]]
+id = "left-transient"
+channel = "math"
+surface = "lefttransient"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lefttransient) (paren (seq (slot 0))))"

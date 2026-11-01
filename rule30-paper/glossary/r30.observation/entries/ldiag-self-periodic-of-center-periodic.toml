@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag-self-periodic-of-center-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t)))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (app (const lexlean.std.nat::add) (local t) (local P)) (app (const lexlean.std.nat::add) (local t) (local P))) (app (const r30.time::ldiag) (local t) (local t)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftTower"
+name = "Rule30UOR.LeftTower.ldiag_self_periodic_of_centerPeriodic"
+
+[[form]]
+id = "ldiag-self-periodic-of-center-periodic"
+channel = "math"
+surface = "ldiagselfperiodicofcenterperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiagselfperiodicofcenterperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

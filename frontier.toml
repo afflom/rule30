@@ -446,3 +446,12 @@ lean = "Rule30UOR.Antidiagonal.center_eq_leftCone"
 since = "2026-10-31"
 note = "Rule30UOR.Antidiagonal: pascalParity_symm (C(n,k) = C(n,n-k) mod 2), runEnd, leftEnd, coneTerm, coneRow, leftCone, exposed_eq_leftEnd, lucasPartial_eq_fold, xorBelow_swap (host), coneRow_eq_weight, lucasSum_eq_leftCone, center_eq_leftCone, leftCone_centerPeriodic, coneTerm_add_twopow_mul. The specific consistency condition the seed imposes on the left half-plane (which by leftExtend_rule alone cannot refute a period): a linear Pascal functional of the left run-ends equals the center. Under a period it is a fixed-point equation for the run-end field of the left cone. Not a closing argument."
 depends = ["lucas-frame"]
+
+[[claim]]
+id = "left-tower"
+status = "proved"
+statement = "Every left diagonal is eventually periodic: in left-diagonal coordinates the rule makes diagonal j+2 a one-bit state driven by diagonals j and j+1, one input period acts on the state as a map on Bool whose third iterate equals the first, so periodic inputs give a periodic diagonal with twice the period after one more period; from the constant edge diagonals, diagonal j has period 2^j from time 2^j. With the right table (exactly periodic from time 0, period 2^(j-1)), the center is the anti-diagonal of both tables, read where neither has settled."
+lean = "Rule30UOR.LeftTower.ldiag_eventually_periodic"
+since = "2026-11-01"
+note = "Rule30UOR.LeftTower: LeftPeriodic, leftPeriodic_zero/one/mono/mul, leftRun (the forced one-bit system), ldiag_eq_leftRun, leftRun_add, leftRun_shift, leftRun_three (G^3 = G on Bool), leftPeriodic_step, leftPeriod (= twopow j), leftTransient, leftPeriodic_pair, ldiag_eventually_periodic, center_eq_ldiag_self, ldiag_self_periodic_of_centerPeriodic. Measured: true periods 1..16 for d <= 1200 (slowly growing powers of 2), transients linear in d with slope about 1.29; the provable 2^d bounds are loose. The aperiodicity of the center is carried by the wedge between the settled left region (transient about 1.29 d) and the right table's periods (larger than the diagonal index). Not a closing argument."
+depends = ["antidiagonal"]

@@ -301,3 +301,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.Antidiagonal.center_eq_leftCone for left-light-cone
     When the suite exercises left-light-cone
     Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.center_eq_leftCone kernel-checked under propext and Quot.sound and published
+
+  @left-tower @build
+  Scenario: Every left diagonal is eventually periodic: in left-diagonal coordinates the rule makes diagonal j+2 a one-bit state driven by diagonals j and j+1, one input period acts on the state as a map on Bool whose third iterate equals the first, so periodic inputs give a periodic diagonal with twice the period after one more period; from the constant edge diagonals, diagonal j has period 2^j from time 2^j. With the right table (exactly periodic from time 0, period 2^(j-1)), the center is the anti-diagonal of both tables, read where neither has settled.
+    Given frontier.toml names Rule30UOR.LeftTower.ldiag_eventually_periodic for left-tower
+    When the suite exercises left-tower
+    Then its oracle accepts it: frontier check: Rule30UOR.LeftTower.ldiag_eventually_periodic kernel-checked under propext and Quot.sound and published

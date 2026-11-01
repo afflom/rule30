@@ -54,6 +54,7 @@ import Rule30UOR.LeftBand
 import Rule30UOR.KernelLaw
 import Rule30UOR.ClassObligation
 import Rule30UOR.Antidiagonal
+import Rule30UOR.LeftTower
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

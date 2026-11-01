@@ -4546,5 +4546,61 @@ Close the goal with \(\lexeme{r30.observation::lucas-sum-eq-left-cone}(t)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{left-periodic-zero}
+\allowaxioms{Quot.sound;propext}
+\(leftperiodic(0, 0, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-periodic-zero}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-periodic-one}
+\allowaxioms{Quot.sound;propext}
+\(leftperiodic(1, 1, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-periodic-one}\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-periodic-step}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(T\) and natural number \(p\), if \(leftperiodic(k, T, p)\), then if \(leftperiodic(k + 1, T, p)\), then \(leftperiodic(k + 2, T + p, 2 * p)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-periodic-step}(k, T, p)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{left-period-eq-twopow}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(leftperiod(j) = twopow(j)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-period-eq-twopow}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-eventually-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\), \(leftperiodic(j, lefttransient(j), leftperiod(j))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-eventually-periodic}(j)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-eq-ldiag-self}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(center(t) = ldiag(t, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-ldiag-self}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-self-periodic-of-center-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(T ≤ t\), then \(ldiag(t + P, t + P) = ldiag(t, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-self-periodic-of-center-periodic}(T, P, t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-periodic-step"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit T (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (pi ((explicit ha (app (const r30.observation::left-periodic) (local k) (local T) (local p))) (explicit hb (app (const r30.observation::left-periodic) (app (const lexlean.std.nat::add) (local k) (nat 1)) (local T) (local p)))) (app (const r30.observation::left-periodic) (app (const lexlean.std.nat::add) (local k) (nat 2)) (app (const lexlean.std.nat::add) (local T) (local p)) (app (const lexlean.std.nat::mul) (nat 2) (local p)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftTower"
+name = "Rule30UOR.LeftTower.leftPeriodic_step"
+
+[[form]]
+id = "left-periodic-step"
+channel = "math"
+surface = "leftperiodicstep"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftperiodicstep) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

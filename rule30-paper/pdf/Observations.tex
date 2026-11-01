@@ -3974,4 +3974,53 @@ For every natural number \(t\), if \(2 \le t\), then \(\operatorname{lucassum}(t
 \begin{proof}
 The goal follows from \(\operatorname{lucassumeqleftcone}(t)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:left-periodic-zero}
+\(\operatorname{leftperiodic}(0, 0, 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftperiodiczero}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-periodic-one}
+\(\operatorname{leftperiodic}(1, 1, 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftperiodicone}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-periodic-step}
+For every natural number \(k\) and natural number \(T\) and natural number \(p\), if \(\operatorname{leftperiodic}(k, T, p)\), then if \(\operatorname{leftperiodic}(k + 1, T, p)\), then \(\operatorname{leftperiodic}(k + 2, T + p, 2 \cdot p)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftperiodicstep}(k, T, p)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:left-period-eq-twopow}
+For every natural number \(j\), \(\operatorname{leftperiod}(j) = \operatorname{twopow}(j)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftperiodeqtwopow}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-eventually-periodic}
+For every natural number \(j\), \(\operatorname{leftperiodic}(j, \operatorname{lefttransient}(j), \operatorname{leftperiod}(j))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiageventuallyperiodic}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-ldiag-self}
+For every natural number \(t\), \(\operatorname{center}(t) = \operatorname{ldiag}(t, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqldiagself}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-self-periodic-of-center-periodic}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then \(\operatorname{ldiag}(t + P, t + P) = \operatorname{ldiag}(t, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagselfperiodicofcenterperiodic}(T, P, t)\).
+\end{proof}
 \end{document}

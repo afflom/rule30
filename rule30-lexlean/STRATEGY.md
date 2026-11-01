@@ -3368,3 +3368,25 @@ dyadic freezing. Under a period it becomes a fixed-point equation for the run-en
 left cone, which is where the next iteration looks.
 
 Problem 1 remains unproved.
+
+**Both tables settle; the center lives in the wedge between them (2026-10-31; the left half proved,
+`ldiag_eventually_periodic`: diagonal `j` has period `2^j` from time `2^j`).** In left-diagonal coordinates the rule reads
+`ldiag (d+1) (t+1) = ldiag (d−1) t ⊕ (ldiag d t ∨ ldiag (d+1) t)` (`Core.ldiag_step`): diagonal
+`d+1` is a one-bit state driven by the two diagonals before it. If those are eventually periodic
+with period `p`, one input period acts on the state as a map `Bool → Bool`, whose iterates settle
+with period 1 or 2, so diagonal `d+1` is eventually periodic with period dividing `2p`; by
+induction from the two constant edge diagonals **every left diagonal is eventually periodic**
+(`Rule30UOR.LeftTower`). Measured (rows to 8000, `d ≤ 1200`): the true periods are powers of 2
+that grow very slowly (8 is the norm for `30 ≤ d ≤ 300`, 16 from about `d = 400`), and the
+transients are linear, slope about `1.29` (`T/d` between 1.03 and 1.48); the provable bound `2^d`
+is loose, and a linear transient bound is the quantitative statement that would place the wedge. The right diagonals are
+exactly periodic from time 0 with period at most `2^{j−1}` (`diagonal-halving`). The center
+`cell (t, 0)` is the anti-diagonal of both tables, `rdiag t t = ldiag t t`, so it is read at the
+right diagonal `t`, whose period exceeds `t` (no repetition visible), and at the left diagonal `t`,
+whose transient exceeds `t` (not yet settled): the center is sampled in the wedge where neither
+table has settled. In the light-cone frame the same picture appears quantitatively: the
+contribution of the run-ends on the left diagonal at distance `d` from the edge is periodic with
+period `3·2^{a(d)}` (the 3 is the Fibonacci parity of the Pascal diagonal sums: the edge itself
+contributes the period-3 word `100`), doubling at `d ≈ 3, 8, 29, 36, 44, 81`, cumulatively
+periodic through every distance measured: the aperiodicity of the center is carried entirely by
+the unsettled wedge.

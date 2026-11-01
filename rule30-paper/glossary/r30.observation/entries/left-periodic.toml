@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-periodic"
+category = "function"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit T (const lexlean.std.nat::nat)) (explicit p (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.LeftTower"
+name = "Rule30UOR.LeftTower.LeftPeriodic"
+
+[[form]]
+id = "left-periodic"
+channel = "math"
+surface = "leftperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"
