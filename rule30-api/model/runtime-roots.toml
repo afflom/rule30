@@ -1,9 +1,16 @@
 spec = "prismpm/runtime-roots/1"
-lean_module = "Rule30Api.Api"
+lean_modules = ["Rule30Api.Api", "Rule30Api.Rule30Core"]
 ir_module = "Rule30Api"
 roots = [
   "Rule30Api.Api.commandCount",
   "Rule30Api.Api.commands",
+  "Rule30Api.Rule30Core.center",
+  "Rule30Api.Rule30Core.centersFrom",
+  "Rule30Api.Rule30Core.rdiag",
+  "Rule30Api.Rule30Core.rows",
+  "Rule30Api.Rule30Core.rulerBackground",
+  "Rule30Api.Rule30Core.rulerFrom",
+  "Rule30Api.Rule30Core.towerWord",
 ]
 
 [[root]]
@@ -17,3 +24,45 @@ name = "Rule30Api.Api.commands"
 package = "rule30_api_commands"
 targets = ["rust-std"]
 effects = ["allocation"]
+
+[[root]]
+name = "Rule30Api.Rule30Core.center"
+package = "rule30_api_core_center"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]
+
+[[root]]
+name = "Rule30Api.Rule30Core.centersFrom"
+package = "rule30_api_core_centers_from"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]
+
+[[root]]
+name = "Rule30Api.Rule30Core.rdiag"
+package = "rule30_api_core_rdiag"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]
+
+[[root]]
+name = "Rule30Api.Rule30Core.rows"
+package = "rule30_api_core_rows"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]
+
+[[root]]
+name = "Rule30Api.Rule30Core.rulerBackground"
+package = "rule30_api_core_ruler_background"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]
+
+[[root]]
+name = "Rule30Api.Rule30Core.rulerFrom"
+package = "rule30_api_core_ruler_from"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]
+
+[[root]]
+name = "Rule30Api.Rule30Core.towerWord"
+package = "rule30_api_core_tower_word"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]

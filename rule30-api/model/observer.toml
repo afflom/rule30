@@ -8,7 +8,7 @@ vantages = ["regular-side", "chaotic-side", "kernel"]
 [[quadruple]]
 vantage = "prize-review"
 real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower"]
-sensual_qualities = ["reduction-tree", "open-leaves", "register", "obligation", "verify"]
+sensual_qualities = ["reduction-tree", "open-leaves", "viz-tower", "register", "obligation", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
 
 [[quadruple]]
@@ -20,25 +20,25 @@ withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-
 [[quadruple]]
 vantage = "reading"
 real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower"]
-sensual_qualities = ["reduction-tree", "interface-sheets", "register", "obligation", "verify"]
+sensual_qualities = ["reduction-tree", "sitemap", "interface-sheets", "viz-triangle", "viz-tower", "register", "obligation", "standards", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
 
 [[quadruple]]
 vantage = "stdlib-feedback"
 real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower"]
-sensual_qualities = ["modules", "quality", "register", "obligation", "verify"]
+sensual_qualities = ["modules", "model", "quality", "design", "register", "obligation", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
 
 [[quadruple]]
 vantage = "mathematics"
 real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower"]
-sensual_qualities = ["paper", "reduction-tree", "register", "obligation", "refutations", "verify"]
+sensual_qualities = ["paper", "reduction-tree", "viz-tower", "viz-ledger", "viz-defects", "viz-rays", "viz-dyadic", "register", "obligation", "refutations", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
 
 [[quadruple]]
 vantage = "first-visit"
 real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower"]
-sensual_qualities = ["picture", "explainer", "reduction-tree", "register", "obligation", "verify"]
+sensual_qualities = ["picture", "explainer", "reduction-tree", "viz-triangle", "viz-ledger", "register", "obligation", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic"]
 
 [[overlap]]
@@ -841,7 +841,7 @@ via_panels = ["open-leaves", "register", "obligation", "verify"]
 [[interaction]]
 source = "prize-review"
 target = "reading"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-tower", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "prize-review"
@@ -851,7 +851,7 @@ via_panels = ["register", "obligation", "verify"]
 [[interaction]]
 source = "prize-review"
 target = "mathematics"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-tower", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "prize-review"
@@ -886,7 +886,7 @@ via_panels = ["register", "obligation", "verify"]
 [[interaction]]
 source = "reading"
 target = "prize-review"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-tower", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "reading"
@@ -901,12 +901,12 @@ via_panels = ["register", "obligation", "verify"]
 [[interaction]]
 source = "reading"
 target = "mathematics"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-tower", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "reading"
 target = "first-visit"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-triangle", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "stdlib-feedback"
@@ -936,7 +936,7 @@ via_panels = ["register", "obligation", "verify"]
 [[interaction]]
 source = "mathematics"
 target = "prize-review"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-tower", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "mathematics"
@@ -946,7 +946,7 @@ via_panels = ["register", "obligation", "refutations", "verify"]
 [[interaction]]
 source = "mathematics"
 target = "reading"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-tower", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "mathematics"
@@ -956,7 +956,7 @@ via_panels = ["register", "obligation", "verify"]
 [[interaction]]
 source = "mathematics"
 target = "first-visit"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-ledger", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "first-visit"
@@ -971,7 +971,7 @@ via_panels = ["register", "obligation", "verify"]
 [[interaction]]
 source = "first-visit"
 target = "reading"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-triangle", "register", "obligation", "verify"]
 
 [[interaction]]
 source = "first-visit"
@@ -981,7 +981,7 @@ via_panels = ["register", "obligation", "verify"]
 [[interaction]]
 source = "first-visit"
 target = "mathematics"
-via_panels = ["reduction-tree", "register", "obligation", "verify"]
+via_panels = ["reduction-tree", "viz-ledger", "register", "obligation", "verify"]
 
 [[facet]]
 facet = "edge-parity"
@@ -1027,6 +1027,12 @@ basis = "a proved reduction of the root, the same from every vantage, kernel-che
 
 [[facet]]
 facet = "periodic-finite-kernel"
+pole = "real-quality"
+vantage = "kernel"
+basis = "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"
+
+[[facet]]
+facet = "antidiagonal"
 pole = "real-quality"
 vantage = "kernel"
 basis = "a proved reduction of the root, the same from every vantage, kernel-checked under propext and Quot.sound"

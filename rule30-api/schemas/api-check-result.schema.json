@@ -11,6 +11,8 @@
   "presentation",
   "observer",
   "convert",
+  "standards",
+  "core",
   "model",
   "logo"
  ],
@@ -111,6 +113,44 @@
    }
   },
   "convert": {
+   "type": "object",
+   "required": [
+    "ok",
+    "reason"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "ok": {
+     "type": "boolean"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   }
+  },
+  "standards": {
+   "type": "object",
+   "required": [
+    "ok",
+    "reason"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "ok": {
+     "type": "boolean"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   }
+  },
+  "core": {
    "type": "object",
    "required": [
     "ok",

@@ -1,0 +1,55 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/standards/1",
+ "title": "The standards register (view/standards.json)",
+ "type": "array",
+ "items": {
+  "type": "object",
+  "required": [
+   "id",
+   "name",
+   "authority",
+   "version",
+   "scope",
+   "realizedBy",
+   "conformance",
+   "coverage"
+  ],
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "pattern": "^[a-z][a-z0-9.-]*$"
+   },
+   "name": {
+    "type": "string"
+   },
+   "authority": {
+    "type": "string",
+    "pattern": "^https://"
+   },
+   "version": {
+    "type": "string"
+   },
+   "scope": {
+    "type": "string"
+   },
+   "realizedBy": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "conformance": {
+    "type": "string"
+   },
+   "coverage": {
+    "type": "string",
+    "enum": [
+     "implemented",
+     "planned"
+    ]
+   }
+  }
+ }
+}

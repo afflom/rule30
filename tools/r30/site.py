@@ -21,15 +21,27 @@ import json
 import re
 import shutil
 
-from . import archmodel, frontier, repo
-from .presentationmodel import (APPLICATION_RECORD, ARTIFACTS, BRAND, EXPLAINER, JOURNEYS, OBLIGATION, PANELS, POLES,
-                                PUBLICATION, STATUS_MARKS, STEPS, VERIFICATIONS, step_problems)
+from . import archmodel, designmodel, frontier, observermodel, repo, standardsmodel
+from .presentationmodel import (APPLICATION_RECORD, ARTIFACTS, BRAND, EXPLAINER, JOURNEYS, JOURNEY_LABELS, NAV_ITEMS, NAV_PATTERNS,
+                                NAVIGATIONS, OBLIGATION, PANELS, POLES, PUBLICATION, STATUS_MARKS, STEPS, VERIFICATIONS,
+                                nav_problems, step_problems)
 
 SITE = repo.ROOT / "rule30-api" / "site"
 LOGO = SITE / "logo.svg"
 TEMPLATE = SITE / "index.html"
 DATA_OPEN = '<script id="r30-data" type="application/json">'
 DATA_CLOSE = "</script>"
+HEAD_CLOSE = "</head>"
+# the design tokens (designmodel.css) live in the template between these
+# markers, written by `api sync` and refused when drifted by `api check`
+TOKENS_OPEN = '<style id="r30-tokens">\n'
+TOKENS_CLOSE = "</style>"
+# the loader hook of the visualizations: `view render` inlines every
+# rule30-api/site/viz/*.js here, before the page's own script, so each can
+# register window.r30viz[panelId] = function (slot, viewData) {...}
+VIZ_DIR = SITE / "viz"
+VIZ_OPEN = '<script id="r30-viz">'
+VIZ_CLOSE = "</script>"
 
 INK = "#14161a"
 PAPER = "#f4f1ea"
@@ -101,20 +113,81 @@ def picture_svg(rows=PICTURE_ROWS, ink=INK, accent=ACCENT, background=PAPER):
     return "\n".join(head + back + cells + ["</svg>"]) + "\n"
 
 
+def with_tokens(html, css=None):
+    """The template with its token block replaced by the design model's CSS."""
+    css = designmodel.css() if css is None else css
+    start = html.index(TOKENS_OPEN) + len(TOKENS_OPEN)
+    end = html.index(TOKENS_CLOSE, start)
+    return html[:start] + css + html[end:]
+
+
 def sync_logo():
+    """The logo and the template's design tokens, both generated: `api sync`
+    writes them, `api check` refuses a drifted one (`check_logo`)."""
     SITE.mkdir(parents=True, exist_ok=True)
     text = logo_svg()
     changed = not LOGO.exists() or LOGO.read_text() != text
     if changed:
         LOGO.write_text(text)
+    html = TEMPLATE.read_text()
+    tokens = with_tokens(html)
+    if tokens != html:
+        TEMPLATE.write_text(tokens)
+        changed = True
     return {"logo": str(LOGO.relative_to(repo.ROOT)), "changed": changed}
 
 
 def check_logo():
     if not LOGO.exists():
         return {"ok": False, "reason": "rule30-api/site/logo.svg is missing; run `bin/r30 api sync`"}
-    ok = LOGO.read_text() == logo_svg()
-    return {"ok": ok, "reason": None if ok else "rule30-api/site/logo.svg drifted; run `bin/r30 api sync`"}
+    if LOGO.read_text() != logo_svg():
+        return {"ok": False, "reason": "rule30-api/site/logo.svg drifted; run `bin/r30 api sync`"}
+    html = TEMPLATE.read_text()
+    if with_tokens(html) != html:
+        return {"ok": False, "reason": "the design tokens of rule30-api/site/index.html drifted from designmodel; run `bin/r30 api sync`"}
+    return {"ok": True, "reason": None}
+
+
+def viz_scripts():
+    """The visualization scripts, in name order, as one inline block."""
+    files = sorted(VIZ_DIR.glob("*.js")) if VIZ_DIR.exists() else []
+    return "\n".join(f"/* viz/{f.name} */\n" + f.read_text().replace("</script", "<\\/script") for f in files)
+
+
+def with_viz(html, scripts=None):
+    """The template with the visualization scripts inlined at the loader hook."""
+    scripts = viz_scripts() if scripts is None else scripts
+    if VIZ_OPEN not in html:
+        return html
+    start = html.index(VIZ_OPEN) + len(VIZ_OPEN)
+    end = html.index(VIZ_CLOSE, start)
+    # the registry exists before any visualization registers into it
+    return html[:start] + ("\nwindow.r30viz = window.r30viz || {};\n" + scripts + "\n" if scripts else "") + html[end:]
+
+
+def provenance_summary(prov):
+    """Per claim, what an evidence card opens in place: the Lean theorem, the
+    lexeme, the research module and its kappa-label, from provenance.jsonld."""
+    graph = {x["@id"]: x for x in prov.get("@graph", [])}
+    out = {}
+    for x in prov.get("@graph", []):
+        if not x["@id"].startswith("r30:claim/"):
+            continue
+        row = {"status": x.get("r30:status")}
+        theorem = graph.get(x.get("prov:wasDerivedFrom") or "")
+        if theorem:
+            row["lean"] = theorem.get("schema:name")
+            module = graph.get(theorem.get("r30:module") or "")
+            if module:
+                row["module"] = module.get("schema:name")
+                row["kappa"] = module.get("r30:kappa")
+                row["kappaNote"] = module.get("r30:kappaSource") or module.get("r30:kappaNote")
+        if x.get("r30:lexeme"):
+            row["lexeme"] = x["r30:lexeme"]
+        if x.get("r30:attestedBy"):
+            row["attestation"] = x["r30:attestedBy"].rsplit("/", 1)[-1]
+        out[x["schema:name"]] = row
+    return out
 
 
 def register_text(claims):
@@ -191,7 +264,7 @@ def statements():
     return paper
 
 
-def view_data(claims, rows, sheets, commit, paper=None):
+def view_data(claims, rows, sheets, commit, paper=None, provenance=None):
     """Everything the site renders, as one JSON value: the register, the tree,
     the open leaves, the sheets present, the paper's statements, the explainer,
     the picture, and the presentation and architecture data the modules
@@ -212,6 +285,10 @@ def view_data(claims, rows, sheets, commit, paper=None):
         "poles": POLES,
         "steps": STEPS,
         "verifications": VERIFICATIONS,
+        "navPatterns": NAV_PATTERNS,
+        "navigations": NAVIGATIONS,
+        "navItems": NAV_ITEMS,
+        "journeyLabels": JOURNEY_LABELS,
         "explainer": EXPLAINER,
         "obligation": OBLIGATION,
         "pictureRows": PICTURE_ROWS,
@@ -227,6 +304,10 @@ def view_data(claims, rows, sheets, commit, paper=None):
         "subcharacteristics": archmodel.SUBCHARACTERISTICS,
         "requirements": archmodel.REQUIREMENTS,
         "measures": archmodel.MEASURES,
+        "standards": standardsmodel.rows(),
+        "design": designmodel.view_data(),
+        "observer": {k: v for k, v in observermodel.data(claims=claims).items() if k != "claims"},
+        "provenance": provenance or {},
     }
 
 
@@ -238,7 +319,9 @@ def check_journeys(panels=PANELS, journeys=JOURNEYS, steps=None, claims=None):
     order, ending in verification, on declared evidence): the runtime's own
     check of `journeysThroughPanels`, `journeysOfStakeholders` and the step
     theorems, so a render cannot publish a journey whose step has no panel
-    to show or no evidence to link. Returns the problems, empty when none."""
+    to show or no evidence to link; and the navigation theorems
+    (`presentationmodel.nav_problems`), so every journey stays reachable from
+    the primary navigation. Returns the problems, empty when none."""
     ids = {p["id"] for p in panels}
     stakeholders = {s["id"] for s in archmodel.STAKEHOLDERS}
     problems = []
@@ -250,16 +333,23 @@ def check_journeys(panels=PANELS, journeys=JOURNEYS, steps=None, claims=None):
             problems.append(f"journey {j['id']}: stakeholder {j['stakeholder']} is not declared")
     claim_ids = [c["id"] for c in (frontier.list_claims() if claims is None else claims)]
     problems += step_problems(claim_ids, steps=STEPS if steps is None else steps, journeys=journeys, panels=panels)
+    if steps is None:
+        problems += nav_problems(journeys=journeys)
+        problems += designmodel.problems(journeys, OBLIGATION)
     return problems
 
 
-def embed(html, data):
+def embed(html, data, head=""):
     """The template with its data script filled (an embedded `</` is escaped
-    so the JSON cannot close the script element)."""
+    so the JSON cannot close the script element) and, when given, `head`
+    (the schema.org JSON-LD and Open Graph block) injected before `</head>`."""
     start = html.index(DATA_OPEN) + len(DATA_OPEN)
     end = html.index(DATA_CLOSE, start)
     payload = json.dumps(data, ensure_ascii=False, sort_keys=True).replace("</", "<\\/")
-    return html[:start] + payload + html[end:]
+    html = html[:start] + payload + html[end:]
+    if TOKENS_OPEN in html:
+        html = with_viz(with_tokens(html))
+    return html.replace(HEAD_CLOSE, head + HEAD_CLOSE, 1) if head and HEAD_CLOSE in html else html
 
 
 def render_view(out):
@@ -273,11 +363,19 @@ def render_view(out):
     paper = statements()
     sheets_dir = repo.ROOT / "interfaces"
     sheets = sorted(p.stem for p in sheets_dir.glob("*.md") if p.stem != "README") if sheets_dir.exists() else []
+    standardsmodel.citation_file()
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    prov = standardsmodel.provenance(claims, commit, generated, paper["attestation"])
+    data = view_data(claims, rows, sheets, commit, paper, provenance_summary(prov))
+    data["generated"] = generated
+    jsonld = standardsmodel.schema_org(STEPS, JOURNEYS, archmodel.STAKEHOLDERS, commit, paper["pdfs"]["documents"])
     written = []
+    from .vizmodel import publish as publish_viz; publish_viz(out)  # noqa: E702 (the visualizations' hook)
     for a in ARTIFACTS:
         target = out / a["path"]
         if a["id"] == "site":
-            target.write_text(embed((repo.ROOT / a["source"]).read_text(), view_data(claims, rows, sheets, commit, paper)))
+            target.write_text(embed((repo.ROOT / a["source"]).read_text(), data,
+                                    standardsmodel.head_block(jsonld, BRAND, PUBLICATION["url"])))
         elif a["source"]:
             source = repo.ROOT / a["source"]
             if source.is_dir():
@@ -301,7 +399,26 @@ def render_view(out):
         elif a["id"] == "readme":
             target.write_text(f"# {BRAND['name']}: {BRAND['tagline']}\n\nRule 30 Prize, Problem 1: the current view.\n\n"
                               f"Commit: {commit}\n\nOpen `index.html` for the rendered view; `chain.txt` is the reduction tree:\n\n"
-                              f"```\n{chain_text}\n```\n")
+                              f"```\n{chain_text}\n```\n\nThe standards this view implements, with what realizes each and the check "
+                              "behind it, are `standards.json`; `openapi.json` describes the command surface, `provenance.jsonld` "
+                              "the provenance of every claim, `schema.json` the site for machines, `attestations.intoto.json` the "
+                              "attested documents, `CITATION.cff` how to cite the work.\n")
+        elif a["id"] == "standards":
+            target.write_text(standardsmodel.artifacts_json())
+        elif a["id"] == "openapi":
+            target.write_text(repo.to_json(standardsmodel.openapi()) + "\n")
+        elif a["id"] == "sitemap":
+            target.write_text(standardsmodel.sitemap(STEPS, data["generated"][:10]))
+        elif a["id"] == "robots":
+            target.write_text(standardsmodel.robots())
+        elif a["id"] == "provenance":
+            target.write_text(repo.to_json(prov) + "\n")
+        elif a["id"] == "tokens":
+            target.write_text(designmodel.css())
+        elif a["id"] == "jsonld":
+            target.write_text(repo.to_json(jsonld) + "\n")
+        elif a["id"] == "attestations":
+            target.write_text(repo.to_json(standardsmodel.in_toto_statement(paper["pdfs"]["documents"], paper["attestation"], paper["pdfs"], commit)) + "\n")
         else:
             raise ValueError(f"no renderer for artifact {a['id']}")
         written.append(a["path"])

@@ -65,7 +65,7 @@ AUTHORITIES = [
     {"id": "LEXLEAN", "name": "UOR-Foundation/LexLean",
      "citation": "https://github.com/UOR-Foundation/LexLean",
      "statement": "A closed-lexicon LaTeX-to-Lean 4 compiler; the paper, the register and the API are its modules.",
-     "realized_by": lambda claims: ["api-modules"]},
+     "realized_by": lambda claims: ["api-modules", "verified-core"]},
     {"id": "PRISMPM", "name": "UOR-Foundation/PrismPM",
      "citation": "https://github.com/UOR-Foundation/PrismPM",
      "statement": "Model registers (authorities, ids, ledger, commands, standards, projection, contracts, errors, dependencies, runtime-roots, stdlib-package) and the generated runtime of LexLean application models.",
@@ -84,14 +84,23 @@ API_IDS = [
      "statement": "The model registers (authorities, ids, ledger, commands, standards, projection, contracts, errors, dependencies, runtime-roots, stdlib-package), the result schemas, the Gherkin suites and CONFORMANCE.md are generated from the register, the parser, the error table and the architecture, and drift is refused.",
      "feature": "rule30-api/model", "evidence": "bin/r30 api check; scripts/tests/test_r30.py"},
     {"id": "rust-emission", "level": "build", "suite": "api",
-     "statement": "The production roots of Api.lex.tex (commands, commandCount) export to certified Rust packages through lexlean production build, kernel-checked under its stated axioms, and the published bundle replays with verify-artifact.",
+     "statement": "The production roots of Api.lex.tex (commands, commandCount) and of Rule30Core.lex.tex (rows, center, rdiag, towerWord, rulerBackground, centersFrom, rulerFrom) export to certified Rust packages through lexlean production build, kernel-checked under their stated axioms, and the published bundle replays with verify-artifact.",
      "feature": "rule30-api/production/request.json", "evidence": "bin/r30 api production; scripts/tests/test_r30.py"},
+    {"id": "verified-core", "level": "build", "suite": "api",
+     "statement": "Rule30Core.lex.tex declares the automaton's computational core (the rule on three cells, the row step, the rows, the center, the right diagonals rdiag, the tower of words towerWord, trailingParity, timeParity and the ruler background) as executable definitions whose production roots export to Rust; the kernel decides the first 32 centers and ruler values, rdiag 1 as the time parity on 64 times, center t = towerWord t t, the periods 2^j of the first words and the half periods 2^(j-1) of the first diagonals, the tower recursion on the first words and the agreement of the row cells with the right-edge recursion of Core.lex.tex; core-vectors.json (256 centers, 12 tower words, the ruler background below 512) is generated from the same model, cross-checked against the decided literals and identities, and published by the view. The pinned compiler has no Wasm or browser target, so the page reads the vectors rather than running the module.",
+     "feature": "rule30-api/src/Rule30Core.lex.tex", "evidence": "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check; scripts/tests/test_r30.py"},
     {"id": "observer", "level": "build", "suite": "api",
      "statement": "Observer.lex.tex records the object quadruple of every stakeholder vantage (the proof as the real object, the journey as the sensual object, the proved claims its panels render as real qualities, the panels as sensual qualities, the open claims as withdrawn) and the kernel decides withdrawal, nonempty overlap, symmetric interaction and gauge covariance over the register and the presentation.",
      "feature": "rule30-api/src/Observer.lex.tex", "evidence": "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check"},
     {"id": "current-view", "level": "build", "suite": "api",
      "statement": "The view workflow renders the artifacts Presentation.lex.tex declares, with the site, on every push to main, deploys them to GitHub Pages at the URL Application.lex.tex names, and runs no validation; the site opens on a choice of vantage and shows one step at a time, every step a rendered panel toward a goal on declared evidence, the journeys covering the Observer's poles in order and ending in verification as the kernel decides, and the page meets WCAG AA contrast with keyboard focus and reduced motion honoured.",
      "feature": ".github/workflows/view.yml", "evidence": "bin/r30 view render; scripts/tests/test_r30.py"},
+    {"id": "design-system", "level": "build", "suite": "api",
+     "statement": "Presentation.lex.tex declares the design system of the site as data (colour tokens with their sRGB values in both themes, the contrast pairs the stylesheet uses, the type and spacing scales, the motion durations with their reduced-motion variant, the landing) and the kernel decides, in integer arithmetic over relative luminance, that every pair meets WCAG 2.2 AA (4.5:1 for text, 3:1 for controls and graphics) in both themes, that the scales increase, that targets are at least 24px and that reduced motion is instant; api sync writes the tokens into the site as CSS custom properties and api check refuses drift.",
+     "feature": "rule30-api/src/Presentation.lex.tex", "evidence": "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check; scripts/tests/test_r30.py DesignTests"},
+    {"id": "standards-register", "level": "build", "suite": "api",
+     "statement": "Standards.lex.tex names every external standard the implementation realizes (architecture, quality, accessibility, markup, graphics, metadata, provenance, schemas, API description, citation, licensing, canonical forms, attestations, the toolchains) with its authority, version, scope, realizers and check; the kernel decides that the ids are distinct, every standard has an authority and a realizer, every realizer is declared, every panel, artifact, journey, command, navigation and visualization id names a standard, and the toolchain rows carry the pinned versions; view render writes the artifacts the standards call for (openapi.json, sitemap.xml, provenance.jsonld, schema.json, attestations.intoto.json, standards.json, CITATION.cff).",
+     "feature": "rule30-api/src/Standards.lex.tex", "evidence": "lexlean verify rule30-api (scripts/verify_lexlean.sh); bin/r30 api check; scripts/tests/test_r30.py"},
 ]
 
 # What each command mutates (`never` when it only reads). A leaf of the
@@ -108,20 +117,10 @@ MUTATES = {
 # of its own: `frontier list` prints the register, `interface` the sheet.
 SCHEMA_OF = {"frontier_list": "r30/register/1", "interface": "r30/interface-sheet/1"}
 
-STANDARDS = [
-    {"id": "ISO-42010-2022", "name": "ISO/IEC/IEEE 42010:2022", "edition": "2022",
-     "reference": "https://www.iso.org/standard/74393.html", "basis": "public-catalog",
-     "scope": "Architecture description conceptual foundations and view/viewpoint framework",
-     "provenance": "ISO/IEC/IEEE international standard catalog entry",
-     "interpretation": "The architecture of the proof effort is stakeholders, concerns, viewpoints and views on Foundation.Arch; every entry carries a stdlib entity and Architecture.lex.tex decides that the indices agree with the labels.",
-     "facet_package": "prism.arch", "facet_entries": ["arch-concern", "arch-model-kind", "arch-stakeholder", "arch-view", "arch-viewpoint"]},
-    {"id": "ISO-25010-2023", "name": "ISO/IEC 25010:2023", "edition": "2023",
-     "reference": "https://www.iso.org/standard/78176.html", "basis": "public-catalog",
-     "scope": "System and software product quality model",
-     "provenance": "ISO/IEC international standard catalog entry",
-     "interpretation": "What an optimal implementation is here: characteristics, subcharacteristics, requirements and measures with thresholds on Foundation.Qual, each measure naming the r30 command that reports it.",
-     "facet_package": "prism.qual", "facet_entries": ["qual-characteristic", "qual-measure", "qual-requirement", "qual-subcharacteristic"]},
-]
+# The standards register itself lives in `standardsmodel` (rows, module and
+# TOML); the ISO rows carry the vendored lexicon facets the architecture is
+# built on, which `check` confirms exist under rule30-api/language.
+from .standardsmodel import FACETS as STANDARD_FACETS  # noqa: E402
 
 PROJECTION = {
     "catalog": [{"module": "Foundation.Arch", "declaration": "ModelKind", "facet": "prism.arch@1.0.0", "target": "model_kinds"}],
@@ -143,11 +142,21 @@ PROJECTION = {
         {"module": "Presentation", "type_name": "Pole", "target": "poles"},
         {"module": "Presentation", "type_name": "Step", "target": "steps"},
         {"module": "Presentation", "type_name": "Verification", "target": "verifications"},
+        {"module": "Presentation", "type_name": "Pattern", "target": "navPatterns"},
+        {"module": "Presentation", "type_name": "Navigation", "target": "navigations"},
+        {"module": "Presentation", "type_name": "NavItem", "target": "navItems"},
+        {"module": "Presentation", "type_name": "Token", "target": "tokens"},
+        {"module": "Presentation", "type_name": "ContrastPair", "target": "contrastPairs"},
+        {"module": "Presentation", "type_name": "TypeStep", "target": "typeScale"},
+        {"module": "Presentation", "type_name": "SpaceStep", "target": "spacing"},
+        {"module": "Presentation", "type_name": "Motion", "target": "motion"},
+        {"module": "Presentation", "type_name": "Landing", "target": "landing"},
         {"module": "Application", "type_name": "StatusMark", "target": "statusMarks"},
         {"module": "Observer", "type_name": "Quadruple", "target": "quadruples"},
         {"module": "Observer", "type_name": "Overlap", "target": "overlaps"},
         {"module": "Observer", "type_name": "Interaction", "target": "interactions"},
         {"module": "Observer", "type_name": "Facet", "target": "facets"},
+        {"module": "Standards", "type_name": "Standard", "target": "standards"},
     ],
 }
 
@@ -158,6 +167,9 @@ CONTRACTS = [
     {"schema": "r30/interface-sheet/1", "path": "schemas/interface-sheet.schema.json", "media_type": "application/vnd.r30.interface-sheet.v1+json",
      "identity": "sha256-canonical-json", "maximum_bytes": 1048576, "maximum_items": 4096, "extension_policy": "closed",
      "compatibility": "exact-major", "produced_by": "interface", "artifact": "interfaces"},
+    {"schema": "r30/standards/1", "path": "schemas/standards.schema.json", "media_type": "application/vnd.r30.standards.v1+json",
+     "identity": "sha256-canonical-json", "maximum_bytes": 1048576, "maximum_items": 4096, "extension_policy": "closed",
+     "compatibility": "exact-major", "produced_by": "view_render", "artifact": "standards.json"},
 ] + [
     # the `--json` reports of the read-only commands (schema.RESULTS)
     {"schema": f"r30/{name}/1", "path": f"schemas/{name}.schema.json", "media_type": f"application/vnd.r30.{name}.v1+json",
@@ -273,13 +285,9 @@ def result_schema(command):
 
 
 def standards():
-    lines = ['spec = "prismpm/standards/1"', ""]
-    for st in STANDARDS:
-        lines += ["[[standard]]"]
-        for k in ("id", "name", "edition", "reference", "basis", "scope", "provenance", "interpretation", "facet_package"):
-            lines.append(f"{k} = {_q(st[k])}")
-        lines += ["facet_entries = " + _list(st["facet_entries"]), 'coverage_state = "implemented"', "release_scope = true", ""]
-    return "\n".join(lines)
+    """`model/standards.toml`: the rows of `Standards.lex.tex` (standardsmodel)."""
+    from . import standardsmodel
+    return standardsmodel.register_toml()
 
 
 def projection():
@@ -452,7 +460,7 @@ def conformance(claims):
 
 def files(claims):
     """Every generated file of the model: path -> text."""
-    from . import observermodel, production, schema
+    from . import observermodel, production, schema, standardsmodel
     out = {
         MODEL / "authorities.toml": authorities(claims),
         MODEL / "ids.toml": ids(claims),
@@ -467,6 +475,7 @@ def files(claims):
         MODEL / "observer.toml": observermodel.register_toml(observermodel.data()),
         SCHEMAS / "register.schema.json": json.dumps(REGISTER_SCHEMA, indent=1) + "\n",
         SCHEMAS / "interface-sheet.schema.json": json.dumps(SHEET_SCHEMA, indent=1) + "\n",
+        SCHEMAS / "standards.schema.json": json.dumps(standardsmodel.STANDARDS_SCHEMA, indent=1) + "\n",
         API / "prismpm.toml": PRISMPM,
         CONFORMANCE: conformance(claims),
     }
@@ -509,11 +518,11 @@ def check():
     unknown = sorted({c for e in ERRORS for c in e["commands"]} - surface - {c.replace("-", "_") for c in surface})
     if unknown:
         return {"ok": False, "reason": f"errors.toml names commands the parser does not have: {', '.join(unknown)}"}
-    for st in STANDARDS:
-        facet = API / "language" / st["facet_package"] / "entries"
-        absent = [e for e in st["facet_entries"] if not (facet / f"{e}.toml").exists()]
+    for sid, st in STANDARD_FACETS.items():
+        facet = API / "language" / st["package"] / "entries"
+        absent = [e for e in st["entries"] if not (facet / f"{e}.toml").exists()]
         if absent:
-            return {"ok": False, "reason": f"{st['id']} names lexicon entries absent from rule30-api/language: {', '.join(absent)}"}
+            return {"ok": False, "reason": f"{sid} names lexicon entries absent from rule30-api/language: {', '.join(absent)}"}
     return {"ok": True, "reason": None}
 
 

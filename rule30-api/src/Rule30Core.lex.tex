@@ -1,0 +1,450 @@
+\begin{lexlean}{Rule30Core}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: bxor,
+  parameters: [a : Bool, c : Bool],
+  result: Bool,
+  body: (if a then (not c) else c),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: rule,
+  parameters: [a : Bool, c : Bool, r : Bool],
+  result: Bool,
+  body: (bxor a (c || r)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: walk,
+  parameters: [l : Bool, c : Bool, rest : (List Bool)],
+  result: (List Bool),
+  body: (match rest
+    | List.nil => (nil Bool)
+    | List.cons r tail => (cons (rule l c r) (walk c r tail))),
+  axioms: [],
+  recursive_argument: rest,
+  executable: true
+}
+
+definition{
+  name: step,
+  parameters: [row : (List Bool)],
+  result: (List Bool),
+  body: (walk false false (prim append row (cons false (cons false (nil Bool))) : (List Bool))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: rows,
+  parameters: [t : Nat],
+  result: (List Bool),
+  body: (match t
+    | Nat.zero => (cons true (nil Bool))
+    | Nat.succ s => (step (rows s))),
+  axioms: [],
+  recursive_argument: t,
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: nth,
+  parameters: [xs : (List Bool), i : Nat],
+  result: Bool,
+  body: (match xs
+    | List.nil => false
+    | List.cons h tl => (if (i =? 0) then h else (nth tl (prim subtract i 1 : Nat)))),
+  axioms: [],
+  recursive_argument: xs,
+  executable: true
+}
+
+definition{
+  name: rowWidth,
+  parameters: [t : Nat],
+  result: Nat,
+  body: (prim length (rows t) : Nat),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: center,
+  parameters: [t : Nat],
+  result: Bool,
+  body: (nth (rows t) t),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: rdiag,
+  parameters: [j : Nat, t : Nat],
+  result: Bool,
+  body: (if ((t + t) <? j) then false else (nth (rows t) (prim subtract (t + t) j : Nat))),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: rightRecursion,
+  parameters: [j : Nat, t : Nat],
+  result: Bool,
+  body: (match t
+    | Nat.zero => (match j
+    | Nat.zero => true
+    | Nat.succ i => false)
+    | Nat.succ s => (match j
+    | Nat.zero => true
+    | Nat.succ i => (match i
+    | Nat.zero => (not (rightRecursion (i + 1) s))
+    | Nat.succ k => (bxor (rightRecursion (k + 2) s) ((rightRecursion (k + 1) s) || (rightRecursion k s)))))),
+  axioms: [],
+  recursive_argument: t,
+  executable: true
+}
+
+definition{
+  name: twopow,
+  parameters: [k : Nat],
+  result: Nat,
+  body: (match k
+    | Nat.zero => 1
+    | Nat.succ p => ((twopow p) + (twopow p))),
+  axioms: [],
+  recursive_argument: k,
+  executable: true
+}
+
+definition{
+  name: towerWord,
+  parameters: [j : Nat, s : Nat],
+  result: Bool,
+  body: (rdiag j (prim remainder s (twopow j) 0 : Nat)),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: timeParity,
+  parameters: [t : Nat],
+  result: Bool,
+  body: ((prim remainder t 2 0 : Nat) =? 1),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: trailingParityFuel,
+  parameters: [f : Nat, t : Nat],
+  result: Bool,
+  body: (match f
+    | Nat.zero => false
+    | Nat.succ g => (if ((prim remainder t 2 0 : Nat) =? 0) then false else (not (trailingParityFuel g (prim quotient t 2 0 : Nat))))),
+  axioms: [],
+  recursive_argument: f,
+  executable: true
+}
+
+definition{
+  name: trailingParity,
+  parameters: [t : Nat],
+  result: Bool,
+  body: (trailingParityFuel t t),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: rulerBackground,
+  parameters: [t : Nat],
+  result: Bool,
+  body: (bxor (trailingParity (prim subtract t 2 : Nat)) (bxor (not (timeParity t)) (bxor (trailingParity (prim subtract t 4 : Nat)) (trailingParity (prim quotient (prim subtract t 4 : Nat) 2 0 : Nat))))),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: sameBools,
+  parameters: [xs : (List Bool), ys : (List Bool)],
+  result: Bool,
+  body: (match xs
+    | List.nil => ((prim length ys : Nat) =? 0)
+    | List.cons h tl => (match ys
+    | List.nil => false
+    | List.cons h2 tl2 => ((prim equal h h2 : Bool) && (sameBools tl tl2)))),
+  axioms: [],
+  recursive_argument: xs,
+  executable: true
+}
+
+definition{
+  name: centersFrom,
+  parameters: [t : Nat, n : Nat],
+  result: (List Bool),
+  body: (match n
+    | Nat.zero => (nil Bool)
+    | Nat.succ m => (cons (center t) (centersFrom (t + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: rulerFrom,
+  parameters: [t : Nat, n : Nat],
+  result: (List Bool),
+  body: (match n
+    | Nat.zero => (nil Bool)
+    | Nat.succ m => (cons (rulerBackground t) (rulerFrom (t + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: knownCenters,
+  parameters: [],
+  result: (List Bool),
+  body: (cons true (cons true (cons false (cons true (cons true (cons true (cons false (cons false (cons true (cons true (cons false (cons false (cons false (cons true (cons false (cons true (cons true (cons false (cons false (cons true (cons false (cons false (cons true (cons true (cons true (cons false (cons true (cons false (cons true (cons true (cons true (cons false (nil Bool))))))))))))))))))))))))))))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: knownRuler,
+  parameters: [],
+  result: (List Bool),
+  body: (cons true (cons false (cons true (cons true (cons true (cons true (cons false (cons false (cons true (cons false (cons true (cons false (cons true (cons true (cons false (cons false (cons true (cons true (cons false (cons false (cons true (cons true (cons false (cons false (cons true (cons false (cons true (cons false (cons true (cons true (cons false (cons false (nil Bool))))))))))))))))))))))))))))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: rowWidthsFrom,
+  parameters: [t : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => (((rowWidth t) =? ((t + t) + 1)) && (rowWidthsFrom (t + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: timeParityFrom,
+  parameters: [t : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((prim equal (rdiag 1 t) (timeParity t) : Bool) && (timeParityFrom (t + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: antidiagonalFrom,
+  parameters: [t : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((prim equal (center t) (towerWord t t) : Bool) && (antidiagonalFrom (t + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: towerStep,
+  parameters: [k : Nat, s : Nat],
+  result: Bool,
+  body: (prim equal (towerWord (k + 2) (s + 1)) (bxor (towerWord (k + 2) s) ((towerWord (k + 1) s) || (towerWord k s))) : Bool),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: towerStepsFrom,
+  parameters: [k : Nat, s : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((towerStep k s) && (towerStepsFrom k (s + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: towerWordsFrom,
+  parameters: [k : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((towerStepsFrom k 0 (twopow (k + 2))) && (towerWordsFrom (k + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: periodFrom,
+  parameters: [j : Nat, t : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((prim equal (rdiag j (t + (twopow j))) (rdiag j t) : Bool) && (periodFrom j (t + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: periodsFrom,
+  parameters: [j : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((periodFrom j 0 (twopow j)) && (periodsFrom (j + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: halfPeriodFrom,
+  parameters: [j : Nat, t : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((prim equal (rdiag j (t + (twopow (prim subtract j 1 : Nat)))) (rdiag j t) : Bool) && (halfPeriodFrom j (t + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: halfPeriodsFrom,
+  parameters: [j : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((halfPeriodFrom j 0 (twopow j)) && (halfPeriodsFrom (j + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: agreeFrom,
+  parameters: [t : Nat, j : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((prim equal (rightRecursion j t) (rdiag j t) : Bool) && (agreeFrom t (j + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+definition{
+  name: agreementFrom,
+  parameters: [t : Nat, n : Nat],
+  result: Bool,
+  body: (match n
+    | Nat.zero => true
+    | Nat.succ m => ((agreeFrom t 0 (t + 1)) && (agreementFrom (t + 1) m))),
+  axioms: [],
+  recursive_argument: n,
+  executable: true
+}
+
+theorem{
+  name: rowWidths,
+  parameters: [],
+  statement: ((rowWidthsFrom 0 32) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: centersAreKnown,
+  parameters: [],
+  statement: ((sameBools (centersFrom 0 32) (knownCenters)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: rulerBackgroundIsKnown,
+  parameters: [],
+  statement: ((sameBools (rulerFrom 0 32) (knownRuler)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: rdiagOneIsTimeParity,
+  parameters: [],
+  statement: ((timeParityFrom 0 64) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: centerIsAntidiagonal,
+  parameters: [],
+  statement: ((antidiagonalFrom 0 32) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: towerRecursionOnFirstWords,
+  parameters: [],
+  statement: ((towerWordsFrom 0 4) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: wordsArePeriodic,
+  parameters: [],
+  statement: ((periodsFrom 0 5) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: diagonalsHaveHalfPeriod,
+  parameters: [],
+  statement: ((halfPeriodsFrom 2 4) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: rightRecursionAgrees,
+  parameters: [],
+  statement: ((agreementFrom 0 10) = true),
+  proof: decide{},
+  axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

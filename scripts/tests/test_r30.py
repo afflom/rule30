@@ -3,6 +3,8 @@ Lean-to-LexLean converter on recorded signatures, the frontier register and the
 MCP argument mapping."""
 
 from pathlib import Path
+import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -618,10 +620,13 @@ class PrismModelTests(unittest.TestCase):
 
     def test_standards_name_vendored_entries_used_by_the_architecture(self):
         import tomllib
-        from tools.r30 import prismmodel
+        from tools.r30 import prismmodel, standardsmodel
         rows = tomllib.loads(prismmodel.standards())["standard"]
-        self.assertEqual({r["facet_package"] for r in rows}, {"prism.arch", "prism.qual"})
-        for r in rows:
+        self.assertEqual([r["id"] for r in rows], [r["id"] for r in standardsmodel.rows()])
+        faceted = [r for r in rows if "facet_package" in r]
+        self.assertEqual({r["facet_package"] for r in faceted}, {"prism.arch", "prism.qual"})
+        self.assertEqual({r["id"] for r in faceted}, set(standardsmodel.FACETS))
+        for r in faceted:
             for e in r["facet_entries"]:
                 self.assertTrue((repo.PROJECTS["api"] / "language" / r["facet_package"] / "entries" / f"{e}.toml").exists(), e)
 
@@ -647,6 +652,203 @@ class PrismModelTests(unittest.TestCase):
             self.assertTrue(set(schema["required"]) <= set(claim), claim["id"])
             self.assertTrue(set(claim) <= set(schema["properties"]), claim["id"])
             self.assertIn(claim["status"], schema["properties"]["status"]["enum"])
+
+
+class StandardsTests(unittest.TestCase):
+    """Standards.lex.tex names every external standard the implementation
+    realizes; the data the kernel decides over is checked here first, and the
+    machine-readable artifacts the standards call for are read back from a
+    rendered view."""
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.r30 import site
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.out = Path(cls.tmp.name) / "view"
+        site.render_view(cls.out)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def read_json(self, name):
+        import json
+        return json.loads((self.out / name).read_text())
+
+    def test_module_is_current_and_the_register_covers_the_declared_things(self):
+        from tools.r30 import standardsmodel as sm, presentationmodel as pm, apimodel
+        r = sm.check()
+        self.assertTrue(r["ok"], r["reason"])
+        self.assertEqual(sm.problems(), [])
+        rows = sm.rows()
+        self.assertEqual(len({x["id"] for x in rows}), len(rows))
+        declared = set(sm.declared_ids())
+        realizers = {x for st in rows for x in st["realizedBy"]}
+        for st in rows:
+            self.assertTrue(st["authority"].startswith("https://"), st["id"])
+            self.assertTrue(st["realizedBy"], st["id"])
+            self.assertTrue(set(st["realizedBy"]) <= declared, st["id"])
+            self.assertIn(st["coverage"], ("implemented", "planned"))
+        for x in [p["id"] for p in pm.PANELS] + [a["id"] for a in pm.ARTIFACTS] + [j["id"] for j in pm.JOURNEYS] + \
+                [row["name"] for row in apimodel.surface()] + sm.NAVIGATION + sm.VISUALIZATIONS:
+            self.assertIn(x, realizers, x)
+        by_id = {st["id"]: st for st in rows}
+        self.assertEqual(by_id["lean-4"]["version"], (repo.PROJECTS["api"] / "lean-toolchain").read_text().strip())
+        self.assertIn("language 1.2", by_id["lexlean"]["version"])
+        self.assertEqual(by_id["oci-distribution"]["coverage"], "planned")
+        text = sm.render()
+        self.assertIn("\\importmodule{Presentation}", text)
+        for name in ("Standard", "standards", "navigation", "visualizations", "declaredIds", "standardIdsDistinct", "everyStandardHasAuthority",
+                     "everyStandardRealized", "realizersDeclared", "panelsNameAStandard", "artifactsNameAStandard", "journeysNameAStandard",
+                     "commandsNameAStandard", "navigationNamesAStandard", "visualizationsNameAStandard", "leanToolchainPinned", "lexleanPinned"):
+            self.assertIn(f"name: {name},", text)
+        self.assertIn('(allMembers (Architecture::commandNames (Api::commands)) (standardRealizers (standards)))', text)
+        # a realizer nobody declares, and a command no standard names, are found before the kernel
+        broken = [dict(rows[0], realizedBy=["ghost"])] + rows[1:]
+        self.assertIn("standard iso-42010: realizer ghost is not declared", sm.problems(broken))
+        self.assertIn("command sig names no standard", sm.problems([r for r in rows if r["id"] != "openapi-3.1"]))
+        # the artifacts the standards call for are declared, rendered and cited by a verification step
+        evidence = {e for s in pm.STEPS if s["pole"] == "verification" for e in s["evidence"]}
+        for aid in ("standards", "standards-module", "openapi", "sitemap", "provenance", "jsonld", "attestations", "citation"):
+            self.assertIn(aid, {a["id"] for a in pm.ARTIFACTS}, aid)
+            self.assertIn(aid, evidence, aid)
+        from tools.r30 import schema
+        schema.validate(sm.STANDARDS_SCHEMA, self.read_json("standards.json"))
+        self.assertEqual([x["id"] for x in self.read_json("standards.json")], [x["id"] for x in rows])
+
+    def test_openapi_describes_the_command_surface(self):
+        from tools.r30 import apimodel, prismmodel, schema
+        doc = self.read_json("openapi.json")
+        self.assertEqual(doc["openapi"], "3.1.0")
+        self.assertEqual(doc["jsonSchemaDialect"], schema.DRAFT)
+        surface = apimodel.surface()
+        self.assertEqual(sorted(doc["paths"]), sorted("/" + "/".join(r["path"]) for r in surface))
+        ops = {op["operationId"]: (method, op) for item in doc["paths"].values() for method, op in item.items()}
+        self.assertEqual(set(ops), {r["name"] for r in surface})
+        self.assertEqual(ops["chain"][0], "get")
+        self.assertEqual(ops["api_sync"][0], "post")
+        self.assertEqual(ops["frontier_set"][1]["x-r30-mutates"], "register")
+        claim = ops["claim"][1]
+        self.assertEqual([(p["name"], p["required"]) for p in claim["parameters"]], [("id", True), ("related", False)])
+        self.assertEqual(claim["responses"]["200"]["content"]["application/json"]["schema"], {"$ref": "#/components/schemas/claim-result"})
+        self.assertIn("R301001", claim["responses"]["default"]["description"])
+        for name in schema.RESULTS:
+            self.assertIn(name, doc["components"]["schemas"])
+            self.assertNotIn("$defs", doc["components"]["schemas"][name])
+        self.assertEqual(doc["components"]["schemas"]["brief-result"]["properties"]["open"]["items"]["type"], "object")
+        self.assertIn("register", doc["components"]["schemas"])
+        for op_method, op in ops.values():
+            schema_id = op["x-r30-result-schema"]
+            self.assertEqual(schema_id, prismmodel.result_schema(op["operationId"]))
+        text = (self.out / "openapi.json").read_text()
+        self.assertNotIn('"$ref": "#/$defs', text)
+
+    def test_sitemap_lists_every_step_deep_link(self):
+        import xml.etree.ElementTree as ET
+        from tools.r30 import presentationmodel as pm, standardsmodel as sm
+        root = ET.fromstring((self.out / "sitemap.xml").read_text())
+        ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        locs = [u.find("s:loc", ns).text for u in root.findall("s:url", ns)]
+        self.assertEqual(locs[0], pm.PUBLICATION["url"])
+        self.assertEqual(locs[1:], [sm.step_url(s) for s in pm.STEPS])
+        for u in root.findall("s:url", ns):
+            self.assertRegex(u.find("s:lastmod", ns).text, r"^\d{4}-\d{2}-\d{2}$")
+        self.assertIn(f"Sitemap: {pm.PUBLICATION['url']}sitemap.xml", (self.out / "robots.txt").read_text())
+
+    def test_provenance_derives_every_proved_claim_from_its_theorem(self):
+        from tools.r30 import standardsmodel as sm
+        doc = self.read_json("provenance.jsonld")
+        self.assertIn("prov", doc["@context"])
+        by_id = {g["@id"]: g for g in doc["@graph"]}
+        claims = {c["id"]: c for c in frontier.list_claims()}
+        for cid, c in claims.items():
+            entity = by_id[f"r30:claim/{cid}"]
+            self.assertEqual(entity["r30:status"], c["status"])
+            if c["status"] == "proved":
+                self.assertEqual(entity["prov:wasDerivedFrom"], f"r30:lean/{c['lean']}")
+                self.assertEqual(entity["prov:wasAttributedTo"], "r30:agent/lean-kernel")
+                theorem = by_id[f"r30:lean/{c['lean']}"]
+                module = by_id[theorem["r30:module"]]
+                self.assertTrue(("r30:kappa" in module) != ("r30:kappaNote" in module), module["@id"])
+                if "r30:kappa" in module:
+                    self.assertRegex(module["r30:kappa"], r"^sha256:[0-9a-f]{64}$")
+                if c.get("lexeme"):
+                    self.assertTrue(entity["r30:attestedBy"].startswith("r30:activity/attestation/"))
+            else:
+                self.assertNotIn("prov:wasDerivedFrom", entity)
+        self.assertEqual(by_id["r30:agent/lean-kernel"]["r30:axiomsAllowed"], ["propext", "Quot.sound"])
+        # without receipts the labels are omitted and the document says so
+        without = sm.provenance(list(claims.values()), "abc", "now", {"id": "a" * 64}, kappas={})
+        self.assertTrue(without["r30:kappaLabels"].startswith("omitted"))
+        self.assertTrue(all("r30:kappaNote" in g for g in without["@graph"] if g.get("r30:kind") == "Lean module"))
+        self.assertEqual(sm.module_of("Rule30UOR.Interfaces.lhBandAgree_engine_hypotheses_unsat"), "Rule30UOR.Interfaces")
+
+    def test_schema_org_describes_every_step_the_paper_the_repository_and_the_register(self):
+        from tools.r30 import presentationmodel as pm, standardsmodel as sm
+        doc = self.read_json("schema.json")
+        self.assertEqual(doc["@context"], "https://schema.org")
+        types = {}
+        for g in doc["@graph"]:
+            types.setdefault(g["@type"], []).append(g)
+        self.assertEqual({g["name"] for g in types["ScholarlyArticle"]}, {sm.PAPER_TITLE})
+        self.assertEqual(types["SoftwareSourceCode"][0]["codeRepository"], pm.APPLICATION_RECORD["repository"])
+        self.assertEqual(len(types["Dataset"]), 1)
+        steps = [g for g in types["LearningResource"] if g["learningResourceType"] == "lesson step"]
+        self.assertEqual([g["@id"] for g in steps], [sm.step_url(s) for s in pm.STEPS])
+        self.assertEqual([g["teaches"] for g in steps], [s["goal"] for s in pm.STEPS])
+        lessons = [g for g in types["LearningResource"] if g["learningResourceType"] == "lesson"]
+        self.assertEqual([g["@id"].split("#")[1] for g in lessons], [j["id"] for j in pm.JOURNEYS])
+        for g in types["ScholarlyArticle"]:
+            self.assertEqual(len(g["associatedMedia"]), 3)
+            for m in g["associatedMedia"]:
+                self.assertRegex(m["sha256"], r"^[0-9a-f]{64}$")
+
+    def test_site_head_carries_json_ld_and_open_graph(self):
+        import json
+        from tools.r30 import presentationmodel as pm, site
+        html = (self.out / "index.html").read_text()
+        head = html[:html.index("</head>")]
+        self.assertIn('<script type="application/ld+json">', head)
+        start = head.index('<script type="application/ld+json">') + len('<script type="application/ld+json">')
+        graph = json.loads(head[start:head.index("</script>", start)].replace("<\\/", "</"))
+        self.assertEqual(graph, self.read_json("schema.json"))
+        for prop in ("og:title", "og:type", "og:url", "og:description", "og:image"):
+            self.assertIn(f'<meta property="{prop}" content="', head)
+        self.assertIn(f'<meta property="og:url" content="{pm.PUBLICATION["url"]}">', head)
+        self.assertIn('<link rel="sitemap" type="application/xml" href="sitemap.xml">', head)
+        # the body is untouched by the injection: the template's body is the rendered body
+        template = site.TEMPLATE.read_text()
+        self.assertEqual(html[html.index("<body>"):html.index(site.DATA_OPEN)], template[template.index("<body>"):template.index(site.DATA_OPEN)])
+        # a template without a head (the embed test's snippet) takes the data and ignores the head block
+        self.assertEqual(site.embed(f"<x>{site.DATA_OPEN}null</script></x>", {}, "<meta>"), f"<x>{site.DATA_OPEN}{{}}</script></x>")
+
+    def test_in_toto_statement_subjects_are_the_attested_documents(self):
+        from tools.r30 import site
+        doc = self.read_json("attestations.intoto.json")
+        self.assertEqual(doc["_type"], "https://in-toto.io/Statement/v1")
+        digests = {d["pdfSha256"] for d in site.documents()["documents"]}
+        self.assertTrue(digests <= {s["digest"]["sha256"] for s in doc["subject"]})
+        self.assertEqual({s["name"] for s in doc["subject"] if s["name"].endswith(".pdf")}, set(site.PDF_PACKAGE.values()))
+        self.assertEqual(doc["predicate"]["attestation"]["id"], site.attestation("paper")["id"])
+
+    def test_citation_file_names_the_author_the_title_and_the_repository(self):
+        from tools.r30 import standardsmodel as sm
+        text = (ROOT / "CITATION.cff").read_text()
+        self.assertEqual(text, (self.out / "CITATION.cff").read_text())
+        self.assertIn("cff-version: 1.2.0", text)
+        self.assertIn(f'title: "{sm.PAPER_TITLE}"', text)
+        self.assertIn("family-names: Flom", text)
+        self.assertIn("given-names: Alex", text)
+        self.assertIn(f'repository-code: "{sm.REPOSITORY}"', text)
+        self.assertNotIn("license:", text)
+
+    def test_spdx_expressions_are_well_formed(self):
+        import re, tomllib
+        from tools.r30 import prismmodel
+        pkg = tomllib.loads(prismmodel.stdlib_package())
+        for part in re.split(r"\s+(?:OR|AND|WITH)\s+", pkg["license"]):
+            self.assertRegex(part, r"^[A-Za-z0-9.+-]+$", pkg["license"])
+            self.assertTrue((repo.PROJECTS["api"] / "stdlib" / f"LICENSE-{part.split('-')[0].upper()}").exists(), part)
 
 
 class SiteTests(unittest.TestCase):
@@ -732,13 +934,13 @@ class SiteTests(unittest.TestCase):
         self.assertEqual((viewpoints["paper"]["stakeholder"], viewpoints["paper"]["concern"]), ("mathematician", "mathematics"))
         self.assertEqual((viewpoints["plain"]["stakeholder"], viewpoints["plain"]["concern"]), ("layperson", "plain-language"))
         panels = {p["id"]: p for p in pm.PANELS}
-        self.assertEqual({p for p, x in panels.items() if x["viewpoint"] == "paper"}, {"paper", "obligation", "refutations"})
-        self.assertEqual({p for p, x in panels.items() if x["viewpoint"] == "plain"}, {"picture", "explainer"})
+        self.assertEqual({p for p, x in panels.items() if x["viewpoint"] == "paper" and not p.startswith("viz-")}, {"paper", "obligation", "refutations"})
+        self.assertEqual({p for p, x in panels.items() if x["viewpoint"] == "plain" and not p.startswith("viz-")}, {"picture", "explainer"})
         journeys = {j["id"]: j for j in pm.JOURNEYS}
         self.assertEqual(journeys["mathematics"]["stakeholder"], "mathematician")
         # a journey's panels are its steps' panels in order of first use
-        self.assertEqual(journeys["mathematics"]["panels"], ["paper", "reduction-tree", "register", "obligation", "refutations", "verify"])
-        self.assertEqual((journeys["first-visit"]["stakeholder"], journeys["first-visit"]["panels"]),
+        self.assertEqual([p for p in journeys["mathematics"]["panels"] if not p.startswith("viz-")], ["paper", "reduction-tree", "register", "obligation", "refutations", "verify"])
+        self.assertEqual((journeys["first-visit"]["stakeholder"], [p for p in journeys["first-visit"]["panels"] if not p.startswith("viz-")]),
                          ("layperson", ["picture", "explainer", "reduction-tree", "register", "obligation", "verify"]))
         self.assertEqual(len({e["id"] for e in pm.EXPLAINER}), len(pm.EXPLAINER))
         for e in pm.EXPLAINER:
@@ -1072,15 +1274,19 @@ class AccessibilityTests(unittest.TestCase):
         self.assertIn('aria-label="Toggle dark or light theme"', html)
 
     def test_text_tokens_meet_aa_contrast_in_both_themes(self):
-        from tools.r30 import site
+        """The design model's pairs, measured here in floating point
+        independently of the kernel's integer arithmetic, in both themes as
+        the template's generated token block carries them."""
+        from tools.r30 import designmodel, site
         themes = self.tokens(site.TEMPLATE.read_text())
-        pairs = [("ink", "bg"), ("ink", "panel"), ("ink", "soft"), ("muted", "bg"), ("muted", "panel"), ("link", "bg"),
-                 ("link", "panel"), ("open", "open-bg"), ("open", "panel"), ("proved", "proved-bg"), ("proved", "panel"),
-                 ("refuted", "refuted-bg"), ("refuted", "panel"), ("retired", "retired-bg"), ("retired", "panel"),
-                 ("ink", "open-bg"), ("focus", "bg")]
+        for name in ("light", "dark"):
+            self.assertEqual(themes[name], {x["id"]: x[name] for x in designmodel.TOKENS}, name)
+        pairs = [(p["foreground"], p["background"], p["minimum"] / 10) for p in designmodel.PAIRS]
+        for needle in (("ink", "bg", 4.5), ("muted", "panel", 4.5), ("link", "soft", 4.5), ("accent-ink", "accent", 4.5), ("focus", "bg", 3.0)):
+            self.assertIn(needle, pairs)
         for name, t in themes.items():
-            for fg, bg in pairs:
-                self.assertGreaterEqual(self.contrast(t[fg], t[bg]), 4.5 if fg != "focus" else 3.0, f"{name}: {fg} on {bg}")
+            for fg, bg, minimum in pairs:
+                self.assertGreaterEqual(self.contrast(t[fg], t[bg]), minimum, f"{name}: {fg} on {bg}")
 
     def test_journeys_check_finds_a_step_without_a_panel(self):
         from tools.r30 import site, presentationmodel as pm
@@ -1172,8 +1378,9 @@ class PedagogyTests(unittest.TestCase):
         self.assertIn("journey reading: steps are not linked by next", pm.step_problems(claims, steps=unlinked, journeys=journeys))
         gap = copy.deepcopy(good)
         gap[2]["order"] = 7
-        self.assertIn("journey reading: orders are not 1..5", pm.step_problems(claims, steps=gap, journeys=journeys))
-        truncated = copy.deepcopy(good)[:-1]
+        self.assertIn(f"journey reading: orders are not 1..{len(good)}", pm.step_problems(claims, steps=gap, journeys=journeys))
+        # without its verification steps (the standards and the reproduction)
+        truncated = [s for s in copy.deepcopy(good) if s["pole"] != "verification"]
         truncated[-1]["next"] = ""
         problems = pm.step_problems(claims, steps=truncated, journeys=journeys)
         self.assertIn("journey reading: poles not covered: verification", problems)
@@ -1252,13 +1459,15 @@ class PedagogyTests(unittest.TestCase):
         from tools.r30 import site, presentationmodel as pm
         html = site.TEMPLATE.read_text()
         for needle in ('id="vantages"', 'id="stepbar"', 'id="switch"', "Switch vantage", 'id="progress"', 'id="step-title"', 'id="panel-body"',
-                       'id="detail-slot"', 'id="evidence"', 'id="stepnav"', 'window.addEventListener("hashchange"', 'rel="next"', 'rel="prev"',
+                       'id="detail-slot"', 'id="evidence"', 'id="nav-stepper"', 'window.addEventListener("hashchange"', 'rel="next"', 'rel="prev"',
                        'return "#" + encodeURIComponent(s.journey) + "/" + encodeURIComponent(s.id);', '"Step " + (n + 1) + " of " + total',
                        'String(list[i].order) === ref', 'data-journey='):
             self.assertIn(needle, html)
-        # every panel of the model has a renderer in the page
+        # every panel of the model has a renderer in the page; a visualization
+        # panel (viz-*) is drawn by window.r30viz[panelId] instead
         for panel in pm.PANELS:
-            self.assertIn(f'"{panel["id"]}": function', html, panel["id"])
+            if not panel["id"].startswith("viz-"):
+                self.assertIn(f'"{panel["id"]}": function', html, panel["id"])
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp) / "view"
             site.render_view(out)
@@ -1270,6 +1479,556 @@ class PedagogyTests(unittest.TestCase):
         self.assertEqual(data["verifications"], pm.VERIFICATIONS)
         self.assertEqual(data["pictureRows"], site.PICTURE_ROWS)
         self.assertIn(f'<title id="pt">Rule 30, rows 0 to {site.PICTURE_ROWS - 1}</title>', data["picture"])
+
+
+class NavigationTests(unittest.TestCase):
+    """The central navigation is an implementation of the WAI-ARIA Authoring
+    Practices, modeled in Presentation.lex.tex (Pattern, Navigation, NavItem),
+    decided by the kernel, mirrored by `nav_problems`, and rendered by the
+    site: the disclosure navigation menu, the breadcrumb, the stepper and the
+    register search as a combobox, with the landmarks of the HTML standard and
+    the WCAG 2.2 criteria the template is checked for."""
+
+    CHROME = Path.home() / ".cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell"
+
+    def test_navigation_is_modeled_and_the_theorems_are_stated(self):
+        from tools.r30 import presentationmodel as pm
+        self.assertEqual(pm.nav_problems(), [])
+        self.assertEqual([x["id"] for x in pm.NAVIGATIONS], ["nav-primary", "nav-breadcrumb", "nav-stepper"])
+        patterns = {x["id"]: x for x in pm.NAV_PATTERNS}
+        self.assertEqual(set(patterns), {"disclosure-navigation-menu", "breadcrumb", "stepper", "combobox"})
+        for x in pm.NAV_PATTERNS:
+            self.assertTrue(x["authority"].startswith("https://www.w3.org/WAI/ARIA/apg/"), x["id"])
+        top = [x for x in pm.NAV_ITEMS if x["navigation"] == "nav-primary" and x["parent"] == ""]
+        self.assertEqual([x["label"] for x in top], ["Vantages", "Register", "Modules", "Verify", "Standards"])
+        journeys = {j["id"] for j in pm.JOURNEYS}
+        self.assertEqual({x["target"] for x in pm.NAV_ITEMS if x["navigation"] == "nav-primary" and x["kind"] == "journey"}, journeys)
+        self.assertEqual({x["target"] for x in pm.NAV_ITEMS if x["navigation"] == "nav-stepper"}, journeys)
+        last = {[s for s in pm.STEPS if s["journey"] == j][-1]["id"] for j in journeys}
+        self.assertEqual({x["target"] for x in pm.NAV_ITEMS if x["parent"] == "nav-verify"}, last)
+        self.assertEqual([x["kind"] for x in pm.NAV_ITEMS if x["navigation"] == "nav-breadcrumb"], ["journey", "pole", "step"])
+        search = next(x for x in pm.NAV_ITEMS if x["id"] == "nav-search")
+        self.assertEqual((search["pattern"], next(s["panel"] for s in pm.STEPS if s["id"] == search["target"])), ("combobox", "register"))
+        self.assertIn("rd-map", {x["target"] for x in pm.NAV_ITEMS if x["parent"] == "nav-vantages"})
+        self.assertEqual(next(s["panel"] for s in pm.STEPS if s["id"] == "rd-map"), "sitemap")
+        text = pm.render_presentation()
+        for name in ("Pattern", "Navigation", "NavItem", "navPatterns", "navigations", "navItems", "navIdsDistinct", "navigationsNamePatterns",
+                     "navItemsNamePatterns", "navItemsInNavigations", "navItemParentsAreItems", "everyJourneyInPrimaryNavigation",
+                     "stepperListsEveryJourney", "navJourneyTargetsAreJourneys", "navStepTargetsAreSteps", "navArtifactTargetsAreArtifacts",
+                     "breadcrumbIsVantagePoleStep", "everyBreadcrumbResolves", "verifyReachableFromEveryJourney", "searchOpensTheRegister",
+                     "navGroupsOrdered", "navTopLevelOrdered"):
+            self.assertIn(f"name: {name},", text)
+        self.assertIn('(cons "journey" (cons "pole" (cons "step" (nil String))))', text)
+        self.assertIn('(navTargets "journey" "nav-primary" (navItems))', text)
+
+    def test_nav_problems_name_each_fault(self):
+        from tools.r30 import presentationmodel as pm
+        items = [dict(x) for x in pm.NAV_ITEMS]
+        bad = next(x for x in items if x["id"] == "nav-vantage-reading")
+        bad["target"] = "nowhere"
+        problems = pm.nav_problems(items=items)
+        self.assertIn("item nav-vantage-reading: journey nowhere is not a journey", problems)
+        self.assertIn("journey reading: not reachable from nav-primary", problems)
+        items = [dict(x) for x in pm.NAV_ITEMS]
+        next(x for x in items if x["id"] == "nav-search")["pattern"] = "menubar"
+        self.assertIn("item nav-search: pattern menubar is not declared", pm.nav_problems(items=items))
+        items = [x for x in pm.NAV_ITEMS if x["id"] != "nav-crumb-pole"]
+        self.assertIn("nav-breadcrumb: the trail is not vantage > pole > step", pm.nav_problems(items=items))
+        items = [dict(x) for x in pm.NAV_ITEMS]
+        next(x for x in items if x["id"] == "nav-verify-mathematics")["target"] = "ma-tree"
+        self.assertIn("journey mathematics: its verification step is not a target of nav-primary", pm.nav_problems(items=items))
+        items = [dict(x) for x in pm.NAV_ITEMS]
+        next(x for x in items if x["id"] == "nav-register-json")["order"] = 9
+        self.assertTrue(any(p.startswith("nav-primary: the orders under nav-register are not") for p in pm.nav_problems(items=items)))
+        from tools.r30 import site
+        self.assertEqual(site.check_journeys(), [])
+
+    def test_template_realizes_the_apg_patterns(self):
+        from tools.r30 import site
+        html = site.TEMPLATE.read_text()
+        # the disclosure navigation menu: a nav landmark, buttons with aria-expanded and aria-controls over hidden lists, Escape and the arrow keys
+        for needle in ('<nav id="nav-primary" class="primary" aria-label="Site">', '<ul id="nav-primary-list" class="menubar">',
+                       'aria-expanded="false" aria-controls="menu-', 'class="submenu" hidden>',
+                       'if (k === "Escape")', 'k === "ArrowRight"', 'k === "ArrowLeft"', 'k === "ArrowDown"', 'k === "ArrowUp"', 'k === "Home"', 'k === "End"',
+                       'function closeAll(except)', 'primary.addEventListener("focusout"', 'setOpen(owner, false); owner.focus();'):
+            self.assertIn(needle, html, needle)
+        # the breadcrumb: a labeled nav, an ordered list, the current step aria-current="page"
+        for needle in ('<nav id="nav-breadcrumb" class="breadcrumb" aria-label="Breadcrumb"><ol id="crumb"></ol></nav>', '" aria-current="page"><span class="k">'):
+            self.assertIn(needle, html, needle)
+        # the stepper: a labeled nav landmark, the step list, aria-current="step", a disclosure of the titles
+        for needle in ('<nav class="stepnav" id="nav-stepper" aria-label="Steps of this vantage"></nav>', '<ol id="stepper-list" class="progress',
+                       'aria-current="step"', 'id="stepper-toggle" aria-expanded="', 'aria-controls="stepper-list"', 'rel="prev"', 'rel="next"'):
+            self.assertIn(needle, html, needle)
+        # the register search: an editable combobox with a listbox popup and a live region, reachable from the primary navigation
+        for needle in ('role="combobox" aria-expanded="false" aria-controls="nav-q-list" aria-autocomplete="list" aria-haspopup="listbox"',
+                       'role="listbox" aria-label="Matching claims"', 'role="option" aria-selected=', 'aria-activedescendant', '<label for="nav-q">',
+                       'id="nav-q-status" class="live" role="status" aria-live="polite"'):
+            self.assertIn(needle, html, needle)
+        # landmarks of the HTML standard, one h1, the where-am-I, the site map, the visualization slot, consistent help
+        for needle in ('<header class="top">', '<main id="main"', '<aside class="evidence" id="evidence" aria-labelledby="evidence-title">', "<footer>",
+                       'id="whereami"', '"sitemap": function', '<div id="viz-slot" hidden></div>', 'window.r30viz', 'indexOf("viz-") === 0',
+                       'min-width: 24px; min-height: 24px', 'min-width: 320px', "@media (prefers-reduced-motion: reduce)", 'parts[2] && byId[parts[2]]'):
+            self.assertIn(needle, html, needle)
+        self.assertEqual(html.count("<h1>"), 1)
+        self.assertEqual(html.count("<h1"), 1)
+        # the inline script parses (node --check) when node is available
+        script = html[html.rindex("<script>") + len("<script>"):html.rindex("</script>")]
+        if shutil.which("node"):
+            with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+                f.write(script)
+            try:
+                r = subprocess.run(["node", "--check", f.name], capture_output=True, text=True)
+                self.assertEqual(r.returncode, 0, r.stderr)
+            finally:
+                Path(f.name).unlink()
+
+    def test_rendered_dom_has_the_apg_structure(self):
+        """With the cached headless chromium: at a deep link the page carries
+        five closed disclosures with aria-controls over hidden lists, one
+        combobox, a three-link breadcrumb ending in aria-current=page, one
+        current step, no duplicate id, one h1 and no heading that skips a
+        level; the home page hides the stepbar."""
+        if not self.CHROME.exists():
+            self.skipTest("no headless chromium")
+        import re
+        from html.parser import HTMLParser
+        from tools.r30 import site
+
+        class Tags(HTMLParser):
+            def __init__(self):
+                super().__init__(); self.rows = []; self.stack = []
+            def handle_starttag(self, tag, attrs):
+                a = dict(attrs); self.rows.append((tag, a, list(self.stack)))
+                if tag not in ("br", "img", "meta", "link", "input", "hr"):
+                    self.stack.append((tag, a.get("id")))
+            def handle_endtag(self, tag):
+                for i in range(len(self.stack) - 1, -1, -1):
+                    if self.stack[i][0] == tag:
+                        del self.stack[i:]; break
+
+        def dump(view, h):
+            r = subprocess.run([str(self.CHROME), "--headless", "--disable-gpu", "--no-sandbox", "--virtual-time-budget=3000", "--dump-dom",
+                                f"file://{view}/index.html{h}"], capture_output=True, text=True, timeout=120)
+            p = Tags(); p.feed(re.sub(r"<script.*?</script>", "", r.stdout, flags=re.S)); return p.rows
+
+        with tempfile.TemporaryDirectory() as tmp:
+            view = Path(tmp) / "view"
+            site.render_view(view)
+            for h, on_step in (("#mathematics/ma-tree", True), ("", False)):
+                rows = dump(view, h)
+                if not rows:
+                    self.skipTest("headless chromium produced no DOM")
+                ids = [a["id"] for _, a, _ in rows if "id" in a]
+                self.assertEqual(len(ids), len(set(ids)), h)
+                self.assertEqual(sum(1 for t, _, _ in rows if t == "h1"), 1, h)
+                hidden = {a.get("id") for _, a, _ in rows if "hidden" in a and a.get("id")}
+                levels = [int(t[1]) for t, a, anc in rows if re.fullmatch(r"h[1-6]", t) and "hidden" not in a and not any(i in hidden for _, i in anc)]
+                self.assertTrue(all(n <= p + 1 for p, n in zip(levels, levels[1:])), (h, levels))
+                btns = [a for t, a, anc in rows if t == "button" and "aria-controls" in a and any(i == "nav-primary" for _, i in anc)]
+                menus = {a["id"]: a for t, a, _ in rows if t == "ul" and a.get("class") == "submenu"}
+                self.assertEqual(len(btns), 5, h)
+                for b in btns:
+                    self.assertEqual(b["aria-expanded"], "false"); self.assertIn("hidden", menus[b["aria-controls"]])
+                self.assertEqual(sum(1 for t, a, _ in rows if t == "input" and a.get("role") == "combobox"), 1, h)
+                self.assertEqual(len([a for t, a, anc in rows if t == "a" and any(i == "menu-nav-verify" for _, i in anc)]), 6, h)
+                stepbar = next(a for _, a, _ in rows if a.get("id") == "stepbar")
+                if on_step:
+                    self.assertNotIn("hidden", stepbar)
+                    crumbs = [a for t, a, anc in rows if t == "a" and any(i == "nav-breadcrumb" for _, i in anc)]
+                    self.assertEqual((len(crumbs), crumbs[-1].get("aria-current")), (3, "page"))
+                    steps = [a for t, a, anc in rows if t == "a" and any(i == "stepper-list" for _, i in anc)]
+                    self.assertEqual(sum(1 for a in steps if a.get("aria-current") == "step"), 1)
+                else:
+                    self.assertIn("hidden", stepbar)
+
+
+class DesignTests(unittest.TestCase):
+    """The design system and the experience: tokens with decided WCAG 2.2
+    contrast (integer arithmetic over relative luminance), the scales and
+    motion, the landing, the standards, model and design panels, the evidence
+    cards, the loader contract of the visualizations and deep links,
+    modeled in Presentation.lex.tex and rendered by the site."""
+
+    CHROME = Path.home() / ".cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell"
+
+    def test_design_model_is_decided_and_its_problems_named(self):
+        from tools.r30 import designmodel as dm, presentationmodel as pm
+        self.assertEqual(dm.problems(pm.JOURNEYS, pm.OBLIGATION), [])
+        text = pm.render_presentation()
+        for name in ("Token", "ContrastPair", "TypeStep", "SpaceStep", "Motion", "Landing", "srgbLinear", "tokens", "contrastPairs",
+                     "typeScale", "spacing", "motion", "landing", "luminance", "meetsContrast") + tuple(dm.THEOREMS):
+            self.assertIn(f"name: {name},", text, name)
+        self.assertIn("(prim multiply", text)
+        # the kernel's integer luminance is WCAG's, to the table's rounding
+        for t in dm.TOKENS:
+            for mode in ("light", "dark"):
+                self.assertAlmostEqual(dm.luminance(t[mode]) / 1e10, AccessibilityTests.luminance(t[mode]), places=5)
+                self.assertIn(f"{mode}Luminance := {dm.luminance(t[mode])}", text)
+        self.assertEqual(len(dm.SRGB_LINEAR), 256)
+        self.assertEqual((dm.SRGB_LINEAR[0], dm.SRGB_LINEAR[255]), (0, 1000000))
+        # a failing pair, a bad minimum, a stray text token and slow motion are each named
+        old = [dict(x) for x in dm.TOKENS], [dict(x) for x in dm.PAIRS], [dict(x) for x in dm.MOTION]
+        def restore():
+            dm.TOKENS[:], dm.PAIRS[:], dm.MOTION[:] = old
+        self.addCleanup(restore)
+        next(x for x in dm.TOKENS if x["id"] == "muted")["light"] = "#b0b0b0"
+        dm.PAIRS[0]["minimum"] = 40
+        dm.TOKENS.append({"id": "ghost", "role": "text", "light": "#000000", "dark": "#ffffff", "statement": ""})
+        dm.MOTION[0]["reduced"] = 100
+        problems = dm.problems(pm.JOURNEYS, pm.OBLIGATION)
+        self.assertTrue(any(p.startswith("pair muted on bg (light)") for p in problems), problems)
+        self.assertIn("pair ink on bg: minimum 40 is not WCAG's for text", problems)
+        self.assertIn("token ghost: a text colour on no declared background", problems)
+        self.assertIn("motion quick: the reduced duration is not 0", problems)
+
+    def test_tokens_are_generated_into_the_template_and_published(self):
+        from tools.r30 import designmodel as dm, site
+        html = site.TEMPLATE.read_text()
+        self.assertIn(site.TOKENS_OPEN + dm.css() + site.TOKENS_CLOSE, html)
+        self.assertTrue(site.check_logo()["ok"])
+        self.assertNotEqual(site.with_tokens(html, "/* drifted */\n"), html)
+        css = dm.css()
+        for needle in ("--ink: #16181d;", "@media (prefers-color-scheme: dark)", ':root[data-theme="dark"]',
+                       "@media (prefers-reduced-motion: reduce) { :root { --motion-quick: 0ms;", "--space-target: 24px;", "--text-base: 1rem;"):
+            self.assertIn(needle, css)
+        # the stylesheet reads colours only through the tokens: no literal hex outside the generated block
+        import re
+        body = html[html.index(site.TOKENS_CLOSE):]
+        style = body[:body.index("</style>", len(site.TOKENS_CLOSE))]
+        self.assertEqual(re.findall(r"#[0-9a-fA-F]{6}\b", style), [])
+
+    def test_template_realizes_the_experience_and_the_loader_contract(self):
+        from tools.r30 import site, presentationmodel as pm
+        html = site.TEMPLATE.read_text()
+        for needle in (
+                # the landing: the question, what is proved, what is open, the triangle drawn row by row, the vantages
+                'id="hero-q"', 'id="hero-proved"', 'id="hero-open"', 'id="hero-triangle"', "function rule30Rows(count)", "animation-delay: calc(var(--motion-reveal) * var(--t))",
+                'id="replay"', 'data-journey=',
+                # the step: a transition on the motion token, a progress line, evidence as APG disclosures with the theorem in place
+                "#step.entering { animation: stepin var(--motion-step)", 'id="progressline"', 'class="ev-toggle" aria-expanded="false" aria-controls="',
+                "<dt>Lean name</dt>", "<dt>lexeme</dt>", "κ-label", 'role="status" aria-live="polite"',
+                # consistent help in the banner, the site map and the standards in the footer
+                'id="help"', 'id="foot-links"', 'id="foot-standards"',
+                # the panels of the experience
+                '"standards": function', '"model": function', '"design": function', 'role="graphics-document document"', 'role="graphics-symbol img"',
+                'data-model-pick=', 'data-std-filter=',
+                # the loader contract: window.r30viz[panelId](slot, viewData), a graceful placeholder otherwise
+                '<script id="r30-viz"></script>', 'window.r30viz = window.r30viz || {};', 'draw(viz, viewFor(step))', 'vizPlaceholder(viz, step, "")',
+                'class="viz-missing" data-missing="'):
+            self.assertIn(needle, html, needle)
+        self.assertLess(html.index('<script id="r30-viz">'), html.rindex("<script>"))
+        # the inlining: viz/*.js land in the hook, a closing script tag cannot escape it
+        inlined = site.with_viz(html, "window.r30viz['viz-x'] = function (slot, v) { slot.textContent = '<\\/script>'; };")
+        self.assertIn("window.r30viz['viz-x']", inlined)
+        self.assertEqual(site.with_viz("<p>no hook</p>", "x"), "<p>no hook</p>")
+        # the steps the experience adds are reachable from the pedagogy and the navigation
+        steps = {s["id"]: s for s in pm.STEPS}
+        self.assertEqual((steps["rd-standards"]["panel"], steps["sf-model"]["panel"], steps["sf-design"]["panel"]), ("standards", "model", "design"))
+        targets = {x["target"] for x in pm.NAV_ITEMS if x["navigation"] == "nav-primary"}
+        self.assertTrue({"rd-standards", "sf-model", "sf-design"} <= targets)
+
+    def test_rendered_pages_at_deep_links(self):
+        """With the cached headless chromium: the landing, a step with its
+        evidence cards, the standards, the model with a vantage selected by
+        the deep link, the design system, and a visualization panel through
+        the loader contract (a registered function and a missing one)."""
+        if not self.CHROME.exists():
+            self.skipTest("no headless chromium")
+        import re
+        from tools.r30 import site, standardsmodel, presentationmodel as pm
+
+        def dump(view, h):
+            r = subprocess.run([str(self.CHROME), "--headless", "--disable-gpu", "--no-sandbox", "--virtual-time-budget=3000", "--dump-dom",
+                                f"file://{view}/index.html{h}"], capture_output=True, text=True, timeout=120)
+            return re.sub(r"<script.*?</script>", "", r.stdout, flags=re.S)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            view = Path(tmp) / "view"
+            site.render_view(view)
+            home = dump(view, "")
+            if "<body" not in home:
+                self.skipTest("headless chromium produced no DOM (run without a ulimit)")
+            self.assertEqual(home.count('class="vantage"'), len(pm.JOURNEYS))
+            self.assertIn('aria-labelledby="hero-t hero-d"', home)
+            self.assertIn("aperiodic-compensation", home)
+            step = dump(view, "#mathematics/ma-edges")
+            ev = [s for s in pm.STEPS if s["id"] == "ma-edges"][0]["evidence"]
+            self.assertEqual(step.count('class="ev-toggle"'), len(ev))
+            self.assertIn('aria-current="page"', step)
+            std = dump(view, "#reading/rd-standards")
+            self.assertEqual(std.count('<div class="card" id="std-'), len(standardsmodel.rows()))
+            model = dump(view, "#stdlib-feedback/sf-model/mathematics")
+            self.assertIn('data-model-pick="mathematics" aria-pressed="true"', model)
+            self.assertIn("<h4>Real qualities</h4>", model)
+            design = dump(view, "#stdlib-feedback/sf-design")
+            from tools.r30 import designmodel as dm
+            self.assertEqual(design.count("4.5:1 ✓") + design.count("3.0:1 ✓"), len(dm.PAIRS))
+            # the loader contract, exercised with a stand-in visualization on a step that shows a viz-* panel
+            html = (view / "index.html").read_text()
+            start = html.index(site.DATA_OPEN) + len(site.DATA_OPEN)
+            import json
+            data = json.loads(html[start:html.index(site.DATA_CLOSE, start)].replace("<\\/", "</"))
+            data["panels"].append({"id": "viz-probe", "title": "Probe", "viewpoint": "plain", "artifact": "picture", "statement": "A probe."})
+            data["steps"][0]["panel"] = "viz-probe"
+            first = data["steps"][0]
+            probe = "window.r30viz['viz-probe'] = function (slot, v) { slot.innerHTML = '<p id=\"probe\">' + v.step.id + ' ' + v.register.length + '</p>'; };"
+            (view / "probe.html").write_text(site.with_viz(site.embed(html, data), probe))
+            (view / "missing.html").write_text(site.with_viz(site.embed(html, data), ""))
+            for name, needle in (("probe", f'<p id="probe">{first["id"]} {len(data["register"])}</p>'), ("missing", 'class="viz-missing" data-missing="viz-probe"')):
+                r = subprocess.run([str(self.CHROME), "--headless", "--disable-gpu", "--no-sandbox", "--virtual-time-budget=3000", "--dump-dom",
+                                    f"file://{view}/{name}.html#{first['journey']}/{first['id']}"], capture_output=True, text=True, timeout=120)
+                self.assertIn(needle, r.stdout, name)
+
+
+
+class VisualizationTests(unittest.TestCase):
+    """The visualizations (tools/r30/vizmodel.py): panels with the claims
+    they render, decided in Presentation.lex.tex, read by the Observer,
+    reachable as steps at the sensual-quality pole, published by `view
+    render`, computed in plain JavaScript that passes `node --check` and
+    reproduces the identities the panels check."""
+
+    VIZ = ["viz-triangle", "viz-tower", "viz-ledger", "viz-rays", "viz-defects", "viz-dyadic"]
+
+    def test_viz_panels_are_modeled_with_the_claims_they_render(self):
+        from tools.r30 import presentationmodel as pm, observermodel as om, standardsmodel, vizmodel
+        claims = {c["id"]: c for c in frontier.list_claims()}
+        proved = {i for i, c in claims.items() if c["status"] == "proved"}
+        self.assertEqual([p["id"] for p in vizmodel.VIZ_PANELS], self.VIZ)
+        self.assertEqual(self.VIZ, standardsmodel.VISUALIZATIONS)
+        self.assertEqual(vizmodel.problems(), [])
+        panels = {p["id"]: p for p in pm.PANELS}
+        for p in vizmodel.VIZ_PANELS:
+            self.assertIs(panels[p["id"]], p)
+            self.assertTrue(p["renders"], p["id"])
+            self.assertTrue(set(p["renders"]) <= proved, p["id"])
+            # the generated row is the declared row less what the register does not hold yet
+            self.assertEqual(p["renders"], [i for i in vizmodel.declared(p["id"]) if i in claims])
+            script = next(a for a in pm.ARTIFACTS if a["id"] == p["artifact"])
+            self.assertEqual(script["media"], "application/javascript")
+            self.assertTrue(script["path"].startswith("viz/") and script["source"].startswith("rule30-api/site/viz/"))
+            self.assertTrue((ROOT / script["source"]).exists(), script["source"])
+            self.assertEqual(om.rendered(p, list(claims.values())), [i for i in claims if i in set(p["renders"]) and i in proved])
+        self.assertEqual(vizmodel.declared("viz-tower"), ["antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame"])
+        self.assertEqual(vizmodel.declared("viz-triangle"), ["antidiagonal", "diagonal-halving", "edge-parity"])
+        self.assertEqual(vizmodel.declared("viz-ledger"), ["left-band", "three-diagonal-band", "edge-parity"])
+        self.assertEqual(vizmodel.declared("viz-rays"), ["kernel-law", "residue-dichotomy", "second-table"])
+        self.assertEqual(vizmodel.declared("viz-defects"), ["coupling-law", "left-defect-sourcing", "recurrent-central-collision"])
+        self.assertEqual(vizmodel.declared("viz-dyadic"), ["scale-free-rows", "dyadic-response-reduction"])
+        self.assertEqual([a["path"] for a in vizmodel.VIZ_ARTIFACTS][0], "viz/core.js")
+        # the Python decision names a bad row before the kernel does
+        import copy
+        bad = copy.deepcopy(vizmodel.VIZ_PANELS)
+        bad[1]["renders"] = []
+        bad[3]["renders"] = ["ghost-claim", pm.OBLIGATION]
+        saved = vizmodel.VIZ_PANELS[:]
+        try:
+            vizmodel.VIZ_PANELS[:] = bad
+            problems = vizmodel.problems(panels=pm.PANELS + bad)
+        finally:
+            vizmodel.VIZ_PANELS[:] = saved
+        self.assertIn("viz panel viz-tower renders no claim", problems)
+        self.assertIn("viz panel viz-rays renders ghost-claim, which is not a claim", problems)
+        self.assertIn(f"viz panel viz-rays renders {pm.OBLIGATION}, which is open, not proved", problems)
+        # the theorems, stated in Presentation
+        text = pm.render_presentation()
+        for name in ("VizPanel", "vizPanels", "vizRenders", "vizEachRenders", "vizAllProved", "vizPanelsArePanels", "vizPanelsAreSteps",
+                     "vizScriptsArePublished", "vizPanelsRender", "vizRendersAreClaims", "vizRendersAreProved"):
+            self.assertIn(f"name: {name},", text)
+        self.assertIn("(allMembers (vizRenders (vizPanels)) (Register::idsOf (Register::claims)))", text)
+        self.assertEqual((ROOT / "rule30-api/src/Presentation.lex.tex").read_text(), text)
+
+    def test_viz_steps_are_at_the_sensual_quality_pole_and_the_observer_reads_them(self):
+        from tools.r30 import presentationmodel as pm, observermodel as om, vizmodel
+        steps = [s for s in pm.STEPS if s["panel"] in self.VIZ]
+        self.assertEqual({s["panel"] for s in steps}, set(self.VIZ))
+        panels = {p["id"]: p for p in pm.PANELS}
+        for s in steps:
+            self.assertEqual(s["pole"], "sensual-quality", s["id"])
+            # the mathematician meets a visualization before its claims are introduced (that journey reads
+            # claims in dependency order), so there it cites the script and links the claims through `renders`
+            expected = [panels[s["panel"]]["artifact"]] + ([] if s["journey"] == "mathematics" else panels[s["panel"]]["renders"])
+            self.assertEqual(s["evidence"], expected, s["id"])
+        self.assertEqual({s["journey"] for s in steps}, {"first-visit", "mathematics", "reading", "prize-review"})
+        self.assertEqual([s["panel"] for s in steps if s["journey"] == "mathematics"], ["viz-tower", "viz-ledger", "viz-defects", "viz-rays", "viz-dyadic"])
+        # an anchor that a journey no longer has: the step goes after the last early-pole step
+        moved = vizmodel.with_viz_steps({"reading": [{"id": "x", "pole": "sensual-object"}, {"id": "y", "pole": "real-quality"}]})
+        self.assertEqual([s["id"] for s in moved["reading"]], ["x", "rd-triangle", "rd-tower", "y"])
+        quadruples = {q["sensualObject"]: q for q in om.data()["quadruples"]}
+        for s in steps:
+            q = quadruples[s["journey"]]
+            self.assertIn(s["panel"], q["sensualQualities"])
+            self.assertTrue(set(panels[s["panel"]]["renders"]) <= set(q["realQualities"]), s["id"])
+
+    def test_the_rendered_view_publishes_the_scripts_and_lists_them(self):
+        import json
+        from tools.r30 import site, presentationmodel as pm, vizmodel
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "view"
+            site.render_view(out)
+            for a in vizmodel.VIZ_ARTIFACTS:
+                self.assertEqual((out / a["path"]).read_text(), (ROOT / a["source"]).read_text(), a["path"])
+            html = (out / "index.html").read_text()
+            start = html.index(site.DATA_OPEN) + len(site.DATA_OPEN)
+            data = json.loads(html[start:html.index(site.DATA_CLOSE, start)].replace("<\\/", "</"))
+        listed = [a["path"] for a in data["artifacts"] if a["media"] == "application/javascript"]
+        self.assertEqual(listed, [a["path"] for a in vizmodel.VIZ_ARTIFACTS])
+        self.assertTrue({p["id"] for p in data["panels"]} >= set(self.VIZ))
+
+    def test_viz_scripts_are_plain_accessible_and_pass_node_check(self):
+        import shutil
+        import subprocess
+        from tools.r30 import vizmodel
+        scripts = [ROOT / a["source"] for a in vizmodel.VIZ_ARTIFACTS]
+        for path in scripts:
+            text = path.read_text().replace("http://www.w3.org/2000/svg", "")  # the SVG namespace is not a dependency
+            for forbidden in ("import(", "require(", "https://", "http://", "<script", "localStorage", "eval("):
+                self.assertNotIn(forbidden, text, f"{path.name} uses {forbidden}")
+            self.assertIn('"use strict"', text)
+        core = (ROOT / "rule30-api/site/viz/core.js").read_text()
+        for needle in ('role: "graphics-document"', '"aria-labelledby"', '"aria-describedby"', '"graphics-symbol"', 'matchMedia("(prefers-reduced-motion: reduce)")',
+                       '"aria-pressed"', 'el("label"', "focus-visible", "<pattern>", "var(--ink,", "y ^ ((y << 1n) | (y << 2n))", "coreVectors", "the verified values win"):
+            self.assertIn(needle, core)
+        for path in scripts[1:]:
+            text = path.read_text()
+            panel = "viz-" + path.stem
+            for needle in (f'window.r30viz["{panel}"] = function (slot, d)', "C.picture(", "C.checkNotice(d", '"aria-live": "polite"', "viz-summary", "C.frame(slot)", "C.legend("):
+                self.assertIn(needle, text, f"{path.name} lacks {needle}")
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node is not installed")
+        for path in scripts:
+            r = subprocess.run([node, "--check", str(path)], capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, f"{path.name}: {r.stderr}")
+
+    def test_viz_core_reproduces_the_rows_and_the_identities(self):
+        import json
+        import shutil
+        import subprocess
+        from tools.r30 import site
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node is not installed")
+        r = subprocess.run([node, str(ROOT / "scripts/tests/viz_check.js"), str(ROOT / "rule30-api/site/viz/core.js")],
+                           capture_output=True, text=True, timeout=120)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        out = json.loads(r.stdout)
+        rows = site.rule30_rows(520)
+        self.assertEqual(out["centers"], "".join(str(row[len(row) // 2]) for row in rows[:256]))
+        # rdiag j s = cell s (s - j): the words at their drawn lengths 1, 2, 2^(j-1)
+        for j, w in enumerate(out["words"]):
+            length = 1 if j == 0 else 2 if j == 1 else 2 ** (j - 1)
+            self.assertEqual(w, "".join(str(rows[s][2 * s - j]) if 2 * s >= j else "0" for s in range(length)), f"word {j}")
+        self.assertEqual(out["periods"], [1, 2, 2, 4, 8, 8, 16, 32, 32, 64, 64, 64, 64])
+        self.assertEqual(out["secondTable4"], "0001111001100000")
+        self.assertEqual(out["secondTable5"], "00011111110010010110001101011010")
+        self.assertTrue(out["frozenAgree"])
+        for key in ("selfCheck", "badHalving", "badAntidiagonal", "badMask", "badLucas", "badExposed", "badEight", "badThree", "badRowTerm",
+                    "badLaw", "badRuler", "badDyadic", "badDyadicRow", "badCoupling", "compareOk"):
+            self.assertEqual(out[key], [], key)
+        self.assertEqual(out["comparePlanted"], ["center 2"])
+
+
+class CoreModelTests(unittest.TestCase):
+    """Rule30Core.lex.tex is the automaton's computational core as executable
+    definitions with decided theorems, generated by coremodel.py; its Python
+    replica agrees with the known centers, with the main checkout's Lean
+    definitions (cell, row, rdiag, towerWord, trailingParity, rulerBackground)
+    and with the site's own rows; core-vectors.json is generated from the same
+    model, cross-checked against the decided literals, and published by the
+    view; the production roots are requested beside those of Api."""
+
+    def test_core_module_is_current_and_states_the_decided_theorems(self):
+        import tomllib
+        from tools.r30 import coremodel
+        r = coremodel.check()
+        self.assertTrue(r["ok"], r["reason"])
+        text = coremodel.MODULE.read_text()
+        self.assertEqual(coremodel.theorem_names(text), [t["name"] for t in coremodel.THEOREMS])
+        for name in ("rule", "walk", "step", "rows", "nth", "center", "rdiag", "rightRecursion", "twopow", "towerWord",
+                     "timeParity", "trailingParityFuel", "trailingParity", "rulerBackground", "knownCenters", "knownRuler"):
+            self.assertIn(f"name: {name},", text)
+        for root in coremodel.PRODUCTION_ROOTS:
+            self.assertIn(f"  name: {root},", text)
+        self.assertEqual(text.count("production: {effects: [allocation, overflow, recursion], targets: [rust-std]}"),
+                         len(coremodel.PRODUCTION_ROOTS))
+        self.assertTrue(all("proof: decide{}" in block for block in text.split("theorem{")[1:]))
+        self.assertEqual(coremodel.decided_literal("knownCenters", text), coremodel.KNOWN_CENTERS)
+        project = tomllib.loads((repo.PROJECTS["api"] / "lexlean.toml").read_text())
+        self.assertIn("src/Rule30Core.lex.tex", project["entrypoints"])
+
+    def test_replica_agrees_with_the_lean_definitions_and_the_site_rows(self):
+        from tools.r30 import coremodel, site
+        r = coremodel.REPLICA
+        self.assertEqual(r.centers(32), [1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0])
+        self.assertEqual(r.centers(32), coremodel.KNOWN_CENTERS)
+
+        # Core.lean: cell 0 p = (p = 0); cell (s+1) p = rule (cell s (p-1)) (cell s p) (cell s (p+1)),
+        # rule a b c = a XOR (b OR c); center t = cell t 0
+        def cell(t, p, memo={}):
+            if (t, p) not in memo:
+                memo[(t, p)] = int(p == 0) if t == 0 else cell(t - 1, p - 1) ^ (cell(t - 1, p) | cell(t - 1, p + 1))
+            return memo[(t, p)]
+        for t in range(40):
+            self.assertEqual(r.rows(t), [cell(t, p) for p in range(-t, t + 1)], t)
+        picture = site.rule30_rows(48)
+        for t in range(48):
+            self.assertEqual(r.rows(t), picture[t], t)
+        # Core.lean rdiag (the right-edge recursion) is the cell at position t - j
+        for t in range(12):
+            for j in range(t + 3):
+                self.assertEqual(r.right_recursion(j, t), r.rdiag(j, t), (j, t))
+                if j <= 2 * t:
+                    self.assertEqual(r.rdiag(j, t), cell(t, t - j), (j, t))
+        self.assertTrue(all(r.rdiag(1, t) == r.time_parity(t) for t in range(64)))
+        self.assertTrue(all(r.center(t) == r.tower_word(t, t) for t in range(64)))
+        self.assertTrue(all(r.tower_word(k + 2, s + 1) == r.tower_word(k + 2, s) ^ (r.tower_word(k + 1, s) | r.tower_word(k, s))
+                            for k in range(8) for s in range(256)))
+        self.assertTrue(all(r.rdiag(j, t + 2 ** j) == r.rdiag(j, t) for j in range(8) for t in range(2 ** j)))
+        self.assertTrue(all(r.rdiag(j, t + 2 ** (j - 1)) == r.rdiag(j, t) for j in range(2, 9) for t in range(2 ** j)))
+        # Ledger.lean trailingParity: the parity of the trailing ones
+        self.assertEqual([r.trailing_parity(t) for t in range(8)], [0, 1, 0, 0, 0, 1, 0, 1])
+        self.assertEqual(r.ruler_background(5), r.trailing_parity(3) ^ 0 ^ r.trailing_parity(1) ^ r.trailing_parity(0))
+
+    def test_vectors_are_generated_cross_checked_and_current(self):
+        import json
+        from tools.r30 import coremodel
+        v = json.loads(coremodel.VECTORS.read_text())
+        self.assertEqual(coremodel.VECTORS.read_text(), coremodel.vectors_json())
+        self.assertEqual((v["spec"], len(v["centers"]), len(v["towerWords"]), len(v["rulerBackground"])),
+                         ("r30/core-vectors/1", 256, 12, 512))
+        self.assertEqual([len(w) for w in v["towerWords"]], [2 ** j for j in range(12)])
+        self.assertEqual(v["centers"][:32], coremodel.KNOWN_CENTERS)
+        self.assertEqual(v["theorems"], coremodel.THEOREMS)
+        self.assertIsNone(v["browserTarget"])
+        self.assertEqual(v["crossCheck"]["recheckedOnVectors"], [t["name"] for t in coremodel.THEOREMS])
+        # a vector that contradicts a decided literal or identity is refused
+        bad = dict(v, centers=[1 - v["centers"][0]] + v["centers"][1:])
+        with self.assertRaises(ValueError):
+            coremodel.cross_check(bad)
+        words = [list(w) for w in v["towerWords"]]
+        words[5][3] ^= 1
+        with self.assertRaises(ValueError):
+            coremodel.cross_check(dict(v, towerWords=words))
+
+    def test_core_roots_are_requested_beside_the_api_roots_and_the_vectors_published(self):
+        import json
+        from tools.r30 import coremodel, production, presentationmodel as pm, site, standardsmodel
+        roots = {r["root"]: r for r in production.roots()}
+        for name in coremodel.PRODUCTION_ROOTS:
+            self.assertEqual(roots[f"{coremodel.LEAN_MODULE}.{name}"]["effects"], ["allocation", "overflow", "recursion"])
+        self.assertEqual(production.crate_name("rows", "core"), "rule30_api_core_rows")
+        req = json.loads(production.REQUEST.read_text())
+        self.assertIn(f"{coremodel.LEAN_MODULE}.center", [r["root"] for r in req["roots"]])
+        self.assertIn("Rule30Core", standardsmodel.MODULES)
+        artifacts = {a["id"]: a for a in pm.ARTIFACTS}
+        self.assertEqual((artifacts["core-vectors"]["path"], artifacts["core-vectors"]["source"]),
+                         ("core-vectors.json", str(coremodel.VECTORS.relative_to(repo.ROOT))))
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "view"
+            site.render_view(out)
+            self.assertEqual((out / "core-vectors.json").read_text(), coremodel.VECTORS.read_text())
+
 
 
 if __name__ == "__main__":

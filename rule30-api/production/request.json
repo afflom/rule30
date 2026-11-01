@@ -25,6 +25,97 @@
           "id": "rust-std"
         }
       ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_core_center",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Rule30Core.center",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_core_centers_from",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Rule30Core.centersFrom",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_core_rdiag",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Rule30Core.rdiag",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_core_rows",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Rule30Core.rows",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_core_ruler_background",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Rule30Core.rulerBackground",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_core_ruler_from",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Rule30Core.rulerFrom",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_core_tower_word",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Rule30Core.towerWord",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
     }
   ],
   "spec": "lexlean/production-request/1"

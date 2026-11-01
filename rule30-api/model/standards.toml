@@ -1,29 +1,269 @@
 spec = "prismpm/standards/1"
 
 [[standard]]
-id = "ISO-42010-2022"
-name = "ISO/IEC/IEEE 42010:2022"
-edition = "2022"
-reference = "https://www.iso.org/standard/74393.html"
-basis = "public-catalog"
-scope = "Architecture description conceptual foundations and view/viewpoint framework"
-provenance = "ISO/IEC/IEEE international standard catalog entry"
-interpretation = "The architecture of the proof effort is stakeholders, concerns, viewpoints and views on Foundation.Arch; every entry carries a stdlib entity and Architecture.lex.tex decides that the indices agree with the labels."
+id = "iso-42010"
+name = "ISO/IEC/IEEE 42010:2022, Architecture description"
+authority = "https://www.iso.org/standard/74393.html"
+version = "2022"
+scope = "Stakeholders, concerns, viewpoints and views of the proof effort on Foundation.Arch; every panel of the site is governed by a viewpoint."
+realized_by = ["Architecture", "architecture-module", "Presentation"]
+conformance = "bin/r30 verify api: everyConcernFramed, viewpointsFrameHeldConcerns, everyViewpointGovernsAView (Architecture), panelsGovernedByViewpoints (Presentation)"
+coverage_state = "implemented"
+release_scope = true
 facet_package = "prism.arch"
 facet_entries = ["arch-concern", "arch-model-kind", "arch-stakeholder", "arch-view", "arch-viewpoint"]
+
+[[standard]]
+id = "iso-25010"
+name = "ISO/IEC 25010:2023, Product quality model"
+authority = "https://www.iso.org/standard/78176.html"
+version = "2023"
+scope = "What an optimal implementation is here: characteristics, subcharacteristics, requirements and measures with thresholds on Foundation.Qual, each measure naming the command that reports it."
+realized_by = ["Architecture", "quality", "architecture-module", "api_check", "check", "choice_audit", "frontier_check", "gate", "verify", "view_render"]
+conformance = "bin/r30 verify api: everyRequirementMeasured, everyMeasureCommandExists (Architecture), publicationWithinBudget (Application)"
+coverage_state = "implemented"
+release_scope = true
+facet_package = "prism.qual"
+facet_entries = ["qual-characteristic", "qual-measure", "qual-requirement", "qual-subcharacteristic"]
+
+[[standard]]
+id = "wcag-2.2"
+name = "W3C WCAG 2.2, Web Content Accessibility Guidelines"
+authority = "https://www.w3.org/TR/WCAG22/"
+version = "2.2 (Recommendation, 2023-10-05)"
+scope = "The site at level AA: 4.5:1 text contrast in both themes, one visible focus ring, a skip link, reduced motion honoured, keyboard operation of every control and step."
+realized_by = ["site", "picture", "explainer", "reduction-tree", "register", "open-leaves", "paper", "obligation", "refutations", "interface-sheets", "modules", "quality", "sitemap", "verify", "standards", "model", "design", "viz-triangle", "viz-tower", "viz-ledger", "viz-rays", "viz-defects", "viz-dyadic", "nav-primary", "nav-breadcrumb", "nav-stepper"]
+conformance = "python3 -m unittest scripts.tests.test_r30.AccessibilityTests (contrast measured from the stylesheet, landmarks, focus, motion, keyboard)"
 coverage_state = "implemented"
 release_scope = true
 
 [[standard]]
-id = "ISO-25010-2023"
-name = "ISO/IEC 25010:2023"
-edition = "2023"
-reference = "https://www.iso.org/standard/78176.html"
-basis = "public-catalog"
-scope = "System and software product quality model"
-provenance = "ISO/IEC international standard catalog entry"
-interpretation = "What an optimal implementation is here: characteristics, subcharacteristics, requirements and measures with thresholds on Foundation.Qual, each measure naming the r30 command that reports it."
-facet_package = "prism.qual"
-facet_entries = ["qual-characteristic", "qual-measure", "qual-requirement", "qual-subcharacteristic"]
+id = "wai-aria-1.2"
+name = "W3C WAI-ARIA 1.2 and the ARIA Authoring Practices Guide"
+authority = "https://www.w3.org/TR/wai-aria-1.2/"
+version = "1.2 (Recommendation, 2023-06-06); APG patterns"
+scope = "The navigation of the site: the primary navigation, the breadcrumb and the stepper follow the APG patterns (roles, aria-current, arrow keys), the status region is live."
+realized_by = ["site", "nav-primary", "nav-breadcrumb", "nav-stepper"]
+conformance = "python3 -m unittest scripts.tests.test_r30.AccessibilityTests (role, aria-current, aria-pressed, role=status, arrow keys)"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "html-living-standard"
+name = "WHATWG HTML Living Standard"
+authority = "https://html.spec.whatwg.org/multipage/"
+version = "living standard"
+scope = "The page's landmarks (header, nav, main, footer), the one-document site with its data in a JSON script element and its metadata in the head."
+realized_by = ["site", "nav-primary", "nav-breadcrumb", "nav-stepper"]
+conformance = "python3 -m unittest scripts.tests.test_r30.AccessibilityTests.test_landmarks_focus_motion_and_keyboard"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "svg-2"
+name = "W3C SVG 2"
+authority = "https://www.w3.org/TR/SVG2/"
+version = "2 (Candidate Recommendation, 2018-10-04)"
+scope = "The Rule 30 picture, the logo and the visualizations are SVG documents with a title and a description, crisp cells, colours from the page's tokens."
+realized_by = ["picture", "logo", "viz-triangle", "viz-tower", "viz-ledger", "viz-rays", "viz-defects", "viz-dyadic"]
+conformance = "python3 -m unittest scripts.tests.test_r30.SiteTests.test_rule30_rows_and_logo (parsed as SVG, no script)"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "wai-aria-graphics-1.0"
+name = "W3C WAI-ARIA Graphics Module 1.0"
+authority = "https://www.w3.org/TR/graphics-aria-1.0/"
+version = "1.0 (Recommendation, 2018-10-02)"
+scope = "Every drawing carries role=img with aria-labelledby pointing at its title and description; the interactive visualizations use graphics-document and graphics-symbol."
+realized_by = ["picture", "logo", "viz-triangle", "viz-tower", "viz-ledger", "viz-rays", "viz-defects", "viz-dyadic"]
+conformance = "python3 -m unittest scripts.tests.test_r30.SiteTests.test_statements_picture_and_explainer_artifacts (role=img, aria-labelledby)"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "schema-org"
+name = "schema.org vocabulary (JSON-LD)"
+authority = "https://schema.org/"
+version = "current release (https://schema.org/docs/releases.html)"
+scope = "A LearningResource for every pedagogical step of every journey, the paper as ScholarlyArticle, the repository as SoftwareSourceCode, the register as Dataset, embedded in the page and published as schema.json."
+realized_by = ["jsonld", "site", "paper-pdf", "register-json", "readme", "prize-review", "research-session", "reading", "stdlib-feedback", "mathematics", "first-visit"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests.test_schema_org_describes_every_step_the_paper_the_repository_and_the_register"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "json-ld-1.1"
+name = "W3C JSON-LD 1.1"
+authority = "https://www.w3.org/TR/json-ld11/"
+version = "1.1 (Recommendation, 2020-07-16)"
+scope = "The serialization of the schema.org and PROV-O graphs: a @context, a @graph, ids under the published URL."
+realized_by = ["jsonld", "provenance"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests (both documents parse and carry @context and @graph)"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "prov-o"
+name = "W3C PROV-O, the PROV Ontology"
+authority = "https://www.w3.org/TR/prov-o/"
+version = "Recommendation, 2013-04-30"
+scope = "Provenance of every claim: a proved claim prov:wasDerivedFrom its Lean theorem and prov:wasAttributedTo the Lean kernel, attested by the paper's LexLean attestation and the module's kappa-label; the view prov:wasGeneratedBy the render of this commit under the view workflow."
+realized_by = ["provenance", "view-workflow", "view_render", "frontier_check", "kappa", "verify"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests.test_provenance_derives_every_proved_claim_from_its_theorem"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "json-schema-2020-12"
+name = "JSON Schema 2020-12"
+authority = "https://json-schema.org/draft/2020-12/schema"
+version = "2020-12"
+scope = "The closed schemas of register.json, the interface sheets, standards.json and the --json reports (rule30-api/schemas), validated by the tests and referenced from openapi.json."
+realized_by = ["register-json", "standards", "openapi", "api_check", "api_production", "brief", "chain", "claim", "frontier_list", "interface", "kappa", "status"]
+conformance = "python3 -m unittest scripts.tests.test_r30.ResultSchemaTests; bin/r30 api check"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "openapi-3.1"
+name = "OpenAPI Specification 3.1"
+authority = "https://spec.openapis.org/oas/v3.1.1"
+version = "3.1.1 (2024-10-24)"
+scope = "The r30 command surface as an API description: one path per command of the parser, its arguments as parameters, its responses from the result schemas, the same leaves as Api.lex.tex and the MCP tools."
+realized_by = ["openapi", "status", "brief", "chain", "api_sync", "api_check", "api_production", "view_render", "interface", "claim", "gate", "lexicon_search", "lexicon_show", "lexicon_packages", "sig", "mentions", "theorem_preview", "theorem_add", "theorem_remove", "define", "check", "unpublished", "selfcheck", "verify", "probe", "axioms", "choice_audit", "frontier_list", "frontier_add", "frontier_set", "frontier_check", "frontier_render", "commit", "module_list", "module_add", "module_build", "kappa", "experiment_list", "experiment_run"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests.test_openapi_describes_the_command_surface; bin/r30 api check (Api.lex.tex)"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "gherkin"
+name = "Gherkin (Cucumber reference)"
+authority = "https://cucumber.io/docs/gherkin/reference/"
+version = "Gherkin reference (current)"
+scope = "One scenario per conformance id in features/suites, tagged with the id and its honesty level, generated with the registers."
+realized_by = ["api_sync", "api_check"]
+conformance = "python3 -m unittest scripts.tests.test_r30.ConformanceTests; bin/r30 api check"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "citation-cff"
+name = "Citation File Format 1.2.0"
+authority = "https://citation-file-format.github.io/"
+version = "1.2.0"
+scope = "CITATION.cff at the repository root (and copied into the view): the author, the title of the paper, the repository and the published view."
+realized_by = ["citation", "readme"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests.test_citation_file_names_the_author_the_title_and_the_repository"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "spdx"
+name = "SPDX License Expressions (SPDX 2.3, ISO/IEC 5962:2021)"
+authority = "https://spdx.github.io/spdx-spec/v2.3/SPDX-license-expressions/"
+version = "2.3"
+scope = "License identifiers of the vendored sources: the prism-stdlib register carries the SPDX expression of its license files; the repository root has no license file yet, so the citation names none."
+realized_by = ["stdlib-package", "citation"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests.test_spdx_expressions_are_well_formed"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "sitemap-protocol"
+name = "Sitemaps XML protocol 0.9"
+authority = "https://www.sitemaps.org/protocol.html"
+version = "0.9"
+scope = "sitemap.xml: the page and the deep link of every step of every journey; robots.txt names the sitemap."
+realized_by = ["sitemap", "robots", "site", "prize-review", "research-session", "reading", "stdlib-feedback", "mathematics", "first-visit"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests.test_sitemap_lists_every_step_deep_link"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "open-graph"
+name = "The Open Graph protocol"
+authority = "https://ogp.me/"
+version = "ogp.me (2014-10)"
+scope = "og:title, og:type, og:url, og:description and og:image in the page's head, injected with the JSON-LD at render."
+realized_by = ["site", "logo"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests.test_site_head_carries_json_ld_and_open_graph"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "rfc-8785"
+name = "RFC 8785, JSON Canonicalization Scheme (JCS)"
+authority = "https://www.rfc-editor.org/rfc/rfc8785"
+version = "2020-06"
+scope = "The identity of the published JSON contracts (sha256-canonical-json in contracts.toml) and the canonical JSON of the LexLean attestations; uor-addr labels JSON under JCS."
+realized_by = ["register-json", "statements", "kappa"]
+conformance = "python3 -m unittest scripts.tests.test_kappa (the no-prefix rule on the JCS vector)"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "rivest-csexp"
+name = "Rivest, S-Expressions (canonical form, section 4.3)"
+authority = "https://people.csail.mit.edu/rivest/Sexp.txt"
+version = "draft-rivest-sexp-00, 1997-05-04"
+scope = "The kappa-label of a research module: the SHA-256 of the canonical S-expression of the declarations the kernel replays, as UOR-Foundation/uor-addr mints labels; the key of the replay receipts."
+realized_by = ["kappa", "provenance"]
+conformance = "python3 -m unittest scripts.tests.test_kappa; bin/r30 kappa <modules>"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "in-toto-statement-v1"
+name = "in-toto Attestation Framework, Statement v1"
+authority = "https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md"
+version = "v1"
+scope = "attestations.intoto.json: a Statement whose subjects are the attested PDFs and the paper's sources with their SHA-256 digests and whose predicate is the paper's LexLean attestation."
+realized_by = ["attestations", "pdf-manifest", "verify", "paper-pdf", "observations-pdf", "core-pdf"]
+conformance = "python3 -m unittest scripts.tests.test_r30.StandardsTests.test_in_toto_statement_subjects_are_the_attested_documents"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "oci-distribution"
+name = "OCI Distribution Specification"
+authority = "https://github.com/opencontainers/distribution-spec/blob/main/spec.md"
+version = "1.1.0 (2024-02)"
+scope = "Planned: a kappa-registry serving the replay receipts and certified bundles by content address; today only the kappa-labels that would address them exist."
+realized_by = ["kappa"]
+conformance = "bin/r30 kappa <modules> (the labels); no registry runs yet"
+coverage_state = "planned"
+release_scope = false
+
+[[standard]]
+id = "iana-media-types"
+name = "IANA Media Types (RFC 6838)"
+authority = "https://www.iana.org/assignments/media-types/"
+version = "RFC 6838 (2013-01)"
+scope = "Every published artifact declares its media type in Presentation.lex.tex; the contracts register declares the vendor types of the JSON reports."
+realized_by = ["chain", "register-json", "register-text", "frontier", "interfaces", "statements", "explainer", "picture", "paper-pdf", "observations-pdf", "core-pdf", "pdf-manifest", "api-module", "register-module", "architecture-module", "presentation-module", "application-module", "core-vectors", "frontier-module", "agents", "strategy", "readme", "logo", "standards", "standards-module", "openapi", "sitemap", "robots", "provenance", "jsonld", "attestations", "citation", "observer-module", "tokens", "site", "viz-core-js", "viz-triangle-js", "viz-tower-js", "viz-ledger-js", "viz-rays-js", "viz-defects-js", "viz-dyadic-js"]
+conformance = "bin/r30 verify api: artifactPathsDistinct, panelsReadArtifacts (Presentation); python3 -m unittest scripts.tests.test_r30.StandardsTests"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "lean-4"
+name = "Lean 4 (the kernel)"
+authority = "https://github.com/leanprover/lean4"
+version = "leanprover/lean4:v4.32.1"
+scope = "Every proved claim names a theorem the Lean kernel checked under propext and Quot.sound; the research modules are kernel-replayed with leanchecker."
+realized_by = ["Register", "axioms", "choice_audit", "frontier_check", "kappa", "module_build"]
+conformance = "bin/r30 frontier check; bin/r30 axioms <Lean names>; bin/r30 choice-audit"
+coverage_state = "implemented"
+release_scope = true
+
+[[standard]]
+id = "lexlean"
+name = "UOR-Foundation/LexLean (closed-lexicon LaTeX to Lean 4)"
+authority = "https://github.com/UOR-Foundation/LexLean"
+version = "0.4.0, language 1.2, compiler semantics 2a0617a23636"
+scope = "The authoring surface: the paper, the register and these API modules are LexLean modules verified by lexlean; the production roots export to certified Rust."
+realized_by = ["Api", "Register", "Architecture", "Presentation", "Application", "Observer", "Convert", "Standards", "Rule30Core", "verify", "check", "api_sync", "api_check", "api_production"]
+conformance = "bin/r30 verify api; bin/r30 check api; bin/r30 api check"
 coverage_state = "implemented"
 release_scope = true

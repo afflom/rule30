@@ -409,7 +409,7 @@ statement = "The right half-plane is a tower of words: every right diagonal rdia
 lean = "Rule30UOR.Antidiagonal.problem1_iff_antidiagonal"
 since = "2026-10-31"
 note = "Rule30UOR.Antidiagonal: center_eq_rdiag_self, centerPeriodic_iff_centerPer (Right.CenterPer is the anti-diagonal form), AntidiagonalAperiodic, problem1_iff_antidiagonal, problem1_of_antidiagonal, twopow_eq_pow, rdiag_add_twopow_mul, towerWord, rdiag_eq_towerWord, towerWord_mod, center_eq_towerWord, towerWord_step (unconditional, no modulus bookkeeping), towerWord_zero, towerWord_one, towerWord_succ_zero, towerWord_centerPeriodic, centerPeriodic_of_towerWord. Why this frame: the third proposal round showed nothing left of the center can refute a period (every center sequence is the center of a Rule-30-consistent half-plane), so the proof lives in the right half-plane, whose exact structure is this tower. Next: the recursion integrates to a prefix parity (the center at t is the parity of the OR of diagonals t-1 and t-2 over the first t times) and a word's period doubles exactly when the OR-word's weight over a period is odd (Jen's doubling law as a decided identity)."
-depends = ["recurrent-central-collision"]
+depends = ["problem1"]
 
 [[claim]]
 id = "diagonal-halving"

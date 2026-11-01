@@ -92,6 +92,51 @@ type_name = "Verification"
 target = "verifications"
 
 [[entity]]
+module = "Presentation"
+type_name = "Pattern"
+target = "navPatterns"
+
+[[entity]]
+module = "Presentation"
+type_name = "Navigation"
+target = "navigations"
+
+[[entity]]
+module = "Presentation"
+type_name = "NavItem"
+target = "navItems"
+
+[[entity]]
+module = "Presentation"
+type_name = "Token"
+target = "tokens"
+
+[[entity]]
+module = "Presentation"
+type_name = "ContrastPair"
+target = "contrastPairs"
+
+[[entity]]
+module = "Presentation"
+type_name = "TypeStep"
+target = "typeScale"
+
+[[entity]]
+module = "Presentation"
+type_name = "SpaceStep"
+target = "spacing"
+
+[[entity]]
+module = "Presentation"
+type_name = "Motion"
+target = "motion"
+
+[[entity]]
+module = "Presentation"
+type_name = "Landing"
+target = "landing"
+
+[[entity]]
 module = "Application"
 type_name = "StatusMark"
 target = "statusMarks"
@@ -115,3 +160,8 @@ target = "interactions"
 module = "Observer"
 type_name = "Facet"
 target = "facets"
+
+[[entity]]
+module = "Standards"
+type_name = "Standard"
+target = "standards"

@@ -106,6 +106,45 @@ structure{
   ]
 }
 
+structure{
+  name: Pattern,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: authority, type: String},
+    {name: statement, type: String}
+  ]
+}
+
+structure{
+  name: Navigation,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: label, type: String},
+    {name: pattern, type: String},
+    {name: statement, type: String}
+  ]
+}
+
+structure{
+  name: NavItem,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: navigation, type: String},
+    {name: parent, type: String},
+    {name: label, type: String},
+    {name: pattern, type: String},
+    {name: kind, type: String},
+    {name: target, type: String},
+    {name: order, type: Nat}
+  ]
+}
+
 definition{
   name: brand,
   parameters: [],
@@ -118,7 +157,7 @@ definition{
   name: artifacts,
   parameters: [],
   result: (List Artifact),
-  body: (cons (record Artifact {id := "chain", path := "chain.txt", mediaType := "text/plain", command := "chain"}) (cons (record Artifact {id := "register-json", path := "register.json", mediaType := "application/json", command := "frontier_list"}) (cons (record Artifact {id := "register-text", path := "register.txt", mediaType := "text/plain", command := "frontier_list"}) (cons (record Artifact {id := "frontier", path := "frontier.toml", mediaType := "application/toml", command := "view_render"}) (cons (record Artifact {id := "interfaces", path := "interfaces", mediaType := "text/markdown", command := "interface"}) (cons (record Artifact {id := "statements", path := "statements.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "explainer", path := "explainer.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "picture", path := "rule30.svg", mediaType := "image/svg+xml", command := "view_render"}) (cons (record Artifact {id := "paper-pdf", path := "Rule30-Paper.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "observations-pdf", path := "Rule30-Observations.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "core-pdf", path := "Rule30-Core.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "pdf-manifest", path := "pdf-manifest.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "api-module", path := "Api.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "register-module", path := "Register.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "architecture-module", path := "Architecture.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "presentation-module", path := "Presentation.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "application-module", path := "Application.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "frontier-module", path := "Frontier.lex.tex", mediaType := "text/x-lexlean", command := "frontier_render"}) (cons (record Artifact {id := "agents", path := "AGENTS.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "strategy", path := "STRATEGY.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "readme", path := "README.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "logo", path := "logo.svg", mediaType := "image/svg+xml", command := "api_sync"}) (cons (record Artifact {id := "site", path := "index.html", mediaType := "text/html", command := "view_render"}) (nil Artifact)))))))))))))))))))))))),
+  body: (prim append (cons (record Artifact {id := "chain", path := "chain.txt", mediaType := "text/plain", command := "chain"}) (cons (record Artifact {id := "register-json", path := "register.json", mediaType := "application/json", command := "frontier_list"}) (cons (record Artifact {id := "register-text", path := "register.txt", mediaType := "text/plain", command := "frontier_list"}) (cons (record Artifact {id := "frontier", path := "frontier.toml", mediaType := "application/toml", command := "view_render"}) (cons (record Artifact {id := "interfaces", path := "interfaces", mediaType := "text/markdown", command := "interface"}) (cons (record Artifact {id := "statements", path := "statements.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "explainer", path := "explainer.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "picture", path := "rule30.svg", mediaType := "image/svg+xml", command := "view_render"}) (cons (record Artifact {id := "paper-pdf", path := "Rule30-Paper.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "observations-pdf", path := "Rule30-Observations.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "core-pdf", path := "Rule30-Core.pdf", mediaType := "application/pdf", command := "view_render"}) (cons (record Artifact {id := "pdf-manifest", path := "pdf-manifest.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "api-module", path := "Api.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "register-module", path := "Register.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "architecture-module", path := "Architecture.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "presentation-module", path := "Presentation.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "application-module", path := "Application.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "core-vectors", path := "core-vectors.json", mediaType := "application/json", command := "api_sync"}) (cons (record Artifact {id := "frontier-module", path := "Frontier.lex.tex", mediaType := "text/x-lexlean", command := "frontier_render"}) (cons (record Artifact {id := "agents", path := "AGENTS.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "strategy", path := "STRATEGY.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "readme", path := "README.md", mediaType := "text/markdown", command := "view_render"}) (cons (record Artifact {id := "logo", path := "logo.svg", mediaType := "image/svg+xml", command := "api_sync"}) (cons (record Artifact {id := "standards", path := "standards.json", mediaType := "application/json", command := "view_render"}) (cons (record Artifact {id := "standards-module", path := "Standards.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "openapi", path := "openapi.json", mediaType := "application/vnd.oai.openapi+json", command := "view_render"}) (cons (record Artifact {id := "sitemap", path := "sitemap.xml", mediaType := "application/xml", command := "view_render"}) (cons (record Artifact {id := "robots", path := "robots.txt", mediaType := "text/plain", command := "view_render"}) (cons (record Artifact {id := "provenance", path := "provenance.jsonld", mediaType := "application/ld+json", command := "view_render"}) (cons (record Artifact {id := "jsonld", path := "schema.json", mediaType := "application/ld+json", command := "view_render"}) (cons (record Artifact {id := "attestations", path := "attestations.intoto.json", mediaType := "application/vnd.in-toto+json", command := "view_render"}) (cons (record Artifact {id := "citation", path := "CITATION.cff", mediaType := "application/yaml", command := "view_render"}) (cons (record Artifact {id := "observer-module", path := "Observer.lex.tex", mediaType := "text/x-lexlean", command := "api_sync"}) (cons (record Artifact {id := "tokens", path := "tokens.css", mediaType := "text/css", command := "view_render"}) (cons (record Artifact {id := "site", path := "index.html", mediaType := "text/html", command := "view_render"}) (cons (record Artifact {id := "viz-core-js", path := "viz/core.js", mediaType := "application/javascript", command := "view_render"}) (cons (record Artifact {id := "viz-triangle-js", path := "viz/triangle.js", mediaType := "application/javascript", command := "view_render"}) (cons (record Artifact {id := "viz-tower-js", path := "viz/tower.js", mediaType := "application/javascript", command := "view_render"}) (cons (record Artifact {id := "viz-ledger-js", path := "viz/ledger.js", mediaType := "application/javascript", command := "view_render"}) (cons (record Artifact {id := "viz-rays-js", path := "viz/rays.js", mediaType := "application/javascript", command := "view_render"}) (nil Artifact))))))))))))))))))))))))))))))))))))))))) (cons (record Artifact {id := "viz-defects-js", path := "viz/defects.js", mediaType := "application/javascript", command := "view_render"}) (cons (record Artifact {id := "viz-dyadic-js", path := "viz/dyadic.js", mediaType := "application/javascript", command := "view_render"}) (nil Artifact))) : (List Artifact)),
   axioms: []
 }
 
@@ -126,7 +165,7 @@ definition{
   name: panels,
   parameters: [],
   result: (List Panel),
-  body: (cons (record Panel {id := "picture", title := "Rule 30", viewpoint := "plain", artifact := "picture", statement := "The first rows of Rule 30 from a single black cell; the center column, the object of Problem 1, in amber."}) (cons (record Panel {id := "explainer", title := "In plain words", viewpoint := "plain", artifact := "explainer", statement := "What Rule 30 is, what Problem 1 asks, what is proved here, what remains open, what kernel-checked means, and how to read the rest."}) (cons (record Panel {id := "reduction-tree", title := "Reduction tree", viewpoint := "reduction", artifact := "chain", statement := "The register as a tree from problem1: proved arrows, open leaves, refuted routes."}) (cons (record Panel {id := "register", title := "Register", viewpoint := "evidence", artifact := "register-json", statement := "Every claim with its status, statement, Lean name and lexeme; filter by status, search by notion."}) (cons (record Panel {id := "open-leaves", title := "Open leaves", viewpoint := "reduction", artifact := "register-json", statement := "The open claims no open claim rests on: each is a sufficient condition for Problem 1 once the proved arrows above it are read upward."}) (cons (record Panel {id := "paper", title := "Paper", viewpoint := "paper", artifact := "statements", statement := "Every published theorem of Observations.lex.tex in the paper's controlled English with its Lean name, lexeme and section; the attested PDFs with their digests."}) (cons (record Panel {id := "obligation", title := "Open obligation", viewpoint := "paper", artifact := "register-json", statement := "The open claim every proved reduction ends at, in full: statement, Lean predicate, exact forms, the chain to Problem 1 and what rests on it."}) (cons (record Panel {id := "refutations", title := "Refuted routes", viewpoint := "paper", artifact := "register-json", statement := "Each refuted claim with the Lean refutation or the experiment that refutes it."}) (cons (record Panel {id := "interface-sheets", title := "Interface sheets", viewpoint := "comprehension", artifact := "interfaces", statement := "The labeled sheet of the selected claim: chain, notions, exact facts, handles."}) (cons (record Panel {id := "modules", title := "LexLean modules", viewpoint := "stdlib", artifact := "api-module", statement := "The command surface, the register, the architecture and this presentation as verified semantic modules."}) (cons (record Panel {id := "quality", title := "Quality", viewpoint := "optimal", artifact := "architecture-module", statement := "The measures of an optimal implementation, each with its threshold and the command that reports it."}) (cons (record Panel {id := "verify", title := "Verify it yourself", viewpoint := "evidence", artifact := "pdf-manifest", statement := "The commands that reproduce what this page shows, the attested PDFs with their digests, the attestation of the paper and the published artifacts; nothing here asks to be taken on trust."}) (nil Panel))))))))))))),
+  body: (cons (record Panel {id := "picture", title := "Rule 30", viewpoint := "plain", artifact := "picture", statement := "The first rows of Rule 30 from a single black cell; the center column, the object of Problem 1, in amber."}) (cons (record Panel {id := "explainer", title := "In plain words", viewpoint := "plain", artifact := "explainer", statement := "What Rule 30 is, what Problem 1 asks, what is proved here, what remains open, what kernel-checked means, and how to read the rest."}) (cons (record Panel {id := "reduction-tree", title := "Reduction tree", viewpoint := "reduction", artifact := "chain", statement := "The register as a tree from problem1: proved arrows, open leaves, refuted routes."}) (cons (record Panel {id := "register", title := "Register", viewpoint := "evidence", artifact := "register-json", statement := "Every claim with its status, statement, Lean name and lexeme; filter by status, search by notion."}) (cons (record Panel {id := "open-leaves", title := "Open leaves", viewpoint := "reduction", artifact := "register-json", statement := "The open claims no open claim rests on: each is a sufficient condition for Problem 1 once the proved arrows above it are read upward."}) (cons (record Panel {id := "paper", title := "Paper", viewpoint := "paper", artifact := "statements", statement := "Every published theorem of Observations.lex.tex in the paper's controlled English with its Lean name, lexeme and section; the attested PDFs with their digests."}) (cons (record Panel {id := "obligation", title := "Open obligation", viewpoint := "paper", artifact := "register-json", statement := "The open claim every proved reduction ends at, in full: statement, Lean predicate, exact forms, the chain to Problem 1 and what rests on it."}) (cons (record Panel {id := "refutations", title := "Refuted routes", viewpoint := "paper", artifact := "register-json", statement := "Each refuted claim with the Lean refutation or the experiment that refutes it."}) (cons (record Panel {id := "interface-sheets", title := "Interface sheets", viewpoint := "comprehension", artifact := "interfaces", statement := "The labeled sheet of the selected claim: chain, notions, exact facts, handles."}) (cons (record Panel {id := "modules", title := "LexLean modules", viewpoint := "stdlib", artifact := "api-module", statement := "The command surface, the register, the architecture and this presentation as verified semantic modules."}) (cons (record Panel {id := "quality", title := "Quality", viewpoint := "optimal", artifact := "architecture-module", statement := "The measures of an optimal implementation, each with its threshold and the command that reports it."}) (cons (record Panel {id := "sitemap", title := "Site map", viewpoint := "comprehension", artifact := "site", statement := "Every vantage of this site with every step of its lesson, in order and with its pole: the same list the published sitemap mirrors."}) (cons (record Panel {id := "verify", title := "Verify it yourself", viewpoint := "evidence", artifact := "pdf-manifest", statement := "The commands that reproduce what this page shows, the attested PDFs with their digests, the attestation of the paper and the published artifacts; nothing here asks to be taken on trust."}) (cons (record Panel {id := "standards", title := "Standards", viewpoint := "evidence", artifact := "standards", statement := "Every external standard this site and its API implement, with its authority, version, scope, what realizes it here and the check that confirms it: standards.json, rendered."}) (cons (record Panel {id := "model", title := "The model of the site", viewpoint := "stdlib", artifact := "observer-module", statement := "The application as PrismPM models it: stakeholders, viewpoints, journeys and panels, and the Observer's quadruple of each vantage (what it sees proved, what it shows, what stays withdrawn), drawn from the modules the kernel decides."}) (cons (record Panel {id := "design", title := "The design system", viewpoint := "comprehension", artifact := "tokens", statement := "The colour tokens of both themes with the contrast ratio of every pair the stylesheet uses, the type and spacing scales and the motion durations, as Presentation.lex.tex declares them and the kernel decides them against WCAG 2.2."}) (cons (record Panel {id := "viz-triangle", title := "The triangle, explored", viewpoint := "plain", artifact := "viz-triangle-js", statement := "Rule 30 from a single black cell, rows 0 to N (N up to 256), computed in your browser: move through it with the keyboard, read any cell as a time, a position and a bit, colour the right diagonals by their period (it always divides 2^(j-1)), and follow the center column, which is the diagonal t = j of that table."}) (cons (record Panel {id := "viz-tower", title := "The tower of words", viewpoint := "paper", artifact := "viz-tower-js", statement := "Each right diagonal rdiag j as one word of length 2^(j-1) (j up to 10), generated from the words above it by towerWord (k+2) (s+1) = towerWord (k+2) s XOR (towerWord (k+1) s OR towerWord k s), stepped on demand; the anti-diagonal towerWord t t = center t marked; the exposed masks (the left ends of black runs) toggled; and center t = not lucasSum (t-2) t recomputed from the masks with their Lucas weights."}) (cons (record Panel {id := "viz-ledger", title := "The center as rulers plus deep bulk", viewpoint := "plain", artifact := "viz-ledger-js", statement := "Aligned bit rows for t up to 512: the center, the ruler background with its four rulers separable, and the deep bulk interiorEightDiagonal computed from its own ledger, with center t = rulerBackground t XOR interiorEightDiagonal t checked at every t from 6 and the three-diagonal form from 2."}) (cons (record Panel {id := "viz-rays", title := "The kernel law on a dyadic ray", viewpoint := "paper", artifact := "viz-rays-js", statement := "Choose a scale k and a residue r: the times 2^k u + r, the frozen prefix, the second table over every residue (0, 0, 0, 1 on the first four), the late tail, and the kernel law checked at each u; the residues 1 and 2, where the ruler background moves with u, highlighted."}) (cons (record Panel {id := "viz-defects", title := "The lag-P defect field", viewpoint := "paper", artifact := "viz-defects-js", statement := "Choose a lag P (1 to 64): where row t and row t+P differ in the cone for t up to 256, the center, column -1 and column +1 highlighted, the collisions marked, and the coupling law checked wherever the center agrees at lag P."}) (cons (record Panel {id := "viz-dyadic", title := "The dyadic column", viewpoint := "paper", artifact := "viz-dyadic-js", statement := "The column center (2^j), the scale-free sequence dyadicRow m with its blocks [2^j, 2^(j+1)) and their parities, and center (2^(j+1)) = center (2^j) XOR blockParity j checked at every scale shown."}) (nil Panel))))))))))))))))))))))),
   axioms: []
 }
 
@@ -134,7 +173,7 @@ definition{
   name: journeys,
   parameters: [],
   result: (List Journey),
-  body: (cons (record Journey {id := "prize-review", stakeholder := "wolfram", panels := (cons "reduction-tree" (cons "open-leaves" (cons "register" (cons "obligation" (cons "verify" (nil String))))))}) (cons (record Journey {id := "research-session", stakeholder := "researcher", panels := (cons "open-leaves" (cons "interface-sheets" (cons "quality" (cons "register" (cons "obligation" (cons "refutations" (cons "verify" (nil String))))))))}) (cons (record Journey {id := "reading", stakeholder := "community", panels := (cons "reduction-tree" (cons "interface-sheets" (cons "register" (cons "obligation" (cons "verify" (nil String))))))}) (cons (record Journey {id := "stdlib-feedback", stakeholder := "uor-foundation", panels := (cons "modules" (cons "quality" (cons "register" (cons "obligation" (cons "verify" (nil String))))))}) (cons (record Journey {id := "mathematics", stakeholder := "mathematician", panels := (cons "paper" (cons "reduction-tree" (cons "register" (cons "obligation" (cons "refutations" (cons "verify" (nil String)))))))}) (cons (record Journey {id := "first-visit", stakeholder := "layperson", panels := (cons "picture" (cons "explainer" (cons "reduction-tree" (cons "register" (cons "obligation" (cons "verify" (nil String)))))))}) (nil Journey))))))),
+  body: (cons (record Journey {id := "prize-review", stakeholder := "wolfram", panels := (cons "reduction-tree" (cons "open-leaves" (cons "viz-tower" (cons "register" (cons "obligation" (cons "verify" (nil String)))))))}) (cons (record Journey {id := "research-session", stakeholder := "researcher", panels := (cons "open-leaves" (cons "interface-sheets" (cons "quality" (cons "register" (cons "obligation" (cons "refutations" (cons "verify" (nil String))))))))}) (cons (record Journey {id := "reading", stakeholder := "community", panels := (cons "reduction-tree" (cons "sitemap" (cons "interface-sheets" (cons "viz-triangle" (cons "viz-tower" (cons "register" (cons "obligation" (cons "standards" (cons "verify" (nil String))))))))))}) (cons (record Journey {id := "stdlib-feedback", stakeholder := "uor-foundation", panels := (cons "modules" (cons "model" (cons "quality" (cons "design" (cons "register" (cons "obligation" (cons "verify" (nil String))))))))}) (cons (record Journey {id := "mathematics", stakeholder := "mathematician", panels := (cons "paper" (cons "reduction-tree" (cons "viz-tower" (cons "viz-ledger" (cons "viz-defects" (cons "viz-rays" (cons "viz-dyadic" (cons "register" (cons "obligation" (cons "refutations" (cons "verify" (nil String))))))))))))}) (cons (record Journey {id := "first-visit", stakeholder := "layperson", panels := (cons "picture" (cons "explainer" (cons "reduction-tree" (cons "viz-triangle" (cons "viz-ledger" (cons "register" (cons "obligation" (cons "verify" (nil String)))))))))}) (nil Journey))))))),
   axioms: []
 }
 
@@ -166,7 +205,7 @@ definition{
   name: steps,
   parameters: [],
   result: (List Step),
-  body: (cons (record Step {id := "pr-tree", journey := "prize-review", order := 1, pole := "sensual-object", panel := "reduction-tree", title := "The proof as a tree", goal := "See the whole effort as one tree from problem1: every arrow a theorem, every leaf an open sufficient condition, every cross a refuted route.", text := "", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "pr-leaves"}) (cons (record Step {id := "pr-leaves", journey := "prize-review", order := 2, pole := "sensual-quality", panel := "open-leaves", title := "The open leaves", goal := "Read the open leaves: each is a statement that would close Problem 1 through the proved arrows above it, and nothing else is claimed.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))), next := "pr-register"}) (cons (record Step {id := "pr-register", journey := "prize-review", order := 3, pole := "real-quality", panel := "register", title := "Proved, against the kernel", goal := "Check that every proved claim names a Lean theorem, kernel-checked under propext and Quot.sound and published as a lexeme; filter the register by proved.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "register-module" (cons "frontier-module" (nil String)))), next := "pr-obligation"}) (cons (record Step {id := "pr-obligation", journey := "prize-review", order := 4, pole := "withdrawn", panel := "obligation", title := "The remaining obligation", goal := "Read the one open obligation every proved reduction ends at, EightAperiodic, stated as open with its chain to Problem 1.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "pr-verify"}) (cons (record Step {id := "pr-verify", journey := "prize-review", order := 5, pole := "verification", panel := "verify", title := "Reproduce the evidence", goal := "Reproduce the register's evidence: bin/r30 frontier check reads every proved claim against the kernel, bin/r30 axioms <Lean name> prints its axioms, the PDFs carry the attested paper.", text := "", paragraphs := (nil String), evidence := (cons "frontier" (cons "pdf-manifest" (cons "paper-pdf" (nil String)))), next := ""}) (cons (record Step {id := "rs-leaves", journey := "research-session", order := 1, pole := "sensual-object", panel := "open-leaves", title := "Where to work", goal := "Start where the register allows work: the open leaves, the only places a session works (bin/r30 brief lists them).", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "dyadic-response-aperiodic" (cons "dyadic-column-aperiodic" (cons "horizon-criterion" (nil String))))), next := "rs-sheet"}) (cons (record Step {id := "rs-sheet", journey := "research-session", order := 2, pole := "sensual-quality", panel := "interface-sheets", title := "The sheet of a leaf", goal := "Read a leaf's interface sheet: its chain to problem1, its notions, the exact facts about them and the handles to continue (bin/r30 interface <id>).", text := "", paragraphs := (nil String), evidence := (cons "interfaces" (cons "dyadic-response-aperiodic" (nil String))), next := "rs-quality"}) (cons (record Step {id := "rs-quality", journey := "research-session", order := 3, pole := "sensual-quality", panel := "quality", title := "The gate and its budget", goal := "Know the cost model: one module checks in seconds, the gate runs once per batch, CI only renders; each measure names its threshold and the command that reports it.", text := "", paragraphs := (nil String), evidence := (cons "architecture-module" (cons "agents" (nil String))), next := "rs-reductions"}) (cons (record Step {id := "rs-reductions", journey := "research-session", order := 4, pole := "real-quality", panel := "register", title := "Proved reductions: use them", goal := "Use the proved reductions as equivalent forms of the goal and do not re-derive them; the register is the plan and the kernel is the judge.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "interior-aperiodicity" (cons "three-diagonal-band" (cons "left-band" (cons "kernel-law" (nil String)))))), next := "rs-obligation"}) (cons (record Step {id := "rs-obligation", journey := "research-session", order := 5, pole := "withdrawn", panel := "obligation", title := "The obligation and its exact forms", goal := "Read the obligation in its exact forms (center t = rulerBackground t XOR interiorEightDiagonal t; the dyadic form) and what is known about it.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "rs-refuted"}) (cons (record Step {id := "rs-refuted", journey := "research-session", order := 6, pole := "withdrawn", panel := "refutations", title := "Routes not to walk again", goal := "Know the refuted routes and the refutation of each, so the session does not walk them again.", text := "", paragraphs := (nil String), evidence := (cons "route-a-band-discharge" (cons "route-b-reset-mismatch" (cons "route-c-rank-drop" (cons "band-engines" (cons "q-adic-descent" (nil String)))))), next := "rs-verify"}) (cons (record Step {id := "rs-verify", journey := "research-session", order := 7, pole := "verification", panel := "verify", title := "Run the loop", goal := "Run the loop: bin/r30 brief, bin/r30 claim <id>, check or verify one module, bin/r30 kappa for the replay labels, and commit through the gate once per batch.", text := "", paragraphs := (nil String), evidence := (cons "agents" (cons "strategy" (nil String))), next := ""}) (cons (record Step {id := "rd-tree", journey := "reading", order := 1, pole := "sensual-object", panel := "reduction-tree", title := "The map", goal := "Read the register as a tree: what rests on what, which arrows are theorems, which leaves are open.", text := "", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "rd-sheet"}) (cons (record Step {id := "rd-sheet", journey := "reading", order := 2, pole := "sensual-quality", panel := "interface-sheets", title := "A claim, labeled", goal := "Read a claim's labeled sheet, written to be reused: chain, notions, exact facts, handles.", text := "", paragraphs := (nil String), evidence := (cons "interfaces" (nil String)), next := "rd-register"}) (cons (record Step {id := "rd-register", journey := "reading", order := 3, pole := "real-quality", panel := "register", title := "Every claim with its evidence", goal := "Find any claim, its status, its Lean name and lexeme, what it rests on and what rests on it; search by notion.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "frontier" (nil String))), next := "rd-obligation"}) (cons (record Step {id := "rd-obligation", journey := "reading", order := 4, pole := "withdrawn", panel := "obligation", title := "What is open", goal := "Read the open obligation as open, with its Lean predicate, and the open leaves that would also close Problem 1.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "rd-verify"}) (cons (record Step {id := "rd-verify", journey := "reading", order := 5, pole := "verification", panel := "verify", title := "Reproduce the view", goal := "Reproduce the view: bin/r30 view render writes these artifacts, the PDFs and their digests are the attested paper, the modules are verified with lexlean.", text := "", paragraphs := (nil String), evidence := (cons "readme" (cons "pdf-manifest" (cons "site" (nil String)))), next := ""}) (cons (record Step {id := "sf-modules", journey := "stdlib-feedback", order := 1, pole := "sensual-object", panel := "modules", title := "The application as modules", goal := "Read the application as LexLean semantic modules on prism-stdlib: the command surface, the register, the architecture, the presentation, the application and the Observer, each data plus theorems the kernel decides.", text := "", paragraphs := (nil String), evidence := (cons "api-module" (cons "register-module" (cons "architecture-module" (cons "presentation-module" (cons "application-module" (nil String)))))), next := "sf-quality"}) (cons (record Step {id := "sf-quality", journey := "stdlib-feedback", order := 2, pole := "sensual-quality", panel := "quality", title := "What optimal means here", goal := "Read the quality model on Foundation.Qual: the measures, their thresholds and the command that reports each, the pedagogy among them.", text := "", paragraphs := (nil String), evidence := (cons "architecture-module" (nil String)), next := "sf-register"}) (cons (record Step {id := "sf-register", journey := "stdlib-feedback", order := 3, pole := "real-quality", panel := "register", title := "The register, decided", goal := "Read the register as Register.lex.tex restates it (every depends target a claim, every proved claim a Lean theorem, decided by the kernel): the same rows as register.json under its schema.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "register-module" (cons "frontier-module" (nil String)))), next := "sf-obligation"}) (cons (record Step {id := "sf-obligation", journey := "stdlib-feedback", order := 4, pole := "withdrawn", panel := "obligation", title := "The obligation as data", goal := "Read the obligation as Presentation names it and Application decides it to be an open claim (obligationIsOpen): the Observer's withdrawn core.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (cons "presentation-module" (cons "application-module" (nil String)))), next := "sf-verify"}) (cons (record Step {id := "sf-verify", journey := "stdlib-feedback", order := 5, pole := "verification", panel := "verify", title := "Drive the surface as a machine", goal := "Drive the same surface as a machine: every command is an MCP tool, --json reports validate against the published schemas, bin/r30 kappa prints the kappa-labels of the modules, bin/r30 api check refuses drift.", text := "", paragraphs := (nil String), evidence := (cons "api-module" (cons "readme" (nil String))), next := ""}) (cons (record Step {id := "ma-paper", journey := "mathematics", order := 1, pole := "sensual-object", panel := "paper", title := "The paper's vocabulary", goal := "Read the paper's statements as mathematics, the defining equations of the Notions section first: every later statement is in their terms.", text := "Observations.lex.tex is written in a controlled English whose every sentence compiles to a Lean statement and is closed by the lexeme of the theorem it states, so the sentence read here and the theorem the kernel checked are the same object. The Notions section publishes the defining equations of the host notions (the center, the carry ledger, the defects, the trinomial and trailing parities) as lemmas; the Lean name and the lexeme are under each statement, and the attested PDFs carry the same text.", paragraphs := (nil String), evidence := (cons "statements" (cons "paper-pdf" (cons "observations-pdf" (cons "core-pdf" (nil String))))), next := "ma-tree"}) (cons (record Step {id := "ma-tree", journey := "mathematics", order := 2, pole := "sensual-quality", panel := "reduction-tree", title := "The register as a tree", goal := "Read the register as a tree of reductions from problem1: a proved arrow is a theorem toward Problem 1, an open leaf a sufficient condition, a cross a refuted route; the open obligation is the node every exact decomposition ends at.", text := "problem1 is Ruliology.CellularAutomata.Rule30Prize.Problem1 as the prize kit states it. A proved child of a node is a kernel-checked implication or equivalence toward the node; an open leaf is a statement that would close Problem 1 through the proved arrows above it; aperiodic-compensation is the open statement the exact decompositions of the next steps end at, read in full once they have been read.", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "ma-edges"}) (cons (record Step {id := "ma-edges", journey := "mathematics", order := 3, pole := "real-quality", panel := "register", title := "The edge chain", goal := "Follow the exact decomposition of the center: ledger-diagonal, edge-interior-split, edge-diagonal-formula, edge-parity (center t = not (timeParity t XOR interiorDiagonal t)), hence Problem 1 iff InteriorAperiodic.", text := "The center is the complement of the diagonal of the carry ledger (centerPeriodic_iff_ledgerPeriodic); every elementary rule is a linear part plus a carry (rule_eq_linear_xor_carry), and the carry is the intersection of a row with its own translate. The two edge carries of every row, propagated through the trinomial triangle, contribute exactly the time parity (edgeDiagonal_eq_timeParity), so a period of the center is a period of the interior diagonal up to a factor 2 (problem1_iff_interiorAperiodic).", paragraphs := (nil String), evidence := (cons "ledger-diagonal" (cons "all-rules-facet" (cons "characteristic-one-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (nil String))))))))), next := "ma-bands"}) (cons (record Step {id := "ma-bands", journey := "mathematics", order := 4, pole := "real-quality", panel := "register", title := "Stripping the bands", goal := "Strip the regular bands exactly: center t = trailingParity (t-2) XOR interiorThreeDiagonal t (three-diagonal-band), center t = rulerBackground t XOR interiorEightDiagonal t (left-band), and the renormalization of the obligation on every dyadic class.", text := "The three inner diagonals of the regular side inject the period-doubling sequence trailingParity, which has no eventual period (trailingParity_not_periodic); the first diagonals of the chaotic side inject two further ruler terms. Under a center period the deep interior has no eventual period at all (not_threePeriodic_of_centerPeriodic) and the equation against the ruler reproduces itself with the same period on every class 2^k u + 1 (threeClass_of_centerPeriodic). Problem 1 iff ThreeAperiodic iff EightAperiodic.", paragraphs := (nil String), evidence := (cons "three-diagonal-band" (cons "dyadic-renormalization" (cons "left-band" (nil String)))), next := "ma-collisions"}) (cons (record Step {id := "ma-collisions", journey := "mathematics", order := 5, pole := "real-quality", panel := "register", title := "Collisions, coupling and certificates", goal := "Read the nonlinear facts: Problem 1 iff no recurrent central collision, the coupling law of the center defect, left-defect sourcing from column one, and the kernel-checked horizon certificate for T <= 512 and P <= 128.", text := "problem1_iff_noRecurrentCentralCollision is the band form, choice-free. center_periodic_of_coupling states a center period as the coupling leftDefect(t,1) XOR (not center t AND rightDefect(t,1)) at every later time. left_defect_sourced says where a left defect comes from. horizon_thirty_two is a finite certificate the kernel evaluated directly on the rows; the uniform horizon H(T, P) is the open claim horizon-criterion.", paragraphs := (nil String), evidence := (cons "recurrent-central-collision" (cons "coupling-law" (cons "left-defect-sourcing" (cons "horizon-certificate" (nil String))))), next := "ma-dyadic"}) (cons (record Step {id := "ma-dyadic", journey := "mathematics", order := 6, pole := "real-quality", panel := "register", title := "The dyadic side", goal := "Read the 2-kernel reductions: a periodic center has a finite 2-kernel, which forces dyadic self-similarity, the dilation and response reductions, the fixed sequence dyadicRow, and the freezing law of the linear transport (kernel-law).", text := "centerKernelFinite_of_centerPeriodic: under CenterPeriodic T P every subsequence t -> center(2^k t + r) is eventually periodic with a common period. From it: problem1_of_no_dyadic_self_similarity, problem1_of_dyadic_column_aperiodic, problem1_of_dilation_aperiodic_in_paper (any base), kappaCollapse_iff, problem1_of_dyadic_response_aperiodic; the trinomial kernel is dyadically stable (dyadicColumnAperiodic_iff_stable), each row's contribution to the dyadic column is scale-free (center_twopow_succ_eq), and rowTerm_kernel_law makes every 2-kernel sequence explicit up to the rows at or above the scale.", paragraphs := (nil String), evidence := (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "interior-kernel-reduction" (cons "stable-kernel" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "scale-free-rows" (cons "kernel-law" (nil String))))))))))), next := "ma-obligation"}) (cons (record Step {id := "ma-obligation", journey := "mathematics", order := 7, pole := "withdrawn", panel := "obligation", title := "The open obligation, exactly", goal := "State the obligation exactly, as open: EightAperiodic (Rule30UOR.LeftBand), its exact forms, its chain to Problem 1, what rests on it, and the open leaves that would also close Problem 1.", text := "Every proved reduction ends here. The bulk carries, with both edge bands stripped, are never the ruler background plus a periodic sequence. No closing argument is known; the register records what a periodic interior would have to satisfy (renormalization on every dyadic class, black-center absorption, the block tables of the freezing law) and calls none of it a proof. The other open leaves (horizon-criterion, center-infinite-kernel, no-dyadic-self-similarity, dyadic-column-aperiodic, some-base-dilation-aperiodic, dyadic-response-aperiodic) are each sufficient.", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))), next := "ma-refuted"}) (cons (record Step {id := "ma-refuted", journey := "mathematics", order := 8, pole := "withdrawn", panel := "refutations", title := "Refuted routes", goal := "Know the refuted routes toward the obligation and the Lean refutation or experiment behind each, so as not to walk them again.", text := "A refuted claim stays in the register with its refutation: a Lean theorem that shows the route arithmetic or vacuous (routes A, B and C in Rule30UOR.Routes, the engine hypothesis bundles, the observer q-rank), or a finite experiment on the seed (q-adic descent, front slack, the evaluation point, the first-failure 2-adic law).", paragraphs := (nil String), evidence := (cons "q-adic-descent" (cons "front-slack-descent" (cons "evaluation-point" (cons "gate-phase-opposition" (cons "band-engines" (cons "saturation-reexcitation" (cons "first-failure-2adic" (cons "route-a-band-discharge" (cons "route-c-rank-drop" (cons "route-b-reset-mismatch" (nil String))))))))))), next := "ma-verify"}) (cons (record Step {id := "ma-verify", journey := "mathematics", order := 9, pole := "verification", panel := "verify", title := "Verify the paper", goal := "Verify: the attestation identifiers of the paper, the PDF digests against pdf-manifest.json, bin/r30 claim <id> for any claim, bin/r30 axioms <Lean name> for its axioms.", text := "", paragraphs := (nil String), evidence := (cons "pdf-manifest" (cons "paper-pdf" (cons "statements" (cons "register-json" (nil String))))), next := ""}) (cons (record Step {id := "fv-picture", journey := "first-visit", order := 1, pole := "sensual-object", panel := "picture", title := "What Rule 30 is", goal := "Read the picture: how each row is made from the one above it, and which cells are the center column.", text := "", paragraphs := (cons "rule-30" (cons "the-picture" (nil String))), evidence := (cons "picture" (nil String)), next := "fv-problem"}) (cons (record Step {id := "fv-problem", journey := "first-visit", order := 2, pole := "sensual-object", panel := "explainer", title := "The center column and Problem 1", goal := "State Problem 1 in your own words: does the center column ever settle into a block that repeats forever? The claim to be proved is that it never does.", text := "", paragraphs := (cons "center-column" (cons "problem-1" (nil String))), evidence := (cons "explainer" (cons "problem1" (nil String))), next := "fv-kernel"}) (cons (record Step {id := "fv-kernel", journey := "first-visit", order := 3, pole := "sensual-object", panel := "explainer", title := "What kernel-checked means", goal := "Know what this site means by kernel-checked before any checked statement is shown.", text := "", paragraphs := (cons "kernel-checked" (nil String)), evidence := (cons "explainer" (nil String)), next := "fv-tree"}) (cons (record Step {id := "fv-tree", journey := "first-visit", order := 4, pole := "sensual-quality", panel := "reduction-tree", title := "The map of what is proved", goal := "Read the reduction tree: Problem 1 at the top, and under it the statements it has been reduced to; a check mark is a proved arrow.", text := "", paragraphs := (cons "what-is-proved" (cons "how-to-read" (nil String))), evidence := (cons "chain" (cons "problem1" (nil String))), next := "fv-reductions"}) (cons (record Step {id := "fv-reductions", journey := "first-visit", order := 5, pole := "sensual-quality", panel := "explainer", title := "The main proved arrows, in words", goal := "Say in plain words what the main proved arrows reduce Problem 1 to: collisions, edges, bands, a sparser sequence, and a checked certificate.", text := "", paragraphs := (cons "reduction-collisions" (cons "reduction-edges" (cons "reduction-bands" (cons "reduction-sparse" (cons "reduction-horizon" (nil String)))))), evidence := (cons "recurrent-central-collision" (cons "edge-parity" (cons "interior-aperiodicity" (cons "three-diagonal-band" (cons "left-band" (cons "periodic-finite-kernel" (cons "dilation-reduction" (cons "dyadic-response-reduction" (cons "horizon-certificate" (nil String)))))))))), next := "fv-register"}) (cons (record Step {id := "fv-register", journey := "first-visit", order := 6, pole := "real-quality", panel := "register", title := "The register", goal := "Find a proved statement in the register and see the name of the checked theorem behind it; filter by proved.", text := "", paragraphs := (cons "the-register" (nil String)), evidence := (cons "register-json" (cons "edge-parity" (cons "left-band" (nil String)))), next := "fv-open"}) (cons (record Step {id := "fv-open", journey := "first-visit", order := 7, pole := "withdrawn", panel := "obligation", title := "What remains open", goal := "State the one remaining obligation in plain words and recognize that it is open, not proved.", text := "", paragraphs := (cons "what-is-open" (nil String)), evidence := (cons "aperiodic-compensation" (nil String)), next := "fv-verify"}) (cons (record Step {id := "fv-verify", journey := "first-visit", order := 8, pole := "verification", panel := "verify", title := "What you can check yourself", goal := "Reproduce what this page shows: the briefing, one statement in full, and the paper as it was verified.", text := "", paragraphs := (cons "verify-yourself" (nil String)), evidence := (cons "paper-pdf" (cons "pdf-manifest" (cons "readme" (nil String)))), next := ""}) (nil Step)))))))))))))))))))))))))))))))))))))))),
+  body: (prim append (cons (record Step {id := "pr-tree", journey := "prize-review", order := 1, pole := "sensual-object", panel := "reduction-tree", title := "The proof as a tree", goal := "See the whole effort as one tree from problem1: every arrow a theorem, every leaf an open sufficient condition, every cross a refuted route.", text := "", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "pr-leaves"}) (cons (record Step {id := "pr-leaves", journey := "prize-review", order := 2, pole := "sensual-quality", panel := "open-leaves", title := "The open leaves", goal := "Read the open leaves: each is a statement that would close Problem 1 through the proved arrows above it, and nothing else is claimed.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))), next := "pr-antidiagonal"}) (cons (record Step {id := "pr-antidiagonal", journey := "prize-review", order := 3, pole := "sensual-quality", panel := "viz-tower", title := "Problem 1 as one diagonal of a table", goal := "See Problem 1 in the form with no free input: two constant words, one local recursion, and the anti-diagonal read; Problem 1 holds exactly when that anti-diagonal is not eventually periodic.", text := "", paragraphs := (nil String), evidence := (cons "viz-tower-js" (cons "antidiagonal" (cons "diagonal-halving" (cons "mask-transport" (cons "lucas-frame" (nil String)))))), next := "pr-register"}) (cons (record Step {id := "pr-register", journey := "prize-review", order := 4, pole := "real-quality", panel := "register", title := "Proved, against the kernel", goal := "Check that every proved claim names a Lean theorem, kernel-checked under propext and Quot.sound and published as a lexeme; filter the register by proved.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "register-module" (cons "frontier-module" (nil String)))), next := "pr-obligation"}) (cons (record Step {id := "pr-obligation", journey := "prize-review", order := 5, pole := "withdrawn", panel := "obligation", title := "The remaining obligation", goal := "Read the one open obligation every proved reduction ends at, EightAperiodic, stated as open with its chain to Problem 1.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "pr-verify"}) (cons (record Step {id := "pr-verify", journey := "prize-review", order := 6, pole := "verification", panel := "verify", title := "Reproduce the evidence", goal := "Reproduce the register's evidence: bin/r30 frontier check reads every proved claim against the kernel, bin/r30 axioms <Lean name> prints its axioms, the PDFs carry the attested paper, and provenance.jsonld records for every proved claim the theorem, the module and the attestation it rests on.", text := "", paragraphs := (nil String), evidence := (cons "frontier" (cons "pdf-manifest" (cons "paper-pdf" (cons "provenance" (cons "attestations" (nil String)))))), next := ""}) (cons (record Step {id := "rs-leaves", journey := "research-session", order := 1, pole := "sensual-object", panel := "open-leaves", title := "Where to work", goal := "Start where the register allows work: the open leaves, the only places a session works (bin/r30 brief lists them).", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "dyadic-response-aperiodic" (cons "dyadic-column-aperiodic" (cons "horizon-criterion" (nil String))))), next := "rs-sheet"}) (cons (record Step {id := "rs-sheet", journey := "research-session", order := 2, pole := "sensual-quality", panel := "interface-sheets", title := "The sheet of a leaf", goal := "Read a leaf's interface sheet: its chain to problem1, its notions, the exact facts about them and the handles to continue (bin/r30 interface <id>).", text := "", paragraphs := (nil String), evidence := (cons "interfaces" (cons "dyadic-response-aperiodic" (nil String))), next := "rs-quality"}) (cons (record Step {id := "rs-quality", journey := "research-session", order := 3, pole := "sensual-quality", panel := "quality", title := "The gate and its budget", goal := "Know the cost model: one module checks in seconds, the gate runs once per batch, CI only renders; each measure names its threshold and the command that reports it.", text := "", paragraphs := (nil String), evidence := (cons "architecture-module" (cons "agents" (nil String))), next := "rs-reductions"}) (cons (record Step {id := "rs-reductions", journey := "research-session", order := 4, pole := "real-quality", panel := "register", title := "Proved reductions: use them", goal := "Use the proved reductions as equivalent forms of the goal and do not re-derive them; the register is the plan and the kernel is the judge.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "interior-aperiodicity" (cons "three-diagonal-band" (cons "left-band" (cons "kernel-law" (nil String)))))), next := "rs-obligation"}) (cons (record Step {id := "rs-obligation", journey := "research-session", order := 5, pole := "withdrawn", panel := "obligation", title := "The obligation and its exact forms", goal := "Read the obligation in its exact forms (center t = rulerBackground t XOR interiorEightDiagonal t; the dyadic form) and what is known about it.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "rs-refuted"}) (cons (record Step {id := "rs-refuted", journey := "research-session", order := 6, pole := "withdrawn", panel := "refutations", title := "Routes not to walk again", goal := "Know the refuted routes and the refutation of each, so the session does not walk them again.", text := "", paragraphs := (nil String), evidence := (cons "route-a-band-discharge" (cons "route-b-reset-mismatch" (cons "route-c-rank-drop" (cons "band-engines" (cons "q-adic-descent" (nil String)))))), next := "rs-verify"}) (cons (record Step {id := "rs-verify", journey := "research-session", order := 7, pole := "verification", panel := "verify", title := "Run the loop", goal := "Run the loop: bin/r30 brief, bin/r30 claim <id>, check or verify one module, bin/r30 kappa for the replay labels, and commit through the gate once per batch.", text := "", paragraphs := (nil String), evidence := (cons "agents" (cons "strategy" (nil String))), next := ""}) (cons (record Step {id := "rd-tree", journey := "reading", order := 1, pole := "sensual-object", panel := "reduction-tree", title := "The map", goal := "Read the register as a tree: what rests on what, which arrows are theorems, which leaves are open.", text := "", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "rd-map"}) (cons (record Step {id := "rd-map", journey := "reading", order := 2, pole := "sensual-object", panel := "sitemap", title := "Every vantage and its steps", goal := "Find any lesson of this site: the six vantages, every step of each with its pole, and the step you are on; the primary navigation reaches the same places from every page.", text := "", paragraphs := (nil String), evidence := (cons "site" (cons "presentation-module" (nil String))), next := "rd-sheet"}) (cons (record Step {id := "rd-sheet", journey := "reading", order := 3, pole := "sensual-quality", panel := "interface-sheets", title := "A claim, labeled", goal := "Read a claim's labeled sheet, written to be reused: chain, notions, exact facts, handles.", text := "", paragraphs := (nil String), evidence := (cons "interfaces" (nil String)), next := "rd-triangle"}) (cons (record Step {id := "rd-triangle", journey := "reading", order := 4, pole := "sensual-quality", panel := "viz-triangle", title := "The pattern itself", goal := "Compute the triangle in the browser, read any cell, and see the right diagonals repeat with periods dividing 2^(j-1) while the center column, which meets each of them once, does not.", text := "", paragraphs := (nil String), evidence := (cons "viz-triangle-js" (cons "antidiagonal" (cons "diagonal-halving" (cons "edge-parity" (nil String))))), next := "rd-tower"}) (cons (record Step {id := "rd-tower", journey := "reading", order := 5, pole := "sensual-quality", panel := "viz-tower", title := "The tower behind the pattern", goal := "See the right diagonals as words generated by one local recursion, the center as the anti-diagonal, and the left ends of black runs as the masks the center is a weighted sum of.", text := "", paragraphs := (nil String), evidence := (cons "viz-tower-js" (cons "antidiagonal" (cons "diagonal-halving" (cons "mask-transport" (cons "lucas-frame" (nil String)))))), next := "rd-register"}) (cons (record Step {id := "rd-register", journey := "reading", order := 6, pole := "real-quality", panel := "register", title := "Every claim with its evidence", goal := "Find any claim, its status, its Lean name and lexeme, what it rests on and what rests on it; search by notion.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "frontier" (nil String))), next := "rd-obligation"}) (cons (record Step {id := "rd-obligation", journey := "reading", order := 7, pole := "withdrawn", panel := "obligation", title := "What is open", goal := "Read the open obligation as open, with its Lean predicate, and the open leaves that would also close Problem 1.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (nil String)), next := "rd-standards"}) (cons (record Step {id := "rd-standards", journey := "reading", order := 8, pole := "verification", panel := "standards", title := "The standards it implements", goal := "See which external standard governs each part of what you have read (accessibility, navigation, markup, graphics, metadata, provenance, citation), what realizes it here and the check that confirms it; filter by kind and follow any authority.", text := "", paragraphs := (nil String), evidence := (cons "standards" (cons "standards-module" (cons "site" (nil String)))), next := "rd-verify"}) (cons (record Step {id := "rd-verify", journey := "reading", order := 9, pole := "verification", panel := "verify", title := "Reproduce the view", goal := "Reproduce the view: bin/r30 view render writes these artifacts, the PDFs and their digests are the attested paper, the modules are verified with lexlean; the standards the view implements, with what realizes each and how it is checked, are standards.json, and the site is described for machines (schema.org, the sitemap) and for citation (CITATION.cff).", text := "", paragraphs := (nil String), evidence := (cons "readme" (cons "pdf-manifest" (cons "site" (cons "standards" (cons "jsonld" (cons "sitemap" (cons "citation" (nil String)))))))), next := ""}) (cons (record Step {id := "sf-modules", journey := "stdlib-feedback", order := 1, pole := "sensual-object", panel := "modules", title := "The application as modules", goal := "Read the application as LexLean semantic modules on prism-stdlib: the command surface, the register, the architecture, the presentation, the application, the Observer and the standards register, each data plus theorems the kernel decides.", text := "", paragraphs := (nil String), evidence := (cons "api-module" (cons "register-module" (cons "architecture-module" (cons "presentation-module" (cons "application-module" (cons "standards-module" (nil String))))))), next := "sf-model"}) (cons (record Step {id := "sf-model", journey := "stdlib-feedback", order := 2, pole := "sensual-object", panel := "model", title := "One model, many parts", goal := "Read the whole repository as one PrismPM model: each stakeholder holds concerns, each viewpoint frames one, each journey is a vantage through panels, and the Observer records for each vantage what it sees proved, what it shows and what stays withdrawn; select a vantage to trace its quadruple.", text := "", paragraphs := (nil String), evidence := (cons "observer-module" (cons "presentation-module" (cons "architecture-module" (cons "register-module" (nil String))))), next := "sf-quality"}) (cons (record Step {id := "sf-quality", journey := "stdlib-feedback", order := 3, pole := "sensual-quality", panel := "quality", title := "What optimal means here", goal := "Read the quality model on Foundation.Qual: the measures, their thresholds and the command that reports each, the pedagogy among them.", text := "", paragraphs := (nil String), evidence := (cons "architecture-module" (nil String)), next := "sf-design"}) (cons (record Step {id := "sf-design", journey := "stdlib-feedback", order := 4, pole := "sensual-quality", panel := "design", title := "The design system, decided", goal := "Read the design system as data: every colour token in both themes, every text and control pair with its contrast ratio, which the kernel decides in integer arithmetic over relative luminance against WCAG 2.2, and the type, spacing and motion scales the stylesheet is generated from.", text := "", paragraphs := (nil String), evidence := (cons "tokens" (cons "presentation-module" (nil String))), next := "sf-register"}) (cons (record Step {id := "sf-register", journey := "stdlib-feedback", order := 5, pole := "real-quality", panel := "register", title := "The register, decided", goal := "Read the register as Register.lex.tex restates it (every depends target a claim, every proved claim a Lean theorem, decided by the kernel): the same rows as register.json under its schema.", text := "", paragraphs := (nil String), evidence := (cons "register-json" (cons "register-module" (cons "frontier-module" (nil String)))), next := "sf-obligation"}) (cons (record Step {id := "sf-obligation", journey := "stdlib-feedback", order := 6, pole := "withdrawn", panel := "obligation", title := "The obligation as data", goal := "Read the obligation as Presentation names it and Application decides it to be an open claim (obligationIsOpen): the Observer's withdrawn core.", text := "", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (cons "presentation-module" (cons "application-module" (nil String)))), next := "sf-verify"}) (cons (record Step {id := "sf-verify", journey := "stdlib-feedback", order := 7, pole := "verification", panel := "verify", title := "Drive the surface as a machine", goal := "Drive the same surface as a machine: every command is an MCP tool and an operation of openapi.json, --json reports validate against the published schemas, bin/r30 kappa prints the kappa-labels of the modules, bin/r30 api check refuses drift; standards.json names every standard the surface implements and the check behind each.", text := "", paragraphs := (nil String), evidence := (cons "api-module" (cons "readme" (cons "openapi" (cons "standards" (cons "standards-module" (nil String)))))), next := ""}) (cons (record Step {id := "ma-paper", journey := "mathematics", order := 1, pole := "sensual-object", panel := "paper", title := "The paper's vocabulary", goal := "Read the paper's statements as mathematics, the defining equations of the Notions section first: every later statement is in their terms.", text := "Observations.lex.tex is written in a controlled English whose every sentence compiles to a Lean statement and is closed by the lexeme of the theorem it states, so the sentence read here and the theorem the kernel checked are the same object. The Notions section publishes the defining equations of the host notions (the center, the carry ledger, the defects, the trinomial and trailing parities) as lemmas; the Lean name and the lexeme are under each statement, and the attested PDFs carry the same text.", paragraphs := (nil String), evidence := (cons "statements" (cons "paper-pdf" (cons "observations-pdf" (cons "core-pdf" (nil String))))), next := "ma-tree"}) (cons (record Step {id := "ma-tree", journey := "mathematics", order := 2, pole := "sensual-quality", panel := "reduction-tree", title := "The register as a tree", goal := "Read the register as a tree of reductions from problem1: a proved arrow is a theorem toward Problem 1, an open leaf a sufficient condition, a cross a refuted route; the open obligation is the node every exact decomposition ends at.", text := "problem1 is Ruliology.CellularAutomata.Rule30Prize.Problem1 as the prize kit states it. A proved child of a node is a kernel-checked implication or equivalence toward the node; an open leaf is a statement that would close Problem 1 through the proved arrows above it; aperiodic-compensation is the open statement the exact decompositions of the next steps end at, read in full once they have been read.", paragraphs := (nil String), evidence := (cons "chain" (cons "problem1" (nil String))), next := "ma-tower"}) (cons (record Step {id := "ma-tower", journey := "mathematics", order := 3, pole := "sensual-quality", panel := "viz-tower", title := "The right half-plane as a tower of words", goal := "See every right diagonal as a word of length 2^(j-1) generated by one local recursion from the words 1 and the time parity, the center as the anti-diagonal towerWord t t, the exposed masks as the left ends of black runs, and center t = not lucasSum (t-2) t as a Lucas-weighted sum of those masks.", text := "rdiag j t = cell t (t-j) is bit j of row t, so the words are read off the rows; the recursion rebuilds each word from the two above it and the panel checks the two agree. Each word is periodic from time 0 with period dividing 2^(j-1) (diagonal-halving), Problem 1 is the statement that the anti-diagonal of this table is not eventually periodic (antidiagonal), the OR of the recursion splits into the previous word plus the exposed mask, whose transport gives center t = not maskTransport (t-2) t (mask-transport), and its weights are binomial parities C(t-1-j, t-2-i) mod 2 (lucas-frame). Choose t to see the cells that carry weight.", paragraphs := (nil String), evidence := (cons "viz-tower-js" (nil String)), next := "ma-ledger"}) (cons (record Step {id := "ma-ledger", journey := "mathematics", order := 4, pole := "sensual-quality", panel := "viz-ledger", title := "The center against the rulers", goal := "Read center t = rulerBackground t XOR interiorEightDiagonal t on aligned rows for t up to 512, the four rulers trailingParity (t-2), not timeParity t, trailingParity (t-4) and trailingParity ((t-4)/2) separable, the deep bulk computed from its own ledger.", text := "The deep bulk row is the diagonal of the ledger of the carries on right diagonals at least 3 and left diagonals at least 8, not derived from the identity, and the identity is checked at every t from 6: a finite replay in the browser of center_eq_rulerBackground_bxor_eight. The open obligation EightAperiodic is a statement about the bottom row against the middle one.", paragraphs := (nil String), evidence := (cons "viz-ledger-js" (nil String)), next := "ma-defects"}) (cons (record Step {id := "ma-defects", journey := "mathematics", order := 5, pole := "sensual-quality", panel := "viz-defects", title := "The defect field of a lag", goal := "Choose a lag P and see where row t and row t+P differ, the center, the gated column -1 and column +1, and the collisions; check the coupling law wherever the center agrees at lag P.", text := "The defect field is where the nonlinear facts bite: where the center agrees at lag P, the next center defect is leftDefect t 1 XOR (not center t AND rightDefect t 1), so a center period is exactly this coupling at every later time (coupling-law); every left defect is sourced from column +1 within its depth (left-defect-sourcing); and Problem 1 is the statement that no period admits recurrent collisions in the central band (recurrent-central-collision). The panel computes the field and marks every collision.", paragraphs := (nil String), evidence := (cons "viz-defects-js" (nil String)), next := "ma-rays"}) (cons (record Step {id := "ma-rays", journey := "mathematics", order := 6, pole := "sensual-quality", panel := "viz-rays", title := "The kernel law on a ray", goal := "Choose k and r and read center (2^k u + r) as the kernel law writes it: the frozen prefix, the ruler term trailingParity (u-1) AND secondPrefix k r, the late tail; see the second table over the residues and the residues 1 and 2 where the ruler background moves with u.", text := "frozenPrefix, secondPrefix and lateTail are read off the interior ledger exactly as Rule30UOR.KernelLaw defines them, and the law is checked at each u shown. The second table reads 0 on residues 0, 1, 2 and 1 on residue 3 at every scale (second-table), and the ruler background depends on u only on residues 1 and 2 (residue-dichotomy): there the late tail must supply the ruler, on residue 3 it must cancel the one the frozen rows carry.", paragraphs := (nil String), evidence := (cons "viz-rays-js" (nil String)), next := "ma-dyadic-column"}) (cons (record Step {id := "ma-dyadic-column", journey := "mathematics", order := 7, pole := "sensual-quality", panel := "viz-dyadic", title := "The dyadic column and its block parities", goal := "Read the dyadic column center (2^j) as the prefix parity of the scale-free sequence dyadicRow, block by block: center (2^(j+1)) = center (2^j) XOR blockParity j.", text := "dyadicRow m is row m's term at any dyadic time beyond m (scale-free-rows), the blocks [2^j, 2^(j+1)) are marked with their parities, and the step identity is checked at every scale shown. The open leaf dyadic-column-aperiodic says this column is not eventually periodic (dyadic-response-reduction carries it to Problem 1); the panel shows the column, it does not decide it.", paragraphs := (nil String), evidence := (cons "viz-dyadic-js" (nil String)), next := "ma-edges"}) (cons (record Step {id := "ma-edges", journey := "mathematics", order := 8, pole := "real-quality", panel := "register", title := "The edge chain", goal := "Follow the exact decomposition of the center: ledger-diagonal, edge-interior-split, edge-diagonal-formula, edge-parity (center t = not (timeParity t XOR interiorDiagonal t)), hence Problem 1 iff InteriorAperiodic.", text := "The center is the complement of the diagonal of the carry ledger (centerPeriodic_iff_ledgerPeriodic); every elementary rule is a linear part plus a carry (rule_eq_linear_xor_carry), and the carry is the intersection of a row with its own translate. The two edge carries of every row, propagated through the trinomial triangle, contribute exactly the time parity (edgeDiagonal_eq_timeParity), so a period of the center is a period of the interior diagonal up to a factor 2 (problem1_iff_interiorAperiodic).", paragraphs := (nil String), evidence := (cons "ledger-diagonal" (cons "all-rules-facet" (cons "characteristic-one-facet" (cons "edge-interior-split" (cons "edge-diagonal-formula" (cons "interior-diagonal-formula" (cons "edge-parity" (cons "interior-aperiodicity" (nil String))))))))), next := "ma-bands"}) (cons (record Step {id := "ma-bands", journey := "mathematics", order := 9, pole := "real-quality", panel := "register", title := "Stripping the bands", goal := "Strip the regular bands exactly: center t = trailingParity (t-2) XOR interiorThreeDiagonal t (three-diagonal-band), center t = rulerBackground t XOR interiorEightDiagonal t (left-band), and the renormalization of the obligation on every dyadic class.", text := "The three inner diagonals of the regular side inject the period-doubling sequence trailingParity, which has no eventual period (trailingParity_not_periodic); the first diagonals of the chaotic side inject two further ruler terms. Under a center period the deep interior has no eventual period at all (not_threePeriodic_of_centerPeriodic) and the equation against the ruler reproduces itself with the same period on every class 2^k u + 1 (threeClass_of_centerPeriodic). Problem 1 iff ThreeAperiodic iff EightAperiodic.", paragraphs := (nil String), evidence := (cons "three-diagonal-band" (cons "dyadic-renormalization" (cons "left-band" (nil String)))), next := "ma-collisions"}) (cons (record Step {id := "ma-collisions", journey := "mathematics", order := 10, pole := "real-quality", panel := "register", title := "Collisions, coupling and certificates", goal := "Read the nonlinear facts: Problem 1 iff no recurrent central collision, the coupling law of the center defect, left-defect sourcing from column one, and the kernel-checked horizon certificate for T <= 512 and P <= 128.", text := "problem1_iff_noRecurrentCentralCollision is the band form, choice-free. center_periodic_of_coupling states a center period as the coupling leftDefect(t,1) XOR (not center t AND rightDefect(t,1)) at every later time. left_defect_sourced says where a left defect comes from. horizon_thirty_two is a finite certificate the kernel evaluated directly on the rows; the uniform horizon H(T, P) is the open claim horizon-criterion.", paragraphs := (nil String), evidence := (cons "recurrent-central-collision" (cons "coupling-law" (cons "left-defect-sourcing" (cons "horizon-certificate" (nil String))))), next := "ma-dyadic"}) (cons (record Step {id := "ma-dyadic", journey := "mathematics", order := 11, pole := "real-quality", panel := "register", title := "The dyadic side", goal := "Read the 2-kernel reductions: a periodic center has a finite 2-kernel, which forces dyadic self-similarity, the dilation and response reductions, the fixed sequence dyadicRow, and the freezing law of the linear transport (kernel-law).", text := "centerKernelFinite_of_centerPeriodic: under CenterPeriodic T P every subsequence t -> center(2^k t + r) is eventually periodic with a common period. From it: problem1_of_no_dyadic_self_similarity, problem1_of_dyadic_column_aperiodic, problem1_of_dilation_aperiodic_in_paper (any base), kappaCollapse_iff, problem1_of_dyadic_response_aperiodic; the trinomial kernel is dyadically stable (dyadicColumnAperiodic_iff_stable), each row's contribution to the dyadic column is scale-free (center_twopow_succ_eq), and rowTerm_kernel_law makes every 2-kernel sequence explicit up to the rows at or above the scale.", paragraphs := (nil String), evidence := (cons "periodic-finite-kernel" (cons "kernel-self-similarity" (cons "dilation-reduction" (cons "base-generic-reduction" (cons "interior-kernel-reduction" (cons "stable-kernel" (cons "kappa-collapse" (cons "dyadic-response-reduction" (cons "scale-free-rows" (cons "kernel-law" (nil String))))))))))), next := "ma-obligation"}) (nil Step))))))))))))))))))))))))))))))))))))))))) (cons (record Step {id := "ma-obligation", journey := "mathematics", order := 12, pole := "withdrawn", panel := "obligation", title := "The open obligation, exactly", goal := "State the obligation exactly, as open: EightAperiodic (Rule30UOR.LeftBand), its exact forms, its chain to Problem 1, what rests on it, and the open leaves that would also close Problem 1.", text := "Every proved reduction ends here. The bulk carries, with both edge bands stripped, are never the ruler background plus a periodic sequence. No closing argument is known; the register records what a periodic interior would have to satisfy (renormalization on every dyadic class, black-center absorption, the block tables of the freezing law) and calls none of it a proof. The other open leaves (horizon-criterion, center-infinite-kernel, no-dyadic-self-similarity, dyadic-column-aperiodic, some-base-dilation-aperiodic, dyadic-response-aperiodic) are each sufficient.", paragraphs := (nil String), evidence := (cons "aperiodic-compensation" (cons "horizon-criterion" (cons "center-infinite-kernel" (cons "no-dyadic-self-similarity" (cons "dyadic-column-aperiodic" (cons "some-base-dilation-aperiodic" (cons "dyadic-response-aperiodic" (nil String)))))))), next := "ma-refuted"}) (cons (record Step {id := "ma-refuted", journey := "mathematics", order := 13, pole := "withdrawn", panel := "refutations", title := "Refuted routes", goal := "Know the refuted routes toward the obligation and the Lean refutation or experiment behind each, so as not to walk them again.", text := "A refuted claim stays in the register with its refutation: a Lean theorem that shows the route arithmetic or vacuous (routes A, B and C in Rule30UOR.Routes, the engine hypothesis bundles, the observer q-rank), or a finite experiment on the seed (q-adic descent, front slack, the evaluation point, the first-failure 2-adic law).", paragraphs := (nil String), evidence := (cons "q-adic-descent" (cons "front-slack-descent" (cons "evaluation-point" (cons "gate-phase-opposition" (cons "band-engines" (cons "saturation-reexcitation" (cons "first-failure-2adic" (cons "route-a-band-discharge" (cons "route-c-rank-drop" (cons "route-b-reset-mismatch" (nil String))))))))))), next := "ma-verify"}) (cons (record Step {id := "ma-verify", journey := "mathematics", order := 14, pole := "verification", panel := "verify", title := "Verify the paper", goal := "Verify: the attestation identifiers of the paper, the PDF digests against pdf-manifest.json (also an in-toto statement), the provenance of every proved claim (PROV-O: theorem, module, attestation), bin/r30 claim <id> for any claim, bin/r30 axioms <Lean name> for its axioms; cite the paper from CITATION.cff.", text := "", paragraphs := (nil String), evidence := (cons "pdf-manifest" (cons "paper-pdf" (cons "statements" (cons "register-json" (cons "attestations" (cons "provenance" (cons "citation" (nil String)))))))), next := ""}) (cons (record Step {id := "fv-picture", journey := "first-visit", order := 1, pole := "sensual-object", panel := "picture", title := "What Rule 30 is", goal := "Read the picture: how each row is made from the one above it, and which cells are the center column.", text := "", paragraphs := (cons "rule-30" (cons "the-picture" (nil String))), evidence := (cons "picture" (nil String)), next := "fv-problem"}) (cons (record Step {id := "fv-problem", journey := "first-visit", order := 2, pole := "sensual-object", panel := "explainer", title := "The center column and Problem 1", goal := "State Problem 1 in your own words: does the center column ever settle into a block that repeats forever? The claim to be proved is that it never does.", text := "", paragraphs := (cons "center-column" (cons "problem-1" (nil String))), evidence := (cons "explainer" (cons "problem1" (nil String))), next := "fv-kernel"}) (cons (record Step {id := "fv-kernel", journey := "first-visit", order := 3, pole := "sensual-object", panel := "explainer", title := "What kernel-checked means", goal := "Know what this site means by kernel-checked before any checked statement is shown.", text := "", paragraphs := (cons "kernel-checked" (nil String)), evidence := (cons "explainer" (nil String)), next := "fv-tree"}) (cons (record Step {id := "fv-tree", journey := "first-visit", order := 4, pole := "sensual-quality", panel := "reduction-tree", title := "The map of what is proved", goal := "Read the reduction tree: Problem 1 at the top, and under it the statements it has been reduced to; a check mark is a proved arrow.", text := "", paragraphs := (cons "what-is-proved" (cons "how-to-read" (nil String))), evidence := (cons "chain" (cons "problem1" (nil String))), next := "fv-explore"}) (cons (record Step {id := "fv-explore", journey := "first-visit", order := 5, pole := "sensual-quality", panel := "viz-triangle", title := "Explore the triangle yourself", goal := "Move through the rows with the keyboard, read any cell as a time, a position and a black or white bit, and see the diagonals on the right edge repeat with periods that double as you move inward, while the center column shows no such repetition.", text := "Everything in this picture is computed in your browser from the one rule, row by row. Switch on the diagonals of the right edge: each repeats, the first with period 2, then 2, 4, 8, 8, 16, 32, 32, and the period of the j-th always divides 2^(j-1), which is proved. The center column cuts across all of them, one cell from each: its value at row t is the cell where row t meets diagonal t. That is why the regular edge says nothing yet about the center, and it is exactly the question Problem 1 asks.", paragraphs := (nil String), evidence := (cons "viz-triangle-js" (cons "antidiagonal" (cons "diagonal-halving" (cons "edge-parity" (nil String))))), next := "fv-reductions"}) (cons (record Step {id := "fv-reductions", journey := "first-visit", order := 6, pole := "sensual-quality", panel := "explainer", title := "The main proved arrows, in words", goal := "Say in plain words what the main proved arrows reduce Problem 1 to: collisions, edges, bands, a sparser sequence, and a checked certificate.", text := "", paragraphs := (cons "reduction-collisions" (cons "reduction-edges" (cons "reduction-bands" (cons "reduction-sparse" (cons "reduction-horizon" (nil String)))))), evidence := (cons "recurrent-central-collision" (cons "edge-parity" (cons "interior-aperiodicity" (cons "three-diagonal-band" (cons "left-band" (cons "periodic-finite-kernel" (cons "dilation-reduction" (cons "dyadic-response-reduction" (cons "horizon-certificate" (nil String)))))))))), next := "fv-bands"}) (cons (record Step {id := "fv-bands", journey := "first-visit", order := 7, pole := "sensual-quality", panel := "viz-ledger", title := "See the bands stripped away", goal := "See the center column as two rows added bit by bit: a background made of four simple rulers, and what remains, the deep bulk; the remaining obligation is a statement about that last row alone.", text := "The top row is the center column itself. The middle row is the ruler background: four rhythms, each switchable on its own, that the proved statements identify exactly. The bottom row is what is left once the background is taken away, computed separately from the rule, and the page checks at every time from 6 to 512 that the top row equals the other two combined. Nothing in the bottom row is claimed to repeat or not to repeat; that is the open question.", paragraphs := (nil String), evidence := (cons "viz-ledger-js" (cons "left-band" (cons "three-diagonal-band" (cons "edge-parity" (nil String))))), next := "fv-register"}) (cons (record Step {id := "fv-register", journey := "first-visit", order := 8, pole := "real-quality", panel := "register", title := "The register", goal := "Find a proved statement in the register and see the name of the checked theorem behind it; filter by proved.", text := "", paragraphs := (cons "the-register" (nil String)), evidence := (cons "register-json" (cons "edge-parity" (cons "left-band" (nil String)))), next := "fv-open"}) (cons (record Step {id := "fv-open", journey := "first-visit", order := 9, pole := "withdrawn", panel := "obligation", title := "What remains open", goal := "State the one remaining obligation in plain words and recognize that it is open, not proved.", text := "", paragraphs := (cons "what-is-open" (nil String)), evidence := (cons "aperiodic-compensation" (nil String)), next := "fv-verify"}) (cons (record Step {id := "fv-verify", journey := "first-visit", order := 10, pole := "verification", panel := "verify", title := "What you can check yourself", goal := "Reproduce what this page shows: the briefing, one statement in full, and the paper as it was verified.", text := "", paragraphs := (cons "verify-yourself" (nil String)), evidence := (cons "paper-pdf" (cons "pdf-manifest" (cons "readme" (nil String)))), next := ""}) (nil Step)))))))))))))) : (List Step)),
   axioms: []
 }
 
@@ -175,6 +214,30 @@ definition{
   parameters: [],
   result: (List Verification),
   body: (cons (record Verification {command := "brief", invocation := "bin/r30 brief", statement := "One screen: the open claims, the proved reductions, the refuted routes."}) (cons (record Verification {command := "claim", invocation := "bin/r30 claim <id>", statement := "One claim in full: register entry, Lean type, published statement, dependents."}) (cons (record Verification {command := "frontier_check", invocation := "bin/r30 frontier check", statement := "The register against the kernel: every proved claim names a theorem checked under propext and Quot.sound and published."}) (cons (record Verification {command := "axioms", invocation := "bin/r30 axioms <Lean names>", statement := "The axioms a theorem depends on; must print only propext and Quot.sound."}) (cons (record Verification {command := "kappa", invocation := "bin/r30 kappa <modules>", statement := "The kappa-labels of the research modules: the address of the declarations the kernel replays."}) (cons (record Verification {command := "verify", invocation := "bin/r30 verify api", statement := "lexlean verify of the API modules: the kernel decides the theorems this page's model states, the pedagogy among them."}) (cons (record Verification {command := "api_check", invocation := "bin/r30 api check", statement := "Refuses a module, register, schema or feature that drifted from its generator."}) (cons (record Verification {command := "view_render", invocation := "bin/r30 view render --out view", statement := "This view, rendered from the register into a directory; open view/index.html without a server."}) (nil Verification))))))))),
+  axioms: []
+}
+
+definition{
+  name: navPatterns,
+  parameters: [],
+  result: (List Pattern),
+  body: (cons (record Pattern {id := "disclosure-navigation-menu", authority := "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/", statement := "A navigation landmark of top-level disclosure buttons (aria-expanded, aria-controls), each revealing a list of links; Escape closes the open list and returns focus to its button; the arrow keys, Home and End move focus among the buttons and the links; one list is open at a time."}) (cons (record Pattern {id := "breadcrumb", authority := "https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/", statement := "A navigation landmark labeled Breadcrumb holding an ordered list of links from the vantage through its pole to the current step, which carries aria-current=page."}) (cons (record Pattern {id := "stepper", authority := "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/", statement := "A disclosure sequence: a navigation landmark holding the ordered list of the vantage's steps with the current step aria-current=step, the previous and the next step as links, and a disclosure button that reveals the title of every step."}) (cons (record Pattern {id := "combobox", authority := "https://www.w3.org/WAI/ARIA/apg/patterns/combobox/", statement := "An editable combobox with a listbox popup (aria-expanded, aria-controls, aria-activedescendant, aria-autocomplete=list): typing filters the register, the arrow keys move the active option, Enter opens it, Escape closes the list, and a live region reports the number of matches."}) (nil Pattern))))),
+  axioms: []
+}
+
+definition{
+  name: navigations,
+  parameters: [],
+  result: (List Navigation),
+  body: (cons (record Navigation {id := "nav-primary", label := "Site", pattern := "disclosure-navigation-menu", statement := "The site-wide navigation in the banner of every page: Vantages, Register, Modules, Verify, Standards."}) (cons (record Navigation {id := "nav-breadcrumb", label := "Breadcrumb", pattern := "breadcrumb", statement := "Where the reader is: the vantage, its pole, the current step."}) (cons (record Navigation {id := "nav-stepper", label := "Steps of this vantage", pattern := "stepper", statement := "The steps of the current vantage in order, the current one marked, with the previous and the next."}) (nil Navigation)))),
+  axioms: []
+}
+
+definition{
+  name: navItems,
+  parameters: [],
+  result: (List NavItem),
+  body: (prim append (cons (record NavItem {id := "nav-vantages", navigation := "nav-primary", parent := "", label := "Vantages", pattern := "disclosure-navigation-menu", kind := "group", target := "", order := 1}) (cons (record NavItem {id := "nav-vantage-prize-review", navigation := "nav-primary", parent := "nav-vantages", label := "The prize committee", pattern := "disclosure-navigation-menu", kind := "journey", target := "prize-review", order := 1}) (cons (record NavItem {id := "nav-vantage-research-session", navigation := "nav-primary", parent := "nav-vantages", label := "The researcher (developer view)", pattern := "disclosure-navigation-menu", kind := "journey", target := "research-session", order := 2}) (cons (record NavItem {id := "nav-vantage-reading", navigation := "nav-primary", parent := "nav-vantages", label := "The community", pattern := "disclosure-navigation-menu", kind := "journey", target := "reading", order := 3}) (cons (record NavItem {id := "nav-vantage-stdlib-feedback", navigation := "nav-primary", parent := "nav-vantages", label := "The UOR Foundation (machine view)", pattern := "disclosure-navigation-menu", kind := "journey", target := "stdlib-feedback", order := 4}) (cons (record NavItem {id := "nav-vantage-mathematics", navigation := "nav-primary", parent := "nav-vantages", label := "The mathematician", pattern := "disclosure-navigation-menu", kind := "journey", target := "mathematics", order := 5}) (cons (record NavItem {id := "nav-vantage-first-visit", navigation := "nav-primary", parent := "nav-vantages", label := "First visit: no background needed", pattern := "disclosure-navigation-menu", kind := "journey", target := "first-visit", order := 6}) (cons (record NavItem {id := "nav-sitemap", navigation := "nav-primary", parent := "nav-vantages", label := "Site map: every vantage and its steps", pattern := "disclosure-navigation-menu", kind := "step", target := "rd-map", order := 7}) (cons (record NavItem {id := "nav-register", navigation := "nav-primary", parent := "", label := "Register", pattern := "disclosure-navigation-menu", kind := "group", target := "", order := 2}) (cons (record NavItem {id := "nav-search", navigation := "nav-primary", parent := "nav-register", label := "Search the register", pattern := "combobox", kind := "step", target := "rd-register", order := 1}) (cons (record NavItem {id := "nav-register-claims", navigation := "nav-primary", parent := "nav-register", label := "Every claim with its evidence", pattern := "disclosure-navigation-menu", kind := "step", target := "rd-register", order := 2}) (cons (record NavItem {id := "nav-register-tree", navigation := "nav-primary", parent := "nav-register", label := "Reduction tree", pattern := "disclosure-navigation-menu", kind := "step", target := "rd-tree", order := 3}) (cons (record NavItem {id := "nav-register-leaves", navigation := "nav-primary", parent := "nav-register", label := "Open leaves", pattern := "disclosure-navigation-menu", kind := "step", target := "pr-leaves", order := 4}) (cons (record NavItem {id := "nav-register-obligation", navigation := "nav-primary", parent := "nav-register", label := "Open obligation", pattern := "disclosure-navigation-menu", kind := "step", target := "rd-obligation", order := 5}) (cons (record NavItem {id := "nav-register-json", navigation := "nav-primary", parent := "nav-register", label := "register.json", pattern := "disclosure-navigation-menu", kind := "artifact", target := "register-json", order := 6}) (cons (record NavItem {id := "nav-modules", navigation := "nav-primary", parent := "", label := "Modules", pattern := "disclosure-navigation-menu", kind := "group", target := "", order := 3}) (cons (record NavItem {id := "nav-modules-step", navigation := "nav-primary", parent := "nav-modules", label := "The LexLean modules, read", pattern := "disclosure-navigation-menu", kind := "step", target := "sf-modules", order := 1}) (cons (record NavItem {id := "nav-model", navigation := "nav-primary", parent := "nav-modules", label := "The model of the site (PrismPM, Observer)", pattern := "disclosure-navigation-menu", kind := "step", target := "sf-model", order := 2}) (cons (record NavItem {id := "nav-design", navigation := "nav-primary", parent := "nav-modules", label := "The design system, decided", pattern := "disclosure-navigation-menu", kind := "step", target := "sf-design", order := 3}) (cons (record NavItem {id := "nav-module-api-module", navigation := "nav-primary", parent := "nav-modules", label := "Api.lex.tex", pattern := "disclosure-navigation-menu", kind := "artifact", target := "api-module", order := 4}) (cons (record NavItem {id := "nav-module-register-module", navigation := "nav-primary", parent := "nav-modules", label := "Register.lex.tex", pattern := "disclosure-navigation-menu", kind := "artifact", target := "register-module", order := 5}) (cons (record NavItem {id := "nav-module-architecture-module", navigation := "nav-primary", parent := "nav-modules", label := "Architecture.lex.tex", pattern := "disclosure-navigation-menu", kind := "artifact", target := "architecture-module", order := 6}) (cons (record NavItem {id := "nav-module-presentation-module", navigation := "nav-primary", parent := "nav-modules", label := "Presentation.lex.tex", pattern := "disclosure-navigation-menu", kind := "artifact", target := "presentation-module", order := 7}) (cons (record NavItem {id := "nav-module-application-module", navigation := "nav-primary", parent := "nav-modules", label := "Application.lex.tex", pattern := "disclosure-navigation-menu", kind := "artifact", target := "application-module", order := 8}) (cons (record NavItem {id := "nav-module-frontier-module", navigation := "nav-primary", parent := "nav-modules", label := "Frontier.lex.tex", pattern := "disclosure-navigation-menu", kind := "artifact", target := "frontier-module", order := 9}) (cons (record NavItem {id := "nav-module-standards-module", navigation := "nav-primary", parent := "nav-modules", label := "Standards.lex.tex", pattern := "disclosure-navigation-menu", kind := "artifact", target := "standards-module", order := 10}) (cons (record NavItem {id := "nav-module-observer-module", navigation := "nav-primary", parent := "nav-modules", label := "Observer.lex.tex", pattern := "disclosure-navigation-menu", kind := "artifact", target := "observer-module", order := 11}) (cons (record NavItem {id := "nav-verify", navigation := "nav-primary", parent := "", label := "Verify", pattern := "disclosure-navigation-menu", kind := "group", target := "", order := 4}) (cons (record NavItem {id := "nav-verify-prize-review", navigation := "nav-primary", parent := "nav-verify", label := "Verify: The prize committee", pattern := "disclosure-navigation-menu", kind := "step", target := "pr-verify", order := 1}) (cons (record NavItem {id := "nav-verify-research-session", navigation := "nav-primary", parent := "nav-verify", label := "Verify: The researcher (developer view)", pattern := "disclosure-navigation-menu", kind := "step", target := "rs-verify", order := 2}) (cons (record NavItem {id := "nav-verify-reading", navigation := "nav-primary", parent := "nav-verify", label := "Verify: The community", pattern := "disclosure-navigation-menu", kind := "step", target := "rd-verify", order := 3}) (cons (record NavItem {id := "nav-verify-stdlib-feedback", navigation := "nav-primary", parent := "nav-verify", label := "Verify: The UOR Foundation (machine view)", pattern := "disclosure-navigation-menu", kind := "step", target := "sf-verify", order := 4}) (cons (record NavItem {id := "nav-verify-mathematics", navigation := "nav-primary", parent := "nav-verify", label := "Verify: The mathematician", pattern := "disclosure-navigation-menu", kind := "step", target := "ma-verify", order := 5}) (cons (record NavItem {id := "nav-verify-first-visit", navigation := "nav-primary", parent := "nav-verify", label := "Verify: First visit: no background needed", pattern := "disclosure-navigation-menu", kind := "step", target := "fv-verify", order := 6}) (cons (record NavItem {id := "nav-standards", navigation := "nav-primary", parent := "", label := "Standards", pattern := "disclosure-navigation-menu", kind := "group", target := "", order := 5}) (cons (record NavItem {id := "nav-standards-step", navigation := "nav-primary", parent := "nav-standards", label := "Every standard this site implements", pattern := "disclosure-navigation-menu", kind := "step", target := "rd-standards", order := 1}) (cons (record NavItem {id := "nav-standards-json", navigation := "nav-primary", parent := "nav-standards", label := "standards.json", pattern := "disclosure-navigation-menu", kind := "artifact", target := "standards", order := 2}) (cons (record NavItem {id := "nav-standard-apg", navigation := "nav-primary", parent := "nav-standards", label := "WAI-ARIA Authoring Practices (APG)", pattern := "disclosure-navigation-menu", kind := "authority", target := "https://www.w3.org/WAI/ARIA/apg/", order := 3}) (cons (record NavItem {id := "nav-standard-aria", navigation := "nav-primary", parent := "nav-standards", label := "WAI-ARIA 1.2", pattern := "disclosure-navigation-menu", kind := "authority", target := "https://www.w3.org/TR/wai-aria-1.2/", order := 4}) (cons (record NavItem {id := "nav-standard-wcag", navigation := "nav-primary", parent := "nav-standards", label := "WCAG 2.2", pattern := "disclosure-navigation-menu", kind := "authority", target := "https://www.w3.org/TR/WCAG22/", order := 5}) (nil NavItem))))))))))))))))))))))))))))))))))))))))) (cons (record NavItem {id := "nav-standard-html", navigation := "nav-primary", parent := "nav-standards", label := "HTML Living Standard", pattern := "disclosure-navigation-menu", kind := "authority", target := "https://html.spec.whatwg.org/multipage/", order := 6}) (cons (record NavItem {id := "nav-standard-42010", navigation := "nav-primary", parent := "nav-standards", label := "ISO/IEC/IEEE 42010 (architecture description)", pattern := "disclosure-navigation-menu", kind := "authority", target := "https://www.iso.org/standard/74393.html", order := 7}) (cons (record NavItem {id := "nav-standard-25010", navigation := "nav-primary", parent := "nav-standards", label := "ISO/IEC 25010 (product quality)", pattern := "disclosure-navigation-menu", kind := "authority", target := "https://www.iso.org/standard/78176.html", order := 8}) (cons (record NavItem {id := "nav-crumb-vantage", navigation := "nav-breadcrumb", parent := "", label := "Vantage", pattern := "breadcrumb", kind := "journey", target := "", order := 1}) (cons (record NavItem {id := "nav-crumb-pole", navigation := "nav-breadcrumb", parent := "", label := "Pole", pattern := "breadcrumb", kind := "pole", target := "", order := 2}) (cons (record NavItem {id := "nav-crumb-step", navigation := "nav-breadcrumb", parent := "", label := "Step", pattern := "breadcrumb", kind := "step", target := "", order := 3}) (cons (record NavItem {id := "nav-steps-prize-review", navigation := "nav-stepper", parent := "", label := "Steps: The prize committee", pattern := "stepper", kind := "journey", target := "prize-review", order := 1}) (cons (record NavItem {id := "nav-steps-research-session", navigation := "nav-stepper", parent := "", label := "Steps: The researcher (developer view)", pattern := "stepper", kind := "journey", target := "research-session", order := 2}) (cons (record NavItem {id := "nav-steps-reading", navigation := "nav-stepper", parent := "", label := "Steps: The community", pattern := "stepper", kind := "journey", target := "reading", order := 3}) (cons (record NavItem {id := "nav-steps-stdlib-feedback", navigation := "nav-stepper", parent := "", label := "Steps: The UOR Foundation (machine view)", pattern := "stepper", kind := "journey", target := "stdlib-feedback", order := 4}) (cons (record NavItem {id := "nav-steps-mathematics", navigation := "nav-stepper", parent := "", label := "Steps: The mathematician", pattern := "stepper", kind := "journey", target := "mathematics", order := 5}) (cons (record NavItem {id := "nav-steps-first-visit", navigation := "nav-stepper", parent := "", label := "Steps: First visit: no background needed", pattern := "stepper", kind := "journey", target := "first-visit", order := 6}) (nil NavItem))))))))))))) : (List NavItem)),
   axioms: []
 }
 
@@ -761,6 +824,961 @@ theorem{
   name: verificationsAreCommands,
   parameters: [],
   statement: ((allMembers (verificationCommands (verifications)) (Architecture::commandNames (Api::commands))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+definition{
+  name: patternIds,
+  parameters: [xs : (List Pattern)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (patternIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navigationIds,
+  parameters: [xs : (List Navigation)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (navigationIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navigationPatterns,
+  parameters: [xs : (List Navigation)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head pattern) (navigationPatterns tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemIds,
+  parameters: [xs : (List NavItem)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (navItemIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemNavigations,
+  parameters: [xs : (List NavItem)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head navigation) (navItemNavigations tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemParents,
+  parameters: [xs : (List NavItem)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head parent) (navItemParents tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemPatterns,
+  parameters: [xs : (List NavItem)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head pattern) (navItemPatterns tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemKinds,
+  parameters: [xs : (List NavItem)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head kind) (navItemKinds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemTargets,
+  parameters: [xs : (List NavItem)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head target) (navItemTargets tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemOrders,
+  parameters: [xs : (List NavItem)],
+  result: (List Nat),
+  body: (match xs
+    | List.nil => (nil Nat)
+    | List.cons head tail => (cons (project head order) (navItemOrders tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemsOf,
+  parameters: [navigation : String, xs : (List NavItem)],
+  result: (List NavItem),
+  body: (match xs
+    | List.nil => (nil NavItem)
+    | List.cons head tail => (if (prim equal navigation (project head navigation) : Bool) then (cons head (navItemsOf navigation tail)) else (navItemsOf navigation tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemsUnder,
+  parameters: [parent : String, xs : (List NavItem)],
+  result: (List NavItem),
+  body: (match xs
+    | List.nil => (nil NavItem)
+    | List.cons head tail => (if (prim equal parent (project head parent) : Bool) then (cons head (navItemsUnder parent tail)) else (navItemsUnder parent tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navItemsOfKind,
+  parameters: [kind : String, xs : (List NavItem)],
+  result: (List NavItem),
+  body: (match xs
+    | List.nil => (nil NavItem)
+    | List.cons head tail => (if (prim equal kind (project head kind) : Bool) then (cons head (navItemsOfKind kind tail)) else (navItemsOfKind kind tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: navTargets,
+  parameters: [kind : String, navigation : String, xs : (List NavItem)],
+  result: (List String),
+  body: (navItemTargets (navItemsOfKind kind (navItemsOf navigation xs))),
+  axioms: []
+}
+
+definition{
+  name: navItemTarget,
+  parameters: [key : String, xs : (List NavItem)],
+  result: String,
+  body: (match xs
+    | List.nil => ""
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head target) else (navItemTarget key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: stepPanel,
+  parameters: [key : String, xs : (List Step)],
+  result: String,
+  body: (match xs
+    | List.nil => ""
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head panel) else (stepPanel key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: breadcrumbOf,
+  parameters: [st : Step],
+  result: (List String),
+  body: (cons (project st journey) (cons (project st pole) (cons (project st id) (nil String)))),
+  axioms: []
+}
+
+definition{
+  name: trailResolves,
+  parameters: [trail : (List String), js : (List String), ps : (List String), ids : (List String)],
+  result: Bool,
+  body: (match trail
+    | List.nil => false
+    | List.cons j rest => (match rest
+    | List.nil => false
+    | List.cons p rest2 => (match rest2
+    | List.nil => false
+    | List.cons sid rest3 => (if (memberString j js) then (if (memberString p ps) then (memberString sid ids) else false) else false)))),
+  axioms: []
+}
+
+definition{
+  name: breadcrumbsResolve,
+  parameters: [xs : (List Step), js : (List String), ps : (List String), ids : (List String)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (trailResolves (breadcrumbOf head) js ps ids) then (breadcrumbsResolve tail js ps ids) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: groupsOrdered,
+  parameters: [xs : (List NavItem), all : (List NavItem)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (consecutiveFrom (navItemOrders (navItemsUnder (project head id) all)) 1) then (groupsOrdered tail all) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: verifyReachable,
+  parameters: [js : (List Journey), ss : (List Step), ts : (List String)],
+  result: Bool,
+  body: (match js
+    | List.nil => true
+    | List.cons head tail => (if (memberString (lastString (stepIds (stepsOfJourney (project head id) ss)) "") ts) then (verifyReachable tail ss ts) else false)),
+  axioms: [],
+  recursive_argument: js
+}
+
+theorem{
+  name: navIdsDistinct,
+  parameters: [],
+  statement: ((distinctStrings (appendStrings (navigationIds (navigations)) (navItemIds (navItems)))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navigationsNamePatterns,
+  parameters: [],
+  statement: ((allMembers (navigationPatterns (navigations)) (patternIds (navPatterns))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navItemsNamePatterns,
+  parameters: [],
+  statement: ((allMembers (navItemPatterns (navItems)) (patternIds (navPatterns))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navItemsInNavigations,
+  parameters: [],
+  statement: ((allMembers (navItemNavigations (navItems)) (navigationIds (navigations))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navItemParentsAreItems,
+  parameters: [],
+  statement: ((allMembers (navItemParents (navItems)) (cons "" (navItemIds (navItems)))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyJourneyInPrimaryNavigation,
+  parameters: [],
+  statement: ((allMembers (journeyIds (journeys)) (navTargets "journey" "nav-primary" (navItems))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: stepperListsEveryJourney,
+  parameters: [],
+  statement: ((allMembers (journeyIds (journeys)) (navTargets "journey" "nav-stepper" (navItems))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navJourneyTargetsAreJourneys,
+  parameters: [],
+  statement: ((allMembers (appendStrings (navTargets "journey" "nav-primary" (navItems)) (navTargets "journey" "nav-stepper" (navItems))) (journeyIds (journeys))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navStepTargetsAreSteps,
+  parameters: [],
+  statement: ((allMembers (navTargets "step" "nav-primary" (navItems)) (stepIds (steps))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navArtifactTargetsAreArtifacts,
+  parameters: [],
+  statement: ((allMembers (navTargets "artifact" "nav-primary" (navItems)) (artifactIds (artifacts))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: breadcrumbIsVantagePoleStep,
+  parameters: [],
+  statement: ((navItemKinds (navItemsOf "nav-breadcrumb" (navItems))) = (cons "journey" (cons "pole" (cons "step" (nil String))))),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyBreadcrumbResolves,
+  parameters: [],
+  statement: ((breadcrumbsResolve (steps) (journeyIds (journeys)) (poleIds (poles)) (stepIds (steps))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: verifyReachableFromEveryJourney,
+  parameters: [],
+  statement: ((verifyReachable (journeys) (steps) (navTargets "step" "nav-primary" (navItems))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: searchOpensTheRegister,
+  parameters: [],
+  statement: ((prim equal (stepPanel (navItemTarget "nav-search" (navItems)) (steps)) "register" : Bool) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navGroupsOrdered,
+  parameters: [],
+  statement: ((groupsOrdered (navItemsUnder "" (navItemsOf "nav-primary" (navItems))) (navItemsOf "nav-primary" (navItems))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: navTopLevelOrdered,
+  parameters: [],
+  statement: ((consecutiveFrom (navItemOrders (navItemsUnder "" (navItemsOf "nav-primary" (navItems)))) 1) = true),
+  proof: decide{},
+  axioms: []
+}
+
+structure{
+  name: Token,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: role, type: String},
+    {name: lightRed, type: Nat},
+    {name: lightGreen, type: Nat},
+    {name: lightBlue, type: Nat},
+    {name: darkRed, type: Nat},
+    {name: darkGreen, type: Nat},
+    {name: darkBlue, type: Nat},
+    {name: lightLuminance, type: Nat},
+    {name: darkLuminance, type: Nat}
+  ]
+}
+
+structure{
+  name: ContrastPair,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: foreground, type: String},
+    {name: background, type: String},
+    {name: purpose, type: String},
+    {name: minimum, type: Nat}
+  ]
+}
+
+structure{
+  name: TypeStep,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: size, type: Nat},
+    {name: leading, type: Nat},
+    {name: family, type: String}
+  ]
+}
+
+structure{
+  name: SpaceStep,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: size, type: Nat}
+  ]
+}
+
+structure{
+  name: Motion,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: duration, type: Nat},
+    {name: reduced, type: Nat},
+    {name: easing, type: String}
+  ]
+}
+
+structure{
+  name: Landing,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: question, type: String},
+    {name: provedStatement, type: String},
+    {name: openStatement, type: String},
+    {name: obligation, type: String},
+    {name: entries, type: (List String)}
+  ]
+}
+
+definition{
+  name: srgbLinear,
+  parameters: [],
+  result: (List Nat),
+  body: (prim append (cons 0 (cons 304 (cons 607 (cons 911 (cons 1214 (cons 1518 (cons 1821 (cons 2125 (cons 2428 (cons 2732 (cons 3035 (cons 3347 (cons 3677 (cons 4025 (cons 4391 (cons 4777 (cons 5182 (cons 5605 (cons 6049 (cons 6512 (cons 6995 (cons 7499 (cons 8023 (cons 8568 (cons 9134 (cons 9721 (cons 10330 (cons 10960 (cons 11612 (cons 12286 (cons 12983 (cons 13702 (cons 14444 (cons 15209 (cons 15996 (cons 16807 (cons 17642 (cons 18500 (cons 19382 (cons 20289 (nil Nat))))))))))))))))))))))))))))))))))))))))) (prim append (cons 21219 (cons 22174 (cons 23153 (cons 24158 (cons 25187 (cons 26241 (cons 27321 (cons 28426 (cons 29557 (cons 30713 (cons 31896 (cons 33105 (cons 34340 (cons 35601 (cons 36889 (cons 38204 (cons 39546 (cons 40915 (cons 42311 (cons 43735 (cons 45186 (cons 46665 (cons 48172 (cons 49707 (cons 51269 (cons 52861 (cons 54480 (cons 56128 (cons 57805 (cons 59511 (cons 61246 (cons 63010 (cons 64803 (cons 66626 (cons 68478 (cons 70360 (cons 72272 (cons 74214 (cons 76185 (cons 78187 (nil Nat))))))))))))))))))))))))))))))))))))))))) (prim append (cons 80220 (cons 82283 (cons 84376 (cons 86500 (cons 88656 (cons 90842 (cons 93059 (cons 95307 (cons 97587 (cons 99899 (cons 102242 (cons 104616 (cons 107023 (cons 109462 (cons 111932 (cons 114435 (cons 116971 (cons 119538 (cons 122139 (cons 124772 (cons 127438 (cons 130136 (cons 132868 (cons 135633 (cons 138432 (cons 141263 (cons 144128 (cons 147027 (cons 149960 (cons 152926 (cons 155926 (cons 158961 (cons 162029 (cons 165132 (cons 168269 (cons 171441 (cons 174647 (cons 177888 (cons 181164 (cons 184475 (nil Nat))))))))))))))))))))))))))))))))))))))))) (prim append (cons 187821 (cons 191202 (cons 194618 (cons 198069 (cons 201556 (cons 205079 (cons 208637 (cons 212231 (cons 215861 (cons 219526 (cons 223228 (cons 226966 (cons 230740 (cons 234551 (cons 238398 (cons 242281 (cons 246201 (cons 250158 (cons 254152 (cons 258183 (cons 262251 (cons 266356 (cons 270498 (cons 274677 (cons 278894 (cons 283149 (cons 287441 (cons 291771 (cons 296138 (cons 300544 (cons 304987 (cons 309469 (cons 313989 (cons 318547 (cons 323143 (cons 327778 (cons 332452 (cons 337164 (cons 341914 (cons 346704 (nil Nat))))))))))))))))))))))))))))))))))))))))) (prim append (cons 351533 (cons 356400 (cons 361307 (cons 366253 (cons 371238 (cons 376262 (cons 381326 (cons 386429 (cons 391572 (cons 396755 (cons 401978 (cons 407240 (cons 412543 (cons 417885 (cons 423268 (cons 428690 (cons 434154 (cons 439657 (cons 445201 (cons 450786 (cons 456411 (cons 462077 (cons 467784 (cons 473531 (cons 479320 (cons 485150 (cons 491021 (cons 496933 (cons 502886 (cons 508881 (cons 514918 (cons 520996 (cons 527115 (cons 533276 (cons 539479 (cons 545724 (cons 552011 (cons 558340 (cons 564712 (cons 571125 (nil Nat))))))))))))))))))))))))))))))))))))))))) (prim append (cons 577580 (cons 584078 (cons 590619 (cons 597202 (cons 603827 (cons 610496 (cons 617207 (cons 623960 (cons 630757 (cons 637597 (cons 644480 (cons 651406 (cons 658375 (cons 665387 (cons 672443 (cons 679542 (cons 686685 (cons 693872 (cons 701102 (cons 708376 (cons 715694 (cons 723055 (cons 730461 (cons 737910 (cons 745404 (cons 752942 (cons 760525 (cons 768151 (cons 775822 (cons 783538 (cons 791298 (cons 799103 (cons 806952 (cons 814847 (cons 822786 (cons 830770 (cons 838799 (cons 846873 (cons 854993 (cons 863157 (nil Nat))))))))))))))))))))))))))))))))))))))))) (cons 871367 (cons 879622 (cons 887923 (cons 896269 (cons 904661 (cons 913099 (cons 921582 (cons 930111 (cons 938686 (cons 947307 (cons 955973 (cons 964686 (cons 973445 (cons 982251 (cons 991102 (cons 1000000 (nil Nat))))))))))))))))) : (List Nat)) : (List Nat)) : (List Nat)) : (List Nat)) : (List Nat)) : (List Nat)),
+  axioms: []
+}
+
+definition{
+  name: tokens,
+  parameters: [],
+  result: (List Token),
+  body: (cons (record Token {id := "bg", role := "surface", lightRed := 246, lightGreen := 243, lightBlue := 236, darkRed := 16, darkGreen := 18, darkBlue := 23, lightLuminance := 8975012098, darkLuminance := 60465476}) (cons (record Token {id := "panel", role := "surface", lightRed := 253, lightGreen := 252, lightBlue := 249, darkRed := 24, darkGreen := 27, darkBlue := 33, lightLuminance := 9734299920, darkLuminance := 108785702}) (cons (record Token {id := "soft", role := "surface", lightRed := 236, lightGreen := 231, lightBlue := 220, darkRed := 34, darkGreen := 38, darkBlue := 46, lightLuminance := 8015202398, darkLuminance := 192353322}) (cons (record Token {id := "line", role := "decoration", lightRed := 221, lightGreen := 214, lightBlue := 200, darkRed := 44, darkGreen := 48, darkBlue := 57, lightLuminance := 6763540026, darkLuminance := 294479856}) (cons (record Token {id := "line-strong", role := "ui", lightRed := 139, lightGreen := 134, lightBlue := 119, darkRed := 111, darkGreen := 118, darkBlue := 130, lightLuminance := 2387110504, darkLuminance := 1794806630}) (cons (record Token {id := "ink", role := "text", lightRed := 22, lightGreen := 24, lightBlue := 29, darkRed := 236, darkGreen := 232, darkBlue := 223, lightLuminance := 91253758, darkLuminance := 8087378398}) (cons (record Token {id := "muted", role := "text", lightRed := 88, lightGreen := 92, lightBlue := 100, darkRed := 164, darkGreen := 169, darkBlue := 178, lightLuminance := 1064908694, darkLuminance := 3948278870}) (cons (record Token {id := "accent", role := "graphic", lightRed := 160, lightGreen := 102, lightBlue := 0, darkRed := 232, darkGreen := 169, darkBlue := 58, lightLuminance := 1697631094, darkLuminance := 4583720254}) (cons (record Token {id := "accent-text", role := "text", lightRed := 133, lightGreen := 85, lightBlue := 0, darkRed := 235, darkGreen := 181, darkBlue := 87, lightLuminance := 1148357410, darkLuminance := 5139803378}) (cons (record Token {id := "accent-ink", role := "text", lightRed := 255, lightGreen := 255, lightBlue := 255, darkRed := 22, darkGreen := 24, darkBlue := 29, lightLuminance := 10000000000, darkLuminance := 91253758}) (cons (record Token {id := "accent-soft", role := "surface", lightRed := 247, lightGreen := 231, lightBlue := 196, darkRed := 58, darkGreen := 45, darkBlue := 18, lightLuminance := 8091152584, darkLuminance := 281996196}) (cons (record Token {id := "link", role := "text", lightRed := 27, lightGreen := 90, lightBlue := 134, darkRed := 140, darkGreen := 194, darkBlue := 234, lightLuminance := 926659100, darkLuminance := 5009950926}) (cons (record Token {id := "focus", role := "ui", lightRed := 27, lightGreen := 90, lightBlue := 134, darkRed := 140, darkGreen := 194, darkBlue := 234, lightLuminance := 926659100, darkLuminance := 5009950926}) (cons (record Token {id := "cell", role := "graphic", lightRed := 42, lightGreen := 45, lightBlue := 51, darkRed := 217, darkGreen := 212, darkBlue := 201, lightLuminance := 260800720, darkLuminance := 6605574188}) (cons (record Token {id := "open", role := "text", lightRed := 122, lightGreen := 81, lightBlue := 4, darkRed := 232, darkGreen := 176, darkBlue := 74, lightLuminance := 1003122392, darkLuminance := 4870090476}) (cons (record Token {id := "open-bg", role := "surface", lightRed := 251, lightGreen := 239, lightBlue := 211, darkRed := 58, darkGreen := 46, darkBlue := 18, lightLuminance := 8694536432, darkLuminance := 289720356}) (cons (record Token {id := "proved", role := "text", lightRed := 34, lightGreen := 102, lightBlue := 62, darkRed := 114, darkGreen := 208, darkBlue := 154, lightLuminance := 1019059616, darkLuminance := 5102223204}) (cons (record Token {id := "proved-bg", role := "surface", lightRed := 221, lightGreen := 241, lightBlue := 227, darkRed := 22, darkGreen := 51, darkBlue := 35, lightLuminance := 8382876496, darkLuminance := 265958512}) (cons (record Token {id := "refuted", role := "text", lightRed := 163, lightGreen := 48, lightBlue := 42, darkRed := 240, darkGreen := 140, darkBlue := 130, lightLuminance := 1006762008, darkLuminance := 3889316010}) (cons (record Token {id := "refuted-bg", role := "surface", lightRed := 249, lightGreen := 223, lightBlue := 220, darkRed := 63, darkGreen := 31, darkBlue := 28, lightLuminance := 7808238070, darkLuminance := 212057650}) (cons (record Token {id := "retired", role := "text", lightRed := 87, lightGreen := 91, lightBlue := 97, darkRed := 164, darkGreen := 169, darkBlue := 178, lightLuminance := 1037142750, darkLuminance := 3948278870}) (cons (record Token {id := "retired-bg", role := "surface", lightRed := 232, lightGreen := 231, lightBlue := 228, darkRed := 42, darkGreen := 45, darkBlue := 51, lightLuminance := 7990908092, darkLuminance := 260800720}) (nil Token))))))))))))))))))))))),
+  axioms: []
+}
+
+definition{
+  name: contrastPairs,
+  parameters: [],
+  result: (List ContrastPair),
+  body: (cons (record ContrastPair {foreground := "ink", background := "bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "ink", background := "panel", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "ink", background := "soft", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "muted", background := "bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "muted", background := "panel", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "muted", background := "soft", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "link", background := "bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "link", background := "panel", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "link", background := "soft", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "accent-text", background := "bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "accent-text", background := "panel", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "accent-ink", background := "accent", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "ink", background := "accent-soft", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "muted", background := "accent-soft", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "open", background := "open-bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "open", background := "panel", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "proved", background := "proved-bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "proved", background := "panel", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "refuted", background := "refuted-bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "refuted", background := "panel", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "retired", background := "retired-bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "retired", background := "panel", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "ink", background := "open-bg", purpose := "text", minimum := 45}) (cons (record ContrastPair {foreground := "focus", background := "bg", purpose := "ui", minimum := 30}) (cons (record ContrastPair {foreground := "focus", background := "panel", purpose := "ui", minimum := 30}) (cons (record ContrastPair {foreground := "line-strong", background := "bg", purpose := "ui", minimum := 30}) (cons (record ContrastPair {foreground := "line-strong", background := "panel", purpose := "ui", minimum := 30}) (cons (record ContrastPair {foreground := "accent", background := "bg", purpose := "ui", minimum := 30}) (cons (record ContrastPair {foreground := "accent", background := "panel", purpose := "ui", minimum := 30}) (cons (record ContrastPair {foreground := "cell", background := "bg", purpose := "ui", minimum := 30}) (cons (record ContrastPair {foreground := "cell", background := "panel", purpose := "ui", minimum := 30}) (nil ContrastPair)))))))))))))))))))))))))))))))),
+  axioms: []
+}
+
+definition{
+  name: typeScale,
+  parameters: [],
+  result: (List TypeStep),
+  body: (cons (record TypeStep {id := "xs", size := 78, leading := 140, family := "sans"}) (cons (record TypeStep {id := "sm", size := 88, leading := 150, family := "sans"}) (cons (record TypeStep {id := "base", size := 100, leading := 160, family := "sans"}) (cons (record TypeStep {id := "md", size := 115, leading := 150, family := "serif"}) (cons (record TypeStep {id := "lg", size := 140, leading := 125, family := "serif"}) (cons (record TypeStep {id := "xl", size := 185, leading := 115, family := "serif"}) (cons (record TypeStep {id := "display", size := 280, leading := 105, family := "serif"}) (nil TypeStep)))))))),
+  axioms: []
+}
+
+definition{
+  name: spacing,
+  parameters: [],
+  result: (List SpaceStep),
+  body: (cons (record SpaceStep {id := "hair", size := 2}) (cons (record SpaceStep {id := "xxs", size := 4}) (cons (record SpaceStep {id := "xs", size := 8}) (cons (record SpaceStep {id := "sm", size := 12}) (cons (record SpaceStep {id := "md", size := 16}) (cons (record SpaceStep {id := "target", size := 24}) (cons (record SpaceStep {id := "lg", size := 32}) (cons (record SpaceStep {id := "xl", size := 48}) (cons (record SpaceStep {id := "xxl", size := 72}) (cons (record SpaceStep {id := "huge", size := 112}) (nil SpaceStep))))))))))),
+  axioms: []
+}
+
+definition{
+  name: motion,
+  parameters: [],
+  result: (List Motion),
+  body: (cons (record Motion {id := "quick", duration := 140, reduced := 0, easing := "cubic-bezier(0.2, 0, 0, 1)"}) (cons (record Motion {id := "step", duration := 280, reduced := 0, easing := "cubic-bezier(0.2, 0, 0, 1)"}) (cons (record Motion {id := "card", duration := 220, reduced := 0, easing := "cubic-bezier(0.3, 0, 0, 1)"}) (cons (record Motion {id := "reveal", duration := 2600, reduced := 0, easing := "linear"}) (nil Motion))))),
+  axioms: []
+}
+
+definition{
+  name: landing,
+  parameters: [],
+  result: Landing,
+  body: (record Landing {question := "Does the center column of Rule 30 ever repeat?", provedStatement := "Kernel-checked arrows reduce the question to one open statement about the interior of the triangle.", openStatement := "That statement, aperiodic-compensation, is open: nobody has proved it, and nothing on this site claims a proof of it.", obligation := "aperiodic-compensation", entries := (cons "first-visit" (cons "mathematics" (cons "prize-review" (cons "research-session" (cons "reading" (cons "stdlib-feedback" (nil String)))))))}),
+  axioms: []
+}
+
+definition{
+  name: nthNat,
+  parameters: [xs : (List Nat), k : Nat],
+  result: Nat,
+  body: (match xs
+    | List.nil => 0
+    | List.cons head tail => (if (k =? 0) then head else (nthNat tail (prim subtract k 1 : Nat)))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: luminance,
+  parameters: [r : Nat, g : Nat, bl : Nat],
+  result: Nat,
+  body: (((prim multiply 2126 (nthNat (srgbLinear) r) : Nat) + (prim multiply 7152 (nthNat (srgbLinear) g) : Nat)) + (prim multiply 722 (nthNat (srgbLinear) bl) : Nat)),
+  axioms: []
+}
+
+definition{
+  name: meetsContrast,
+  parameters: [x : Nat, y : Nat, minimum : Nat],
+  result: Bool,
+  body: (if (x <=? y) then ((prim multiply minimum (x + 500000000) : Nat) <=? (prim multiply 10 (y + 500000000) : Nat)) else ((prim multiply minimum (y + 500000000) : Nat) <=? (prim multiply 10 (x + 500000000) : Nat))),
+  axioms: []
+}
+
+definition{
+  name: tokenOf,
+  parameters: [key : String, xs : (List Token)],
+  result: Token,
+  body: (match xs
+    | List.nil => (record Token {id := "", role := "", lightRed := 0, lightGreen := 0, lightBlue := 0, darkRed := 0, darkGreen := 0, darkBlue := 0, lightLuminance := 0, darkLuminance := 0})
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then head else (tokenOf key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: luminancesComputed,
+  parameters: [xs : (List Token)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (if ((project head lightLuminance) =? (luminance (project head lightRed) (project head lightGreen) (project head lightBlue))) then ((project head darkLuminance) =? (luminance (project head darkRed) (project head darkGreen) (project head darkBlue))) else false) then (luminancesComputed tail) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: pairsMeetLight,
+  parameters: [xs : (List ContrastPair), ts : (List Token)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (meetsContrast (project (tokenOf (project head foreground) ts) lightLuminance) (project (tokenOf (project head background) ts) lightLuminance) (project head minimum)) then (pairsMeetLight tail ts) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: pairsMeetDark,
+  parameters: [xs : (List ContrastPair), ts : (List Token)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (meetsContrast (project (tokenOf (project head foreground) ts) darkLuminance) (project (tokenOf (project head background) ts) darkLuminance) (project head minimum)) then (pairsMeetDark tail ts) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: wcagMinimum,
+  parameters: [purpose : String],
+  result: Nat,
+  body: (if (prim equal purpose "text" : Bool) then 45 else 30),
+  axioms: []
+}
+
+definition{
+  name: pairMinimumsWcag,
+  parameters: [xs : (List ContrastPair)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (if (memberString (project head purpose) (cons "large-text" (cons "text" (cons "ui" (nil String))))) then ((project head minimum) =? (wcagMinimum (project head purpose))) else false) then (pairMinimumsWcag tail) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: tokenIds,
+  parameters: [xs : (List Token)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (tokenIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: pairForegrounds,
+  parameters: [xs : (List ContrastPair)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head foreground) (pairForegrounds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: pairBackgrounds,
+  parameters: [xs : (List ContrastPair)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head background) (pairBackgrounds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: typeSizes,
+  parameters: [xs : (List TypeStep)],
+  result: (List Nat),
+  body: (match xs
+    | List.nil => (nil Nat)
+    | List.cons head tail => (cons (project head size) (typeSizes tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: spaceSizes,
+  parameters: [xs : (List SpaceStep)],
+  result: (List Nat),
+  body: (match xs
+    | List.nil => (nil Nat)
+    | List.cons head tail => (cons (project head size) (spaceSizes tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: strictlyIncreasing,
+  parameters: [xs : (List Nat), previous : Nat],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if (previous <? head) then (strictlyIncreasing tail head) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: textTokenIds,
+  parameters: [xs : (List Token)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (if (prim equal (project head role) "text" : Bool) then (cons (project head id) (textTokenIds tail)) else (textTokenIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: typeSize,
+  parameters: [key : String, xs : (List TypeStep)],
+  result: Nat,
+  body: (match xs
+    | List.nil => 0
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head size) else (typeSize key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: spaceSize,
+  parameters: [key : String, xs : (List SpaceStep)],
+  result: Nat,
+  body: (match xs
+    | List.nil => 0
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head size) else (spaceSize key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: motionReducedToZero,
+  parameters: [xs : (List Motion)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if ((project head reduced) =? 0) then (motionReducedToZero tail) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: motionWithinPause,
+  parameters: [xs : (List Motion)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (if ((project head duration) <=? 5000) then (motionWithinPause tail) else false)),
+  axioms: [],
+  recursive_argument: xs
+}
+
+theorem{
+  name: tokenIdsDistinct,
+  parameters: [],
+  statement: ((distinctStrings (tokenIds (tokens))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: tokenLuminancesComputed,
+  parameters: [],
+  statement: ((luminancesComputed (tokens)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: pairsNameTokens,
+  parameters: [],
+  statement: ((allMembers (appendStrings (pairForegrounds (contrastPairs)) (pairBackgrounds (contrastPairs))) (tokenIds (tokens))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyTextTokenOnABackground,
+  parameters: [],
+  statement: ((allMembers (textTokenIds (tokens)) (pairForegrounds (contrastPairs))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: pairMinimumsAreWcag,
+  parameters: [],
+  statement: ((pairMinimumsWcag (contrastPairs)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyPairMeetsContrastLight,
+  parameters: [],
+  statement: ((pairsMeetLight (contrastPairs) (tokens)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyPairMeetsContrastDark,
+  parameters: [],
+  statement: ((pairsMeetDark (contrastPairs) (tokens)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: typeScaleIncreasing,
+  parameters: [],
+  statement: ((strictlyIncreasing (typeSizes (typeScale)) 0) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: spacingIncreasing,
+  parameters: [],
+  statement: ((strictlyIncreasing (spaceSizes (spacing)) 0) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: bodyTextAtLeastOneRem,
+  parameters: [],
+  statement: ((100 <=? (typeSize "base" (typeScale))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: targetAtLeast24px,
+  parameters: [],
+  statement: ((24 <=? (spaceSize "target" (spacing))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: reducedMotionIsInstant,
+  parameters: [],
+  statement: ((motionReducedToZero (motion)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: motionEndsWithinFiveSeconds,
+  parameters: [],
+  statement: ((motionWithinPause (motion)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: landingNamesTheObligation,
+  parameters: [],
+  statement: ((prim equal (project (landing) obligation) (obligation) : Bool) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: landingEntersEveryJourney,
+  parameters: [],
+  statement: ((sameMembers (project (landing) entries) (journeyIds (journeys))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+structure{
+  name: VizPanel,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: String},
+    {name: script, type: String},
+    {name: renders, type: (List String)}
+  ]
+}
+
+definition{
+  name: vizPanels,
+  parameters: [],
+  result: (List VizPanel),
+  body: (cons (record VizPanel {id := "viz-triangle", script := "viz-triangle-js", renders := (cons "antidiagonal" (cons "diagonal-halving" (cons "edge-parity" (nil String))))}) (cons (record VizPanel {id := "viz-tower", script := "viz-tower-js", renders := (cons "antidiagonal" (cons "diagonal-halving" (cons "mask-transport" (cons "lucas-frame" (nil String)))))}) (cons (record VizPanel {id := "viz-ledger", script := "viz-ledger-js", renders := (cons "left-band" (cons "three-diagonal-band" (cons "edge-parity" (nil String))))}) (cons (record VizPanel {id := "viz-rays", script := "viz-rays-js", renders := (cons "kernel-law" (cons "residue-dichotomy" (cons "second-table" (nil String))))}) (cons (record VizPanel {id := "viz-defects", script := "viz-defects-js", renders := (cons "coupling-law" (cons "left-defect-sourcing" (cons "recurrent-central-collision" (nil String))))}) (cons (record VizPanel {id := "viz-dyadic", script := "viz-dyadic-js", renders := (cons "scale-free-rows" (cons "dyadic-response-reduction" (nil String)))}) (nil VizPanel))))))),
+  axioms: []
+}
+
+definition{
+  name: vizPanelIds,
+  parameters: [xs : (List VizPanel)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (vizPanelIds tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: vizScripts,
+  parameters: [xs : (List VizPanel)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head script) (vizScripts tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: vizRenders,
+  parameters: [xs : (List VizPanel)],
+  result: (List String),
+  body: (match xs
+    | List.nil => (nil String)
+    | List.cons head tail => (appendStrings (project head renders) (vizRenders tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: vizEachRenders,
+  parameters: [xs : (List VizPanel)],
+  result: Bool,
+  body: (match xs
+    | List.nil => true
+    | List.cons head tail => (match (project head renders)
+    | List.nil => false
+    | List.cons r rs => (vizEachRenders tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: vizClaimStatus,
+  parameters: [key : String, xs : (List Register::Claim)],
+  result: String,
+  body: (match xs
+    | List.nil => ""
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head status) else (vizClaimStatus key tail))),
+  axioms: [],
+  recursive_argument: xs
+}
+
+definition{
+  name: vizAllProved,
+  parameters: [ids : (List String), cs : (List Register::Claim)],
+  result: Bool,
+  body: (match ids
+    | List.nil => true
+    | List.cons head tail => (if (prim equal (vizClaimStatus head cs) "proved" : Bool) then (vizAllProved tail cs) else false)),
+  axioms: [],
+  recursive_argument: ids
+}
+
+theorem{
+  name: vizPanelsArePanels,
+  parameters: [],
+  statement: ((allMembers (vizPanelIds (vizPanels)) (panelIds (panels))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: vizPanelsAreSteps,
+  parameters: [],
+  statement: ((allMembers (vizPanelIds (vizPanels)) (stepPanels (steps))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: vizScriptsArePublished,
+  parameters: [],
+  statement: ((allMembers (vizScripts (vizPanels)) (artifactIds (artifacts))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: vizPanelsRender,
+  parameters: [],
+  statement: ((vizEachRenders (vizPanels)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: vizRendersAreClaims,
+  parameters: [],
+  statement: ((allMembers (vizRenders (vizPanels)) (Register::idsOf (Register::claims))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: vizRendersAreProved,
+  parameters: [],
+  statement: ((vizAllProved (vizRenders (vizPanels)) (Register::claims)) = true),
   proof: decide{},
   axioms: []
 }

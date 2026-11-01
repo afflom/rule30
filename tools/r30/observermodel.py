@@ -125,7 +125,8 @@ def rendered(panel, claims, artifacts=None):
         leaves = [c["id"] for c in claims if c["status"] == "open" and c["id"] not in depended]
         chains = {i for leaf in leaves for i in proved_chain(leaf, by_id)}
         return [i for i in proved if i in chains]
-    return []
+    # a visualization renders the proved claims its row declares (vizmodel)
+    return [i for i in proved if i in set(panel.get("renders", []))]
 
 
 def data(claims=None, panels=None, journeys=None, artifacts=None):

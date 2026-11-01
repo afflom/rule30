@@ -20,10 +20,12 @@ published on every push to `main` at <https://afflom.github.io/rule30/>.
 | `Api.lex.tex` | the `r30` command surface (`Argument`, `Command`, `commands`) | the command count |
 | `Register.lex.tex` | the claims of `frontier.toml` | every `depends` target is a claim; every proved claim names a Lean theorem |
 | `Architecture.lex.tex` | the conceptual model, stakeholders, concerns, viewpoints, views and the quality model, on prism-stdlib's `Foundation.Arch` and `Foundation.Qual` | the stdlib's index references agree with the labeled ids; every concern is framed by a viewpoint of a stakeholder who holds it; every viewpoint governs a view; every command a view or a measure names is a command of `Api` |
-| `Presentation.lex.tex` | the brand, the published artifacts, the panels of the site, the explainer's paragraphs, the open obligation's id, the journey of each stakeholder and its steps (`Pole`, `Step`, `Verification`: the pedagogy) | panels are governed by `Architecture` viewpoints; journeys belong to declared stakeholders; artifacts come from `Api` commands; published paths and paragraph ids are distinct; every step shows a panel of a journey at a declared pole, the steps of a journey are consecutive from 1 and linked, cover the poles in the Observer's order and end in verification, cite claims of `Register` or artifacts and declared paragraphs, and a journey's panels are its steps' panels |
+| `Presentation.lex.tex` | the brand, the published artifacts, the panels of the site, the explainer's paragraphs, the open obligation's id, the journey of each stakeholder and its steps (`Pole`, `Step`, `Verification`: the pedagogy), and the central navigation as WAI-ARIA APG patterns (`Pattern`, `Navigation`, `NavItem`) | panels are governed by `Architecture` viewpoints; journeys belong to declared stakeholders; artifacts come from `Api` commands; published paths and paragraph ids are distinct; every step shows a panel of a journey at a declared pole, the steps of a journey are consecutive from 1 and linked, cover the poles in the Observer's order and end in verification, cite claims of `Register` or artifacts and declared paragraphs, and a journey's panels are its steps' panels; navigation ids are distinct, every item names a declared pattern and navigation, every journey is reachable from the primary navigation and listed by the stepper, targets are journeys, steps or artifacts, the breadcrumb is vantage > pole > step and resolves for every step, the verification step of every journey is a primary target, the register search opens a register step |
 | `Application.lex.tex` | the application and its publication (the view workflow, the Pages environment and URL) | the entry page and the logo are published artifacts; the publication's workflow is the application's; its timeout is within the quality threshold; the obligation is an open claim of `Register`; the status marks cover every status of `Register` |
 | `Observer.lex.tex` | the Observer: for every journey of `Presentation`, the object quadruple (`Quadruple`: the problem, the proof as real object, the journey as sensual object, the proved claims its panels render as real qualities, its panels as sensual qualities, the open claims as withdrawn), the `Overlap` and `Interaction` rows between vantages, the `Facet` rows correlating the proof's own vantages, and a declared `gauge` renaming of the panel ids | every vantage is a declared journey and every journey a vantage; the object is the declared problem; real qualities are proved claims, withdrawn ids open claims, sensual qualities the journey's panels; no panel renders a withdrawn claim; every vantage sees part of the real object; interactions are symmetric and through shared panels; the facets are claims of the stated status; the gauge keeps the real qualities and transforms the sensual ones |
 | `Convert.lex.tex` | the converter from Lean signatures to LexLean statements (`tools/r30/convert.py`): the signature language (`Node`, `Signature`), a snapshot of the glossary entries the fixtures resolve (`Lexeme`), the operator-class, hint and rewrite tables, and `convert` (`check`, `prop`, `math`, binder naming) as definitions | on 28 real signatures of the research modules (`tools/r30/convert_fixtures.json`), `convert` yields exactly the statement, or the refusal, the Python converter produces; the fixture count |
+| `Rule30Core.lex.tex` | the automaton's computational core as executable definitions (`tools/r30/coremodel.py`): `rule` on three cells, the row step (`walk`, `step`), `rows`, `center`, the right diagonals `rdiag` (the cell at position t-j) and `rightRecursion` (the right-edge recursion `rdiag` of `Core.lex.tex`), `twopow`, `towerWord`, `timeParity`, `trailingParity`, `rulerBackground`, and the vectors `centersFrom`, `rulerFrom`; seven of them are production roots | the first 32 centers are 1,1,0,1,1,1,0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,1,1,1,0,1,0,1,1,1,0 and the first 32 ruler values a literal; row t has 2t+1 cells (t < 32); `rdiag 1 t = timeParity t` (t < 64); `center t = towerWord t t` (t < 32); the tower recursion `towerWord (k+2) (s+1) = towerWord (k+2) s XOR (towerWord (k+1) s OR towerWord k s)` on words 2..5 at every position; period `2^j` of words 0..4 and half period `2^(j-1)` of diagonals 2..5; the row cells agree with the right-edge recursion (t < 10) |
+| `Standards.lex.tex` | the standards register: every external standard the implementation realizes (`Standard`: id, name, authority, version, scope, `realizedBy`, conformance check, coverage), and the ids of the site's navigation and visualizations | standard ids distinct; every standard has an authority and at least one realizer; every realizer is a declared module, artifact, panel, journey, command, workflow, register, navigation or visualization id; every panel, artifact, journey and command of `Presentation` and `Api`, and every navigation and visualization id, names at least one standard; the Lean and LexLean rows carry the pinned versions |
 
 ## The converter in LexLean, and what stays in Python
 
@@ -149,6 +151,99 @@ logo, `site/logo.svg`, is Rule 30 itself: the first twelve rows from a single
 black cell, the center column in amber; it is generated by `api sync` like
 the modules and imitates no one's mark.
 
+## Navigation
+
+The central navigation is modeled before it is rendered and is an
+implementation of the [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+(APG): `Presentation.lex.tex` declares the patterns (`Pattern`: the
+[disclosure navigation menu](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/),
+the [breadcrumb](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/), the
+stepper as a [disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/)
+sequence with `aria-current="step"`, and the
+[combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)), the three
+navigations (`nav-primary`, the site-wide disclosure navigation menu in the
+banner: Vantages, Register, Modules, Verify, Standards; `nav-breadcrumb`, the
+trail vantage > pole > step of the current step; `nav-stepper`, the steps of
+the current vantage) and every item (`NavItem`: its navigation, parent,
+label, pattern, kind and target: a journey, a step, an artifact or an
+external authority), and the kernel decides that the ids are distinct, that
+every item names a declared pattern, that every journey is reachable from the
+primary navigation and listed by the stepper, that step, journey and artifact
+targets resolve, that the breadcrumb is vantage > pole > step and resolves
+for every step, that the verification step of every journey is a primary
+target (WCAG 2.2 consistent help) and that the register search opens a
+register step (`navIdsDistinct`, `everyJourneyInPrimaryNavigation`,
+`breadcrumbIsVantagePoleStep`, `everyBreadcrumbResolves`,
+`verifyReachableFromEveryJourney`, `searchOpensTheRegister` among them);
+`nav_problems` in `presentationmodel.py` names a faulty item before the
+kernel does and `view render` refuses it. `site/index.html` realizes the
+patterns exactly: the menu's buttons carry `aria-expanded` and
+`aria-controls`, Escape closes a list and returns focus, the arrow keys, Home
+and End move focus per the pattern and one list is open at a time; the
+breadcrumb is a `nav` labeled Breadcrumb whose last link is
+`aria-current="page"`; the stepper is a `nav` landmark whose current step is
+`aria-current="step"`, with previous and next links and a disclosure of the
+step titles; the register search is an editable combobox with a listbox
+popup and a live region, reachable from the Register menu on every page, and
+opens the register step of the current vantage on the chosen claim through
+the deep link `#<journey>/<step>/<claim>`. The page keeps the landmarks of
+the HTML standard (`header`, `nav`, `main`, `aside`, `footer`, one `h1`,
+headings in order), a visible "where am I" (vantage, pole, step n of N), a
+site map panel (`sitemap`, the community's step `rd-map`: every vantage and
+every step, the list the published sitemap mirrors), WCAG 2.2 focus
+visibility, 24 by 24 pixel targets, reduced motion, the measured contrast
+tokens and a layout that holds at 320 pixels, and leaves a `viz-slot`
+container in the step view where a visualization panel (an id starting with
+`viz-`) renders through the loader contract below.
+
+## The design system and the experience
+
+The design system is model data before it is CSS (`tools/r30/designmodel.py`,
+generated into `Presentation.lex.tex`): colour tokens (`Token`: a role with
+its sRGB channels in the light and the dark theme and the relative luminance
+of each, scaled by 10^10), the pairs the stylesheet puts one token on another
+(`ContrastPair`: text 4.5:1, large text and controls or graphics 3:1, WCAG
+2.2 success criteria 1.4.3 and 1.4.11), the type scale, the spacing scale and
+the motion durations with their reduced-motion variant. The kernel decides,
+in integer arithmetic, that every stored luminance is the one computed from
+the channels through the 256-entry sRGB table (`tokenLuminancesComputed`),
+that every pair meets its minimum in both themes as
+`minimum * (darker + 5*10^8) <= 10 * (lighter + 5*10^8)`
+(`everyPairMeetsContrastLight`, `everyPairMeetsContrastDark`), that every
+text colour sits on a declared background, that the scales increase, that
+body text is at least 1rem and targets at least 24px, that reduced motion is
+instant and that nothing animates for 5 s or more. `api sync` writes the
+tokens into `site/index.html` as CSS custom properties (light, dark under
+`prefers-color-scheme` and under the reader's choice, the reduced-motion
+variant) and `api check` refuses drift; the view publishes them as
+`tokens.css`. The stylesheet uses no colour that is not a token.
+
+The experience: the page opens on one screen that tells the story (the
+question, Rule 30 drawn row by row with its center column in amber and read
+out as bits, what is proved, what is open, the six vantages as entry points;
+the `Landing` record, whose obligation and entries the kernel decides), then
+each vantage is a lesson one step at a time, with a progress line, a
+transition on the motion token, consistent help (the verification step of
+the current vantage) in the banner, and every item of a step's evidence as a
+disclosure card that opens the exact statement in place: status, Lean name,
+lexeme, research module and its kappa-label and the attestation, from
+`provenance.jsonld`. Three panels complete the model: `standards` (the
+community's step `rd-standards`, `standards.json` rendered with filters and
+links to every realizer), `model` (the UOR Foundation's step `sf-model`:
+stakeholders, vantages, panels and viewpoints as an interactive diagram, and
+the Observer's quadruple of the chosen vantage; `#stdlib-feedback/sf-model/<journey>`
+deep-links a vantage) and `design` (`sf-design`: the tokens and the decided
+ratio of every pair).
+
+The loader contract of the visualizations: `view render` inlines every
+`site/viz/*.js` into the `<script id="r30-viz">` hook before the page's own
+script, after `window.r30viz = window.r30viz || {}`; each file registers
+`window.r30viz["viz-..."] = function (slot, viewData) {...}`, and a step whose
+panel id starts with `viz-` calls it with the `#viz-slot` element and the view
+data (the whole embedded data with `step`, `panel` and `reducedMotion`). A
+missing or failing visualization renders a placeholder that names the panel;
+the evidence of the step holds without it.
+
 ## The views and the Pages deployment
 
 The site is not arbitrary: `Architecture.lex.tex` declares the stakeholders
@@ -223,14 +318,67 @@ runs no Lean, no lexlean and no tests: validation happened in the pre-commit
 gate, and the workflow's five-minute timeout is decided against the quality
 model (`publicationWithinBudget`).
 
+## Standards
+
+The site, the model and the tooling are an implementation of external
+standards at every level, and the implementation says which:
+`Standards.lex.tex` (generated by `api sync` from `tools/r30/standardsmodel.py`,
+the same rows as `model/standards.toml`) is one `Standard` row per standard,
+with its authority (a URL), its version, what it governs here, the declared
+things that realize it (`realizedBy`: modules, published artifacts, panels,
+journeys, `r30` commands, workflows, model registers, and the site's
+navigation ids `nav-primary`, `nav-breadcrumb`, `nav-stepper` and visualization
+ids `viz-triangle`, `viz-tower`, `viz-ledger`, `viz-rays`, `viz-defects`,
+`viz-dyadic`) and the command or decided predicate that confirms conformance.
+The rows: ISO/IEC/IEEE 42010 (`Architecture`), ISO/IEC 25010 (`Foundation.Qual`,
+the measures' commands), WCAG 2.2, WAI-ARIA 1.2 with the APG patterns, the
+HTML Living Standard, SVG 2 and the WAI-ARIA Graphics Module (the site, its
+navigation and its visualizations), schema.org and JSON-LD 1.1, W3C PROV-O,
+JSON Schema 2020-12, OpenAPI 3.1, Gherkin, CITATION.cff, SPDX, the Sitemap
+protocol, Open Graph, RFC 8785 JCS and Rivest canonical S-expressions (the
+κ-labels), in-toto Statement v1, OCI distribution (planned: the κ-registry),
+IANA media types, Lean 4 and LexLean (versions read from `lean-toolchain` and
+`lexlean.lock`, so a toolchain change regenerates the module). The kernel
+decides (`standardIdsDistinct`, `everyStandardHasAuthority`,
+`everyStandardRealized`, `realizersDeclared`, `panelsNameAStandard`,
+`artifactsNameAStandard`, `journeysNameAStandard`, `commandsNameAStandard`,
+`navigationNamesAStandard`, `visualizationsNameAStandard`,
+`leanToolchainPinned`, `lexleanPinned`) that nothing is realized by an
+undeclared thing and that nothing declared escapes the standards; a new
+command or artifact without a standard is a false `decide`, and
+`standardsmodel.problems` names the row before the kernel does.
+
+`view render` writes the machine-readable artifacts the standards call for,
+each a declared artifact of `Presentation.lex.tex` cited as evidence by a
+verification step: `standards.json` (the register; schema `r30/standards/1`),
+`openapi.json` (OpenAPI 3.1 from `cli.build_parser`: a path per command, GET
+when it only reads and POST when `model/commands.toml` says it mutates, the
+arguments as parameters, the responses from the result schemas, the typed
+failures from `errors.toml`), `sitemap.xml` and `robots.txt` (the page and
+the deep link `#<journey>/<step>` of every step), `provenance.jsonld` (PROV-O:
+every proved claim `prov:wasDerivedFrom` its Lean theorem and
+`prov:wasAttributedTo` the Lean kernel, attested by the paper's latest
+LexLean attestation id, its module carrying the κ-label read from the last
+accepted gate's kernel-replay receipt when one is readable and saying so when
+not, as in CI; an open claim derived from nothing), `schema.json` (schema.org
+JSON-LD: a `LearningResource` per step and per journey, the paper as
+`ScholarlyArticle` with the attested PDFs, the repository as
+`SoftwareSourceCode`, the register as `Dataset`; the same graph and the Open
+Graph metadata are injected into the head of `index.html` at render),
+`attestations.intoto.json` (an in-toto Statement v1 whose subjects are the
+PDFs and their sources with the digests of `pdf-manifest.json` and whose
+predicate is the attestation) and `CITATION.cff` (written at the repository
+root when missing, copied into the view). The tests
+(`StandardsTests` in `scripts/tests/test_r30.py`) read each artifact back.
+
 ## The PrismPM model (`model/`, `schemas/`, `features/`, `CONFORMANCE.md`, `prismpm.toml`)
 
 `authorities`, `ids` and `ledger` (`template/1`) are the register as
 capabilities with their evidence; `commands` (`prismpm/command-contract/1`)
 is every leaf of the parser with what it mutates and the schema of its
-result; `standards` (`prismpm/standards/1`) names ISO/IEC/IEEE 42010 and
-ISO/IEC 25010 through the vendored facets with exactly the entries the
-architecture uses; `projection` (`prismpm/projection/1`) says which
+result; `standards` (`prismpm/standards/1`) is the standards register of
+`Standards.lex.tex` (the ISO rows keep the vendored facets with exactly the
+entries the architecture uses); `projection` (`prismpm/projection/1`) says which
 declaration projects to which collection of the view; `contracts`
 (`prismpm/contracts/1`) with `schemas/` describes the JSON the project
 publishes: `register.json`, the interface sheets, and the `--json` reports of
@@ -270,6 +418,53 @@ committed; `packages/rust-std/rule30_api_commands/` is a Cargo crate whose
 `run()` returns the command list, and it builds with a stock `cargo`. The
 Python package `tools/r30` remains the interim runtime around the modules.
 
+`rows`, `center`, `rdiag`, `towerWord`, `rulerBackground`, `centersFrom` and
+`rulerFrom` of `Rule30Core.lex.tex` are production roots of the same request
+(`coremodel.PRODUCTION_ROOTS`: effects `allocation`, `overflow`,
+`recursion`; target `rust-std`; packages `rule30_api_core_*`), and every
+definition they call is marked `executable`. The pinned compiler's targets
+are `rust-core` and `rust-std` and nothing else (`bin/r30 api production
+--targets`): there is no Wasm, JavaScript or browser target, so the page does
+not run the module. PrismPM's SDK (the Core-Wasm and browser export of
+`lexlean-matmul`) is the route to that, and it is not a dependency here.
+What the page gets instead is `production/core-vectors.json` (the view
+artifact `core-vectors`): the first 256 centers, the first 12 tower words and
+the ruler background below 512, computed by the Python replica of the module
+in `coremodel.py`, and written by `api sync` only after it agrees with the
+module: the literals `knownCenters` and `knownRuler` are read back from the
+generated text and must be prefixes of the vectors, and every decided
+identity is re-checked on the whole published range. `api check` refuses a
+drifted file.
+
+## LexLean features in use
+
+Every feature of the pinned binary (`lexlean 0.4.0`, language 1.2), and
+where this repository uses it or why it does not.
+
+| Feature | Used | Where, or why not |
+| --- | --- | --- |
+| Semantic modules (the `lexlean/semantic-module/1` data form, emitted as the 1.2 notation) | yes | every module of `src/`, generated from the data form by `tools/r30/*model.py` through `semantic.py` and `lexmod.py`; the paper's `rule30-paper/src/*.lex.tex` |
+| Decided theorems (`proof: decide{}`) | yes | every module of `src/`; `Rule30Core.lex.tex` decides computations (rows, centers, words), the others decide membership and shape of the model data |
+| Executable definitions and production roots (`executable`, `production: {effects, targets}`) | yes | `commands`, `commandCount` of `Api`; seven roots of `Rule30Core` |
+| `lexlean production targets` | yes | `bin/r30 api production --targets`; the digests are pinned in `production.py` and the request, and the tests compare them with the binary |
+| `lexlean production build` | yes | `bin/r30 api production`: certified `rust-std` crates for every root (`rust-core` is unused: every root allocates) |
+| `lexlean production verify-artifact` | yes | `bin/r30 api production` replays the published bundle without source, Lean or network |
+| A Wasm or browser production target | no | the binary has none (only `rust-core`, `rust-std`); the site publishes the cross-checked vectors instead (above) |
+| `lexlean verify` (the full pipeline, attestation) | yes | `bin/r30 verify api` and `bin/r30 verify paper` through `scripts/verify_lexlean.sh`, which reuses the attestation of an unchanged project |
+| Attestations (`attestation.json`, `latest-verified.json`) | yes | the gate records the paper's attestation; `standardsmodel` publishes it as `attestations.intoto.json` and in `provenance.jsonld` |
+| `lexlean check` (linked IR, no Lean) | yes | `bin/r30 check api`, `bin/r30 check paper`, `bin/r30 theorem add`: seconds, before any verify |
+| `lexlean build` (content-addressed layout without verifying) | no | `verify` subsumes it for this project; the gate needs the verified attestation, not an unverified build |
+| `lexlean lock` / `lock --check` | yes | `api sync` relocks after a module changes; the tests and the gate check the lock |
+| `lexlean fmt` / `fmt --check` | no | the generators own the text and `api check` refuses drift from them byte for byte; the emitted notation is not `fmt`'s canonical layout (`fmt --check --all` reports `LLL1003`), and rewriting it would make the generated files disagree with their generators |
+| `lexlean migrate --to 1.2` | once | the vendored PrismPM stdlib (`stdlib/Foundation/{Arch,Qual}.lex.tex`, `language/prism.{arch,qual}`) was migrated from 1.1; the generated modules are emitted in 1.2 directly |
+| Builtin lexicons (`lexlean.std.bool`, `lexlean.std.nat`) | yes | `rule30-api/lexlean.toml`; the paper adds the research lexicons |
+| Path lexicons (`kind = "path"`) | yes | `prism.arch`, `prism.qual` here; the paper's `r30.*` lexicons, generated by `bin/r30 theorem add` |
+| Git lexicons (`kind = "git"`, `lock --allow-network`) | no | every lexicon is vendored or generated in the repository, so the lock needs no network |
+| Imports (`\importmodule`, `Module::name`) | yes | `Presentation` imports `Api`, `Architecture`, `Register`; `Architecture` imports `Api` and the stdlib (`Foundation.Arch`, `Foundation.Qual`); `Application`, `Observer` and `Standards` import `Presentation`; `Rule30Core` imports nothing (it is self-contained so its roots link alone) |
+| The external-interface probe (host Lean elaborating a statement against `rule30-core-lean`) | yes | the paper: `bin/r30 theorem add` and `bin/r30 verify paper --modules` run the probe `verify` runs; the API modules state no host theorem, so they have no probe |
+| `lexlean explain <code>` | no | not called by the tooling; reports carry the diagnostic code and message, and `explain` is the manual lookup |
+| `lexlean init`, `clean` | no | the projects exist; `clean` would discard the warm `.lexlean` the gate reuses |
+
 ## Commands
 
 ```
@@ -277,6 +472,6 @@ bin/r30 api sync                   # regenerate every module, register, schema, 
 bin/r30 api check                  # refuse drift (run by the tests and the gate)
 bin/r30 api production             # export the production roots to certified Rust and replay the bundle (about a minute)
 bin/r30 api production --targets   # the compiler's target descriptors
-bin/r30 verify api                 # lexlean verify of the nine modules (about five minutes; Convert.lex.tex decides 28 conversions)
+bin/r30 verify api                 # lexlean verify of the API modules (about five minutes; Convert.lex.tex decides 28 conversions, Rule30Core.lex.tex the first rows)
 bin/r30 view render [--out DIR]    # the current view (the site, statements.json, explainer.json, rule30.svg, the PDFs)
 ```

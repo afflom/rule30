@@ -20,7 +20,22 @@ consecutive orders from 1 and are linked by `next`, every journey covers the
 poles in their canonical order and ends in the verification step, every
 evidence id is a claim or an artifact, every paragraph a step cites is
 declared, and each journey's panels are exactly its steps' panels (what the
-Observer reads as the vantage's sensual qualities).
+Observer reads as the vantage's sensual qualities). The central navigation is
+declared too, as an implementation of the WAI-ARIA Authoring Practices
+(`Pattern`, `Navigation`, `NavItem`: the disclosure navigation menu
+`nav-primary`, the breadcrumb `nav-breadcrumb`, the stepper `nav-stepper`,
+the register search as a combobox), and decided: ids distinct, every item
+names a declared pattern and a declared navigation, every journey is
+reachable from the primary navigation and listed by the stepper, targets are
+journeys, steps or artifacts, the breadcrumb is vantage > pole > step and
+resolves for every step, and the verification step of every journey is a
+primary target (WCAG 2.2 consistent help). The design system is declared
+here too (`designmodel`: `Token`, `ContrastPair`, `TypeStep`, `SpaceStep`,
+`Motion`, `Landing`), with the kernel deciding WCAG 2.2 contrast of every
+pair in both themes in integer arithmetic over relative luminance; the
+experience adds three panels reached from the pedagogy: the standards
+(`rd-standards`), the model of the site with the Observer's quadruples
+(`sf-model`) and the design system itself (`sf-design`).
 
 `rule30-api/src/Application.lex.tex` declares the application (name,
 version, entry page, logo, workflow) and its publication (the view workflow
@@ -35,10 +50,11 @@ uses cover every status of `Register`.
 `bin/r30 view render` is the runtime of these two modules: it writes the
 artifacts into a directory from the same lists (`site.py`)."""
 
-from . import repo
+from . import designmodel, repo
 from .semantic import (BOOL, NAT, STR, add, all_members, b, beq, ble, call, definition, eq_string, field_of_each, holds, if_,
                        index_of, list_t, lookup_field, lst, match_list, member_string, n, named, proj, record, s, strings,
-                       structure, var)
+                       structure, theorem, var)
+from .vizmodel import VIZ_ARTIFACTS, VIZ_PANELS, viz_declarations, with_viz_steps
 
 PRESENTATION = repo.ROOT / "rule30-api" / "src" / "Presentation.lex.tex"
 APPLICATION = repo.ROOT / "rule30-api" / "src" / "Application.lex.tex"
@@ -72,13 +88,27 @@ ARTIFACTS = [
     {"id": "architecture-module", "path": "Architecture.lex.tex", "media": "text/x-lexlean", "command": "api_sync", "source": "rule30-api/src/Architecture.lex.tex"},
     {"id": "presentation-module", "path": "Presentation.lex.tex", "media": "text/x-lexlean", "command": "api_sync", "source": "rule30-api/src/Presentation.lex.tex"},
     {"id": "application-module", "path": "Application.lex.tex", "media": "text/x-lexlean", "command": "api_sync", "source": "rule30-api/src/Application.lex.tex"},
+    {"id": "core-vectors", "path": "core-vectors.json", "media": "application/json", "command": "api_sync", "source": "rule30-api/production/core-vectors.json"},
     {"id": "frontier-module", "path": "Frontier.lex.tex", "media": "text/x-lexlean", "command": "frontier_render", "source": "rule30-paper/src/Frontier.lex.tex"},
     {"id": "agents", "path": "AGENTS.md", "media": "text/markdown", "command": "view_render", "source": "AGENTS.md"},
     {"id": "strategy", "path": "STRATEGY.md", "media": "text/markdown", "command": "view_render", "source": "rule30-lexlean/STRATEGY.md"},
     {"id": "readme", "path": "README.md", "media": "text/markdown", "command": "view_render", "source": None},
     {"id": "logo", "path": "logo.svg", "media": "image/svg+xml", "command": "api_sync", "source": "rule30-api/site/logo.svg"},
+    # the machine-readable artifacts the standards register (Standards.lex.tex) calls for
+    {"id": "standards", "path": "standards.json", "media": "application/json", "command": "view_render", "source": None},
+    {"id": "standards-module", "path": "Standards.lex.tex", "media": "text/x-lexlean", "command": "api_sync", "source": "rule30-api/src/Standards.lex.tex"},
+    {"id": "openapi", "path": "openapi.json", "media": "application/vnd.oai.openapi+json", "command": "view_render", "source": None},
+    {"id": "sitemap", "path": "sitemap.xml", "media": "application/xml", "command": "view_render", "source": None},
+    {"id": "robots", "path": "robots.txt", "media": "text/plain", "command": "view_render", "source": None},
+    {"id": "provenance", "path": "provenance.jsonld", "media": "application/ld+json", "command": "view_render", "source": None},
+    {"id": "jsonld", "path": "schema.json", "media": "application/ld+json", "command": "view_render", "source": None},
+    {"id": "attestations", "path": "attestations.intoto.json", "media": "application/vnd.in-toto+json", "command": "view_render", "source": None},
+    {"id": "citation", "path": "CITATION.cff", "media": "application/yaml", "command": "view_render", "source": "CITATION.cff"},
+    # the Observer module the model panel draws, and the design tokens as the stylesheet the site inlines
+    {"id": "observer-module", "path": "Observer.lex.tex", "media": "text/x-lexlean", "command": "api_sync", "source": "rule30-api/src/Observer.lex.tex"},
+    {"id": "tokens", "path": "tokens.css", "media": "text/css", "command": "view_render", "source": None},
     {"id": "site", "path": "index.html", "media": "text/html", "command": "view_render", "source": "rule30-api/site/index.html"},
-]
+] + VIZ_ARTIFACTS
 
 # The open claim every proved reduction ends at (the register's "remaining
 # obligation"); Application.lex.tex decides that it is an open claim.
@@ -107,9 +137,17 @@ PANELS = [
      "statement": "The command surface, the register, the architecture and this presentation as verified semantic modules."},
     {"id": "quality", "title": "Quality", "viewpoint": "optimal", "artifact": "architecture-module",
      "statement": "The measures of an optimal implementation, each with its threshold and the command that reports it."},
+    {"id": "sitemap", "title": "Site map", "viewpoint": "comprehension", "artifact": "site",
+     "statement": "Every vantage of this site with every step of its lesson, in order and with its pole: the same list the published sitemap mirrors."},
     {"id": "verify", "title": "Verify it yourself", "viewpoint": "evidence", "artifact": "pdf-manifest",
      "statement": "The commands that reproduce what this page shows, the attested PDFs with their digests, the attestation of the paper and the published artifacts; nothing here asks to be taken on trust."},
-]
+    {"id": "standards", "title": "Standards", "viewpoint": "evidence", "artifact": "standards",
+     "statement": "Every external standard this site and its API implement, with its authority, version, scope, what realizes it here and the check that confirms it: standards.json, rendered."},
+    {"id": "model", "title": "The model of the site", "viewpoint": "stdlib", "artifact": "observer-module",
+     "statement": "The application as PrismPM models it: stakeholders, viewpoints, journeys and panels, and the Observer's quadruple of each vantage (what it sees proved, what it shows, what stays withdrawn), drawn from the modules the kernel decides."},
+    {"id": "design", "title": "The design system", "viewpoint": "comprehension", "artifact": "tokens",
+     "statement": "The colour tokens of both themes with the contrast ratio of every pair the stylesheet uses, the type and spacing scales and the motion durations, as Presentation.lex.tex declares them and the kernel decides them against WCAG 2.2."},
+] + VIZ_PANELS
 
 # The Observer's poles as the canonical order of every journey: a lesson
 # first says what the vantage is, then shows the proof as it appears from
@@ -220,8 +258,8 @@ _STEPS = {
          "evidence": ["q-adic-descent", "front-slack-descent", "evaluation-point", "gate-phase-opposition", "band-engines", "saturation-reexcitation",
                       "first-failure-2adic", "route-a-band-discharge", "route-c-rank-drop", "route-b-reset-mismatch"]},
         {"id": "ma-verify", "pole": "verification", "panel": "verify", "title": "Verify the paper",
-         "goal": "Verify: the attestation identifiers of the paper, the PDF digests against pdf-manifest.json, bin/r30 claim <id> for any claim, bin/r30 axioms <Lean name> for its axioms.",
-         "evidence": ["pdf-manifest", "paper-pdf", "statements", "register-json"]},
+         "goal": "Verify: the attestation identifiers of the paper, the PDF digests against pdf-manifest.json (also an in-toto statement), the provenance of every proved claim (PROV-O: theorem, module, attestation), bin/r30 claim <id> for any claim, bin/r30 axioms <Lean name> for its axioms; cite the paper from CITATION.cff.",
+         "evidence": ["pdf-manifest", "paper-pdf", "statements", "register-json", "attestations", "provenance", "citation"]},
     ],
     "prize-review": [
         {"id": "pr-tree", "pole": "sensual-object", "panel": "reduction-tree", "title": "The proof as a tree",
@@ -238,8 +276,8 @@ _STEPS = {
          "goal": "Read the one open obligation every proved reduction ends at, EightAperiodic, stated as open with its chain to Problem 1.",
          "evidence": ["aperiodic-compensation"]},
         {"id": "pr-verify", "pole": "verification", "panel": "verify", "title": "Reproduce the evidence",
-         "goal": "Reproduce the register's evidence: bin/r30 frontier check reads every proved claim against the kernel, bin/r30 axioms <Lean name> prints its axioms, the PDFs carry the attested paper.",
-         "evidence": ["frontier", "pdf-manifest", "paper-pdf"]},
+         "goal": "Reproduce the register's evidence: bin/r30 frontier check reads every proved claim against the kernel, bin/r30 axioms <Lean name> prints its axioms, the PDFs carry the attested paper, and provenance.jsonld records for every proved claim the theorem, the module and the attestation it rests on.",
+         "evidence": ["frontier", "pdf-manifest", "paper-pdf", "provenance", "attestations"]},
     ],
     "research-session": [
         {"id": "rs-leaves", "pole": "sensual-object", "panel": "open-leaves", "title": "Where to work",
@@ -268,6 +306,9 @@ _STEPS = {
         {"id": "rd-tree", "pole": "sensual-object", "panel": "reduction-tree", "title": "The map",
          "goal": "Read the register as a tree: what rests on what, which arrows are theorems, which leaves are open.",
          "evidence": ["chain", "problem1"]},
+        {"id": "rd-map", "pole": "sensual-object", "panel": "sitemap", "title": "Every vantage and its steps",
+         "goal": "Find any lesson of this site: the six vantages, every step of each with its pole, and the step you are on; the primary navigation reaches the same places from every page.",
+         "evidence": ["site", "presentation-module"]},
         {"id": "rd-sheet", "pole": "sensual-quality", "panel": "interface-sheets", "title": "A claim, labeled",
          "goal": "Read a claim's labeled sheet, written to be reused: chain, notions, exact facts, handles.",
          "evidence": ["interfaces"]},
@@ -277,17 +318,26 @@ _STEPS = {
         {"id": "rd-obligation", "pole": "withdrawn", "panel": "obligation", "title": "What is open",
          "goal": "Read the open obligation as open, with its Lean predicate, and the open leaves that would also close Problem 1.",
          "evidence": ["aperiodic-compensation"]},
+        {"id": "rd-standards", "pole": "verification", "panel": "standards", "title": "The standards it implements",
+         "goal": "See which external standard governs each part of what you have read (accessibility, navigation, markup, graphics, metadata, provenance, citation), what realizes it here and the check that confirms it; filter by kind and follow any authority.",
+         "evidence": ["standards", "standards-module", "site"]},
         {"id": "rd-verify", "pole": "verification", "panel": "verify", "title": "Reproduce the view",
-         "goal": "Reproduce the view: bin/r30 view render writes these artifacts, the PDFs and their digests are the attested paper, the modules are verified with lexlean.",
-         "evidence": ["readme", "pdf-manifest", "site"]},
+         "goal": "Reproduce the view: bin/r30 view render writes these artifacts, the PDFs and their digests are the attested paper, the modules are verified with lexlean; the standards the view implements, with what realizes each and how it is checked, are standards.json, and the site is described for machines (schema.org, the sitemap) and for citation (CITATION.cff).",
+         "evidence": ["readme", "pdf-manifest", "site", "standards", "jsonld", "sitemap", "citation"]},
     ],
     "stdlib-feedback": [
         {"id": "sf-modules", "pole": "sensual-object", "panel": "modules", "title": "The application as modules",
-         "goal": "Read the application as LexLean semantic modules on prism-stdlib: the command surface, the register, the architecture, the presentation, the application and the Observer, each data plus theorems the kernel decides.",
-         "evidence": ["api-module", "register-module", "architecture-module", "presentation-module", "application-module"]},
+         "goal": "Read the application as LexLean semantic modules on prism-stdlib: the command surface, the register, the architecture, the presentation, the application, the Observer and the standards register, each data plus theorems the kernel decides.",
+         "evidence": ["api-module", "register-module", "architecture-module", "presentation-module", "application-module", "standards-module"]},
+        {"id": "sf-model", "pole": "sensual-object", "panel": "model", "title": "One model, many parts",
+         "goal": "Read the whole repository as one PrismPM model: each stakeholder holds concerns, each viewpoint frames one, each journey is a vantage through panels, and the Observer records for each vantage what it sees proved, what it shows and what stays withdrawn; select a vantage to trace its quadruple.",
+         "evidence": ["observer-module", "presentation-module", "architecture-module", "register-module"]},
         {"id": "sf-quality", "pole": "sensual-quality", "panel": "quality", "title": "What optimal means here",
          "goal": "Read the quality model on Foundation.Qual: the measures, their thresholds and the command that reports each, the pedagogy among them.",
          "evidence": ["architecture-module"]},
+        {"id": "sf-design", "pole": "sensual-quality", "panel": "design", "title": "The design system, decided",
+         "goal": "Read the design system as data: every colour token in both themes, every text and control pair with its contrast ratio, which the kernel decides in integer arithmetic over relative luminance against WCAG 2.2, and the type, spacing and motion scales the stylesheet is generated from.",
+         "evidence": ["tokens", "presentation-module"]},
         {"id": "sf-register", "pole": "real-quality", "panel": "register", "title": "The register, decided",
          "goal": "Read the register as Register.lex.tex restates it (every depends target a claim, every proved claim a Lean theorem, decided by the kernel): the same rows as register.json under its schema.",
          "evidence": ["register-json", "register-module", "frontier-module"]},
@@ -295,8 +345,8 @@ _STEPS = {
          "goal": "Read the obligation as Presentation names it and Application decides it to be an open claim (obligationIsOpen): the Observer's withdrawn core.",
          "evidence": ["aperiodic-compensation", "presentation-module", "application-module"]},
         {"id": "sf-verify", "pole": "verification", "panel": "verify", "title": "Drive the surface as a machine",
-         "goal": "Drive the same surface as a machine: every command is an MCP tool, --json reports validate against the published schemas, bin/r30 kappa prints the kappa-labels of the modules, bin/r30 api check refuses drift.",
-         "evidence": ["api-module", "readme"]},
+         "goal": "Drive the same surface as a machine: every command is an MCP tool and an operation of openapi.json, --json reports validate against the published schemas, bin/r30 kappa prints the kappa-labels of the modules, bin/r30 api check refuses drift; standards.json names every standard the surface implements and the check behind each.",
+         "evidence": ["api-module", "readme", "openapi", "standards", "standards-module"]},
     ],
 }
 
@@ -308,6 +358,9 @@ _JOURNEYS = [
     {"id": "mathematics", "stakeholder": "mathematician"},
     {"id": "first-visit", "stakeholder": "layperson"},
 ]
+
+
+_STEPS = with_viz_steps(_STEPS)
 
 
 def _steps():
@@ -337,6 +390,177 @@ def _distinct_in_order(xs):
 # Observer reads as the vantage's sensual qualities.
 JOURNEYS = [{"id": j["id"], "stakeholder": j["stakeholder"],
              "panels": _distinct_in_order(st["panel"] for st in STEPS if st["journey"] == j["id"])} for j in _JOURNEYS]
+
+# The central navigation as an implementation of the WAI-ARIA Authoring
+# Practices (APG): each navigation realizes one declared pattern, each item
+# names the pattern it is rendered with and targets a journey, a step, an
+# artifact or an external authority (the standards the site implements).
+# `nav-primary` is the site-wide disclosure navigation menu in the banner
+# (Vantages, Register, Modules, Verify, Standards; the verify step of every
+# vantage is reachable from it, WCAG 2.2 consistent help); `nav-breadcrumb`
+# is the breadcrumb of the current step (vantage > pole > step; its items are
+# a template over the current step, so their kind is their meaning and their
+# target empty); `nav-stepper` is the disclosure sequence of a vantage's
+# steps. Decided: ids distinct, every journey reachable from the primary
+# navigation and listed by the stepper, every item names a declared pattern,
+# targets resolve, the breadcrumb trail is vantage > pole > step and resolves
+# for every step, the verification step of every journey is a primary target.
+NAV_PATTERNS = [
+    {"id": "disclosure-navigation-menu", "authority": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+     "statement": "A navigation landmark of top-level disclosure buttons (aria-expanded, aria-controls), each revealing a list of links; Escape closes the open list and returns focus to its button; the arrow keys, Home and End move focus among the buttons and the links; one list is open at a time."},
+    {"id": "breadcrumb", "authority": "https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/",
+     "statement": "A navigation landmark labeled Breadcrumb holding an ordered list of links from the vantage through its pole to the current step, which carries aria-current=page."},
+    {"id": "stepper", "authority": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+     "statement": "A disclosure sequence: a navigation landmark holding the ordered list of the vantage's steps with the current step aria-current=step, the previous and the next step as links, and a disclosure button that reveals the title of every step."},
+    {"id": "combobox", "authority": "https://www.w3.org/WAI/ARIA/apg/patterns/combobox/",
+     "statement": "An editable combobox with a listbox popup (aria-expanded, aria-controls, aria-activedescendant, aria-autocomplete=list): typing filters the register, the arrow keys move the active option, Enter opens it, Escape closes the list, and a live region reports the number of matches."},
+]
+
+NAVIGATIONS = [
+    {"id": "nav-primary", "label": "Site", "pattern": "disclosure-navigation-menu",
+     "statement": "The site-wide navigation in the banner of every page: Vantages, Register, Modules, Verify, Standards."},
+    {"id": "nav-breadcrumb", "label": "Breadcrumb", "pattern": "breadcrumb",
+     "statement": "Where the reader is: the vantage, its pole, the current step."},
+    {"id": "nav-stepper", "label": "Steps of this vantage", "pattern": "stepper",
+     "statement": "The steps of the current vantage in order, the current one marked, with the previous and the next."},
+]
+
+# How the primary navigation names each vantage (the README's table).
+JOURNEY_LABELS = {
+    "prize-review": "The prize committee",
+    "research-session": "The researcher (developer view)",
+    "reading": "The community",
+    "stdlib-feedback": "The UOR Foundation (machine view)",
+    "mathematics": "The mathematician",
+    "first-visit": "First visit: no background needed",
+}
+
+# The external authorities the Standards group links to; S1's standards
+# panel declares what each governs, the navigation only reaches them.
+NAV_AUTHORITIES = [
+    {"id": "nav-standard-apg", "label": "WAI-ARIA Authoring Practices (APG)", "target": "https://www.w3.org/WAI/ARIA/apg/"},
+    {"id": "nav-standard-aria", "label": "WAI-ARIA 1.2", "target": "https://www.w3.org/TR/wai-aria-1.2/"},
+    {"id": "nav-standard-wcag", "label": "WCAG 2.2", "target": "https://www.w3.org/TR/WCAG22/"},
+    {"id": "nav-standard-html", "label": "HTML Living Standard", "target": "https://html.spec.whatwg.org/multipage/"},
+    {"id": "nav-standard-42010", "label": "ISO/IEC/IEEE 42010 (architecture description)", "target": "https://www.iso.org/standard/74393.html"},
+    {"id": "nav-standard-25010", "label": "ISO/IEC 25010 (product quality)", "target": "https://www.iso.org/standard/78176.html"},
+]
+
+
+def _nav_items():
+    rows = []
+    disclosure = "disclosure-navigation-menu"
+
+    def item(id_, navigation, parent, label, kind, target, order, pattern=disclosure):
+        rows.append({"id": id_, "navigation": navigation, "parent": parent, "label": label, "pattern": pattern,
+                     "kind": kind, "target": target, "order": order})
+
+    def group(id_, label, order, children):
+        item(id_, "nav-primary", "", label, "group", "", order)
+        for k, (cid, clabel, kind, target, *pattern) in enumerate(children):
+            item(cid, "nav-primary", id_, clabel, kind, target, k + 1, *pattern)
+
+    last = {j["id"]: [st for st in STEPS if st["journey"] == j["id"]][-1] for j in JOURNEYS}
+    modules = [a for a in ARTIFACTS if a["media"] == "text/x-lexlean"]
+    group("nav-vantages", "Vantages", 1,
+          [(f"nav-vantage-{j['id']}", JOURNEY_LABELS[j["id"]], "journey", j["id"]) for j in JOURNEYS] +
+          [("nav-sitemap", "Site map: every vantage and its steps", "step", "rd-map")])
+    group("nav-register", "Register", 2,
+          [("nav-search", "Search the register", "step", "rd-register", "combobox"),
+           ("nav-register-claims", "Every claim with its evidence", "step", "rd-register"),
+           ("nav-register-tree", "Reduction tree", "step", "rd-tree"),
+           ("nav-register-leaves", "Open leaves", "step", "pr-leaves"),
+           ("nav-register-obligation", "Open obligation", "step", "rd-obligation"),
+           ("nav-register-json", "register.json", "artifact", "register-json")])
+    group("nav-modules", "Modules", 3,
+          [("nav-modules-step", "The LexLean modules, read", "step", "sf-modules"),
+           ("nav-model", "The model of the site (PrismPM, Observer)", "step", "sf-model"),
+           ("nav-design", "The design system, decided", "step", "sf-design")] +
+          [(f"nav-module-{a['id']}", a["path"], "artifact", a["id"]) for a in modules])
+    group("nav-verify", "Verify", 4,
+          [(f"nav-verify-{j['id']}", "Verify: " + JOURNEY_LABELS[j["id"]], "step", last[j["id"]]["id"]) for j in JOURNEYS])
+    group("nav-standards", "Standards", 5,
+          [("nav-standards-step", "Every standard this site implements", "step", "rd-standards"),
+           ("nav-standards-json", "standards.json", "artifact", "standards")] +
+          [(a["id"], a["label"], "authority", a["target"]) for a in NAV_AUTHORITIES])
+    for k, (cid, label, kind) in enumerate((("nav-crumb-vantage", "Vantage", "journey"), ("nav-crumb-pole", "Pole", "pole"),
+                                            ("nav-crumb-step", "Step", "step"))):
+        item(cid, "nav-breadcrumb", "", label, kind, "", k + 1, "breadcrumb")
+    for k, j in enumerate(JOURNEYS):
+        item(f"nav-steps-{j['id']}", "nav-stepper", "", "Steps: " + JOURNEY_LABELS[j["id"]], "journey", j["id"], k + 1, "stepper")
+    return rows
+
+
+NAV_ITEMS = _nav_items()
+
+
+def nav_problems(steps=None, journeys=None, artifacts=None, items=None, navigations=None, patterns=None):
+    """What `Presentation.lex.tex` decides about the navigation, checked in
+    Python first so a failure names the item: ids distinct, every item in a
+    declared navigation with a declared pattern and a parent that is an item,
+    targets that resolve (journeys, steps, artifacts; an authority is a URL),
+    every journey reachable from the primary navigation and listed by the
+    stepper, the breadcrumb trail vantage > pole > step, the verification step
+    of every journey a primary target, the search item on a register step,
+    and the orders under each parent consecutive from 1."""
+    steps = STEPS if steps is None else steps
+    journeys = JOURNEYS if journeys is None else journeys
+    items = NAV_ITEMS if items is None else items
+    navigations = NAVIGATIONS if navigations is None else navigations
+    pattern_ids = {x["id"] for x in (NAV_PATTERNS if patterns is None else patterns)}
+    artifact_ids = {a["id"] for a in (ARTIFACTS if artifacts is None else artifacts)}
+    journey_ids = [j["id"] for j in journeys]
+    step_ids = {st["id"] for st in steps}
+    nav_ids = [x["id"] for x in navigations]
+    item_ids = [x["id"] for x in items]
+    out = []
+    if len(set(nav_ids + item_ids)) != len(nav_ids + item_ids):
+        out.append("navigation: ids are not distinct")
+    for x in navigations:
+        if x["pattern"] not in pattern_ids:
+            out.append(f"navigation {x['id']}: pattern {x['pattern']} is not declared")
+    for x in items:
+        if x["navigation"] not in nav_ids:
+            out.append(f"item {x['id']}: navigation {x['navigation']} is not declared")
+        if x["pattern"] not in pattern_ids:
+            out.append(f"item {x['id']}: pattern {x['pattern']} is not declared")
+        if x["parent"] and x["parent"] not in item_ids:
+            out.append(f"item {x['id']}: parent {x['parent']} is not an item")
+        if x["navigation"] == "nav-breadcrumb":
+            continue
+        if x["kind"] == "journey" and x["target"] not in journey_ids:
+            out.append(f"item {x['id']}: journey {x['target']} is not a journey")
+        if x["kind"] == "step" and x["target"] not in step_ids:
+            out.append(f"item {x['id']}: step {x['target']} is not a step")
+        if x["kind"] == "artifact" and x["target"] not in artifact_ids:
+            out.append(f"item {x['id']}: artifact {x['target']} is not an artifact")
+        if x["kind"] == "authority" and not x["target"].startswith("https://"):
+            out.append(f"item {x['id']}: authority {x['target']} is not a URL")
+    primary = [x for x in items if x["navigation"] == "nav-primary"]
+    primary_targets = lambda kind: {x["target"] for x in primary if x["kind"] == kind}
+    for j in journey_ids:
+        if j not in primary_targets("journey"):
+            out.append(f"journey {j}: not reachable from nav-primary")
+        if j not in {x["target"] for x in items if x["navigation"] == "nav-stepper" and x["kind"] == "journey"}:
+            out.append(f"journey {j}: not listed by nav-stepper")
+        mine = [st for st in steps if st["journey"] == j]
+        if mine and mine[-1]["id"] not in primary_targets("step"):
+            out.append(f"journey {j}: its verification step is not a target of nav-primary")
+    crumbs = sorted((x for x in items if x["navigation"] == "nav-breadcrumb"), key=lambda x: x["order"])
+    if [x["kind"] for x in crumbs] != ["journey", "pole", "step"]:
+        out.append("nav-breadcrumb: the trail is not vantage > pole > step")
+    search = next((x for x in items if x["id"] == "nav-search"), None)
+    panel = next((st["panel"] for st in steps if search and st["id"] == search["target"]), None)
+    if panel != "register":
+        out.append("nav-search: its target does not show the register")
+    for nav in nav_ids:
+        parents = {x["parent"] for x in items if x["navigation"] == nav}
+        for parent in parents:
+            orders = [x["order"] for x in items if x["navigation"] == nav and x["parent"] == parent]
+            if orders != list(range(1, len(orders) + 1)):
+                out.append(f"{nav}: the orders under {parent or 'the root'} are not 1..{len(orders)}")
+    return out
+
 
 # The plain-language panel, as data: short paragraphs a reader without Lean
 # or LexLean can follow. `view render` writes them as explainer.json and the
@@ -481,6 +705,7 @@ def _each_journey(name, condition, extra=()):
 def presentation_declarations():
     br_t, ar_t, pa_t, jo_t, pg_t = named("Brand"), named("Artifact"), named("Panel"), named("Journey"), named("Paragraph")
     po_t, st_t, ve_t = named("Pole"), named("Step"), named("Verification")
+    pt_t, nv_t, ni_t = named("Pattern"), named("Navigation"), named("NavItem")
     nil_s, nil_n = {"kind": "nil", "element": STR}, {"kind": "nil", "element": NAT}
     # the steps of the journey under `head`, inside an `_each_journey` condition
     steps_of_head = call("stepsOfJourney", proj(var("head"), "id"), var("ss"))
@@ -494,6 +719,10 @@ def presentation_declarations():
         structure("Step", [("id", STR), ("journey", STR), ("order", NAT), ("pole", STR), ("panel", STR), ("title", STR), ("goal", STR),
                            ("text", STR), ("paragraphs", list_t(STR)), ("evidence", list_t(STR)), ("next", STR)]),
         structure("Verification", [("command", STR), ("invocation", STR), ("statement", STR)]),
+        structure("Pattern", [("id", STR), ("authority", STR), ("statement", STR)]),
+        structure("Navigation", [("id", STR), ("label", STR), ("pattern", STR), ("statement", STR)]),
+        structure("NavItem", [("id", STR), ("navigation", STR), ("parent", STR), ("label", STR), ("pattern", STR), ("kind", STR),
+                              ("target", STR), ("order", NAT)]),
         definition("brand", br_t, record("Brand", **{k: s(v) for k, v in BRAND.items()})),
         definition("artifacts", list_t(ar_t), lst([
             record("Artifact", id=s(a["id"]), path=s(a["path"]), mediaType=s(a["media"]), command=s(a["command"]))
@@ -516,6 +745,14 @@ def presentation_declarations():
         definition("verifications", list_t(ve_t), lst([
             record("Verification", command=s(x["command"]), invocation=s(x["invocation"]), statement=s(x["statement"]))
             for x in VERIFICATIONS], ve_t)),
+        definition("navPatterns", list_t(pt_t), lst([
+            record("Pattern", id=s(x["id"]), authority=s(x["authority"]), statement=s(x["statement"])) for x in NAV_PATTERNS], pt_t)),
+        definition("navigations", list_t(nv_t), lst([
+            record("Navigation", id=s(x["id"]), label=s(x["label"]), pattern=s(x["pattern"]), statement=s(x["statement"]))
+            for x in NAVIGATIONS], nv_t)),
+        definition("navItems", list_t(ni_t), lst([
+            record("NavItem", id=s(x["id"]), navigation=s(x["navigation"]), parent=s(x["parent"]), label=s(x["label"]),
+                   pattern=s(x["pattern"]), kind=s(x["kind"]), target=s(x["target"]), order=n(x["order"])) for x in NAV_ITEMS], ni_t)),
         member_string(), all_members(), index_of(), _append_strings(), _distinct("distinctStrings"),
         field_of_each("artifactIds", ar_t, "id"),
         field_of_each("artifactPaths", ar_t, "path"),
@@ -624,7 +861,100 @@ def presentation_declarations():
         holds("verificationsAreCommands",
               call("allMembers", call("verificationCommands", call("verifications")),
                    call("commandNames", call("commands", module="Api"), module="Architecture"))),
-    ]
+        # the navigation (WAI-ARIA APG): its ids, patterns, targets and trails
+        field_of_each("patternIds", pt_t, "id"),
+        field_of_each("navigationIds", nv_t, "id"),
+        field_of_each("navigationPatterns", nv_t, "pattern"),
+        field_of_each("navItemIds", ni_t, "id"),
+        field_of_each("navItemNavigations", ni_t, "navigation"),
+        field_of_each("navItemParents", ni_t, "parent"),
+        field_of_each("navItemPatterns", ni_t, "pattern"),
+        field_of_each("navItemKinds", ni_t, "kind"),
+        field_of_each("navItemTargets", ni_t, "target"),
+        field_of_each("navItemOrders", ni_t, "order", result=NAT),
+        definition("navItemsOf", list_t(ni_t),
+                   match_list(var("xs"), {"kind": "nil", "element": ni_t}, "head", "tail",
+                              if_(eq_string(var("navigation"), proj(var("head"), "navigation")),
+                                  {"kind": "cons", "head": var("head"), "tail": call("navItemsOf", var("navigation"), var("tail"))},
+                                  call("navItemsOf", var("navigation"), var("tail")))),
+                   parameters=[("navigation", STR), ("xs", list_t(ni_t))], recursive="xs"),
+        definition("navItemsUnder", list_t(ni_t),
+                   match_list(var("xs"), {"kind": "nil", "element": ni_t}, "head", "tail",
+                              if_(eq_string(var("parent"), proj(var("head"), "parent")),
+                                  {"kind": "cons", "head": var("head"), "tail": call("navItemsUnder", var("parent"), var("tail"))},
+                                  call("navItemsUnder", var("parent"), var("tail")))),
+                   parameters=[("parent", STR), ("xs", list_t(ni_t))], recursive="xs"),
+        definition("navItemsOfKind", list_t(ni_t),
+                   match_list(var("xs"), {"kind": "nil", "element": ni_t}, "head", "tail",
+                              if_(eq_string(var("kind"), proj(var("head"), "kind")),
+                                  {"kind": "cons", "head": var("head"), "tail": call("navItemsOfKind", var("kind"), var("tail"))},
+                                  call("navItemsOfKind", var("kind"), var("tail")))),
+                   parameters=[("kind", STR), ("xs", list_t(ni_t))], recursive="xs"),
+        # the targets of the items of one kind in one navigation
+        definition("navTargets", list_t(STR),
+                   call("navItemTargets", call("navItemsOfKind", var("kind"), call("navItemsOf", var("navigation"), var("xs")))),
+                   parameters=[("kind", STR), ("navigation", STR), ("xs", list_t(ni_t))]),
+        lookup_field("navItemTarget", ni_t, "id", "target", STR, s("")),
+        lookup_field("stepPanel", st_t, "id", "panel", STR, s("")),
+        # the breadcrumb of a step: its vantage, its pole, itself
+        definition("breadcrumbOf", list_t(STR),
+                   {"kind": "cons", "head": proj(var("st"), "journey"),
+                    "tail": {"kind": "cons", "head": proj(var("st"), "pole"),
+                             "tail": {"kind": "cons", "head": proj(var("st"), "id"), "tail": nil_s}}},
+                   parameters=[("st", st_t)]),
+        definition("trailResolves", BOOL,
+                   match_list(var("trail"), b(False), "j", "rest",
+                              match_list(var("rest"), b(False), "p", "rest2",
+                                         match_list(var("rest2"), b(False), "sid", "rest3",
+                                                    if_(call("memberString", var("j"), var("js")),
+                                                        if_(call("memberString", var("p"), var("ps")),
+                                                            call("memberString", var("sid"), var("ids")), b(False)), b(False))))),
+                   parameters=[("trail", list_t(STR)), ("js", list_t(STR)), ("ps", list_t(STR)), ("ids", list_t(STR))]),
+        definition("breadcrumbsResolve", BOOL,
+                   match_list(var("xs"), b(True), "head", "tail",
+                              if_(call("trailResolves", call("breadcrumbOf", var("head")), var("js"), var("ps"), var("ids")),
+                                  call("breadcrumbsResolve", var("tail"), var("js"), var("ps"), var("ids")), b(False))),
+                   parameters=[("xs", list_t(st_t)), ("js", list_t(STR)), ("ps", list_t(STR)), ("ids", list_t(STR))], recursive="xs"),
+        # under every top-level item of a navigation, the orders are 1, 2, ...
+        definition("groupsOrdered", BOOL,
+                   match_list(var("xs"), b(True), "head", "tail",
+                              if_(call("consecutiveFrom", call("navItemOrders", call("navItemsUnder", proj(var("head"), "id"), var("all"))), n(1)),
+                                  call("groupsOrdered", var("tail"), var("all")), b(False))),
+                   parameters=[("xs", list_t(ni_t)), ("all", list_t(ni_t))], recursive="xs"),
+        _each_journey("verifyReachable", call("memberString", call("lastString", call("stepIds", steps_of_head), s("")), var("ts")),
+                      extra=[("ts", list_t(STR))]),
+        holds("navIdsDistinct", call("distinctStrings", call("appendStrings", call("navigationIds", call("navigations")), call("navItemIds", call("navItems"))))),
+        holds("navigationsNamePatterns", call("allMembers", call("navigationPatterns", call("navigations")), call("patternIds", call("navPatterns")))),
+        holds("navItemsNamePatterns", call("allMembers", call("navItemPatterns", call("navItems")), call("patternIds", call("navPatterns")))),
+        holds("navItemsInNavigations", call("allMembers", call("navItemNavigations", call("navItems")), call("navigationIds", call("navigations")))),
+        holds("navItemParentsAreItems",
+              call("allMembers", call("navItemParents", call("navItems")), {"kind": "cons", "head": s(""), "tail": call("navItemIds", call("navItems"))})),
+        holds("everyJourneyInPrimaryNavigation",
+              call("allMembers", call("journeyIds", call("journeys")), call("navTargets", s("journey"), s("nav-primary"), call("navItems")))),
+        holds("stepperListsEveryJourney",
+              call("allMembers", call("journeyIds", call("journeys")), call("navTargets", s("journey"), s("nav-stepper"), call("navItems")))),
+        holds("navJourneyTargetsAreJourneys",
+              call("allMembers", call("appendStrings", call("navTargets", s("journey"), s("nav-primary"), call("navItems")),
+                                      call("navTargets", s("journey"), s("nav-stepper"), call("navItems"))),
+                   call("journeyIds", call("journeys")))),
+        holds("navStepTargetsAreSteps",
+              call("allMembers", call("navTargets", s("step"), s("nav-primary"), call("navItems")), call("stepIds", call("steps")))),
+        holds("navArtifactTargetsAreArtifacts",
+              call("allMembers", call("navTargets", s("artifact"), s("nav-primary"), call("navItems")), call("artifactIds", call("artifacts")))),
+        theorem("breadcrumbIsVantagePoleStep",
+                call("navItemKinds", call("navItemsOf", s("nav-breadcrumb"), call("navItems"))), strings(["journey", "pole", "step"])),
+        holds("everyBreadcrumbResolves",
+              call("breadcrumbsResolve", call("steps"), call("journeyIds", call("journeys")), call("poleIds", call("poles")), call("stepIds", call("steps")))),
+        holds("verifyReachableFromEveryJourney",
+              call("verifyReachable", call("journeys"), call("steps"), call("navTargets", s("step"), s("nav-primary"), call("navItems")))),
+        holds("searchOpensTheRegister",
+              eq_string(call("stepPanel", call("navItemTarget", s("nav-search"), call("navItems")), call("steps")), s("register"))),
+        holds("navGroupsOrdered",
+              call("groupsOrdered", call("navItemsUnder", s(""), call("navItemsOf", s("nav-primary"), call("navItems"))),
+                   call("navItemsOf", s("nav-primary"), call("navItems")))),
+        holds("navTopLevelOrdered",
+              call("consecutiveFrom", call("navItemOrders", call("navItemsUnder", s(""), call("navItemsOf", s("nav-primary"), call("navItems")))), n(1))),
+    ] + designmodel.declarations() + viz_declarations()
 
 
 def _append_strings():
@@ -695,7 +1025,8 @@ def sync():
     PRESENTATION.parent.mkdir(parents=True, exist_ok=True)
     p = _write(PRESENTATION, render_presentation())
     a = _write(APPLICATION, render_application())
-    return {"module": str(PRESENTATION.relative_to(repo.ROOT)), "panels": len(PANELS), "steps": len(STEPS), "changed": p or a}
+    return {"module": str(PRESENTATION.relative_to(repo.ROOT)), "panels": len(PANELS), "steps": len(STEPS), "navItems": len(NAV_ITEMS),
+            "changed": p or a}
 
 
 def check():

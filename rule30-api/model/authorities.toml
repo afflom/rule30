@@ -12,7 +12,7 @@ id = "LEXLEAN"
 name = "UOR-Foundation/LexLean"
 citation = "https://github.com/UOR-Foundation/LexLean"
 statement = "A closed-lexicon LaTeX-to-Lean 4 compiler; the paper, the register and the API are its modules."
-realized_by = ["api-modules"]
+realized_by = ["api-modules", "verified-core"]
 
 [[authority]]
 id = "PRISMPM"

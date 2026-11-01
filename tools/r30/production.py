@@ -1,8 +1,11 @@
 """Rust emission of the API module through `lexlean production` (SPEC §24.7).
 
 The production roots are the executable definitions of `Api.lex.tex` that
-`apimodel.PRODUCTION_ROOTS` declares (`commands`, `commandCount`), each with
-the effects and targets of the closed registry `language/production-1.2.toml`.
+`apimodel.PRODUCTION_ROOTS` declares (`commands`, `commandCount`) and those of
+`Rule30Core.lex.tex` that `coremodel.PRODUCTION_ROOTS` declares (the rows,
+the center, the right diagonals, the tower words, the ruler background and
+the vectors of centers and ruler values), each with the effects and targets
+of the closed registry `language/production-1.2.toml`.
 From that table this module generates, and `bin/r30 api sync` writes:
 
 - `rule30-api/production/request.json`, the `lexlean/production-request/1`
@@ -40,17 +43,21 @@ TARGET_DIGESTS = {
 PACKAGE_VERSION = "0.1.0"
 
 
-def crate_name(definition):
-    """`commandCount` -> `rule30_api_command_count` (the §17.16 package form)."""
+def crate_name(definition, group=None):
+    """`commandCount` -> `rule30_api_command_count` (the §17.16 package form);
+    a group names the module's family: `rows` of the core -> `rule30_api_core_rows`."""
     snake = "".join("_" + c.lower() if c.isupper() else c for c in definition)
-    return f"rule30_api_{snake}"
+    return f"rule30_api_{group + '_' if group else ''}{snake}"
 
 
 def roots():
     """The production roots, strictly ascending by name as the request requires."""
     from .apimodel import PRODUCTION_ROOTS
+    from . import coremodel
     rows = [{"root": f"{MODULE}.{name}", "package": crate_name(name), "targets": sorted(spec["targets"]),
              "effects": sorted(spec["effects"])} for name, spec in PRODUCTION_ROOTS.items()]
+    rows += [{"root": f"{coremodel.LEAN_MODULE}.{name}", "package": crate_name(name, "core"), "targets": sorted(spec["targets"]),
+              "effects": sorted(spec["effects"])} for name, spec in coremodel.PRODUCTION_ROOTS.items()]
     return sorted(rows, key=lambda r: r["root"])
 
 
@@ -67,7 +74,8 @@ def request_json():
 
 
 def runtime_roots_toml():
-    lines = ['spec = "prismpm/runtime-roots/1"', f'lean_module = "{MODULE}"', 'ir_module = "Rule30Api"', "roots = ["]
+    from . import coremodel
+    lines = ['spec = "prismpm/runtime-roots/1"', f'lean_modules = ["{MODULE}", "{coremodel.LEAN_MODULE}"]', 'ir_module = "Rule30Api"', "roots = ["]
     lines += [f'  "{r["root"]}",' for r in roots()]
     lines += ["]", ""]
     for r in roots():
