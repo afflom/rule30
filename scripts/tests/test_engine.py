@@ -61,7 +61,25 @@ class EngineTests(unittest.TestCase):
         # caches: the compiler, the Lake builds, the gate's evidence without certificates, the settled mark
         for key in ("r30-lexlean-", "r30-lake-", "r30-gate-", "r30-settled-"):
             self.assertIn(key, text)
-        self.assertIn("-name '*.ok'", text)
+        # the evidence is pruned by the engine's own command before it is saved, never by hand
+        steps = re.split(r"\n      - name: ", text)
+        names = [s.split("\n", 1)[0] for s in steps[1:]]
+        self.assertLess(names.index("Prune the gate's evidence before caching"), names.index("Save the gate's evidence"))
+        self.assertIn("run: bin/r30 engine prune --apply", text)
+        self.assertNotIn("find .git/rule30-validation", text)
+        # a run whose commit is no longer main's tip (queued behind a tick that pushed) stops after the checkout:
+        # every later step is conditioned on it, the settled mark included
+        self.assertEqual(names[:2], ["Checkout (full history, so the tick can push)", "Is this commit still the tip of main"])
+        self.assertIn('git ls-remote origin refs/heads/main | cut -f1)" = "$GITHUB_SHA"', text)
+        self.assertEqual(names[2], "Is this commit settled")
+        for step in steps[4:]:
+            self.assertIn("steps.tip.outputs.current == 'true'", step.split("\n", 2)[1], step.split("\n", 1)[0])
+        # nothing new to cache after a stale tick; only idle, refused and error settle (a cut tick is resumed)
+        for name in ("Prune the gate's evidence before caching", "Save the Lake builds", "Save the gate's evidence"):
+            self.assertIn("steps.tick.outputs.outcome != 'stale'", steps[names.index(name) + 1])
+        self.assertIn("""contains(fromJSON('["idle", "refused", "error", "stalled"]'), steps.tick.outputs.outcome)""", text)
+        # the gate's log reaches the job log, so a refusal on the runner says where
+        self.assertIn('echo "::group::gate log $f"; tail -n 200 "$f"', text)
         self.assertEqual(set(re.findall(r"secrets\.(\w+)", text)), set())
         self.assertEqual(set(re.findall(r"uses:\s*(\S+)", text)), set(em.WORKLOAD["actions"]))
         # the actions allowed are those the repository's other workflows and actions already use
@@ -244,7 +262,14 @@ class EngineTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             engine.record_attempt(data, dict(a))  # the same (claim, strategy, template) twice
         engine.record_attempt(data, {**a, "strategy": "library-rewrite", "template": em.template_digest("library-rewrite"),
-                                     "outcome": "failed", "failure": "(decided in Python) ..."})
+                                     "outcome": "failed", "failure": "(decided in Python) ...", "library": "sha256:" + "1" * 64})
+        with self.assertRaises(RuntimeError):  # the same library: the same attempt
+            engine.record_attempt(data, {**data["attempt"][-1]})
+        # a changed library is a new library-rewrite attempt (a lemma pushed since may close the claim)
+        engine.record_attempt(data, {**data["attempt"][-1], "library": "sha256:" + "2" * 64})
+        data["attempt"].pop()
+        data["weight"] = [{"strategy": s, "family": f, "value": v} for s, f, v in em.Mirror.learn_all(
+            em.initial_table(), [(x["strategy"], x["family"], x["outcome"] in em.SUCCESS) for x in data["attempt"]])]
         w = {(r["strategy"], r["family"]): r["value"] for r in engine.weights(data)}
         self.assertEqual(w[("step-induction", "left-plain")], em.W_INIT + em.RAISE)
         self.assertEqual(w[("library-rewrite", "left-plain")], em.W_INIT - em.LOWER)
@@ -261,12 +286,13 @@ class EngineTests(unittest.TestCase):
             engine.save(data, path)
             back = engine.load(path)
             self.assertEqual(back["attempt"][0]["template"], a["template"])
+            self.assertEqual([x.get("library", "") for x in back["attempt"]], ["", "sha256:" + "1" * 64])
             self.assertEqual(back["tick"][0]["stages"][0]["seconds"], 12.5)
             self.assertEqual(engine.weights(back), engine.weights(data))
             self.assertEqual(tomllib.loads(path.read_text())["spec"], "r30/engine/1")
         if engine.LEDGER.exists():  # the committed ledger is well formed and in bounds
             real = engine.load()
-            keys = [(x["kappa"], x["strategy"], x["template"]) for x in real["attempt"]]
+            keys = [engine.attempt_key(x) for x in real["attempt"]]
             self.assertEqual(len(keys), len(set(keys)))
             self.assertTrue(all(em.W_MIN <= r["value"] <= em.W_MAX for r in real["weight"]))
 
@@ -279,10 +305,13 @@ class EngineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             ledger_path = Path(d) / "engine.toml"
             saved = {}
+            from tools.r30 import modules
             patches = [(frontier, "load", lambda: {"claim": [c]}), (engine, "LEDGER", ledger_path),
                        (deduce, "check", lambda name, body, imports, timeout: ("proved", "", ["propext", "Quot.sound"])),
                        (deduce, "settle", lambda accepted, report, log=print: saved.setdefault("accepted", accepted)),
-                       (deduce, "library_facts", lambda relation, cache: [])]
+                       (deduce, "library_facts", lambda relation, cache: []),
+                       # hermetic: the build of Rule30UOR.Deduced that run() starts with is a recorded answer
+                       (modules, "build", lambda names, timeout=3600: saved.setdefault("built", list(names)) and (True, ""))]
             for mod, attr, value in patches:
                 old = getattr(mod, attr)
                 setattr(mod, attr, value)
@@ -294,16 +323,98 @@ class EngineTests(unittest.TestCase):
             self.assertTrue(all(a["outcome"] in ("dry-run", "failed") for a in dry["attempts"]))
             r = deduce.run(log=lambda *a: None)
             schema.validate(schema.document("deduce-result"), json.loads(json.dumps(r)))
+            self.assertEqual(saved["built"], [deduce.DEDUCED])
             # library-rewrite fails in Python (no facts), step-induction proves: the third is never tried
             self.assertEqual([(a["strategy"], a["outcome"]) for a in r["attempts"]],
                              [("library-rewrite", "failed"), ("step-induction", "proved")])
             self.assertEqual(saved["accepted"][0]["name"], "rdiag3_succ_eq_timeParity_xor_rdiag3")
             ledger = engine.load(ledger_path)
             self.assertEqual(len(ledger["attempt"]), 2)
+            # library-rewrite's key holds the library it read; the other strategies' does not
+            library = deduce.library_digest([c])
+            self.assertEqual([a.get("library", "") for a in ledger["attempt"]], [library, ""])
             # a second run attempts nothing already attempted
             self.assertEqual(deduce.plan()[0]["pending"], ["period-reduction"])
             # the learned order: step-induction proved for right-shift, so it now comes first
             self.assertEqual(deduce.plan()[0]["order"][0], "step-induction")
+            # a relation proved since is a new library: library-rewrite is pending again, nothing else is
+            proved = {"id": "observed-other", "status": "proved", "lean": "Rule30UOR.Deduced.other",
+                      "relation": ["ldiag(7)"], "statement": "x"}
+            frontier.load = lambda: {"claim": [c, proved]}
+            self.assertNotEqual(deduce.library_digest([c, proved]), library)
+            self.assertEqual(sorted(deduce.plan()[0]["pending"]), ["library-rewrite", "period-reduction"])
+
+    def _deduce(self, c, check=None, settle=None, facts=(), publishable=True, weights=()):
+        """deduce.run on one claim with Lean replaced by recorded answers; returns (report, ledger path)."""
+        from tools.r30 import modules
+        d = tempfile.mkdtemp()
+        self.addCleanup(__import__("shutil").rmtree, d, True)
+        ledger_path = Path(d) / "engine.toml"
+        if weights:
+            engine.save({"spec": engine.SPEC, "weight": list(weights), "attempt": [], "tick": []}, ledger_path)
+        patches = [(frontier, "load", lambda: {"claim": [c]}), (engine, "LEDGER", ledger_path),
+                   (deduce, "check", check or (lambda name, body, imports, timeout: ("proved", "", ["propext", "Quot.sound"]))),
+                   (deduce, "settle", settle or (lambda accepted, report, log=print: None)),
+                   (deduce, "library_facts", lambda relation, cache: list(facts)),
+                   (deduce, "publishable", lambda lean, cache=None: publishable),
+                   (modules, "build", lambda names, timeout=3600: (True, ""))]
+        for mod, attr, value in patches:
+            old = getattr(mod, attr)
+            setattr(mod, attr, value)
+            self.addCleanup(setattr, mod, attr, old)
+        return deduce.run(log=lambda *a: None), ledger_path
+
+    def test_a_library_theorem_stating_the_relation_proves_it_first_deduce_command(self):
+        needs_basis(self)
+        c = claim(["time-parity", "rdiag(2)"])
+        apps, fam = deduce.applicable(c)
+        self.assertIn("step-induction", apps)
+        # step-induction ranks first for this family, but the library already states the relation
+        weights = [{"strategy": "step-induction", "family": fam, "value": em.W_MAX},
+                   {"strategy": "library-rewrite", "family": fam, "value": em.W_MIN}]
+        self.assertEqual(em.schedule(weights, fam, apps)[0], "step-induction")
+        fact = {"lean": "Rule30UOR.Band.rdiag_two_eq_parity", "lhs": ("col", "base", "rdiag", 2),
+                "rhs": ("col", "base", "time-parity", None)}
+        checked = []
+        r, path = self._deduce(c, check=lambda *a: checked.append(a) or ("proved", "", []), facts=[fact], weights=weights)
+        self.assertEqual(deduce.plan(ledger=engine.load(path))[0]["order"][0], "step-induction")
+        self.assertEqual(checked, [])  # no Lean ran: no second proof of a statement the library has
+        self.assertEqual([(a["strategy"], a["outcome"], a["theorem"]) for a in r["attempts"]],
+                         [("library-rewrite", "known", "Rule30UOR.Band.rdiag_two_eq_parity")])
+        self.assertEqual(r["known"], [{"id": c["id"], "lean": "Rule30UOR.Band.rdiag_two_eq_parity"}])
+
+    def test_an_attempt_the_deadline_cuts_stays_pending_deduce_command(self):
+        needs_basis(self)
+        c = claim(["time-parity", "rdiag(3)", "shift:rdiag(3)"])
+        asked = []
+        # the stage's deadline leaves less than an attempt's full time: the Lean check times out on it
+        cut = lambda name, body, imports, timeout: asked.append(timeout) or ("timeout", f"no answer within {timeout} s", None)
+        import itertools
+        import types
+        start = 1_800_000_000.0
+        clock = itertools.chain([start], itertools.repeat(start + 3600 - 100))  # 100 s left once the run starts
+        self.addCleanup(setattr, deduce, "time", deduce.time)
+        deduce.time = types.SimpleNamespace(time=lambda: next(clock))  # deduce's clock only
+        r, path = self._deduce(c, check=cut)
+        self.assertTrue(asked and all(t < em.ATTEMPT_TIMEOUT for t in asked))
+        self.assertEqual([a["strategy"] for a in r["attempts"]], ["library-rewrite"])  # decided in Python
+        self.assertEqual([s["strategy"] for s in r["skipped"]], ["step-induction", "period-reduction"])
+        ledger = engine.load(path)
+        self.assertNotIn("timeout", [a["outcome"] for a in ledger["attempt"]])  # not the strategy's failure
+        self.assertEqual(deduce.plan(ledger=ledger)[0]["pending"], ["step-induction", "period-reduction"])
+
+    def test_a_proof_settling_did_not_record_is_not_in_the_ledger_deduce_command(self):
+        needs_basis(self)
+        c = claim(["time-parity", "rdiag(3)", "shift:rdiag(3)"])
+
+        def settle(accepted, report, log=print):
+            raise RuntimeError("the Deduced module did not build with the accepted theorems")
+        with self.assertRaises(RuntimeError):
+            self._deduce(c, settle=settle)
+        ledger = engine.load(Path(engine.LEDGER))
+        # the failure is recorded, the proof the register never received is not: the claim stays pending for it
+        self.assertEqual([(a["strategy"], a["outcome"]) for a in ledger["attempt"]], [("library-rewrite", "failed")])
+        self.assertEqual(deduce.plan(ledger=ledger)[0]["pending"], ["step-induction", "period-reduction"])
 
     def test_module_text_roundtrip_and_scratch_file_deduce_command(self):
         thms = [{"name": "a_eq_b", "body": "/-- d -/\ntheorem a_eq_b (t : Nat) : x = y := by\n  decide\n", "imports": ["Rule30UOR.Band"]},
@@ -335,8 +446,20 @@ class EngineTests(unittest.TestCase):
                                                  {"id": "gate", "seconds": 6000, "outcome": "ok"}]}]
         a = engine.allowances(300, data)
         self.assertEqual(a["gate"], 125)  # 1.25 times its measured 100 minutes, above its share
-        self.assertEqual(a["build"], 10)  # its measured duration
+        # a stage's limit is its share, never its last duration: a fast warm build must not cap the rebuild
+        # a pushed base module needs (10 minutes measured, 60 allowed)
+        self.assertEqual(a["build"], 60)
         self.assertAlmostEqual(sum(a.values()), 300)
+        data["tick"].append({"number": 2, "stages": [{"id": "build", "seconds": 20, "outcome": "ok"},
+                                                     {"id": "induction", "seconds": 40, "outcome": "ok"}]})
+        self.assertEqual({k: engine.allowances(300, data)[k] for k in ("build", "induction", "pruning")},
+                         {"build": 60, "induction": 30, "pruning": 20})
+        # what the earlier stages left goes to deduction, recomputed when it starts
+        after = engine.allowances(300, data, elapsed=2 * 60, done=("build", "induction", "pruning"))
+        self.assertAlmostEqual(after["deduction"], 300 - 2 - 125 - 5)
+        # a cut stage is not measured (its seconds are a lower bound): the gate's reservation ignores a cut
+        data["tick"].append({"number": 3, "stages": [{"id": "gate", "seconds": 60, "outcome": "cut"}]})
+        self.assertEqual(engine.measured(data)["gate"], 6000)
         late = engine.allowances(300, data, elapsed=250 * 60, done=("build", "induction", "pruning"))
         self.assertEqual(late["gate"], 125)  # never cut
         self.assertEqual(late["deduction"], 0)  # the stage that would overrun is cut
@@ -357,8 +480,11 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(engine.measured(data)["gate"], 1500)
         self.assertIsNone(engine.backfill_gate(data))  # measured once
 
-    def _tick(self, changes, push_moved=False, commit=False, push=False):
-        """A tick with its stages replaced by recorded answers."""
+    def _tick(self, changes, push_moved=False, commit=False, push=False, moved_early=False, push_rejected=False,
+              build=None, deduced=None, pending=0):
+        """A tick with its stages replaced by recorded answers. `moved_early`: main is not the base when
+        the tick starts; `push_moved`: main moves while the tick runs; `push_rejected`: the remote refuses
+        the push; `build`: the build's answer (an exception to raise); `deduced`: deduce's report."""
         from tools.r30 import discover, modules, sequencemodel
         calls = []
         with tempfile.TemporaryDirectory() as d:
@@ -369,9 +495,21 @@ class EngineTests(unittest.TestCase):
                 calls.append(cmd)
                 if cmd[:2] == ["git", "rev-parse"]:
                     if cmd[2] == "origin/main":
-                        return 0, ("c" * 40 if push_moved else "b" * 40) + "\n", ""
+                        moved = moved_early or (push_moved is True and state.get("started")) \
+                            or (push_moved == "after-push" and state.get("pushed"))
+                        return 0, ("c" * 40 if moved else "b" * 40) + "\n", ""
                     return 0, state["head"] + "\n", ""
+                if cmd[:2] == ["git", "push"]:
+                    state["pushed"] = True
+                    if push_rejected:
+                        return 1, "", "! [remote rejected] HEAD -> main (protected branch hook declined)"
                 return 0, "", ""
+
+            def build_answer(names, timeout=None):
+                state.update(started=True)
+                if isinstance(build, BaseException):
+                    raise build
+                return build or (True, "")
 
             def r30(args, timeout):
                 calls.append(["r30", *args])
@@ -382,11 +520,12 @@ class EngineTests(unittest.TestCase):
                        (repo, "SCRATCH", Path(d) / "scratch"),
                        (engine, "_r30", r30), (engine, "prune_evidence", lambda: None),
                        (engine, "sequences_input", lambda: "sha256:" + "0" * 64),
-                       (modules, "build", lambda names, timeout=None: state.update(started=True) or (True, "")),
+                       (modules, "build", build_answer),
                        (sequencemodel, "load", lambda: {"window": 512, "sequence": []}),
                        (discover, "run", lambda **kw: {"written": [], "counts": {"new": 0}}),
-                       (deduce, "run", lambda budget_minutes, log=print, tick=0: {"attempts": [], "proved": [], "refuted": [],
-                                                                          "known": [], "skipped": [], "dry_run": False}),
+                       (deduce, "run", lambda budget_minutes, log=print, tick=0: deduced or {
+                           "attempts": [], "proved": [], "refuted": [], "known": [], "skipped": [], "dry_run": False}),
+                       (deduce, "plan", lambda ledger=None: [{"pending": ["step-induction"] * pending}]),
                        (engine, "consolidate", lambda data, tick, start: {"outcomes": 0, "runtime": "python"}),
                        (frontier, "load", lambda: {"claim": []})]
             import subprocess as sp
@@ -397,11 +536,13 @@ class EngineTests(unittest.TestCase):
                 self.addCleanup(setattr, mod, attr, old)
             # clean at the start, `changes` once the stages ran
             engine.dirty = lambda: changes if state.get("started") else []
-            summary = engine.tick(budget_minutes=60, commit=commit, push=push, log=lambda *a: None)
-            recorded = engine.load(ledger)["tick"]
-            marker = Path(d) / "scratch" / "settled"
-            self.settled = marker.read_text() if marker.exists() else ""
-            return summary, calls, recorded
+            try:
+                summary = engine.tick(budget_minutes=60, commit=commit, push=push, log=lambda *a: None)
+            finally:
+                marker = Path(d) / "scratch" / "settled"
+                self.settled = marker.read_text() if marker.exists() else ""
+                self.recorded = engine.load(ledger)["tick"]
+            return summary, calls, self.recorded
 
     def test_tick_idle_commit_and_dropped_push_engine_tick(self):
         s, calls, recorded = self._tick([])
@@ -421,10 +562,178 @@ class EngineTests(unittest.TestCase):
         s, calls, _ = self._tick(["frontier.toml"], commit=True, push=True, push_moved=True)
         self.assertEqual(s["outcome"], "dropped")
         self.assertNotIn(["git", "push", "origin", "HEAD:main"], calls)
+        self.assertEqual(self.settled, "")  # the next tick redoes it from the new main
         s, _, _ = self._tick(["frontier.toml"])
         self.assertEqual(s["outcome"], "uncommitted")
         with self.assertRaises(RuntimeError):
             self._tick([".github/workflows/engine.yml"], commit=True)
+
+    def test_stale_cut_and_rejected_ticks_settle_only_what_needs_a_person_engine_tick(self):
+        import subprocess
+        # a run whose base is no longer main (queued behind a tick that pushed): it stops at once
+        s, calls, recorded = self._tick(["frontier.toml"], commit=True, push=True, moved_early=True)
+        self.assertEqual((s["outcome"], s["stages"]), ("stale", []))
+        self.assertEqual((self.settled, recorded), ("", []))
+        self.assertFalse(any(c[:2] == ["r30", "commit"] for c in calls))
+        schema.validate(schema.document("engine-tick-result"), json.loads(json.dumps(s)))
+        # a build its allowance cuts (a rebuild after a pushed base module, an evicted cache): nothing runs on
+        # the unbuilt library, nothing is settled, and the next tick resumes the build
+        s, calls, recorded = self._tick([], build=subprocess.TimeoutExpired(["lake", "build"], 3600))
+        self.assertEqual(s["outcome"], "cut")
+        self.assertEqual([(st["id"], st["outcome"]) for st in s["stages"]], [("build", "cut")])
+        self.assertEqual(self.settled, "")
+        self.assertEqual(recorded[-1]["outcome"], "cut")
+        self.assertNotIn("build", engine.measured({"tick": recorded}))
+        # a failed build is a person's: settled
+        with self.assertRaises(RuntimeError):
+            self._tick([], build=(False, "error: Rule30UOR/Core.lean:3:0: unknown module"))
+        self.assertTrue(self.settled.startswith("b" * 40 + " error"))
+        self.assertIn("unknown module", self.recorded[-1]["stages"][0]["note"])
+        # deduction left attempts for the budget: nothing changed, but the tick is not idle
+        report = {"attempts": [], "proved": [], "refuted": [], "known": [], "dry_run": False,
+                  "skipped": [{"id": "observed-x", "strategy": "step-induction", "reason": "budget"}]}
+        s, _, _ = self._tick([], deduced=report, pending=1)
+        self.assertEqual((s["outcome"], self.settled), ("cut", ""))
+        self.assertEqual(s["stages"][3]["outcome"], "cut")
+        # nothing cut, but an attempt still pending: not idle either
+        s, _, _ = self._tick([], pending=1)
+        self.assertEqual((s["outcome"], self.settled), ("cut", ""))
+        # the remote rejects the push while main has not moved: no race, so the tick is refused and settled
+        with self.assertRaises(RuntimeError):
+            self._tick(["frontier.toml"], commit=True, push=True, push_rejected=True)
+        self.assertTrue(self.settled.startswith("b" * 40 + " refused"))
+        self.assertEqual(self.recorded[-1]["outcome"], "refused")
+        # ... and when main moved between the check and the push, it is the race: dropped, not settled
+        s, calls, _ = self._tick(["frontier.toml"], commit=True, push=True, push_rejected=True, push_moved="after-push")
+        self.assertIn(["git", "push", "origin", "HEAD:main"], calls)
+        self.assertEqual((s["outcome"], self.settled), ("dropped", ""))
+
+    def test_build_compiles_the_runtime_laws_first_engine_tick(self):
+        """Rule30UOR.Core imports LexLeanRuntime.Laws, which no Lake root covers: the build compiles it as the
+        Makefile's `core` recipe does, so a build from an empty .lake succeeds; and only when its inputs changed."""
+        from tools.r30 import modules
+        self.assertIn("lake build LexLeanRuntime && lake env lean -R . -o .lake/build/lib/lean/LexLeanRuntime/Laws.olean "
+                      "-i .lake/build/lib/lean/LexLeanRuntime/Laws.ilean LexLeanRuntime/Laws.lean && lake build",
+                      (ROOT / "Makefile").read_text())
+        lakefile = tomllib.loads((repo.CORE_LEAN / "lakefile.toml").read_text())
+        runtime = next(lib for lib in lakefile["lean_lib"] if lib["name"] == "LexLeanRuntime")
+        self.assertNotIn("LexLeanRuntime.Laws", runtime["roots"])  # why the step exists
+        with tempfile.TemporaryDirectory() as d:
+            core = Path(d)
+            for rel in modules.LAWS_INPUTS:
+                (core / rel).parent.mkdir(parents=True, exist_ok=True)
+                (core / rel).write_text(f"-- {rel}\n")
+            calls = []
+
+            def run(cmd, cwd=None, timeout=None, env=None, input=None, group=False):
+                calls.append(cmd)
+                self.assertEqual(cwd, core)
+                self.assertTrue(group)  # a cut build leaves no Lean process writing into the cached .lake
+                if cmd[:3] == ["lake", "env", "lean"]:
+                    for flag in ("-o", "-i"):
+                        (core / cmd[cmd.index(flag) + 1]).write_bytes(b"compiled")
+                return 0, "", ""
+            for mod, attr, value in [(repo, "CORE_LEAN", core), (repo, "run", run)]:
+                self.addCleanup(setattr, mod, attr, getattr(mod, attr))
+                setattr(mod, attr, value)
+            self.assertEqual(modules.build([]), (True, ""))
+            self.assertEqual(calls, [["lake", "build", "LexLeanRuntime"],
+                                     ["lake", "env", "lean", "-R", ".", "-o", ".lake/build/lib/lean/LexLeanRuntime/Laws.olean",
+                                      "-i", ".lake/build/lib/lean/LexLeanRuntime/Laws.ilean", "LexLeanRuntime/Laws.lean"],
+                                     ["lake", "build", "Rule30UOR"]])
+            calls.clear()
+            self.assertEqual(modules.build(["Deduced"]), (True, ""))
+            self.assertEqual(calls, [["lake", "build", "Rule30UOR.Deduced"]])  # current: not compiled again
+            (core / "LexLeanRuntime/Portable.lean").write_text("-- changed\n")
+            calls.clear()
+            modules.build([])
+            self.assertEqual([c[:3] for c in calls], [["lake", "build", "LexLeanRuntime"], ["lake", "env", "lean"],
+                                                      ["lake", "build", "Rule30UOR"]])
+        # a failed build keeps its first error block, not Lake's progress lines around it
+        out = ("✔ [24/85] Built Rule30UOR.Intent (867ms)\n✖ [26/85] Building Rule30UOR.Core\n"
+               "error: Rule30UOR/Core.lean:3:0: unknown module prefix 'LexLeanRuntime'\n"
+               "⚠ [25/85] Built Rule30UOR.ZeroDiagonals (2.4s)\nwarning: unused variable\n"
+               "✔ [27/85] Built Rule30UOR.Fixed (1.0s)\nerror: build failed\n")
+        self.assertEqual(modules.errors_of(out), "error: Rule30UOR/Core.lean:3:0: unknown module prefix 'LexLeanRuntime'\n"
+                                                 "error: build failed")
+        self.assertEqual(modules.errors_of("lake: killed\n"), "lake: killed")
+
+    def test_a_timed_out_build_kills_its_whole_process_group_engine_tick(self):
+        import subprocess
+        import time
+        with tempfile.TemporaryDirectory() as d:
+            pidfile = Path(d) / "child.pid"
+            # a parent (lake) that starts a child (lean) and waits: the timeout must take both
+            script = f"sleep 30 & echo $! > {pidfile}; wait"
+            with self.assertRaises(subprocess.TimeoutExpired):
+                repo.run(["sh", "-c", script], cwd=d, timeout=1, group=True)
+            child = int(pidfile.read_text())
+            for _ in range(50):
+                try:
+                    import os
+                    os.kill(child, 0)
+                except ProcessLookupError:
+                    break
+                time.sleep(0.1)
+            else:
+                self.fail("the build's child process survived its timeout")
+
+    def test_prune_keeps_what_the_next_run_can_use_engine_workload(self):
+        """The gate's evidence before caching: the current tools key, the newest attestation per LexLean
+        project, the current κ procedure, never a certificate."""
+        import os
+        import time
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d) / "rule30-validation"
+
+            def put(rel, text="x", age=0):
+                path = root / rel
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text)
+                stamp = time.time() - age
+                for q in [path] + list(path.parents):
+                    if q == root.parent:
+                        break
+                    os.utime(q, (stamp, stamp))
+            put("a" * 64 + ".ok", "tree")
+            put("a" * 64 + ".lock", "")
+            put("lake/bbbbbbbbbbbbbbbb/rule30-core-lean/.lake/o", age=900)
+            put("lake/cccccccccccccccc/rule30-core-lean/.lake/o")
+            put("lake/cccccccccccccccc/rule30-core-lean.new/.lake/o")
+            for project in ("rule30-paper", "rule30-api"):
+                put(f"lexlean/cccccccccccccccc/{project}/{'1' * 64}/latest-verified.json", age=600)
+                put(f"lexlean/cccccccccccccccc/{project}/{'1' * 64}/verified/i/attestation.json", age=600)
+                put(f"lexlean/cccccccccccccccc/{project}/{'2' * 64}/latest-verified.json", age=60)
+                put(f"lexlean/cccccccccccccccc/{project}/{'3' * 64}.new.123/latest-verified.json")
+            put(f"lexlean/cccccccccccccccc/rule30-lexlean/{'4' * 64}/latest-verified.json", age=6000)
+            put(f"lexlean/bbbbbbbbbbbbbbbb/rule30-paper/{'5' * 64}/latest-verified.json")
+            put("replay/bbbbbbbbbbbbbbbb/k.ok")
+            put("replay/cccccccccccccccc/k.ok")
+            put("kappa/ffffffffffffffff/m")
+            put("kappa/eeeeeeeeeeeeeeee/m")
+            plan = engine.prune_evidence(root=root, key="cccccccccccccccc", procedure="eeeeeeeeeeeeeeee")
+            self.assertFalse(plan["applied"])
+            self.assertTrue((root / ("a" * 64 + ".ok")).exists())  # a report changes nothing
+            r = engine.prune_evidence(apply=True, root=root, key="cccccccccccccccc", procedure="eeeeeeeeeeeeeeee")
+            self.assertEqual(r["dropped"], plan["dropped"])
+            schema.validate(schema.document("engine-prune-result"), json.loads(json.dumps(r)))
+            left = sorted(str(p.relative_to(root)) for p in root.rglob("*") if p.is_file())
+            self.assertEqual(left, [
+                "kappa/eeeeeeeeeeeeeeee/m",
+                "lake/cccccccccccccccc/rule30-core-lean/.lake/o",
+                f"lexlean/cccccccccccccccc/rule30-api/{'2' * 64}/latest-verified.json",
+                f"lexlean/cccccccccccccccc/rule30-lexlean/{'4' * 64}/latest-verified.json",
+                f"lexlean/cccccccccccccccc/rule30-paper/{'2' * 64}/latest-verified.json",
+                "replay/cccccccccccccccc/k.ok"])
+            self.assertEqual(r["kept"], ["lake/cccccccccccccccc", "lexlean/cccccccccccccccc", "replay/cccccccccccccccc",
+                                         "kappa/eeeeeeeeeeeeeeee"])
+            self.assertNotIn(".ok", " ".join(p.name for p in root.iterdir()))
+            self.assertIn("kept 4", engine.render_prune(r))
+            # without a computable key, the newest directory of each family stands in for it
+            put("lake/dddddddddddddddd/x")
+            r = engine.prune_evidence(apply=True, root=root, key="", procedure="eeeeeeeeeeeeeeee")
+            self.assertEqual(sorted(p.name for p in (root / "lake").iterdir()), ["dddddddddddddddd"])
+        self.assertEqual(engine.prune_evidence(root=Path(d) / "absent")["kept"], [])
 
     def test_status_reports_the_network_and_the_last_tick_engine_status(self):
         data = {"weight": [{"strategy": "step-induction", "family": "left-plain", "value": 10}], "attempt": [
@@ -456,6 +765,29 @@ class EngineTests(unittest.TestCase):
         feature = (prismmodel.FEATURES / "engine.feature").read_text()
         for i in ids:
             self.assertIn(f"@{i} @build", feature)
+
+
+
+class EngineStallTests(unittest.TestCase):
+    """A cut tick that repeats the same pending work on the same base ends stalled (visible, settled);
+    a transport failure of the push is retried and never settles a base."""
+
+    def test_three_identical_cut_ticks_stall_engine_tick(self):
+        from tools.r30 import engine
+        base = "a" * 40
+        earlier = [{"number": n, "base": base, "outcome": "cut", "pending": 11} for n in (1, 2)]
+        self.assertTrue(engine.stalled({"tick": earlier}, {"number": 3, "base": base, "pending": 11}))
+        self.assertFalse(engine.stalled({"tick": earlier}, {"number": 3, "base": base, "pending": 10}))
+        self.assertFalse(engine.stalled({"tick": earlier[1:]}, {"number": 3, "base": base, "pending": 11}))
+        moved = [dict(t, base="b" * 40) for t in earlier]
+        self.assertFalse(engine.stalled({"tick": moved}, {"number": 3, "base": base, "pending": 11}))
+
+    def test_only_a_remote_decision_counts_as_a_rejection_engine_tick(self):
+        from tools.r30 import engine
+        self.assertTrue(engine.REJECTED.search(" ! [remote rejected] HEAD -> main (protected branch hook declined)"))
+        self.assertTrue(engine.REJECTED.search("remote: error: GH006: Protected branch update failed"))
+        self.assertFalse(engine.REJECTED.search("error: RPC failed; HTTP 502 curl 22 The requested URL returned error: 502"))
+        self.assertFalse(engine.REJECTED.search("fatal: the remote end hung up unexpectedly"))
 
 
 if __name__ == "__main__":

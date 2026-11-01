@@ -151,7 +151,9 @@ to Refute and Mechanize as proposals of their own.
 The loop above also runs by itself on GitHub Actions (`.github/workflows/engine.yml`,
 rendered from `rule30-api/src/Engine.lex.tex` by `api sync`): every thirty minutes,
 on dispatch and on pushes of the engine's inputs, `bin/r30 engine tick --commit --push`
-builds the library, runs induction (`sequences --write` when its inputs changed,
+builds the library (as the gate's `make core` does: `LexLeanRuntime.Laws`, which no Lake
+root covers, then `lake build`; `modules.build` does the same for `module build` and
+`deduce`), runs induction (`sequences --write` when its inputs changed,
 `discover --write`), pruning (`audit --write`), deduction (`deduce`) and learning,
 commits through the unchanged gate (`commit --wait`, in the foreground) and pushes
 only when `origin/main` is still the tick's base. You intervene only by pushing
@@ -161,6 +163,7 @@ features; the engine's commits are yours to read like any other.
 bin/r30 deduce [--budget-minutes N] [--claims <ids>] [--dry-run]   # prove the observed claims for all t
 bin/r30 engine tick [--budget-minutes N] [--commit] [--push]        # one cycle (CI runs it with --commit --push)
 bin/r30 engine status                                               # the last tick, the ledger, the weights
+bin/r30 engine prune [--apply]                                      # the gate's evidence a next run can use; --apply deletes the rest
 bin/r30 commit -m "..." --wait [--coauthor ""]                      # the gate in the foreground (the engine's path)
 ```
 
@@ -170,7 +173,8 @@ bin/r30 commit -m "..." --wait [--coauthor ""]                      # the gate i
   columns into the diagonals, one rule step definitionally, the library's equalities
   from `mentions` and the register's proved relations, Boolean case analysis; a
   publishable library theorem that states the relation proves the claim with no new
-  theorem, outcome `known`), `step-induction` (the
+  theorem, outcome `known`, checked before any strategy runs whatever the learned
+  order), `step-induction` (the
   diagonals `rdiag 0..J`, `ldiag 0..D`, at `t` and `2t`, as a finite system whose
   orbit the kernel decides), `period-reduction` (the words of the right system
   read from the row register modulo `2^j`) and `counterexample`. The Boolean core
@@ -185,18 +189,30 @@ bin/r30 commit -m "..." --wait [--coauthor ""]                      # the gate i
   or renderer has a new digest, so every observed claim it applies to is attempted
   again; an unchanged digest is never attempted twice on a claim.
 - **The ledger** `rule30-api/model/engine.toml` records every attempt (claim κ,
-  strategy, template digest, family, outcome, failure point, seconds); no
-  (claim, strategy, digest) is attempted twice. The weights (plasticity) are a
-  function of the attempts, decided in bounds by `Engine.lex.tex`.
-- **Homeostasis.** A tick splits its budget across the stages from their measured
-  durations (the gate's, which its own record cannot hold, is measured by the next
-  tick from the commit's time); the gate's share is reserved and never cut, an
-  overrunning stage is (an attempt never runs past the deduction deadline).
-- **Idle.** A tick with nothing to do commits nothing; the workflow marks the
-  commit settled (also after a refused or failed tick) and later ticks on it stop
-  after the checkout until a new commit reaches `main`. Kill switch: repository
-  variable `R30_ENGINE=off`. A tick run by hand leaves its record in the ledger;
-  the next tick accepts that one dirty file.
+  strategy, template digest, family, outcome, failure point, seconds, and for
+  `library-rewrite` the library digest: the research modules' sources and the
+  register's proved relations); no (claim, strategy, digest, library) is attempted
+  twice, so `library-rewrite` runs again once the library changed. An attempt the
+  deduction deadline cuts is not recorded (it stays pending), and a success is
+  recorded only once the register has it. The weights (plasticity) are a function
+  of the attempts, decided in bounds by `Engine.lex.tex`.
+- **Homeostasis.** The gate's share is reserved first and never cut (1.25 times its
+  last measured duration when that is larger; the gate's own record cannot hold it, so
+  the next tick measures it from the commit's time); every other stage may take its
+  model share, deduction what the earlier stages left. An overrunning stage is cut
+  (an attempt never runs past the deduction deadline), and a cut is not a
+  measurement.
+- **Idle.** A tick with nothing to do (nothing changed, nothing cut, nothing
+  pending) commits nothing; the workflow marks the commit settled (also after a
+  refused or failed tick, or a push the remote rejected while `main` had not moved)
+  and later ticks on it stop after the checkout until a new commit reaches `main`. A
+  tick a budget cut ends `cut` and settles nothing; a run whose commit is no longer
+  `main`'s tip stops after the checkout (`stale` when main moved during the setup).
+  Before caching, the workflow runs `engine prune --apply` (the current tools key,
+  the newest LexLean attestation per project, never a certificate), and the job log
+  carries the gate's log. Kill switch: repository variable `R30_ENGINE=off`. A tick
+  run by hand leaves its record in the ledger; the next tick accepts that one dirty
+  file.
 
 ## A theorem's life
 

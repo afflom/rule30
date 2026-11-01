@@ -100,7 +100,7 @@ ERRORS = [
      "statement": "deduce --claims names a claim that is not in the register with status observed.",
      "commands": ["deduce"]},
     {"code": "R309003", "title": "Engine tick failed", "class": "engine", "exit": 1,
-     "statement": "A stage of engine tick failed (the build, induction, pruning, deduction or learning) or the pre-commit gate refused the tick's commit; the ledger records the stage, its seconds and the reason.",
+     "statement": "A stage of engine tick failed (the build, induction, pruning, deduction or learning), the pre-commit gate refused the tick's commit, or the remote rejected the push while main had not moved (a branch rule GITHUB_TOKEN cannot pass); the ledger records the stage, its seconds and the reason.",
      "commands": ["engine_tick"]},
     {"code": "R309004", "title": "Tick refused", "class": "engine", "exit": 2,
      "statement": "engine tick refused to start: the working tree is not clean (a tick starts from a clean checkout of main), or --push was given without --commit.",

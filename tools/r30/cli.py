@@ -716,11 +716,16 @@ def cmd_deduce(args):
 
 
 def cmd_engine(args):
-    """The engine: one tick (induction, pruning, deduction, learning, the gate), or its record."""
+    """The engine: one tick (induction, pruning, deduction, learning, the gate), its record, or the
+    gate's evidence pruned to what the next run can use (the workflow runs it before caching)."""
     from . import engine
     if args.sub == "status":
         st = engine.status()
         out(args, st, engine.render_status(st))
+        return
+    if args.sub == "prune":
+        r = engine.prune_evidence(apply=args.apply)
+        out(args, r, engine.render_prune(r))
         return
     if args.push and not args.commit:
         fail("R309004", "--push needs --commit")
@@ -880,6 +885,9 @@ def build_parser():
     s.add_argument("--push", action="store_true", help="push the commit when origin/main still is the base (never a force push)")
     s.set_defaults(fn=cmd_engine)
     en.add_parser("status", help="the last tick, the ledger and the learned weights").set_defaults(fn=cmd_engine)
+    s = en.add_parser("prune", help="the gate's evidence the next run can use (the current tools key's Lake builds, the newest LexLean attestation per project, the replay receipts, the current κ memo; never a certificate) and what it cannot; the workflow runs it with --apply before caching")
+    s.add_argument("--apply", action="store_true", help="delete what the next run cannot use (default: report it)")
+    s.set_defaults(fn=cmd_engine)
 
     ex = sp.add_parser("experiment").add_subparsers(dest="sub", required=True)
     ex.add_parser("list").set_defaults(fn=cmd_experiment)

@@ -30,14 +30,32 @@ def git_config(key):
     return out.strip() if code == 0 else None
 
 
-def run(cmd, cwd=ROOT, timeout=None, env=None, input=None):
-    """Run a command; return (code, stdout, stderr). Never raises on nonzero exit."""
+def run(cmd, cwd=ROOT, timeout=None, env=None, input=None, group=False):
+    """Run a command; return (code, stdout, stderr). Never raises on nonzero exit. With `group`
+    the command runs in a process group of its own, and a timeout (or an interrupt) kills the whole
+    group: a `lake build` cut by its allowance leaves no Lean process behind writing into the build
+    directories that are cached next."""
     merged = dict(os.environ)
     if env:
         merged.update(env)
-    proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout,
-                          env=merged, input=input)
-    return proc.returncode, proc.stdout, proc.stderr
+    if not group:
+        proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout,
+                              env=merged, input=input)
+        return proc.returncode, proc.stdout, proc.stderr
+    import signal
+    proc = subprocess.Popen(cmd, cwd=cwd, stdin=subprocess.PIPE if input is not None else None,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=merged,
+                            start_new_session=True)
+    try:
+        out, err = proc.communicate(input=input, timeout=timeout)
+    except BaseException:
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        proc.communicate()
+        raise
+    return proc.returncode, out, err
 
 
 def lake_roots(package_dir):

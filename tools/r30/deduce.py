@@ -37,10 +37,18 @@ claim), published (`theorem add`) and recorded (`frontier set --status
 proved --lean`). Every attempt (claim κ, strategy, template digest,
 outcome, failure point, seconds) goes into the engine ledger
 (`model/engine.toml`, `engine.py`), and no (claim, strategy, template
-digest) is attempted twice. The finite systems are decided exactly in
-Python first (the orbit of the diagonals from time 0): a template whose
-Boolean core fails there is recorded as failed without running Lean."""
+digest) is attempted twice; for `library-rewrite` the key also holds the
+library digest (`library_digest`: the research modules and the register's
+proved relations), so a new lemma or a relation proved since makes it
+pending again. Before any strategy of a claim runs, a publishable library
+theorem that states its relation proves it (`known`), whatever the learned
+order. A success counts in the ledger only once the register records it, and
+an attempt the stage's deadline cut is left pending, not recorded. The
+finite systems are decided exactly in Python first (the orbit of the
+diagonals from time 0): a template whose Boolean core fails there is recorded
+as failed without running Lean."""
 
+import hashlib
 import re
 import time
 from itertools import product
@@ -687,6 +695,31 @@ def library_facts(relation, cache):
     return facts
 
 
+def library_digest(claims=None):
+    """What `library-rewrite` reads besides its template: the research modules (their sources: the
+    library's theorems that `mentions` finds, the engine's own module included) and the register's
+    proved relations. Part of a library-rewrite attempt's key, so the strategy is attempted again
+    on a claim once the library changed (a lemma pushed since, a relation proved since) and never
+    on an unchanged one. The sources stand in for the statements (a comment edit is a change too):
+    reading them needs no Lean, so the plan and `engine status` can compute it."""
+    claims = frontier.load()["claim"] if claims is None else claims
+    h = hashlib.sha256()
+    for m in sorted(repo.research_modules()):
+        path = repo.CORE_LEAN / (m.replace(".", "/") + ".lean")
+        h.update(m.encode() + b"\0" + (path.read_bytes() if path.exists() else b"") + b"\0")
+    for c in sorted(claims, key=lambda c: c["id"]):
+        if c["status"] == "proved" and c.get("lean") and c.get("relation"):
+            h.update(f"{c['lean']} {' '.join(sorted(c['relation']))}\n".encode())
+    return "sha256:" + h.hexdigest()
+
+
+def known_theorem(claim, facts, cache):
+    """A publishable library theorem that states the claim's relation itself (it proves the claim
+    with no new theorem), or None."""
+    target = sorted(claim["relation"])
+    return next((f["lean"] for f in facts if fact_relation(f) == target and publishable(f["lean"], cache)), None)
+
+
 def publishable(lean, cache=None):
     """Whether a theorem has a lexeme or `theorem preview` can state it (memoized in `cache`)."""
     from . import theorem
@@ -798,11 +831,10 @@ def render_library_rewrite(claim, name, cache, facts=None):
     relation itself (the claim is then proved by it, no new theorem)."""
     rel = claim["relation"]
     facts = library_facts(rel, cache) if facts is None else facts
-    target = sorted(rel)
-    for f in facts:
-        # a library theorem stating the relation proves the claim, once it is (or can be) published
-        if fact_relation(f) == target and publishable(f["lean"], cache):
-            return None, {"known": f["lean"]}
+    # a library theorem stating the relation proves the claim, once it is (or can be) published
+    known = known_theorem(claim, facts, cache)
+    if known:
+        return None, {"known": known}
     cols = columns(rel)
     exprs = [_atoms(c, None) for c in cols]
     goal_atoms = set()
@@ -993,8 +1025,10 @@ def check(name, body, imports, timeout):
     path = d / f"{name}.lean"
     path.write_text(scratch_file(name, body, imports))
     try:
+        # group: a timeout kills lean too (lake env waits on it as a child), so a cut attempt never
+        # keeps running beside the gate
         code, out, err = repo.run(["lake", "env", "lean", "-j", "1", str(path)], cwd=repo.CORE_LEAN, timeout=timeout,
-                                  env={"LEAN_NUM_THREADS": "1"})
+                                  env={"LEAN_NUM_THREADS": "1"}, group=True)
     except Exception as e:  # subprocess.TimeoutExpired
         return "timeout", f"no answer within {timeout} s ({type(e).__name__})", None
     text = out + err
@@ -1075,8 +1109,10 @@ def plan(claims=None, ledger=None):
     which of them are still unattempted for the current template digests."""
     from . import engine
     ledger = engine.load() if ledger is None else ledger
+    register = frontier.load()["claim"]
+    library = library_digest(register)
     rows = []
-    for c in frontier.load()["claim"]:
+    for c in register:
         if c["status"] != "observed" or (claims and c["id"] not in claims):
             continue
         try:
@@ -1084,9 +1120,11 @@ def plan(claims=None, ledger=None):
         except (ValueError, KeyError) as e:
             apps, fam = [], "open"
         order = em.schedule(engine.weights(ledger), fam, apps)
-        done = {(a["strategy"], a["template"]) for a in ledger["attempt"] if a["kappa"] == c.get("kappa")}
-        pending = [s for s in order if (s, em.template_digest(s)) not in done]
-        rows.append({"id": c["id"], "kappa": c.get("kappa"), "family": fam, "order": order, "pending": pending})
+        done = {engine.attempt_key(a) for a in ledger["attempt"] if a["kappa"] == c.get("kappa")}
+        pending = [s for s in order
+                   if (c.get("kappa"), s, em.template_digest(s), library if s == "library-rewrite" else "") not in done]
+        rows.append({"id": c["id"], "kappa": c.get("kappa"), "family": fam, "order": order, "pending": pending,
+                     "library": library})
     return rows
 
 
@@ -1105,29 +1143,66 @@ def run(budget_minutes=60, claims=None, dry_run=False, log=print, tick=0):
     by_id = {c["id"]: c for c in frontier.load()["claim"]}
     cache, report = {}, {"attempts": [], "proved": [], "refuted": [], "known": [], "skipped": [], "dry_run": dry_run}
     accepted = []
+
+    def budget(row, sids):
+        for sid in sids:
+            report["skipped"].append({"id": row["id"], "strategy": sid, "reason": "budget"})
+
+    def facts_of(row, claim):
+        try:
+            return library_facts(claim["relation"], cache)
+        except RuntimeError as e:
+            # Lean did not answer the library-facts query: the environment failed, not the
+            # template, so nothing more is recorded and the run stops
+            if not dry_run:
+                record_attempts(ledger, report["attempts"], tick, settled=False)
+            raise RuntimeError(f"the library-facts query failed ({row['id']}): {str(e)[:400]}")
+
     for row in rows:
         claim = by_id[row["id"]]
         name = theorem_name(claim["relation"], claim["kappa"])
-        for sid in row["pending"]:
-            if time.time() >= deadline:
-                report["skipped"].append({"id": row["id"], "strategy": sid, "reason": "budget"})
+        attempt_of = lambda sid: {"claim": row["id"], "kappa": claim["kappa"], "strategy": sid,
+                                  "template": em.template_digest(sid), "family": row["family"], "outcome": "failed",
+                                  "failure": "", "seconds": 0, "theorem": "",
+                                  "library": row["library"] if sid == "library-rewrite" else ""}
+        facts = None
+        if "library-rewrite" in row["pending"]:
+            # the redundancy rule before the learned order: a library theorem that states the relation
+            # proves the claim, whichever strategy the weights would run first
+            if deadline - time.time() < 30:
+                budget(row, row["pending"])
                 continue
-            digest = em.template_digest(sid)
             t0 = time.time()
-            attempt = {"claim": row["id"], "kappa": claim["kappa"], "strategy": sid, "template": digest,
-                       "family": row["family"], "outcome": "failed", "failure": "", "seconds": 0, "theorem": ""}
+            facts = facts_of(row, claim)
+            known = known_theorem(claim, facts, cache)
+            if known:
+                attempt = {**attempt_of("library-rewrite"), "outcome": "known", "theorem": known,
+                           "seconds": round(time.time() - t0, 1)}
+                report["attempts"].append(attempt)
+                log(f"{row['id']} [{row['family']}] library-rewrite: known ({known}) {attempt['seconds']}s")
+                if not dry_run:
+                    report["known"].append({"id": row["id"], "lean": known})
+                continue
+        for i, sid in enumerate(row["pending"]):
+            if deadline - time.time() < 30:  # an attempt never runs past the stage's deadline
+                budget(row, [sid])
+                continue
+            t0 = time.time()
+            attempt = attempt_of(sid)
             try:
-                body, info = RENDER[sid](claim, name if sid != "counterexample" else name + "_fails", cache)
+                if sid == "library-rewrite":
+                    body, info = render_library_rewrite(claim, name, cache, facts)
+                else:
+                    body, info = RENDER[sid](claim, name if sid != "counterexample" else name + "_fails", cache)
             except Unprovable as e:
                 attempt.update(outcome="failed", failure="(decided in Python) " + str(e)[:280])
                 body, info = None, {}
             except RuntimeError as e:
-                # Lean did not answer the library-facts query: the environment failed, not the
-                # template, so nothing is recorded and the run stops
-                for at in report["attempts"]:
-                    engine.record_attempt(ledger, at, tick)
-                engine.save(ledger)
-                raise RuntimeError(f"the library-facts query failed ({row['id']}): {str(e)[:400]}")
+                # the environment failed (Lean did not answer a query), not the template: nothing more
+                # is recorded and the run stops
+                if not dry_run:
+                    record_attempts(ledger, report["attempts"], tick, settled=False)
+                raise RuntimeError(f"rendering {sid} for {row['id']} failed: {str(e)[:400]}")
             if body is None and info.get("known"):
                 attempt.update(outcome="known", theorem=info["known"])
             elif body is not None:
@@ -1136,9 +1211,18 @@ def run(budget_minutes=60, claims=None, dry_run=False, log=print, tick=0):
                     attempt.update(outcome="dry-run")
                 else:
                     thm = name + ("_fails" if sid == "counterexample" else "")
-                    # an attempt never runs past the stage's deadline (homeostasis cuts it, the gate keeps its share)
-                    timeout = max(30, min(em.ATTEMPT_TIMEOUT, int(deadline - time.time())))
+                    left = deadline - time.time()
+                    if left < 30:
+                        budget(row, row["pending"][i:])
+                        break
+                    timeout = int(min(em.ATTEMPT_TIMEOUT, left))
                     outcome, failure, _ = check(thm, body, info.get("imports", []), timeout)
+                    if outcome == "timeout" and timeout < em.ATTEMPT_TIMEOUT:
+                        # the stage's deadline cut it, not the strategy: left pending for the next tick,
+                        # which gives it the full time; nothing is recorded or learned
+                        log(f"{row['id']} [{row['family']}] {sid}: cut by the deadline after {timeout} s; left for the next tick")
+                        budget(row, row["pending"][i:])
+                        break
                     attempt.update(outcome="refuted" if (outcome == "proved" and sid == "counterexample") else outcome,
                                    failure=failure, theorem=f"{DEDUCED}.{thm}" if outcome == "proved" else "")
                     if outcome == "proved":
@@ -1158,16 +1242,33 @@ def run(budget_minutes=60, claims=None, dry_run=False, log=print, tick=0):
                 break
     if dry_run:
         return report
+    settled = False
     try:
         if accepted or report["known"]:
             settle(accepted, report, log)
+        settled = True
     finally:
         # the ledger takes every attempt with the outcome settling gave it (a duplicate of a library
         # theorem becomes `known`, an unstatable proof `failed`), and learns from it
-        for attempt in report["attempts"]:
-            engine.record_attempt(ledger, attempt, tick)
-        engine.save(ledger)
+        record_attempts(ledger, report["attempts"], tick, settled)
     return report
+
+
+def record_attempts(ledger, attempts, tick, settled):
+    """The attempts into the ledger, and saved. A success (proved, refuted, known) counts once the
+    register records it: when settling did not finish (it raised, or never ran because the run
+    stopped), a success the register does not show is left out, so the claim stays pending for that
+    strategy instead of carrying a proof that does not exist. A failure is recorded either way."""
+    from . import engine
+    shown = None
+    for attempt in attempts:
+        if attempt["outcome"] in em.SUCCESS and not settled:
+            if shown is None:
+                shown = {(c["id"], c.get("lean")) for c in frontier.load()["claim"] if c["status"] in ("proved", "refuted")}
+            if (attempt["claim"], attempt["theorem"]) not in shown:
+                continue
+        engine.record_attempt(ledger, attempt, tick)
+    engine.save(ledger)
 
 
 def settle(accepted, report, log=print):

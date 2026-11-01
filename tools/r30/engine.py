@@ -5,8 +5,10 @@ every thirty minutes off the hour, on dispatch, and on a push of the engine's
 inputs):
 
 1. `base`: record the commit the tick starts from;
-2. `build`: build the research library (`lake build`, the Lake directories
-   restored from the cache);
+2. `build`: build the research library as the gate's `make core` does
+   (`modules.build`: `LexLeanRuntime.Laws`, which no Lake root covers, then
+   `lake build`; the Lake directories restored from the cache). A build cut by
+   its allowance ends the tick `cut`, and the next tick resumes it;
 3. `induction`: `sequences --write` only when its inputs changed (the
    evaluation program and the κ-labels of the modules it imports), then
    `discover --write` at the committed window: new relations become
@@ -20,20 +22,32 @@ inputs):
 7. `gate`: with `--commit`, `bin/r30 commit --wait` in the foreground through
    the unchanged pre-commit gate; with `--push`, `git fetch` and a push only
    when `origin/main` still is the base (otherwise the work is dropped and the
-   next tick redoes it from the new main; never a force push).
+   next tick redoes it from the new main; never a force push). A push the
+   remote rejects while main has not moved is no race: the tick is `refused`.
+   With `--push`, a tick whose base is no longer `origin/main` when it starts
+   (a queued run, or main moved during the setup) ends `stale` at once.
 
-Homeostasis: the budget is split across the stages from their measured
-durations (the ledger's last ticks; the model's shares before any were
-measured), the gate's share is reserved first and never cut, and a stage
-that overruns its allowance is cut (its subprocess times out, deduction stops
-scheduling attempts). When nothing changed (no new relation, every observed
+Homeostasis: the gate's share is reserved first and never cut (its model share
+scaled to the budget, or 1.25 times its last measured duration when larger),
+every other stage may take its model share, and deduction takes what the
+earlier stages left; a stage that overruns its allowance is cut (its
+subprocess times out, deduction stops scheduling attempts and never runs one
+past its deadline). Only a stage that finished is measured: a cut is a lower
+bound, not a duration. When nothing changed (no new relation, every observed
 claim attempted by every applicable strategy, no record other than the tick
-itself) the tick ends `idle` without a commit; the workflow then marks the
-commit settled and later ticks on it stop after the checkout, until a
-developer pushes a new feature.
+itself) and nothing was cut or is still pending, the tick ends `idle` without
+a commit; the workflow then marks the commit settled and later ticks on it
+stop after the checkout, until a developer pushes a new feature. A tick that
+changed nothing because a stage was cut ends `cut`, which settles nothing: the
+next tick on the commit does the work.
 
 `model/engine.toml` (`r30/engine/1`) is the engine's ledger: the weights,
-every attempt, and the last ticks with their stages, seconds and outcome."""
+every attempt, and the last ticks with their stages, seconds and outcome.
+
+`prune_evidence` (`bin/r30 engine prune --apply`, which the workflow runs
+before caching) keeps of the gate's evidence only what the next run can use:
+the current tools key's Lake builds, LexLean attestations (the newest per
+project) and replay receipts, the current κ memo, and never a certificate."""
 
 import hashlib
 import json
@@ -98,6 +112,8 @@ def dumps(data):
         lines.append("[[attempt]]")
         for k in ("claim", "kappa", "strategy", "template", "family", "outcome", "failure", "theorem"):
             lines.append(f"{k} = {_q(a.get(k, ''))}")
+        if a.get("library"):  # library-rewrite: the library its facts were read from (deduce.library_digest)
+            lines.append(f"library = {_q(a['library'])}")
         lines += [f"seconds = {float(a.get('seconds', 0))}", f"tick = {int(a.get('tick', 0))}", ""]
     for t in data["tick"][-KEEP_TICKS:]:
         lines.append("[[tick]]")
@@ -121,12 +137,18 @@ def weights(data):
     return [{"strategy": st, "family": f, "value": have.get((st, f), v)} for st, f, v in em.initial_table()]
 
 
+def attempt_key(attempt):
+    """What an attempt is never repeated for: the claim κ, the strategy, its template digest, and for
+    library-rewrite the library digest (the facts it reads; empty for the other strategies)."""
+    return attempt["kappa"], attempt["strategy"], attempt["template"], attempt.get("library", "")
+
+
 def record_attempt(data, attempt, tick=0):
     """Append an attempt (never one already recorded) and potentiate or depress its strategy for
     the relation's family (plasticity, the mirror of `learn`). `tick` is the tick that made it
     (0: a `deduce` run outside a tick)."""
-    key = (attempt["kappa"], attempt["strategy"], attempt["template"])
-    if any((a["kappa"], a["strategy"], a["template"]) == key for a in data["attempt"]):
+    key = attempt_key(attempt)
+    if any(attempt_key(a) == key for a in data["attempt"]):
         raise RuntimeError(f"attempt {key} is already in the ledger (the redundancy rule)")
     attempt = {**attempt, "tick": tick}
     data["attempt"].append(attempt)
@@ -167,11 +189,12 @@ def consolidate(data, tick, start):
 # ---------------------------------------------------------------- homeostasis
 
 def measured(data):
-    """{stage: seconds} of the last tick that ran each stage."""
+    """{stage: seconds} of the last tick that finished each stage (a cut stage's seconds are a lower
+    bound of its duration, not a measurement)."""
     out = {}
     for t in data["tick"]:
         for st in t.get("stages", []):
-            if st.get("outcome") in ("ok", "cut"):
+            if st.get("outcome") == "ok":
                 out[st["id"]] = st["seconds"]
     return out
 
@@ -179,8 +202,9 @@ def measured(data):
 def allowances(budget_minutes, data, elapsed=0.0, done=()):
     """The minutes each remaining stage may take: the gate's share reserved first (its model share
     scaled to the budget, or 1.25 times its measured duration when larger), every other stage its
-    measured duration (its model share before one was measured) within its model share, and the
-    deduction stage what is left."""
+    model share scaled to the budget, and the deduction stage what is left (recomputed when it
+    starts, so the time an earlier stage did not use goes to deduction). A stage's limit is never
+    its last duration: a rebuild or a re-evaluation of the basis takes what its share allows."""
     shares = {s: b for s, b, _ in em.WORKLOAD["stages"]}
     scale = budget_minutes / em.WORKLOAD["tickBudget"]
     m = {k: v / 60 for k, v in measured(data).items()}
@@ -190,8 +214,7 @@ def allowances(budget_minutes, data, elapsed=0.0, done=()):
     for s in STAGES:
         if s in done or s == "gate":
             continue
-        want = min(shares[s] * scale, max(m.get(s, shares[s] * scale), 1))
-        out[s] = want
+        out[s] = shares[s] * scale
     rest = sum(v for k, v in out.items() if k != "deduction")
     if "deduction" in out:
         out["deduction"] = max(0.0, left - rest)
@@ -229,6 +252,19 @@ def sequences_input():
     return "sha256:" + h.hexdigest()
 
 
+def build_library(allow):
+    """The build stage: the research library as the gate's `make core` builds it (`modules.build`:
+    `LexLeanRuntime.Laws`, then `lake build Rule30UOR`) within `allow` minutes. A build its allowance
+    cuts is `cut` (the Lake directories are cached either way, so the next tick resumes it); a
+    failed one is `error`, with its first errors."""
+    from . import modules
+    try:
+        ok, errors = modules.build([], timeout=int(allow * 60))
+    except subprocess.TimeoutExpired:
+        return "cut", f"lake build did not finish within {allow:.0f} min; the next tick resumes it"
+    return ("ok" if ok else "error"), errors[:300]
+
+
 def _r30(args, timeout):
     """A `bin/r30` subcommand as a stage step: (ok, output tail)."""
     try:
@@ -252,34 +288,136 @@ def gh_output(**kv):
                 f.write(f"{k}={v}\n")
 
 
-def prune_evidence():
-    """On a runner (GITHUB_ACTIONS), keep the gate's evidence small enough to cache: no certificate
-    or lock, only the newest tools key of each family, and only the newest slot of each LexLean
-    project. A local checkout keeps its evidence as it is."""
+def gate_tools_key(root=None, env=None):
+    """The key under which the gate (`scripts/validate_git_tree.py`) keeps its Lake builds, LexLean
+    attestations and replay receipts, computed as the gate computes it: the SHA-256 of the toolchain
+    of HEAD, `lean --version` and `lake --version` under it, `lexlean --version`, the compiler's
+    bytes and the gate script's bytes, extended by `tools`, cut to 16 hex digits (the tests run the
+    gate on a fixture and compare). None when a tool cannot be run."""
     import shutil
-    if os.environ.get("GITHUB_ACTIONS") != "true":
-        return
+    root = Path(repo.ROOT if root is None else root)
+    env = dict(os.environ if env is None else env)
+
+    def output(*args, environ=None):
+        p = subprocess.run(args, cwd=root, env=env if environ is None else environ, capture_output=True, text=True)
+        if p.returncode != 0:
+            raise RuntimeError(f"{args[0]} exited {p.returncode}")
+        return p.stdout.strip()
+    try:
+        toolchain = output("git", "show", "HEAD:rule30-core-lean/lean-toolchain")
+        configured = (env.get("LEXLEAN_BIN") or env.get("LEXLEAN")
+                      or subprocess.run(["git", "config", "--get", "rule30.lexlean"], cwd=root, env=env,
+                                        capture_output=True, text=True).stdout.strip())
+        local = root / ".local" / "bin" / "lexlean"
+        compiler = shutil.which(configured or (str(local) if local.exists() else "lexlean"), path=env.get("PATH"))
+        if not compiler:
+            return None
+        compiler = str(Path(compiler).resolve())
+        version = output(compiler, "--version")
+        clean = dict(env)
+        for name in output("git", "rev-parse", "--local-env-vars").splitlines():
+            clean.pop(name, None)
+        for name in ("ELAN_TOOLCHAIN", "MAKEFLAGS", "MFLAGS", "MAKEOVERRIDES"):
+            clean.pop(name, None)
+        clean.update(LEXLEAN_BIN=compiler, ELAN_TOOLCHAIN=toolchain)
+        lean_version = output("lean", "--version", environ=clean)
+        lake_version = output("lake", "--version", environ=clean)
+        digest = hashlib.sha256()
+        for item in (toolchain, lean_version, lake_version, version):
+            digest.update(item.encode() + b"\0")
+        digest.update(Path(compiler).read_bytes())
+        digest.update((root / "scripts" / "validate_git_tree.py").read_bytes())
+    except (OSError, RuntimeError):
+        return None
+    digest.update(b"tools")
+    return digest.hexdigest()[:16]
+
+
+def kappa_procedure():
+    """The κ memo's current store: the digest of the labeling procedure (`kappa_research.py`)."""
+    from . import cli
+    try:
+        return cli._kappa_research().exporter_digest(repo.CORE_LEAN)
+    except (OSError, ImportError):
+        return None
+
+
+def evidence_dir():
+    """The gate's evidence: `rule30-validation` in the Git common directory."""
     code, out, _ = repo.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"])
-    if code != 0:
-        return
-    root = Path(out.strip()) / "rule30-validation"
-    if not root.exists():
-        return
-    for p in list(root.glob("*.ok")) + list(root.glob("*.lock")):
-        p.unlink(missing_ok=True)
-    newest = lambda ps: sorted(ps, key=lambda p: p.stat().st_mtime, reverse=True)
-    for family in ("lake", "lexlean", "replay", "kappa"):
+    return Path(out.strip()) / "rule30-validation" if code == 0 and out.strip() else None
+
+
+def _size(path):
+    if path.is_symlink() or not path.is_dir():
+        return path.lstat().st_size if path.exists() or path.is_symlink() else 0
+    return sum(f.lstat().st_size for f in path.rglob("*") if f.is_file() or f.is_symlink())
+
+
+def prune_evidence(apply=False, root=None, key=None, procedure=None):
+    """What of the gate's evidence the next run can use, and what it cannot (deleted with `apply`).
+    Kept: under `lake/`, `lexlean/` and `replay/` only the current tools key (`gate_tools_key`; the
+    newest directory when it cannot be computed), within the LexLean attestations of that key only
+    the newest complete slot of each project (`scripts/verify_lexlean.sh`: one slot per input
+    digest), and of the κ memo only the current procedure's store. Dropped besides: every file of
+    the top level (the `.ok` certificates, which say a tree passed and which a later run must
+    establish itself, and their locks) and unfinished slots (`*.new*`)."""
+    import shutil
+    root = evidence_dir() if root is None else Path(root)
+    report = {"root": str(root or ""), "key": None, "procedure": None, "kept": [], "dropped": [],
+              "kept_bytes": 0, "dropped_bytes": 0, "applied": bool(apply)}
+    if root is None or not root.is_dir():
+        return report
+    key = gate_tools_key() if key is None else key
+    procedure = kappa_procedure() if procedure is None else procedure
+    report.update(key=key, procedure=procedure)
+    keep, drop = [], []
+    unfinished = lambda p: p.name.endswith(".new") or ".new." in p.name
+
+    def newest(paths):
+        return max(paths, key=lambda p: p.stat().st_mtime) if paths else None
+    drop += [p for p in sorted(root.iterdir()) if not p.is_dir()]
+    chosen = {}
+    for family, current in (("lake", key), ("lexlean", key), ("replay", key), ("kappa", procedure)):
         d = root / family
-        if d.is_dir():
-            for old in newest([p for p in d.iterdir() if p.is_dir()])[1:]:
-                shutil.rmtree(old, ignore_errors=True)
-    lex = root / "lexlean"
-    if lex.is_dir():
-        for key in lex.iterdir():
-            for project in (key.iterdir() if key.is_dir() else []):
-                if project.is_dir():
-                    for old in newest([p for p in project.iterdir() if p.is_dir()])[1:]:
-                        shutil.rmtree(old, ignore_errors=True)
+        if not d.is_dir():
+            continue
+        entries = sorted(d.iterdir())
+        pick = d / current if current else newest([p for p in entries if p.is_dir() and not unfinished(p)])
+        chosen[family] = pick if pick is not None and pick.is_dir() else None
+        drop += [p for p in entries if p != chosen[family]]
+    if chosen.get("lexlean"):
+        for project in sorted(p for p in chosen["lexlean"].iterdir() if p.is_dir()):
+            slots = [s for s in project.iterdir() if s.is_dir() and not unfinished(s) and (s / "latest-verified.json").is_file()]
+            best = newest(slots)
+            drop += [s for s in sorted(project.iterdir()) if s != best]
+    if chosen.get("lake"):  # a package slot whose copy was interrupted (validate_git_tree.store_lake_cache)
+        drop += [p for p in sorted(chosen["lake"].rglob("*.new")) if p.is_dir()]
+    keep = [p for p in (chosen.get(f) for f in ("lake", "lexlean", "replay", "kappa")) if p is not None]
+    for p in drop:
+        report["dropped"].append(str(p.relative_to(root)))
+        report["dropped_bytes"] += _size(p)
+    report["kept"] = [str(p.relative_to(root)) for p in keep]
+    report["kept_bytes"] = sum(_size(p) for p in keep) - sum(_size(p) for p in drop if any(p.is_relative_to(k) for k in keep))
+    if apply:
+        for p in drop:
+            if p.is_dir() and not p.is_symlink():
+                shutil.rmtree(p, ignore_errors=True)
+            else:
+                p.unlink(missing_ok=True)
+    return report
+
+
+def render_prune(r):
+    if not r["root"]:
+        return "no gate evidence here"
+    mb = lambda n: f"{n / 2 ** 20:.1f} MB"
+    head = (f"gate evidence {r['root']}: tools key {r['key'] or '(not computable: the newest kept)'}, "
+            f"κ procedure {r['procedure'] or '(the newest kept)'}")
+    lines = [head, f"kept {len(r['kept'])} ({mb(r['kept_bytes'])}): " + ", ".join(r["kept"]),
+             f"{'dropped' if r['applied'] else 'to drop'} {len(r['dropped'])} ({mb(r['dropped_bytes'])})"
+             + ("" if r["applied"] else "; --apply deletes them")]
+    return "\n".join(lines)
 
 
 def backfill_gate(data):
@@ -300,9 +438,20 @@ def backfill_gate(data):
     return None
 
 
+def main_moved(base):
+    """origin/main after a fetch, when it is not `base`; None when it is, or when the fetch fails (a
+    network error is no move)."""
+    code, _, _ = repo.run(["git", "fetch", "origin", "main"], timeout=600)
+    if code != 0:
+        return None
+    _, remote, _ = repo.run(["git", "rev-parse", "origin/main"])
+    remote = remote.strip()
+    return remote if remote and remote != base else None
+
+
 def tick(budget_minutes=300, commit=False, push=False, log=print):
-    """One cycle; returns the tick summary (also recorded in the ledger)."""
-    from . import cli, deduce, discover, frontier, modules, sequencemodel, discoverymodel as dm
+    """One cycle; returns the tick summary (also recorded in the ledger, but for a stale tick)."""
+    from . import deduce, discover, frontier, sequencemodel, discoverymodel as dm
     t0 = time.time()
     data = load()
     backfill_gate(data)
@@ -316,6 +465,14 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
     ledger_rel = str(LEDGER.relative_to(repo.ROOT)) if LEDGER.is_relative_to(repo.ROOT) else None
     if [p for p in dirty() if p != ledger_rel]:  # the ledger may carry the record of an idle tick
         raise RuntimeError("the working tree is not clean; a tick starts from a clean checkout of main")
+    moved = main_moved(base) if push else None
+    if moved:
+        # a queued run, or main moved during the setup: whatever this tick did would be dropped at the
+        # push, and the run on the new main does it; nothing is recorded and nothing is settled
+        summary.update(outcome="stale", seconds=round(time.time() - t0, 1))
+        log(f"tick {number}: stale (main is {moved[:12]}, this run's commit {base[:12]})")
+        gh_output(outcome="stale", pushed="false")
+        return summary
     done = []
 
     def stage(name, fn):
@@ -333,10 +490,6 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
         if outcome == "error":
             raise RuntimeError(f"stage {name}: {note}")
         return outcome
-
-    def build(allow):
-        ok, errors = modules.build([], timeout=int(allow * 60))
-        return ("ok" if ok else "error"), errors[-300:]
 
     def induction(allow):
         notes = []
@@ -375,7 +528,14 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
         return "ok", f"{info['outcomes']} outcomes through learnAll ({info['runtime']})"
 
     try:
-        stage("build", build)
+        if stage("build", build_library) == "cut":
+            summary["outcome"] = "cut"  # nothing runs on an unbuilt library; the next tick resumes the build
+            summary["pending"] = None
+            if stalled(data, summary):
+                summary["outcome"] = "stalled"
+                raise RuntimeError(f"the build was cut {STALL_TICKS + 1} ticks in a row on {base[:12]} without "
+                                   "finishing; its share of the budget is too small for this library")
+            return summary
         stage("induction", induction)
         stage("pruning", pruning)
         save(data)  # deduction reads and writes the ledger
@@ -386,7 +546,17 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
         changed = [p for p in dirty() if p != ledger_rel]
         attempted = any(a.get("tick") == number for a in data["attempt"])
         if not changed and not attempted:
-            summary["outcome"] = "idle"
+            # idle only when nothing is left: a stage that was cut, or an attempt still pending (left
+            # for the budget), is the next tick's work on this commit, so this one settles nothing
+            cut = any(s["outcome"] == "cut" for s in summary["stages"])
+            pending = sum(len(r["pending"]) for r in deduce.plan(ledger=data))
+            summary["outcome"] = "cut" if cut or pending else "idle"
+            summary["pending"] = pending
+            if summary["outcome"] == "cut" and stalled(data, summary):
+                # homeostasis failed: the same work is cut again and again with no progress
+                summary["outcome"] = "stalled"
+                raise RuntimeError(f"{STALL_TICKS + 1} ticks in a row on {base[:12]} were cut with the same "
+                                   f"{pending} attempts pending and nothing changed")
         elif any(p.startswith(".github/") for p in changed):
             raise RuntimeError("the tick changed a workflow file; GITHUB_TOKEN cannot push it: " + ", ".join(changed))
         elif not commit:
@@ -410,18 +580,29 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
             _, head, _ = repo.run(["git", "rev-parse", "HEAD"])
             summary["commit"] = head.strip()
             if push:
-                repo.run(["git", "fetch", "origin", "main"], timeout=600)
-                _, remote, _ = repo.run(["git", "rev-parse", "origin/main"])
-                if remote.strip() != base:
+                moved = main_moved(base)
+                if moved:
                     summary["outcome"] = "dropped"
-                    log(f"main moved to {remote.strip()[:12]} during the tick; the work is dropped, the next tick redoes it")
+                    log(f"main moved to {moved[:12]} during the tick; the work is dropped, the next tick redoes it")
                 else:
                     code, out, err = repo.run(["git", "push", "origin", "HEAD:main"], timeout=1800)
-                    if code != 0:
-                        summary["outcome"] = "dropped"
-                        log("the push was refused (main moved?): " + (err or out).strip()[-300:])
-                    else:
+                    if code != 0 and not REJECTED.search(out + err) and not main_moved(base):
+                        # a transport failure (5xx, reset), not a decision of the remote: try once more
+                        code, out, err = repo.run(["git", "push", "origin", "HEAD:main"], timeout=1800)
+                    if code == 0:
                         summary["outcome"] = "pushed"
+                    else:
+                        why = (err or out).strip()[-300:]
+                        fcode, _, _ = repo.run(["git", "fetch", "origin", "main"], timeout=600)
+                        _, remote, _ = repo.run(["git", "rev-parse", "origin/main"])
+                        if fcode == 0 and remote.strip() == base and REJECTED.search(out + err):
+                            # no race: main did not move, so the remote refuses the engine's push itself
+                            # (a branch rule GITHUB_TOKEN cannot pass); every tick would repeat it
+                            summary["outcome"] = "refused"
+                            raise RuntimeError("the remote rejected the push while main is still the base: " + why)
+                        summary["outcome"] = "dropped"
+                        log("the push failed and main moved (or cannot be read); the work is dropped, the next tick "
+                            "redoes it: " + why)
     finally:
         if summary["outcome"] == "running":
             summary["outcome"] = "error"
@@ -429,12 +610,29 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
         if summary["outcome"] not in ("committed", "pushed", "dropped"):
             _record(data, summary, t0)
         log(f"tick {number}: {summary['outcome']} in {summary['seconds']} s")
-        if summary["outcome"] in ("idle", "refused", "error"):
+        if summary["outcome"] in ("idle", "refused", "error", "stalled"):
             # the workflow caches this file under the commit's key: later ticks on it stop after the checkout
             (repo.scratch_dir() / "settled").write_text(f"{base} {summary['outcome']}\n")
         gh_output(outcome=summary["outcome"], pushed="true" if summary["outcome"] == "pushed" else "false")
-        prune_evidence()
     return summary
+
+
+STALL_TICKS = 2  # earlier ticks that, with this one, make a stall
+
+
+def stalled(data, summary):
+    """Whether this cut tick repeats the last STALL_TICKS ticks exactly: same base, each cut, the same
+    work pending, nothing committed. Such a tick would recur every half hour with no progress, so it
+    ends `stalled`: the job fails (visible) and the base is settled until a new commit arrives."""
+    previous = [t for t in data.get("tick", []) if t.get("number") != summary["number"]][-STALL_TICKS:]
+    return len(previous) == STALL_TICKS and all(
+        t.get("base") == summary["base"] and t.get("outcome") == "cut" and t.get("pending") == summary.get("pending")
+        for t in previous)
+
+
+# What the remote says when it decides against a push (a rule, a protected branch, a non-fast-forward
+# it will not take): only these make a tick `refused`; anything else is transport and is `dropped`.
+REJECTED = re.compile(r"\[remote rejected\]|! \[rejected\]|protected branch|GH00[0-9]|GH01[0-9]")
 
 
 def _record(data, summary, t0):

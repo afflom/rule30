@@ -130,6 +130,28 @@ subprocess.run([sys.executable, "scripts/sync_pdfs.py"] +
         self.assertNotEqual(self.git("commit", "-qm", "must fail", check=False).returncode, 0)
         self.assertEqual(self.runs(), 1)
 
+    def test_engine_prune_keys_the_evidence_as_the_gate_does(self):
+        """`bin/r30 engine prune` keeps only the gate evidence of the current tools key: the engine
+        computes that key as the gate does, which stores the accepted Lake builds under it."""
+        sys.path.insert(0, str(ROOT))
+        from tools.r30 import engine
+        self.stage("valid\n")
+        self.validate(True)
+        lake = self.repo / ".git" / "rule30-validation" / "lake"
+        key = engine.gate_tools_key(root=self.repo, env=self.env)
+        self.assertEqual([p.name for p in lake.iterdir()], [key])
+        # a different compiler is a different key, for the gate and the engine alike
+        self.compiler.write_text(self.compiler.read_text() + "# another build\n")
+        self.stage("valid again\n")
+        self.validate(True)
+        other = engine.gate_tools_key(root=self.repo, env=self.env)
+        self.assertNotEqual(other, key)
+        self.assertEqual(sorted(p.name for p in lake.iterdir()), sorted([key, other]))
+        report = engine.prune_evidence(apply=True, root=self.repo / ".git" / "rule30-validation", key=other,
+                                       procedure="0" * 16)
+        self.assertEqual([p.name for p in lake.iterdir()], [other])
+        self.assertFalse(list((self.repo / ".git" / "rule30-validation").glob("*.ok")), report)
+
     def test_only_success_is_cached_for_exact_tree_and_compiler(self):
         self.stage("FAIL\n")
         self.validate(False)

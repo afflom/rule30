@@ -108,7 +108,8 @@ in `rule30-api/model/`, `schemas/`, `features/suites/` and `rule30-api/CONFORMAN
 `.github/workflows/engine.yml` runs the proof engine on GitHub's runners, with no
 one at the keyboard: every thirty minutes (minutes 17 and 47), on a manual dispatch,
 and on every push to `main` that touches its inputs. One run is one **tick**
-(`bin/r30 engine tick`): it builds the research library, runs **induction**
+(`bin/r30 engine tick`): it builds the research library (as the gate's `make core` does:
+`LexLeanRuntime.Laws`, which no Lake root covers, then `lake build`), runs **induction**
 (`sequences --write` when the evaluation program or the κ-labels of what it reads
 changed, then `discover --write`: new relations among the basis sequences become
 `observed` claims), **pruning** (`audit --write`), **deduction** (`deduce`: each observed
@@ -124,9 +125,19 @@ dispatches the view. Nothing in a tick calls a remote or hosted model: the only
 models are the LexLean modules compiled into it. When nothing is left to do the tick
 ends idle without a commit, and later ticks on the same commit stop after the
 checkout, until a developer pushes a new feature (the same holds after a tick the
-gate refused or a stage failed on: it needs a person, and the job summary says
-where). A relation the library already proves is recorded `proved` with the
-existing theorem (outcome `known`), never proved a second time. The workflow file is data the
+gate refused, a stage failed on, or whose push the remote rejected while `main` had
+not moved: it needs a person, and the job log carries the gate's log). A tick its
+budget cut (a rebuild that outlasted its share, attempts left for the next tick)
+settles nothing, so the next tick continues on the same commit; a run whose commit
+is no longer the tip of `main` stops after the checkout. A relation the library
+already proves is recorded `proved` with the existing theorem (outcome `known`),
+never proved a second time, whichever strategy the learned weights rank first; and
+`library-rewrite` is attempted again on a claim once the library changed (a lemma
+pushed since, or a relation the engine proved since). Before caching, `bin/r30 engine
+prune --apply` keeps of the gate's evidence only what the next run can use (the
+current tools key's Lake builds and replay receipts, the newest LexLean attestation
+of each project, the current κ memo, never a certificate), and each cache family
+keeps its newest entry. The workflow file is data the
 model decides about: `bin/r30 api sync` renders it from `Engine.lex.tex`, and `bin/r30
 api check` refuses drift, any secret but `GITHUB_TOKEN`, permissions beyond
 `contents: write` and `actions: write`, an action the repository did not already
@@ -136,6 +147,7 @@ use, and a pull-request trigger.
 bin/r30 engine status              # the last tick, the network (units, synapses, events), the learned weights
 bin/r30 deduce --dry-run           # the attempts the next tick would make, rendered, neither checked nor recorded
 bin/r30 engine tick --budget-minutes 30   # one tick locally, without --commit/--push: nothing leaves the tree
+bin/r30 engine prune               # what of the gate's evidence a next run can use; --apply deletes the rest (the workflow does)
 ```
 
 **What only the owner does.** Nothing beyond pushing: the engine runs on
@@ -144,9 +156,11 @@ bin/r30 engine tick --budget-minutes 30   # one tick locally, without --commit/-
 as features pushed to `main` (a new notion in the basis, a template, a library
 theorem): the push starts a tick. The kill switch is the repository variable
 `R30_ENGINE`: set it to `off` (Settings, Secrets and variables, Actions, Variables)
-and no tick runs; delete it or set anything else to resume. GitHub disables
-scheduled workflows after sixty days without repository activity; re-enable the
-workflow in the Actions tab if that happens (pushes still start ticks meanwhile).
+and no tick runs; delete it or set anything else to resume. GitHub disables a public
+repository's scheduled workflows after sixty days without repository activity, and a
+disabled workflow runs on no event, pushes included, until it is re-enabled (Actions
+tab, Engine, Enable workflow, or `gh workflow enable engine.yml`). A long settled
+stretch, when the engine has nothing to do and commits nothing, is when this happens.
 
 ---
 

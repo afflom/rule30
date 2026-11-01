@@ -563,7 +563,9 @@ def render(committed=None):
 
 def render_workflow():
     wl = WORKLOAD
-    run_if = "steps.settled.outputs.cache-hit != 'true'"
+    run_if = "steps.tip.outputs.current == 'true' && steps.settled.outputs.cache-hit != 'true'"
+    # a stale tick (main moved during the setup) did nothing: there is nothing new to cache
+    save_if = f"always() && {run_if} && steps.tick.outputs.outcome != 'stale'"
     lake = "\n".join("            " + p for p in LAKE_DIRS)
     toolchain = "${{ hashFiles('rule30-core-lean/lean-toolchain', '.github/lexlean-revision') }}"
     paths = "\n".join(f'      - "{p}"' for p in PUSH_PATHS)
@@ -579,7 +581,11 @@ def render_workflow():
 # GITHUB_TOKEN start no workflow, so the engine never triggers itself; the view is dispatched.
 # A commit the engine has nothing more to do on (an idle tick), or one whose tick the gate refused or
 # a stage failed on, is marked settled (a cache entry), and later ticks on it stop after the checkout
-# until a new commit reaches main. The kill switch is the repository variable {wl['killSwitch']}=off.
+# until a new commit reaches main; a tick cut by its budget settles nothing. A run whose commit is no
+# longer the tip of main (queued while an earlier tick pushed) stops after the checkout too. Before
+# caching, the gate's evidence is pruned to what the next run can use (`bin/r30 engine prune`: the
+# current tools key, the newest LexLean attestation per project, never a certificate), and each cache
+# family keeps its newest entry. The kill switch is the repository variable {wl['killSwitch']}=off.
 name: {wl['workflow']}
 
 on:
@@ -609,6 +615,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Is this commit still the tip of main
+        id: tip
+        run: echo "current=$([ "$(git ls-remote origin refs/heads/main | cut -f1)" = "$GITHUB_SHA" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
 
       - name: Is this commit settled
         id: settled
@@ -671,14 +681,15 @@ jobs:
       - name: Tick summary
         if: always() && {run_if}
         run: |
-          {{ echo "outcome: ${{{{ steps.tick.outputs.outcome }}}}"; echo '```'; bin/r30 engine status; echo '```'; }} >> "$GITHUB_STEP_SUMMARY"
+          {{ echo "outcome: ${{{{ steps.tick.outputs.outcome }}}}"; echo '```'; bin/r30 engine status || true; echo '```'; }} >> "$GITHUB_STEP_SUMMARY"
+          for f in .r30/commit-*.log; do if [ -f "$f" ]; then echo "::group::gate log $f"; tail -n 200 "$f"; echo "::endgroup::"; fi; done
 
-      - name: Drop the gate's certificates before caching
-        if: always() && {run_if}
-        run: find .git/rule30-validation -maxdepth 1 \\( -name '*.ok' -o -name '*.lock' \\) -delete 2>/dev/null || true
+      - name: Prune the gate's evidence before caching
+        if: {save_if}
+        run: bin/r30 engine prune --apply
 
       - name: Save the Lake builds
-        if: always() && {run_if}
+        if: {save_if}
         uses: actions/cache/save@v4
         with:
           path: |
@@ -686,14 +697,14 @@ jobs:
           key: r30-lake-${{{{ runner.os }}}}-{toolchain}-${{{{ github.sha }}}}-${{{{ github.run_id }}}}
 
       - name: Save the gate's evidence
-        if: always() && {run_if}
+        if: {save_if}
         uses: actions/cache/save@v4
         with:
           path: .git/rule30-validation
           key: r30-gate-${{{{ runner.os }}}}-${{{{ github.sha }}}}-${{{{ github.run_id }}}}
 
       - name: Mark the commit settled
-        if: always() && {run_if} && contains(fromJSON('["idle", "refused", "error"]'), steps.tick.outputs.outcome)
+        if: always() && {run_if} && contains(fromJSON('["idle", "refused", "error", "stalled"]'), steps.tick.outputs.outcome)
         uses: actions/cache/save@v4
         with:
           path: .r30/settled

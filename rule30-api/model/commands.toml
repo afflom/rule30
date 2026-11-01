@@ -302,6 +302,13 @@ requires_digest = false
 result_schema = "r30/engine-status-result/1"
 
 [[command]]
+name = "engine_prune"
+path = ["engine", "prune"]
+mutates = "gate-evidence"
+requires_digest = false
+result_schema = "r30/engine-prune-result/1"
+
+[[command]]
 name = "experiment_list"
 path = ["experiment", "list"]
 mutates = "never"

@@ -84,12 +84,21 @@
      "type": "string",
      "enum": [
       "idle",
+      "cut",
+      "stale",
       "uncommitted",
       "committed",
       "pushed",
       "dropped",
       "refused",
-      "error"
+      "error",
+      "stalled"
+     ]
+    },
+    "pending": {
+     "type": [
+      "integer",
+      "null"
      ]
     },
     "seconds": {

@@ -3,7 +3,9 @@ exists for the gate only once it is a Lake root and an import of the axiom
 audit (`scripts/check_research_coverage.py` refuses anything else), so adding
 one is a repository operation, not a hand edit of two files."""
 
+import hashlib
 import re
+import time
 
 from . import repo
 
@@ -76,17 +78,75 @@ def register(name, lakefile=LAKEFILE, audit=AUDIT, create=True):
     return {"module": name, "path": str(path), "changed": changed}
 
 
-def build(names, timeout=3600):
-    """`lake build` the modules (the research library when none are given).
-    Returns (ok, output) where output keeps only errors."""
-    names = [qualify(n) for n in names] or ["Rule30UOR"]
-    code, out, err = repo.run(["lake", "build", *names], cwd=repo.CORE_LEAN, timeout=timeout)
-    if code == 0:
+# `Rule30UOR.Core` imports `LexLeanRuntime.Laws`, which no Lake root covers (the LexLeanRuntime
+# library's roots are Portable and Collections), so `lake build` never compiles it. The Makefile's
+# `core` recipe, which the gate runs, compiles it by hand between `lake build LexLeanRuntime` and
+# `lake build`; `build` does the same, so a build from an empty `.lake` (a fresh clone, a runner
+# with a cold cache) succeeds as the gate's does.
+LAWS_SOURCE = "LexLeanRuntime/Laws.lean"
+LAWS_OUTPUT = ".lake/build/lib/lean/LexLeanRuntime"
+LAWS_INPUTS = ("lean-toolchain", "LexLeanRuntime/Portable.lean", "LexLeanRuntime/Collections.lean", LAWS_SOURCE)
+
+
+def laws_digest():
+    """What `LexLeanRuntime.Laws` is compiled from: its source, the runtime modules it imports and
+    the toolchain (the stamp beside its outputs)."""
+    h = hashlib.sha256()
+    for rel in LAWS_INPUTS:
+        path = repo.CORE_LEAN / rel
+        h.update(rel.encode() + b"\0" + (path.read_bytes() if path.exists() else b"") + b"\0")
+    return h.hexdigest()
+
+
+def build_laws(timeout=3600):
+    """Compile `LexLeanRuntime.Laws` as the Makefile's `core` recipe does, unless its outputs carry
+    the stamp of its current inputs. Returns (ok, errors); raises subprocess.TimeoutExpired."""
+    out = repo.CORE_LEAN / LAWS_OUTPUT
+    stamp = out / "Laws.r30-inputs"
+    want = laws_digest()
+    if (out / "Laws.olean").exists() and (out / "Laws.ilean").exists() and stamp.exists() \
+            and stamp.read_text().strip() == want:
         return True, ""
+    deadline = time.time() + timeout
+    # the stamp vouches for complete outputs only: drop it before anything is rewritten
+    if stamp.exists():
+        stamp.unlink()
+    code, o, e = repo.run(["lake", "build", "LexLeanRuntime"], cwd=repo.CORE_LEAN, timeout=timeout, group=True)
+    if code != 0:
+        return False, errors_of(o + e)
+    out.mkdir(parents=True, exist_ok=True)
+    code, o, e = repo.run(["lake", "env", "lean", "-R", ".", "-o", f"{LAWS_OUTPUT}/Laws.olean", "-i", f"{LAWS_OUTPUT}/Laws.ilean",
+                           LAWS_SOURCE], cwd=repo.CORE_LEAN, timeout=max(1, int(deadline - time.time())), group=True)
+    if code != 0:
+        return False, errors_of(o + e)
+    stamp.write_text(want + "\n")
+    return True, ""
+
+
+def errors_of(text):
+    """The error blocks of a Lake or Lean run (a block ends at the next built module), else its tail."""
     kept, keep = [], False
-    for line in (out + err).split("\n"):
+    for line in text.split("\n"):
         if line.startswith(("✖", "error", "warning")) or ": error:" in line:
             keep = "error" in line
+        elif line.startswith(("✔", "⚠", "ℹ")):
+            keep = False
         if keep:
             kept.append(line)
-    return False, "\n".join(kept)
+    return "\n".join(kept).strip("\n") or text.strip()[-1500:]
+
+
+def build(names, timeout=3600):
+    """`lake build` the modules (the research library when none are given), after
+    `LexLeanRuntime.Laws` (`build_laws`). Returns (ok, output) where output keeps only errors;
+    raises subprocess.TimeoutExpired when the build outlasts `timeout` seconds."""
+    names = [qualify(n) for n in names] or ["Rule30UOR"]
+    deadline = time.time() + timeout
+    ok, errors = build_laws(timeout)
+    if not ok:
+        return False, "LexLeanRuntime.Laws: " + errors
+    code, out, err = repo.run(["lake", "build", *names], cwd=repo.CORE_LEAN, timeout=max(1, int(deadline - time.time())),
+                              group=True)
+    if code == 0:
+        return True, ""
+    return False, errors_of(out + err)

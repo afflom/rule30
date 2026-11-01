@@ -1,0 +1,57 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/engine-prune-result/1",
+ "title": "engine prune --json: what of the gate's evidence the next run can use (kept) and what it cannot (dropped, deleted with --apply)",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "root",
+  "key",
+  "procedure",
+  "kept",
+  "dropped",
+  "kept_bytes",
+  "dropped_bytes",
+  "applied"
+ ],
+ "properties": {
+  "root": {
+   "type": "string"
+  },
+  "key": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^[0-9a-f]{16}$"
+  },
+  "procedure": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^[0-9a-f]{16}$"
+  },
+  "kept": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "dropped": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "kept_bytes": {
+   "type": "integer"
+  },
+  "dropped_bytes": {
+   "type": "integer"
+  },
+  "applied": {
+   "type": "boolean"
+  }
+ }
+}
