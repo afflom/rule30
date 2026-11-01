@@ -255,7 +255,7 @@ result_schema = "r30/module-build-result/1"
 [[command]]
 name = "consolidate"
 path = ["consolidate"]
-mutates = "never"
+mutates = "repository"
 requires_digest = false
 result_schema = "r30/consolidate-result/1"
 
@@ -279,6 +279,27 @@ path = ["discover"]
 mutates = "register"
 requires_digest = false
 result_schema = "r30/discover-result/1"
+
+[[command]]
+name = "deduce"
+path = ["deduce"]
+mutates = "deduced-module-paper-register-and-ledger"
+requires_digest = false
+result_schema = "r30/deduce-result/1"
+
+[[command]]
+name = "engine_tick"
+path = ["engine", "tick"]
+mutates = "repository"
+requires_digest = false
+result_schema = "r30/engine-tick-result/1"
+
+[[command]]
+name = "engine_status"
+path = ["engine", "status"]
+mutates = "never"
+requires_digest = false
+result_schema = "r30/engine-status-result/1"
 
 [[command]]
 name = "experiment_list"

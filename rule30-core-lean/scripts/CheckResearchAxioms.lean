@@ -66,6 +66,7 @@ import Rule30UOR.DrivenLucas
 import Rule30UOR.UnitSeedMask
 import Rule30UOR.Walled
 import Rule30UOR.MaskSlice
+import Rule30UOR.Deduced
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

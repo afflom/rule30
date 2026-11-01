@@ -1,0 +1,1163 @@
+# The engine's ledger (bin/r30 engine, deduce): the consolidated weights, every attempt,
+# and the last ticks. Written by the engine only.
+spec = "r30/engine/1"
+
+[[weight]]
+strategy = "counterexample"
+family = "joint-dilated"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "joint-plain"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "joint-shift"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "left-dilated"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "left-plain"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "left-shift"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "open"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "right-dilated"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "right-plain"
+value = 8
+
+[[weight]]
+strategy = "counterexample"
+family = "right-shift"
+value = 8
+
+[[weight]]
+strategy = "library-rewrite"
+family = "joint-dilated"
+value = 5
+
+[[weight]]
+strategy = "library-rewrite"
+family = "joint-plain"
+value = 4
+
+[[weight]]
+strategy = "library-rewrite"
+family = "joint-shift"
+value = 7
+
+[[weight]]
+strategy = "library-rewrite"
+family = "left-dilated"
+value = 6
+
+[[weight]]
+strategy = "library-rewrite"
+family = "left-plain"
+value = 9
+
+[[weight]]
+strategy = "library-rewrite"
+family = "left-shift"
+value = 8
+
+[[weight]]
+strategy = "library-rewrite"
+family = "open"
+value = 1
+
+[[weight]]
+strategy = "library-rewrite"
+family = "right-dilated"
+value = 1
+
+[[weight]]
+strategy = "library-rewrite"
+family = "right-plain"
+value = 11
+
+[[weight]]
+strategy = "library-rewrite"
+family = "right-shift"
+value = 13
+
+[[weight]]
+strategy = "period-reduction"
+family = "joint-dilated"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "joint-plain"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "joint-shift"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "left-dilated"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "left-plain"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "left-shift"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "open"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "right-dilated"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "right-plain"
+value = 8
+
+[[weight]]
+strategy = "period-reduction"
+family = "right-shift"
+value = 8
+
+[[weight]]
+strategy = "step-induction"
+family = "joint-dilated"
+value = 14
+
+[[weight]]
+strategy = "step-induction"
+family = "joint-plain"
+value = 16
+
+[[weight]]
+strategy = "step-induction"
+family = "joint-shift"
+value = 10
+
+[[weight]]
+strategy = "step-induction"
+family = "left-dilated"
+value = 12
+
+[[weight]]
+strategy = "step-induction"
+family = "left-plain"
+value = 10
+
+[[weight]]
+strategy = "step-induction"
+family = "left-shift"
+value = 12
+
+[[weight]]
+strategy = "step-induction"
+family = "open"
+value = 8
+
+[[weight]]
+strategy = "step-induction"
+family = "right-dilated"
+value = 16
+
+[[weight]]
+strategy = "step-induction"
+family = "right-plain"
+value = 10
+
+[[weight]]
+strategy = "step-induction"
+family = "right-shift"
+value = 16
+
+[[attempt]]
+claim = "observed-5053d66f38fb"
+kappa = "sha256:5053d66f38fbd71bd64408f8a904e4c8d18e8bb4b983380c0f1c1d2e4bff4bed"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-plain"
+outcome = "failed"
+failure = "26:4: error: No goals to be solved"
+theorem = ""
+seconds = 6.2
+tick = 0
+
+[[attempt]]
+claim = "observed-5053d66f38fb"
+kappa = "sha256:5053d66f38fbd71bd64408f8a904e4c8d18e8bb4b983380c0f1c1d2e4bff4bed"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-plain"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag2_eq_timeParity"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-c0f330524114"
+kappa = "sha256:c0f33052411467ccdb46a5488b7165bdaa90f066fa447648655d9f4f77fe3072"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "joint-plain"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 2 (t)=false, Core.ldiag 3 (t)=false, Core.rdiag 1 (t)=true"
+theorem = ""
+seconds = 2.4
+tick = 0
+
+[[attempt]]
+claim = "observed-c0f330524114"
+kappa = "sha256:c0f33052411467ccdb46a5488b7165bdaa90f066fa447648655d9f4f77fe3072"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "joint-plain"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag3_eq_timeParity_xor_ldiag2"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-f8cfecd08d5a"
+kappa = "sha256:f8cfecd08d5ad7fd46ee0bb5b250f61a0a43fed5fe84bf8edb8e8f738284896c"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "left-plain"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 1 (t)=false, Core.ldiag 2 (t)=false, Core.ldiag 4 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-f8cfecd08d5a"
+kappa = "sha256:f8cfecd08d5ad7fd46ee0bb5b250f61a0a43fed5fe84bf8edb8e8f738284896c"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "left-plain"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag4_eq_ldiag1_xor_ldiag2"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-9f735af84755"
+kappa = "sha256:9f735af84755508c8e2df7ddb12b02f5112d48330af383181dfb4ee217248ea5"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "joint-plain"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 2 (t)=false, Core.ldiag 5 (t)=false, Core.rdiag 1 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-9f735af84755"
+kappa = "sha256:9f735af84755508c8e2df7ddb12b02f5112d48330af383181dfb4ee217248ea5"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "joint-plain"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag5_eq_timeParity_xor_ldiag2"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-d5c2175eadce"
+kappa = "sha256:d5c2175eadce7b4143c00ab867bae608ec4a2d47c57d04fa8c643baa0865ab2d"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "joint-plain"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 2 (t)=false, Core.ldiag 6 (t)=false, Core.rdiag 1 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-d5c2175eadce"
+kappa = "sha256:d5c2175eadce7b4143c00ab867bae608ec4a2d47c57d04fa8c643baa0865ab2d"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "joint-plain"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag6_eq_timeParity_xor_ldiag2"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-1dba16bb3a91"
+kappa = "sha256:1dba16bb3a91ea4539a768f91ea7b6eab120a5ecce4167b750d3a37c14f1aa7c"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "left-plain"
+outcome = "known"
+failure = ""
+theorem = "Rule30UOR.LeftBand.ldiag_seven_eq"
+seconds = 0.5
+tick = 0
+
+[[attempt]]
+claim = "observed-c7dab95c2581"
+kappa = "sha256:c7dab95c2581ad7d80fd5622a6a2be91177d81782b690c8de88b0f8870343486"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "joint-plain"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 1 (t)=false, Core.ldiag 2 (t)=false, Core.ldiag 8 (t)=false, Core.rdiag 3 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-c7dab95c2581"
+kappa = "sha256:c7dab95c2581ad7d80fd5622a6a2be91177d81782b690c8de88b0f8870343486"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "joint-plain"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag8_eq_rdiag3_xor_ldiag1_xor_ldiag2"
+seconds = 0.6
+tick = 0
+
+[[attempt]]
+claim = "observed-c9e9008d30ed"
+kappa = "sha256:c9e9008d30ed9363f77d0eaccaaf2a905871265ae057e5538fa4d0f4dcfd2ae6"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-plain"
+outcome = "known"
+failure = ""
+theorem = "Rule30UOR.Antidiagonal.exposed_zero"
+seconds = 2.9
+tick = 0
+
+[[attempt]]
+claim = "observed-f24e181da7d6"
+kappa = "sha256:f24e181da7d6ef68dd5da97ec363f9581adf55dbedf130d9e0d5fbae0b9862aa"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-plain"
+outcome = "known"
+failure = ""
+theorem = "Rule30UOR.Antidiagonal.exposed_one"
+seconds = 0.5
+tick = 0
+
+[[attempt]]
+claim = "observed-45032769ad68"
+kappa = "sha256:45032769ad68d40f67c00a1117d2a64a444440be3c92bcf2031bdb8b19740451"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.interiorThreeDiagonal (t)=false, Band.lowDiagonal (t)=false, Core.center (t)=false, Core.rdiag 1 (t)=false"
+theorem = ""
+seconds = 5.4
+tick = 0
+
+[[attempt]]
+claim = "observed-7d29142e6567"
+kappa = "sha256:7d29142e656716dcc38bb3cc1e123b4c371113c9a942aeea585c8860fa6ce27c"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.center (t)=false, Core.rdiag 1 (t)=false, LeftBand.interiorEightDiagonal (t)=false, LeftBand.leftBandDiagonal (t)=false"
+theorem = ""
+seconds = 3.7
+tick = 0
+
+[[attempt]]
+claim = "observed-52252f3e729b"
+kappa = "sha256:52252f3e729bf5e51a999db90fc4a3e26e19461036b0faeae7a34309dfd9091c"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "failed"
+failure = "26:4: error: No goals to be solved"
+theorem = ""
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-52252f3e729b"
+kappa = "sha256:52252f3e729bf5e51a999db90fc4a3e26e19461036b0faeae7a34309dfd9091c"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag3_succ_eq_timeParity_xor_rdiag3"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-c5248659968b"
+kappa = "sha256:c5248659968bc99b66119fe022486256bfe9995e411a20fff75d1226077dca41"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag4_succ_eq_rdiag3_xor_rdiag4_xor_exposed2"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-1d6ae1b61762"
+kappa = "sha256:1d6ae1b61762514b7c4dca606c2e46ebea5bf9d600a3d3b158a0aff82d115305"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag5_succ_eq_rdiag4_xor_rdiag5_xor_exposed3"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-6d4a2a5763ef"
+kappa = "sha256:6d4a2a5763ef330dfc7e92346138b0f160fa792de6136f71c6d46cb25d18cddc"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag6_succ_eq_rdiag5_xor_rdiag6_xor_exposed4"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-4bc1c65e35c9"
+kappa = "sha256:4bc1c65e35c9071edaaf412e9f97293d326e3051defa5a6d76a7b602ba7ef3f9"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag7_succ_eq_rdiag6_xor_rdiag7_xor_exposed5"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-799d502f876a"
+kappa = "sha256:799d502f876a0423299ccd9af22c1109ec21452bd599b5b2817eee070a04a75f"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag8_succ_eq_rdiag7_xor_rdiag8_xor_exposed6"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-53377bf71f92"
+kappa = "sha256:53377bf71f927ff20ec27c56305f022343b25ab5f9b6174f662780bbd00c0adc"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag9_succ_eq_rdiag8_xor_rdiag9_xor_exposed7"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-9e693fea8ab9"
+kappa = "sha256:9e693fea8ab979e94642f59bbfc24222ef52967fa0e47e9f68b530a1a716c0ec"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag10_succ_eq_rdiag9_xor_rdiag10_xor_exposed8"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-271e1f55d5fd"
+kappa = "sha256:271e1f55d5fd257cb6f6785c48645670a9eab60b7491abd51dc962d85efe4f9d"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "left-shift"
+outcome = "known"
+failure = ""
+theorem = "Rule30UOR.Core.ldiag_one"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-a19571110f01"
+kappa = "sha256:a19571110f015fdc33c8a18d705699668ec56a29fb56874a535257b864441f52"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "left-shift"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 0 (t)=true, Core.ldiag 1 (t)=false, Core.ldiag 2 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-a19571110f01"
+kappa = "sha256:a19571110f015fdc33c8a18d705699668ec56a29fb56874a535257b864441f52"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "left-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag2_succ_eq_not_ldiag1"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-92e58d165f11"
+kappa = "sha256:92e58d165f111307e5e2ff8bc52da31b9f5d2726544c4a7c38474cba32f04f5d"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.ldiag 1 (t)=false, Core.ldiag 10 (t)=false, Core.ldiag 12 (t)=false, Core.ldiag 7 (t)=false, Core.ldiag 8 (t)=false, Core.ldiag 9 (t)=false, Core.rdiag 2 (t)=false, Cor"
+theorem = ""
+seconds = 2.3
+tick = 0
+
+[[attempt]]
+claim = "observed-70733dca8e2b"
+kappa = "sha256:70733dca8e2bfad97dca00f5a460615043966fe1e2d2503b2eab107eabdfad86"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "joint-shift"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 1 (t)=false, Core.ldiag 10 (t)=false, Core.ldiag 2 (t)=false, Core.ldiag 8 (t)=false, Core.ldiag 9 (t)=false, Core.rdiag 3 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-70733dca8e2b"
+kappa = "sha256:70733dca8e2bfad97dca00f5a460615043966fe1e2d2503b2eab107eabdfad86"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "joint-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag10_succ_eq_rdiag3_xor_ldiag1_xor_ldiag2_xor_ldiag9"
+seconds = 0.7
+tick = 0
+
+[[attempt]]
+claim = "observed-88dd567b2ddf"
+kappa = "sha256:88dd567b2ddf7ecd94a2d5f730a4675d857b6644a691c49b9fdd254ab58866fa"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "left-shift"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 10 (t)=false, Core.ldiag 11 (t)=true, Core.ldiag 12 (t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-88dd567b2ddf"
+kappa = "sha256:88dd567b2ddf7ecd94a2d5f730a4675d857b6644a691c49b9fdd254ab58866fa"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "left-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag12_succ_eq_ldiag10_xor_ldiag12"
+seconds = 0.8
+tick = 0
+
+[[attempt]]
+claim = "observed-0b9eefb1e9da"
+kappa = "sha256:0b9eefb1e9da93383683efb39c6f944bff2652ecd02a9dc48835a2802a1af40a"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "failed"
+failure = "52:4: error: No goals to be solved"
+theorem = ""
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-0b9eefb1e9da"
+kappa = "sha256:0b9eefb1e9da93383683efb39c6f944bff2652ecd02a9dc48835a2802a1af40a"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.exposed2_succ_eq_not_rdiag3_xor_exposed2"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-3f91af16052a"
+kappa = "sha256:3f91af16052a66f85ef22bdfb2026cc9e0d9b96530e57b6e4a0cb6e7d385acc7"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 2 (t)=false, Core.rdiag 3 (t)=false, Core.rdiag 4 (t)=true, Core.rdiag 5 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-3f91af16052a"
+kappa = "sha256:3f91af16052a66f85ef22bdfb2026cc9e0d9b96530e57b6e4a0cb6e7d385acc7"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.exposed3_succ_eq_rdiag3_xor_rdiag4_xor_exposed3_xor_exposed4"
+seconds = 0.5
+tick = 0
+
+[[attempt]]
+claim = "observed-7ddfd59fd9e7"
+kappa = "sha256:7ddfd59fd9e7ad3db842739e71f4f962eb2918adf2f7451e75b2ed54677a3be9"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-shift"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 2 (t)=false, Core.rdiag 3 (t)=true, Core.rdiag 4 (t)=false, Core.rdiag 5 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-7ddfd59fd9e7"
+kappa = "sha256:7ddfd59fd9e7ad3db842739e71f4f962eb2918adf2f7451e75b2ed54677a3be9"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-shift"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.exposed4_succ_eq_timeParity_xor_rdiag4_xor_exposed4"
+seconds = 0.5
+tick = 0
+
+[[attempt]]
+claim = "observed-e8a1ed6dc127"
+kappa = "sha256:e8a1ed6dc12788c2e3ce1eb3a5c958204b4091a905c8c34cea1e2cf6bb5d9e6c"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t + 1)=false, Core.ldiag 1 (t)=false, Core.ldiag 2 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t + 1)=false, LeftBand.rulerBackground (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-b64d3d0ba07b"
+kappa = "sha256:b64d3d0ba07b4fcc2acc9e41173e6c6918dbe4410014e61aa722386380d6a298"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, LeftBand.leftBandDiagonal (t + 1)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-3d3fa55c7c91"
+kappa = "sha256:3d3fa55c7c9177d29e779d7afbf7f53030ab9a279975a51efdf5bfa2e5461f37"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.ldiag 1 (t)=false, Core.ldiag 2 (t)=false, Core.rdiag 1 (t)=false, LeftBand.rulerBackground (2 * t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-1c2fd8e22fb8"
+kappa = "sha256:1c2fd8e22fb8d682625e409ddedf9fafd6c96c9a559a83abec06645e638146cd"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 3 (2 * t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-1c2fd8e22fb8"
+kappa = "sha256:1c2fd8e22fb8d682625e409ddedf9fafd6c96c9a559a83abec06645e638146cd"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag3_even_eq_timeParity"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-26a63fc44dc7"
+kappa = "sha256:26a63fc44dc7b697e3c445f1eb774d00c633b23ab3d5326515dbb2879ba874af"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 3 (t)=false, Core.rdiag 4 (2 * t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-26a63fc44dc7"
+kappa = "sha256:26a63fc44dc7b697e3c445f1eb774d00c633b23ab3d5326515dbb2879ba874af"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag4_even_eq_timeParity_xor_rdiag3"
+seconds = 0.6
+tick = 0
+
+[[attempt]]
+claim = "observed-884d0d5c6447"
+kappa = "sha256:884d0d5c6447f61db11bf0e13587d710140bc3a91557952c1902aa0f4d707739"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 5 (2 * t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-884d0d5c6447"
+kappa = "sha256:884d0d5c6447f61db11bf0e13587d710140bc3a91557952c1902aa0f4d707739"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag5_even_eq_false"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-0fe84a65b129"
+kappa = "sha256:0fe84a65b129f4a5dd4ce775441b5ac00756b99f3fecb3485287d027cbb987a5"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 2 (t)=false, Core.rdiag 3 (t)=false, Core.rdiag 4 (t)=false, Core.rdiag 6 (2 * t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-0fe84a65b129"
+kappa = "sha256:0fe84a65b129f4a5dd4ce775441b5ac00756b99f3fecb3485287d027cbb987a5"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.rdiag6_even_eq_timeParity_xor_rdiag3_xor_rdiag4_xor_exposed2"
+seconds = 1.0
+tick = 0
+
+[[attempt]]
+claim = "observed-f42bb48334ad"
+kappa = "sha256:f42bb48334ad1419defa449372f5b4864e9de8964f41f101a4174658ffecc71a"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 2 (t)=false, Core.rdiag 3 (t)=false, Core.rdiag 4 (t)=false, Core.rdiag 5 (t)=false, Core.rdiag 6 (t)=false, Core.rdiag 7 (2 * t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-f42bb48334ad"
+kappa = "sha256:f42bb48334ad1419defa449372f5b4864e9de8964f41f101a4174658ffecc71a"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.relation_f42bb48334ad"
+seconds = 1.9
+tick = 0
+
+[[attempt]]
+claim = "observed-a3d70a5ffb2c"
+kappa = "sha256:a3d70a5ffb2ca5083432d54f5eeabdd031465c455ccb4cb0711ab55c7aa99aaa"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "left-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 1 (2 * t)=false, Core.ldiag 1 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-a3d70a5ffb2c"
+kappa = "sha256:a3d70a5ffb2ca5083432d54f5eeabdd031465c455ccb4cb0711ab55c7aa99aaa"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "left-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag1_even_eq_ldiag1"
+seconds = 0.3
+tick = 0
+
+[[attempt]]
+claim = "observed-a2ed46072266"
+kappa = "sha256:a2ed460722666f7144c212833864155cbc4ef1f749e5ac17963d3fa82c22aa02"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "left-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 2 (2 * t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-a2ed46072266"
+kappa = "sha256:a2ed460722666f7144c212833864155cbc4ef1f749e5ac17963d3fa82c22aa02"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "left-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag2_even_eq_false"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-b75a73f46242"
+kappa = "sha256:b75a73f46242f8b15f9e5a8945db0ed93b5b9c27d0c6e11124be61a2cef4b441"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.ldiag 1 (t)=false, Core.ldiag 9 (2 * t)=false, Core.rdiag 1 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-409a7755bc68"
+kappa = "sha256:409a7755bc68d2dc89f53187a0220eb88a77541243929d7bfd112277178aa122"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.ldiag 1 (t)=false, Core.ldiag 10 (2 * t)=false, Core.ldiag 2 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-9b630bd3f3ff"
+kappa = "sha256:9b630bd3f3ff4b9b66a03d205766a3d1f39652cdfee052e7841372762a10e6f7"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "joint-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 10 (t)=false, Core.ldiag 11 (2 * t)=false, Core.ldiag 12 (t)=false, Core.ldiag 2 (t)=false, Core.ldiag 9 (t)=false, Core.rdiag 2 (t)=true, Core.rdiag 3 (t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-9b630bd3f3ff"
+kappa = "sha256:9b630bd3f3ff4b9b66a03d205766a3d1f39652cdfee052e7841372762a10e6f7"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "joint-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.relation_9b630bd3f3ff"
+seconds = 2.6
+tick = 0
+
+[[attempt]]
+claim = "observed-8520f2c1eaae"
+kappa = "sha256:8520f2c1eaae602814ab81829021531c4c09144e9f6e0fff666b65eb8646eb5c"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "joint-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 12 (2 * t)=false, Core.ldiag 2 (t)=false, Core.rdiag 1 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-8520f2c1eaae"
+kappa = "sha256:8520f2c1eaae602814ab81829021531c4c09144e9f6e0fff666b65eb8646eb5c"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "joint-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.ldiag12_even_eq_timeParity_xor_ldiag2"
+seconds = 1.8
+tick = 0
+
+[[attempt]]
+claim = "observed-a4cdb1846e35"
+kappa = "sha256:a4cdb1846e35c6d9fc55a1fecf8eb4d91c6b25f79f6d8eebd5fb9fbc0c43089d"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 2 (2 * t)=true, Core.rdiag 3 (2 * t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-a4cdb1846e35"
+kappa = "sha256:a4cdb1846e35c6d9fc55a1fecf8eb4d91c6b25f79f6d8eebd5fb9fbc0c43089d"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.exposed2_even_eq_false"
+seconds = 0.4
+tick = 0
+
+[[attempt]]
+claim = "observed-e4f6d869bf11"
+kappa = "sha256:e4f6d869bf115ff1e85bc55c90fee1cf31ab89737407d9e2f35a9be4e4de48c2"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 2 (t)=false, Core.rdiag 3 (2 * t)=true, Core.rdiag 3 (t)=false, Core.rdiag 4 (2 * t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-e4f6d869bf11"
+kappa = "sha256:e4f6d869bf115ff1e85bc55c90fee1cf31ab89737407d9e2f35a9be4e4de48c2"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.exposed3_even_eq_timeParity_xor_exposed2"
+seconds = 0.6
+tick = 0
+
+[[attempt]]
+claim = "observed-c85f3baf6065"
+kappa = "sha256:c85f3baf606542a32a84e5c409274fa2feab12a9445b0a258e12ed9a89cfe67e"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 3 (t)=false, Core.rdiag 4 (2 * t)=true, Core.rdiag 5 (2 * t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-c85f3baf6065"
+kappa = "sha256:c85f3baf606542a32a84e5c409274fa2feab12a9445b0a258e12ed9a89cfe67e"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.exposed4_even_eq_timeParity_xor_rdiag3"
+seconds = 0.7
+tick = 0
+
+[[attempt]]
+claim = "observed-cb5d01bea1fc"
+kappa = "sha256:cb5d01bea1fcfa48d05542f56000bc0d0e71c19936e25e9eb57b7ffbae2fcb99"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 5 (2 * t)=true, Core.rdiag 6 (2 * t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-cb5d01bea1fc"
+kappa = "sha256:cb5d01bea1fcfa48d05542f56000bc0d0e71c19936e25e9eb57b7ffbae2fcb99"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.exposed5_even_eq_false"
+seconds = 0.5
+tick = 0
+
+[[attempt]]
+claim = "observed-1de4355b13b0"
+kappa = "sha256:1de4355b13b068731c1dfe699cbc459d92fc11f46a33d8b03d169a102991dcae"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 3 (t)=false, Core.rdiag 4 (t)=false, Core.rdiag 5 (t)=false, Core.rdiag 6 (2 * t)=false, Core.rdiag 6 (t)=false, Core.rdiag 7 (2 * t)=false, Core.rdiag 8 (2 * t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-1de4355b13b0"
+kappa = "sha256:1de4355b13b068731c1dfe699cbc459d92fc11f46a33d8b03d169a102991dcae"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.relation_1de4355b13b0"
+seconds = 2.2
+tick = 0
+
+[[attempt]]
+claim = "observed-f71048479210"
+kappa = "sha256:f71048479210320604c4ce84b6682bcb6fd7535476bb4f95427bd294d5141560"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (2 * t)=false, Core.ldiag 1 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-843066692439"
+kappa = "sha256:843066692439dec5cd1c0601334e5713686b9083ae1fd6794c964492eaaafa7c"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.rdiag 1 (t)=false, LeftBand.leftBandDiagonal (2 * t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-9a440c6ece8c"
+kappa = "sha256:9a440c6ece8c81ea6e5971a8699cbeb5f07c5cc540cbbc3c225a6c1b5429763f"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (2 * t + 1)=false, LeftBand.rulerBackground (t + 1)=false, LeftBand.rulerBackground (t)=false"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-084ca6f82327"
+kappa = "sha256:084ca6f823272addbf4cfc09e4d12a5c25b2d9ae7526c91c73a56d310c5c4255"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "joint-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.ldiag 10 (2 * t)=false, Core.ldiag 10 (t)=false, Core.ldiag 11 (2 * t)=false, Core.ldiag 12 (t)=false, Core.ldiag 9 (2 * t)=false, Core.ldiag 9 (t)=false, Core.rdiag 1 (t)=true, Core.rdiag 2 (t)=t"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-084ca6f82327"
+kappa = "sha256:084ca6f823272addbf4cfc09e4d12a5c25b2d9ae7526c91c73a56d310c5c4255"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "joint-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.relation_084ca6f82327"
+seconds = 2.7
+tick = 0
+
+[[attempt]]
+claim = "observed-b8014c039b17"
+kappa = "sha256:b8014c039b17cd7f151442055ec030c4fc004fabbe74f5aa6435b707e6b27183"
+strategy = "library-rewrite"
+template = "sha256:49b91bf8eef534e30ec3a54b54072441e0a7530461c77f237b30767dcbc06e2b"
+family = "right-dilated"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, Core.rdiag 2 (t)=false, Core.rdiag 3 (2 * t)=false, Core.rdiag 3 (t)=false, Core.rdiag 4 (2 * t)=false, Core.rdiag 4 (t)=false, Core.rdiag 5 (2 * t)=false, Core.rdiag 5 (t)=true"
+theorem = ""
+seconds = 0.0
+tick = 0
+
+[[attempt]]
+claim = "observed-b8014c039b17"
+kappa = "sha256:b8014c039b17cd7f151442055ec030c4fc004fabbe74f5aa6435b707e6b27183"
+strategy = "step-induction"
+template = "sha256:a61a07ac0fe4f2fe552556326ef84b776ebf83420ebab2326b2c9048a9670aea"
+family = "right-dilated"
+outcome = "proved"
+failure = ""
+theorem = "Rule30UOR.Deduced.exposed5_odd_eq_timeParity_xor_rdiag5_xor_exposed2_xor_exposed3"
+seconds = 1.1
+tick = 0

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "relation-9b630bd3f3ff"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (nat 11) (app (const lexlean.std.nat::mul) (nat 2) (local t))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.time::ldiag) (nat 2) (local t)) (app (const r30.time::ldiag) (nat 9) (local t))) (app (const r30.time::ldiag) (nat 10) (local t))) (app (const r30.time::ldiag) (nat 12) (local t))) (app (const r30.observation::exposed) (nat 2) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Deduced"
+name = "Rule30UOR.Deduced.relation_9b630bd3f3ff"
+
+[[form]]
+id = "relation-9b630bd3f3ff"
+channel = "math"
+surface = "relation9b630bd3f3ff"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name relation9b630bd3f3ff) (paren (seq (slot 0))))"

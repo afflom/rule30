@@ -1,0 +1,12 @@
+-- r30 deduce template: period-reduction, revision 2 (rewrite, never rw, before the closing tactic).
+-- Every column is a word of the right system (Antidiagonal.rdiag_eq_towerWord) read from the
+-- row register (Antidiagonal.towerWord_eq_row) at its time modulo 2^j, so the relation depends
+-- on t modulo the largest period only; the kernel decides the residues.
+/-- {{doc}} -/
+theorem {{name}} (t : Nat) : {{statement}} := by
+{{occurrences}}
+  rewrite [{{rewrites}}]
+  have hr : t % {{period}} < {{period}} := Nat.mod_lt _ (by decide)
+  generalize t % {{period}} = r at hr ⊢
+  revert r
+  decide

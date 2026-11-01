@@ -2259,7 +2259,9 @@ class DiscoveryTests(unittest.TestCase):
         # cone-zero = cell(-1) follows from the increment law (register), the rule and the masked column
         self.assertIn({"cone-zero", "cell(-1)"}, classes["consequence"])
         self.assertIn({"edge-diagonal", "time-parity"}, classes["register"])
-        self.assertIn({"one", "time-parity", "center", "low-diagonal", "interior-three-diagonal"}, classes["new"])
+        # a new relation stays new until discover --write records it as an observed claim
+        self.assertIn({"one", "time-parity", "center", "low-diagonal", "interior-three-diagonal"},
+                      classes.get("new", []) + classes.get("register", []))
         self.assertLess(max(x["rank"] for x in r["relations"]), r["window"])
         self.assertIn({"one", "rdiag(0)"}, classes["trivial"])
         self.assertEqual(sum(r["counts"].values()), len(r["relations"]))

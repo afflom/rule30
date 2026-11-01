@@ -150,17 +150,17 @@ def parse(data):
 
 def labels_from_stream(data):
     """{module: {"kappa", "declarations": [(name, κ)], "statements": [(name, statement κ, exact κ)],
-    "kinds": {name: kind}, "reserved": [names Lean reserves]}} from the exporter's stream. The declaration κ (and the module κ
+    "authored": [the theorems written in source]}} from the exporter's stream. The declaration κ (and the module κ
     composed from them, the key of the replay receipts) is exact, binder info included. A
     theorem's statement κ is the κ of its type as a meaning: binder info (implicit or explicit is
     elaboration) is omitted and universe parameters are numbered by first occurrence, so two
     theorems that state the same thing share it whatever their names, binders and universe names.
     It is computed for theorem types only, memoized per module."""
-    result, ids, forms, loose, exact, current, decls, stmts, kinds, reserved = {}, {}, {}, {}, {}, None, [], [], {}, []
+    result, ids, forms, loose, exact, current, decls, stmts, authored = {}, {}, {}, {}, {}, None, [], [], []
     for form in parse(data):
         head = form[0]
         if head == b"module":
-            current, ids, forms, loose, exact, decls, stmts, kinds, reserved = form[1].decode(), {}, {}, {}, {}, [], [], {}, []
+            current, ids, forms, loose, exact, decls, stmts, authored = form[1].decode(), {}, {}, {}, {}, [], [], []
         elif head == b"node":
             ctor = form[2]
             split = 3 + NODE_FIELDS[ctor.decode()]
@@ -170,19 +170,18 @@ def labels_from_stream(data):
         elif head == b"decl":
             _, name, kind, levels, type_id, value_id, *extras = form
             parts = [b"decl", name, kind, levels, ids[type_id], [] if value_id == [] else ids[value_id]]
-            is_reserved = False
+            is_authored = False
             for extra in extras:
-                if extra == [b"reserved"]:
-                    # Lean reserves the name (it realizes the lemma itself): not part of the meaning
-                    is_reserved = True
+                if extra == [b"authored"]:
+                    # written in a source file (a declaration range): not part of the meaning
+                    is_authored = True
                     continue
                 if extra[0] == b"rules":
                     extra = [b"rules"] + [[b"rule", rule[1], rule[2], ids[rule[3]]] for rule in extra[1:]]
                 parts.append(extra)
             decls.append((name, kappa(parts)))
-            kinds[name.decode()] = kind.decode()
-            if is_reserved:
-                reserved.append(name.decode())
+            if is_authored:
+                authored.append(name.decode())
             if kind == b"thm":
                 params = list(levels[1:]) if isinstance(levels, list) else []
                 statement = positional(forms, type_id, params, None if params else loose)
@@ -197,7 +196,7 @@ def labels_from_stream(data):
             result[current] = {"kappa": kappa([b"lean-module", current, *(k for _, k in decls)]),
                                "declarations": [(name.decode(), k) for name, k in decls],
                                "statements": sorted((name.decode(), k, e) for name, k, e in stmts),
-                               "kinds": dict(sorted(kinds.items())), "reserved": sorted(reserved)}
+                               "authored": sorted(authored)}
             current = None
     if current is not None:
         raise ValueError(f"stream ends inside module {current}")

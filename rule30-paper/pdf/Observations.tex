@@ -4229,4 +4229,263 @@ The goal follows from \(\operatorname{noperiodicisolatedofnoperiodicblackconsist
 \begin{proof}
 The goal follows from \(\operatorname{whitedefectinwindowholds}\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag2-eq-time-parity}
+For every natural number \(t\), \(\operatorname{rdiag}(2, t) = \operatorname{timeparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag2eqtimeparity}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag3-eq-time-parity-xor-ldiag2}
+For every natural number \(t\), \(\operatorname{ldiag}(3, t) = \operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{ldiag}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag3eqtimeparityxorldiag2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag4-eq-ldiag1-xor-ldiag2}
+For every natural number \(t\), \(\operatorname{ldiag}(4, t) = \operatorname{bxor}(\operatorname{ldiag}(1, t), \operatorname{ldiag}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag4eqldiag1xorldiag2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag5-eq-time-parity-xor-ldiag2}
+For every natural number \(t\), \(\operatorname{ldiag}(5, t) = \operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{ldiag}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag5eqtimeparityxorldiag2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag6-eq-time-parity-xor-ldiag2}
+For every natural number \(t\), \(\operatorname{ldiag}(6, t) = \operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{ldiag}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag6eqtimeparityxorldiag2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag8-eq-rdiag3-xor-ldiag1-xor-ldiag2}
+For every natural number \(t\), \(\operatorname{ldiag}(8, t) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(3, t), \operatorname{ldiag}(1, t)), \operatorname{ldiag}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag8eqrdiag3xorldiag1xorldiag2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag3-succ-eq-time-parity-xor-rdiag3}
+For every natural number \(t\), \(\operatorname{rdiag}(3, t + 1) = \operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{rdiag}(3, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag3succeqtimeparityxorrdiag3}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag4-succ-eq-rdiag3-xor-rdiag4-xor-exposed2}
+For every natural number \(t\), \(\operatorname{rdiag}(4, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(3, t), \operatorname{rdiag}(4, t)), \operatorname{exposed}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag4succeqrdiag3xorrdiag4xorexposed2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag5-succ-eq-rdiag4-xor-rdiag5-xor-exposed3}
+For every natural number \(t\), \(\operatorname{rdiag}(5, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(4, t), \operatorname{rdiag}(5, t)), \operatorname{exposed}(3, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag5succeqrdiag4xorrdiag5xorexposed3}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag6-succ-eq-rdiag5-xor-rdiag6-xor-exposed4}
+For every natural number \(t\), \(\operatorname{rdiag}(6, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(5, t), \operatorname{rdiag}(6, t)), \operatorname{exposed}(4, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag6succeqrdiag5xorrdiag6xorexposed4}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag7-succ-eq-rdiag6-xor-rdiag7-xor-exposed5}
+For every natural number \(t\), \(\operatorname{rdiag}(7, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(6, t), \operatorname{rdiag}(7, t)), \operatorname{exposed}(5, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag7succeqrdiag6xorrdiag7xorexposed5}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag8-succ-eq-rdiag7-xor-rdiag8-xor-exposed6}
+For every natural number \(t\), \(\operatorname{rdiag}(8, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(7, t), \operatorname{rdiag}(8, t)), \operatorname{exposed}(6, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag8succeqrdiag7xorrdiag8xorexposed6}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag9-succ-eq-rdiag8-xor-rdiag9-xor-exposed7}
+For every natural number \(t\), \(\operatorname{rdiag}(9, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(8, t), \operatorname{rdiag}(9, t)), \operatorname{exposed}(7, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag9succeqrdiag8xorrdiag9xorexposed7}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag10-succ-eq-rdiag9-xor-rdiag10-xor-exposed8}
+For every natural number \(t\), \(\operatorname{rdiag}(10, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(9, t), \operatorname{rdiag}(10, t)), \operatorname{exposed}(8, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag10succeqrdiag9xorrdiag10xorexposed8}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag2-succ-eq-not-ldiag1}
+For every natural number \(t\), \(\operatorname{ldiag}(2, t + 1) = \operatorname{not}(\operatorname{ldiag}(1, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag2succeqnotldiag1}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag10-succ-eq-rdiag3-xor-ldiag1-xor-ldiag2-xor-ldiag9}
+For every natural number \(t\), \(\operatorname{ldiag}(10, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(3, t), \operatorname{ldiag}(1, t)), \operatorname{ldiag}(2, t)), \operatorname{ldiag}(9, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag10succeqrdiag3xorldiag1xorldiag2xorldiag9}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag12-succ-eq-ldiag10-xor-ldiag12}
+For every natural number \(t\), \(\operatorname{ldiag}(12, t + 1) = \operatorname{bxor}(\operatorname{ldiag}(10, t), \operatorname{ldiag}(12, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag12succeqldiag10xorldiag12}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed2-succ-eq-not-rdiag3-xor-exposed2}
+For every natural number \(t\), \(\operatorname{exposed}(2, t + 1) = \operatorname{not}(\operatorname{bxor}(\operatorname{rdiag}(3, t), \operatorname{exposed}(2, t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposed2succeqnotrdiag3xorexposed2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed3-succ-eq-rdiag3-xor-rdiag4-xor-exposed3-xor-exposed4}
+For every natural number \(t\), \(\operatorname{exposed}(3, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(3, t), \operatorname{rdiag}(4, t)), \operatorname{exposed}(3, t)), \operatorname{exposed}(4, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposed3succeqrdiag3xorrdiag4xorexposed3xorexposed4}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed4-succ-eq-time-parity-xor-rdiag4-xor-exposed4}
+For every natural number \(t\), \(\operatorname{exposed}(4, t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{rdiag}(4, t)), \operatorname{exposed}(4, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposed4succeqtimeparityxorrdiag4xorexposed4}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag3-even-eq-time-parity}
+For every natural number \(t\), \(\operatorname{rdiag}(3, 2 \cdot t) = \operatorname{timeparity}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag3eveneqtimeparity}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag4-even-eq-time-parity-xor-rdiag3}
+For every natural number \(t\), \(\operatorname{rdiag}(4, 2 \cdot t) = \operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{rdiag}(3, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag4eveneqtimeparityxorrdiag3}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag5-even-eq-false}
+For every natural number \(t\), \(\operatorname{rdiag}(5, 2 \cdot t) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag5eveneqfalse}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag6-even-eq-time-parity-xor-rdiag3-xor-rdiag4-xor-exposed2}
+For every natural number \(t\), \(\operatorname{rdiag}(6, 2 \cdot t) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{rdiag}(3, t)), \operatorname{rdiag}(4, t)), \operatorname{exposed}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiag6eveneqtimeparityxorrdiag3xorrdiag4xorexposed2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:relation-f42bb48334ad}
+For every natural number \(t\), \(\operatorname{rdiag}(7, 2 \cdot t) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{rdiag}(4, t)), \operatorname{rdiag}(5, t)), \operatorname{rdiag}(6, t)), \operatorname{exposed}(2, t)), \operatorname{exposed}(3, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{relationf42bb48334ad}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag1-even-eq-ldiag1}
+For every natural number \(t\), \(\operatorname{ldiag}(1, 2 \cdot t) = \operatorname{ldiag}(1, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag1eveneqldiag1}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag2-even-eq-false}
+For every natural number \(t\), \(\operatorname{ldiag}(2, 2 \cdot t) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag2eveneqfalse}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:relation-9b630bd3f3ff}
+For every natural number \(t\), \(\operatorname{ldiag}(11, 2 \cdot t) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{ldiag}(2, t), \operatorname{ldiag}(9, t)), \operatorname{ldiag}(10, t)), \operatorname{ldiag}(12, t)), \operatorname{exposed}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{relation9b630bd3f3ff}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag12-even-eq-time-parity-xor-ldiag2}
+For every natural number \(t\), \(\operatorname{ldiag}(12, 2 \cdot t) = \operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{ldiag}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiag12eveneqtimeparityxorldiag2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed2-even-eq-false}
+For every natural number \(t\), \(\operatorname{exposed}(2, 2 \cdot t) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposed2eveneqfalse}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed3-even-eq-time-parity-xor-exposed2}
+For every natural number \(t\), \(\operatorname{exposed}(3, 2 \cdot t) = \operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{exposed}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposed3eveneqtimeparityxorexposed2}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed4-even-eq-time-parity-xor-rdiag3}
+For every natural number \(t\), \(\operatorname{exposed}(4, 2 \cdot t) = \operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{rdiag}(3, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposed4eveneqtimeparityxorrdiag3}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed5-even-eq-false}
+For every natural number \(t\), \(\operatorname{exposed}(5, 2 \cdot t) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposed5eveneqfalse}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:relation-1de4355b13b0}
+For every natural number \(t\), \(\operatorname{exposed}(7, 2 \cdot t) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{rdiag}(6, t), \operatorname{exposed}(4, t)), \operatorname{exposed}(5, t)), \operatorname{exposed}(5, t + 1)), \operatorname{rdiag}(8, 2 \cdot t)), \operatorname{exposed}(6, 2 \cdot t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{relation1de4355b13b0}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:relation-084ca6f82327}
+For every natural number \(t\), \(\operatorname{ldiag}(11, 2 \cdot t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{ldiag}(9, t)), \operatorname{ldiag}(10, t)), \operatorname{ldiag}(12, t)), \operatorname{exposed}(2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{relation084ca6f82327}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed5-odd-eq-time-parity-xor-rdiag5-xor-exposed2-xor-exposed3}
+For every natural number \(t\), \(\operatorname{exposed}(5, 2 \cdot t + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{timeparity}(t), \operatorname{rdiag}(5, t)), \operatorname{exposed}(2, t)), \operatorname{exposed}(3, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposed5oddeqtimeparityxorrdiag5xorexposed2xorexposed3}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:ldiag-one}
+For every natural number \(s\), \(\operatorname{ldiag}(1, \operatorname{succ}(s)) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{ldiagone}(s)\).
+\end{proof}
 \end{document}

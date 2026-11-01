@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exposed3-even-eq-time-parity-xor-exposed2"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::exposed) (nat 3) (app (const lexlean.std.nat::mul) (nat 2) (local t))) (app (const r30.local::bxor) (app (const r30.observation::time-parity) (local t)) (app (const r30.observation::exposed) (nat 2) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Deduced"
+name = "Rule30UOR.Deduced.exposed3_even_eq_timeParity_xor_exposed2"
+
+[[form]]
+id = "exposed3-even-eq-time-parity-xor-exposed2"
+channel = "math"
+surface = "exposed3eveneqtimeparityxorexposed2"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name exposed3eveneqtimeparityxorexposed2) (paren (seq (slot 0))))"

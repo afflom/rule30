@@ -449,6 +449,363 @@ feature = "interfaces/residue-class-jen.md"
 evidence = "register: refuted (Rule30UOR.ResidueJen.whiteDefectInWindow)"
 
 [[claim]]
+id = "observed-5053d66f38fb"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(2)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-5053d66f38fb.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag2_eq_timeParity kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-c0f330524114"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(3)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-c0f330524114.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag3_eq_timeParity_xor_ldiag2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-f8cfecd08d5a"
+level = "build"
+statement = "On every t < 256: ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(4)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-f8cfecd08d5a.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag4_eq_ldiag1_xor_ldiag2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-9f735af84755"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(5)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-9f735af84755.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag5_eq_timeParity_xor_ldiag2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-d5c2175eadce"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(6)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-d5c2175eadce.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag6_eq_timeParity_xor_ldiag2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-1dba16bb3a91"
+level = "build"
+statement = "On every t < 256: ldiag(7)(t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+feature = "interfaces/observed-1dba16bb3a91.md"
+evidence = "frontier check: Rule30UOR.LeftBand.ldiag_seven_eq kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-c7dab95c2581"
+level = "build"
+statement = "On every t < 256: rdiag(3)(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(8)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-c7dab95c2581.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag8_eq_rdiag3_xor_ldiag1_xor_ldiag2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-c9e9008d30ed"
+level = "build"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR exposed(0)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-c9e9008d30ed.md"
+evidence = "frontier check: Rule30UOR.Antidiagonal.exposed_zero kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-f24e181da7d6"
+level = "build"
+statement = "On every t < 256: exposed(1)(t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+feature = "interfaces/observed-f24e181da7d6.md"
+evidence = "frontier check: Rule30UOR.Antidiagonal.exposed_one kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-45032769ad68"
+level = "open"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR center(t) XOR low-diagonal(t) XOR interior-three-diagonal(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-45032769ad68.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-7d29142e6567"
+level = "open"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR center(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR interior-eight-diagonal(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-7d29142e6567.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-52252f3e729b"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(3)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-52252f3e729b.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag3_succ_eq_timeParity_xor_rdiag3 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-c5248659968b"
+level = "build"
+statement = "On every t < 256: rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(2)(t) XOR rdiag(4)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-c5248659968b.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag4_succ_eq_rdiag3_xor_rdiag4_xor_exposed2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-1d6ae1b61762"
+level = "build"
+statement = "On every t < 256: rdiag(4)(t) XOR rdiag(5)(t) XOR exposed(3)(t) XOR rdiag(5)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-1d6ae1b61762.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag5_succ_eq_rdiag4_xor_rdiag5_xor_exposed3 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-6d4a2a5763ef"
+level = "build"
+statement = "On every t < 256: rdiag(5)(t) XOR rdiag(6)(t) XOR exposed(4)(t) XOR rdiag(6)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-6d4a2a5763ef.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag6_succ_eq_rdiag5_xor_rdiag6_xor_exposed4 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-4bc1c65e35c9"
+level = "build"
+statement = "On every t < 256: rdiag(6)(t) XOR rdiag(7)(t) XOR exposed(5)(t) XOR rdiag(7)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-4bc1c65e35c9.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag7_succ_eq_rdiag6_xor_rdiag7_xor_exposed5 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-799d502f876a"
+level = "build"
+statement = "On every t < 256: rdiag(7)(t) XOR rdiag(8)(t) XOR exposed(6)(t) XOR rdiag(8)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-799d502f876a.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag8_succ_eq_rdiag7_xor_rdiag8_xor_exposed6 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-53377bf71f92"
+level = "build"
+statement = "On every t < 256: rdiag(8)(t) XOR rdiag(9)(t) XOR exposed(7)(t) XOR rdiag(9)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-53377bf71f92.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag9_succ_eq_rdiag8_xor_rdiag9_xor_exposed7 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-9e693fea8ab9"
+level = "build"
+statement = "On every t < 256: rdiag(9)(t) XOR rdiag(10)(t) XOR exposed(8)(t) XOR rdiag(10)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-9e693fea8ab9.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag10_succ_eq_rdiag9_xor_rdiag10_xor_exposed8 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-271e1f55d5fd"
+level = "build"
+statement = "On every t < 256: one(t) XOR ldiag(1)(t+1) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+feature = "interfaces/observed-271e1f55d5fd.md"
+evidence = "frontier check: Rule30UOR.Core.ldiag_one kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-a19571110f01"
+level = "build"
+statement = "On every t < 256: one(t) XOR ldiag(1)(t) XOR ldiag(2)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-a19571110f01.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag2_succ_eq_not_ldiag1 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-92e58d165f11"
+level = "open"
+statement = "On every t < 256: one(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(9)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-92e58d165f11.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-70733dca8e2b"
+level = "build"
+statement = "On every t < 256: rdiag(3)(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(9)(t) XOR ldiag(10)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-70733dca8e2b.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag10_succ_eq_rdiag3_xor_ldiag1_xor_ldiag2_xor_ldiag9 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-88dd567b2ddf"
+level = "build"
+statement = "On every t < 256: ldiag(10)(t) XOR ldiag(12)(t) XOR ldiag(12)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-88dd567b2ddf.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag12_succ_eq_ldiag10_xor_ldiag12 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-0b9eefb1e9da"
+level = "build"
+statement = "On every t < 256: one(t) XOR rdiag(3)(t) XOR exposed(2)(t) XOR exposed(2)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-0b9eefb1e9da.md"
+evidence = "frontier check: Rule30UOR.Deduced.exposed2_succ_eq_not_rdiag3_xor_exposed2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-3f91af16052a"
+level = "build"
+statement = "On every t < 256: rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(3)(t) XOR exposed(4)(t) XOR exposed(3)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-3f91af16052a.md"
+evidence = "frontier check: Rule30UOR.Deduced.exposed3_succ_eq_rdiag3_xor_rdiag4_xor_exposed3_xor_exposed4 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-7ddfd59fd9e7"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(4)(t) XOR exposed(4)(t) XOR exposed(4)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-7ddfd59fd9e7.md"
+evidence = "frontier check: Rule30UOR.Deduced.exposed4_succ_eq_timeParity_xor_rdiag4_xor_exposed4 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-e8a1ed6dc127"
+level = "open"
+statement = "On every t < 256: ruler-background(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR left-band-diagonal(t) XOR ruler-background(t+1) XOR low-diagonal(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-e8a1ed6dc127.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-b64d3d0ba07b"
+level = "open"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR left-band-diagonal(t) XOR left-band-diagonal(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-b64d3d0ba07b.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-3d3fa55c7c91"
+level = "open"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR low-diagonal(t) XOR ruler-background(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-3d3fa55c7c91.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-1c2fd8e22fb8"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-1c2fd8e22fb8.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag3_even_eq_timeParity kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-26a63fc44dc7"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(4)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-26a63fc44dc7.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag4_even_eq_timeParity_xor_rdiag3 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-884d0d5c6447"
+level = "build"
+statement = "On every t < 256: rdiag(5)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+feature = "interfaces/observed-884d0d5c6447.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag5_even_eq_false kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-0fe84a65b129"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(2)(t) XOR rdiag(6)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-0fe84a65b129.md"
+evidence = "frontier check: Rule30UOR.Deduced.rdiag6_even_eq_timeParity_xor_rdiag3_xor_rdiag4_xor_exposed2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-f42bb48334ad"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(4)(t) XOR rdiag(5)(t) XOR rdiag(6)(t) XOR exposed(2)(t) XOR exposed(3)(t) XOR rdiag(7)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-f42bb48334ad.md"
+evidence = "frontier check: Rule30UOR.Deduced.relation_f42bb48334ad kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-a3d70a5ffb2c"
+level = "build"
+statement = "On every t < 256: ldiag(1)(t) XOR ldiag(1)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+feature = "interfaces/observed-a3d70a5ffb2c.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag1_even_eq_ldiag1 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-a2ed46072266"
+level = "build"
+statement = "On every t < 256: ldiag(2)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+feature = "interfaces/observed-a2ed46072266.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag2_even_eq_false kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-b75a73f46242"
+level = "open"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(9)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-b75a73f46242.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-409a7755bc68"
+level = "open"
+statement = "On every t < 256: one(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(10)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-409a7755bc68.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-9b630bd3f3ff"
+level = "build"
+statement = "On every t < 256: ldiag(2)(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR ldiag(11)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-9b630bd3f3ff.md"
+evidence = "frontier check: Rule30UOR.Deduced.relation_9b630bd3f3ff kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-8520f2c1eaae"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(12)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-8520f2c1eaae.md"
+evidence = "frontier check: Rule30UOR.Deduced.ldiag12_even_eq_timeParity_xor_ldiag2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-a4cdb1846e35"
+level = "build"
+statement = "On every t < 256: exposed(2)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+feature = "interfaces/observed-a4cdb1846e35.md"
+evidence = "frontier check: Rule30UOR.Deduced.exposed2_even_eq_false kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-e4f6d869bf11"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR exposed(2)(t) XOR exposed(3)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-e4f6d869bf11.md"
+evidence = "frontier check: Rule30UOR.Deduced.exposed3_even_eq_timeParity_xor_exposed2 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-c85f3baf6065"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR exposed(4)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-c85f3baf6065.md"
+evidence = "frontier check: Rule30UOR.Deduced.exposed4_even_eq_timeParity_xor_rdiag3 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-cb5d01bea1fc"
+level = "build"
+statement = "On every t < 256: exposed(5)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+feature = "interfaces/observed-cb5d01bea1fc.md"
+evidence = "frontier check: Rule30UOR.Deduced.exposed5_even_eq_false kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-1de4355b13b0"
+level = "build"
+statement = "On every t < 256: rdiag(6)(t) XOR exposed(4)(t) XOR exposed(5)(t) XOR exposed(5)(t+1) XOR rdiag(8)(2t) XOR exposed(6)(2t) XOR exposed(7)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-1de4355b13b0.md"
+evidence = "frontier check: Rule30UOR.Deduced.relation_1de4355b13b0 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-f71048479210"
+level = "open"
+statement = "On every t < 256: ldiag(1)(t) XOR low-diagonal(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-f71048479210.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-843066692439"
+level = "open"
+statement = "On every t < 256: time-parity(t) XOR low-diagonal(t) XOR left-band-diagonal(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-843066692439.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-9a440c6ece8c"
+level = "open"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR left-band-diagonal(t) XOR ruler-background(t+1) XOR ruler-background(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-9a440c6ece8c.md"
+evidence = "register: observed"
+
+[[claim]]
+id = "observed-084ca6f82327"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR ldiag(11)(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-084ca6f82327.md"
+evidence = "frontier check: Rule30UOR.Deduced.relation_084ca6f82327 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
+id = "observed-b8014c039b17"
+level = "build"
+statement = "On every t < 256: time-parity(t) XOR rdiag(5)(t) XOR exposed(2)(t) XOR exposed(3)(t) XOR exposed(5)(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+feature = "interfaces/observed-b8014c039b17.md"
+evidence = "frontier check: Rule30UOR.Deduced.exposed5_odd_eq_timeParity_xor_rdiag5_xor_exposed2_xor_exposed3 kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."
@@ -566,3 +923,52 @@ level = "build"
 statement = "The saved round workflow .claude/workflows/rule30-round.js opens with an Induce phase before Propose: one agent runs bin/r30 discover --window 256 --degree 2 --json and bin/r30 audit --json (a missing command is reported and contributes nothing) and returns the observed relations not in the register and the open audit obligations, which every lens receives as context and which enter Refute and Mechanize as proposals of their own (an observed relation is a candidate theorem for all t whose window certificate is already decided); the view publishes the workflow."
 feature = ".claude/workflows/rule30-round.js"
 evidence = "scripts/tests/test_audit.py RoundWorkflowTests.test_the_round_opens_with_the_induce_phase_induce_phase"
+
+[[claim]]
+id = "engine-workload"
+level = "build"
+statement = "Engine.lex.tex declares the workload as data (the workflow, its triggers: a schedule at minutes 17 and 47, dispatch, and pushes of the engine's inputs to main; one concurrency group that never cancels a run; runs-on ubuntu-24.04; timeout 340 minutes; permissions contents and actions write; the one secret GITHUB_TOKEN; the actions it uses; the stages of a tick with their budgets; the cache families), and the kernel decides that no secret but GITHUB_TOKEN is read, that the permissions are exactly contents and actions with write, that the stage budgets fill the tick budget and with the setup fit the timeout, that the gate keeps its share, that the cron minutes are off the hour and thirty minutes apart, that there is one concurrency group, and that every action used is one the repository already used; api sync renders .github/workflows/engine.yml from that data (guarded by the repository and the kill switch R30_ENGINE) and api check refuses drift, a secret other than GITHUB_TOKEN, an action beyond those already used, or a pull_request trigger."
+feature = ".github/workflows/engine.yml"
+evidence = "bin/r30 api check; bin/r30 verify api --modules src/Engine.lex.tex; scripts/tests/test_engine.py"
+
+[[claim]]
+id = "engine-tick"
+level = "build"
+statement = "bin/r30 engine tick [--budget-minutes N] [--commit] [--push] runs one deterministic cycle from a clean checkout: it records the base commit, builds the library, runs induction (sequences --write only when the evaluation program or the κ-labels of the modules it imports changed, discover --write at the committed window), pruning (audit --write), deduction (deduce within the remaining budget) and learning (learnAll over the tick's outcomes, api sync), splits the budget across the stages from their measured durations in the ledger (the gate's own duration measured by the next tick from the commit's time) with the gate's share reserved and never cut, ends idle without a commit when nothing changed (the workflow then marks the commit settled, as it does a refused or failed tick, and later runs on it stop after the checkout), commits in the foreground through the unchanged pre-commit gate (commit --wait) and pushes only when origin/main still is the base, dropping the work otherwise; never a force push."
+feature = "tools/r30/engine.py"
+evidence = "scripts/tests/test_engine.py"
+
+[[claim]]
+id = "engine-status"
+level = "build"
+statement = "bin/r30 engine status prints the last tick (start, base, stages with seconds and allowances, counts, outcome), the network (units: the basis sequences; synapses: the observed, proved and refuted relations; events: the ticks), the attempts by outcome, the pending attempts and the learned weights; the workflow appends it to the job summary."
+feature = "tools/r30/engine.py"
+evidence = "scripts/tests/test_engine.py"
+
+[[claim]]
+id = "deduce-command"
+level = "build"
+statement = "bin/r30 deduce [--budget-minutes N] [--claims ids] [--dry-run] attempts every observed claim for all t with the portfolio in the learned order: each attempt renders one theorem from a template into a scratch file under .r30/deduce, checks it with one Lean process and accepts it only when its axioms are among propext and Quot.sound; accepted theorems are appended to Rule30UOR.Deduced and built; one whose statement κ a library theorem already has is removed again and the claim is proved by that library theorem (outcome known: no statement is proved twice, kappa --duplicates prints no group), the others are published (theorem add) and recorded (frontier set --status proved --lean); a relation the orbit of the diagonals breaks beyond its window is refuted by a decided counterexample."
+feature = "tools/r30/deduce.py"
+evidence = "bin/r30 deduce; bin/r30 frontier check; scripts/tests/test_engine.py"
+
+[[claim]]
+id = "strategy-portfolio"
+level = "build"
+statement = "The portfolio is four deterministic Lean proof templates under tools/r30/templates, each pinned in Engine.lex.tex by the SHA-256 of its file and of the renderer that fills it (deduce.py): library-rewrite (the columns rewritten into the diagonals, one rule step unfolded, the library's equalities among the involved constants from mentions and the register's proved relations instantiated, closed by Boolean case analysis; a publishable library theorem that states the relation proves the claim with no new theorem, outcome known), step-induction (the diagonals the relation reads as a finite system stepped by the rule, the orbit decided by the kernel), period-reduction (the words of the right system read from the row register modulo their period 2^j) and counterexample; every applicable template's Boolean core is decided in Python first."
+feature = "tools/r30/templates"
+evidence = "bin/r30 api check; scripts/tests/test_engine.py"
+
+[[claim]]
+id = "strategy-learning"
+level = "build"
+statement = "Engine.lex.tex declares the learning layer: integer strategy weights per relation family, the bounded Hebbian rule learn (a success raises the weight by 2, a failure lowers it by 1, clamped to [1, 16]), learnAll and the scheduler schedule (applicable strategies by weight, ties by portfolio order) as production roots exported to certified Rust; the kernel decides that learn keeps every weight in bounds, that the committed weights are in bounds, that the schedule of every subset of the portfolio in every family is a permutation ordered by weight, and the fixtures the Python mirror computes; the tests compare the mirror with the certified roots."
+feature = "rule30-api/src/Engine.lex.tex"
+evidence = "bin/r30 verify api --modules src/Engine.lex.tex; scripts/tests/test_engine.py"
+
+[[claim]]
+id = "engine-ledger"
+level = "build"
+statement = "rule30-api/model/engine.toml (r30/engine/1) is the engine's ledger: the consolidated weights, every attempt (claim, κ-label, strategy, template digest, family, outcome proved, known, refuted, failed or timeout, failure point, seconds, theorem, tick) and the last ticks; no (claim κ, strategy, template digest) is attempted twice, and the weights are reproducible from the attempts."
+feature = "rule30-api/model/engine.toml"
+evidence = "scripts/tests/test_engine.py"

@@ -67,6 +67,32 @@
     },
     {
       "package": {
+        "name": "rule30_api_engine_learn_all",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Engine.learnAll",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
+        "name": "rule30_api_engine_schedule",
+        "version": "0.1.0"
+      },
+      "root": "Rule30Api.Engine.schedule",
+      "targets": [
+        {
+          "digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+          "id": "rust-std"
+        }
+      ]
+    },
+    {
+      "package": {
         "name": "rule30_api_core_center",
         "version": "0.1.0"
       },

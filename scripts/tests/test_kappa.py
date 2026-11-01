@@ -74,7 +74,7 @@ class DeclarationProfileTests(unittest.TestCase):
         km = sha(b"(11:lean-module 3:Foo 71:" + kd.encode() + b")")
         labels = K.labels_from_stream(self.AXIOM)
         self.assertEqual(labels, {"Foo": {"kappa": km, "declarations": [("Foo", kd)], "statements": [],
-                                          "kinds": {"Foo": "axiom"}, "reserved": []}})
+                                          "authored": []}})
 
     def theorem(self, module, sharing, order="forward", value="0"):
         """A module with a definition `d` of type Prop and value `(lit nat value)`
@@ -173,24 +173,23 @@ class RedundancyTests(unittest.TestCase):
     """Theorems that state the same thing group whatever their names, privacy, binders or
     universe names; generated declarations never count."""
 
-    def test_reserved_names_are_generated_and_nothing_else_by_suffix(self):
-        reserved = {"Rule30UOR.A.f.eq_1", "Rule30UOR.A.f.induct", "Rule30UOR.A.C.mk.injEq"}
-        for name in reserved:
-            self.assertFalse(K.authored(name, {}, reserved), name)
-        # the same suffixes, where Lean does not reserve them, are names someone wrote
-        for written in ("Rule30UOR.A.g.induct", "Rule30UOR.A.Periodic.elim", "Rule30UOR.A.t.inj",
-                        "Rule30UOR.A.Col.red.inj", "Rule30UOR.A.Foo.ext_iff", "Rule30UOR.A.t.eq_1",
-                        "_private.Rule30UOR.A.0.Rule30UOR.A.helper", "Rule30UOR.A.eq_of_range"):
-            self.assertTrue(K.authored(written, {}, reserved), written)
+    def test_only_theorems_written_in_source_count_whatever_their_names(self):
+        labels = {"A": {"statements": [("A.t", "K", "x"), ("A.t.eq_1", "J", "x"), ("A.yy.proof_1", "L", "x")],
+                        "authored": ["A.t", "A.yy.proof_1"]},
+                  "B": {"statements": [("B.u", "K", "x"), ("B.d.eq_1", "J", "x"), ("B.xx", "L", "x")],
+                        "authored": ["B.u", "B.xx"]}}
+        self.assertEqual(K.duplicates(labels), {"K": [("A", "A.t"), ("B", "B.u")],
+                                                "L": [("A", "A.yy.proof_1"), ("B", "B.xx")]})
 
-    def test_auxiliary_components_count_only_under_a_declaration(self):
-        kinds = {"Rule30UOR.A.t": "thm", "Rule30UOR.A.f": "def"}
-        for generated in ("Rule30UOR.A.t._proof_1", "Rule30UOR.A.t._simp_1_2", "Rule30UOR.A.f.match_1",
-                          "_private.Rule30UOR.A.0.Rule30UOR.A.t._proof_1_4",
-                          "_private.Rule30UOR.A.0.Nat.pow.match_1.eq_1", "Init.Foo._proof_1"):
-            self.assertFalse(K.authored(generated, kinds), generated)
-        for written in ("Rule30UOR.A.helper._aux", "Rule30UOR.A.x.proof_2", "_private.Rule30UOR.A.0.Nat.my_lemma"):
-            self.assertTrue(K.authored(written, kinds), written)
+    def test_the_authored_mark_is_read_from_the_stream_and_not_hashed(self):
+        line = lambda *parts: K.canonical(list(parts)) + b"\n"
+        def module(mark):
+            return (line("module", "A", ["constants", "1"]) + line("node", "0", "lit", "nat", "1") +
+                    line("decl", "A.t", "thm", ["levels"], "0", "0", *mark) + line("end", "A"))
+        written, generated = K.labels_from_stream(module([["authored"]]))["A"], K.labels_from_stream(module([]))["A"]
+        self.assertEqual(written["authored"], ["A.t"])
+        self.assertEqual(generated["authored"], [])
+        self.assertEqual(written["kappa"], generated["kappa"])
 
     def test_universe_parameters_are_numbered_by_first_occurrence(self):
         line = lambda *parts: K.canonical(list(parts)) + b"\n"
@@ -204,8 +203,9 @@ class RedundancyTests(unittest.TestCase):
         self.assertEqual(a[1], b[1])
 
     def test_groups_span_privacy(self):
-        labels = {"C": {"statements": [("_private.C.0.C.v", "K", "e1"), ("C.u", "J", "e2")]},
-                  "D": {"statements": [("D.eq_of_x", "J", "e3"), ("D.w", "K", "e1")]}}
+        labels = {"C": {"statements": [("_private.C.0.C.v", "K", "e1"), ("C.u", "J", "e2")],
+                        "authored": ["_private.C.0.C.v", "C.u"]},
+                  "D": {"statements": [("D.eq_of_x", "J", "e3"), ("D.w", "K", "e1")], "authored": ["D.eq_of_x", "D.w"]}}
         self.assertEqual(K.duplicates(labels), {"J": [("C", "C.u"), ("D", "D.eq_of_x")],
                                                 "K": [("C", "_private.C.0.C.v"), ("D", "D.w")]})
 

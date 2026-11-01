@@ -1,0 +1,13 @@
+-- r30 deduce template: library-rewrite, revision 2 (rewrite, never rw, before the closing tactic; facts that exclude no assignment are not instantiated).
+-- The columns are rewritten into the diagonals (the definitions and the library's equalities),
+-- one step of the rule unfolds definitionally, the library's facts about the remaining atoms are
+-- instantiated, and the relation is closed by Boolean case analysis.
+/-- {{doc}} -/
+theorem {{name}} (t : Nat) : {{statement}} := by
+{{occurrences}}
+{{rewrite_goal}}
+  show {{normal_goal}}
+{{facts}}
+{{revert_facts}}
+{{generalize}}
+  decide

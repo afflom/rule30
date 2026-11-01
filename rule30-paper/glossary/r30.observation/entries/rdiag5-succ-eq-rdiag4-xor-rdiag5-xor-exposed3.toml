@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag5-succ-eq-rdiag4-xor-rdiag5-xor-exposed3"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (nat 5) (app (const lexlean.std.nat::add) (local t) (nat 1))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.right::rdiag) (nat 4) (local t)) (app (const r30.right::rdiag) (nat 5) (local t))) (app (const r30.observation::exposed) (nat 3) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Deduced"
+name = "Rule30UOR.Deduced.rdiag5_succ_eq_rdiag4_xor_rdiag5_xor_exposed3"
+
+[[form]]
+id = "rdiag5-succ-eq-rdiag4-xor-rdiag5-xor-exposed3"
+channel = "math"
+surface = "rdiag5succeqrdiag4xorrdiag5xorexposed3"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiag5succeqrdiag4xorrdiag5xorexposed3) (paren (seq (slot 0))))"

@@ -584,3 +584,502 @@ lean = "Rule30UOR.ResidueJen.whiteDefectInWindow"
 since = "2026-11-01"
 note = "Refuted as a route (round 5, Rule30UOR.ResidueJen): the lag defect moves sideways (lagDefect_sideways), black-time consistency pins column -1 only on black-run triangles of depth at most the longest black run (btc_black_window_pinned), and white_defect_in_window proves column -1 has a white-time lag defect in every window [p-Q, 2p-Q): the masked front stops at column -(K+1). Closing needs a mechanism that forces a lag defect of column -1 onto a black residue, i.e. the deep-column nonlinearity at white times."
 depends = ["black-time-consistency"]
+
+[[claim]]
+id = "observed-5053d66f38fb"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(2)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag2_eq_timeParity"
+since = "2026-11-01"
+relation = ["time-parity", "rdiag(2)"]
+window = 256
+kappa = "sha256:5053d66f38fbd71bd64408f8a904e4c8d18e8bb4b983380c0f1c1d2e4bff4bed"
+
+[[claim]]
+id = "observed-c0f330524114"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(3)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag3_eq_timeParity_xor_ldiag2"
+since = "2026-11-01"
+relation = ["time-parity", "ldiag(2)", "ldiag(3)"]
+window = 256
+kappa = "sha256:c0f33052411467ccdb46a5488b7165bdaa90f066fa447648655d9f4f77fe3072"
+
+[[claim]]
+id = "observed-f8cfecd08d5a"
+status = "proved"
+statement = "On every t < 256: ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(4)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag4_eq_ldiag1_xor_ldiag2"
+since = "2026-11-01"
+relation = ["ldiag(1)", "ldiag(2)", "ldiag(4)"]
+window = 256
+kappa = "sha256:f8cfecd08d5ad7fd46ee0bb5b250f61a0a43fed5fe84bf8edb8e8f738284896c"
+
+[[claim]]
+id = "observed-9f735af84755"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(5)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag5_eq_timeParity_xor_ldiag2"
+since = "2026-11-01"
+relation = ["time-parity", "ldiag(2)", "ldiag(5)"]
+window = 256
+kappa = "sha256:9f735af84755508c8e2df7ddb12b02f5112d48330af383181dfb4ee217248ea5"
+
+[[claim]]
+id = "observed-d5c2175eadce"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(6)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag6_eq_timeParity_xor_ldiag2"
+since = "2026-11-01"
+relation = ["time-parity", "ldiag(2)", "ldiag(6)"]
+window = 256
+kappa = "sha256:d5c2175eadce7b4143c00ab867bae608ec4a2d47c57d04fa8c643baa0865ab2d"
+
+[[claim]]
+id = "observed-1dba16bb3a91"
+status = "proved"
+statement = "On every t < 256: ldiag(7)(t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+lean = "Rule30UOR.LeftBand.ldiag_seven_eq"
+since = "2026-11-01"
+relation = ["ldiag(7)"]
+window = 256
+kappa = "sha256:1dba16bb3a91ea4539a768f91ea7b6eab120a5ecce4167b750d3a37c14f1aa7c"
+
+[[claim]]
+id = "observed-c7dab95c2581"
+status = "proved"
+statement = "On every t < 256: rdiag(3)(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(8)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag8_eq_rdiag3_xor_ldiag1_xor_ldiag2"
+since = "2026-11-01"
+relation = ["rdiag(3)", "ldiag(1)", "ldiag(2)", "ldiag(8)"]
+window = 256
+kappa = "sha256:c7dab95c2581ad7d80fd5622a6a2be91177d81782b690c8de88b0f8870343486"
+
+[[claim]]
+id = "observed-c9e9008d30ed"
+status = "proved"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR exposed(0)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Antidiagonal.exposed_zero"
+since = "2026-11-01"
+relation = ["one", "time-parity", "exposed(0)"]
+window = 256
+kappa = "sha256:c9e9008d30ed9363f77d0eaccaaf2a905871265ae057e5538fa4d0f4dcfd2ae6"
+
+[[claim]]
+id = "observed-f24e181da7d6"
+status = "proved"
+statement = "On every t < 256: exposed(1)(t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+lean = "Rule30UOR.Antidiagonal.exposed_one"
+since = "2026-11-01"
+relation = ["exposed(1)"]
+window = 256
+kappa = "sha256:f24e181da7d6ef68dd5da97ec363f9581adf55dbedf130d9e0d5fbae0b9862aa"
+
+[[claim]]
+id = "observed-45032769ad68"
+status = "observed"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR center(t) XOR low-diagonal(t) XOR interior-three-diagonal(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["one", "time-parity", "center", "low-diagonal", "interior-three-diagonal"]
+window = 256
+kappa = "sha256:45032769ad68d40f67c00a1117d2a64a444440be3c92bcf2031bdb8b19740451"
+
+[[claim]]
+id = "observed-7d29142e6567"
+status = "observed"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR center(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR interior-eight-diagonal(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["one", "time-parity", "center", "low-diagonal", "left-band-diagonal", "interior-eight-diagonal"]
+window = 256
+kappa = "sha256:7d29142e656716dcc38bb3cc1e123b4c371113c9a942aeea585c8860fa6ce27c"
+
+[[claim]]
+id = "observed-52252f3e729b"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(3)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag3_succ_eq_timeParity_xor_rdiag3"
+since = "2026-11-01"
+relation = ["time-parity", "rdiag(3)", "shift:rdiag(3)"]
+window = 256
+kappa = "sha256:52252f3e729bf5e51a999db90fc4a3e26e19461036b0faeae7a34309dfd9091c"
+
+[[claim]]
+id = "observed-c5248659968b"
+status = "proved"
+statement = "On every t < 256: rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(2)(t) XOR rdiag(4)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag4_succ_eq_rdiag3_xor_rdiag4_xor_exposed2"
+since = "2026-11-01"
+relation = ["rdiag(3)", "rdiag(4)", "exposed(2)", "shift:rdiag(4)"]
+window = 256
+kappa = "sha256:c5248659968bc99b66119fe022486256bfe9995e411a20fff75d1226077dca41"
+
+[[claim]]
+id = "observed-1d6ae1b61762"
+status = "proved"
+statement = "On every t < 256: rdiag(4)(t) XOR rdiag(5)(t) XOR exposed(3)(t) XOR rdiag(5)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag5_succ_eq_rdiag4_xor_rdiag5_xor_exposed3"
+since = "2026-11-01"
+relation = ["rdiag(4)", "rdiag(5)", "exposed(3)", "shift:rdiag(5)"]
+window = 256
+kappa = "sha256:1d6ae1b61762514b7c4dca606c2e46ebea5bf9d600a3d3b158a0aff82d115305"
+
+[[claim]]
+id = "observed-6d4a2a5763ef"
+status = "proved"
+statement = "On every t < 256: rdiag(5)(t) XOR rdiag(6)(t) XOR exposed(4)(t) XOR rdiag(6)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag6_succ_eq_rdiag5_xor_rdiag6_xor_exposed4"
+since = "2026-11-01"
+relation = ["rdiag(5)", "rdiag(6)", "exposed(4)", "shift:rdiag(6)"]
+window = 256
+kappa = "sha256:6d4a2a5763ef330dfc7e92346138b0f160fa792de6136f71c6d46cb25d18cddc"
+
+[[claim]]
+id = "observed-4bc1c65e35c9"
+status = "proved"
+statement = "On every t < 256: rdiag(6)(t) XOR rdiag(7)(t) XOR exposed(5)(t) XOR rdiag(7)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag7_succ_eq_rdiag6_xor_rdiag7_xor_exposed5"
+since = "2026-11-01"
+relation = ["rdiag(6)", "rdiag(7)", "exposed(5)", "shift:rdiag(7)"]
+window = 256
+kappa = "sha256:4bc1c65e35c9071edaaf412e9f97293d326e3051defa5a6d76a7b602ba7ef3f9"
+
+[[claim]]
+id = "observed-799d502f876a"
+status = "proved"
+statement = "On every t < 256: rdiag(7)(t) XOR rdiag(8)(t) XOR exposed(6)(t) XOR rdiag(8)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag8_succ_eq_rdiag7_xor_rdiag8_xor_exposed6"
+since = "2026-11-01"
+relation = ["rdiag(7)", "rdiag(8)", "exposed(6)", "shift:rdiag(8)"]
+window = 256
+kappa = "sha256:799d502f876a0423299ccd9af22c1109ec21452bd599b5b2817eee070a04a75f"
+
+[[claim]]
+id = "observed-53377bf71f92"
+status = "proved"
+statement = "On every t < 256: rdiag(8)(t) XOR rdiag(9)(t) XOR exposed(7)(t) XOR rdiag(9)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag9_succ_eq_rdiag8_xor_rdiag9_xor_exposed7"
+since = "2026-11-01"
+relation = ["rdiag(8)", "rdiag(9)", "exposed(7)", "shift:rdiag(9)"]
+window = 256
+kappa = "sha256:53377bf71f927ff20ec27c56305f022343b25ab5f9b6174f662780bbd00c0adc"
+
+[[claim]]
+id = "observed-9e693fea8ab9"
+status = "proved"
+statement = "On every t < 256: rdiag(9)(t) XOR rdiag(10)(t) XOR exposed(8)(t) XOR rdiag(10)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag10_succ_eq_rdiag9_xor_rdiag10_xor_exposed8"
+since = "2026-11-01"
+relation = ["rdiag(9)", "rdiag(10)", "exposed(8)", "shift:rdiag(10)"]
+window = 256
+kappa = "sha256:9e693fea8ab979e94642f59bbfc24222ef52967fa0e47e9f68b530a1a716c0ec"
+
+[[claim]]
+id = "observed-271e1f55d5fd"
+status = "proved"
+statement = "On every t < 256: one(t) XOR ldiag(1)(t+1) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+lean = "Rule30UOR.Core.ldiag_one"
+since = "2026-11-01"
+relation = ["one", "shift:ldiag(1)"]
+window = 256
+kappa = "sha256:271e1f55d5fd257cb6f6785c48645670a9eab60b7491abd51dc962d85efe4f9d"
+
+[[claim]]
+id = "observed-a19571110f01"
+status = "proved"
+statement = "On every t < 256: one(t) XOR ldiag(1)(t) XOR ldiag(2)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag2_succ_eq_not_ldiag1"
+since = "2026-11-01"
+relation = ["one", "ldiag(1)", "shift:ldiag(2)"]
+window = 256
+kappa = "sha256:a19571110f015fdc33c8a18d705699668ec56a29fb56874a535257b864441f52"
+
+[[claim]]
+id = "observed-92e58d165f11"
+status = "observed"
+statement = "On every t < 256: one(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(9)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["one", "ruler-background", "ldiag(1)", "ldiag(9)", "ldiag(10)", "ldiag(12)", "exposed(2)", "low-diagonal", "left-band-diagonal", "shift:ldiag(9)"]
+window = 256
+kappa = "sha256:92e58d165f111307e5e2ff8bc52da31b9f5d2726544c4a7c38474cba32f04f5d"
+
+[[claim]]
+id = "observed-70733dca8e2b"
+status = "proved"
+statement = "On every t < 256: rdiag(3)(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(9)(t) XOR ldiag(10)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag10_succ_eq_rdiag3_xor_ldiag1_xor_ldiag2_xor_ldiag9"
+since = "2026-11-01"
+relation = ["rdiag(3)", "ldiag(1)", "ldiag(2)", "ldiag(9)", "shift:ldiag(10)"]
+window = 256
+kappa = "sha256:70733dca8e2bfad97dca00f5a460615043966fe1e2d2503b2eab107eabdfad86"
+
+[[claim]]
+id = "observed-88dd567b2ddf"
+status = "proved"
+statement = "On every t < 256: ldiag(10)(t) XOR ldiag(12)(t) XOR ldiag(12)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag12_succ_eq_ldiag10_xor_ldiag12"
+since = "2026-11-01"
+relation = ["ldiag(10)", "ldiag(12)", "shift:ldiag(12)"]
+window = 256
+kappa = "sha256:88dd567b2ddf7ecd94a2d5f730a4675d857b6644a691c49b9fdd254ab58866fa"
+
+[[claim]]
+id = "observed-0b9eefb1e9da"
+status = "proved"
+statement = "On every t < 256: one(t) XOR rdiag(3)(t) XOR exposed(2)(t) XOR exposed(2)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.exposed2_succ_eq_not_rdiag3_xor_exposed2"
+since = "2026-11-01"
+relation = ["one", "rdiag(3)", "exposed(2)", "shift:exposed(2)"]
+window = 256
+kappa = "sha256:0b9eefb1e9da93383683efb39c6f944bff2652ecd02a9dc48835a2802a1af40a"
+
+[[claim]]
+id = "observed-3f91af16052a"
+status = "proved"
+statement = "On every t < 256: rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(3)(t) XOR exposed(4)(t) XOR exposed(3)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.exposed3_succ_eq_rdiag3_xor_rdiag4_xor_exposed3_xor_exposed4"
+since = "2026-11-01"
+relation = ["rdiag(3)", "rdiag(4)", "exposed(3)", "exposed(4)", "shift:exposed(3)"]
+window = 256
+kappa = "sha256:3f91af16052a66f85ef22bdfb2026cc9e0d9b96530e57b6e4a0cb6e7d385acc7"
+
+[[claim]]
+id = "observed-7ddfd59fd9e7"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(4)(t) XOR exposed(4)(t) XOR exposed(4)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.exposed4_succ_eq_timeParity_xor_rdiag4_xor_exposed4"
+since = "2026-11-01"
+relation = ["time-parity", "rdiag(4)", "exposed(4)", "shift:exposed(4)"]
+window = 256
+kappa = "sha256:7ddfd59fd9e7ad3db842739e71f4f962eb2918adf2f7451e75b2ed54677a3be9"
+
+[[claim]]
+id = "observed-e8a1ed6dc127"
+status = "observed"
+statement = "On every t < 256: ruler-background(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR left-band-diagonal(t) XOR ruler-background(t+1) XOR low-diagonal(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["ruler-background", "ldiag(1)", "ldiag(2)", "left-band-diagonal", "shift:ruler-background", "shift:low-diagonal"]
+window = 256
+kappa = "sha256:e8a1ed6dc12788c2e3ce1eb3a5c958204b4091a905c8c34cea1e2cf6bb5d9e6c"
+
+[[claim]]
+id = "observed-b64d3d0ba07b"
+status = "observed"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR left-band-diagonal(t) XOR left-band-diagonal(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["one", "time-parity", "ruler-background", "left-band-diagonal", "shift:left-band-diagonal"]
+window = 256
+kappa = "sha256:b64d3d0ba07b4fcc2acc9e41173e6c6918dbe4410014e61aa722386380d6a298"
+
+[[claim]]
+id = "observed-3d3fa55c7c91"
+status = "observed"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR low-diagonal(t) XOR ruler-background(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["one", "time-parity", "ldiag(1)", "ldiag(2)", "low-diagonal", "even:ruler-background"]
+window = 256
+kappa = "sha256:3d3fa55c7c9177d29e779d7afbf7f53030ab9a279975a51efdf5bfa2e5461f37"
+
+[[claim]]
+id = "observed-1c2fd8e22fb8"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag3_even_eq_timeParity"
+since = "2026-11-01"
+relation = ["time-parity", "even:rdiag(3)"]
+window = 256
+kappa = "sha256:1c2fd8e22fb8d682625e409ddedf9fafd6c96c9a559a83abec06645e638146cd"
+
+[[claim]]
+id = "observed-26a63fc44dc7"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(4)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag4_even_eq_timeParity_xor_rdiag3"
+since = "2026-11-01"
+relation = ["time-parity", "rdiag(3)", "even:rdiag(4)"]
+window = 256
+kappa = "sha256:26a63fc44dc7b697e3c445f1eb774d00c633b23ab3d5326515dbb2879ba874af"
+
+[[claim]]
+id = "observed-884d0d5c6447"
+status = "proved"
+statement = "On every t < 256: rdiag(5)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag5_even_eq_false"
+since = "2026-11-01"
+relation = ["even:rdiag(5)"]
+window = 256
+kappa = "sha256:884d0d5c6447f61db11bf0e13587d710140bc3a91557952c1902aa0f4d707739"
+
+[[claim]]
+id = "observed-0fe84a65b129"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(2)(t) XOR rdiag(6)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.rdiag6_even_eq_timeParity_xor_rdiag3_xor_rdiag4_xor_exposed2"
+since = "2026-11-01"
+relation = ["time-parity", "rdiag(3)", "rdiag(4)", "exposed(2)", "even:rdiag(6)"]
+window = 256
+kappa = "sha256:0fe84a65b129f4a5dd4ce775441b5ac00756b99f3fecb3485287d027cbb987a5"
+
+[[claim]]
+id = "observed-f42bb48334ad"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(4)(t) XOR rdiag(5)(t) XOR rdiag(6)(t) XOR exposed(2)(t) XOR exposed(3)(t) XOR rdiag(7)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.relation_f42bb48334ad"
+since = "2026-11-01"
+relation = ["time-parity", "rdiag(4)", "rdiag(5)", "rdiag(6)", "exposed(2)", "exposed(3)", "even:rdiag(7)"]
+window = 256
+kappa = "sha256:f42bb48334ad1419defa449372f5b4864e9de8964f41f101a4174658ffecc71a"
+
+[[claim]]
+id = "observed-a3d70a5ffb2c"
+status = "proved"
+statement = "On every t < 256: ldiag(1)(t) XOR ldiag(1)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag1_even_eq_ldiag1"
+since = "2026-11-01"
+relation = ["ldiag(1)", "even:ldiag(1)"]
+window = 256
+kappa = "sha256:a3d70a5ffb2ca5083432d54f5eeabdd031465c455ccb4cb0711ab55c7aa99aaa"
+
+[[claim]]
+id = "observed-a2ed46072266"
+status = "proved"
+statement = "On every t < 256: ldiag(2)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag2_even_eq_false"
+since = "2026-11-01"
+relation = ["even:ldiag(2)"]
+window = 256
+kappa = "sha256:a2ed460722666f7144c212833864155cbc4ef1f749e5ac17963d3fa82c22aa02"
+
+[[claim]]
+id = "observed-b75a73f46242"
+status = "observed"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(9)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["one", "time-parity", "ruler-background", "ldiag(1)", "low-diagonal", "left-band-diagonal", "even:ldiag(9)"]
+window = 256
+kappa = "sha256:b75a73f46242f8b15f9e5a8945db0ed93b5b9c27d0c6e11124be61a2cef4b441"
+
+[[claim]]
+id = "observed-409a7755bc68"
+status = "observed"
+statement = "On every t < 256: one(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(10)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["one", "ruler-background", "ldiag(1)", "ldiag(2)", "low-diagonal", "left-band-diagonal", "even:ldiag(10)"]
+window = 256
+kappa = "sha256:409a7755bc68d2dc89f53187a0220eb88a77541243929d7bfd112277178aa122"
+
+[[claim]]
+id = "observed-9b630bd3f3ff"
+status = "proved"
+statement = "On every t < 256: ldiag(2)(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR ldiag(11)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.relation_9b630bd3f3ff"
+since = "2026-11-01"
+relation = ["ldiag(2)", "ldiag(9)", "ldiag(10)", "ldiag(12)", "exposed(2)", "even:ldiag(11)"]
+window = 256
+kappa = "sha256:9b630bd3f3ff4b9b66a03d205766a3d1f39652cdfee052e7841372762a10e6f7"
+
+[[claim]]
+id = "observed-8520f2c1eaae"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(12)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.ldiag12_even_eq_timeParity_xor_ldiag2"
+since = "2026-11-01"
+relation = ["time-parity", "ldiag(2)", "even:ldiag(12)"]
+window = 256
+kappa = "sha256:8520f2c1eaae602814ab81829021531c4c09144e9f6e0fff666b65eb8646eb5c"
+
+[[claim]]
+id = "observed-a4cdb1846e35"
+status = "proved"
+statement = "On every t < 256: exposed(2)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.exposed2_even_eq_false"
+since = "2026-11-01"
+relation = ["even:exposed(2)"]
+window = 256
+kappa = "sha256:a4cdb1846e35c6d9fc55a1fecf8eb4d91c6b25f79f6d8eebd5fb9fbc0c43089d"
+
+[[claim]]
+id = "observed-e4f6d869bf11"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR exposed(2)(t) XOR exposed(3)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.exposed3_even_eq_timeParity_xor_exposed2"
+since = "2026-11-01"
+relation = ["time-parity", "exposed(2)", "even:exposed(3)"]
+window = 256
+kappa = "sha256:e4f6d869bf115ff1e85bc55c90fee1cf31ab89737407d9e2f35a9be4e4de48c2"
+
+[[claim]]
+id = "observed-c85f3baf6065"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR exposed(4)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.exposed4_even_eq_timeParity_xor_rdiag3"
+since = "2026-11-01"
+relation = ["time-parity", "rdiag(3)", "even:exposed(4)"]
+window = 256
+kappa = "sha256:c85f3baf606542a32a84e5c409274fa2feab12a9445b0a258e12ed9a89cfe67e"
+
+[[claim]]
+id = "observed-cb5d01bea1fc"
+status = "proved"
+statement = "On every t < 256: exposed(5)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.exposed5_even_eq_false"
+since = "2026-11-01"
+relation = ["even:exposed(5)"]
+window = 256
+kappa = "sha256:cb5d01bea1fcfa48d05542f56000bc0d0e71c19936e25e9eb57b7ffbae2fcb99"
+
+[[claim]]
+id = "observed-1de4355b13b0"
+status = "proved"
+statement = "On every t < 256: rdiag(6)(t) XOR exposed(4)(t) XOR exposed(5)(t) XOR exposed(5)(t+1) XOR rdiag(8)(2t) XOR exposed(6)(2t) XOR exposed(7)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.relation_1de4355b13b0"
+since = "2026-11-01"
+relation = ["rdiag(6)", "exposed(4)", "exposed(5)", "shift:exposed(5)", "even:rdiag(8)", "even:exposed(6)", "even:exposed(7)"]
+window = 256
+kappa = "sha256:1de4355b13b068731c1dfe699cbc459d92fc11f46a33d8b03d169a102991dcae"
+
+[[claim]]
+id = "observed-f71048479210"
+status = "observed"
+statement = "On every t < 256: ldiag(1)(t) XOR low-diagonal(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["ldiag(1)", "even:low-diagonal"]
+window = 256
+kappa = "sha256:f71048479210320604c4ce84b6682bcb6fd7535476bb4f95427bd294d5141560"
+
+[[claim]]
+id = "observed-843066692439"
+status = "observed"
+statement = "On every t < 256: time-parity(t) XOR low-diagonal(t) XOR left-band-diagonal(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["time-parity", "low-diagonal", "even:left-band-diagonal"]
+window = 256
+kappa = "sha256:843066692439dec5cd1c0601334e5713686b9083ae1fd6794c964492eaaafa7c"
+
+[[claim]]
+id = "observed-9a440c6ece8c"
+status = "observed"
+statement = "On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR left-band-diagonal(t) XOR ruler-background(t+1) XOR ruler-background(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+since = "2026-11-01"
+relation = ["one", "time-parity", "ruler-background", "left-band-diagonal", "shift:ruler-background", "odd:ruler-background"]
+window = 256
+kappa = "sha256:9a440c6ece8c81ea6e5971a8699cbeb5f07c5cc540cbbc3c225a6c1b5429763f"
+
+[[claim]]
+id = "observed-084ca6f82327"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR ldiag(11)(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.relation_084ca6f82327"
+since = "2026-11-01"
+relation = ["time-parity", "ldiag(9)", "ldiag(10)", "ldiag(12)", "exposed(2)", "odd:ldiag(11)"]
+window = 256
+kappa = "sha256:084ca6f823272addbf4cfc09e4d12a5c25b2d9ae7526c91c73a56d310c5c4255"
+
+[[claim]]
+id = "observed-b8014c039b17"
+status = "proved"
+statement = "On every t < 256: time-parity(t) XOR rdiag(5)(t) XOR exposed(2)(t) XOR exposed(3)(t) XOR exposed(5)(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction)."
+lean = "Rule30UOR.Deduced.exposed5_odd_eq_timeParity_xor_rdiag5_xor_exposed2_xor_exposed3"
+since = "2026-11-01"
+relation = ["time-parity", "rdiag(5)", "exposed(2)", "exposed(3)", "odd:exposed(5)"]
+window = 256
+kappa = "sha256:b8014c039b17cd7f151442055ec030c4fc004fabbe74f5aa6435b707e6b27183"

@@ -145,6 +145,42 @@ produced_by = "discover"
 artifact = "--json"
 
 [[contract]]
+schema = "r30/deduce-result/1"
+path = "schemas/deduce-result.schema.json"
+media_type = "application/vnd.r30.deduce-result.v1+json"
+identity = "sha256-canonical-json"
+maximum_bytes = 1048576
+maximum_items = 4096
+extension_policy = "closed"
+compatibility = "exact-major"
+produced_by = "deduce"
+artifact = "--json"
+
+[[contract]]
+schema = "r30/engine-tick-result/1"
+path = "schemas/engine-tick-result.schema.json"
+media_type = "application/vnd.r30.engine-tick-result.v1+json"
+identity = "sha256-canonical-json"
+maximum_bytes = 1048576
+maximum_items = 4096
+extension_policy = "closed"
+compatibility = "exact-major"
+produced_by = "engine_tick"
+artifact = "--json"
+
+[[contract]]
+schema = "r30/engine-status-result/1"
+path = "schemas/engine-status-result.schema.json"
+media_type = "application/vnd.r30.engine-status-result.v1+json"
+identity = "sha256-canonical-json"
+maximum_bytes = 1048576
+maximum_items = 4096
+extension_policy = "closed"
+compatibility = "exact-major"
+produced_by = "engine_status"
+artifact = "--json"
+
+[[contract]]
 schema = "r30/audit-result/1"
 path = "schemas/audit-result.schema.json"
 media_type = "application/vnd.r30.audit-result.v1+json"

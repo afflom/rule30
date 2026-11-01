@@ -64,7 +64,9 @@ def read_entry(path):
         return None
     if not isinstance(row, dict) or not isinstance(row.get("kappa"), str):
         return None
-    return {key: [tuple(x) for x in value] if isinstance(value, list) else value for key, value in row.items()}
+    # rows of lists (declarations, statements) become tuples; lists of names (reserved) stay strings
+    return {key: [tuple(x) if isinstance(x, list) else x for x in value] if isinstance(value, list) else value
+            for key, value in row.items()}
 
 
 def memo_labels(core, modules, memo, exporter=None, read_only=()):
@@ -105,60 +107,18 @@ def working_memo(core):
     return core.parent / ".r30" / "kappa", [default_memo(core)]
 
 
-AUXILIARY_PART = re.compile(r"^(_.*|proof_\d+|match_\d+)$")
-
-
-def in_library(name):
-    return name.startswith("Rule30UOR.") or name.startswith("_private.Rule30UOR.")
-
-
-def authored(name, kinds=None, reserved=()):
-    """A theorem someone wrote, not one the elaborator generated. Generated: a name Lean reserves
-    (marked by the exporter from `isReservedName`, exact: equation lemmas, functional induction,
-    injectivity, congruence; Lean refuses anyone else's declaration of such a name), or a name
-    with an auxiliary component (`_proof_1`, `_simp_1_2`, `_auxLemma`, `_unary`, `proof_N`,
-    `match_N`) directly under a declaration: one labeled (`kinds`, looked up by the full name or,
-    under a private prefix, by the user-facing name) or one outside the research library, whose
-    kinds are not labeled. Private theorems are authored: a private lemma proved twice is
-    redundant work too."""
-    if name in reserved:
-        return False
-    kinds = kinds or {}
-    parts = name.split(".")
-    first = 0
-    if parts[0] == "_private":
-        first = next((i + 1 for i in range(1, len(parts)) if parts[i].isdigit()), len(parts))
-    if first >= len(parts):
-        return False
-    for i in range(first + 1, len(parts)):
-        if not AUXILIARY_PART.match(parts[i]):
-            continue
-        parent, user_parent = ".".join(parts[:i]), ".".join(parts[first:i])
-        if parent in kinds or user_parent in kinds or not in_library(user_parent):
-            return False
-    return True
-
-
-def library_kinds(labels):
-    """The kinds of every labeled declaration (the parents `authored` looks up)."""
-    kinds = {}
-    for row in labels.values():
-        kinds.update(row.get("kinds", {}))
-    return kinds
-
-
-def duplicates(labels, kinds=None):
+def duplicates(labels):
     """Theorems that state the same thing: groups of (module, name) sharing a statement κ, across
-    the given modules. A group of two or more is redundant work: one proof suffices. `kinds`
-    (default: those of `labels`) should cover the whole library when only some modules are grouped."""
-    kinds = library_kinds(labels) if kinds is None else kinds
+    the given modules. Only authored theorems count: the exporter marks a theorem authored when
+    Lean recorded a declaration range for it (it was written in a source file), so a lemma Lean
+    generated (equation lemmas, functional induction, auxiliary proofs) never counts and a theorem
+    someone wrote always does, whatever its name. A group of two or more is redundant work."""
     groups = {}
     for module, row in labels.items():
-        reserved = set(row.get("reserved", ()))
+        authored = set(row.get("authored", ()))
         for name, k, *_ in row.get("statements", []):
-            if not authored(name, kinds, reserved):
-                continue
-            groups.setdefault(k, []).append((module, name))
+            if name in authored:
+                groups.setdefault(k, []).append((module, name))
     return {k: sorted(v) for k, v in groups.items() if len(v) > 1}
 
 

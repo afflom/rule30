@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag5-even-eq-false"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (nat 5) (app (const lexlean.std.nat::mul) (nat 2) (local t))) (const lexlean.std.bool::false)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Deduced"
+name = "Rule30UOR.Deduced.rdiag5_even_eq_false"
+
+[[form]]
+id = "rdiag5-even-eq-false"
+channel = "math"
+surface = "rdiag5eveneqfalse"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiag5eveneqfalse) (paren (seq (slot 0))))"

@@ -7,37 +7,37 @@ vantages = ["regular-side", "chaotic-side", "kernel"]
 
 [[quadruple]]
 vantage = "prize-review"
-real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice"]
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice", "observed-5053d66f38fb", "observed-c0f330524114", "observed-f8cfecd08d5a", "observed-9f735af84755", "observed-d5c2175eadce", "observed-1dba16bb3a91", "observed-c7dab95c2581", "observed-c9e9008d30ed", "observed-f24e181da7d6", "observed-52252f3e729b", "observed-c5248659968b", "observed-1d6ae1b61762", "observed-6d4a2a5763ef", "observed-4bc1c65e35c9", "observed-799d502f876a", "observed-53377bf71f92", "observed-9e693fea8ab9", "observed-271e1f55d5fd", "observed-a19571110f01", "observed-70733dca8e2b", "observed-88dd567b2ddf", "observed-0b9eefb1e9da", "observed-3f91af16052a", "observed-7ddfd59fd9e7", "observed-1c2fd8e22fb8", "observed-26a63fc44dc7", "observed-884d0d5c6447", "observed-0fe84a65b129", "observed-f42bb48334ad", "observed-a3d70a5ffb2c", "observed-a2ed46072266", "observed-9b630bd3f3ff", "observed-8520f2c1eaae", "observed-a4cdb1846e35", "observed-e4f6d869bf11", "observed-c85f3baf6065", "observed-cb5d01bea1fc", "observed-1de4355b13b0", "observed-084ca6f82327", "observed-b8014c039b17"]
 sensual_qualities = ["reduction-tree", "open-leaves", "viz-tower", "register", "obligation", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic", "black-time-consistency"]
 
 [[quadruple]]
 vantage = "research-session"
-real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice"]
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice", "observed-5053d66f38fb", "observed-c0f330524114", "observed-f8cfecd08d5a", "observed-9f735af84755", "observed-d5c2175eadce", "observed-1dba16bb3a91", "observed-c7dab95c2581", "observed-c9e9008d30ed", "observed-f24e181da7d6", "observed-52252f3e729b", "observed-c5248659968b", "observed-1d6ae1b61762", "observed-6d4a2a5763ef", "observed-4bc1c65e35c9", "observed-799d502f876a", "observed-53377bf71f92", "observed-9e693fea8ab9", "observed-271e1f55d5fd", "observed-a19571110f01", "observed-70733dca8e2b", "observed-88dd567b2ddf", "observed-0b9eefb1e9da", "observed-3f91af16052a", "observed-7ddfd59fd9e7", "observed-1c2fd8e22fb8", "observed-26a63fc44dc7", "observed-884d0d5c6447", "observed-0fe84a65b129", "observed-f42bb48334ad", "observed-a3d70a5ffb2c", "observed-a2ed46072266", "observed-9b630bd3f3ff", "observed-8520f2c1eaae", "observed-a4cdb1846e35", "observed-e4f6d869bf11", "observed-c85f3baf6065", "observed-cb5d01bea1fc", "observed-1de4355b13b0", "observed-084ca6f82327", "observed-b8014c039b17"]
 sensual_qualities = ["open-leaves", "interface-sheets", "quality", "register", "obligation", "refutations", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic", "black-time-consistency"]
 
 [[quadruple]]
 vantage = "reading"
-real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice"]
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice", "observed-5053d66f38fb", "observed-c0f330524114", "observed-f8cfecd08d5a", "observed-9f735af84755", "observed-d5c2175eadce", "observed-1dba16bb3a91", "observed-c7dab95c2581", "observed-c9e9008d30ed", "observed-f24e181da7d6", "observed-52252f3e729b", "observed-c5248659968b", "observed-1d6ae1b61762", "observed-6d4a2a5763ef", "observed-4bc1c65e35c9", "observed-799d502f876a", "observed-53377bf71f92", "observed-9e693fea8ab9", "observed-271e1f55d5fd", "observed-a19571110f01", "observed-70733dca8e2b", "observed-88dd567b2ddf", "observed-0b9eefb1e9da", "observed-3f91af16052a", "observed-7ddfd59fd9e7", "observed-1c2fd8e22fb8", "observed-26a63fc44dc7", "observed-884d0d5c6447", "observed-0fe84a65b129", "observed-f42bb48334ad", "observed-a3d70a5ffb2c", "observed-a2ed46072266", "observed-9b630bd3f3ff", "observed-8520f2c1eaae", "observed-a4cdb1846e35", "observed-e4f6d869bf11", "observed-c85f3baf6065", "observed-cb5d01bea1fc", "observed-1de4355b13b0", "observed-084ca6f82327", "observed-b8014c039b17"]
 sensual_qualities = ["reduction-tree", "sitemap", "interface-sheets", "viz-triangle", "viz-tower", "register", "obligation", "standards", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic", "black-time-consistency"]
 
 [[quadruple]]
 vantage = "stdlib-feedback"
-real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice"]
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice", "observed-5053d66f38fb", "observed-c0f330524114", "observed-f8cfecd08d5a", "observed-9f735af84755", "observed-d5c2175eadce", "observed-1dba16bb3a91", "observed-c7dab95c2581", "observed-c9e9008d30ed", "observed-f24e181da7d6", "observed-52252f3e729b", "observed-c5248659968b", "observed-1d6ae1b61762", "observed-6d4a2a5763ef", "observed-4bc1c65e35c9", "observed-799d502f876a", "observed-53377bf71f92", "observed-9e693fea8ab9", "observed-271e1f55d5fd", "observed-a19571110f01", "observed-70733dca8e2b", "observed-88dd567b2ddf", "observed-0b9eefb1e9da", "observed-3f91af16052a", "observed-7ddfd59fd9e7", "observed-1c2fd8e22fb8", "observed-26a63fc44dc7", "observed-884d0d5c6447", "observed-0fe84a65b129", "observed-f42bb48334ad", "observed-a3d70a5ffb2c", "observed-a2ed46072266", "observed-9b630bd3f3ff", "observed-8520f2c1eaae", "observed-a4cdb1846e35", "observed-e4f6d869bf11", "observed-c85f3baf6065", "observed-cb5d01bea1fc", "observed-1de4355b13b0", "observed-084ca6f82327", "observed-b8014c039b17"]
 sensual_qualities = ["modules", "model", "quality", "design", "register", "obligation", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic", "black-time-consistency"]
 
 [[quadruple]]
 vantage = "mathematics"
-real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice"]
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice", "observed-5053d66f38fb", "observed-c0f330524114", "observed-f8cfecd08d5a", "observed-9f735af84755", "observed-d5c2175eadce", "observed-1dba16bb3a91", "observed-c7dab95c2581", "observed-c9e9008d30ed", "observed-f24e181da7d6", "observed-52252f3e729b", "observed-c5248659968b", "observed-1d6ae1b61762", "observed-6d4a2a5763ef", "observed-4bc1c65e35c9", "observed-799d502f876a", "observed-53377bf71f92", "observed-9e693fea8ab9", "observed-271e1f55d5fd", "observed-a19571110f01", "observed-70733dca8e2b", "observed-88dd567b2ddf", "observed-0b9eefb1e9da", "observed-3f91af16052a", "observed-7ddfd59fd9e7", "observed-1c2fd8e22fb8", "observed-26a63fc44dc7", "observed-884d0d5c6447", "observed-0fe84a65b129", "observed-f42bb48334ad", "observed-a3d70a5ffb2c", "observed-a2ed46072266", "observed-9b630bd3f3ff", "observed-8520f2c1eaae", "observed-a4cdb1846e35", "observed-e4f6d869bf11", "observed-c85f3baf6065", "observed-cb5d01bea1fc", "observed-1de4355b13b0", "observed-084ca6f82327", "observed-b8014c039b17"]
 sensual_qualities = ["paper", "reduction-tree", "viz-tower", "viz-ledger", "viz-defects", "viz-rays", "viz-dyadic", "register", "obligation", "refutations", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic", "black-time-consistency"]
 
 [[quadruple]]
 vantage = "first-visit"
-real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice"]
+real_qualities = ["coupling-law", "recurrent-central-collision", "horizon-certificate", "left-defect-sourcing", "ledger-diagonal", "periodic-finite-kernel", "kernel-self-similarity", "dilation-reduction", "base-generic-reduction", "kappa-collapse", "dyadic-response-reduction", "all-rules-facet", "edge-interior-split", "edge-diagonal-formula", "interior-diagonal-formula", "edge-parity", "interior-aperiodicity", "interior-kernel-reduction", "characteristic-one-facet", "three-diagonal-band", "stable-kernel", "dyadic-renormalization", "scale-free-rows", "left-band", "kernel-law", "residue-dichotomy", "second-table", "antidiagonal", "diagonal-halving", "mask-transport", "lucas-frame", "left-light-cone", "left-tower", "jen-law", "increment-law", "duhamel-and-tails", "single-seed-mask", "isolated-black-slice", "observed-5053d66f38fb", "observed-c0f330524114", "observed-f8cfecd08d5a", "observed-9f735af84755", "observed-d5c2175eadce", "observed-1dba16bb3a91", "observed-c7dab95c2581", "observed-c9e9008d30ed", "observed-f24e181da7d6", "observed-52252f3e729b", "observed-c5248659968b", "observed-1d6ae1b61762", "observed-6d4a2a5763ef", "observed-4bc1c65e35c9", "observed-799d502f876a", "observed-53377bf71f92", "observed-9e693fea8ab9", "observed-271e1f55d5fd", "observed-a19571110f01", "observed-70733dca8e2b", "observed-88dd567b2ddf", "observed-0b9eefb1e9da", "observed-3f91af16052a", "observed-7ddfd59fd9e7", "observed-1c2fd8e22fb8", "observed-26a63fc44dc7", "observed-884d0d5c6447", "observed-0fe84a65b129", "observed-f42bb48334ad", "observed-a3d70a5ffb2c", "observed-a2ed46072266", "observed-9b630bd3f3ff", "observed-8520f2c1eaae", "observed-a4cdb1846e35", "observed-e4f6d869bf11", "observed-c85f3baf6065", "observed-cb5d01bea1fc", "observed-1de4355b13b0", "observed-084ca6f82327", "observed-b8014c039b17"]
 sensual_qualities = ["picture", "explainer", "reduction-tree", "viz-triangle", "viz-ledger", "register", "obligation", "verify"]
 withdrawn = ["problem1", "aperiodic-compensation", "horizon-criterion", "center-infinite-kernel", "no-dyadic-self-similarity", "dyadic-column-aperiodic", "some-base-dilation-aperiodic", "dyadic-response-aperiodic", "black-time-consistency"]
 
@@ -194,6 +194,166 @@ vantage = "prize-review"
 claim = "isolated-black-slice"
 
 [[overlap]]
+vantage = "prize-review"
+claim = "observed-5053d66f38fb"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-c0f330524114"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-f8cfecd08d5a"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-9f735af84755"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-d5c2175eadce"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-1dba16bb3a91"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-c7dab95c2581"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-c9e9008d30ed"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-f24e181da7d6"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-52252f3e729b"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-c5248659968b"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-1d6ae1b61762"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-6d4a2a5763ef"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-4bc1c65e35c9"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-799d502f876a"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-53377bf71f92"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-9e693fea8ab9"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-271e1f55d5fd"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-a19571110f01"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-70733dca8e2b"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-88dd567b2ddf"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-0b9eefb1e9da"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-3f91af16052a"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-7ddfd59fd9e7"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-1c2fd8e22fb8"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-26a63fc44dc7"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-884d0d5c6447"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-0fe84a65b129"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-f42bb48334ad"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-a3d70a5ffb2c"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-a2ed46072266"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-9b630bd3f3ff"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-8520f2c1eaae"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-a4cdb1846e35"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-e4f6d869bf11"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-c85f3baf6065"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-cb5d01bea1fc"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-1de4355b13b0"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-084ca6f82327"
+
+[[overlap]]
+vantage = "prize-review"
+claim = "observed-b8014c039b17"
+
+[[overlap]]
 vantage = "research-session"
 claim = "coupling-law"
 
@@ -346,6 +506,166 @@ vantage = "research-session"
 claim = "isolated-black-slice"
 
 [[overlap]]
+vantage = "research-session"
+claim = "observed-5053d66f38fb"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-c0f330524114"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-f8cfecd08d5a"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-9f735af84755"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-d5c2175eadce"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-1dba16bb3a91"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-c7dab95c2581"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-c9e9008d30ed"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-f24e181da7d6"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-52252f3e729b"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-c5248659968b"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-1d6ae1b61762"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-6d4a2a5763ef"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-4bc1c65e35c9"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-799d502f876a"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-53377bf71f92"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-9e693fea8ab9"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-271e1f55d5fd"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-a19571110f01"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-70733dca8e2b"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-88dd567b2ddf"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-0b9eefb1e9da"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-3f91af16052a"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-7ddfd59fd9e7"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-1c2fd8e22fb8"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-26a63fc44dc7"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-884d0d5c6447"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-0fe84a65b129"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-f42bb48334ad"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-a3d70a5ffb2c"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-a2ed46072266"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-9b630bd3f3ff"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-8520f2c1eaae"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-a4cdb1846e35"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-e4f6d869bf11"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-c85f3baf6065"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-cb5d01bea1fc"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-1de4355b13b0"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-084ca6f82327"
+
+[[overlap]]
+vantage = "research-session"
+claim = "observed-b8014c039b17"
+
+[[overlap]]
 vantage = "reading"
 claim = "coupling-law"
 
@@ -498,6 +818,166 @@ vantage = "reading"
 claim = "isolated-black-slice"
 
 [[overlap]]
+vantage = "reading"
+claim = "observed-5053d66f38fb"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-c0f330524114"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-f8cfecd08d5a"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-9f735af84755"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-d5c2175eadce"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-1dba16bb3a91"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-c7dab95c2581"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-c9e9008d30ed"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-f24e181da7d6"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-52252f3e729b"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-c5248659968b"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-1d6ae1b61762"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-6d4a2a5763ef"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-4bc1c65e35c9"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-799d502f876a"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-53377bf71f92"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-9e693fea8ab9"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-271e1f55d5fd"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-a19571110f01"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-70733dca8e2b"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-88dd567b2ddf"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-0b9eefb1e9da"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-3f91af16052a"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-7ddfd59fd9e7"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-1c2fd8e22fb8"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-26a63fc44dc7"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-884d0d5c6447"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-0fe84a65b129"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-f42bb48334ad"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-a3d70a5ffb2c"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-a2ed46072266"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-9b630bd3f3ff"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-8520f2c1eaae"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-a4cdb1846e35"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-e4f6d869bf11"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-c85f3baf6065"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-cb5d01bea1fc"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-1de4355b13b0"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-084ca6f82327"
+
+[[overlap]]
+vantage = "reading"
+claim = "observed-b8014c039b17"
+
+[[overlap]]
 vantage = "stdlib-feedback"
 claim = "coupling-law"
 
@@ -650,6 +1130,166 @@ vantage = "stdlib-feedback"
 claim = "isolated-black-slice"
 
 [[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-5053d66f38fb"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-c0f330524114"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-f8cfecd08d5a"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-9f735af84755"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-d5c2175eadce"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-1dba16bb3a91"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-c7dab95c2581"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-c9e9008d30ed"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-f24e181da7d6"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-52252f3e729b"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-c5248659968b"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-1d6ae1b61762"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-6d4a2a5763ef"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-4bc1c65e35c9"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-799d502f876a"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-53377bf71f92"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-9e693fea8ab9"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-271e1f55d5fd"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-a19571110f01"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-70733dca8e2b"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-88dd567b2ddf"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-0b9eefb1e9da"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-3f91af16052a"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-7ddfd59fd9e7"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-1c2fd8e22fb8"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-26a63fc44dc7"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-884d0d5c6447"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-0fe84a65b129"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-f42bb48334ad"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-a3d70a5ffb2c"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-a2ed46072266"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-9b630bd3f3ff"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-8520f2c1eaae"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-a4cdb1846e35"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-e4f6d869bf11"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-c85f3baf6065"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-cb5d01bea1fc"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-1de4355b13b0"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-084ca6f82327"
+
+[[overlap]]
+vantage = "stdlib-feedback"
+claim = "observed-b8014c039b17"
+
+[[overlap]]
 vantage = "mathematics"
 claim = "coupling-law"
 
@@ -802,6 +1442,166 @@ vantage = "mathematics"
 claim = "isolated-black-slice"
 
 [[overlap]]
+vantage = "mathematics"
+claim = "observed-5053d66f38fb"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-c0f330524114"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-f8cfecd08d5a"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-9f735af84755"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-d5c2175eadce"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-1dba16bb3a91"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-c7dab95c2581"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-c9e9008d30ed"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-f24e181da7d6"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-52252f3e729b"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-c5248659968b"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-1d6ae1b61762"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-6d4a2a5763ef"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-4bc1c65e35c9"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-799d502f876a"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-53377bf71f92"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-9e693fea8ab9"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-271e1f55d5fd"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-a19571110f01"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-70733dca8e2b"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-88dd567b2ddf"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-0b9eefb1e9da"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-3f91af16052a"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-7ddfd59fd9e7"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-1c2fd8e22fb8"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-26a63fc44dc7"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-884d0d5c6447"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-0fe84a65b129"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-f42bb48334ad"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-a3d70a5ffb2c"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-a2ed46072266"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-9b630bd3f3ff"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-8520f2c1eaae"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-a4cdb1846e35"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-e4f6d869bf11"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-c85f3baf6065"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-cb5d01bea1fc"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-1de4355b13b0"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-084ca6f82327"
+
+[[overlap]]
+vantage = "mathematics"
+claim = "observed-b8014c039b17"
+
+[[overlap]]
 vantage = "first-visit"
 claim = "coupling-law"
 
@@ -952,6 +1752,166 @@ claim = "single-seed-mask"
 [[overlap]]
 vantage = "first-visit"
 claim = "isolated-black-slice"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-5053d66f38fb"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-c0f330524114"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-f8cfecd08d5a"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-9f735af84755"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-d5c2175eadce"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-1dba16bb3a91"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-c7dab95c2581"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-c9e9008d30ed"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-f24e181da7d6"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-52252f3e729b"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-c5248659968b"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-1d6ae1b61762"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-6d4a2a5763ef"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-4bc1c65e35c9"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-799d502f876a"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-53377bf71f92"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-9e693fea8ab9"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-271e1f55d5fd"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-a19571110f01"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-70733dca8e2b"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-88dd567b2ddf"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-0b9eefb1e9da"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-3f91af16052a"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-7ddfd59fd9e7"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-1c2fd8e22fb8"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-26a63fc44dc7"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-884d0d5c6447"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-0fe84a65b129"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-f42bb48334ad"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-a3d70a5ffb2c"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-a2ed46072266"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-9b630bd3f3ff"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-8520f2c1eaae"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-a4cdb1846e35"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-e4f6d869bf11"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-c85f3baf6065"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-cb5d01bea1fc"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-1de4355b13b0"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-084ca6f82327"
+
+[[overlap]]
+vantage = "first-visit"
+claim = "observed-b8014c039b17"
 
 [[interaction]]
 source = "prize-review"

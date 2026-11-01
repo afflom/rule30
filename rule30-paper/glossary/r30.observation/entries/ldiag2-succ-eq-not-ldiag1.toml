@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag2-succ-eq-not-ldiag1"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (nat 2) (app (const lexlean.std.nat::add) (local t) (nat 1))) (app (const lexlean.std.bool::not) (app (const r30.time::ldiag) (nat 1) (local t)))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Deduced"
+name = "Rule30UOR.Deduced.ldiag2_succ_eq_not_ldiag1"
+
+[[form]]
+id = "ldiag2-succ-eq-not-ldiag1"
+channel = "math"
+surface = "ldiag2succeqnotldiag1"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiag2succeqnotldiag1) (paren (seq (slot 0))))"

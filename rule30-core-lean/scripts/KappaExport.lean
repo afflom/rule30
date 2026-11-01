@@ -23,11 +23,12 @@ names are not emitted (bound variables are de Bruijn indices), and free or
 meta variables are an error: a closed declaration has none.
 
 The constants are read from the named modules' object files. The environment of
-those modules is imported once, only to ask Lean which theorem names it reserves
-(`isReservedName`: equation lemmas, functional induction, injectivity and the
-other names Lean realizes on demand and refuses to let anyone declare): such a
-theorem is marked `(reserved)`, so the redundancy check never counts a generated
-lemma as authored. The mark is not part of any κ-label.
+those modules is imported once, only to ask Lean which theorems someone wrote: a
+theorem with a declaration range (`declRangeExt`, the source position Lean records
+for every declaration it elaborates from source) is marked `(authored)`; a lemma
+Lean generated (equation lemmas, functional induction, auxiliary proofs, matcher
+equations) has none. The redundancy check counts authored theorems only, by this
+mark and never by their names. The mark is not part of any κ-label.
 -/
 
 namespace KappaExport
@@ -138,7 +139,7 @@ def safety (s : String) : String := lst [atom "safety", atom s]
 def count (label : String) (n : Nat) : String := lst [atom label, natAtom n]
 def names (label : String) (ns : List Name) : String := lst (atom label :: ns.map nameAtom)
 
-def emitDecl (isReserved : Name → Bool) (ci : ConstantInfo) : M Unit := do
+def emitDecl (isAuthored : Name → Bool) (ci : ConstantInfo) : M Unit := do
   let t ← visitExpr ci.type
   let (kind, value, extras) ← match ci with
     | .axiomInfo i => pure ("axiom", none, [safety (unsafeAtom i.isUnsafe)])
@@ -147,7 +148,7 @@ def emitDecl (isReserved : Name → Bool) (ci : ConstantInfo) : M Unit := do
       pure ("def", some v, [safety (safetyAtom i.safety)])
     | .thmInfo i => do
       let v ← visitExpr i.value
-      pure ("thm", some v, if isReserved ci.name then [lst [atom "reserved"]] else [])
+      pure ("thm", some v, if isAuthored ci.name then [lst [atom "authored"]] else [])
     | .opaqueInfo i => do
       let v ← visitExpr i.value
       pure ("opaque", some v, [safety (unsafeAtom i.isUnsafe)])
@@ -172,7 +173,7 @@ def emitDecl (isReserved : Name → Bool) (ci : ConstantInfo) : M Unit := do
 
 /-- The parts of a module's object file, chosen as `leanchecker` chooses them:
 the last ("most private") part holds every constant the kernel replays. -/
-def exportModule (isReserved : Name → Bool) (mod : Name) : IO Unit := do
+def exportModule (isAuthored : Name → Bool) (mod : Name) : IO Unit := do
   let mFile ← findOLean mod
   unless (← mFile.pathExists) do
     throw <| IO.userError s!"object file '{mFile}' of module {mod} does not exist"
@@ -189,7 +190,7 @@ def exportModule (isReserved : Name → Bool) (mod : Name) : IO Unit := do
   let act : M Unit := do
     emit (lst [atom "module", nameAtom mod, count "constants" data.constants.size])
     for ci in data.constants do
-      emitDecl isReserved ci
+      emitDecl isAuthored ci
     emit (lst [atom "end", nameAtom mod])
     flush
   act.run' {}
@@ -205,8 +206,8 @@ def main (args : List String) : IO UInt32 := do
   if let some bad := args.find? (·.toName.isAnonymous) then
     throw <| IO.userError s!"not a module name: {bad}"
   let env ← importModules (mods.toArray.map fun m => { module := m }) {}
-  -- a private theorem is reserved when its user-facing name is
-  let isReserved := fun n => isReservedName env n || ((privateToUserName? n).map (isReservedName env)).getD false
+  -- authored: Lean recorded where in the source the declaration was written
+  let isAuthored := fun n => (declRangeExt.find? env n).isSome
   for mod in mods do
-    KappaExport.exportModule isReserved mod
+    KappaExport.exportModule isAuthored mod
   return 0

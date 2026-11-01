@@ -98,9 +98,9 @@ RESULTS = {
         "title": "api check --json: whether each generated surface of rule30-api matches its sources",
         "type": "object", "additionalProperties": False,
         "required": ["api", "register", "architecture", "presentation", "observer", "convert", "standards", "core", "sequences",
-                     "discovery", "model", "logo"],
+                     "discovery", "engine", "model", "logo"],
         "properties": {k: OK for k in ("api", "register", "architecture", "presentation", "observer", "convert", "standards", "core",
-                                       "sequences", "discovery", "model", "logo")},
+                                       "sequences", "discovery", "engine", "model", "logo")},
     },
     "sequences-result": {
         "title": "sequences --json: the basis (every sequence with its lexeme, parameters and κ-label), the excluded notions, and the problems of the committed data",
@@ -145,6 +145,70 @@ RESULTS = {
             "written": {"type": "array", "items": {"type": "string"}},
         },
     },
+    "deduce-result": {
+        "title": "deduce --json: every attempt (claim, κ-label, strategy, template digest, family, outcome, failure point, seconds, theorem), the claims proved, known (proved by the library theorem that states them), refuted, and the attempts left for the budget",
+        "type": "object", "additionalProperties": False,
+        "required": ["attempts", "proved", "refuted", "known", "skipped", "dry_run"],
+        "properties": {
+            "attempts": {"type": "array", "items": {"$ref": "#/$defs/attempt"}},
+            "proved": {"type": "array", "items": {"$ref": "#/$defs/proof"}},
+            "known": {"type": "array", "items": {"$ref": "#/$defs/proof"}},
+            "refuted": {"type": "array", "items": {
+                "type": "object", "required": ["id", "lean", "t"], "additionalProperties": False,
+                "properties": {"id": {"type": "string"}, "lean": {"type": "string"}, "t": {"type": "integer"}}}},
+            "skipped": {"type": "array", "items": {
+                "type": "object", "required": ["id", "strategy", "reason"], "additionalProperties": False,
+                "properties": {k: {"type": "string"} for k in ("id", "strategy", "reason")}}},
+            "dry_run": {"type": "boolean"},
+        },
+        "$defs": {
+            "attempt": {"type": "object", "additionalProperties": False,
+                        "required": ["claim", "kappa", "strategy", "template", "family", "outcome", "failure", "seconds", "theorem"],
+                        "properties": {"claim": {"type": "string"}, "kappa": KAPPA, "strategy": {"type": "string"},
+                                       "template": KAPPA, "family": {"type": "string"},
+                                       "outcome": {"type": "string", "enum": ["proved", "known", "refuted", "failed", "timeout", "dry-run"]},
+                                       "failure": {"type": "string"}, "seconds": {"type": "number"}, "theorem": {"type": "string"}}},
+            "proof": {"type": "object", "required": ["id", "lean"], "additionalProperties": False,
+                      "properties": {"id": {"type": "string"}, "lean": {"type": "string"}}},
+        },
+    },
+    "engine-tick-result": {
+        "title": "engine tick --json: the tick summary the ledger records (start, base, stages with seconds and allowances, counts, outcome)",
+        "$ref": "#/$defs/tick",
+        "$defs": {"tick": {
+            "type": "object", "additionalProperties": False,
+            "required": ["number", "start", "base", "budget", "stages", "outcome", "seconds", "commit", "observed", "proved",
+                         "refuted", "known", "attempts", "new_relations"],
+            "properties": {
+                "number": {"type": "integer"}, "start": {"type": "string"}, "base": {"type": "string"},
+                "budget": {"type": "integer"},
+                "stages": {"type": "array", "items": {
+                    "type": "object", "required": ["id", "seconds", "allowance", "outcome", "note"], "additionalProperties": False,
+                    "properties": {"id": {"type": "string", "enum": ["build", "induction", "pruning", "deduction", "learning", "gate"]},
+                                   "seconds": {"type": "number"}, "allowance": {"type": "number"},
+                                   "outcome": {"type": "string", "enum": ["ok", "cut", "error"]}, "note": {"type": "string"}}}},
+                "outcome": {"type": "string", "enum": ["idle", "uncommitted", "committed", "pushed", "dropped", "refused", "error"]},
+                "seconds": {"type": "number"}, "commit": {"type": "string"},
+                "observed": {"type": "integer"}, "proved": {"type": "integer"}, "refuted": {"type": "integer"},
+                "known": {"type": "integer"}, "attempts": {"type": "integer"}, "new_relations": {"type": "integer"}}}},
+    },
+    "engine-status-result": {
+        "title": "engine status --json: the last tick, the network (units, synapses, events), the attempts by outcome, the pending attempts and the learned weights",
+        "type": "object", "additionalProperties": False,
+        "required": ["last", "units", "synapses", "events", "attempts", "pending", "weights"],
+        "properties": {
+            "last": {"type": ["object", "null"]},
+            "units": {"type": "integer"},
+            "synapses": {"type": "object", "required": ["observed", "proved", "refuted"], "additionalProperties": False,
+                         "properties": {k: {"type": "integer"} for k in ("observed", "proved", "refuted")}},
+            "events": {"type": "integer"},
+            "attempts": {"type": "object", "additionalProperties": {"type": "integer"}},
+            "pending": {"type": "integer"},
+            "weights": {"type": "array", "items": {
+                "type": "object", "required": ["strategy", "family", "value"], "additionalProperties": False,
+                "properties": {"strategy": {"type": "string"}, "family": {"type": "string"}, "value": {"type": "integer"}}}},
+        },
+    },
     "api-production-result": {
         "title": "api production --json: the certified Rust bundle lexlean production published, or the stage that failed",
         "type": "object", "additionalProperties": False, "required": ["ok", "stage", "diagnostics"],
@@ -182,7 +246,8 @@ class Invalid(ValueError):
     pass
 
 
-_TYPES = {"object": dict, "array": list, "string": str, "integer": int, "boolean": bool, "null": type(None)}
+_TYPES = {"object": dict, "array": list, "string": str, "integer": int, "number": (int, float), "boolean": bool,
+          "null": type(None)}
 
 
 def validate(schema, value, root=None, path="$"):
@@ -196,7 +261,7 @@ def validate(schema, value, root=None, path="$"):
     types = schema.get("type")
     if types is not None:
         allowed = [types] if isinstance(types, str) else types
-        ok = any(isinstance(value, _TYPES[t]) and not (t == "integer" and isinstance(value, bool)) for t in allowed)
+        ok = any(isinstance(value, _TYPES[t]) and not (t in ("integer", "number") and isinstance(value, bool)) for t in allowed)
         if not ok:
             raise Invalid(f"{path}: expected {types}, got {type(value).__name__}")
     if "enum" in schema and value not in schema["enum"]:

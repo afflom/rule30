@@ -1,5 +1,5 @@
 spec = "prismpm/runtime-roots/1"
-lean_modules = ["Rule30Api.Api", "Rule30Api.Rule30Core", "Rule30Api.Discovery"]
+lean_modules = ["Rule30Api.Api", "Rule30Api.Rule30Core", "Rule30Api.Discovery", "Rule30Api.Engine"]
 ir_module = "Rule30Api"
 roots = [
   "Rule30Api.Api.commandCount",
@@ -7,6 +7,8 @@ roots = [
   "Rule30Api.Discovery.buildColumns",
   "Rule30Api.Discovery.findRecurrence",
   "Rule30Api.Discovery.findRelations",
+  "Rule30Api.Engine.learnAll",
+  "Rule30Api.Engine.schedule",
   "Rule30Api.Rule30Core.center",
   "Rule30Api.Rule30Core.centersFrom",
   "Rule30Api.Rule30Core.rdiag",
@@ -43,6 +45,18 @@ effects = ["allocation", "overflow", "recursion"]
 [[root]]
 name = "Rule30Api.Discovery.findRelations"
 package = "rule30_api_discovery_find_relations"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]
+
+[[root]]
+name = "Rule30Api.Engine.learnAll"
+package = "rule30_api_engine_learn_all"
+targets = ["rust-std"]
+effects = ["allocation", "overflow", "recursion"]
+
+[[root]]
+name = "Rule30Api.Engine.schedule"
+package = "rule30_api_engine_schedule"
 targets = ["rust-std"]
 effects = ["allocation", "overflow", "recursion"]
 

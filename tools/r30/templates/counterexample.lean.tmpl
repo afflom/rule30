@@ -1,0 +1,17 @@
+-- r30 deduce template: counterexample, revision 2 (rewrite, never rw, before the closing tactic).
+-- The diagonals the relation reads, iterated by the rule from time 0 (definitionally equal to
+-- the host recursion at every time), evaluated by the kernel at the time where the relation fails.
+/-- {{doc}} -/
+theorem {{name}} : {{refutation}} := by
+{{occurrences}}
+{{rewrite_goal}}
+  have key : ∀ s : Nat, {{state_s}} = Nat.rec (motive := fun _ => List Bool) ({{state_zero}}) (fun _ x => ({{step}}) x) s := by
+    intro s
+    induction s with
+    | zero => rfl
+    | succ s ih =>
+      show ({{step}}) ({{state_s}}) = ({{step}}) (Nat.rec (motive := fun _ => List Bool) ({{state_zero}}) (fun _ x => ({{step}}) x) s)
+      rw [ih]
+{{atoms}}
+  rewrite [{{atom_rewrites}}]
+  decide

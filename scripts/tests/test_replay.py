@@ -20,10 +20,10 @@ def stream(module, value, theorems=()):
     """...with, for each (name, statement value) in `theorems`, a theorem whose statement is the
     nat literal `statement value` (two theorems with one statement value state the same thing)."""
     line = lambda *parts: kappa_research.canonical(list(parts)) + b"\n"
-    # an equation lemma (`.eq_1`) is a name Lean reserves: the exporter marks it
+    # a theorem written in source is marked authored; an equation lemma (`.eq_1`) Lean generates is not
     body = b"".join(line("node", str(3 + i), "lit", "nat", str(v)) +
                     line("decl", module + "." + n, "thm", ["levels"], str(3 + i), "2",
-                         *([["reserved"]] if n.endswith(".eq_1") else []))
+                         *([] if n.endswith(".eq_1") else [["authored"]]))
                     for i, (n, v) in enumerate(theorems))
     plain = _stream(module, value)
     return plain.replace(line("end", module), body + line("end", module))
@@ -234,6 +234,15 @@ class ReplayReceiptTests(unittest.TestCase):
         lines = self.replay(success=False)
         self.assertEqual(self.invocations(), [])
         self.assertEqual(self.receipts(), [])
+
+    def test_generated_theorems_do_not_count_also_from_the_memo(self):
+        # the second run reads every module from the memo: the authored marks survive the round trip
+        self.compile("Rule30UOR.Alpha", "compiled Alpha", theorems=[("t", 7), ("d.eq_1", 8)])
+        self.compile("Rule30UOR.Beta", "compiled Beta", theorems=[("u", 9), ("d.eq_1", 8)])
+        self.replay()
+        for module in self.MODULES:
+            (self.streams / (module + ".sexp")).unlink()
+        self.replay()
 
     def test_different_statements_pass_and_generated_theorems_do_not_count(self):
         # `d` is each fixture module's definition: its equation lemmas are generated.

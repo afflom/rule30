@@ -61,6 +61,9 @@ def roots():
     from . import discoverymodel
     rows += [{"root": f"{discoverymodel.LEAN_MODULE}.{name}", "package": crate_name(name, "discovery"), "targets": sorted(spec["targets"]),
               "effects": sorted(spec["effects"])} for name, spec in discoverymodel.PRODUCTION_ROOTS.items()]
+    from . import enginemodel
+    rows += [{"root": f"{enginemodel.LEAN_MODULE}.{name}", "package": crate_name(name, "engine"), "targets": sorted(spec["targets"]),
+              "effects": sorted(spec["effects"])} for name, spec in enginemodel.PRODUCTION_ROOTS.items()]
     return sorted(rows, key=lambda r: r["root"])
 
 
@@ -78,8 +81,9 @@ def request_json():
 
 def runtime_roots_toml():
     from . import coremodel
-    from . import discoverymodel
-    lines = ['spec = "prismpm/runtime-roots/1"', f'lean_modules = ["{MODULE}", "{coremodel.LEAN_MODULE}", "{discoverymodel.LEAN_MODULE}"]',
+    from . import discoverymodel, enginemodel
+    lines = ['spec = "prismpm/runtime-roots/1"',
+             f'lean_modules = ["{MODULE}", "{coremodel.LEAN_MODULE}", "{discoverymodel.LEAN_MODULE}", "{enginemodel.LEAN_MODULE}"]',
              'ir_module = "Rule30Api"', "roots = ["]
     lines += [f'  "{r["root"]}",' for r in roots()]
     lines += ["]", ""]

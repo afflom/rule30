@@ -53,8 +53,8 @@ code = "R303001"
 title = "LexLean check failed"
 class = "lexlean"
 exit = 1
-statement = "lexlean check reported a diagnostic for a module of the selected project, or a lexlean lock refused a project after a command rewrote it (api sync, consolidate)."
-commands = ["check", "api_sync", "consolidate"]
+statement = "lexlean check reported a diagnostic for a module of the selected project, or a lexlean lock refused a project after a command rewrote it (api sync, consolidate, frontier add or set, discover --write)."
+commands = ["check", "api_sync", "consolidate", "frontier_add", "frontier_set", "discover"]
 
 [[error]]
 code = "R303002"
@@ -102,7 +102,7 @@ title = "Lean cannot answer"
 class = "kernel"
 exit = 1
 statement = "The query to the built research library failed: the library is not built, a module is missing, or Lean reported an error."
-commands = ["claim", "sig", "mentions", "interface", "frontier_render", "frontier_add", "frontier_set", "unpublished", "selfcheck", "define", "kappa"]
+commands = ["claim", "sig", "mentions", "interface", "frontier_render", "frontier_add", "frontier_set", "unpublished", "selfcheck", "define", "kappa", "consolidate"]
 
 [[error]]
 code = "R305001"
@@ -207,3 +207,43 @@ class = "discovery"
 exit = 1
 statement = "The relation or recurrence engine returned a contract violation (a precondition the window fails, or an output the postcondition validator refuses), the discovery window does not fit the stored window, or the certified runtime failed to build or run."
 commands = ["discover"]
+
+[[error]]
+code = "R305007"
+title = "Gate refused the commit"
+class = "gate"
+exit = 1
+statement = "commit --wait ran the pre-commit gate in the foreground and the gate refused the staged tree; the log names the stage, nothing was committed."
+commands = ["commit"]
+
+[[error]]
+code = "R309001"
+title = "Deduction cannot run"
+class = "deduction"
+exit = 1
+statement = "deduce could not complete: the basis or the register cannot be read, Lean did not answer the library-facts query, the Deduced module did not build with the accepted theorems (they were dropped), or an accepted theorem cannot be published."
+commands = ["deduce"]
+
+[[error]]
+code = "R309002"
+title = "Not an observed claim"
+class = "deduction"
+exit = 2
+statement = "deduce --claims names a claim that is not in the register with status observed."
+commands = ["deduce"]
+
+[[error]]
+code = "R309003"
+title = "Engine tick failed"
+class = "engine"
+exit = 1
+statement = "A stage of engine tick failed (the build, induction, pruning, deduction or learning) or the pre-commit gate refused the tick's commit; the ledger records the stage, its seconds and the reason."
+commands = ["engine_tick"]
+
+[[error]]
+code = "R309004"
+title = "Tick refused"
+class = "engine"
+exit = 2
+statement = "engine tick refused to start: the working tree is not clean (a tick starts from a clean checkout of main), or --push was given without --commit."
+commands = ["engine_tick"]

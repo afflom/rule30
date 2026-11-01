@@ -140,6 +140,32 @@ API_IDS += [
      "evidence": "scripts/tests/test_audit.py RoundWorkflowTests.test_the_round_opens_with_the_induce_phase_induce_phase"},
 ]
 
+# The engine (enginemodel, engine, deduce): every id with its scenario and a test whose name ends in the id
+# (scripts/tests/test_engine.py).
+API_IDS += [
+    {"id": "engine-workload", "level": "build", "suite": "engine",
+     "statement": "Engine.lex.tex declares the workload as data (the workflow, its triggers: a schedule at minutes 17 and 47, dispatch, and pushes of the engine's inputs to main; one concurrency group that never cancels a run; runs-on ubuntu-24.04; timeout 340 minutes; permissions contents and actions write; the one secret GITHUB_TOKEN; the actions it uses; the stages of a tick with their budgets; the cache families), and the kernel decides that no secret but GITHUB_TOKEN is read, that the permissions are exactly contents and actions with write, that the stage budgets fill the tick budget and with the setup fit the timeout, that the gate keeps its share, that the cron minutes are off the hour and thirty minutes apart, that there is one concurrency group, and that every action used is one the repository already used; api sync renders .github/workflows/engine.yml from that data (guarded by the repository and the kill switch R30_ENGINE) and api check refuses drift, a secret other than GITHUB_TOKEN, an action beyond those already used, or a pull_request trigger.",
+     "feature": ".github/workflows/engine.yml", "evidence": "bin/r30 api check; bin/r30 verify api --modules src/Engine.lex.tex; scripts/tests/test_engine.py"},
+    {"id": "engine-tick", "level": "build", "suite": "engine",
+     "statement": "bin/r30 engine tick [--budget-minutes N] [--commit] [--push] runs one deterministic cycle from a clean checkout: it records the base commit, builds the library, runs induction (sequences --write only when the evaluation program or the κ-labels of the modules it imports changed, discover --write at the committed window), pruning (audit --write), deduction (deduce within the remaining budget) and learning (learnAll over the tick's outcomes, api sync), splits the budget across the stages from their measured durations in the ledger (the gate's own duration measured by the next tick from the commit's time) with the gate's share reserved and never cut, ends idle without a commit when nothing changed (the workflow then marks the commit settled, as it does a refused or failed tick, and later runs on it stop after the checkout), commits in the foreground through the unchanged pre-commit gate (commit --wait) and pushes only when origin/main still is the base, dropping the work otherwise; never a force push.",
+     "feature": "tools/r30/engine.py", "evidence": "scripts/tests/test_engine.py"},
+    {"id": "engine-status", "level": "build", "suite": "engine",
+     "statement": "bin/r30 engine status prints the last tick (start, base, stages with seconds and allowances, counts, outcome), the network (units: the basis sequences; synapses: the observed, proved and refuted relations; events: the ticks), the attempts by outcome, the pending attempts and the learned weights; the workflow appends it to the job summary.",
+     "feature": "tools/r30/engine.py", "evidence": "scripts/tests/test_engine.py"},
+    {"id": "deduce-command", "level": "build", "suite": "engine",
+     "statement": "bin/r30 deduce [--budget-minutes N] [--claims ids] [--dry-run] attempts every observed claim for all t with the portfolio in the learned order: each attempt renders one theorem from a template into a scratch file under .r30/deduce, checks it with one Lean process and accepts it only when its axioms are among propext and Quot.sound; accepted theorems are appended to Rule30UOR.Deduced and built; one whose statement κ a library theorem already has is removed again and the claim is proved by that library theorem (outcome known: no statement is proved twice, kappa --duplicates prints no group), the others are published (theorem add) and recorded (frontier set --status proved --lean); a relation the orbit of the diagonals breaks beyond its window is refuted by a decided counterexample.",
+     "feature": "tools/r30/deduce.py", "evidence": "bin/r30 deduce; bin/r30 frontier check; scripts/tests/test_engine.py"},
+    {"id": "strategy-portfolio", "level": "build", "suite": "engine",
+     "statement": "The portfolio is four deterministic Lean proof templates under tools/r30/templates, each pinned in Engine.lex.tex by the SHA-256 of its file and of the renderer that fills it (deduce.py): library-rewrite (the columns rewritten into the diagonals, one rule step unfolded, the library's equalities among the involved constants from mentions and the register's proved relations instantiated, closed by Boolean case analysis; a publishable library theorem that states the relation proves the claim with no new theorem, outcome known), step-induction (the diagonals the relation reads as a finite system stepped by the rule, the orbit decided by the kernel), period-reduction (the words of the right system read from the row register modulo their period 2^j) and counterexample; every applicable template's Boolean core is decided in Python first.",
+     "feature": "tools/r30/templates", "evidence": "bin/r30 api check; scripts/tests/test_engine.py"},
+    {"id": "strategy-learning", "level": "build", "suite": "engine",
+     "statement": "Engine.lex.tex declares the learning layer: integer strategy weights per relation family, the bounded Hebbian rule learn (a success raises the weight by 2, a failure lowers it by 1, clamped to [1, 16]), learnAll and the scheduler schedule (applicable strategies by weight, ties by portfolio order) as production roots exported to certified Rust; the kernel decides that learn keeps every weight in bounds, that the committed weights are in bounds, that the schedule of every subset of the portfolio in every family is a permutation ordered by weight, and the fixtures the Python mirror computes; the tests compare the mirror with the certified roots.",
+     "feature": "rule30-api/src/Engine.lex.tex", "evidence": "bin/r30 verify api --modules src/Engine.lex.tex; scripts/tests/test_engine.py"},
+    {"id": "engine-ledger", "level": "build", "suite": "engine",
+     "statement": "rule30-api/model/engine.toml (r30/engine/1) is the engine's ledger: the consolidated weights, every attempt (claim, κ-label, strategy, template digest, family, outcome proved, known, refuted, failed or timeout, failure point, seconds, theorem, tick) and the last ticks; no (claim κ, strategy, template digest) is attempted twice, and the weights are reproducible from the attempts.",
+     "feature": "rule30-api/model/engine.toml", "evidence": "scripts/tests/test_engine.py"},
+]
+
 # What each command mutates (`never` when it only reads). A leaf of the
 # parser without a row here is reported by `check`.
 MUTATES = {
@@ -150,6 +176,11 @@ MUTATES = {
     "api_production": "lexlean-build", "sequences": "sequences-data", "discover": "register",
 }
 MUTATES["audit"] = "audit-register-and-module"  # --write: model/audit.toml and src/Audit.lex.tex
+# the engine: deduce writes Rule30UOR/Deduced.lean, the paper's statements and glossary, the register and
+# the ledger; a tick does all of that and commits through the gate
+MUTATES["deduce"] = "deduced-module-paper-register-and-ledger"
+MUTATES["engine_tick"] = "repository"
+MUTATES["consolidate"] = "repository"  # --apply: Lean sources, glossaries, register, locks, sheets, audit
 
 # Commands whose result is a published contract rather than a result schema
 # of its own: `frontier list` prints the register, `interface` the sheet.
@@ -214,7 +245,7 @@ CONTRACTS = [
      "identity": "sha256-canonical-json", "maximum_bytes": 1048576, "maximum_items": 4096, "extension_policy": "closed",
      "compatibility": "exact-major", "produced_by": name[:-len("-result")].replace("-", "_"), "artifact": "--json"}
     for name in ("status-result", "brief-result", "chain-result", "claim-result", "kappa-result", "api-check-result", "api-production-result",
-                 "sequences-result", "discover-result")
+                 "sequences-result", "discover-result", "deduce-result", "engine-tick-result", "engine-status-result")
 ]
 from . import auditmodel  # noqa: E402
 CONTRACTS.append(auditmodel.CONTRACT)  # the audit's --json report (auditmodel.RESULT_SCHEMA)
@@ -466,7 +497,8 @@ def features(claims):
         suites.setdefault(row["suite"], []).append(row)
     about = {"register": "The claims of frontier.toml: the kernel is the judge of every proved one.",
              "api": "The LexLean API modules, the PrismPM model and the stakeholder view.",
-             "discovery": "Induction mechanized: the basis of the map, the relation and recurrence engines, their certified roots, bin/r30 discover and the observed status."}
+             "discovery": "Induction mechanized: the basis of the map, the relation and recurrence engines, their certified roots, bin/r30 discover and the observed status.",
+             "engine": "The engine on GitHub Actions: the workload, the tick (induction, pruning, deduction, learning, the gate), the portfolio of proof templates, the learning layer and the ledger."}
     out = {}
     for suite, rws in suites.items():
         lines = [f"Feature: {suite}", "", f"  {about[suite]}", ""]
@@ -495,7 +527,7 @@ def conformance(claims):
              "| Authority | Citation | Realized by |", "| --- | --- | --- |"]
     for a in AUTHORITIES:
         lines.append(f"| {a['name']} | {a['citation']} | {', '.join('`' + x + '`' for x in a['realized_by'](claims))} |")
-    for suite in ("register", "api", "discovery"):
+    for suite in ("register", "api", "discovery", "engine"):
         lines += ["", f"## {suite}", "", "| ID | Level | Statement | Evidence |", "| --- | --- | --- | --- |"]
         for r in ids_.values():
             if r["suite"] == suite:
@@ -576,4 +608,4 @@ def _mutating(row):
     """A command with a `--write`-like flag or a sub-verb that is not a query
     must declare what it mutates."""
     verbs = {"add", "set", "remove", "sync", "render", "build", "run", "commit", "write"}
-    return bool(set(row["path"]) & verbs) or any(a["name"] == "write" for a in row["arguments"])
+    return bool(set(row["path"]) & verbs) or any(a["name"] in ("write", "apply") for a in row["arguments"])

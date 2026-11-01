@@ -1,0 +1,20 @@
+-- r30 deduce template: step-induction, revision 2 (rewrite, never rw, before the closing tactic).
+-- The diagonals the relation reads form a finite system stepped by the rule (Core.rdiag_step,
+-- Core.ldiag_step, definitionally); by induction on the time its state stays in the orbit the
+-- kernel decides, and the relation holds on every state of that orbit.
+/-- {{doc}} -/
+theorem {{name}} (t : Nat) : {{statement}} := by
+{{occurrences}}
+{{rewrite_goal}}
+  have key : ∀ s : Nat, List.elem ({{state_s}}) ({{reach}}) = true := by
+    intro s
+    induction s with
+    | zero => decide
+    | succ s ih =>
+{{dilation_rewrite}}
+      have e : {{state_succ}} = ({{step}}) ({{state_s}}) := rfl
+      rewrite [e]
+      have closed : ({{reach}}).all (fun x => List.elem (({{step}}) x) ({{reach}})) = true := by decide
+      exact List.all_eq_true.mp closed _ (List.elem_iff.mp ih)
+  have holds : ({{reach}}).all ({{relation}}) = true := by decide
+  exact of_decide_eq_true (List.all_eq_true.mp holds _ (List.elem_iff.mp (key {{time}})))

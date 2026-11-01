@@ -15,6 +15,7 @@
   "core",
   "sequences",
   "discovery",
+  "engine",
   "model",
   "logo"
  ],
@@ -191,6 +192,25 @@
    }
   },
   "discovery": {
+   "type": "object",
+   "required": [
+    "ok",
+    "reason"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "ok": {
+     "type": "boolean"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   }
+  },
+  "engine": {
    "type": "object",
    "required": [
     "ok",

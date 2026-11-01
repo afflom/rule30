@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag3-even-eq-time-parity"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (nat 3) (app (const lexlean.std.nat::mul) (nat 2) (local t))) (app (const r30.observation::time-parity) (local t))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Deduced"
+name = "Rule30UOR.Deduced.rdiag3_even_eq_timeParity"
+
+[[form]]
+id = "rdiag3-even-eq-time-parity"
+channel = "math"
+surface = "rdiag3eveneqtimeparity"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiag3eveneqtimeparity) (paren (seq (slot 0))))"

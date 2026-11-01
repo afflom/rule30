@@ -386,6 +386,312 @@ Feature: register
     When the suite reproduces residue-class-jen
     Then the route is reported refuted from its authority and nothing is established here
 
+  @observed-5053d66f38fb @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(2)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag2_eq_timeParity for observed-5053d66f38fb
+    When the suite exercises observed-5053d66f38fb
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag2_eq_timeParity kernel-checked under propext and Quot.sound and published
+
+  @observed-c0f330524114 @build
+  Scenario: On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(3)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag3_eq_timeParity_xor_ldiag2 for observed-c0f330524114
+    When the suite exercises observed-c0f330524114
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag3_eq_timeParity_xor_ldiag2 kernel-checked under propext and Quot.sound and published
+
+  @observed-f8cfecd08d5a @build
+  Scenario: On every t < 256: ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(4)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag4_eq_ldiag1_xor_ldiag2 for observed-f8cfecd08d5a
+    When the suite exercises observed-f8cfecd08d5a
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag4_eq_ldiag1_xor_ldiag2 kernel-checked under propext and Quot.sound and published
+
+  @observed-9f735af84755 @build
+  Scenario: On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(5)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag5_eq_timeParity_xor_ldiag2 for observed-9f735af84755
+    When the suite exercises observed-9f735af84755
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag5_eq_timeParity_xor_ldiag2 kernel-checked under propext and Quot.sound and published
+
+  @observed-d5c2175eadce @build
+  Scenario: On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(6)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag6_eq_timeParity_xor_ldiag2 for observed-d5c2175eadce
+    When the suite exercises observed-d5c2175eadce
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag6_eq_timeParity_xor_ldiag2 kernel-checked under propext and Quot.sound and published
+
+  @observed-1dba16bb3a91 @build
+  Scenario: On every t < 256: ldiag(7)(t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.LeftBand.ldiag_seven_eq for observed-1dba16bb3a91
+    When the suite exercises observed-1dba16bb3a91
+    Then its oracle accepts it: frontier check: Rule30UOR.LeftBand.ldiag_seven_eq kernel-checked under propext and Quot.sound and published
+
+  @observed-c7dab95c2581 @build
+  Scenario: On every t < 256: rdiag(3)(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(8)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag8_eq_rdiag3_xor_ldiag1_xor_ldiag2 for observed-c7dab95c2581
+    When the suite exercises observed-c7dab95c2581
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag8_eq_rdiag3_xor_ldiag1_xor_ldiag2 kernel-checked under propext and Quot.sound and published
+
+  @observed-c9e9008d30ed @build
+  Scenario: On every t < 256: one(t) XOR time-parity(t) XOR exposed(0)(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Antidiagonal.exposed_zero for observed-c9e9008d30ed
+    When the suite exercises observed-c9e9008d30ed
+    Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.exposed_zero kernel-checked under propext and Quot.sound and published
+
+  @observed-f24e181da7d6 @build
+  Scenario: On every t < 256: exposed(1)(t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Antidiagonal.exposed_one for observed-f24e181da7d6
+    When the suite exercises observed-f24e181da7d6
+    Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.exposed_one kernel-checked under propext and Quot.sound and published
+
+  @observed-45032769ad68 @open
+  Scenario: On every t < 256: one(t) XOR time-parity(t) XOR center(t) XOR low-diagonal(t) XOR interior-three-diagonal(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-45032769ad68 (experiment)
+    When the suite measures observed-45032769ad68
+    Then the claim is reported open and never asserted
+
+  @observed-7d29142e6567 @open
+  Scenario: On every t < 256: one(t) XOR time-parity(t) XOR center(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR interior-eight-diagonal(t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-7d29142e6567 (experiment)
+    When the suite measures observed-7d29142e6567
+    Then the claim is reported open and never asserted
+
+  @observed-52252f3e729b @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(3)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag3_succ_eq_timeParity_xor_rdiag3 for observed-52252f3e729b
+    When the suite exercises observed-52252f3e729b
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag3_succ_eq_timeParity_xor_rdiag3 kernel-checked under propext and Quot.sound and published
+
+  @observed-c5248659968b @build
+  Scenario: On every t < 256: rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(2)(t) XOR rdiag(4)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag4_succ_eq_rdiag3_xor_rdiag4_xor_exposed2 for observed-c5248659968b
+    When the suite exercises observed-c5248659968b
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag4_succ_eq_rdiag3_xor_rdiag4_xor_exposed2 kernel-checked under propext and Quot.sound and published
+
+  @observed-1d6ae1b61762 @build
+  Scenario: On every t < 256: rdiag(4)(t) XOR rdiag(5)(t) XOR exposed(3)(t) XOR rdiag(5)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag5_succ_eq_rdiag4_xor_rdiag5_xor_exposed3 for observed-1d6ae1b61762
+    When the suite exercises observed-1d6ae1b61762
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag5_succ_eq_rdiag4_xor_rdiag5_xor_exposed3 kernel-checked under propext and Quot.sound and published
+
+  @observed-6d4a2a5763ef @build
+  Scenario: On every t < 256: rdiag(5)(t) XOR rdiag(6)(t) XOR exposed(4)(t) XOR rdiag(6)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag6_succ_eq_rdiag5_xor_rdiag6_xor_exposed4 for observed-6d4a2a5763ef
+    When the suite exercises observed-6d4a2a5763ef
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag6_succ_eq_rdiag5_xor_rdiag6_xor_exposed4 kernel-checked under propext and Quot.sound and published
+
+  @observed-4bc1c65e35c9 @build
+  Scenario: On every t < 256: rdiag(6)(t) XOR rdiag(7)(t) XOR exposed(5)(t) XOR rdiag(7)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag7_succ_eq_rdiag6_xor_rdiag7_xor_exposed5 for observed-4bc1c65e35c9
+    When the suite exercises observed-4bc1c65e35c9
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag7_succ_eq_rdiag6_xor_rdiag7_xor_exposed5 kernel-checked under propext and Quot.sound and published
+
+  @observed-799d502f876a @build
+  Scenario: On every t < 256: rdiag(7)(t) XOR rdiag(8)(t) XOR exposed(6)(t) XOR rdiag(8)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag8_succ_eq_rdiag7_xor_rdiag8_xor_exposed6 for observed-799d502f876a
+    When the suite exercises observed-799d502f876a
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag8_succ_eq_rdiag7_xor_rdiag8_xor_exposed6 kernel-checked under propext and Quot.sound and published
+
+  @observed-53377bf71f92 @build
+  Scenario: On every t < 256: rdiag(8)(t) XOR rdiag(9)(t) XOR exposed(7)(t) XOR rdiag(9)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag9_succ_eq_rdiag8_xor_rdiag9_xor_exposed7 for observed-53377bf71f92
+    When the suite exercises observed-53377bf71f92
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag9_succ_eq_rdiag8_xor_rdiag9_xor_exposed7 kernel-checked under propext and Quot.sound and published
+
+  @observed-9e693fea8ab9 @build
+  Scenario: On every t < 256: rdiag(9)(t) XOR rdiag(10)(t) XOR exposed(8)(t) XOR rdiag(10)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag10_succ_eq_rdiag9_xor_rdiag10_xor_exposed8 for observed-9e693fea8ab9
+    When the suite exercises observed-9e693fea8ab9
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag10_succ_eq_rdiag9_xor_rdiag10_xor_exposed8 kernel-checked under propext and Quot.sound and published
+
+  @observed-271e1f55d5fd @build
+  Scenario: On every t < 256: one(t) XOR ldiag(1)(t+1) = 0 (found by bin/r30 discover, self relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Core.ldiag_one for observed-271e1f55d5fd
+    When the suite exercises observed-271e1f55d5fd
+    Then its oracle accepts it: frontier check: Rule30UOR.Core.ldiag_one kernel-checked under propext and Quot.sound and published
+
+  @observed-a19571110f01 @build
+  Scenario: On every t < 256: one(t) XOR ldiag(1)(t) XOR ldiag(2)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag2_succ_eq_not_ldiag1 for observed-a19571110f01
+    When the suite exercises observed-a19571110f01
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag2_succ_eq_not_ldiag1 kernel-checked under propext and Quot.sound and published
+
+  @observed-92e58d165f11 @open
+  Scenario: On every t < 256: one(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(9)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-92e58d165f11 (experiment)
+    When the suite measures observed-92e58d165f11
+    Then the claim is reported open and never asserted
+
+  @observed-70733dca8e2b @build
+  Scenario: On every t < 256: rdiag(3)(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR ldiag(9)(t) XOR ldiag(10)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag10_succ_eq_rdiag3_xor_ldiag1_xor_ldiag2_xor_ldiag9 for observed-70733dca8e2b
+    When the suite exercises observed-70733dca8e2b
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag10_succ_eq_rdiag3_xor_ldiag1_xor_ldiag2_xor_ldiag9 kernel-checked under propext and Quot.sound and published
+
+  @observed-88dd567b2ddf @build
+  Scenario: On every t < 256: ldiag(10)(t) XOR ldiag(12)(t) XOR ldiag(12)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag12_succ_eq_ldiag10_xor_ldiag12 for observed-88dd567b2ddf
+    When the suite exercises observed-88dd567b2ddf
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag12_succ_eq_ldiag10_xor_ldiag12 kernel-checked under propext and Quot.sound and published
+
+  @observed-0b9eefb1e9da @build
+  Scenario: On every t < 256: one(t) XOR rdiag(3)(t) XOR exposed(2)(t) XOR exposed(2)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.exposed2_succ_eq_not_rdiag3_xor_exposed2 for observed-0b9eefb1e9da
+    When the suite exercises observed-0b9eefb1e9da
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.exposed2_succ_eq_not_rdiag3_xor_exposed2 kernel-checked under propext and Quot.sound and published
+
+  @observed-3f91af16052a @build
+  Scenario: On every t < 256: rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(3)(t) XOR exposed(4)(t) XOR exposed(3)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.exposed3_succ_eq_rdiag3_xor_rdiag4_xor_exposed3_xor_exposed4 for observed-3f91af16052a
+    When the suite exercises observed-3f91af16052a
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.exposed3_succ_eq_rdiag3_xor_rdiag4_xor_exposed3_xor_exposed4 kernel-checked under propext and Quot.sound and published
+
+  @observed-7ddfd59fd9e7 @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(4)(t) XOR exposed(4)(t) XOR exposed(4)(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.exposed4_succ_eq_timeParity_xor_rdiag4_xor_exposed4 for observed-7ddfd59fd9e7
+    When the suite exercises observed-7ddfd59fd9e7
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.exposed4_succ_eq_timeParity_xor_rdiag4_xor_exposed4 kernel-checked under propext and Quot.sound and published
+
+  @observed-e8a1ed6dc127 @open
+  Scenario: On every t < 256: ruler-background(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR left-band-diagonal(t) XOR ruler-background(t+1) XOR low-diagonal(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-e8a1ed6dc127 (experiment)
+    When the suite measures observed-e8a1ed6dc127
+    Then the claim is reported open and never asserted
+
+  @observed-b64d3d0ba07b @open
+  Scenario: On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR left-band-diagonal(t) XOR left-band-diagonal(t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-b64d3d0ba07b (experiment)
+    When the suite measures observed-b64d3d0ba07b
+    Then the claim is reported open and never asserted
+
+  @observed-3d3fa55c7c91 @open
+  Scenario: On every t < 256: one(t) XOR time-parity(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR low-diagonal(t) XOR ruler-background(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-3d3fa55c7c91 (experiment)
+    When the suite measures observed-3d3fa55c7c91
+    Then the claim is reported open and never asserted
+
+  @observed-1c2fd8e22fb8 @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(3)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag3_even_eq_timeParity for observed-1c2fd8e22fb8
+    When the suite exercises observed-1c2fd8e22fb8
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag3_even_eq_timeParity kernel-checked under propext and Quot.sound and published
+
+  @observed-26a63fc44dc7 @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(4)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag4_even_eq_timeParity_xor_rdiag3 for observed-26a63fc44dc7
+    When the suite exercises observed-26a63fc44dc7
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag4_even_eq_timeParity_xor_rdiag3 kernel-checked under propext and Quot.sound and published
+
+  @observed-884d0d5c6447 @build
+  Scenario: On every t < 256: rdiag(5)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag5_even_eq_false for observed-884d0d5c6447
+    When the suite exercises observed-884d0d5c6447
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag5_even_eq_false kernel-checked under propext and Quot.sound and published
+
+  @observed-0fe84a65b129 @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR rdiag(4)(t) XOR exposed(2)(t) XOR rdiag(6)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.rdiag6_even_eq_timeParity_xor_rdiag3_xor_rdiag4_xor_exposed2 for observed-0fe84a65b129
+    When the suite exercises observed-0fe84a65b129
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.rdiag6_even_eq_timeParity_xor_rdiag3_xor_rdiag4_xor_exposed2 kernel-checked under propext and Quot.sound and published
+
+  @observed-f42bb48334ad @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(4)(t) XOR rdiag(5)(t) XOR rdiag(6)(t) XOR exposed(2)(t) XOR exposed(3)(t) XOR rdiag(7)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.relation_f42bb48334ad for observed-f42bb48334ad
+    When the suite exercises observed-f42bb48334ad
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.relation_f42bb48334ad kernel-checked under propext and Quot.sound and published
+
+  @observed-a3d70a5ffb2c @build
+  Scenario: On every t < 256: ldiag(1)(t) XOR ldiag(1)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag1_even_eq_ldiag1 for observed-a3d70a5ffb2c
+    When the suite exercises observed-a3d70a5ffb2c
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag1_even_eq_ldiag1 kernel-checked under propext and Quot.sound and published
+
+  @observed-a2ed46072266 @build
+  Scenario: On every t < 256: ldiag(2)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag2_even_eq_false for observed-a2ed46072266
+    When the suite exercises observed-a2ed46072266
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag2_even_eq_false kernel-checked under propext and Quot.sound and published
+
+  @observed-b75a73f46242 @open
+  Scenario: On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(9)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-b75a73f46242 (experiment)
+    When the suite measures observed-b75a73f46242
+    Then the claim is reported open and never asserted
+
+  @observed-409a7755bc68 @open
+  Scenario: On every t < 256: one(t) XOR ruler-background(t) XOR ldiag(1)(t) XOR ldiag(2)(t) XOR low-diagonal(t) XOR left-band-diagonal(t) XOR ldiag(10)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-409a7755bc68 (experiment)
+    When the suite measures observed-409a7755bc68
+    Then the claim is reported open and never asserted
+
+  @observed-9b630bd3f3ff @build
+  Scenario: On every t < 256: ldiag(2)(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR ldiag(11)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.relation_9b630bd3f3ff for observed-9b630bd3f3ff
+    When the suite exercises observed-9b630bd3f3ff
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.relation_9b630bd3f3ff kernel-checked under propext and Quot.sound and published
+
+  @observed-8520f2c1eaae @build
+  Scenario: On every t < 256: time-parity(t) XOR ldiag(2)(t) XOR ldiag(12)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.ldiag12_even_eq_timeParity_xor_ldiag2 for observed-8520f2c1eaae
+    When the suite exercises observed-8520f2c1eaae
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.ldiag12_even_eq_timeParity_xor_ldiag2 kernel-checked under propext and Quot.sound and published
+
+  @observed-a4cdb1846e35 @build
+  Scenario: On every t < 256: exposed(2)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.exposed2_even_eq_false for observed-a4cdb1846e35
+    When the suite exercises observed-a4cdb1846e35
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.exposed2_even_eq_false kernel-checked under propext and Quot.sound and published
+
+  @observed-e4f6d869bf11 @build
+  Scenario: On every t < 256: time-parity(t) XOR exposed(2)(t) XOR exposed(3)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.exposed3_even_eq_timeParity_xor_exposed2 for observed-e4f6d869bf11
+    When the suite exercises observed-e4f6d869bf11
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.exposed3_even_eq_timeParity_xor_exposed2 kernel-checked under propext and Quot.sound and published
+
+  @observed-c85f3baf6065 @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(3)(t) XOR exposed(4)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.exposed4_even_eq_timeParity_xor_rdiag3 for observed-c85f3baf6065
+    When the suite exercises observed-c85f3baf6065
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.exposed4_even_eq_timeParity_xor_rdiag3 kernel-checked under propext and Quot.sound and published
+
+  @observed-cb5d01bea1fc @build
+  Scenario: On every t < 256: exposed(5)(2t) = 0 (found by bin/r30 discover, self relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.exposed5_even_eq_false for observed-cb5d01bea1fc
+    When the suite exercises observed-cb5d01bea1fc
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.exposed5_even_eq_false kernel-checked under propext and Quot.sound and published
+
+  @observed-1de4355b13b0 @build
+  Scenario: On every t < 256: rdiag(6)(t) XOR exposed(4)(t) XOR exposed(5)(t) XOR exposed(5)(t+1) XOR rdiag(8)(2t) XOR exposed(6)(2t) XOR exposed(7)(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.relation_1de4355b13b0 for observed-1de4355b13b0
+    When the suite exercises observed-1de4355b13b0
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.relation_1de4355b13b0 kernel-checked under propext and Quot.sound and published
+
+  @observed-f71048479210 @open
+  Scenario: On every t < 256: ldiag(1)(t) XOR low-diagonal(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-f71048479210 (experiment)
+    When the suite measures observed-f71048479210
+    Then the claim is reported open and never asserted
+
+  @observed-843066692439 @open
+  Scenario: On every t < 256: time-parity(t) XOR low-diagonal(t) XOR left-band-diagonal(2t) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-843066692439 (experiment)
+    When the suite measures observed-843066692439
+    Then the claim is reported open and never asserted
+
+  @observed-9a440c6ece8c @open
+  Scenario: On every t < 256: one(t) XOR time-parity(t) XOR ruler-background(t) XOR left-band-diagonal(t) XOR ruler-background(t+1) XOR ruler-background(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given the register entry observed-9a440c6ece8c (experiment)
+    When the suite measures observed-9a440c6ece8c
+    Then the claim is reported open and never asserted
+
+  @observed-084ca6f82327 @build
+  Scenario: On every t < 256: time-parity(t) XOR ldiag(9)(t) XOR ldiag(10)(t) XOR ldiag(12)(t) XOR exposed(2)(t) XOR ldiag(11)(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.relation_084ca6f82327 for observed-084ca6f82327
+    When the suite exercises observed-084ca6f82327
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.relation_084ca6f82327 kernel-checked under propext and Quot.sound and published
+
+  @observed-b8014c039b17 @build
+  Scenario: On every t < 256: time-parity(t) XOR rdiag(5)(t) XOR exposed(2)(t) XOR exposed(3)(t) XOR exposed(5)(2t+1) = 0 (found by bin/r30 discover, cross relation; a candidate for deduction).
+    Given frontier.toml names Rule30UOR.Deduced.exposed5_odd_eq_timeParity_xor_rdiag5_xor_exposed2_xor_exposed3 for observed-b8014c039b17
+    When the suite exercises observed-b8014c039b17
+    Then its oracle accepts it: frontier check: Rule30UOR.Deduced.exposed5_odd_eq_timeParity_xor_rdiag5_xor_exposed2_xor_exposed3 kernel-checked under propext and Quot.sound and published
+
   @conditional-audit @build
   Scenario: bin/r30 audit reads, in one Lean introspection of the research library, every theorem concluding not CenterPeriodic T P, Problem1 or not CenterPer T P (or False under a CenterPeriodic hypothesis), identifies each hypothesis beyond the period and the arithmetic side conditions by its head, and classifies the conditional refutation dead (a hypothesis refuted under a period by a named theorem), live-discharged (every hypothesis discharged and the composition kernel-checked in Lean) or open (the hypotheses neither refuted nor discharged); --write records it in model/audit.toml and Audit.lex.tex, whose kernel-decided theorems are that every dead entry names a refuting theorem, the statuses are declared, the theorem names are distinct, and the count of each status; claim --related lists the open hypotheses of the conditional refutations a claim concerns.
     Given rule30-api/src/Audit.lex.tex

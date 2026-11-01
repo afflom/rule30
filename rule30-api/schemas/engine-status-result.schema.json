@@ -1,0 +1,82 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/engine-status-result/1",
+ "title": "engine status --json: the last tick, the network (units, synapses, events), the attempts by outcome, the pending attempts and the learned weights",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "last",
+  "units",
+  "synapses",
+  "events",
+  "attempts",
+  "pending",
+  "weights"
+ ],
+ "properties": {
+  "last": {
+   "type": [
+    "object",
+    "null"
+   ]
+  },
+  "units": {
+   "type": "integer"
+  },
+  "synapses": {
+   "type": "object",
+   "required": [
+    "observed",
+    "proved",
+    "refuted"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "observed": {
+     "type": "integer"
+    },
+    "proved": {
+     "type": "integer"
+    },
+    "refuted": {
+     "type": "integer"
+    }
+   }
+  },
+  "events": {
+   "type": "integer"
+  },
+  "attempts": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "integer"
+   }
+  },
+  "pending": {
+   "type": "integer"
+  },
+  "weights": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "strategy",
+     "family",
+     "value"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "strategy": {
+      "type": "string"
+     },
+     "family": {
+      "type": "string"
+     },
+     "value": {
+      "type": "integer"
+     }
+    }
+   }
+  }
+ }
+}

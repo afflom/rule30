@@ -4837,5 +4837,301 @@ Close the goal with \(\lexeme{r30.observation::white-defect-in-window-holds}\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{rdiag2-eq-time-parity}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(2, t) = timeparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag2-eq-time-parity}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag3-eq-time-parity-xor-ldiag2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(3, t) = bxor(timeparity(t), ldiag(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag3-eq-time-parity-xor-ldiag2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag4-eq-ldiag1-xor-ldiag2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(4, t) = bxor(ldiag(1, t), ldiag(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag4-eq-ldiag1-xor-ldiag2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag5-eq-time-parity-xor-ldiag2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(5, t) = bxor(timeparity(t), ldiag(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag5-eq-time-parity-xor-ldiag2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag6-eq-time-parity-xor-ldiag2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(6, t) = bxor(timeparity(t), ldiag(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag6-eq-time-parity-xor-ldiag2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag8-eq-rdiag3-xor-ldiag1-xor-ldiag2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(8, t) = bxor(bxor(rdiag(3, t), ldiag(1, t)), ldiag(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag8-eq-rdiag3-xor-ldiag1-xor-ldiag2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag3-succ-eq-time-parity-xor-rdiag3}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(3, t + 1) = bxor(timeparity(t), rdiag(3, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag3-succ-eq-time-parity-xor-rdiag3}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag4-succ-eq-rdiag3-xor-rdiag4-xor-exposed2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(4, t + 1) = bxor(bxor(rdiag(3, t), rdiag(4, t)), exposed(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag4-succ-eq-rdiag3-xor-rdiag4-xor-exposed2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag5-succ-eq-rdiag4-xor-rdiag5-xor-exposed3}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(5, t + 1) = bxor(bxor(rdiag(4, t), rdiag(5, t)), exposed(3, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag5-succ-eq-rdiag4-xor-rdiag5-xor-exposed3}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag6-succ-eq-rdiag5-xor-rdiag6-xor-exposed4}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(6, t + 1) = bxor(bxor(rdiag(5, t), rdiag(6, t)), exposed(4, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag6-succ-eq-rdiag5-xor-rdiag6-xor-exposed4}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag7-succ-eq-rdiag6-xor-rdiag7-xor-exposed5}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(7, t + 1) = bxor(bxor(rdiag(6, t), rdiag(7, t)), exposed(5, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag7-succ-eq-rdiag6-xor-rdiag7-xor-exposed5}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag8-succ-eq-rdiag7-xor-rdiag8-xor-exposed6}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(8, t + 1) = bxor(bxor(rdiag(7, t), rdiag(8, t)), exposed(6, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag8-succ-eq-rdiag7-xor-rdiag8-xor-exposed6}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag9-succ-eq-rdiag8-xor-rdiag9-xor-exposed7}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(9, t + 1) = bxor(bxor(rdiag(8, t), rdiag(9, t)), exposed(7, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag9-succ-eq-rdiag8-xor-rdiag9-xor-exposed7}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag10-succ-eq-rdiag9-xor-rdiag10-xor-exposed8}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(10, t + 1) = bxor(bxor(rdiag(9, t), rdiag(10, t)), exposed(8, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag10-succ-eq-rdiag9-xor-rdiag10-xor-exposed8}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag2-succ-eq-not-ldiag1}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(2, t + 1) = not(ldiag(1, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag2-succ-eq-not-ldiag1}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag10-succ-eq-rdiag3-xor-ldiag1-xor-ldiag2-xor-ldiag9}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(10, t + 1) = bxor(bxor(bxor(rdiag(3, t), ldiag(1, t)), ldiag(2, t)), ldiag(9, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag10-succ-eq-rdiag3-xor-ldiag1-xor-ldiag2-xor-ldiag9}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag12-succ-eq-ldiag10-xor-ldiag12}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(12, t + 1) = bxor(ldiag(10, t), ldiag(12, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag12-succ-eq-ldiag10-xor-ldiag12}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed2-succ-eq-not-rdiag3-xor-exposed2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(2, t + 1) = not(bxor(rdiag(3, t), exposed(2, t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed2-succ-eq-not-rdiag3-xor-exposed2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed3-succ-eq-rdiag3-xor-rdiag4-xor-exposed3-xor-exposed4}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(3, t + 1) = bxor(bxor(bxor(rdiag(3, t), rdiag(4, t)), exposed(3, t)), exposed(4, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed3-succ-eq-rdiag3-xor-rdiag4-xor-exposed3-xor-exposed4}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed4-succ-eq-time-parity-xor-rdiag4-xor-exposed4}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(4, t + 1) = bxor(bxor(timeparity(t), rdiag(4, t)), exposed(4, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed4-succ-eq-time-parity-xor-rdiag4-xor-exposed4}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag3-even-eq-time-parity}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(3, 2 * t) = timeparity(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag3-even-eq-time-parity}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag4-even-eq-time-parity-xor-rdiag3}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(4, 2 * t) = bxor(timeparity(t), rdiag(3, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag4-even-eq-time-parity-xor-rdiag3}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag5-even-eq-false}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(5, 2 * t) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag5-even-eq-false}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{rdiag6-even-eq-time-parity-xor-rdiag3-xor-rdiag4-xor-exposed2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(6, 2 * t) = bxor(bxor(bxor(timeparity(t), rdiag(3, t)), rdiag(4, t)), exposed(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag6-even-eq-time-parity-xor-rdiag3-xor-rdiag4-xor-exposed2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{relation-f42bb48334ad}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(rdiag(7, 2 * t) = bxor(bxor(bxor(bxor(bxor(timeparity(t), rdiag(4, t)), rdiag(5, t)), rdiag(6, t)), exposed(2, t)), exposed(3, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::relation-f42bb48334ad}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag1-even-eq-ldiag1}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(1, 2 * t) = ldiag(1, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag1-even-eq-ldiag1}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag2-even-eq-false}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(2, 2 * t) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag2-even-eq-false}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{relation-9b630bd3f3ff}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(11, 2 * t) = bxor(bxor(bxor(bxor(ldiag(2, t), ldiag(9, t)), ldiag(10, t)), ldiag(12, t)), exposed(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::relation-9b630bd3f3ff}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag12-even-eq-time-parity-xor-ldiag2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(12, 2 * t) = bxor(timeparity(t), ldiag(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag12-even-eq-time-parity-xor-ldiag2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed2-even-eq-false}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(2, 2 * t) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed2-even-eq-false}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed3-even-eq-time-parity-xor-exposed2}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(3, 2 * t) = bxor(timeparity(t), exposed(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed3-even-eq-time-parity-xor-exposed2}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed4-even-eq-time-parity-xor-rdiag3}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(4, 2 * t) = bxor(timeparity(t), rdiag(3, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed4-even-eq-time-parity-xor-rdiag3}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed5-even-eq-false}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(5, 2 * t) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed5-even-eq-false}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{relation-1de4355b13b0}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(7, 2 * t) = bxor(bxor(bxor(bxor(bxor(rdiag(6, t), exposed(4, t)), exposed(5, t)), exposed(5, t + 1)), rdiag(8, 2 * t)), exposed(6, 2 * t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::relation-1de4355b13b0}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{relation-084ca6f82327}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(ldiag(11, 2 * t + 1) = bxor(bxor(bxor(bxor(timeparity(t), ldiag(9, t)), ldiag(10, t)), ldiag(12, t)), exposed(2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::relation-084ca6f82327}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{exposed5-odd-eq-time-parity-xor-rdiag5-xor-exposed2-xor-exposed3}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(exposed(5, 2 * t + 1) = bxor(bxor(bxor(timeparity(t), rdiag(5, t)), exposed(2, t)), exposed(3, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::exposed5-odd-eq-time-parity-xor-rdiag5-xor-exposed2-xor-exposed3}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{ldiag-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(s\), \(ldiag(1, succ(s)) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::ldiag-one}(s)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

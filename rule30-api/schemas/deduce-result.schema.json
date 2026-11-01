@@ -1,0 +1,156 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/deduce-result/1",
+ "title": "deduce --json: every attempt (claim, \u03ba-label, strategy, template digest, family, outcome, failure point, seconds, theorem), the claims proved, known (proved by the library theorem that states them), refuted, and the attempts left for the budget",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "attempts",
+  "proved",
+  "refuted",
+  "known",
+  "skipped",
+  "dry_run"
+ ],
+ "properties": {
+  "attempts": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/attempt"
+   }
+  },
+  "proved": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/proof"
+   }
+  },
+  "known": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/proof"
+   }
+  },
+  "refuted": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "lean",
+     "t"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "lean": {
+      "type": "string"
+     },
+     "t": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  "skipped": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "strategy",
+     "reason"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "strategy": {
+      "type": "string"
+     },
+     "reason": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "dry_run": {
+   "type": "boolean"
+  }
+ },
+ "$defs": {
+  "attempt": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "claim",
+    "kappa",
+    "strategy",
+    "template",
+    "family",
+    "outcome",
+    "failure",
+    "seconds",
+    "theorem"
+   ],
+   "properties": {
+    "claim": {
+     "type": "string"
+    },
+    "kappa": {
+     "type": "string",
+     "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "strategy": {
+     "type": "string"
+    },
+    "template": {
+     "type": "string",
+     "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "family": {
+     "type": "string"
+    },
+    "outcome": {
+     "type": "string",
+     "enum": [
+      "proved",
+      "known",
+      "refuted",
+      "failed",
+      "timeout",
+      "dry-run"
+     ]
+    },
+    "failure": {
+     "type": "string"
+    },
+    "seconds": {
+     "type": "number"
+    },
+    "theorem": {
+     "type": "string"
+    }
+   }
+  },
+  "proof": {
+   "type": "object",
+   "required": [
+    "id",
+    "lean"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "lean": {
+     "type": "string"
+    }
+   }
+  }
+ }
+}

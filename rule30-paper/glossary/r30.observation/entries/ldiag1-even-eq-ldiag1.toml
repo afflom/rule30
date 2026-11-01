@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "ldiag1-even-eq-ldiag1"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.time::ldiag) (nat 1) (app (const lexlean.std.nat::mul) (nat 2) (local t))) (app (const r30.time::ldiag) (nat 1) (local t))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Deduced"
+name = "Rule30UOR.Deduced.ldiag1_even_eq_ldiag1"
+
+[[form]]
+id = "ldiag1-even-eq-ldiag1"
+channel = "math"
+surface = "ldiag1eveneqldiag1"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name ldiag1eveneqldiag1) (paren (seq (slot 0))))"

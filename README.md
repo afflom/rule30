@@ -103,6 +103,53 @@ in `rule30-api/model/`, `schemas/`, `features/suites/` and `rule30-api/CONFORMAN
 
 ---
 
+## The engine: the work runs on GitHub Actions
+
+`.github/workflows/engine.yml` runs the proof engine on GitHub's runners, with no
+one at the keyboard: every thirty minutes (minutes 17 and 47), on a manual dispatch,
+and on every push to `main` that touches its inputs. One run is one **tick**
+(`bin/r30 engine tick`): it builds the research library, runs **induction**
+(`sequences --write` when the evaluation program or the κ-labels of what it reads
+changed, then `discover --write`: new relations among the basis sequences become
+`observed` claims), **pruning** (`audit --write`), **deduction** (`deduce`: each observed
+claim attempted for every time with a fixed portfolio of Lean proof templates, a
+proof accepted only when Lean checks it under `propext` and `Quot.sound`, appended to
+`Rule30UOR.Deduced`, published and recorded as `proved`; a relation that fails beyond
+its window becomes `refuted` by a decided counterexample) and **learning** (integer
+strategy weights per relation family, a bounded Hebbian rule decided in
+`rule30-api/src/Engine.lex.tex` and run through its certified Rust roots). It then
+commits through the unchanged pre-commit gate and pushes only if `main` has not
+moved meanwhile (otherwise the next tick redoes the work; never a force push), and
+dispatches the view. Nothing in a tick calls a remote or hosted model: the only
+models are the LexLean modules compiled into it. When nothing is left to do the tick
+ends idle without a commit, and later ticks on the same commit stop after the
+checkout, until a developer pushes a new feature (the same holds after a tick the
+gate refused or a stage failed on: it needs a person, and the job summary says
+where). A relation the library already proves is recorded `proved` with the
+existing theorem (outcome `known`), never proved a second time. The workflow file is data the
+model decides about: `bin/r30 api sync` renders it from `Engine.lex.tex`, and `bin/r30
+api check` refuses drift, any secret but `GITHUB_TOKEN`, permissions beyond
+`contents: write` and `actions: write`, an action the repository did not already
+use, and a pull-request trigger.
+
+```bash
+bin/r30 engine status              # the last tick, the network (units, synapses, events), the learned weights
+bin/r30 deduce --dry-run           # the attempts the next tick would make, rendered, neither checked nor recorded
+bin/r30 engine tick --budget-minutes 30   # one tick locally, without --commit/--push: nothing leaves the tree
+```
+
+**What only the owner does.** Nothing beyond pushing: the engine runs on
+`GITHUB_TOKEN` alone, and the owner's own credentials (an HTTPS token with the
+`workflow` scope, or SSH) already push the workflow file. New work reaches the engine
+as features pushed to `main` (a new notion in the basis, a template, a library
+theorem): the push starts a tick. The kill switch is the repository variable
+`R30_ENGINE`: set it to `off` (Settings, Secrets and variables, Actions, Variables)
+and no tick runs; delete it or set anything else to resume. GitHub disables
+scheduled workflows after sixty days without repository activity; re-enable the
+workflow in the Actions tab if that happens (pushes still start ticks meanwhile).
+
+---
+
 ## Highlights of Verified Results (`v0.1`, through `9.1386`)
 
 1. **The Doubling Law & Unbounded Left-Diagonal Periods (`9.892`–`9.900`, `9.824`):**

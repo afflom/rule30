@@ -87,21 +87,22 @@ def cmd_interface(args):
 def cmd_api(args):
     """The API as a LexLean semantic module (rule30-api/src/Api.lex.tex)."""
     from . import apimodel, registermodel, archmodel, presentationmodel, observermodel, convertmodel, standardsmodel, coremodel, prismmodel, site
-    from . import sequencemodel, discoverymodel
+    from . import sequencemodel, discoverymodel, enginemodel
     if args.sub == "sync":
         a, r, h, p = apimodel.sync(), registermodel.sync(), archmodel.sync(), presentationmodel.sync()
         o, c, d = observermodel.sync(), convertmodel.sync(fixtures=args.fixtures), standardsmodel.sync()
         k = coremodel.sync()
         q, v = sequencemodel.sync(), discoverymodel.sync()
+        e = enginemodel.sync()
         m, g = prismmodel.sync(), site.sync_logo()
         if (a["changed"] or r["changed"] or h["changed"] or p["changed"] or o["changed"] or c["changed"] or d["changed"] or k["changed"]
-                or q["changed"] or v["changed"]):
+                or q["changed"] or v["changed"] or e["changed"]):
             locked = checks.lock("api")
         else:
             locked = {"ok": True}
         state = lambda x: " (rewritten)" if x["changed"] else " (current)"
         out(args, {"api": a, "register": r, "architecture": h, "presentation": p, "observer": o, "convert": c, "standards": d, "core": k,
-                   "sequences": q, "discovery": v, "model": m, "logo": g},
+                   "sequences": q, "discovery": v, "engine": e, "model": m, "logo": g},
             f"{a['module']}: {a['commands']} commands" + state(a) +
             f"\n{r['module']}: {r['claims']} claims" + state(r) +
             f"\n{h['module']}: {h['stakeholders']} stakeholders" + state(h) +
@@ -112,6 +113,7 @@ def cmd_api(args):
             f"\n{k['module']}: {k['theorems']} decided theorems, {k['vectors']}" + state(k) +
             f"\n{q['module']}: {q['sequences']} sequences" + state(q) + "".join("\n  " + x for x in q.get("problems", [])) +
             f"\n{v['module']}: {v['theorems']} decided theorems" + state(v) +
+            f"\n{e['module']}: {e['theorems']} decided theorems, and .github/workflows/engine.yml" + state(e) +
             f"\n{m['model']}: {m['claims']} claims, {m['registers']} registers" + state(m) +
             f"\n{g['logo']}" + state(g))
         if not locked["ok"]:
@@ -130,7 +132,8 @@ def cmd_api(args):
         results = {"api": apimodel.check(), "register": registermodel.check(), "architecture": archmodel.check(),
                    "presentation": presentationmodel.check(), "observer": observermodel.check(),
                    "convert": convertmodel.check(), "standards": standardsmodel.check(), "core": coremodel.check(),
-                   "sequences": sequencemodel.check(), "discovery": discoverymodel.check(), "model": prismmodel.check(),
+                   "sequences": sequencemodel.check(), "discovery": discoverymodel.check(), "engine": enginemodel.check(),
+                   "model": prismmodel.check(),
                    "logo": site.check_logo()}
         names = {"api": "Api.lex.tex matches the CLI", "register": "Register.lex.tex matches frontier.toml",
                  "architecture": "Architecture.lex.tex is current", "presentation": "Presentation.lex.tex and Application.lex.tex are current",
@@ -140,6 +143,7 @@ def cmd_api(args):
                  "core": "Rule30Core.lex.tex and production/core-vectors.json match coremodel.py",
                  "sequences": "Sequences.lex.tex and model/sequences.toml are the basis, with their κ-labels",
                  "discovery": "Discovery.lex.tex matches discoverymodel.py, the basis and the register's relations",
+                 "engine": "Engine.lex.tex and .github/workflows/engine.yml match enginemodel.py, the templates and the ledger",
                  "model": "model/ registers, schemas, features and CONFORMANCE.md are current", "logo": "site/logo.svg is current"}
         out(args, results, "\n".join(names[k] if v["ok"] else v["reason"] for k, v in results.items()))
         if not all(v["ok"] for v in results.values()):
@@ -507,10 +511,20 @@ def cmd_commit(args):
     if code != 0:
         fail("R305006", "git add failed, nothing committed: " + err.strip().splitlines()[-1] if err.strip() else "git add failed")
     log = repo.scratch_dir() / f"commit-{int(time.time())}.log"
-    script = f"git commit -F - <<'MSG' && {'git push origin main' if args.push else 'true'}\n{args.message}\n\nCo-Authored-By: {args.coauthor}\nMSG"
+    trailer = f"\n\nCo-Authored-By: {args.coauthor}" if args.coauthor else ""
+    script = f"git commit -F - <<'MSG' && {'git push origin main' if args.push else 'true'}\n{args.message}{trailer}\nMSG"
     with open(log, "w") as f:
-        subprocess.Popen(["bash", "-c", script], cwd=repo.ROOT, stdout=f, stderr=subprocess.STDOUT,
-                         start_new_session=True)
+        proc = subprocess.Popen(["bash", "-c", script], cwd=repo.ROOT, stdout=f, stderr=subprocess.STDOUT,
+                                start_new_session=not args.wait)
+        if args.wait:  # in the foreground: the gate's verdict is this command's
+            code = proc.wait()
+    if args.wait:
+        _, head, _ = repo.run(["git", "rev-parse", "HEAD"])
+        out(args, {"log": str(log), "commit": head.strip() if code == 0 else None},
+            f"committed {head.strip()[:12]} through the hook; log: {log}" if code == 0 else f"the gate refused; log: {log}")
+        if code != 0:
+            fail("R305007", "\n".join(log.read_text().splitlines()[-8:]))
+        return
     out(args, {"log": str(log)}, f"commit running through the hook; log: {log}\n"
                                   f"poll with: tail -3 {log}")
 
@@ -559,11 +573,7 @@ def cmd_kappa(args):
     memo, read_only = kappa_research.working_memo(repo.CORE_LEAN)
     labels = kappa_research.memo_labels(repo.CORE_LEAN, names, memo, read_only=read_only)
     if args.duplicates:
-        every = list(modules.list_modules())
-        # the parents of generated names may live in modules outside the requested ones
-        full = labels if set(names) == set(every) else \
-            kappa_research.memo_labels(repo.CORE_LEAN, every, memo, read_only=read_only)
-        groups = kappa_research.duplicates(labels, kappa_research.library_kinds(full))
+        groups = kappa_research.duplicates(labels)
         rows = [{"statement": k, "theorems": [f"{m}: {n}" for m, n in v]} for k, v in sorted(groups.items())]
         text = "\n".join(f"! {r['statement'][:19]}  " + "  =  ".join(r["theorems"]) for r in rows) \
             or "no two theorems state the same thing"
@@ -624,15 +634,17 @@ def cmd_consolidate(args):
     ok, errors = modules.build([])
     if not ok:
         fail("R305003", "the consolidated library does not build (git diff shows the edits):\n" + errors)
-    if "frontier.toml" in touched:
-        # rendered from the rebuilt library, where a promoted canonical is public
+    if "frontier.toml" in touched or any("/glossary/" in t for t in touched):
+        # rendered from the rebuilt library, where a promoted canonical is public; a repointed
+        # glossary entry can change which lexeme closes a claim, so it re-renders too
         frontier.render_file()
+    if "frontier.toml" in touched:
         _sync_register()
     for claim in sheets:
         interface.write(claim)
     gone = {x["name"] for r in planned["keep"] for x in r["removed"]}
     audit_record = repo.ROOT / "rule30-api" / "model" / "audit.toml"
-    if gone and audit_record.exists() and any(n in audit_record.read_text() for n in gone):
+    if gone and audit_record.exists() and any(f'"{n}"' in audit_record.read_text() for n in gone):
         # the audit record names a removed theorem: re-audit the rebuilt library
         rerun = subprocess.run([str(repo.ROOT / "bin" / "r30"), "audit", "--write"], cwd=repo.ROOT,
                                capture_output=True, text=True)
@@ -685,6 +697,39 @@ def cmd_discover(args):
     except discover.Refused as e:
         fail("R307003", str(e)[:1200])
     out(args, r, discover.render(r))
+
+
+def cmd_deduce(args):
+    """Deduction mechanized: the observed claims of the register attempted for all t with the
+    portfolio of proof templates, in the learned order (tools/r30/deduce.py)."""
+    from . import deduce
+    observed = {c["id"] for c in frontier.load()["claim"] if c["status"] == "observed"}
+    unknown = [c for c in (args.claims or []) if c not in observed]
+    if unknown:
+        fail("R309002", ", ".join(unknown))
+    try:
+        r = deduce.run(budget_minutes=args.budget_minutes, claims=args.claims, dry_run=args.dry_run,
+                       log=(lambda *a, **k: None) if args.json else print)
+    except (RuntimeError, ValueError) as e:
+        fail("R309001", str(e)[:1200])
+    out(args, r, deduce.render(r))
+
+
+def cmd_engine(args):
+    """The engine: one tick (induction, pruning, deduction, learning, the gate), or its record."""
+    from . import engine
+    if args.sub == "status":
+        st = engine.status()
+        out(args, st, engine.render_status(st))
+        return
+    if args.push and not args.commit:
+        fail("R309004", "--push needs --commit")
+    try:
+        summary = engine.tick(budget_minutes=args.budget_minutes, commit=args.commit, push=args.push,
+                              log=(lambda *a, **k: None) if args.json else print)
+    except RuntimeError as e:
+        fail("R309004" if "not clean" in str(e) else "R309003", str(e)[:1200])
+    out(args, summary, f"tick {summary['number']}: {summary['outcome']} in {summary['seconds']} s")
 
 
 def cmd_experiment(args):
@@ -794,7 +839,8 @@ def build_parser():
 
     s = sp.add_parser("commit"); s.add_argument("-m", "--message", required=True)
     s.add_argument("--push", action="store_true"); s.add_argument("paths", nargs="*")
-    s.add_argument("--coauthor", default="Claude <noreply@anthropic.com>")
+    s.add_argument("--coauthor", default="Claude <noreply@anthropic.com>", help="the Co-Authored-By trailer ('' for none)")
+    s.add_argument("--wait", action="store_true", help="commit in the foreground and exit with the gate's verdict")
     s.set_defaults(fn=cmd_commit)
 
     mo = sp.add_parser("module", help="research modules: list, add (register + skeleton), build").add_subparsers(dest="sub", required=True)
@@ -821,6 +867,19 @@ def build_parser():
     s.add_argument("--degree", type=int, choices=[1, 2], default=2, help="2 adds the pairwise ANDs of the cell columns |p| <= 3")
     s.add_argument("--write", action="store_true", help="append the new relations to the register as status observed")
     s.set_defaults(fn=cmd_discover)
+
+    s = sp.add_parser("deduce", help="deduction mechanized: prove the observed claims for all t with the portfolio of proof templates, in the learned order; publish and register the proofs")
+    s.add_argument("--budget-minutes", type=int, default=60, help="stop scheduling attempts after this many minutes (default 60)")
+    s.add_argument("--claims", nargs="*", help="only these observed claims (default: every observed claim)")
+    s.add_argument("--dry-run", action="store_true", help="render the attempts without checking them in Lean or recording anything")
+    s.set_defaults(fn=cmd_deduce)
+    en = sp.add_parser("engine", help="the engine that runs on GitHub Actions: one tick, or its record").add_subparsers(dest="sub", required=True)
+    s = en.add_parser("tick", help="one cycle: build, induction (sequences, discover), pruning (audit), deduction, learning; --commit through the gate, --push when main has not moved")
+    s.add_argument("--budget-minutes", type=int, default=300, help="the tick budget split across the stages (default 300)")
+    s.add_argument("--commit", action="store_true", help="commit the tick's results in the foreground through the pre-commit gate")
+    s.add_argument("--push", action="store_true", help="push the commit when origin/main still is the base (never a force push)")
+    s.set_defaults(fn=cmd_engine)
+    en.add_parser("status", help="the last tick, the ledger and the learned weights").set_defaults(fn=cmd_engine)
 
     ex = sp.add_parser("experiment").add_subparsers(dest="sub", required=True)
     ex.add_parser("list").set_defaults(fn=cmd_experiment)

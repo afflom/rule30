@@ -1,0 +1,122 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "r30/engine-tick-result/1",
+ "title": "engine tick --json: the tick summary the ledger records (start, base, stages with seconds and allowances, counts, outcome)",
+ "$ref": "#/$defs/tick",
+ "$defs": {
+  "tick": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "number",
+    "start",
+    "base",
+    "budget",
+    "stages",
+    "outcome",
+    "seconds",
+    "commit",
+    "observed",
+    "proved",
+    "refuted",
+    "known",
+    "attempts",
+    "new_relations"
+   ],
+   "properties": {
+    "number": {
+     "type": "integer"
+    },
+    "start": {
+     "type": "string"
+    },
+    "base": {
+     "type": "string"
+    },
+    "budget": {
+     "type": "integer"
+    },
+    "stages": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "id",
+       "seconds",
+       "allowance",
+       "outcome",
+       "note"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "id": {
+        "type": "string",
+        "enum": [
+         "build",
+         "induction",
+         "pruning",
+         "deduction",
+         "learning",
+         "gate"
+        ]
+       },
+       "seconds": {
+        "type": "number"
+       },
+       "allowance": {
+        "type": "number"
+       },
+       "outcome": {
+        "type": "string",
+        "enum": [
+         "ok",
+         "cut",
+         "error"
+        ]
+       },
+       "note": {
+        "type": "string"
+       }
+      }
+     }
+    },
+    "outcome": {
+     "type": "string",
+     "enum": [
+      "idle",
+      "uncommitted",
+      "committed",
+      "pushed",
+      "dropped",
+      "refused",
+      "error"
+     ]
+    },
+    "seconds": {
+     "type": "number"
+    },
+    "commit": {
+     "type": "string"
+    },
+    "observed": {
+     "type": "integer"
+    },
+    "proved": {
+     "type": "integer"
+    },
+    "refuted": {
+     "type": "integer"
+    },
+    "known": {
+     "type": "integer"
+    },
+    "attempts": {
+     "type": "integer"
+    },
+    "new_relations": {
+     "type": "integer"
+    }
+   }
+  }
+ }
+}
