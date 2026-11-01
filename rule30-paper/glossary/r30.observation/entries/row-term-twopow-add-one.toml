@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "row-term-twopow-add-one"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (nat 1) (local k)))) (app (const lexlean.core::eq) (app (const r30.observation::row-term) (app (const lexlean.std.nat::add) (app (const r30.scale::twopow) (local k)) (nat 1)) (app (const r30.scale::twopow) (local k))) (app (const lexlean.std.bool::and) (app (const r30.scale::center) (app (const r30.scale::twopow) (local k))) (app (const r30.time::cell) (app (const r30.scale::twopow) (local k)) (nat 1))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.rowTerm_twopow_add_one"
+
+[[form]]
+id = "row-term-twopow-add-one"
+channel = "math"
+surface = "rowtermtwopowaddone"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rowtermtwopowaddone) (paren (seq (slot 0))))"

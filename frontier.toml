@@ -392,3 +392,12 @@ lean = "Rule30UOR.ClassObligation.eightOffClass_of_centerPeriodic"
 since = "2026-10-31"
 note = "Rule30UOR.ClassObligation: rulerCoefficient, frozenRuler, rulerBackground_kernel (the u-dependence of the background per residue; lag lemmas lag2_*, lag4_*, half_*), EightClassPeriodic, EightClassAgainstRuler, center_class_eq, eightClass_of_centerPeriodic, eightOffClass_of_centerPeriodic, lateTail_obligation (lateTail (k,r,u+P) XOR lateTail (k,r,u) = ruler difference AND secondPrefix k r), lateTail_scale_zero (lateTail k 0 (2v) = lateTail (k+1) 0 v XOR blockParity k), lateTail_scale. Measured: secondPrefix k r = 0 for r in {0,1,2} and 1 for r = 3 at every k in [2,6]; irregular beyond. The exact map of where the obligation sits: two residues per scale, nested along the 2-adic neighbourhoods of 1 and 2. Not a closing argument."
 depends = ["left-band", "kernel-law", "dyadic-renormalization"]
+
+[[claim]]
+id = "second-table"
+status = "proved"
+statement = "The frozen rows' second table is exact on the first four residues: second k 2 m = false for every row, and second k 3 m = pairRow m (the rows carrying the diagonal-2 pair, m odd and m >= 3), so secondPrefix k 2 = false and secondPrefix k 3 = true for every k >= 2. With secondPrefix k 0 = secondPrefix k 1 = false, the late tail of the kernel law is P-periodic in u on residues 0, 1, 2 and carries the ruler difference on residue 3, at every scale; and the residue-1 late tail at the first index is the single bit center (2^k) AND cell (2^k) 1."
+lean = "Rule30UOR.ClassObligation.secondPrefix_three"
+since = "2026-10-31"
+note = "Rule30UOR.ClassObligation: phiLinearPow_testBit_low, shiftedRow_low, interior_testBit_mid, interior_testBit_top_two, interior_lt_sub_two, shiftedRow_lt_of_pos, shiftedRow_zero_testBit, second_two_zero, second_three_zero, second_two, secondPrefix_two, pairRow, pairRow_eq, second_three, xorBelow_pairRow, secondPrefix_three, lateTail_one_at_one, rowTerm_twopow_add_one, lateTail_one_at_one_cell; then lateTail_three_scale (consecutive scales' residue-3 tails agree on even indices up to a constant), lateTail_three_obligation_one (lateTail k 3 (1+P) = lateTail k 3 1 XOR trailingParity P under a period), carry_testBit_cells, rowTerm_three_row_zero/_one/_two, lateTail_three_at_one_cells (the residue-3 tail at the first index is an explicit Boolean expression in the cells within distance 3 of the center at times 2^k, 2^k+1, 2^k+2), three_rows_against_ruler. Not a closing argument."
+depends = ["residue-dichotomy", "kernel-law"]

@@ -3427,4 +3427,102 @@ For every natural number \(k\) and natural number \(r\) and natural number \(v\)
 \begin{proof}
 The goal follows from \(\operatorname{latetailscale}(k, r, v)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:second-two}
+For every natural number \(k\) and natural number \(m\), if \(m < \operatorname{twopow}(k)\), then \(\operatorname{second}(k, 2, m) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{secondtwo}(k, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:second-prefix-two}
+For every natural number \(k\), \(\operatorname{secondprefix}(k, 2) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{secondprefixtwo}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:second-three}
+For every natural number \(k\) and natural number \(m\), if \(m < \operatorname{twopow}(k)\), then \(\operatorname{second}(k, 3, m) = \operatorname{pairrow}(m)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{secondthree}(k, m)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:second-prefix-three}
+For every natural number \(k\), if \(2 \le k\), then \(\operatorname{secondprefix}(k, 3) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{secondprefixthree}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:late-tail-one-at-one}
+For every natural number \(k\), \(\operatorname{latetail}(k, 1, 1) = \operatorname{rowterm}(\operatorname{twopow}(k) + 1, \operatorname{twopow}(k))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{latetailoneatone}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:row-term-twopow-add-one}
+For every natural number \(k\), if \(1 \le k\), then \(\operatorname{rowterm}(\operatorname{twopow}(k) + 1, \operatorname{twopow}(k)) = \operatorname{center}(\operatorname{twopow}(k)) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k), 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rowtermtwopowaddone}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:late-tail-one-at-one-cell}
+For every natural number \(k\), if \(1 \le k\), then \(\operatorname{latetail}(k, 1, 1) = \operatorname{center}(\operatorname{twopow}(k)) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k), 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{latetailoneatonecell}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:late-tail-three-scale}
+For every natural number \(k\) and natural number \(v\), if \(2 \le k\), then if \(1 \le v\), then \(\operatorname{latetail}(k + 1, 3, v) = \operatorname{bxor}(\operatorname{latetail}(k, 3, 2 \cdot v), \operatorname{bxor}(\operatorname{bxor}(\operatorname{frozenprefix}(k + 1, 3), \operatorname{frozenprefix}(k, 3)), \operatorname{true}))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{latetailthreescale}(k, v)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:late-tail-three-obligation-one}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then if \(2 \le k\), then if \(T \le \operatorname{twopow}(k) + 3\), then \(\operatorname{latetail}(k, 3, 1 + P) = \operatorname{bxor}(\operatorname{latetail}(k, 3, 1), \operatorname{trailingparity}(P))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{latetailthreeobligationone}(T, P, k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:row-term-three-row-two}
+For every natural number \(K\), if \(4 \le K\), then \(\operatorname{rowterm}(K + 3, K + 2) = \operatorname{cell}(K + 2, 0) \operatorname{and} \operatorname{cell}(K + 2, 1)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rowtermthreerowtwo}(K)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:row-term-three-row-one}
+For every natural number \(K\), if \(4 \le K\), then \(\operatorname{rowterm}(K + 3, K + 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{cell}(K + 1, -1) \operatorname{and} \operatorname{cell}(K + 1, 0), \operatorname{cell}(K + 1, 0) \operatorname{and} \operatorname{cell}(K + 1, 1)), \operatorname{cell}(K + 1, 1) \operatorname{and} \operatorname{cell}(K + 1, 2))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rowtermthreerowone}(K)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:row-term-three-row-zero}
+For every natural number \(K\), if \(4 \le K\), then \(\operatorname{rowterm}(K + 3, K) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{cell}(K, -2) \operatorname{and} \operatorname{cell}(K, -1), \operatorname{cell}(K, 0) \operatorname{and} \operatorname{cell}(K, 1)), \operatorname{cell}(K, 2) \operatorname{and} \operatorname{cell}(K, 3))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rowtermthreerowzero}(K)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:late-tail-three-at-one-cells}
+For every natural number \(k\), if \(2 \le k\), then \(\operatorname{latetail}(k, 3, 1) = \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{cell}(\operatorname{twopow}(k), -2) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k), -1), \operatorname{cell}(\operatorname{twopow}(k), 0) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k), 1)), \operatorname{cell}(\operatorname{twopow}(k), 2) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k), 3)), \operatorname{bxor}(\operatorname{bxor}(\operatorname{cell}(\operatorname{twopow}(k) + 1, -1) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k) + 1, 0), \operatorname{cell}(\operatorname{twopow}(k) + 1, 0) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k) + 1, 1)), \operatorname{cell}(\operatorname{twopow}(k) + 1, 1) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k) + 1, 2))), \operatorname{cell}(\operatorname{twopow}(k) + 2, 0) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k) + 2, 1))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{latetailthreeatonecells}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:three-rows-against-ruler}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(\operatorname{centerperiodic}(T, P)\), then if \(2 \le k\), then if \(T \le \operatorname{twopow}(k) + 3\), then \(\operatorname{bxor}(\operatorname{latetail}(k, 3, 1 + P), \operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{bxor}(\operatorname{cell}(\operatorname{twopow}(k), -2) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k), -1), \operatorname{cell}(\operatorname{twopow}(k), 0) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k), 1)), \operatorname{cell}(\operatorname{twopow}(k), 2) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k), 3)), \operatorname{bxor}(\operatorname{bxor}(\operatorname{cell}(\operatorname{twopow}(k) + 1, -1) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k) + 1, 0), \operatorname{cell}(\operatorname{twopow}(k) + 1, 0) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k) + 1, 1)), \operatorname{cell}(\operatorname{twopow}(k) + 1, 1) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k) + 1, 2))), \operatorname{cell}(\operatorname{twopow}(k) + 2, 0) \operatorname{and} \operatorname{cell}(\operatorname{twopow}(k) + 2, 1))) = \operatorname{trailingparity}(P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{threerowsagainstruler}(T, P, k)\).
+\end{proof}
 \end{document}

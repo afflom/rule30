@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "second-prefix-two"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::second-prefix) (local k) (nat 2)) (const lexlean.std.bool::false)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.secondPrefix_two"
+
+[[form]]
+id = "second-prefix-two"
+channel = "math"
+surface = "secondprefixtwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name secondprefixtwo) (paren (seq (slot 0))))"

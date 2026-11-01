@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "pair-row"
+category = "function"
+signature = "(pi ((explicit m (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.pairRow"
+
+[[form]]
+id = "pair-row"
+channel = "math"
+surface = "pairrow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name pairrow) (paren (seq (slot 0))))"

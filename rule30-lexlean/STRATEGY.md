@@ -3280,4 +3280,19 @@ exact map of where the obligation sits: two residues per scale, nested across sc
 2-adic neighbourhoods of 1 and 2, i.e. at each time `t` exactly the scales `k ≤ ν_2(t−1)` or
 `k ≤ ν_2(t−2)`.
 
+*The second table on the first four residues is exact* (`second-table`): `second k 2 m = false`
+for every row, `second k 3 m = pairRow m` (the rows carrying the diagonal-2 pair, `m` odd, `m ≥ 3`;
+at `m = 0` palindromy kills both bits, for `m ≥ 1` the three leftmost carry bits vanish,
+`interior m < 2^{2m−2}`), so `secondPrefix k 3 = true` (`2^{k−1} − 1` rows, odd) and
+`secondPrefix k r = false` for `r ∈ {0, 1, 2}` at every scale. Hence the late tail is `P`-periodic in
+`u` on residues 0, 1, 2 and carries the ruler difference on residue 3; on residues 1 and 2 the ruler
+of the background therefore comes entirely from the band bits of the rows at or above the scale,
+and on residue 3 the frozen rows carry a ruler the late tail must cancel. The residue-1 tail at the
+first index is one bit, `lateTail k 1 1 = center (2^k) ∧ cell (2^k) 1`
+(`lateTail_one_at_one_cell`). Next in the iteration: the residue-3 tails of consecutive scales agree
+on even indices up to a constant (`lateTail_scale` with `secondPrefix k 3 = secondPrefix (k+1) 3 =
+true`), and the residue-3 obligation at the first index is a three-row local statement,
+`lateTail k 3 (1+P) = lateTail k 3 1 ⊕ trailingParity P`, with `lateTail k 3 1` a Boolean
+expression in the cells within distance 3 of the center at times `2^k, 2^k+1, 2^k+2`.
+
 Problem 1 remains unproved.

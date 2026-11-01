@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "second-two"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit m (const lexlean.std.nat::nat))) (pi ((explicit hm (app (const lexlean.std.nat::lt) (local m) (app (const r30.scale::twopow) (local k))))) (app (const lexlean.core::eq) (app (const r30.observation::second) (local k) (nat 2) (local m)) (const lexlean.std.bool::false))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.second_two"
+
+[[form]]
+id = "second-two"
+channel = "math"
+surface = "secondtwo"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name secondtwo) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

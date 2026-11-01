@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "late-tail-three-scale"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit v (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (nat 2) (local k))) (explicit hv (app (const lexlean.std.nat::le) (nat 1) (local v)))) (app (const lexlean.core::eq) (app (const r30.observation::late-tail) (app (const lexlean.std.nat::add) (local k) (nat 1)) (nat 3) (local v)) (app (const r30.local::bxor) (app (const r30.observation::late-tail) (local k) (nat 3) (app (const lexlean.std.nat::mul) (nat 2) (local v))) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const r30.observation::frozen-prefix) (app (const lexlean.std.nat::add) (local k) (nat 1)) (nat 3)) (app (const r30.observation::frozen-prefix) (local k) (nat 3))) (const lexlean.std.bool::true))))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.lateTail_three_scale"
+
+[[form]]
+id = "late-tail-three-scale"
+channel = "math"
+surface = "latetailthreescale"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name latetailthreescale) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

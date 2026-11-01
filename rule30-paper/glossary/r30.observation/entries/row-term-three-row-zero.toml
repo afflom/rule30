@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "row-term-three-row-zero"
+category = "proof-constant"
+signature = "(pi ((explicit K (const lexlean.std.nat::nat))) (pi ((explicit hK (app (const lexlean.std.nat::le) (nat 4) (local K)))) (app (const lexlean.core::eq) (app (const r30.observation::row-term) (app (const lexlean.std.nat::add) (local K) (nat 3)) (local K)) (app (const r30.local::bxor) (app (const r30.local::bxor) (app (const lexlean.std.bool::and) (app (const r30.time::cell) (local K) (app (const lexlean.std.int::neg) (nat 2))) (app (const r30.time::cell) (local K) (app (const lexlean.std.int::neg) (nat 1)))) (app (const lexlean.std.bool::and) (app (const r30.time::cell) (local K) (nat 0)) (app (const r30.time::cell) (local K) (nat 1)))) (app (const lexlean.std.bool::and) (app (const r30.time::cell) (local K) (nat 2)) (app (const r30.time::cell) (local K) (nat 3)))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.ClassObligation"
+name = "Rule30UOR.ClassObligation.rowTerm_three_row_zero"
+
+[[form]]
+id = "row-term-three-row-zero"
+channel = "math"
+surface = "rowtermthreerowzero"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rowtermthreerowzero) (paren (seq (slot 0))))"

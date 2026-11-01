@@ -265,3 +265,9 @@ Feature: register
     Given frontier.toml names Rule30UOR.ClassObligation.eightOffClass_of_centerPeriodic for residue-dichotomy
     When the suite exercises residue-dichotomy
     Then its oracle accepts it: frontier check: Rule30UOR.ClassObligation.eightOffClass_of_centerPeriodic kernel-checked under propext and Quot.sound and published
+
+  @second-table @build
+  Scenario: The frozen rows' second table is exact on the first four residues: second k 2 m = false for every row, and second k 3 m = pairRow m (the rows carrying the diagonal-2 pair, m odd and m >= 3), so secondPrefix k 2 = false and secondPrefix k 3 = true for every k >= 2. With secondPrefix k 0 = secondPrefix k 1 = false, the late tail of the kernel law is P-periodic in u on residues 0, 1, 2 and carries the ruler difference on residue 3, at every scale; and the residue-1 late tail at the first index is the single bit center (2^k) AND cell (2^k) 1.
+    Given frontier.toml names Rule30UOR.ClassObligation.secondPrefix_three for second-table
+    When the suite exercises second-table
+    Then its oracle accepts it: frontier check: Rule30UOR.ClassObligation.secondPrefix_three kernel-checked under propext and Quot.sound and published

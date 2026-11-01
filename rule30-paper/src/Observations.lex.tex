@@ -3921,5 +3921,117 @@ Close the goal with \(\lexeme{r30.observation::late-tail-scale}(k, r, v)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{second-two}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(m\), if \(m < twopow(k)\), then \(second(k, 2, m) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::second-two}(k, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{second-prefix-two}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), \(secondprefix(k, 2) = false\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::second-prefix-two}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{second-three}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(m\), if \(m < twopow(k)\), then \(second(k, 3, m) = pairrow(m)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::second-three}(k, m)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{second-prefix-three}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), if \(2 ≤ k\), then \(secondprefix(k, 3) = true\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::second-prefix-three}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-one-at-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), \(latetail(k, 1, 1) = rowterm(twopow(k) + 1, twopow(k))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-one-at-one}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{row-term-twopow-add-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), if \(1 ≤ k\), then \(rowterm(twopow(k) + 1, twopow(k)) = center(twopow(k)) band cell(twopow(k), 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-twopow-add-one}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-one-at-one-cell}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), if \(1 ≤ k\), then \(latetail(k, 1, 1) = center(twopow(k)) band cell(twopow(k), 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-one-at-one-cell}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-three-scale}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\) and natural number \(v\), if \(2 ≤ k\), then if \(1 ≤ v\), then \(latetail(k + 1, 3, v) = bxor(latetail(k, 3, 2 * v), bxor(bxor(frozenprefix(k + 1, 3), frozenprefix(k, 3)), true))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-three-scale}(k, v)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-three-obligation-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(2 ≤ k\), then if \(T ≤ twopow(k) + 3\), then \(latetail(k, 3, 1 + P) = bxor(latetail(k, 3, 1), trailingparity(P))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-three-obligation-one}(T, P, k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{row-term-three-row-two}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\), if \(4 ≤ K\), then \(rowterm(K + 3, K + 2) = cell(K + 2, 0) band cell(K + 2, 1)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-three-row-two}(K)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{row-term-three-row-one}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\), if \(4 ≤ K\), then \(rowterm(K + 3, K + 1) = bxor(bxor(cell(K + 1, intneg 1) band cell(K + 1, 0), cell(K + 1, 0) band cell(K + 1, 1)), cell(K + 1, 1) band cell(K + 1, 2))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-three-row-one}(K)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{row-term-three-row-zero}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(K\), if \(4 ≤ K\), then \(rowterm(K + 3, K) = bxor(bxor(cell(K, intneg 2) band cell(K, intneg 1), cell(K, 0) band cell(K, 1)), cell(K, 2) band cell(K, 3))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::row-term-three-row-zero}(K)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{late-tail-three-at-one-cells}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(k\), if \(2 ≤ k\), then \(latetail(k, 3, 1) = bxor(bxor(bxor(bxor(cell(twopow(k), intneg 2) band cell(twopow(k), intneg 1), cell(twopow(k), 0) band cell(twopow(k), 1)), cell(twopow(k), 2) band cell(twopow(k), 3)), bxor(bxor(cell(twopow(k) + 1, intneg 1) band cell(twopow(k) + 1, 0), cell(twopow(k) + 1, 0) band cell(twopow(k) + 1, 1)), cell(twopow(k) + 1, 1) band cell(twopow(k) + 1, 2))), cell(twopow(k) + 2, 0) band cell(twopow(k) + 2, 1))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::late-tail-three-at-one-cells}(k)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{three-rows-against-ruler}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(k\), if \(centerperiodic(T, P)\), then if \(2 ≤ k\), then if \(T ≤ twopow(k) + 3\), then \(bxor(latetail(k, 3, 1 + P), bxor(bxor(bxor(bxor(cell(twopow(k), intneg 2) band cell(twopow(k), intneg 1), cell(twopow(k), 0) band cell(twopow(k), 1)), cell(twopow(k), 2) band cell(twopow(k), 3)), bxor(bxor(cell(twopow(k) + 1, intneg 1) band cell(twopow(k) + 1, 0), cell(twopow(k) + 1, 0) band cell(twopow(k) + 1, 1)), cell(twopow(k) + 1, 1) band cell(twopow(k) + 1, 2))), cell(twopow(k) + 2, 0) band cell(twopow(k) + 2, 1))) = trailingparity(P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::three-rows-against-ruler}(T, P, k)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}
