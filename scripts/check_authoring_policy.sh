@@ -6,6 +6,26 @@ set -euo pipefail
 #   be paired with LexLean source edits.
 # - Generated artifacts must not be edited without LexLean source edits.
 
+# Python is deprecated (the owner, 2026-11-01: "No more python"): the implementation is LexLean,
+# with prism-stdlib, and PrismPM generates and governs it. Python is eliminated incrementally, so a
+# commit may only shrink it: it may not add a Python file, and the Python it touches may not grow.
+# This check runs before the bypass below and has none of its own.
+if git rev-parse --git-dir >/dev/null 2>&1; then
+  mapfile -t new_python < <(git diff --cached --no-renames --name-only --diff-filter=A -- '*.py')
+  if [[ ${#new_python[@]} -gt 0 ]]; then
+    echo "Refused: Python is deprecated in this repository; new Python files: ${new_python[*]}" >&2
+    echo "Author the capability in LexLean (prism-stdlib; PrismPM generates the runtime)." >&2
+    exit 1
+  fi
+  read -r py_added py_removed < <(git diff --cached --no-renames --numstat -- '*.py' \
+    | awk '$1 != "-" { a += $1; r += $2 } END { print a + 0, r + 0 }')
+  if (( py_added > py_removed )); then
+    echo "Refused: Python is deprecated; this commit grows it by $((py_added - py_removed)) lines" >&2
+    echo "(added ${py_added}, removed ${py_removed}). Python may only shrink: move the logic to LexLean." >&2
+    exit 1
+  fi
+fi
+
 if [[ "${ALLOW_NON_LEXLEAN_AUTHORING:-0}" == "1" ]]; then
   exit 0
 fi
