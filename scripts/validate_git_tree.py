@@ -163,12 +163,14 @@ def main():
 
     key = cache_key(tree)
     certificate = cache / (key + ".ok")
-    # Finer caches, keyed by the same proof-tool digest: Lake build directories
-    # and per-project LexLean verifications.
+    # Finer caches, keyed by the same proof-tool digest: Lake build directories,
+    # per-project LexLean verifications and kernel-replay receipts.
     tools_key = cache_key("tools")[:16]
     lake_cache = cache / "lake" / tools_key
     lexlean_cache = cache / "lexlean" / tools_key
     env["RULE30_LEXLEAN_CACHE"] = str(lexlean_cache)
+    # Kernel-replay receipts (scripts/replay_research.py), keyed by artifact content.
+    env["RULE30_REPLAY_CACHE"] = str(cache / "replay" / tools_key)
     for project in LEXLEAN_INPUTS:
         env["RULE30_LEXLEAN_KEY_" + project.replace("-", "_")] = lexlean_input_digest(root, tree, project)
     with (cache / (key + ".lock")).open("w") as guard:

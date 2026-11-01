@@ -3189,4 +3189,26 @@ the next block, which is the one place the nonlinear rule acts; the register's o
 facts (left-defect sourcing from column one, the coupling law `leftDefect = ¬center ∧ rightDefect`,
 black-center absorption) are statements about exactly that window.
 
+*The collision form.* `collision Q t p = (cell(t,p) ∧ cell(t+Q,p+1)) ⊕ (cell(t,p+1) ∧ cell(t+Q,p))` is
+the cross term between a row and its lag-`Q` shift, so by `carry_xor` the lag-`P` change of a row's
+carries is `carry δ ⊕ cross (row, δ)` with `δ` the lag-`P` defect row. Under a period the obligation
+reads: the gasket parity over rows of the defect-driven carry changes equals the ruler difference,
+which for lag `2^k P` vanishes off the class `t ≡ 1 (mod 2^k)` at every `k`
+(`threeOffClass_of_centerPeriodic`). The defect field is where the nonlinear facts bite: it vanishes
+on the center, column `−1` is gated (`periodic_center_coupling`), every left defect is sourced from
+column `+1` within its depth (`left_defect_sourced`), and the far-left edge forces a defect at
+depth `t + P` at every time. A closing argument in this vocabulary shows that no defect field with
+these properties drives a gasket parity that is zero off one residue class at every dyadic scale.
+
+**Kappa (2026-10-31).** PrismPM's κ is an artifact's content address (application kappa, archive
+kappa, Kappa replication in its spec; `UOR-Foundation/kappa-registry` is the content-addressed
+substrate behind OCI, Git, S3 and Nix). In the proof the freezing law is a κ: the far future sees a
+block of rows only through its two tables, the idempotent canonical form of the block with respect
+to the center, `2^{j+2}` bits for `2^{2j+1}` carries, and "κ does not determine the spectrum" is
+exactly that the tables do not determine the carries. In the tooling the same discipline is what
+the gate lacked: evidence must be addressed by the content it certifies, so verifying the same
+content twice is a no-op (per-module kernel-replay receipts keyed by the olean's digest, the
+attestation and Lake caches already keyed by inputs). No registry server is needed for this; the
+local content-addressed caches are the fix, and a kappa-registry would only make them shareable.
+
 Problem 1 remains unproved.

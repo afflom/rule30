@@ -42,12 +42,14 @@ import json
 from pathlib import Path
 
 from . import convert, repo, sexpr
+from .semantic import CHUNK, lst
 
 API = repo.ROOT / "rule30-api"
 MODULE = API / "src" / "Convert.lex.tex"
 FIXTURES = Path(__file__).with_name("convert_fixtures.json")
 TARGET = "r30.observation"
-CHUNK = 40          # the notation's JSON reader nests about 128 levels: literal lists are chunked
+# CHUNK (from `semantic`): the lexicon is split into definitions of at most
+# CHUNK lexemes, and every literal list is chunked through `prim append`.
 
 # The fixture vector: real theorems of the research modules, chosen so that
 # every construct of the converter and every refusal class appears once.
@@ -181,16 +183,6 @@ def match_nat(s, zero_body, p, succ_body):
     return {"kind": "match", "scrutinee": s, "branches": [
         {"constructor": {"name": "Nat.zero"}, "binders": [], "body": zero_body},
         {"constructor": {"name": "Nat.succ"}, "binders": [p], "body": succ_body}]}
-
-
-def lst(items, t):
-    """A literal list, chunked through `prim append` below CHUNK elements."""
-    if len(items) <= CHUNK:
-        node = {"kind": "nil", "element": t}
-        for e in reversed(items):
-            node = {"kind": "cons", "head": e, "tail": node}
-        return node
-    return lappend(lst(items[:CHUNK], t), lst(items[CHUNK:], t), t)
 
 
 def chars(text):

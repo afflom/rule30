@@ -50,7 +50,18 @@ def ctor(name, module=None):
     return {"kind": "constructor", "constructor": c, "arguments": []}
 
 
+# The pinned LexLean notation reads a module into JSON with a reader that
+# nests about 128 levels and refuses deeper modules (LLT4001 "recursion limit
+# exceeded"); a literal list is a chain of cons cells, one level each, so
+# every list longer than CHUNK is split through `prim append`.
+CHUNK = 40
+
+
 def lst(elements, element_type):
+    """A literal list, chunked through `prim append` below CHUNK elements."""
+    if len(elements) > CHUNK:
+        return {"kind": "primitive", "operation": "append", "result": list_t(element_type),
+                "arguments": [lst(elements[:CHUNK], element_type), lst(elements[CHUNK:], element_type)]}
     node = {"kind": "nil", "element": element_type}
     for e in reversed(elements):
         node = {"kind": "cons", "head": e, "tail": node}

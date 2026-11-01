@@ -7,7 +7,7 @@ target is a claim id, and every proved claim names a Lean theorem. The gate
 still confirms the Lean names against the kernel (`frontier check`); the
 module makes the plan itself a checked object, written in LexLean."""
 
-from . import frontier, repo
+from . import frontier, repo, semantic
 
 API = repo.ROOT / "rule30-api"
 MODULE = API / "src" / "Register.lex.tex"
@@ -34,10 +34,7 @@ def _call(f, *args):
 
 
 def _list(elements, element_type):
-    node = {"kind": "nil", "element": element_type}
-    for e in reversed(elements):
-        node = {"kind": "cons", "head": e, "tail": node}
-    return node
+    return semantic.lst(elements, element_type)
 
 
 def _named(name):

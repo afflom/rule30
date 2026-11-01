@@ -196,6 +196,35 @@ cost explicit and checked, so that effort goes only to `open` claims.
 | `scripts/` | the validation gate, packaging and policy checks; tests in `scripts/tests/` |
 | `experiments/` | finite diagnostics on the seed |
 
+## Operating the gate
+
+The gate (`bin/r30 commit`, the pre-commit and pre-push hooks running
+`scripts/validate_git_tree.py`) is the one expensive step, and its failures of
+the last day were all operational: the kernel replay needs about 41 GB of
+virtual and 12 GB of resident memory on a 31 GB machine, and anything that
+limits or competes with it looks like a proof failure. Run it from a plain
+shell and leave the machine to it; iterate with the module-level commands and
+commit once per batch.
+
+- Launch `bin/r30 commit` from a plain shell: never under `ulimit -v`, a
+  thread cap or a sandbox. The gate inherits them, and `leanchecker` then
+  cannot map the toolchain.
+- Run no agent workloads, `lake build` or `lexlean verify` while the gate runs.
+  `bin/r30` and the hooks set `oom_score_adj=1000`, so under memory pressure
+  the gate dies before the editor, and the rejection is then not about the proof.
+- The gate reuses its evidence. Lake build directories, LexLean attestations
+  (keyed by their exact inputs) and the kernel-replay receipts of
+  `scripts/replay_research.py` (one per research module, keyed by the content
+  of its `.olean` and the proof tools, never by path or Git state) live under
+  the Git common directory in `rule30-validation/` and survive rejections, so a
+  retry replays only what changed. Outside the gate the receipts are in `.r30/replay`.
+- Generated modules (`bin/r30 api sync`) chunk every literal list through
+  `prim append` below `semantic.CHUNK` elements: the pinned notation's reader
+  refuses deeper nesting (LLT4001). Do not build long lists by hand.
+- Iterate with `bin/r30 check`, `bin/r30 verify ... --modules`, `bin/r30 module
+  build` and `make check-tooling`; use the gate once per batch, and
+  `bin/r30 gate` to watch it.
+
 ## What not to do
 
 - Do not edit `lexlean.lock`, `pdf-manifest.json`, the PDFs or `verified-latest/`; the gate generates them.

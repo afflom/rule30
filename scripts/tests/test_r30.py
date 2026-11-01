@@ -533,6 +533,50 @@ class NotationTests(unittest.TestCase):
         self.assertIn("\\useglossary{lexlean.std.bool@1.2.0}\n\\useglossary{lexlean.std.nat@1.2.0}\n\\useglossary{prism.arch@1.0.0}\n"
                       "\\importmodule{Alpha}\n\\importmodule{Zeta}\n\\title{Boolean}", text)
 
+    def test_long_literal_lists_stay_below_the_notation_nesting_limit(self):
+        """The pinned notation's reader nests about 128 levels (LLT4001 beyond);
+        `semantic.lst` chunks every literal list through `prim append`, so the
+        longest list a generator can produce (a register of 500 records, each
+        with its own string list) stays below 100 levels of parentheses."""
+        from tools.r30 import lexmod, semantic
+        from tools.r30.semantic import CHUNK, definition, list_t, lst, named, record, s, strings
+
+        def depth(text):
+            best = current = 0
+            in_string = escape = False
+            for ch in text:
+                if in_string:
+                    if escape:
+                        escape = False
+                    elif ch == "\\":
+                        escape = True
+                    elif ch == '"':
+                        in_string = False
+                    continue
+                if ch == '"':
+                    in_string = True
+                elif ch in "([{":
+                    current += 1
+                    best = max(best, current)
+                elif ch in ")]}":
+                    current -= 1
+            return best
+
+        self.assertEqual(CHUNK, 40)
+        rows = [record("Claim", id=s(f"claim-{i}"), depends=strings([f"dep-{j}" for j in range(i % (CHUNK + 1))]))
+                for i in range(500)]
+        text = lexmod.decl(definition("claims", list_t(named("Claim")), lst(rows, named("Claim"))))
+        self.assertLess(depth(text), 100)
+        self.assertLess(depth(lexmod.expr(strings([str(i) for i in range(500)]))), 100)
+        self.assertEqual(lexmod.expr(semantic.lst([s("a")], semantic.STR)), '(cons "a" (nil String))')
+        self.assertEqual(text.count("(prim append"), 12)
+        # The chunking is a construction, not a change of value: the generators
+        # that chunk by hand produce the same data form.
+        from tools.r30 import convertmodel, observermodel
+        self.assertIs(convertmodel.lst, lst)
+        self.assertIs(observermodel.lst, lst)
+        self.assertEqual(convertmodel.CHUNK, CHUNK)
+
     def test_vendored_stdlib_is_language_1_2_and_declares_the_arch_entities(self):
         api = repo.PROJECTS["api"]
         arch = (api / "stdlib" / "Foundation" / "Arch.lex.tex").read_text()

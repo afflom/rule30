@@ -48,17 +48,8 @@ Stakeholders, journeys and panels are read from `archmodel` and
 from . import archmodel, frontier, repo
 from . import presentationmodel as pm
 
-CHUNK = 40          # the notation's JSON reader nests about 128 levels: literal lists are chunked
-
-
-def lst(items, t):
-    """A literal list, chunked through `prim append` below CHUNK elements."""
-    if len(items) <= CHUNK:
-        return _lst(items, t)
-    return {"kind": "primitive", "operation": "append", "result": list_t(t),
-            "arguments": [lst(items[:CHUNK], t), lst(items[CHUNK:], t)]}
 from .semantic import (BOOL, STR, all_members, b, call, definition, eq_string, field_of_each, holds, if_, list_t,
-                       lookup_field, lst as _lst, match_list, member_string, named, proj, record, s, strings, structure,
+                       lookup_field, lst, match_list, member_string, named, proj, record, s, strings, structure,
                        theorem, var)
 
 MODULE = repo.ROOT / "rule30-api" / "src" / "Observer.lex.tex"

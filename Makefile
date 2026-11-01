@@ -17,7 +17,7 @@ check-research: check-research-coverage core
 	python3 scripts/check_no_choice.py
 	bin/r30 frontier check
 	cd rule30-core-lean && lake env lean scripts/AuditVacuous.lean && lake env lean scripts/CheckResearchAxioms.lean
-	cd rule30-core-lean && modules="$$(python3 ../scripts/check_research_coverage.py --modules)" && lake env "$$(lake env lean --print-prefix)/bin/leanchecker" $$modules
+	python3 scripts/replay_research.py
 
 lexlean:
 	./scripts/verify_lexlean.sh "$(LEXLEAN)"

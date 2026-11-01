@@ -12,7 +12,7 @@ import argparse
 import json
 from pathlib import Path
 
-from . import repo
+from . import repo, semantic
 
 API = repo.ROOT / "rule30-api"
 MODULE = API / "src" / "Api.lex.tex"
@@ -38,10 +38,7 @@ def _bool(v):
 
 
 def _list(elements, element_type):
-    node = {"kind": "nil", "element": element_type}
-    for e in reversed(elements):
-        node = {"kind": "cons", "head": e, "tail": node}
-    return node
+    return semantic.lst(elements, element_type)
 
 
 def _named(name):

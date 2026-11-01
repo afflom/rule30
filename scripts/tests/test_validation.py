@@ -66,6 +66,7 @@ lake.parent.mkdir(parents=True, exist_ok=True)
 lake.write_text("built by the fixture gate")
 assert os.environ.get("RULE30_LEXLEAN_CACHE"), "the gate must name the LexLean cache"
 assert os.environ.get("RULE30_LEXLEAN_KEY_rule30_paper"), "the gate must key each project's inputs"
+assert os.environ.get("RULE30_REPLAY_CACHE"), "the gate must name the kernel-replay receipt cache"
 Path("dist").mkdir(exist_ok=True)
 for name in ("Core", "Paper", "Observations"):
     Path("dist", name + ".pdf").write_bytes(b"%PDF-1.4 fresh " + name.encode())
