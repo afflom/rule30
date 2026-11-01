@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "half-periodic"
+category = "function"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.HalfPeriodic"
+
+[[form]]
+id = "half-periodic"
+channel = "math"
+surface = "halfperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name halfperiodic) (paren (seq (slot 0))))"

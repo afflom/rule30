@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "half-periodic-of-two-le"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::le) (nat 2) (local j)))) (app (const r30.observation::half-periodic) (local j))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.halfPeriodic_of_two_le"
+
+[[form]]
+id = "half-periodic-of-two-le"
+channel = "math"
+surface = "halfperiodicoftwole"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name halfperiodicoftwole) (paren (seq (slot 0))))"

@@ -244,6 +244,22 @@ Close the goal with \(\lexeme{r30.observation::problem1-iff-antidiagonal}\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{claim-diagonal-halving}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(j\) and natural number \(t\), if \(2 ≤ j\), then \(rdiag(j, t + twopow(j - 1)) = rdiag(j, t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::rdiag-period-half}(j, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{claim-mask-transport}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), if \(2 ≤ t\), then \(center(t) = not(masktransport(t - 2, t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-eq-not-mask-transport}(t)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 
 \begin{section}{frontier-refuted}

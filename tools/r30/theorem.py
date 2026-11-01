@@ -12,8 +12,11 @@ ALLOW = "\\allowaxioms{Quot.sound;propext}"
 
 
 def slugify(lean_name):
-    base = lean_name.split(".")[-1]
+    """The glossary id of a Lean name: words split at case changes and underscores; a prime
+    (`foo'`) reads `-prime`, and any other character outside the id alphabet is a separator."""
+    base = lean_name.split(".")[-1].replace("'", "_prime")
     s = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "-", base).replace("_", "-").lower()
+    s = re.sub(r"[^a-z0-9-]", "-", s)
     return re.sub(r"-+", "-", s).strip("-")
 
 

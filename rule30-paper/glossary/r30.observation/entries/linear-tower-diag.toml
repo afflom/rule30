@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "linear-tower-diag"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (pi ((explicit ht (app (const lexlean.std.nat::le) (nat 1) (local t)))) (app (const lexlean.core::eq) (app (const r30.observation::linear-tower) (app (const lexlean.std.nat::sub) (local t) (nat 1)) (local t)) (const lexlean.std.bool::true))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.linearTower_diag"
+
+[[form]]
+id = "linear-tower-diag"
+channel = "math"
+surface = "lineartowerdiag"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name lineartowerdiag) (paren (seq (slot 0))))"

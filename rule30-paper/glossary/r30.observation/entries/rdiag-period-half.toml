@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "rdiag-period-half"
+category = "proof-constant"
+signature = "(pi ((explicit j (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hj (app (const lexlean.std.nat::le) (nat 2) (local j)))) (app (const lexlean.core::eq) (app (const r30.right::rdiag) (local j) (app (const lexlean.std.nat::add) (local t) (app (const r30.scale::twopow) (app (const lexlean.std.nat::sub) (local j) (nat 1))))) (app (const r30.right::rdiag) (local j) (local t)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.rdiag_period_half"
+
+[[form]]
+id = "rdiag-period-half"
+channel = "math"
+surface = "rdiagperiodhalf"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name rdiagperiodhalf) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

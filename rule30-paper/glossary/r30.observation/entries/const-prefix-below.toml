@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "const-prefix-below"
+category = "proof-constant"
+signature = "(pi ((explicit n (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (pi ((explicit hs (app (const lexlean.std.nat::lt) (local s) (local n)))) (app (const lexlean.core::eq) (app (const r30.observation::const-prefix) (local n) (local s)) (const lexlean.std.bool::false))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.constPrefix_below"
+
+[[form]]
+id = "const-prefix-below"
+channel = "math"
+surface = "constprefixbelow"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name constprefixbelow) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

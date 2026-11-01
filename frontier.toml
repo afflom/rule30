@@ -410,3 +410,21 @@ lean = "Rule30UOR.Antidiagonal.problem1_iff_antidiagonal"
 since = "2026-10-31"
 note = "Rule30UOR.Antidiagonal: center_eq_rdiag_self, centerPeriodic_iff_centerPer (Right.CenterPer is the anti-diagonal form), AntidiagonalAperiodic, problem1_iff_antidiagonal, problem1_of_antidiagonal, twopow_eq_pow, rdiag_add_twopow_mul, towerWord, rdiag_eq_towerWord, towerWord_mod, center_eq_towerWord, towerWord_step (unconditional, no modulus bookkeeping), towerWord_zero, towerWord_one, towerWord_succ_zero, towerWord_centerPeriodic, centerPeriodic_of_towerWord. Why this frame: the third proposal round showed nothing left of the center can refute a period (every center sequence is the center of a Rule-30-consistent half-plane), so the proof lives in the right half-plane, whose exact structure is this tower. Next: the recursion integrates to a prefix parity (the center at t is the parity of the OR of diagonals t-1 and t-2 over the first t times) and a word's period doubles exactly when the OR-word's weight over a period is odd (Jen's doubling law as a decided identity)."
 depends = ["recurrent-central-collision"]
+
+[[claim]]
+id = "diagonal-halving"
+status = "proved"
+statement = "Every right diagonal rdiag j with j >= 2 has period 2^(j-1), half of Jen's 2^j: the OR-word of two words with periods 2^k and 2^(k+1) has period 2^(k+1), so its weight over 2^(k+2) is the parity of two equal halves, even, and the next word's second half equals its first; from the bases 2 and 3 the two-step induction gives every j. Hence wordWeight k = false for every k: the doubling of Jen's law never exceeds 2^(j-1)."
+lean = "Rule30UOR.Antidiagonal.rdiag_period_half"
+since = "2026-10-31"
+note = "Rule30UOR.Antidiagonal: orWord, towerWord_eq_prefix (the recursion integrates to a prefix parity), center_eq_prefix_or (the center at t is the parity of the OR of diagonals t-1 and t-2 over the first t times), wordWeight, orWord_periodic, xorBelow_split, xorBelow_window, towerWord_half_period, towerWord_period_halves, towerWord_period_doubles (Jen's doubling law as decided identities), wordWeight_zero..five (kernel evaluation), HalfPeriodic, halfPeriodic_two/three, orWord_half_periodic, wordWeight_succ_false, halfPeriodic_succ, halfPeriodic_pair, halfPeriodic_of_two_le, rdiag_period_half, wordWeight_false, towerWord_add_twopow_half, towerWord_add_half_mul, towerWord_mod_half. The true periods are smaller still (measured 2,4,8,8,16,32,32,64,64,64,64,64 for j = 2..13): the OR structure, not the parity, controls them. Not a closing argument."
+depends = ["antidiagonal"]
+
+[[claim]]
+id = "mask-transport"
+status = "proved"
+statement = "The tower unfolds: the OR of the recursion splits as the previous word plus the exposed part of the word before it (a black cell whose left neighbour is white, the left end of a black run), so every word is the iterated prefix parity of the time parity plus the transport of the exposed masks, and at the anti-diagonal the linear part is C(t,t) = 1: center t = not maskTransport (t-2) t, the exact dual of center = not ledgerDiagonal, with Pascal weights in diagonal coordinates where the carry ledger has trinomial weights in time coordinates."
+lean = "Rule30UOR.Antidiagonal.center_eq_not_maskTransport"
+since = "2026-10-31"
+note = "Rule30UOR.Antidiagonal: exposed, orWord_eq_exposed, towerWord_eq_prefix_split(') , center_eq_prefix_split('), prefixPow, prefixPow_add, maskTransport, towerWord_unfold('), center_eq_transport('), prefixWord, exposedPrefix, linearTower, constPrefix, linearTower_eq_constPrefix, timeParity_eq_prefix_true, constPrefix_below, constPrefix_diag (zero below the diagonal, one on it), linearTower_diag, center_eq_not_maskTransport, exposed_eq_cells (host: casts), exposed_periodic, maskTransport_centerPeriodic. The iterated prefix of the constant word is the binomial parity C(s, n) mod 2 (Lucas; identified numerically, to be mechanized as pascalParity with the digit recursion): the dual transport has no ruler side-terms (C(n, n-1) = n mod 2). Not a closing argument."
+depends = ["diagonal-halving"]

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "mask-transport"
+category = "function"
+signature = "(pi ((explicit h1 (const lexlean.std.nat::nat)) (explicit h2 (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.maskTransport"
+
+[[form]]
+id = "mask-transport"
+channel = "math"
+surface = "masktransport"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name masktransport) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

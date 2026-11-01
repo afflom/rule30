@@ -3666,4 +3666,116 @@ For every natural number \(j\) and natural number \(s\), \(\operatorname{towerwo
 \begin{proof}
 The goal follows from \(\operatorname{towerwordaddtwopow}(j, s)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:half-periodic-two}
+\(\operatorname{halfperiodic}(2)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{halfperiodictwo}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:half-periodic-three}
+\(\operatorname{halfperiodic}(3)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{halfperiodicthree}\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-weight-succ-false}
+For every natural number \(k\), if \(\operatorname{halfperiodic}(k + 1)\), then if \(\operatorname{halfperiodic}(k + 2)\), then \(\operatorname{wordweight}(k + 1) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordweightsuccfalse}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:half-periodic-succ}
+For every natural number \(k\), if \(\operatorname{halfperiodic}(k + 1)\), then if \(\operatorname{halfperiodic}(k + 2)\), then \(\operatorname{halfperiodic}(k + 3)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{halfperiodicsucc}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:half-periodic-of-two-le}
+For every natural number \(j\), if \(2 \le j\), then \(\operatorname{halfperiodic}(j)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{halfperiodicoftwole}(j)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:rdiag-period-half}
+For every natural number \(j\) and natural number \(t\), if \(2 \le j\), then \(\operatorname{rdiag}(j, t + \operatorname{twopow}(j - 1)) = \operatorname{rdiag}(j, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{rdiagperiodhalf}(j, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:word-weight-false}
+For every natural number \(k\), \(\operatorname{wordweight}(k) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{wordweightfalse}(k)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:tower-word-add-twopow-half}
+For every natural number \(k\) and natural number \(s\), \(\operatorname{towerword}(k + 2, s + \operatorname{twopow}(k + 1)) = \operatorname{towerword}(k + 2, s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{towerwordaddtwopowhalf}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:or-word-eq-exposed}
+For every natural number \(k\) and natural number \(i\), \(\operatorname{orword}(k, i) = \operatorname{bxor}(\operatorname{towerword}(k + 1, i), \operatorname{exposed}(k, i))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{orwordeqexposed}(k, i)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:exposed-periodic}
+For every natural number \(k\) and natural number \(s\), if \(2 \le k\), then \(\operatorname{exposed}(k, s + \operatorname{twopow}(k)) = \operatorname{exposed}(k, s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{exposedperiodic}(k, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-tower-eq-const-prefix}
+For every natural number \(n\) and natural number \(s\), \(\operatorname{lineartower}(n, s) = \operatorname{constprefix}(n + 1, s)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lineartowereqconstprefix}(n, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:const-prefix-below}
+For every natural number \(n\) and natural number \(s\), if \(s < n\), then \(\operatorname{constprefix}(n, s) = \operatorname{false}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{constprefixbelow}(n, s)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:const-prefix-diag}
+For every natural number \(n\), \(\operatorname{constprefix}(n, n) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{constprefixdiag}(n)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:linear-tower-diag}
+For every natural number \(t\), if \(1 \le t\), then \(\operatorname{lineartower}(t - 1, t) = \operatorname{true}\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{lineartowerdiag}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-eq-not-mask-transport}
+For every natural number \(t\), if \(2 \le t\), then \(\operatorname{center}(t) = \operatorname{not}(\operatorname{masktransport}(t - 2, t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centereqnotmasktransport}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:mask-transport-center-periodic}
+For every natural number \(T\) and natural number \(P\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(T \le t\), then if \(2 \le t\), then \(\operatorname{masktransport}(t + P - 2, t + P) = \operatorname{masktransport}(t - 2, t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{masktransportcenterperiodic}(T, P, t)\).
+\end{proof}
 \end{document}

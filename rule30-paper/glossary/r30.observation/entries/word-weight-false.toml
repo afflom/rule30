@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "word-weight-false"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::word-weight) (local k)) (const lexlean.std.bool::false)))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.wordWeight_false"
+
+[[form]]
+id = "word-weight-false"
+channel = "math"
+surface = "wordweightfalse"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name wordweightfalse) (paren (seq (slot 0))))"

@@ -277,3 +277,15 @@ Feature: register
     Given frontier.toml names Rule30UOR.Antidiagonal.problem1_iff_antidiagonal for antidiagonal
     When the suite exercises antidiagonal
     Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.problem1_iff_antidiagonal kernel-checked under propext and Quot.sound and published
+
+  @diagonal-halving @build
+  Scenario: Every right diagonal rdiag j with j >= 2 has period 2^(j-1), half of Jen's 2^j: the OR-word of two words with periods 2^k and 2^(k+1) has period 2^(k+1), so its weight over 2^(k+2) is the parity of two equal halves, even, and the next word's second half equals its first; from the bases 2 and 3 the two-step induction gives every j. Hence wordWeight k = false for every k: the doubling of Jen's law never exceeds 2^(j-1).
+    Given frontier.toml names Rule30UOR.Antidiagonal.rdiag_period_half for diagonal-halving
+    When the suite exercises diagonal-halving
+    Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.rdiag_period_half kernel-checked under propext and Quot.sound and published
+
+  @mask-transport @build
+  Scenario: The tower unfolds: the OR of the recursion splits as the previous word plus the exposed part of the word before it (a black cell whose left neighbour is white, the left end of a black run), so every word is the iterated prefix parity of the time parity plus the transport of the exposed masks, and at the anti-diagonal the linear part is C(t,t) = 1: center t = not maskTransport (t-2) t, the exact dual of center = not ledgerDiagonal, with Pascal weights in diagonal coordinates where the carry ledger has trinomial weights in time coordinates.
+    Given frontier.toml names Rule30UOR.Antidiagonal.center_eq_not_maskTransport for mask-transport
+    When the suite exercises mask-transport
+    Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.center_eq_not_maskTransport kernel-checked under propext and Quot.sound and published

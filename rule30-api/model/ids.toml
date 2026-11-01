@@ -277,6 +277,18 @@ suite = "register"
 statement = "The right half-plane is a tower of words: every right diagonal rdiag j is exactly 2^j-periodic from time 0 (Right.rdiag_periodic), so it is a word towerWord j of length 2^j; the tower is generated from the two constant words (true, and the time parity) by the permutive recursion read from the right edge, towerWord (k+2) (s+1) = towerWord (k+2) s XOR (towerWord (k+1) s OR towerWord k s); and the center is its anti-diagonal, center t = towerWord t t. Problem 1 iff AntidiagonalAperiodic: the anti-diagonal of the tower is not eventually periodic. The formulation with no free input: two constant words, one local recursion, one diagonal read."
 
 [[id]]
+id = "diagonal-halving"
+level = "build"
+suite = "register"
+statement = "Every right diagonal rdiag j with j >= 2 has period 2^(j-1), half of Jen's 2^j: the OR-word of two words with periods 2^k and 2^(k+1) has period 2^(k+1), so its weight over 2^(k+2) is the parity of two equal halves, even, and the next word's second half equals its first; from the bases 2 and 3 the two-step induction gives every j. Hence wordWeight k = false for every k: the doubling of Jen's law never exceeds 2^(j-1)."
+
+[[id]]
+id = "mask-transport"
+level = "build"
+suite = "register"
+statement = "The tower unfolds: the OR of the recursion splits as the previous word plus the exposed part of the word before it (a black cell whose left neighbour is white, the left end of a black run), so every word is the iterated prefix parity of the time parity plus the transport of the exposed masks, and at the anti-diagonal the linear part is C(t,t) = 1: center t = not maskTransport (t-2) t, the exact dual of center = not ledgerDiagonal, with Pascal weights in diagonal coordinates where the carry ledger has trinomial weights in time coordinates."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

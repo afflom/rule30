@@ -3321,7 +3321,21 @@ The reason is an induction the tower makes exact: if words `k+1` and `k+2` have 
 `2^k` and `2^{k+1}`, the OR-word has period `2^{k+1}`, its weight over `2^{k+2}` is the parity of two
 equal halves, hence even, and word `k+3` has period `2^{k+2}`; with words 2 and 3 of periods 2 and 4
 as the base, **every diagonal `rdiag j`, `j ≥ 2`, has period `2^{j−1}`**, half of Jen's `2^j`, and
-`wordWeight k = false` for every `k` (next iteration). The true periods are much smaller still
-(about `2^{j/2}`), which the OR structure, not the parity, controls.
+`wordWeight k = false` for every `k` (`rdiag_period_half`, `wordWeight_false`; register
+`diagonal-halving`). The true periods are much smaller still (about `2^{j/2}`), which the OR
+structure, not the parity, controls. The OR splits, `a ∨ b = a ⊕ (b ∧ ¬a)`, so the tower recursion
+is the prefix parity of the previous word plus the prefix parity of the *exposed* part of the word
+before it (where word `k` shows through word `k+1`): the ledger's linear-plus-carry split in diagonal
+coordinates, with the exposed masks as the carries; iterating the prefix operator is the gasket
+again, so the tower unfolds to a transport of the time parity plus a transport of the masks, dual
+to the carry-ledger formula for the center (`towerWord_unfold`, `center_eq_transport`). The linear
+part is the iterated prefix of the constant word, `prefixPow n 1 (s) = C(s, n) mod 2` (Lucas;
+identified, not mechanized), and at the anti-diagonal it is `C(t, t) = 1`, provable by the two-line
+induction "zero below the diagonal, one on it": so **`center t = ¬ maskTransport (t−2) t`**, the exact
+dual of `center = ¬ ledgerDiagonal` (eighth iteration). The exposed masks are, in cells, the black
+cells whose left neighbour is white, the left ends of black runs: the tower's "carries" are run
+boundaries, the same objects as the odd rows' linear self-intersection, so the two formulas for the
+center, `¬(gasket of adjacent black pairs)` in time coordinates and `¬(gasket of left run-ends)` in
+diagonal coordinates, are the two readings of one object.
 
 Problem 1 remains unproved.

@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "exposed-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit k (const lexlean.std.nat::nat)) (explicit s (const lexlean.std.nat::nat))) (pi ((explicit hk (app (const lexlean.std.nat::le) (nat 2) (local k)))) (app (const lexlean.core::eq) (app (const r30.observation::exposed) (local k) (app (const lexlean.std.nat::add) (local s) (app (const r30.scale::twopow) (local k)))) (app (const r30.observation::exposed) (local k) (local s)))))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.exposed_periodic"
+
+[[form]]
+id = "exposed-periodic"
+channel = "math"
+surface = "exposedperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name exposedperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"
