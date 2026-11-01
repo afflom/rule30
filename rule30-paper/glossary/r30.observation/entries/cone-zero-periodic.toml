@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "cone-zero-periodic"
+category = "function"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat))) (sort prop))"
+surface_arity = 2
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.ConeZeroPeriodic"
+
+[[form]]
+id = "cone-zero-periodic"
+channel = "math"
+surface = "conezeroperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name conezeroperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1))))"

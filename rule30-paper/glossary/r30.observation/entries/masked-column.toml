@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "masked-column"
+category = "function"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (const lexlean.std.bool::bool))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.maskedColumn"
+
+[[form]]
+id = "masked-column"
+channel = "math"
+surface = "maskedcolumn"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskedcolumn) (paren (seq (slot 0))))"

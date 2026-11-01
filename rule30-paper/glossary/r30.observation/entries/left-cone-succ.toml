@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "left-cone-succ"
+category = "proof-constant"
+signature = "(pi ((explicit t (const lexlean.std.nat::nat))) (app (const lexlean.core::eq) (app (const r30.observation::left-cone) (app (const lexlean.std.nat::add) (local t) (nat 1))) (app (const r30.local::bxor) (app (const r30.observation::left-cone) (local t)) (app (const r30.local::bxor) (app (const r30.observation::masked-column) (local t)) (app (const r30.observation::cone-zero) (local t))))))"
+surface_arity = 1
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.leftCone_succ"
+
+[[form]]
+id = "left-cone-succ"
+channel = "math"
+surface = "leftconesucc"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name leftconesucc) (paren (seq (slot 0))))"

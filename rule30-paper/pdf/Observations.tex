@@ -4086,4 +4086,32 @@ For every natural number \(j\), \(\operatorname{jenexp}(j) \le j\).
 \begin{proof}
 The goal follows from \(\operatorname{jenexple}(j)\).
 \end{proof}
+\begin{theorem}
+\label{ll:observations:left-cone-succ}
+For every natural number \(t\), \(\operatorname{leftcone}(t + 1) = \operatorname{bxor}(\operatorname{leftcone}(t), \operatorname{bxor}(\operatorname{maskedcolumn}(t), \operatorname{conezero}(t)))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{leftconesucc}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:center-increment-all}
+For every natural number \(t\), \(\operatorname{bxor}(\operatorname{center}(t + 1), \operatorname{center}(t)) = \operatorname{bxor}(\operatorname{maskedcolumn}(t), \operatorname{conezero}(t))\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{centerincrementall}(t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:masked-column-of-periodic}
+For every natural number \(T\) and natural number \(P\) and natural number \(S\) and natural number \(t\), if \(\operatorname{centerperiodic}(T, P)\), then if \(\operatorname{conezeroperiodic}(S, P)\), then if \(T \le t\), then if \(S \le t\), then \(\operatorname{maskedcolumn}(t + P) = \operatorname{maskedcolumn}(t)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{maskedcolumnofperiodic}(T, P, S, t)\).
+\end{proof}
+\begin{theorem}
+\label{ll:observations:not-cone-zero-periodic-from}
+For every natural number \(T\) and natural number \(P\) and natural number \(S\), if \(0 < P\), then if \(\operatorname{centerperiodic}(T, P)\), then not \(\operatorname{conezeroperiodic}(S, P)\).
+\end{theorem}
+\begin{proof}
+The goal follows from \(\operatorname{notconezeroperiodicfrom}(T, P, S)\).
+\end{proof}
 \end{document}

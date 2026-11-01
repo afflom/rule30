@@ -489,3 +489,28 @@ statement = "Route B of the 2026-11-01 reading: under a center period, the prefi
 since = "2026-11-01"
 note = "No theorem in the repository derives hpref or htail from CenterPeriodic; they are free hypotheses of the conditional refutation (Part17). The analogous agreement for the left half is refuted at a doubling (route-d-lhcolagree-coboundary), and the doubling diagonal forces anti-agreement where the prefix needs agreement, so the route needs an argument that the doubling diagonal falls outside the prefix window; recorded as open with that exact obligation."
 depends = ["aperiodic-compensation"]
+
+[[claim]]
+id = "driven-left-cone"
+status = "refuted"
+statement = "A left half-line driven from white by an eventually periodic boundary has an eventually periodic Pascal cone at column 0 (which, with the increment law and masked Jen, would contradict a center period)."
+since = "2026-11-01"
+note = "False: experiments/driven_halves.py (bin/r30 experiment run driven_halves) drives the left half by random periodic boundaries; cone0 shows no period up to 160 on any of them. The left side is the chaotic side; a driven left half carries masked Jen's aperiodicity without contradiction."
+depends = ["left-light-cone"]
+
+[[claim]]
+id = "driven-right-column"
+status = "refuted"
+statement = "A right half-line driven from white by an eventually periodic boundary has an eventually periodic column +1 (which, by the recombination and Jen's adjacency theorem, would contradict a center period)."
+since = "2026-11-01"
+note = "False in general: experiments/driven_halves.py; for most periodic boundaries the driven right half's column +1 shows no period up to 512 in 1200 steps (e.g. boundaries 100, 01, 10011), periodic only for some (1011: period 8). The regularity of Rule 30's right side (Jen's periodic diagonals) is a global fact of the seed, coming from the right edge through the tower, not a property of half-lines driven by periodic boundaries. Lesson: no property of one driven half alone carries the contradiction; it must use the fixed point c = Phi(c) (Rule30UOR.Fixed: the center is the recombination of the two halves it drives)."
+depends = ["jen-law"]
+
+[[claim]]
+id = "increment-law"
+status = "proved"
+statement = "The center's increment is Jen's masked column plus the left half's own Pascal cone: center (t+1) XOR center t = (cell t 1 AND NOT center t) XOR coneZero t for every t, where coneZero is the Pascal cone of the left run-ends at positions <= 0. Hence, by masked Jen (prize kit), under any center period P the left half's cone coneZero is not P-periodic from any start."
+lean = "Rule30UOR.Antidiagonal.center_increment_all"
+since = "2026-11-01"
+note = "Rule30UOR.Antidiagonal: coneZeroTerm, coneZeroRow, coneZero, maskedColumn, ConeZeroPeriodic, leftEnd_succ, coneTerm_pascal, coneRow_pascal, coneRow_succ, coneRow_last, leftCone_succ (leftCone (t+1) = leftCone t XOR maskedColumn t XOR coneZero t, Pascal's rule), center_increment, center_increment_all, maskedColumn_of_periodic, not_coneZeroPeriodic_from (via Rule30MaskedJen.masked_jen_center and Scale.cell_eq_kit), not_coneZeroPeriodic_of_centerPeriodic. A bridge between the light-cone frame and the prize kit's masked Jen. Not a closing argument: a left half driven by a periodic boundary has an aperiodic cone in general (driven-left-cone, refuted)."
+depends = ["left-light-cone"]

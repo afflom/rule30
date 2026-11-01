@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "masked-column-of-periodic"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat)) (explicit t (const lexlean.std.nat::nat))) (pi ((explicit hc (app (const r30.scale::center-periodic) (local T) (local P))) (explicit hz (app (const r30.observation::cone-zero-periodic) (local S) (local P))) (explicit ht (app (const lexlean.std.nat::le) (local T) (local t))) (explicit hs (app (const lexlean.std.nat::le) (local S) (local t)))) (app (const lexlean.core::eq) (app (const r30.observation::masked-column) (app (const lexlean.std.nat::add) (local t) (local P))) (app (const r30.observation::masked-column) (local t)))))"
+surface_arity = 4
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.maskedColumn_of_periodic"
+
+[[form]]
+id = "masked-column-of-periodic"
+channel = "math"
+surface = "maskedcolumnofperiodic"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name maskedcolumnofperiodic) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2) (token comma) (space) (slot 3))))"

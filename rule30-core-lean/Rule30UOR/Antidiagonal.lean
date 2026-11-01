@@ -1042,4 +1042,146 @@ theorem coneTerm_add_twopow_mul (m n j q c : Nat) (hq : q < twopow m) :
   unfold coneTerm
   rw [pascalParity_add_twopow_mul m n q c hq]
 
+/-! ## The increment law: the center's change is the masked column plus the cone from column 0
+
+Pascal's rule `C(n+1, q) = C(n, q) ⊕ C(n, q−1)` splits the left cone at time `t + 1` into the
+left cone at time `t`, the same cone shifted one place to the right (the run-ends at distance `q`
+left of column `0`), and the new row `j = t`, whose only term is the run-end at column `+1`. -/
+
+/-- A run-end at distance `q` left of column `0` (position `−q`), transported over the age `n`. -/
+def coneZeroTerm (n j q : Nat) : Bool := pascalParity n q && runEnd j (-(q : Int))
+
+/-- The contribution of time `j` to the cone from column `0` at time `t`. -/
+def coneZeroRow (t j : Nat) : Bool := xorBelow (fun q => coneZeroTerm (t - 1 - j) j q) (t - j)
+
+/-- The cone from column `0` at time `t`: the transport of the run-ends at the positions `≤ 0`. -/
+def coneZero (t : Nat) : Bool := xorBelow (coneZeroRow t) t
+
+/-- Column `1` on the white times of the center: the run-end at column `+1`. -/
+def maskedColumn (t : Nat) : Bool := cell t 1 && !(center t)
+
+theorem cone_bxor_false_right (b : Bool) : bxor b false = b := by cases b <;> rfl
+
+theorem cone_and_bxor (a b c : Bool) : (bxor a b && c) = bxor (a && c) (b && c) := by
+  cases a <;> cases b <;> cases c <;> rfl
+
+theorem leftEnd_succ (j q : Nat) : leftEnd j (q + 1) = runEnd j (-(q : Int)) := by
+  unfold leftEnd
+  rw [show (1 : Int) - ((q + 1 : Nat) : Int) = -(q : Int) by cfomega]
+
+/-- Pascal's rule on one cone term. -/
+theorem coneTerm_pascal (n j q : Nat) :
+    coneTerm (n + 1) j (q + 1) = bxor (coneZeroTerm n j q) (coneTerm n j (q + 1)) := by
+  unfold coneTerm coneZeroTerm
+  rw [pascalParity_succ, cone_and_bxor, leftEnd_succ]
+
+/-- Pascal's rule on one row of the cone. -/
+theorem coneRow_pascal (n j : Nat) :
+    xorBelow (fun q => coneTerm (n + 1) j q) (n + 2) =
+      bxor (xorBelow (fun q => coneTerm n j q) (n + 1)) (xorBelow (fun q => coneZeroTerm n j q) (n + 1)) := by
+  have h1 : xorBelow (fun q => coneTerm (n + 1) j q) (n + 2) =
+      bxor (coneTerm (n + 1) j 0) (xorBelow (fun m => coneTerm (n + 1) j (m + 1)) (n + 1)) :=
+    xorBelow_front _ (n + 1)
+  have h2 : xorBelow (fun q => coneTerm n j q) (n + 1) =
+      bxor (coneTerm n j 0) (xorBelow (fun m => coneTerm n j (m + 1)) n) :=
+    xorBelow_front _ n
+  have h3 : xorBelow (fun m => coneTerm (n + 1) j (m + 1)) (n + 1) =
+      bxor (xorBelow (fun m => coneZeroTerm n j m) (n + 1)) (xorBelow (fun m => coneTerm n j (m + 1)) (n + 1)) := by
+    rw [← xorBelow_bxor]
+    exact xorBelow_congr _ _ (n + 1) (fun m _ => coneTerm_pascal n j m)
+  have hz : coneTerm n j (n + 1) = false := by
+    unfold coneTerm
+    rw [pascalParity_gt n (n + 1) (by cfomega)]
+    rfl
+  have h4 : xorBelow (fun m => coneTerm n j (m + 1)) (n + 1) = xorBelow (fun m => coneTerm n j (m + 1)) n := by
+    show bxor (xorBelow (fun m => coneTerm n j (m + 1)) n) (coneTerm n j (n + 1)) = _
+    rw [hz, cone_bxor_false_right]
+  have h0 : coneTerm (n + 1) j 0 = coneTerm n j 0 := by
+    unfold coneTerm
+    rw [pascalParity_zero_right, pascalParity_zero_right]
+  rw [h1, h2, h3, h4, h0]
+  cases coneTerm n j 0 <;> cases xorBelow (fun m => coneZeroTerm n j m) (n + 1) <;>
+    cases xorBelow (fun m => coneTerm n j (m + 1)) n <;> rfl
+
+/-- An old row of the cone at time `t + 1` is its row at time `t` plus its row of the cone from
+column `0`. -/
+theorem coneRow_succ (t j : Nat) (hj : j < t) : coneRow (t + 1) j = bxor (coneRow t j) (coneZeroRow t j) := by
+  obtain ⟨n, rfl⟩ : ∃ n, t = j + n + 1 := ⟨t - 1 - j, by cfomega⟩
+  unfold coneRow coneZeroRow
+  rw [show j + n + 1 + 1 - 1 - j = n + 1 by cfomega, show j + n + 1 + 1 - j = n + 2 by cfomega,
+    show j + n + 1 - 1 - j = n by cfomega, show j + n + 1 - j = n + 1 by cfomega]
+  exact coneRow_pascal n j
+
+/-- The new row of the cone at time `t + 1` is the masked column at time `t`. -/
+theorem coneRow_last (t : Nat) : coneRow (t + 1) t = maskedColumn t := by
+  unfold coneRow
+  rw [show t + 1 - 1 - t = 0 by cfomega, show t + 1 - t = 1 by cfomega]
+  show bxor false (coneTerm 0 t 0) = maskedColumn t
+  unfold coneTerm leftEnd runEnd maskedColumn
+  rw [pascalParity_zero_right, cone_bxor_false, Bool.true_and,
+    show (1 : Int) - ((0 : Nat) : Int) = 1 by cfomega, show (1 : Int) - 1 = 0 by cfomega]
+  rfl
+
+/-- **The left cone steps by the masked column and the cone from column `0`.** -/
+theorem leftCone_succ (t : Nat) : leftCone (t + 1) = bxor (leftCone t) (bxor (maskedColumn t) (coneZero t)) := by
+  unfold leftCone coneZero
+  show bxor (xorBelow (coneRow (t + 1)) t) (coneRow (t + 1) t) = _
+  rw [coneRow_last,
+    xorBelow_congr (coneRow (t + 1)) (fun j => bxor (coneRow t j) (coneZeroRow t j)) t
+      (fun j hj => coneRow_succ t j hj),
+    xorBelow_bxor]
+  cases xorBelow (coneRow t) t <;> cases xorBelow (coneZeroRow t) t <;> cases maskedColumn t <;> rfl
+
+/-- **The increment law**: the change of the center is the masked column (column `1` on the
+white times of the center) plus the left half's own cone from column `0`. -/
+theorem center_increment (t : Nat) (ht : 2 ≤ t) :
+    bxor (center (t + 1)) (center t) = bxor (maskedColumn t) (coneZero t) := by
+  rw [center_eq_leftCone (t + 1) (by cfomega), center_eq_leftCone t ht, leftCone_succ]
+  cases leftCone t <;> cases maskedColumn t <;> cases coneZero t <;> rfl
+
+/-- The increment law holds from time `0`. -/
+theorem center_increment_all (t : Nat) :
+    bxor (center (t + 1)) (center t) = bxor (maskedColumn t) (coneZero t) := by
+  rcases t with _ | _ | t
+  · rfl
+  · rfl
+  · exact center_increment (t + 2) (by cfomega)
+
+/-- The cone from column `0` has period `P` from `T`. -/
+def ConeZeroPeriodic (T P : Nat) : Prop := ∀ t, T ≤ t → coneZero (t + P) = coneZero t
+
+/-- Under a center period the masked column repeats wherever the cone from column `0` repeats. -/
+theorem maskedColumn_of_periodic (T P S t : Nat) (hc : Rule30UOR.Scale.CenterPeriodic T P)
+    (hz : ConeZeroPeriodic S P) (ht : T ≤ t) (hs : S ≤ t) : maskedColumn (t + P) = maskedColumn t := by
+  have h1 := center_increment_all (t + P)
+  have h2 := center_increment_all t
+  rw [show t + P + 1 = t + 1 + P by cfomega, hc (t + 1) (by cfomega), hc t ht, h2, hz t hs] at h1
+  exact (bxor_aux_cancel _ _ _ h1).symm
+
+/-- **Under a center period the cone from column `0` is not periodic from any start**: masked Jen
+forbids the masked column to repeat on the white times of the center, and the increment law
+transfers the repetition from the cone. -/
+theorem not_coneZeroPeriodic_from (T P S : Nat) (hP : 0 < P)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : ¬ ConeZeroPeriodic S P := by
+  intro hz
+  apply Ruliology.CellularAutomata.Rule30MaskedJen.masked_jen_center hP (T := T)
+    (fun t ht => by
+      rw [← Rule30UOR.Scale.cell_eq_kit, ← Rule30UOR.Scale.cell_eq_kit]
+      exact hc t ht) (T + S)
+  intro t ht hw
+  rw [← Rule30UOR.Scale.cell_eq_kit] at hw
+  rw [← Rule30UOR.Scale.cell_eq_kit, ← Rule30UOR.Scale.cell_eq_kit]
+  have hw0 : center t = false := hw
+  have hwP : center (t + P) = false := (hc t (by cfomega)).trans hw0
+  have hm := maskedColumn_of_periodic T P S t hc hz (by cfomega) (by cfomega)
+  unfold maskedColumn at hm
+  rw [hw0, hwP, Bool.not_false, Bool.and_true, Bool.and_true] at hm
+  exact hm
+
+/-- Under a center period `P` from `T`, the cone from column `0` is not `P`-periodic from `T + 2`. -/
+theorem not_coneZeroPeriodic_of_centerPeriodic (T P : Nat) (hP : 0 < P)
+    (hc : Rule30UOR.Scale.CenterPeriodic T P) : ¬ ConeZeroPeriodic (T + 2) P :=
+  not_coneZeroPeriodic_from T P (T + 2) hP hc
+
+
 end Rule30UOR.Antidiagonal

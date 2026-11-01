@@ -353,8 +353,11 @@ def cmd_choice_audit(args):
 def _sync_register():
     """The register module follows frontier.toml (a changed plan is a changed LexLean module),
     and so does the Observer, whose real qualities are the register's proved claims."""
-    from . import registermodel, observermodel
+    from . import registermodel, observermodel, presentationmodel
     changed = registermodel.sync()["changed"]
+    # every module that reads the register follows it: the Observer's real qualities are its proved
+    # claims, and the Presentation's steps cite its claims (the refuted-routes step lists them all)
+    changed = presentationmodel.sync()["changed"] or changed
     changed = observermodel.sync()["changed"] or changed
     if changed:
         checks.lock("api")

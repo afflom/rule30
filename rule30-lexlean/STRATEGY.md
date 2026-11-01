@@ -3430,3 +3430,23 @@ theorem by theorem:
 What the check fixes for the next round: a closing argument cannot rest on agreement of the driven
 halves across the lag; at every doubling the period forces disagreement there. The usable positive
 content is the forced flip itself, a statement the period makes about column `−1` at the seams.
+
+**Driven halves cannot carry it; the increment law (2026-11-01).** The prize kit already holds Jen's
+adjacency theorem (`Rule30Jen.not_adjacent`), masked Jen (column `+1` is not `P`-periodic on the
+white times of a `P`-periodic center) and the effective boundary (the left half sees the center only
+through `c t ∧ c (t+1)`). Splitting the light cone at column `+1` gives an exact **increment law**
+(`center_increment_all`, proved for every `t`):
+`center (t+1) ⊕ center t = [cell t 1 ∧ ¬center t] ⊕ cone₀ t`, where `cone₀` is the Pascal cone of the
+run-ends at positions `≤ 0`, the left half's own cone. The first term is masked Jen's column, so
+under a center period `cone₀` is not `P`-periodic from any start (`not_coneZeroPeriodic_from`). Two one-sided routes then suggest themselves and
+both are refuted by `experiments/driven_halves.py`: a left half driven from white by a periodic
+boundary does *not* have a periodic cone (`driven-left-cone`), and a right half driven by a periodic
+boundary does *not* in general have a periodic column `+1` (`driven-right-column`: the right side's
+regularity is a global fact of the seed, coming from the right edge through Jen's tower, not a
+property of half-lines driven by periodic boundaries). The lesson is structural: no property of one
+driven half alone carries the contradiction. It must use the fixed point `c = Φ(c)`
+(`Rule30UOR.Fixed`): the center is the recombination of the two halves it drives, and the right
+half is simultaneously the half driven by `c` and the tower generated from the right edge. That
+double description of the right half is the constraint a closing argument has to exploit: a
+periodic `c` must drive a right half whose diagonals are exactly Jen's words `W_j` with the
+doubling bits of the seed.

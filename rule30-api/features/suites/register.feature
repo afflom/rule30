@@ -331,3 +331,21 @@ Feature: register
     Given the register entry single-row-agreement (experiment)
     When the suite measures single-row-agreement
     Then the claim is reported open and never asserted
+
+  @driven-left-cone @some-true
+  Scenario: A left half-line driven from white by an eventually periodic boundary has an eventually periodic Pascal cone at column 0 (which, with the increment law and masked Jen, would contradict a center period).
+    Given the register entry driven-left-cone and the refutation it names (experiment)
+    When the suite reproduces driven-left-cone
+    Then the route is reported refuted from its authority and nothing is established here
+
+  @driven-right-column @some-true
+  Scenario: A right half-line driven from white by an eventually periodic boundary has an eventually periodic column +1 (which, by the recombination and Jen's adjacency theorem, would contradict a center period).
+    Given the register entry driven-right-column and the refutation it names (experiment)
+    When the suite reproduces driven-right-column
+    Then the route is reported refuted from its authority and nothing is established here
+
+  @increment-law @build
+  Scenario: The center's increment is Jen's masked column plus the left half's own Pascal cone: center (t+1) XOR center t = (cell t 1 AND NOT center t) XOR coneZero t for every t, where coneZero is the Pascal cone of the left run-ends at positions <= 0. Hence, by masked Jen (prize kit), under any center period P the left half's cone coneZero is not P-periodic from any start.
+    Given frontier.toml names Rule30UOR.Antidiagonal.center_increment_all for increment-law
+    When the suite exercises increment-law
+    Then its oracle accepts it: frontier check: Rule30UOR.Antidiagonal.center_increment_all kernel-checked under propext and Quot.sound and published

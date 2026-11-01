@@ -331,6 +331,24 @@ suite = "register"
 statement = "Route B of the 2026-11-01 reading: under a center period, the prefix and tail spatial agreements (hpref, htail) of the driven right half rhCenter in one row at scale 2^L hold, so the conditional refutation not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound fires."
 
 [[id]]
+id = "driven-left-cone"
+level = "some-true"
+suite = "register"
+statement = "A left half-line driven from white by an eventually periodic boundary has an eventually periodic Pascal cone at column 0 (which, with the increment law and masked Jen, would contradict a center period)."
+
+[[id]]
+id = "driven-right-column"
+level = "some-true"
+suite = "register"
+statement = "A right half-line driven from white by an eventually periodic boundary has an eventually periodic column +1 (which, by the recombination and Jen's adjacency theorem, would contradict a center period)."
+
+[[id]]
+id = "increment-law"
+level = "build"
+suite = "register"
+statement = "The center's increment is Jen's masked column plus the left half's own Pascal cone: center (t+1) XOR center t = (cell t 1 AND NOT center t) XOR coneZero t for every t, where coneZero is the Pascal cone of the left run-ends at positions <= 0. Hence, by masked Jen (prize kit), under any center period P the left half's cone coneZero is not P-periodic from any start."
+
+[[id]]
 id = "api-modules"
 level = "build"
 suite = "api"

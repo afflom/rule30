@@ -4674,5 +4674,37 @@ Close the goal with \(\lexeme{r30.observation::jen-exp-le}(j)\).
 \end{proof}
 \end{theorem}
 
+\begin{theorem}{left-cone-succ}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(leftcone(t + 1) = bxor(leftcone(t), bxor(maskedcolumn(t), conezero(t)))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::left-cone-succ}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{center-increment-all}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(t\), \(bxor(center(t + 1), center(t)) = bxor(maskedcolumn(t), conezero(t))\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::center-increment-all}(t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{masked-column-of-periodic}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(S\) and natural number \(t\), if \(centerperiodic(T, P)\), then if \(conezeroperiodic(S, P)\), then if \(T ≤ t\), then if \(S ≤ t\), then \(maskedcolumn(t + P) = maskedcolumn(t)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::masked-column-of-periodic}(T, P, S, t)\).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{not-cone-zero-periodic-from}
+\allowaxioms{Quot.sound;propext}
+For every natural number \(T\) and natural number \(P\) and natural number \(S\), if \(0 < P\), then if \(centerperiodic(T, P)\), then \(¬ conezeroperiodic(S, P)\).
+\begin{proof}
+Close the goal with \(\lexeme{r30.observation::not-cone-zero-periodic-from}(T, P, S)\).
+\end{proof}
+\end{theorem}
+
 \end{section}
 \end{lexlean}

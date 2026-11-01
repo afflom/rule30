@@ -1,0 +1,21 @@
+spec = "lexlean/entry/1"
+id = "not-cone-zero-periodic-from"
+category = "proof-constant"
+signature = "(pi ((explicit T (const lexlean.std.nat::nat)) (explicit P (const lexlean.std.nat::nat)) (explicit S (const lexlean.std.nat::nat))) (pi ((explicit hP (app (const lexlean.std.nat::lt) (nat 0) (local P))) (explicit hc (app (const r30.scale::center-periodic) (local T) (local P)))) (app (const lexlean.core::lnot) (app (const r30.observation::cone-zero-periodic) (local S) (local P)))))"
+surface_arity = 3
+frame = "call"
+
+[denotation]
+kind = "lean"
+module = "Rule30UOR.Antidiagonal"
+name = "Rule30UOR.Antidiagonal.not_coneZeroPeriodic_from"
+
+[[form]]
+id = "not-cone-zero-periodic-from"
+channel = "math"
+surface = "notconezeroperiodicfrom"
+canonical_source = true
+features = []
+
+[render]
+math = "(seq (operator-name notconezeroperiodicfrom) (paren (seq (slot 0) (token comma) (space) (slot 1) (token comma) (space) (slot 2))))"

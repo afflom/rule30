@@ -386,6 +386,27 @@ feature = "interfaces/single-row-agreement.md"
 evidence = "register: open"
 
 [[claim]]
+id = "driven-left-cone"
+level = "some-true"
+statement = "A left half-line driven from white by an eventually periodic boundary has an eventually periodic Pascal cone at column 0 (which, with the increment law and masked Jen, would contradict a center period)."
+feature = "interfaces/driven-left-cone.md"
+evidence = "register: refuted"
+
+[[claim]]
+id = "driven-right-column"
+level = "some-true"
+statement = "A right half-line driven from white by an eventually periodic boundary has an eventually periodic column +1 (which, by the recombination and Jen's adjacency theorem, would contradict a center period)."
+feature = "interfaces/driven-right-column.md"
+evidence = "register: refuted"
+
+[[claim]]
+id = "increment-law"
+level = "build"
+statement = "The center's increment is Jen's masked column plus the left half's own Pascal cone: center (t+1) XOR center t = (cell t 1 AND NOT center t) XOR coneZero t for every t, where coneZero is the Pascal cone of the left run-ends at positions <= 0. Hence, by masked Jen (prize kit), under any center period P the left half's cone coneZero is not P-periodic from any start."
+feature = "interfaces/increment-law.md"
+evidence = "frontier check: Rule30UOR.Antidiagonal.center_increment_all kernel-checked under propext and Quot.sound and published"
+
+[[claim]]
 id = "api-modules"
 level = "build"
 statement = "The command surface, the register, the architecture and the presentation are LexLean semantic modules on prism-stdlib, verified by the gate."
