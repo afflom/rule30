@@ -1606,7 +1606,7 @@ number = 10
 start = "2026-11-02T10:52:32Z"
 base = "651205b2135d19221e15f253ca81a1c7082f83e8"
 budget = 300
-stages = [{id = "build", seconds = 0.1, allowance = 60.0, outcome = "ok", note = "", runtime = "no root"}, {id = "induction", seconds = 24.1, allowance = 30.0, outcome = "ok", note = "discover: 0 new, 0 written", runtime = "certified 2ddcedf424e5"}, {id = "pruning", seconds = 35.1, allowance = 20.0, outcome = "ok", note = "ree_dyadic_pred_col_twopow", runtime = "no root"}, {id = "deduction", seconds = 2.5, allowance = 204.0, outcome = "ok", note = "attempts 0: ", runtime = "certified 2ddcedf424e5"}, {id = "learning", seconds = 0.9, allowance = 5.0, outcome = "ok", note = "0 outcomes through learnAll (certified)", runtime = "certified 2ddcedf424e5"}, {id = "hypotheses", seconds = 0.2, allowance = 5.0, outcome = "ok", note = "16 minted through mint", runtime = "certified 2ddcedf424e5"}]
+stages = [{id = "build", seconds = 0.1, allowance = 60.0, outcome = "ok", note = "", runtime = "no root"}, {id = "induction", seconds = 24.1, allowance = 30.0, outcome = "ok", note = "discover: 0 new, 0 written", runtime = "certified 2ddcedf424e5"}, {id = "pruning", seconds = 35.1, allowance = 20.0, outcome = "ok", note = "ree_dyadic_pred_col_twopow", runtime = "no root"}, {id = "deduction", seconds = 2.5, allowance = 204.0, outcome = "ok", note = "attempts 0: ", runtime = "certified 2ddcedf424e5"}, {id = "learning", seconds = 0.9, allowance = 5.0, outcome = "ok", note = "0 outcomes through learnAll (certified)", runtime = "certified 2ddcedf424e5"}, {id = "hypotheses", seconds = 0.2, allowance = 5.0, outcome = "ok", note = "16 minted through mint", runtime = "certified 2ddcedf424e5"}, {id = "gate", seconds = 0.0, allowance = 0.0, outcome = "ok", note = "measured by the next tick from the commit's time"}]
 outcome = "committed"
 seconds = 63.3
 commit = ""
@@ -1617,3 +1617,20 @@ known = 0
 attempts = 0
 new_relations = 0
 minted = 16
+
+[[tick]]
+number = 11
+start = "2026-11-02T11:23:30Z"
+base = "6700f4c11435c544d67ad0617ff0ed712f0dae50"
+budget = 300
+stages = [{id = "build", seconds = 0.1, allowance = 60.0, outcome = "ok", note = "", runtime = "no root"}, {id = "induction", seconds = 19.4, allowance = 30.0, outcome = "ok", note = "discover: 0 new, 0 written", runtime = "certified 2ddcedf424e5"}, {id = "pruning", seconds = 39.7, allowance = 20.0, outcome = "ok", note = "ree_dyadic_pred_col_twopow", runtime = "no root"}, {id = "deduction", seconds = 2.7, allowance = 204.0, outcome = "ok", note = "attempts 0: ", runtime = "certified 2ddcedf424e5"}, {id = "learning", seconds = 1.0, allowance = 5.0, outcome = "ok", note = "0 outcomes through learnAll (certified)", runtime = "certified 2ddcedf424e5"}, {id = "hypotheses", seconds = 0.2, allowance = 5.0, outcome = "ok", note = "12 minted through mint", runtime = "certified 2ddcedf424e5"}]
+outcome = "committed"
+seconds = 63.9
+commit = ""
+observed = 11
+proved = 0
+refuted = 0
+known = 0
+attempts = 0
+new_relations = 0
+minted = 12
