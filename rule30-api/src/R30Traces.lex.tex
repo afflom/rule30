@@ -1,0 +1,689 @@
+\begin{lexlean}{R30Traces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Host}
+\importmodule{R30}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: workDirectory,
+  parameters: [],
+  result: Bytes,
+  body: 0x2f776f726b
+}
+
+definition{
+  name: subDirectory,
+  parameters: [],
+  result: Bytes,
+  body: 0x2f776f726b2f737562
+}
+
+definition{
+  name: executablePath,
+  parameters: [],
+  result: Bytes,
+  body: 0x2f776f726b2f62696e2f723330
+}
+
+definition{
+  name: argProgram,
+  parameters: [],
+  result: Bytes,
+  body: 0x723330
+}
+
+definition{
+  name: argHelp,
+  parameters: [],
+  result: Bytes,
+  body: 0x68656c70
+}
+
+definition{
+  name: argHelpFlag,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d68656c70
+}
+
+definition{
+  name: argVersion,
+  parameters: [],
+  result: Bytes,
+  body: 0x76657273696f6e
+}
+
+definition{
+  name: argFrontier,
+  parameters: [],
+  result: Bytes,
+  body: 0x66726f6e74696572
+}
+
+definition{
+  name: argList,
+  parameters: [],
+  result: Bytes,
+  body: 0x6c697374
+}
+
+definition{
+  name: argStatus,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d737461747573
+}
+
+definition{
+  name: argStat,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d73746174
+}
+
+definition{
+  name: argStatusOpen,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d7374617475733d6f70656e
+}
+
+definition{
+  name: argBogus,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d626f677573
+}
+
+definition{
+  name: argBlank,
+  parameters: [],
+  result: Bytes,
+  body: 0x
+}
+
+definition{
+  name: argOpen,
+  parameters: [],
+  result: Bytes,
+  body: 0x6f70656e
+}
+
+definition{
+  name: argRefuted,
+  parameters: [],
+  result: Bytes,
+  body: 0x72656675746564
+}
+
+definition{
+  name: argFrobnicate,
+  parameters: [],
+  result: Bytes,
+  body: 0x66726f626e6963617465
+}
+
+definition{
+  name: argSeparator,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d
+}
+
+definition{
+  name: argDashX,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d78
+}
+
+definition{
+  name: argMinusOne,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d31
+}
+
+definition{
+  name: argHelpValue,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d683d78
+}
+
+definition{
+  name: argHelpGlued,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d6878
+}
+
+definition{
+  name: permissionDenied,
+  parameters: [],
+  result: Bytes,
+  body: 0x5065726d697373696f6e2064656e69656420286f73206572726f7220313329
+}
+
+definition{
+  name: noSuchFile,
+  parameters: [],
+  result: Bytes,
+  body: 0x4e6f20737563682066696c65206f72206469726563746f727920286f73206572726f72203229
+}
+
+definition{
+  name: windows,
+  parameters: [],
+  result: String,
+  body: "How the traces stay small. One trace of Toml.parse costs memory that grows faster than linearly in the bytes of its register, as measured: a 70-byte register peaked near 1 GB of Lean's resident set and a 380-byte one passed 10 GB; why it grows so was not measured. So every register here is a window of at most 107 bytes, each behaviour has its own window (one claim per shape in R30TracesClaims, the forms of --status in R30TracesForms, the two-claim order and the failures in R30TracesRegister), and each of those modules is a Lean process of its own. The expected bytes of each listing were printed by the deprecated runtime on the same fixture.",
+  executable: true
+}
+
+definition{
+  name: fixtureOne,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a6964203d202262657461220a737461747573203d20226f70656e220a73746174656d656e74203d2022422e220a
+}
+
+definition{
+  name: pythonListOne,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b6f70656e2020205d20626574613a20422e0a
+}
+
+definition{
+  name: fixtureBadValue,
+  parameters: [],
+  result: Bytes,
+  body: 0x0a0a0a0a0a0a0a0a0a0a0a78203d0a
+}
+
+definition{
+  name: fixtureNotUtf8,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a6964203d2022ff220a
+}
+
+definition{
+  name: tableBytes,
+  parameters: [],
+  result: Bytes,
+  body: 0xe28a95e289a4e289a5e28093e28892c2b7c2ace288a7e288a8e28888e28094cebae28692e286a6e280a6e28495e29fbae29fb9e28792e28694e28690e289a1e28988e289a0c397c2b1e28898e28880e28883e288a9e288aae2889ec2a7cf83cf84ceb4cea6e28280e28281e28282e28283c2b2e28099e2809ce2809de28a968041
+}
+
+definition{
+  name: startedIn,
+  parameters: [arguments : (List Bytes), directory : Bytes],
+  result: Host::Event,
+  body: (ctor Host::Event.start arguments directory (executablePath) (nil (Bytes * Bytes)) false)
+}
+
+definition{
+  name: started,
+  parameters: [arguments : (List Bytes)],
+  result: Host::Event,
+  body: (startedIn arguments (workDirectory))
+}
+
+definition{
+  name: statedDirectory,
+  parameters: [],
+  result: Host::Event,
+  body: (ctor Host::Event.stated (ctor Result.ok [Host::Stat, Host::Failure] (record Host::Stat {kind := (ctor Host::EntryKind.directory), size := 4096, device := 0, inode := 0})))
+}
+
+definition{
+  name: statedMissing,
+  parameters: [],
+  result: Host::Event,
+  body: (ctor Host::Event.stated (ctor Result.error [Host::Stat, Host::Failure] (record Host::Failure {kind := (ctor Host::FailureKind.notFound), message := (noSuchFile)})))
+}
+
+definition{
+  name: statedFailed,
+  parameters: [kind : Host::FailureKind, message : Bytes],
+  result: Host::Event,
+  body: (ctor Host::Event.stated (ctor Result.error [Host::Stat, Host::Failure] (record Host::Failure {kind := kind, message := message})))
+}
+
+definition{
+  name: listedNothing,
+  parameters: [],
+  result: Host::Event,
+  body: (ctor Host::Event.listed (ctor Result.ok [(List Bytes), Host::Failure] (nil Bytes)))
+}
+
+definition{
+  name: readOk,
+  parameters: [contents : Bytes],
+  result: Host::Event,
+  body: (ctor Host::Event.read (ctor Result.ok [Bytes, Host::Failure] contents))
+}
+
+definition{
+  name: readFailed,
+  parameters: [kind : Host::FailureKind, message : Bytes],
+  result: Host::Event,
+  body: (ctor Host::Event.read (ctor Result.error [Bytes, Host::Failure] (record Host::Failure {kind := kind, message := message})))
+}
+
+definition{
+  name: piece,
+  parameters: [text : String],
+  result: Host::Piece,
+  body: (ctor Host::Piece.literal text)
+}
+
+definition{
+  name: shown,
+  parameters: [bytes : Bytes],
+  result: (List Host::Piece),
+  body: (cons (ctor Host::Piece.taken bytes) (nil Host::Piece))
+}
+
+definition{
+  name: expectError,
+  parameters: [code : String, title : String, detail : (List Host::Piece)],
+  result: (List Host::Piece),
+  body: (cons (piece code) (cons (piece " ") (cons (piece title) (cons (piece ": ") (prim append detail (cons (piece "\n") (nil Host::Piece)) : (List Host::Piece))))))
+}
+
+definition{
+  name: exited,
+  parameters: [status : UInt8, output : (List Host::Piece), errorOutput : (List Host::Piece)],
+  result: Host::Draft,
+  body: (ctor Host::Draft.exit status output errorOutput)
+}
+
+definition{
+  name: refusedWith,
+  parameters: [detail : (List Host::Piece)],
+  result: Host::Draft,
+  body: (exited (2 : UInt8) (nil Host::Piece) (expectError "R300001" "Command line refused" detail))
+}
+
+definition{
+  name: malformedWith,
+  parameters: [detail : (List Host::Piece)],
+  result: Host::Draft,
+  body: (exited (1 : UInt8) (nil Host::Piece) (expectError "R301005" "Register outside its TOML subset" detail))
+}
+
+definition{
+  name: statsGit,
+  parameters: [],
+  result: Host::Draft,
+  body: (ctor Host::Draft.stat (cons (piece ".git") (nil Host::Piece)))
+}
+
+definition{
+  name: statsGitAbove,
+  parameters: [],
+  result: Host::Draft,
+  body: (ctor Host::Draft.stat (cons (piece "../") (cons (piece ".git") (nil Host::Piece))))
+}
+
+definition{
+  name: readsRegister,
+  parameters: [],
+  result: Host::Draft,
+  body: (ctor Host::Draft.read (cons (piece "frontier.toml") (nil Host::Piece)))
+}
+
+definition{
+  name: readsRegisterAbove,
+  parameters: [],
+  result: Host::Draft,
+  body: (ctor Host::Draft.read (cons (piece "../") (cons (piece "frontier.toml") (nil Host::Piece))))
+}
+
+definition{
+  name: run,
+  parameters: [events : (List Host::Event)],
+  result: (List Host::Draft),
+  body: (Host::trace [R30::Session, Host::Draft] (ref R30::plan) (ref Host::isExit) events 8),
+  axioms: [propext]
+}
+
+definition{
+  name: listRun,
+  parameters: [arguments : (List Bytes), register : Bytes],
+  result: (List Host::Draft),
+  body: (run (cons (started (cons (argFrontier) (cons (argList) arguments))) (cons (statedDirectory) (cons (readOk register) (nil Host::Event))))),
+  axioms: [propext]
+}
+
+definition{
+  name: listedAs,
+  parameters: [final : Host::Draft],
+  result: (List Host::Draft),
+  body: (cons (statsGit) (cons (readsRegister) (cons final (nil Host::Draft))))
+}
+
+theorem{
+  name: traceHelp,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argHelp) (nil Bytes))) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceHelpFlag,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argHelpFlag) (nil Bytes))) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceNoArguments,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (nil Bytes)) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceStopsAtExit,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argHelp) (nil Bytes))) (cons (readOk (fixtureOne)) (nil Host::Event)))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceVersion,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argVersion) (nil Bytes))) (nil Host::Event))) (cons (exited (0 : UInt8) (cons (piece "r30 ") (cons (piece "0.1.0") (cons (piece "\n") (nil Host::Piece)))) (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceVersionArguments,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argVersion) (cons (argFrontier) (nil Bytes)))) (nil Host::Event))) (cons (refusedWith (cons (piece "version takes no arguments") (nil Host::Piece))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceStatusWithoutValue,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (nil Bytes))))) (nil Host::Event))) (cons (refusedWith (cons (piece "argument --status of frontier list expects one value") (nil Host::Piece))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceListHelp,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argBogus) (cons (argHelpFlag) (nil Bytes)))))) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit "usage: r30 frontier list [-h] [--status STATUS]\n\noptions:\n  -h, --help       show this help message and exit\n  --status STATUS\n") (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRootMissing,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedMissing) (cons (statedMissing) (cons (readOk (fixtureOne)) (nil Host::Event)))))) (cons (statsGit) (cons (statsGitAbove) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece "frontier.toml: no directory at or above the working directory holds .git") (nil Host::Piece)))) (nil Host::Draft))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRegisterUnreadable,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedDirectory) (cons (readFailed (ctor Host::FailureKind.notFound) (noSuchFile)) (nil Host::Event))))) (listedAs (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece "frontier.toml") (cons (piece ": ") (cons (piece "not found") (cons (piece " (") (cons (ctor Host::Piece.taken (noSuchFile)) (cons (piece ")") (nil Host::Piece))))))))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRegisterBadValue,
+  parameters: [],
+  statement: ((Host::traceAgrees (listRun (nil Bytes) (fixtureBadValue)) (listedAs (malformedWith (cons (piece "frontier.toml") (cons (piece " line ") (cons (piece "1") (cons (piece "2") (cons (piece ": ") (cons (piece "a value outside the register's subset: a string, an array of strings or an integer") (nil Host::Piece)))))))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRegisterNotUtf8,
+  parameters: [],
+  statement: ((Host::traceAgrees (listRun (nil Bytes) (fixtureNotUtf8)) (listedAs (malformedWith (cons (piece "frontier.toml") (cons (piece ": ") (cons (piece "the text is not UTF-8") (nil Host::Piece))))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceUnknownVerb,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrobnicate) (nil Bytes))) (nil Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrobnicate)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceProgramName,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argProgram) (cons (argHelp) (nil Bytes)))) (nil Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argProgram)) (cons (piece " ") (cons (ctor Host::Piece.taken (argHelp)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceHostProtocol,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (readOk (fixtureOne)) (nil Host::Event))) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceHostProtocolListed,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (listedNothing) (nil Host::Event)))) (cons (statsGit) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))) (nil Host::Draft)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceHostProtocolRegister,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedDirectory) (cons (statedDirectory) (nil Host::Event))))) (listedAs (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceListStray,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argBogus) (nil Bytes))))) (nil Host::Event))) (cons (refusedWith (cons (piece "frontier list takes no arguments but --status S") (nil Host::Piece))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceListSeparator,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argSeparator) (nil Bytes))))) (nil Host::Event))) (cons (refusedWith (cons (piece "frontier list takes no arguments but --status S") (nil Host::Piece))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceStatusOptionLike,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (cons (argDashX) (nil Bytes)))))) (nil Host::Event))) (cons (refusedWith (cons (piece "argument --status of frontier list expects one value") (nil Host::Piece))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceStatusNegative,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (cons (argMinusOne) (nil Bytes)))))) (nil Host::Event))) (cons (statsGit) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceHelpValue,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argHelpValue) (nil Bytes))))) (nil Host::Event))) (cons (refusedWith (cons (piece "argument -h/--help of frontier list takes no value") (nil Host::Piece))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceHelpGlued,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argHelpGlued) (nil Bytes))))) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit "usage: r30 frontier list [-h] [--status STATUS]\n\noptions:\n  -h, --help       show this help message and exit\n  --status STATUS\n") (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceFrontierAlone,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (nil Bytes))) (nil Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrontier)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceFrontierOtherWord,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argFrobnicate) (nil Bytes)))) (nil Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrontier)) (cons (piece " ") (cons (ctor Host::Piece.taken (argFrobnicate)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRootDenied,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (startedIn (cons (argFrontier) (cons (argList) (nil Bytes))) (subDirectory)) (cons (statedFailed (ctor Host::FailureKind.denied) (permissionDenied)) (nil Host::Event)))) (cons (statsGit) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece ".git") (cons (piece ": ") (cons (piece "permission denied") (cons (piece " (") (cons (ctor Host::Piece.taken (permissionDenied)) (cons (piece ")") (nil Host::Piece))))))))) (nil Host::Draft)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: realizeRead,
+  parameters: [path : (List Host::Piece)],
+  statement: ((Host::realize (ctor Host::Draft.read path)) = (ctor Host::Request.read (Host::render path))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: realizeStat,
+  parameters: [path : (List Host::Piece)],
+  statement: ((Host::realize (ctor Host::Draft.stat path)) = (ctor Host::Request.stat (Host::render path))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: realizeExit,
+  parameters: [status : UInt8, output : (List Host::Piece), errorOutput : (List Host::Piece)],
+  statement: ((Host::realize (ctor Host::Draft.exit status output errorOutput)) = (ctor Host::Request.exit status (Host::render output) (Host::render errorOutput))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: renderJoinsTexts,
+  parameters: [pieces : (List Host::Piece)],
+  statement: ((Host::render pieces) = (prim join (Host::pieceTexts pieces) "" : String)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: pieceTextsNil,
+  parameters: [],
+  statement: ((Host::pieceTexts (nil Host::Piece)) = (nil String)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: pieceTextsCons,
+  parameters: [head : Host::Piece, rest : (List Host::Piece)],
+  statement: ((Host::pieceTexts (cons head rest)) = (cons (Host::pieceText head) (Host::pieceTexts rest))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: pieceTextLiteral,
+  parameters: [text : String],
+  statement: ((Host::pieceText (ctor Host::Piece.literal text)) = text),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: pieceTextTaken,
+  parameters: [bytes : Bytes],
+  statement: ((Host::pieceText (ctor Host::Piece.taken bytes)) = (Host::textOf bytes)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: textOfJoinsScalars,
+  parameters: [bytes : Bytes],
+  statement: ((Host::textOf bytes) = (prim join (Host::pieceScalars (ctor Host::Piece.taken bytes)) "" : String)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: textCharsControls,
+  parameters: [],
+  statement: ((Host::charsFrom 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f 0 32) = (cons "\u0000" (cons "\u0001" (cons "\u0002" (cons "\u0003" (cons "\u0004" (cons "\u0005" (cons "\u0006" (cons "\u0007" (cons "\u0008" (cons "\u0009" (cons "\u000A" (cons "\u000B" (cons "\u000C" (cons "\u000D" (cons "\u000E" (cons "\u000F" (cons "\u0010" (cons "\u0011" (cons "\u0012" (cons "\u0013" (cons "\u0014" (cons "\u0015" (cons "\u0016" (cons "\u0017" (cons "\u0018" (cons "\u0019" (cons "\u001A" (cons "\u001B" (cons "\u001C" (cons "\u001D" (cons "\u001E" (cons "\u001F" (nil String)))))))))))))))))))))))))))))))))),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: textCharsPunctuation,
+  parameters: [],
+  statement: ((Host::charsFrom 0x202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f 0 32) = (cons " " (cons "!" (cons "\"" (cons "#" (cons "$" (cons "\u0025" (cons "&" (cons "'" (cons "(" (cons ")" (cons "*" (cons "+" (cons "," (cons "-" (cons "." (cons "/" (cons "0" (cons "1" (cons "2" (cons "3" (cons "4" (cons "5" (cons "6" (cons "7" (cons "8" (cons "9" (cons ":" (cons ";" (cons "<" (cons "=" (cons ">" (cons "?" (nil String)))))))))))))))))))))))))))))))))),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: textCharsUpper,
+  parameters: [],
+  statement: ((Host::charsFrom 0x404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f 0 32) = (cons "@" (cons "A" (cons "B" (cons "C" (cons "D" (cons "E" (cons "F" (cons "G" (cons "H" (cons "I" (cons "J" (cons "K" (cons "L" (cons "M" (cons "N" (cons "O" (cons "P" (cons "Q" (cons "R" (cons "S" (cons "T" (cons "U" (cons "V" (cons "W" (cons "X" (cons "Y" (cons "Z" (cons "[" (cons "\\" (cons "]" (cons "^" (cons "_" (nil String)))))))))))))))))))))))))))))))))),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: textCharsLower,
+  parameters: [],
+  statement: ((Host::charsFrom 0x606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f 0 32) = (cons "`" (cons "a" (cons "b" (cons "c" (cons "d" (cons "e" (cons "f" (cons "g" (cons "h" (cons "i" (cons "j" (cons "k" (cons "l" (cons "m" (cons "n" (cons "o" (cons "p" (cons "q" (cons "r" (cons "s" (cons "t" (cons "u" (cons "v" (cons "w" (cons "x" (cons "y" (cons "z" (cons "{" (cons "|" (cons "}" (cons "~" (cons "\u007F" (nil String)))))))))))))))))))))))))))))))))),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: textCharsTable,
+  parameters: [],
+  statement: ((Host::charsFrom (tableBytes) 0 (prim length (tableBytes) : Nat)) = (cons "\u2295" (cons "\u2264" (cons "\u2265" (cons "\u2013" (cons "\u2212" (cons "\u00B7" (cons "\u00AC" (cons "\u2227" (cons "\u2228" (cons "\u2208" (cons "\u2014" (cons "\u03BA" (cons "\u2192" (cons "\u21A6" (cons "\u2026" (cons "\u2115" (cons "\u27FA" (cons "\u27F9" (cons "\u21D2" (cons "\u2194" (cons "\u2190" (cons "\u2261" (cons "\u2248" (cons "\u2260" (cons "\u00D7" (cons "\u00B1" (cons "\u2218" (cons "\u2200" (cons "\u2203" (cons "\u2229" (cons "\u222A" (cons "\u221E" (cons "\u00A7" (cons "\u03C3" (cons "\u03C4" (cons "\u03B4" (cons "\u03A6" (cons "\u2080" (cons "\u2081" (cons "\u2082" (cons "\u2083" (cons "\u00B2" (cons "\u2019" (cons "\u201C" (cons "\u201D" (cons "\uFFFD" (cons "A" (nil String))))))))))))))))))))))))))))))))))))))))))))))))),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

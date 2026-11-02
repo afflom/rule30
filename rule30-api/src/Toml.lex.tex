@@ -1,0 +1,444 @@
+\begin{lexlean}{Toml}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: subset,
+  parameters: [],
+  result: (List String),
+  body: (cons "one key = value per line, the key bare (A-Z a-z 0-9 _ -)" (cons "a value is a basic string on one line with the escapes \\\" \\\\ \\n \\t, a one-line array of such strings (a trailing comma allowed), or a decimal integer without sign, underscore or leading zero" (cons "[[name]] opens a new table of the array name; keys before the first header belong to the root table, named by the empty string" (cons "a comment from # to the end of the line, blank lines, spaces and tabs around tokens, and LF or CRLF line ends" (cons "the text is UTF-8; anything else TOML has is refused with its line and a reason" (nil String)))))),
+  executable: true
+}
+
+inductive{
+  name: Value,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: text, fields: [(List Bytes)]},
+    {name: strings, fields: [(List (List Bytes))]},
+    {name: number, fields: [Nat]}
+  ]
+}
+
+structure{
+  name: Entry,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: key, type: Bytes}, {name: value, type: Value}]
+}
+
+structure{
+  name: Table,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: name, type: Bytes}, {name: entries, type: (List Entry)}]
+}
+
+structure{
+  name: Problem,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: line, type: Nat}, {name: reason, type: String}]
+}
+
+definition{
+  name: byteIs,
+  parameters: [bytes : Bytes, position : Nat, wanted : UInt8],
+  result: Bool,
+  body: (match (prim index bytes position : (Option UInt8))
+    | Option.some found => (prim equal found wanted : Bool)
+    | Option.none => false),
+  executable: true
+}
+
+definition{
+  name: sliceOr,
+  parameters: [bytes : Bytes, start : Nat, count : Nat],
+  result: Bytes,
+  body: (match (prim slice bytes start count : (Option Bytes))
+    | Option.some piece => piece
+    | Option.none => 0x),
+  executable: true
+}
+
+definition{
+  name: sameByteAt,
+  parameters: [left : Bytes, leftAt : Nat, right : Bytes, rightAt : Nat],
+  result: Bool,
+  body: (match (prim index left leftAt : (Option UInt8))
+    | Option.some x => (match (prim index right rightAt : (Option UInt8))
+      | Option.some y => (prim equal x y : Bool)
+      | Option.none => false)
+    | Option.none => false),
+  executable: true
+}
+
+definition{
+  name: bytesAgreeFrom,
+  parameters: [left : Bytes, leftAt : Nat, right : Bytes, rightAt : Nat, count : Nat],
+  result: Bool,
+  body: (match count
+    | Nat.zero => true
+    | Nat.succ more => ((sameByteAt left leftAt right rightAt) && (bytesAgreeFrom left (leftAt + 1) right (rightAt + 1) more))),
+  recursive_argument: count,
+  executable: true
+}
+
+definition{
+  name: sameBytes,
+  parameters: [left : Bytes, right : Bytes],
+  result: Bool,
+  body: (((prim length left : Nat) =? (prim length right : Nat)) && (bytesAgreeFrom left 0 right 0 (prim length left : Nat))),
+  executable: true
+}
+
+definition{
+  name: between,
+  parameters: [byte : UInt8, low : UInt8, high : UInt8],
+  result: Bool,
+  body: ((not (prim less_than byte low : Bool)) && (not (prim less_than high byte : Bool))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: isKeyByte,
+  parameters: [byte : UInt8],
+  result: Bool,
+  body: ((between byte (65 : UInt8) (90 : UInt8)) || ((between byte (97 : UInt8) (122 : UInt8)) || ((between byte (48 : UInt8) (57 : UInt8)) || ((prim equal byte (95 : UInt8) : Bool) || (prim equal byte (45 : UInt8) : Bool))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: isControlByte,
+  parameters: [byte : UInt8],
+  result: Bool,
+  body: ((between byte (0 : UInt8) (8 : UInt8)) || ((between byte (10 : UInt8) (31 : UInt8)) || (prim equal byte (127 : UInt8) : Bool))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: skipSpaces,
+  parameters: [bytes : Bytes, position : Nat, fuel : Nat],
+  result: Nat,
+  body: (match fuel
+    | Nat.zero => position
+    | Nat.succ more => (if ((byteIs bytes position (32 : UInt8)) || (byteIs bytes position (9 : UInt8))) then (skipSpaces bytes (position + 1) more) else position)),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: keyEnd,
+  parameters: [bytes : Bytes, position : Nat, fuel : Nat],
+  result: Nat,
+  body: (match fuel
+    | Nat.zero => position
+    | Nat.succ more => (match (prim index bytes position : (Option UInt8))
+      | Option.some byte => (if (isKeyByte byte) then (keyEnd bytes (position + 1) more) else position)
+      | Option.none => position)),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: digitValue,
+  parameters: [byte : UInt8],
+  result: (Option Nat),
+  body: (if (prim equal byte (48 : UInt8) : Bool) then (ctor Option.some [Nat] 0) else (if (prim equal byte (49 : UInt8) : Bool) then (ctor Option.some [Nat] 1) else (if (prim equal byte (50 : UInt8) : Bool) then (ctor Option.some [Nat] 2) else (if (prim equal byte (51 : UInt8) : Bool) then (ctor Option.some [Nat] 3) else (if (prim equal byte (52 : UInt8) : Bool) then (ctor Option.some [Nat] 4) else (if (prim equal byte (53 : UInt8) : Bool) then (ctor Option.some [Nat] 5) else (if (prim equal byte (54 : UInt8) : Bool) then (ctor Option.some [Nat] 6) else (if (prim equal byte (55 : UInt8) : Bool) then (ctor Option.some [Nat] 7) else (if (prim equal byte (56 : UInt8) : Bool) then (ctor Option.some [Nat] 8) else (if (prim equal byte (57 : UInt8) : Bool) then (ctor Option.some [Nat] 9) else (ctor Option.none [Nat]))))))))))),
+  executable: true
+}
+
+definition{
+  name: digitAt,
+  parameters: [bytes : Bytes, position : Nat],
+  result: (Option Nat),
+  body: (match (prim index bytes position : (Option UInt8))
+    | Option.some byte => (digitValue byte)
+    | Option.none => (ctor Option.none [Nat])),
+  executable: true
+}
+
+definition{
+  name: digitsFrom,
+  parameters: [bytes : Bytes, position : Nat, value : Nat, fuel : Nat],
+  result: (Nat * Nat),
+  body: (match fuel
+    | Nat.zero => (value, position)
+    | Nat.succ more => (match (digitAt bytes position)
+      | Option.some digit => (digitsFrom bytes (position + 1) ((prim multiply value 10 : Nat) + digit) more)
+      | Option.none => (value, position))),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: reverseBytesOnto,
+  parameters: [items : (List Bytes), onto : (List Bytes)],
+  result: (List Bytes),
+  body: (match items
+    | List.nil => onto
+    | List.cons item rest => (reverseBytesOnto rest (cons item onto))),
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: reverseStringsOnto,
+  parameters: [items : (List (List Bytes)), onto : (List (List Bytes))],
+  result: (List (List Bytes)),
+  body: (match items
+    | List.nil => onto
+    | List.cons item rest => (reverseStringsOnto rest (cons item onto))),
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: reverseEntriesOnto,
+  parameters: [items : (List Entry), onto : (List Entry)],
+  result: (List Entry),
+  body: (match items
+    | List.nil => onto
+    | List.cons item rest => (reverseEntriesOnto rest (cons item onto))),
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: reverseTablesOnto,
+  parameters: [items : (List Table), onto : (List Table)],
+  result: (List Table),
+  body: (match items
+    | List.nil => onto
+    | List.cons item rest => (reverseTablesOnto rest (cons item onto))),
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: pushSegment,
+  parameters: [line : Bytes, start : Nat, stop : Nat, segments : (List Bytes)],
+  result: (List Bytes),
+  body: (if (start <? stop) then (cons (sliceOr line start (prim subtract stop start : Nat)) segments) else segments),
+  executable: true
+}
+
+definition{
+  name: scanString,
+  parameters: [line : Bytes, position : Nat, start : Nat, segments : (List Bytes), fuel : Nat],
+  result: (Result ((List Bytes) * Nat) String),
+  body: (match fuel
+    | Nat.zero => (ctor Result.error [((List Bytes) * Nat), String] "a string is not closed on its line")
+    | Nat.succ more => (match (prim index line position : (Option UInt8))
+      | Option.none => (ctor Result.error [((List Bytes) * Nat), String] "a string is not closed on its line")
+      | Option.some byte => (if (prim equal byte (34 : UInt8) : Bool) then (ctor Result.ok [((List Bytes) * Nat), String] ((reverseBytesOnto (pushSegment line start position segments) (nil Bytes)), (position + 1))) else (if (prim equal byte (92 : UInt8) : Bool) then (let kept : (List Bytes) := (pushSegment line start position segments); (let next : Nat := (position + 2); (match (prim index line (position + 1) : (Option UInt8))
+        | Option.some escaped => (if (prim equal escaped (34 : UInt8) : Bool) then (scanString line next next (cons 0x22 kept) more) else (if (prim equal escaped (92 : UInt8) : Bool) then (scanString line next next (cons 0x5c kept) more) else (if (prim equal escaped (110 : UInt8) : Bool) then (scanString line next next (cons 0x0a kept) more) else (if (prim equal escaped (116 : UInt8) : Bool) then (scanString line next next (cons 0x09 kept) more) else (ctor Result.error [((List Bytes) * Nat), String] "an escape outside the register's subset (\\\" \\\\ \\n \\t)")))))
+        | Option.none => (ctor Result.error [((List Bytes) * Nat), String] "a string is not closed on its line")))) else (if (isControlByte byte) then (ctor Result.error [((List Bytes) * Nat), String] "a control character in a string") else (scanString line (position + 1) start segments more)))))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: scanArray,
+  parameters: [line : Bytes, position : Nat, items : (List (List Bytes)), wantItem : Bool, fuel : Nat],
+  result: (Result ((List (List Bytes)) * Nat) String),
+  body: (match fuel
+    | Nat.zero => (ctor Result.error [((List (List Bytes)) * Nat), String] "an array is not closed on its line")
+    | Nat.succ more => (let size : Nat := (prim length line : Nat); (let here : Nat := (skipSpaces line position (size + 1)); (if (byteIs line here (93 : UInt8)) then (ctor Result.ok [((List (List Bytes)) * Nat), String] ((reverseStringsOnto items (nil (List Bytes))), (here + 1))) else (if (size <=? here) then (ctor Result.error [((List (List Bytes)) * Nat), String] "an array is not closed on its line") else (if wantItem then (if (byteIs line here (34 : UInt8)) then (match (scanString line (here + 1) (here + 1) (nil Bytes) (size + 1))
+      | Result.ok found => (scanArray line (second found) (cons (first found) items) false more)
+      | Result.error reason => (ctor Result.error [((List (List Bytes)) * Nat), String] reason)) else (ctor Result.error [((List (List Bytes)) * Nat), String] "an array holds only strings in the register's subset")) else (if (byteIs line here (44 : UInt8)) then (scanArray line (here + 1) items true more) else (ctor Result.error [((List (List Bytes)) * Nat), String] "the items of an array are separated by commas")))))))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: parseValue,
+  parameters: [line : Bytes, position : Nat],
+  result: (Result (Value * Nat) String),
+  body: (let size : Nat := (prim length line : Nat); (if (byteIs line position (34 : UInt8)) then (match (scanString line (position + 1) (position + 1) (nil Bytes) (size + 1))
+    | Result.ok found => (ctor Result.ok [(Value * Nat), String] ((ctor Value.text (first found)), (second found)))
+    | Result.error reason => (ctor Result.error [(Value * Nat), String] reason)) else (if (byteIs line position (91 : UInt8)) then (match (scanArray line (position + 1) (nil (List Bytes)) true (size + 1))
+    | Result.ok found => (ctor Result.ok [(Value * Nat), String] ((ctor Value.strings (first found)), (second found)))
+    | Result.error reason => (ctor Result.error [(Value * Nat), String] reason)) else (match (digitAt line position)
+    | Option.some digit => (if (if (digit =? 0) then (match (digitAt line (position + 1))
+        | Option.some next => true
+        | Option.none => false) else false) then (ctor Result.error [(Value * Nat), String] "an integer with a leading zero") else (let found : (Nat * Nat) := (digitsFrom line position 0 (size + 1)); (ctor Result.ok [(Value * Nat), String] ((ctor Value.number (first found)), (second found)))))
+    | Option.none => (ctor Result.error [(Value * Nat), String] "a value outside the register's subset: a string, an array of strings or an integer"))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: restIsEmpty,
+  parameters: [line : Bytes, position : Nat],
+  result: Bool,
+  body: (let size : Nat := (prim length line : Nat); (let here : Nat := (skipSpaces line position (size + 1)); ((size <=? here) || (byteIs line here (35 : UInt8))))),
+  executable: true
+}
+
+definition{
+  name: hasKey,
+  parameters: [entries : (List Entry), key : Bytes],
+  result: Bool,
+  body: (match entries
+    | List.nil => false
+    | List.cons entry rest => (if (sameBytes (project entry key) key) then true else (hasKey rest key))),
+  recursive_argument: entries,
+  executable: true
+}
+
+definition{
+  name: addEntry,
+  parameters: [table : Table, key : Bytes, value : Value],
+  result: (Result Table String),
+  body: (if (hasKey (project table entries) key) then (ctor Result.error [Table, String] "a key defined twice in one table") else (ctor Result.ok [Table, String] (record Table {name := (project table name), entries := (cons (record Entry {key := key, value := value}) (project table entries))}))),
+  executable: true
+}
+
+definition{
+  name: closeTable,
+  parameters: [table : Table],
+  result: Table,
+  body: (record Table {name := (project table name), entries := (reverseEntriesOnto (project table entries) (nil Entry))}),
+  executable: true
+}
+
+definition{
+  name: parseHeader,
+  parameters: [line : Bytes, position : Nat, current : Table, done : (List Table)],
+  result: (Result (Table * (List Table)) String),
+  body: (let size : Nat := (prim length line : Nat); (let nameStart : Nat := (position + 2); (let nameStop : Nat := (keyEnd line nameStart (size + 1)); (if (if (byteIs line (position + 1) (91 : UInt8)) then (if (nameStart <? nameStop) then (if (byteIs line nameStop (93 : UInt8)) then (byteIs line (nameStop + 1) (93 : UInt8)) else false) else false) else false) then (if (restIsEmpty line (nameStop + 2)) then (ctor Result.ok [(Table * (List Table)), String] ((record Table {name := (sliceOr line nameStart (prim subtract nameStop nameStart : Nat)), entries := (nil Entry)}), (cons (closeTable current) done))) else (ctor Result.error [(Table * (List Table)), String] "characters after a table header")) else (ctor Result.error [(Table * (List Table)), String] "a table header outside the register's subset: [[name]]"))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: parseEntry,
+  parameters: [line : Bytes, position : Nat, current : Table, done : (List Table)],
+  result: (Result (Table * (List Table)) String),
+  body: (let size : Nat := (prim length line : Nat); (let keyStop : Nat := (keyEnd line position (size + 1)); (let afterKey : Nat := (skipSpaces line keyStop (size + 1)); (if (keyStop =? position) then (ctor Result.error [(Table * (List Table)), String] "a line that is not a key, a [[name]] header, a comment or blank") else (if (byteIs line afterKey (61 : UInt8)) then (match (parseValue line (skipSpaces line (afterKey + 1) (size + 1)))
+    | Result.error reason => (ctor Result.error [(Table * (List Table)), String] reason)
+    | Result.ok parsed => (if (restIsEmpty line (second parsed)) then (match (addEntry current (sliceOr line position (prim subtract keyStop position : Nat)) (first parsed))
+      | Result.ok table => (ctor Result.ok [(Table * (List Table)), String] (table, done))
+      | Result.error reason => (ctor Result.error [(Table * (List Table)), String] reason)) else (ctor Result.error [(Table * (List Table)), String] "characters after a value"))) else (ctor Result.error [(Table * (List Table)), String] "a key without = (dotted and quoted keys are outside the register's subset)")))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: parseLine,
+  parameters: [line : Bytes, current : Table, done : (List Table)],
+  result: (Result (Table * (List Table)) String),
+  body: (let size : Nat := (prim length line : Nat); (let position : Nat := (skipSpaces line 0 (size + 1)); (if (size <=? position) then (ctor Result.ok [(Table * (List Table)), String] (current, done)) else (if (byteIs line position (35 : UInt8)) then (ctor Result.ok [(Table * (List Table)), String] (current, done)) else (if (byteIs line position (91 : UInt8)) then (parseHeader line position current done) else (parseEntry line position current done)))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: lineEnd,
+  parameters: [source : Bytes, position : Nat, fuel : Nat],
+  result: Nat,
+  body: (match fuel
+    | Nat.zero => position
+    | Nat.succ more => (match (prim index source position : (Option UInt8))
+      | Option.some byte => (if (prim equal byte (10 : UInt8) : Bool) then position else (lineEnd source (position + 1) more))
+      | Option.none => position)),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: contentSize,
+  parameters: [source : Bytes, start : Nat, stop : Nat],
+  result: Nat,
+  body: (if (if (start <? stop) then (byteIs source (prim subtract stop 1 : Nat) (13 : UInt8)) else false) then (prim subtract (prim subtract stop 1 : Nat) start : Nat) else (prim subtract stop start : Nat)),
+  executable: true
+}
+
+definition{
+  name: parseLines,
+  parameters: [source : Bytes, position : Nat, number : Nat, current : Table, done : (List Table), fuel : Nat],
+  result: (Result (List Table) Problem),
+  body: (match fuel
+    | Nat.zero => (ctor Result.error [(List Table), Problem] (record Problem {line := number, reason := "the register outruns its parse fuel"}))
+    | Nat.succ more => (let size : Nat := (prim length source : Nat); (if (size <=? position) then (ctor Result.ok [(List Table), Problem] (reverseTablesOnto (cons (closeTable current) done) (nil Table))) else (let stop : Nat := (lineEnd source position (size + 1)); (match (parseLine (sliceOr source position (contentSize source position stop)) current done)
+      | Result.ok state => (parseLines source (stop + 1) (number + 1) (first state) (second state) more)
+      | Result.error reason => (ctor Result.error [(List Table), Problem] (record Problem {line := number, reason := reason}))))))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: continuationAt,
+  parameters: [bytes : Bytes, position : Nat, low : UInt8, high : UInt8],
+  result: Bool,
+  body: (match (prim index bytes position : (Option UInt8))
+    | Option.some byte => (between byte low high)
+    | Option.none => false),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: validFrom,
+  parameters: [bytes : Bytes, position : Nat, fuel : Nat],
+  result: Bool,
+  body: (match fuel
+    | Nat.zero => ((prim length bytes : Nat) <=? position)
+    | Nat.succ more => (match (prim index bytes position : (Option UInt8))
+      | Option.none => true
+      | Option.some byte => (if (between byte (0 : UInt8) (127 : UInt8)) then (validFrom bytes (position + 1) more) else (if (between byte (194 : UInt8) (223 : UInt8)) then ((continuationAt bytes (position + 1) (128 : UInt8) (191 : UInt8)) && (validFrom bytes (position + 2) more)) else (if (prim equal byte (224 : UInt8) : Bool) then ((continuationAt bytes (position + 1) (160 : UInt8) (191 : UInt8)) && ((continuationAt bytes (position + 2) (128 : UInt8) (191 : UInt8)) && (validFrom bytes (position + 3) more))) else (if ((between byte (225 : UInt8) (236 : UInt8)) || (between byte (238 : UInt8) (239 : UInt8))) then ((continuationAt bytes (position + 1) (128 : UInt8) (191 : UInt8)) && ((continuationAt bytes (position + 2) (128 : UInt8) (191 : UInt8)) && (validFrom bytes (position + 3) more))) else (if (prim equal byte (237 : UInt8) : Bool) then ((continuationAt bytes (position + 1) (128 : UInt8) (159 : UInt8)) && ((continuationAt bytes (position + 2) (128 : UInt8) (191 : UInt8)) && (validFrom bytes (position + 3) more))) else (if (prim equal byte (240 : UInt8) : Bool) then ((continuationAt bytes (position + 1) (144 : UInt8) (191 : UInt8)) && ((continuationAt bytes (position + 2) (128 : UInt8) (191 : UInt8)) && ((continuationAt bytes (position + 3) (128 : UInt8) (191 : UInt8)) && (validFrom bytes (position + 4) more)))) else (if (between byte (241 : UInt8) (243 : UInt8)) then ((continuationAt bytes (position + 1) (128 : UInt8) (191 : UInt8)) && ((continuationAt bytes (position + 2) (128 : UInt8) (191 : UInt8)) && ((continuationAt bytes (position + 3) (128 : UInt8) (191 : UInt8)) && (validFrom bytes (position + 4) more)))) else (if (prim equal byte (244 : UInt8) : Bool) then ((continuationAt bytes (position + 1) (128 : UInt8) (143 : UInt8)) && ((continuationAt bytes (position + 2) (128 : UInt8) (191 : UInt8)) && ((continuationAt bytes (position + 3) (128 : UInt8) (191 : UInt8)) && (validFrom bytes (position + 4) more)))) else false)))))))))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: parse,
+  parameters: [source : Bytes],
+  result: (Result (List Table) Problem),
+  body: (if (validFrom source 0 ((prim length source : Nat) + 1)) then (parseLines source 0 1 (record Table {name := 0x, entries := (nil Entry)}) (nil Table) ((prim length source : Nat) + 1)) else (ctor Result.error [(List Table), Problem] (record Problem {line := 0, reason := "the text is not UTF-8"}))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: lookup,
+  parameters: [entries : (List Entry), key : Bytes],
+  result: (Option Value),
+  body: (match entries
+    | List.nil => (ctor Option.none [Value])
+    | List.cons entry rest => (if (sameBytes (project entry key) key) then (ctor Option.some [Value] (project entry value)) else (lookup rest key))),
+  recursive_argument: entries,
+  executable: true
+}
+
+definition{
+  name: field,
+  parameters: [table : Table, key : Bytes],
+  result: (Option Value),
+  body: (lookup (project table entries) key),
+  executable: true
+}
+
+definition{
+  name: tablesNamed,
+  parameters: [tables : (List Table), name : Bytes],
+  result: (List Table),
+  body: (match tables
+    | List.nil => (nil Table)
+    | List.cons table rest => (if (sameBytes (project table name) name) then (cons table (tablesNamed rest name)) else (tablesNamed rest name))),
+  recursive_argument: tables,
+  executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

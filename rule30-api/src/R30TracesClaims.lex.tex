@@ -1,0 +1,68 @@
+\begin{lexlean}{R30TracesClaims}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Host}
+\importmodule{R30}
+\importmodule{R30Traces}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: fixtureAlpha,
+  parameters: [],
+  result: Bytes,
+  body: 0x2320630a0a5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d202270726f766564220a73746174656d656e74203d20227820e28a952078203d20302e220a6c65616e203d2022522e616c706861220a
+}
+
+definition{
+  name: pythonAlpha,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b70726f766564205d20616c7068613a207820e28a952078203d20302e202028522e616c706861290a
+}
+
+definition{
+  name: fixtureBeta,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a6964203d202262657461220a737461747573203d20226f70656e220a73746174656d656e74203d2022422e220a646570656e6473203d205b22616c706861225d0a
+}
+
+definition{
+  name: fixtureGamma,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a6964203d202267616d6d61220a737461747573203d20226f62736572766564220a73746174656d656e74203d2022432e220a72656c6174696f6e203d205b2274222c202272225d0a77696e646f77203d203235360a
+}
+
+definition{
+  name: pythonGamma,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b6f627365727665645d2067616d6d613a20432e0a
+}
+
+theorem{
+  name: traceClaimAlpha,
+  parameters: [],
+  statement: ((Host::realizedAgrees (R30Traces::listRun (nil Bytes) (fixtureAlpha)) (R30Traces::listedAs (R30Traces::exited (0 : UInt8) (R30Traces::shown (pythonAlpha)) (nil Host::Piece))) (cons ".git" (cons "frontier.toml" (cons "[" (cons "p" (cons "r" (cons "o" (cons "v" (cons "e" (cons "d" (cons " " (cons "]" (cons " " (cons "a" (cons "l" (cons "p" (cons "h" (cons "a" (cons ":" (cons " " (cons "x" (cons " " (cons "⊕" (cons " " (cons "x" (cons " " (cons "=" (cons " " (cons "0" (cons "." (cons " " (cons " " (cons "(" (cons "R" (cons "." (cons "a" (cons "l" (cons "p" (cons "h" (cons "a" (cons ")" (cons "\n" (nil String))))))))))))))))))))))))))))))))))))))))))) = true),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: traceClaimBeta,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (nil Bytes) (fixtureBeta)) (R30Traces::listedAs (R30Traces::exited (0 : UInt8) (R30Traces::shown (R30Traces::pythonListOne)) (nil Host::Piece)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceClaimGamma,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (nil Bytes) (fixtureGamma)) (R30Traces::listedAs (R30Traces::exited (0 : UInt8) (R30Traces::shown (pythonGamma)) (nil Host::Piece)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

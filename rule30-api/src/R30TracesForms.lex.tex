@@ -1,0 +1,87 @@
+\begin{lexlean}{R30TracesForms}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Application}
+\importmodule{Host}
+\importmodule{R30}
+\importmodule{R30Traces}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: pythonEmpty,
+  parameters: [],
+  result: Bytes,
+  body: 0x656d7074790a
+}
+
+definition{
+  name: listedOne,
+  parameters: [],
+  result: (List Host::Draft),
+  body: (R30Traces::listedAs (R30Traces::exited (0 : UInt8) (R30Traces::shown (R30Traces::pythonListOne)) (nil Host::Piece)))
+}
+
+theorem{
+  name: versionIsApplications,
+  parameters: [],
+  statement: ((prim equal (R30::version) (project (Application::application) version) : Bool) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: traceFrontierListOpen,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (cons (R30Traces::argStatus) (cons (R30Traces::argOpen) (nil Bytes))) (R30Traces::fixtureOne)) (listedOne)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceFrontierListEmpty,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (cons (R30Traces::argStatus) (cons (R30Traces::argRefuted) (nil Bytes))) (R30Traces::fixtureOne)) (R30Traces::listedAs (R30Traces::exited (0 : UInt8) (R30Traces::shown (pythonEmpty)) (nil Host::Piece)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceStatusEquals,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (cons (R30Traces::argStatusOpen) (nil Bytes)) (R30Traces::fixtureOne)) (listedOne)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceStatusEqualsMiss,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (cons 0x2d2d7374617475733d72656675746564 (nil Bytes)) (R30Traces::fixtureOne)) (R30Traces::listedAs (R30Traces::exited (0 : UInt8) (R30Traces::shown (pythonEmpty)) (nil Host::Piece)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceStatusBlank,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (cons (R30Traces::argStatus) (cons (R30Traces::argBlank) (nil Bytes))) (R30Traces::fixtureOne)) (listedOne)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceStatusLastWins,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (cons (R30Traces::argStat) (cons (R30Traces::argRefuted) (cons (R30Traces::argStatusOpen) (nil Bytes)))) (R30Traces::fixtureOne)) (listedOne)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRootAbove,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::run (cons (R30Traces::startedIn (cons (R30Traces::argFrontier) (cons (R30Traces::argList) (nil Bytes))) (R30Traces::subDirectory)) (cons (R30Traces::statedMissing) (cons (R30Traces::statedDirectory) (cons (R30Traces::readOk (R30Traces::fixtureOne)) (nil Host::Event)))))) (cons (R30Traces::statsGit) (cons (R30Traces::statsGitAbove) (cons (R30Traces::readsRegisterAbove) (cons (R30Traces::exited (0 : UInt8) (R30Traces::shown (R30Traces::pythonListOne)) (nil Host::Piece)) (nil Host::Draft)))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

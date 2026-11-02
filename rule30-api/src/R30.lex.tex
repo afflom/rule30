@@ -1,0 +1,890 @@
+\begin{lexlean}{R30}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Host}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: rootKind,
+  parameters: [],
+  result: String,
+  body: "step has the signature of a command root of LexLean issue 271 over the mirror Host, and is declared a production root for rust-std with the effects LexLean 0.4.0 admits (allocation, overflow, recursion): lexlean verify certifies the root, and lexlean production compiles it to a Rust library function with no main when a request names it. rule30-api/production/request.json does not name it, because that file and model/runtime-roots.toml are generated from the tables of the deprecated tools/r30, which take no additions; so bin/r30 api production does not build this root, and exporting it takes a request of its own until the runtime moves. Its closure builds three Request constructors, read, stat and exit, through Host::realize, so under rule 5 of 271 it realizes files and not process. When rule30 pins the release that lands 271, Host:: becomes LexLeanStd.Host:: (imported from LexLean's stdlib as a source package, SPEC 10.5), the root's effects become [allocation, files, overflow, recursion], and the same signature makes it the command root whose generated driver is rule30's binary; a verb that spawns a process adds Draft.spawn, and process with it. plan is the step before its texts are joined (step realizes plan, by definition); the kernel decides traces of plan.",
+  executable: true
+}
+
+structure{
+  name: ErrorRow,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: code, type: String},
+    {name: title, type: String},
+    {name: family, type: String},
+    {name: status, type: UInt8},
+    {name: statement, type: String}
+  ]
+}
+
+definition{
+  name: commandLineRefused,
+  parameters: [],
+  result: ErrorRow,
+  body: (record ErrorRow {code := "R300001", title := "Command line refused", family := "surface", status := (2 : UInt8), statement := "The arguments name no command of the LexLean runtime, or do not fit the form of the command they name; r30 help lists the commands and their forms."}),
+  executable: true
+}
+
+definition{
+  name: hostProtocol,
+  parameters: [],
+  result: ErrorRow,
+  body: (record ErrorRow {code := "R300002", title := "Host answered another request", family := "surface", status := (1 : UInt8), statement := "The driver passed an event that answers no request of the step (a start after the start, or the outcome of another request): a defect of the driver, against the contract of LexLean issue 271."}),
+  executable: true
+}
+
+definition{
+  name: registerUnreadable,
+  parameters: [],
+  result: ErrorRow,
+  body: (record ErrorRow {code := "R301004", title := "Register cannot be read", family := "register", status := (1 : UInt8), statement := "No directory at or above the working directory holds .git, the host could not stat a .git on the way up, or it could not read frontier.toml in the repository root; the path, the failure's kind and the host's message follow."}),
+  executable: true
+}
+
+definition{
+  name: registerMalformed,
+  parameters: [],
+  result: ErrorRow,
+  body: (record ErrorRow {code := "R301005", title := "Register outside its TOML subset", family := "register", status := (1 : UInt8), statement := "frontier.toml is not UTF-8, is not in the TOML subset of Toml.lex.tex, or has a [[claim]] without a string id, status or statement or with a lean that is not a string; the path, the line or the claim, and the reason follow."}),
+  executable: true
+}
+
+definition{
+  name: errors,
+  parameters: [],
+  result: (List ErrorRow),
+  body: (cons (commandLineRefused) (cons (hostProtocol) (cons (registerUnreadable) (cons (registerMalformed) (nil ErrorRow))))),
+  executable: true
+}
+
+definition{
+  name: codeIsNew,
+  parameters: [code : String, rows : (List ErrorRow)],
+  result: Bool,
+  body: (match rows
+    | List.nil => true
+    | List.cons row rest => (if (prim equal (project row code) code : Bool) then false else (codeIsNew code rest))),
+  recursive_argument: rows
+}
+
+definition{
+  name: codesDistinct,
+  parameters: [rows : (List ErrorRow)],
+  result: Bool,
+  body: (match rows
+    | List.nil => true
+    | List.cons row rest => ((codeIsNew (project row code) rest) && (codesDistinct rest))),
+  recursive_argument: rows
+}
+
+definition{
+  name: statusesClosed,
+  parameters: [rows : (List ErrorRow)],
+  result: Bool,
+  body: (match rows
+    | List.nil => true
+    | List.cons row rest => (((prim equal (project row status) (1 : UInt8) : Bool) || (prim equal (project row status) (2 : UInt8) : Bool)) && (statusesClosed rest))),
+  recursive_argument: rows
+}
+
+theorem{
+  name: errorCodesDistinct,
+  parameters: [],
+  statement: ((codesDistinct (errors)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: errorStatusesClosed,
+  parameters: [],
+  statement: ((statusesClosed (errors)) = true),
+  proof: decide{}
+}
+
+definition{
+  name: version,
+  parameters: [],
+  result: String,
+  body: "0.1.0",
+  executable: true
+}
+
+definition{
+  name: usage,
+  parameters: [],
+  result: String,
+  body: "usage: r30 <command> [arguments]\n\nThe LexLean runtime of rule30 (rule30-api/src/R30.lex.tex) runs:\n  help                         this text; also --help, -h and no arguments\n  version                      the version of rule30-api\n  frontier list [--status S]   the claims of the register, one line each, or those of status S\n\nThe register is frontier.toml in the repository root, the nearest directory at or above\nthe working directory that holds .git. The other commands of the surface\n(rule30-api/src/Api.lex.tex) still run on the deprecated runtime, bin/r30 (tools/r30),\nuntil they move here.\n",
+  executable: true
+}
+
+definition{
+  name: listHelp,
+  parameters: [],
+  result: String,
+  body: "usage: r30 frontier list [-h] [--status STATUS]\n\noptions:\n  -h, --help       show this help message and exit\n  --status STATUS\n",
+  executable: true
+}
+
+definition{
+  name: wordHelp,
+  parameters: [],
+  result: Bytes,
+  body: 0x68656c70,
+  executable: true
+}
+
+definition{
+  name: wordHelpFlag,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d68656c70,
+  executable: true
+}
+
+definition{
+  name: wordHelpShort,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d68,
+  executable: true
+}
+
+definition{
+  name: wordVersion,
+  parameters: [],
+  result: Bytes,
+  body: 0x76657273696f6e,
+  executable: true
+}
+
+definition{
+  name: wordVersionFlag,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d76657273696f6e,
+  executable: true
+}
+
+definition{
+  name: wordFrontier,
+  parameters: [],
+  result: Bytes,
+  body: 0x66726f6e74696572,
+  executable: true
+}
+
+definition{
+  name: wordList,
+  parameters: [],
+  result: Bytes,
+  body: 0x6c697374,
+  executable: true
+}
+
+definition{
+  name: wordStatusFlag,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d737461747573,
+  executable: true
+}
+
+definition{
+  name: wordSeparator,
+  parameters: [],
+  result: Bytes,
+  body: 0x2d2d,
+  executable: true
+}
+
+definition{
+  name: tableClaim,
+  parameters: [],
+  result: Bytes,
+  body: 0x636c61696d,
+  executable: true
+}
+
+definition{
+  name: keyId,
+  parameters: [],
+  result: Bytes,
+  body: 0x6964,
+  executable: true
+}
+
+definition{
+  name: keyStatus,
+  parameters: [],
+  result: Bytes,
+  body: 0x737461747573,
+  executable: true
+}
+
+definition{
+  name: keyStatement,
+  parameters: [],
+  result: Bytes,
+  body: 0x73746174656d656e74,
+  executable: true
+}
+
+definition{
+  name: keyLean,
+  parameters: [],
+  result: Bytes,
+  body: 0x6c65616e,
+  executable: true
+}
+
+definition{
+  name: openBracket,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b,
+  executable: true
+}
+
+definition{
+  name: closeBracket,
+  parameters: [],
+  result: Bytes,
+  body: 0x5d20,
+  executable: true
+}
+
+definition{
+  name: colonSpace,
+  parameters: [],
+  result: Bytes,
+  body: 0x3a20,
+  executable: true
+}
+
+definition{
+  name: leanOpen,
+  parameters: [],
+  result: Bytes,
+  body: 0x202028,
+  executable: true
+}
+
+definition{
+  name: leanClose,
+  parameters: [],
+  result: Bytes,
+  body: 0x29,
+  executable: true
+}
+
+definition{
+  name: newline,
+  parameters: [],
+  result: Bytes,
+  body: 0x0a,
+  executable: true
+}
+
+definition{
+  name: emptyLine,
+  parameters: [],
+  result: Bytes,
+  body: 0x656d7074790a,
+  executable: true
+}
+
+definition{
+  name: padding,
+  parameters: [scalars : Nat],
+  result: Bytes,
+  body: (if (7 <=? scalars) then 0x else (if (scalars =? 6) then 0x20 else (if (scalars =? 5) then 0x2020 else (if (scalars =? 4) then 0x202020 else (if (scalars =? 3) then 0x20202020 else (if (scalars =? 2) then 0x2020202020 else (if (scalars =? 1) then 0x202020202020 else 0x20202020202020))))))),
+  executable: true
+}
+
+inductive{
+  name: Awaiting,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: root, fields: [(Option Bytes), Nat, Nat]},
+    {name: register, fields: [(Option Bytes), Nat]},
+    {name: nothing, fields: []}
+  ]
+}
+
+structure{
+  name: Session,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: awaiting, type: Awaiting}]
+}
+
+inductive{
+  name: ListForm,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: listed, fields: [(Option Bytes)]},
+    {name: help, fields: []},
+    {name: refused, fields: [String]}
+  ]
+}
+
+definition{
+  name: lit,
+  parameters: [text : String],
+  result: (List Host::Piece),
+  body: (cons (ctor Host::Piece.literal text) (nil Host::Piece)),
+  executable: true
+}
+
+definition{
+  name: taken,
+  parameters: [bytes : Bytes],
+  result: Host::Piece,
+  body: (ctor Host::Piece.taken bytes),
+  executable: true
+}
+
+definition{
+  name: word,
+  parameters: [argument : Bytes, wanted : Bytes],
+  result: Bool,
+  body: (Host::sameBytes argument wanted),
+  executable: true
+}
+
+definition{
+  name: takenAll,
+  parameters: [segments : (List Bytes)],
+  result: (List Host::Piece),
+  body: (match segments
+    | List.nil => (nil Host::Piece)
+    | List.cons segment rest => (cons (taken segment) (takenAll rest))),
+  recursive_argument: segments,
+  executable: true
+}
+
+definition{
+  name: spoken,
+  parameters: [arguments : (List Bytes)],
+  result: (List Host::Piece),
+  body: (match arguments
+    | List.nil => (nil Host::Piece)
+    | List.cons argument rest => (cons (taken argument) (match rest
+      | List.nil => (nil Host::Piece)
+      | List.cons next others => (cons (ctor Host::Piece.literal " ") (spoken rest))))),
+  recursive_argument: arguments,
+  executable: true
+}
+
+definition{
+  name: digitText,
+  parameters: [digit : Nat],
+  result: String,
+  body: (if (digit =? 0) then "0" else (if (digit =? 1) then "1" else (if (digit =? 2) then "2" else (if (digit =? 3) then "3" else (if (digit =? 4) then "4" else (if (digit =? 5) then "5" else (if (digit =? 6) then "6" else (if (digit =? 7) then "7" else (if (digit =? 8) then "8" else "9"))))))))),
+  executable: true
+}
+
+definition{
+  name: decimalFrom,
+  parameters: [number : Nat, done : (List Host::Piece), fuel : Nat],
+  result: (List Host::Piece),
+  body: (match fuel
+    | Nat.zero => done
+    | Nat.succ more => (let digit : Host::Piece := (ctor Host::Piece.literal (digitText (prim remainder number 10 0 : Nat))); (let rest : Nat := (prim quotient number 10 0 : Nat); (if (rest =? 0) then (cons digit done) else (decimalFrom rest (cons digit done) more))))),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: decimal,
+  parameters: [number : Nat],
+  result: (List Host::Piece),
+  body: (decimalFrom number (nil Host::Piece) 20),
+  executable: true
+}
+
+definition{
+  name: errorText,
+  parameters: [row : ErrorRow, detail : (List Host::Piece)],
+  result: (List Host::Piece),
+  body: (cons (ctor Host::Piece.literal (project row code)) (cons (ctor Host::Piece.literal " ") (cons (ctor Host::Piece.literal (project row title)) (prim append (match detail
+    | List.nil => (nil Host::Piece)
+    | List.cons piece others => (cons (ctor Host::Piece.literal ": ") detail)) (lit "\n") : (List Host::Piece))))),
+  executable: true
+}
+
+definition{
+  name: finish,
+  parameters: [status : UInt8, output : (List Host::Piece), errorOutput : (List Host::Piece)],
+  result: (Session * Host::Draft),
+  body: ((record Session {awaiting := (ctor Awaiting.nothing)}), (ctor Host::Draft.exit status output errorOutput)),
+  executable: true
+}
+
+definition{
+  name: failWith,
+  parameters: [row : ErrorRow, detail : (List Host::Piece)],
+  result: (Session * Host::Draft),
+  body: (finish (project row status) (nil Host::Piece) (errorText row detail)),
+  executable: true
+}
+
+definition{
+  name: unexpected,
+  parameters: [],
+  result: (Session * Host::Draft),
+  body: (failWith (hostProtocol) (lit "the event answers no request of this step")),
+  executable: true
+}
+
+definition{
+  name: refuse,
+  parameters: [arguments : (List Bytes)],
+  result: (Session * Host::Draft),
+  body: (failWith (commandLineRefused) (prim append (spoken arguments) (lit " names no command of this runtime; r30 help lists them") : (List Host::Piece))),
+  executable: true
+}
+
+definition{
+  name: versionOutput,
+  parameters: [],
+  result: (List Host::Piece),
+  body: (cons (ctor Host::Piece.literal "r30 ") (cons (ctor Host::Piece.literal (version)) (lit "\n"))),
+  executable: true
+}
+
+definition{
+  name: listFormNote,
+  parameters: [],
+  result: String,
+  body: "scanList reads the options of frontier list as the deprecated runtime's argparse parser does: --status S, --status=S and every unique prefix of --status from --s, with or without =, the last one winning; an empty S lists every claim; a missing S, or an S that looks like an option (it begins with - and is more than -, is no negative number and has no space), is refused at once; -h=S, and --h=S up to --help=S, are refused at once, the value being one -h takes none of (the empty S too); -h, every other word beginning with -h, and --h up to --help print the parser's help and exit 0 wherever they stand, unless a refusal came first; any other word, or --, is refused once the scan ends without help.",
+  executable: true
+}
+
+definition{
+  name: longPrefix,
+  parameters: [candidate : Bytes, full : Bytes],
+  result: Bool,
+  body: (let size : Nat := (prim length candidate : Nat); ((3 <=? size) && ((size <=? (prim length full : Nat)) && (Host::bytesAgreeFrom candidate 0 full 0 size)))),
+  executable: true
+}
+
+definition{
+  name: equalsFrom,
+  parameters: [bytes : Bytes, position : Nat, fuel : Nat],
+  result: (Option Nat),
+  body: (match fuel
+    | Nat.zero => (ctor Option.none [Nat])
+    | Nat.succ more => (match (prim index bytes position : (Option UInt8))
+      | Option.none => (ctor Option.none [Nat])
+      | Option.some byte => (if (prim equal byte (61 : UInt8) : Bool) then (ctor Option.some [Nat] position) else (equalsFrom bytes (position + 1) more)))),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: inlineValue,
+  parameters: [candidate : Bytes, full : Bytes],
+  result: (Option Bytes),
+  body: (let size : Nat := (prim length candidate : Nat); (match (equalsFrom candidate 0 size)
+    | Option.none => (ctor Option.none [Bytes])
+    | Option.some at => (if (longPrefix (Toml::sliceOr candidate 0 at) full) then (ctor Option.some [Bytes] (Toml::sliceOr candidate (at + 1) (prim subtract size (at + 1) : Nat))) else (ctor Option.none [Bytes])))),
+  executable: true
+}
+
+definition{
+  name: hasByteFrom,
+  parameters: [bytes : Bytes, wanted : UInt8, position : Nat, fuel : Nat],
+  result: Bool,
+  body: (match fuel
+    | Nat.zero => false
+    | Nat.succ more => (match (prim index bytes position : (Option UInt8))
+      | Option.none => false
+      | Option.some byte => (if (prim equal byte wanted : Bool) then true else (hasByteFrom bytes wanted (position + 1) more)))),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: negativeNumber,
+  parameters: [candidate : Bytes],
+  result: Bool,
+  body: (let size : Nat := (prim length candidate : Nat); (let wholeEnd : Nat := (second (Toml::digitsFrom candidate 1 0 (size + 1))); (if (wholeEnd =? size) then (2 <=? size) else (if (Toml::byteIs candidate wholeEnd (46 : UInt8)) then (let fractionEnd : Nat := (second (Toml::digitsFrom candidate (wholeEnd + 1) 0 (size + 1))); ((fractionEnd =? size) && ((wholeEnd + 1) <? fractionEnd))) else false)))),
+  executable: true
+}
+
+definition{
+  name: optionLike,
+  parameters: [candidate : Bytes],
+  result: Bool,
+  body: ((Toml::byteIs candidate 0 (45 : UInt8)) && ((2 <=? (prim length candidate : Nat)) && ((not (negativeNumber candidate)) && (not (hasByteFrom candidate (32 : UInt8) 0 (prim length candidate : Nat)))))),
+  executable: true
+}
+
+definition{
+  name: helpWord,
+  parameters: [candidate : Bytes],
+  result: Bool,
+  body: (((Toml::byteIs candidate 0 (45 : UInt8)) && (Toml::byteIs candidate 1 (104 : UInt8))) || (longPrefix candidate (wordHelpFlag))),
+  executable: true
+}
+
+definition{
+  name: valueFilter,
+  parameters: [value : Bytes],
+  result: (Option Bytes),
+  body: (if ((prim length value : Nat) =? 0) then (ctor Option.none [Bytes]) else (ctor Option.some [Bytes] value)),
+  executable: true
+}
+
+definition{
+  name: needsValue,
+  parameters: [],
+  result: String,
+  body: "argument --status of frontier list expects one value",
+  executable: true
+}
+
+definition{
+  name: strayWords,
+  parameters: [],
+  result: String,
+  body: "frontier list takes no arguments but --status S",
+  executable: true
+}
+
+definition{
+  name: helpTakesNoValue,
+  parameters: [],
+  result: String,
+  body: "argument -h/--help of frontier list takes no value",
+  executable: true
+}
+
+definition{
+  name: shortHelpValue,
+  parameters: [candidate : Bytes],
+  result: Bool,
+  body: ((Toml::byteIs candidate 0 (45 : UInt8)) && ((Toml::byteIs candidate 1 (104 : UInt8)) && (Toml::byteIs candidate 2 (61 : UInt8)))),
+  executable: true
+}
+
+definition{
+  name: scanList,
+  parameters: [options : (List Bytes), filter : (Option Bytes), expecting : Bool, stray : Bool],
+  result: ListForm,
+  body: (match options
+    | List.nil => (if expecting then (ctor ListForm.refused (needsValue)) else (if stray then (ctor ListForm.refused (strayWords)) else (ctor ListForm.listed filter)))
+    | List.cons candidate rest => (if expecting then (if (optionLike candidate) then (ctor ListForm.refused (needsValue)) else (scanList rest (valueFilter candidate) false stray)) else (if (shortHelpValue candidate) then (ctor ListForm.refused (helpTakesNoValue)) else (if (helpWord candidate) then (ctor ListForm.help) else (if (word candidate (wordSeparator)) then (ctor ListForm.refused (strayWords)) else (if (longPrefix candidate (wordStatusFlag)) then (scanList rest filter true stray) else (match (inlineValue candidate (wordStatusFlag))
+      | Option.some value => (scanList rest (valueFilter value) false stray)
+      | Option.none => (match (inlineValue candidate (wordHelpFlag))
+        | Option.some value => (ctor ListForm.refused (helpTakesNoValue))
+        | Option.none => (scanList rest filter false true))))))))),
+  recursive_argument: options,
+  executable: true
+}
+
+definition{
+  name: componentsFrom,
+  parameters: [bytes : Bytes, position : Nat, inside : Bool, fuel : Nat],
+  result: Nat,
+  body: (match fuel
+    | Nat.zero => 0
+    | Nat.succ more => (match (prim index bytes position : (Option UInt8))
+      | Option.none => 0
+      | Option.some byte => (if (prim equal byte (47 : UInt8) : Bool) then (componentsFrom bytes (position + 1) false more) else (if inside then (componentsFrom bytes (position + 1) true more) else ((componentsFrom bytes (position + 1) true more) + 1))))),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: components,
+  parameters: [directory : Bytes],
+  result: Nat,
+  body: (componentsFrom directory 0 false (prim length directory : Nat)),
+  executable: true
+}
+
+definition{
+  name: upward,
+  parameters: [level : Nat],
+  result: (List Host::Piece),
+  body: (match level
+    | Nat.zero => (nil Host::Piece)
+    | Nat.succ lower => (cons (ctor Host::Piece.literal "../") (upward lower))),
+  recursive_argument: level,
+  executable: true
+}
+
+definition{
+  name: gitAt,
+  parameters: [level : Nat],
+  result: (List Host::Piece),
+  body: (prim append (upward level) (lit ".git") : (List Host::Piece)),
+  executable: true
+}
+
+definition{
+  name: registerAt,
+  parameters: [level : Nat],
+  result: (List Host::Piece),
+  body: (prim append (upward level) (lit "frontier.toml") : (List Host::Piece)),
+  executable: true
+}
+
+definition{
+  name: frontierCommand,
+  parameters: [arguments : (List Bytes), rest : (List Bytes), top : Nat],
+  result: (Session * Host::Draft),
+  body: (match rest
+    | List.cons sub options => (if (word sub (wordList)) then (match (scanList options (ctor Option.none [Bytes]) false false)
+      | ListForm.listed filter => ((record Session {awaiting := (ctor Awaiting.root filter 0 top)}), (ctor Host::Draft.stat (gitAt 0)))
+      | ListForm.help => (finish (0 : UInt8) (lit (listHelp)) (nil Host::Piece))
+      | ListForm.refused detail => (failWith (commandLineRefused) (lit detail))) else (refuse arguments))
+    | List.nil => (refuse arguments)),
+  executable: true
+}
+
+definition{
+  name: begin,
+  parameters: [start : Host::Start],
+  result: (Session * Host::Draft),
+  body: (let arguments : (List Bytes) := (project start arguments); (match arguments
+    | List.nil => (finish (0 : UInt8) (lit (usage)) (nil Host::Piece))
+    | List.cons verb rest => (if ((word verb (wordHelp)) || ((word verb (wordHelpFlag)) || (word verb (wordHelpShort)))) then (finish (0 : UInt8) (lit (usage)) (nil Host::Piece)) else (if ((word verb (wordVersion)) || (word verb (wordVersionFlag))) then (match rest
+      | List.nil => (finish (0 : UInt8) (versionOutput) (nil Host::Piece))
+      | List.cons extra others => (failWith (commandLineRefused) (lit "version takes no arguments"))) else (if (word verb (wordFrontier)) then (frontierCommand arguments rest (components (project start directory))) else (refuse arguments)))))),
+  executable: true
+}
+
+definition{
+  name: scalarsFrom,
+  parameters: [bytes : Bytes, position : Nat, fuel : Nat],
+  result: Nat,
+  body: (match fuel
+    | Nat.zero => 0
+    | Nat.succ more => (match (prim index bytes position : (Option UInt8))
+      | Option.some byte => (if (Toml::between byte (128 : UInt8) (191 : UInt8)) then (scalarsFrom bytes (position + 1) more) else ((scalarsFrom bytes (position + 1) more) + 1))
+      | Option.none => 0)),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: scalarsIn,
+  parameters: [segments : (List Bytes)],
+  result: Nat,
+  body: (match segments
+    | List.nil => 0
+    | List.cons segment rest => ((scalarsFrom segment 0 (prim length segment : Nat)) + (scalarsIn rest))),
+  axioms: [propext],
+  recursive_argument: segments,
+  executable: true
+}
+
+definition{
+  name: bytesIn,
+  parameters: [segments : (List Bytes)],
+  result: Nat,
+  body: (match segments
+    | List.nil => 0
+    | List.cons segment rest => ((prim length segment : Nat) + (bytesIn rest))),
+  recursive_argument: segments,
+  executable: true
+}
+
+definition{
+  name: stringField,
+  parameters: [table : Toml::Table, key : Bytes],
+  result: (Option (List Bytes)),
+  body: (match (Toml::field table key)
+    | Option.some value => (match value
+      | Toml::Value.text segments => (ctor Option.some [(List Bytes)] segments)
+      | Toml::Value.strings items => (ctor Option.none [(List Bytes)])
+      | Toml::Value.number number => (ctor Option.none [(List Bytes)]))
+    | Option.none => (ctor Option.none [(List Bytes)])),
+  executable: true
+}
+
+definition{
+  name: claimProblem,
+  parameters: [path : (List Host::Piece), index : Nat, what : String],
+  result: (List Host::Piece),
+  body: (prim append path (cons (ctor Host::Piece.literal ": claim ") (prim append (decimal index) (lit what) : (List Host::Piece))) : (List Host::Piece)),
+  executable: true
+}
+
+definition{
+  name: leanSuffix,
+  parameters: [path : (List Host::Piece), claim : Toml::Table, index : Nat],
+  result: (Result (List Host::Piece) (List Host::Piece)),
+  body: (match (Toml::field claim (keyLean))
+    | Option.none => (ctor Result.ok [(List Host::Piece), (List Host::Piece)] (nil Host::Piece))
+    | Option.some value => (match value
+      | Toml::Value.text segments => (if ((bytesIn segments) =? 0) then (ctor Result.ok [(List Host::Piece), (List Host::Piece)] (nil Host::Piece)) else (ctor Result.ok [(List Host::Piece), (List Host::Piece)] (cons (taken (leanOpen)) (prim append (takenAll segments) (cons (taken (leanClose)) (nil Host::Piece)) : (List Host::Piece)))))
+      | Toml::Value.strings items => (ctor Result.error [(List Host::Piece), (List Host::Piece)] (claimProblem path index " has a lean that is not a string"))
+      | Toml::Value.number number => (ctor Result.error [(List Host::Piece), (List Host::Piece)] (claimProblem path index " has a lean that is not a string")))),
+  executable: true
+}
+
+definition{
+  name: claimLine,
+  parameters: [path : (List Host::Piece), claim : Toml::Table, index : Nat, filter : (Option Bytes)],
+  result: (Result (List Host::Piece) (List Host::Piece)),
+  body: (match (stringField claim (keyStatus))
+    | Option.none => (ctor Result.error [(List Host::Piece), (List Host::Piece)] (claimProblem path index " has no string status"))
+    | Option.some status => (if (match filter
+        | Option.none => true
+        | Option.some wanted => (Host::takenAgreeFrom (takenAll status) wanted 0)) then (match (stringField claim (keyId))
+      | Option.none => (ctor Result.error [(List Host::Piece), (List Host::Piece)] (claimProblem path index " has no string id"))
+      | Option.some name => (match (stringField claim (keyStatement))
+        | Option.none => (ctor Result.error [(List Host::Piece), (List Host::Piece)] (claimProblem path index " has no string statement"))
+        | Option.some statement => (match (leanSuffix path claim index)
+          | Result.error detail => (ctor Result.error [(List Host::Piece), (List Host::Piece)] detail)
+          | Result.ok suffix => (ctor Result.ok [(List Host::Piece), (List Host::Piece)] (cons (taken (openBracket)) (prim append (takenAll status) (cons (taken (padding (scalarsIn status))) (cons (taken (closeBracket)) (prim append (takenAll name) (cons (taken (colonSpace)) (prim append (takenAll statement) (prim append suffix (cons (taken (newline)) (nil Host::Piece)) : (List Host::Piece)) : (List Host::Piece))) : (List Host::Piece)))) : (List Host::Piece))))))) else (ctor Result.ok [(List Host::Piece), (List Host::Piece)] (nil Host::Piece)))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: claimLines,
+  parameters: [path : (List Host::Piece), claims : (List Toml::Table), index : Nat, filter : (Option Bytes)],
+  result: (Result (List Host::Piece) (List Host::Piece)),
+  body: (match claims
+    | List.nil => (ctor Result.ok [(List Host::Piece), (List Host::Piece)] (nil Host::Piece))
+    | List.cons claim rest => (match (claimLine path claim index filter)
+      | Result.error detail => (ctor Result.error [(List Host::Piece), (List Host::Piece)] detail)
+      | Result.ok line => (match (claimLines path rest (index + 1) filter)
+        | Result.error detail => (ctor Result.error [(List Host::Piece), (List Host::Piece)] detail)
+        | Result.ok lines => (ctor Result.ok [(List Host::Piece), (List Host::Piece)] (prim append line lines : (List Host::Piece)))))),
+  axioms: [propext],
+  recursive_argument: claims,
+  executable: true
+}
+
+definition{
+  name: failureText,
+  parameters: [kind : Host::FailureKind],
+  result: String,
+  body: (match kind
+    | Host::FailureKind.notFound => "not found"
+    | Host::FailureKind.denied => "permission denied"
+    | Host::FailureKind.invalid => "invalid path"
+    | Host::FailureKind.other => "failed"),
+  executable: true
+}
+
+definition{
+  name: isNotFound,
+  parameters: [kind : Host::FailureKind],
+  result: Bool,
+  body: (match kind
+    | Host::FailureKind.notFound => true
+    | Host::FailureKind.denied => false
+    | Host::FailureKind.invalid => false
+    | Host::FailureKind.other => false),
+  executable: true
+}
+
+definition{
+  name: failureDetail,
+  parameters: [path : (List Host::Piece), failure : Host::Failure],
+  result: (List Host::Piece),
+  body: (prim append path (cons (ctor Host::Piece.literal ": ") (cons (ctor Host::Piece.literal (failureText (project failure kind))) (if ((prim length (project failure message) : Nat) =? 0) then (nil Host::Piece) else (cons (ctor Host::Piece.literal " (") (cons (taken (project failure message)) (lit ")")))))) : (List Host::Piece)),
+  executable: true
+}
+
+definition{
+  name: noRoot,
+  parameters: [],
+  result: String,
+  body: "frontier.toml: no directory at or above the working directory holds .git",
+  executable: true
+}
+
+definition{
+  name: problemDetail,
+  parameters: [path : (List Host::Piece), problem : Toml::Problem],
+  result: (List Host::Piece),
+  body: (if ((project problem line) =? 0) then (prim append path (cons (ctor Host::Piece.literal ": ") (lit (project problem reason))) : (List Host::Piece)) else (prim append path (cons (ctor Host::Piece.literal " line ") (prim append (decimal (project problem line)) (cons (ctor Host::Piece.literal ": ") (lit (project problem reason))) : (List Host::Piece))) : (List Host::Piece))),
+  executable: true
+}
+
+definition{
+  name: probed,
+  parameters: [filter : (Option Bytes), level : Nat, top : Nat, outcome : (Result Host::Stat Host::Failure)],
+  result: (Session * Host::Draft),
+  body: (match outcome
+    | Result.ok found => ((record Session {awaiting := (ctor Awaiting.register filter level)}), (ctor Host::Draft.read (registerAt level)))
+    | Result.error failure => (if (isNotFound (project failure kind)) then (if (level <? top) then ((record Session {awaiting := (ctor Awaiting.root filter (level + 1) top)}), (ctor Host::Draft.stat (gitAt (level + 1)))) else (failWith (registerUnreadable) (lit (noRoot)))) else (failWith (registerUnreadable) (failureDetail (gitAt level) failure)))),
+  executable: true
+}
+
+definition{
+  name: listing,
+  parameters: [filter : (Option Bytes), level : Nat, outcome : (Result Bytes Host::Failure)],
+  result: (Session * Host::Draft),
+  body: (let path : (List Host::Piece) := (registerAt level); (match outcome
+    | Result.error failure => (failWith (registerUnreadable) (failureDetail path failure))
+    | Result.ok contents => (match (Toml::parse contents)
+      | Result.error problem => (failWith (registerMalformed) (problemDetail path problem))
+      | Result.ok tables => (match (claimLines path (Toml::tablesNamed tables (tableClaim)) 1 filter)
+        | Result.error detail => (failWith (registerMalformed) detail)
+        | Result.ok lines => (finish (0 : UInt8) (match lines
+          | List.nil => (cons (taken (emptyLine)) (nil Host::Piece))
+          | List.cons piece others => lines) (nil Host::Piece)))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: plan,
+  parameters: [state : (Option Session), event : Host::Event],
+  result: (Session * Host::Draft),
+  body: (match state
+    | Option.none => (match (Host::asStart event)
+      | Option.some start => (begin start)
+      | Option.none => (unexpected))
+    | Option.some session => (match (project session awaiting)
+      | Awaiting.root filter level top => (match (Host::asStated event)
+        | Option.some outcome => (probed filter level top outcome)
+        | Option.none => (unexpected))
+      | Awaiting.register filter level => (match (Host::asRead event)
+        | Option.some outcome => (listing filter level outcome)
+        | Option.none => (unexpected))
+      | Awaiting.nothing => (unexpected))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: step,
+  parameters: [state : (Option Session), event : Host::Event],
+  result: (Session * Host::Request),
+  body: (let drafted : (Session * Host::Draft) := (plan state event); ((first drafted), (Host::realize (second drafted)))),
+  axioms: [Quot.sound, propext],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+theorem{
+  name: stepRealizesPlan,
+  parameters: [state : (Option Session), event : Host::Event],
+  statement: ((step state event) = ((first (plan state event)), (Host::realize (second (plan state event))))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,106 @@
+\begin{lexlean}{R30TracesRegister}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Host}
+\importmodule{R30}
+\importmodule{R30Traces}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: fixturePair,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a6964203d202261220a737461747573203d20226f70656e220a73746174656d656e74203d2022412e220a0a5b5b636c61696d5d5d0a6964203d202262220a737461747573203d202270726f766564220a73746174656d656e74203d2022422e220a
+}
+
+definition{
+  name: pythonPair,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b6f70656e2020205d20613a20412e0a5b70726f766564205d20623a20422e0a
+}
+
+definition{
+  name: pythonPairOpen,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b6f70656e2020205d20613a20412e0a
+}
+
+definition{
+  name: fixtureNoStatus,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a6964203d202261220a737461747573203d20226f70656e220a73746174656d656e74203d2022412e220a0a5b5b636c61696d5d5d0a6964203d202262220a73746174656d656e74203d2022422e220a
+}
+
+definition{
+  name: fixtureLeanNumber,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a6964203d202261220a737461747573203d20226f70656e220a73746174656d656e74203d2022412e220a6c65616e203d20330a
+}
+
+definition{
+  name: fixtureNoId,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a737461747573203d20226f70656e220a
+}
+
+definition{
+  name: fixtureNoStatement,
+  parameters: [],
+  result: Bytes,
+  body: 0x5b5b636c61696d5d5d0a6964203d202261220a737461747573203d20226f70656e220a
+}
+
+theorem{
+  name: traceRegisterNoId,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (nil Bytes) (fixtureNoId)) (R30Traces::listedAs (R30Traces::malformedWith (cons (R30Traces::piece "frontier.toml") (cons (R30Traces::piece ": claim ") (cons (R30Traces::piece "1") (cons (R30Traces::piece " has no string id") (nil Host::Piece)))))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRegisterNoStatement,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (nil Bytes) (fixtureNoStatement)) (R30Traces::listedAs (R30Traces::malformedWith (cons (R30Traces::piece "frontier.toml") (cons (R30Traces::piece ": claim ") (cons (R30Traces::piece "1") (cons (R30Traces::piece " has no string statement") (nil Host::Piece)))))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceFrontierList,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (nil Bytes) (fixturePair)) (R30Traces::listedAs (R30Traces::exited (0 : UInt8) (R30Traces::shown (pythonPair)) (nil Host::Piece)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceFrontierListFiltered,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (cons (R30Traces::argStatus) (cons (R30Traces::argOpen) (nil Bytes))) (fixturePair)) (R30Traces::listedAs (R30Traces::exited (0 : UInt8) (R30Traces::shown (pythonPairOpen)) (nil Host::Piece)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRegisterNoStatus,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (nil Bytes) (fixtureNoStatus)) (R30Traces::listedAs (R30Traces::malformedWith (cons (R30Traces::piece "frontier.toml") (cons (R30Traces::piece ": claim ") (cons (R30Traces::piece "2") (cons (R30Traces::piece " has no string status") (nil Host::Piece)))))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceRegisterLeanNumber,
+  parameters: [],
+  statement: ((Host::traceAgrees (R30Traces::listRun (nil Bytes) (fixtureLeanNumber)) (R30Traces::listedAs (R30Traces::malformedWith (cons (R30Traces::piece "frontier.toml") (cons (R30Traces::piece ": claim ") (cons (R30Traces::piece "1") (cons (R30Traces::piece " has a lean that is not a string") (nil Host::Piece)))))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}
