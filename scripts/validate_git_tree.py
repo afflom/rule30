@@ -25,7 +25,7 @@ LEXLEAN_INPUTS = {
                        "scripts/verify_lexlean.sh"),
     "rule30-paper": ("rule30-paper/", "rule30-core-lean/", "Rule30PrizeKit/lean/",
                      "scripts/verify_lexlean.sh"),
-    "rule30-api": ("rule30-api/", "scripts/verify_lexlean.sh"),
+    "rule30-api": ("rule30-api/", "lexlean-stdlib/", "lexlean-workspace.toml", "scripts/verify_lexlean.sh"),
 }
 
 

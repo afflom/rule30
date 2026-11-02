@@ -1,0 +1,1142 @@
+\begin{lexlean}{Hypotheses}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Engine}
+\importmodule{Toml}
+\importmodule{LexLeanStd.Sha256}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: purpose,
+  parameters: [],
+  result: String,
+  body: "The engine's role is to label new hypotheses. A hypothesis is a statement minted from data the engine already keeps, in a canonical form, with its sources: the exclusion a failed library-rewrite attempt names (for all t, not these atoms with these values together), or an open hypothesis of a conditional refutation in the audit. Its label is the SHA-256 of the canonical bytes of the statement, with no prefix or framing added to those bytes, as UOR-Foundation/uor-addr mints labels. An exclusion is a consequence of the relation whose attempt named it, never evidence for it: the attempt found an assignment that breaks the relation, so wherever the relation holds that assignment does not occur. This module proves none of the hypotheses and enumerates no cell or time.",
+  executable: true
+}
+
+structure{
+  name: Literal,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: atom, type: Bytes}, {name: value, type: Bool}]
+}
+
+inductive{
+  name: Statement,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: exclusion, fields: [(List Literal)]},
+    {name: obligation, fields: [Bytes]}
+  ]
+}
+
+structure{
+  name: FailureRecord,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: claim, type: Bytes}, {name: live, type: Bool}, {name: failure, type: Bytes}]
+}
+
+structure{
+  name: Obligation,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: theorem, type: Bytes}, {name: live, type: Bool}, {name: open, type: (List Bytes)}]
+}
+
+structure{
+  name: Candidate,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: statement, type: Statement},
+    {name: form, type: Bytes},
+    {name: support, type: Nat},
+    {name: sources, type: (List Bytes)}
+  ]
+}
+
+structure{
+  name: Hypothesis,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: statement, type: Statement},
+    {name: form, type: Bytes},
+    {name: label, type: Bytes},
+    {name: weight, type: Nat},
+    {name: sources, type: (List Bytes)}
+  ]
+}
+
+definition{
+  name: lessFrom,
+  parameters: [left : Bytes, right : Bytes, position : Nat, fuel : Nat],
+  result: Bool,
+  body: (match fuel
+    | Nat.zero => false
+    | Nat.succ more => (match (prim index left position : (Option UInt8))
+      | Option.none => (match (prim index right position : (Option UInt8))
+        | Option.some y => true
+        | Option.none => false)
+      | Option.some x => (match (prim index right position : (Option UInt8))
+        | Option.none => false
+        | Option.some y => (if (prim less_than x y : Bool) then true else (if (prim equal x y : Bool) then (lessFrom left right (position + 1) more) else false))))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: lessBytes,
+  parameters: [left : Bytes, right : Bytes],
+  result: Bool,
+  body: (lessFrom left right 0 ((prim length left : Nat) + 1)),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: sameValue,
+  parameters: [left : Bool, right : Bool],
+  result: Bool,
+  body: (if left then right else (not right)),
+  executable: true
+}
+
+definition{
+  name: sameLiteral,
+  parameters: [left : Literal, right : Literal],
+  result: Bool,
+  body: ((Toml::sameBytes (project left atom) (project right atom)) && (sameValue (project left value) (project right value))),
+  executable: true
+}
+
+definition{
+  name: lessLiteral,
+  parameters: [left : Literal, right : Literal],
+  result: Bool,
+  body: (if (Toml::sameBytes (project left atom) (project right atom)) then ((not (project left value)) && (project right value)) else (lessBytes (project left atom) (project right atom))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: insertLiteral,
+  parameters: [item : Literal, sorted : (List Literal)],
+  result: (List Literal),
+  body: (match sorted
+    | List.nil => (cons item (nil Literal))
+    | List.cons head tail => (if (sameLiteral item head) then (cons head tail) else (if (lessLiteral item head) then (cons item (cons head tail)) else (cons head (insertLiteral item tail))))),
+  axioms: [propext],
+  recursive_argument: sorted,
+  executable: true
+}
+
+definition{
+  name: canonicalClause,
+  parameters: [literals : (List Literal)],
+  result: (List Literal),
+  body: (match literals
+    | List.nil => (nil Literal)
+    | List.cons head tail => (insertLiteral head (canonicalClause tail))),
+  axioms: [propext],
+  recursive_argument: literals,
+  executable: true
+}
+
+definition{
+  name: contradictory,
+  parameters: [sorted : (List Literal)],
+  result: Bool,
+  body: (match sorted
+    | List.nil => false
+    | List.cons head tail => (match tail
+      | List.nil => false
+      | List.cons later more => ((Toml::sameBytes (project head atom) (project later atom)) || (contradictory tail)))),
+  recursive_argument: sorted,
+  executable: true
+}
+
+definition{
+  name: digitBytes,
+  parameters: [digit : Nat],
+  result: Bytes,
+  body: (if (digit =? 0) then 0x30 else (if (digit =? 1) then 0x31 else (if (digit =? 2) then 0x32 else (if (digit =? 3) then 0x33 else (if (digit =? 4) then 0x34 else (if (digit =? 5) then 0x35 else (if (digit =? 6) then 0x36 else (if (digit =? 7) then 0x37 else (if (digit =? 8) then 0x38 else 0x39))))))))),
+  executable: true
+}
+
+definition{
+  name: decimalFrom,
+  parameters: [number : Nat, done : Bytes, fuel : Nat],
+  result: Bytes,
+  body: (match fuel
+    | Nat.zero => done
+    | Nat.succ more => (let digit : Bytes := (digitBytes (prim remainder number 10 0 : Nat)); (let rest : Nat := (prim quotient number 10 0 : Nat); (if (rest =? 0) then (prim append digit done : Bytes) else (decimalFrom rest (prim append digit done : Bytes) more))))),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: decimal,
+  parameters: [number : Nat],
+  result: Bytes,
+  body: (decimalFrom number 0x 20),
+  executable: true
+}
+
+definition{
+  name: atomForm,
+  parameters: [bytes : Bytes],
+  result: Bytes,
+  body: (prim append (decimal (prim length bytes : Nat)) (prim append 0x3a bytes : Bytes) : Bytes),
+  executable: true
+}
+
+definition{
+  name: literalForm,
+  parameters: [literal : Literal],
+  result: Bytes,
+  body: (prim append 0x28 (prim append (atomForm (project literal atom)) (if (project literal value) then 0x20343a7472756529 else 0x20353a66616c736529) : Bytes) : Bytes),
+  executable: true
+}
+
+definition{
+  name: literalsForm,
+  parameters: [literals : (List Literal)],
+  result: Bytes,
+  body: (match literals
+    | List.nil => 0x29
+    | List.cons head tail => (prim append 0x20 (prim append (literalForm head) (literalsForm tail) : Bytes) : Bytes)),
+  recursive_argument: literals,
+  executable: true
+}
+
+definition{
+  name: formOf,
+  parameters: [statement : Statement],
+  result: Bytes,
+  body: (match statement
+    | Statement.exclusion clause => (prim append 0x28393a6578636c7573696f6e (literalsForm clause) : Bytes)
+    | Statement.obligation key => (prim append 0x2831303a6f626c69676174696f6e20 (prim append (atomForm key) 0x29 : Bytes) : Bytes)),
+  executable: true
+}
+
+definition{
+  name: labelOf,
+  parameters: [form : Bytes],
+  result: Bytes,
+  body: (prim append 0x7368613235363a (LexLeanStd.Sha256::sha256Hex form) : Bytes),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: failurePrefix,
+  parameters: [],
+  result: Bytes,
+  body: 0x286465636964656420696e20507974686f6e2920746865206c6962726172792773206661637473206c6561766520616e2061737369676e6d656e74206f66207468652061746f6d73207468617420627265616b73207468652072656c6174696f6e3a20,
+  executable: true
+}
+
+definition{
+  name: failureCut,
+  parameters: [],
+  result: Nat,
+  body: 300,
+  executable: true
+}
+
+definition{
+  name: hasAt,
+  parameters: [bytes : Bytes, position : Nat, wanted : Bytes],
+  result: Bool,
+  body: (Toml::bytesAgreeFrom bytes position wanted 0 (prim length wanted : Nat)),
+  executable: true
+}
+
+definition{
+  name: equalsFrom,
+  parameters: [bytes : Bytes, position : Nat, fuel : Nat],
+  result: (Option Nat),
+  body: (match fuel
+    | Nat.zero => (ctor Option.none [Nat])
+    | Nat.succ more => (match (prim index bytes position : (Option UInt8))
+      | Option.none => (ctor Option.none [Nat])
+      | Option.some byte => (if (prim equal byte (61 : UInt8) : Bool) then (ctor Option.some [Nat] position) else (equalsFrom bytes (position + 1) more)))),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: parseLiterals,
+  parameters: [text : Bytes, position : Nat, fuel : Nat],
+  result: (Option (List Literal)),
+  body: (match fuel
+    | Nat.zero => (ctor Option.none [(List Literal)])
+    | Nat.succ more => (let size : Nat := (prim length text : Nat); (match (equalsFrom text position size)
+      | Option.none => (ctor Option.none [(List Literal)])
+      | Option.some sign => (if (sign <=? position) then (ctor Option.none [(List Literal)]) else (let atom : Bytes := (Toml::sliceOr text position (prim subtract sign position : Nat)); (if (hasAt text (sign + 1) 0x74727565) then (if ((sign + 5) =? size) then (ctor Option.some [(List Literal)] (cons (record Literal {atom := atom, value := true}) (nil Literal))) else (if (hasAt text (sign + 5) 0x2c20) then (match (parseLiterals text (sign + 7) more)
+        | Option.some rest => (ctor Option.some [(List Literal)] (cons (record Literal {atom := atom, value := true}) rest))
+        | Option.none => (ctor Option.none [(List Literal)])) else (ctor Option.none [(List Literal)]))) else (if (hasAt text (sign + 1) 0x66616c7365) then (if ((sign + 6) =? size) then (ctor Option.some [(List Literal)] (cons (record Literal {atom := atom, value := false}) (nil Literal))) else (if (hasAt text (sign + 6) 0x2c20) then (match (parseLiterals text (sign + 8) more)
+        | Option.some rest => (ctor Option.some [(List Literal)] (cons (record Literal {atom := atom, value := false}) rest))
+        | Option.none => (ctor Option.none [(List Literal)])) else (ctor Option.none [(List Literal)]))) else (ctor Option.none [(List Literal)])))))))),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: clauseOf,
+  parameters: [literals : (List Literal)],
+  result: (Option (List Literal)),
+  body: (let clause : (List Literal) := (canonicalClause literals); (if ((prim length clause : Nat) =? 0) then (ctor Option.none [(List Literal)]) else (if (contradictory clause) then (ctor Option.none [(List Literal)]) else (ctor Option.some [(List Literal)] clause)))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: clauseOfText,
+  parameters: [text : Bytes, start : Nat],
+  result: (Option (List Literal)),
+  body: (match (parseLiterals text start (prim length text : Nat))
+    | Option.none => (ctor Option.none [(List Literal)])
+    | Option.some literals => (clauseOf literals)),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: clauseOfFailure,
+  parameters: [failure : Bytes],
+  result: (Option (List Literal)),
+  body: (if ((failureCut) <=? (prim length failure : Nat)) then (ctor Option.none [(List Literal)]) else (if (hasAt failure 0 (failurePrefix)) then (clauseOfText failure (prim length (failurePrefix) : Nat)) else (ctor Option.none [(List Literal)]))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: memberBytes,
+  parameters: [item : Bytes, items : (List Bytes)],
+  result: Bool,
+  body: (match items
+    | List.nil => false
+    | List.cons head tail => (if (Toml::sameBytes item head) then true else (memberBytes item tail))),
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: allMembers,
+  parameters: [items : (List Bytes), within : (List Bytes)],
+  result: Bool,
+  body: (match items
+    | List.nil => true
+    | List.cons head tail => ((memberBytes head within) && (allMembers tail within))),
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: insertBytes,
+  parameters: [item : Bytes, sorted : (List Bytes)],
+  result: (List Bytes),
+  body: (match sorted
+    | List.nil => (cons item (nil Bytes))
+    | List.cons head tail => (if (Toml::sameBytes item head) then (cons head tail) else (if (lessBytes item head) then (cons item (cons head tail)) else (cons head (insertBytes item tail))))),
+  axioms: [propext],
+  recursive_argument: sorted,
+  executable: true
+}
+
+definition{
+  name: mergeSources,
+  parameters: [items : (List Bytes), sorted : (List Bytes)],
+  result: (List Bytes),
+  body: (match items
+    | List.nil => sorted
+    | List.cons head tail => (mergeSources tail (insertBytes head sorted))),
+  axioms: [propext],
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: addCandidate,
+  parameters: [item : Candidate, sorted : (List Candidate)],
+  result: (List Candidate),
+  body: (match sorted
+    | List.nil => (cons item (nil Candidate))
+    | List.cons head tail => (if (Toml::sameBytes (project item form) (project head form)) then (cons (record Candidate {statement := (project head statement), form := (project head form), support := (if (allMembers (project item sources) (project head sources)) then (project head support) else ((project head support) + (project item support))), sources := (mergeSources (project item sources) (project head sources))}) tail) else (if (lessBytes (project item form) (project head form)) then (cons item (cons head tail)) else (cons head (addCandidate item tail))))),
+  axioms: [propext],
+  recursive_argument: sorted,
+  executable: true
+}
+
+definition{
+  name: candidateOf,
+  parameters: [statement : Statement, support : Nat, source : Bytes],
+  result: Candidate,
+  body: (record Candidate {statement := statement, form := (formOf statement), support := support, sources := (cons source (nil Bytes))}),
+  executable: true
+}
+
+definition{
+  name: clauseCandidates,
+  parameters: [claim : Bytes, clause : (Option (List Literal)), sorted : (List Candidate)],
+  result: (List Candidate),
+  body: (match clause
+    | Option.none => sorted
+    | Option.some literals => (addCandidate (candidateOf (ctor Statement.exclusion literals) 1 claim) sorted)),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: exclusionCandidates,
+  parameters: [records : (List FailureRecord)],
+  result: (List Candidate),
+  body: (match records
+    | List.nil => (nil Candidate)
+    | List.cons head tail => (if (project head live) then (clauseCandidates (project head claim) (clauseOfFailure (project head failure)) (exclusionCandidates tail)) else (exclusionCandidates tail))),
+  axioms: [propext],
+  recursive_argument: records,
+  executable: true
+}
+
+definition{
+  name: oneShortCredit,
+  parameters: [],
+  result: Nat,
+  body: 4,
+  executable: true
+}
+
+definition{
+  name: isStatementKey,
+  parameters: [key : Bytes],
+  result: Bool,
+  body: (match (prim index key 0 : (Option UInt8))
+    | Option.none => false
+    | Option.some byte => (not (prim equal byte (40 : UInt8) : Bool))),
+  executable: true
+}
+
+definition{
+  name: keysCandidates,
+  parameters: [theorem : Bytes, credit : Nat, keys : (List Bytes), sorted : (List Candidate)],
+  result: (List Candidate),
+  body: (match keys
+    | List.nil => sorted
+    | List.cons head tail => (keysCandidates theorem credit tail (if (isStatementKey head) then (addCandidate (candidateOf (ctor Statement.obligation head) credit theorem) sorted) else sorted))),
+  axioms: [propext],
+  recursive_argument: keys,
+  executable: true
+}
+
+definition{
+  name: obligationCandidates,
+  parameters: [obligations : (List Obligation)],
+  result: (List Candidate),
+  body: (match obligations
+    | List.nil => (nil Candidate)
+    | List.cons head tail => (if (project head live) then (keysCandidates (project head theorem) (if ((prim length (project head open) : Nat) =? 1) then (oneShortCredit) else 1) (mergeSources (project head open) (nil Bytes)) (obligationCandidates tail)) else (obligationCandidates tail))),
+  axioms: [propext],
+  recursive_argument: obligations,
+  executable: true
+}
+
+definition{
+  name: boundedWeight,
+  parameters: [support : Nat],
+  result: Nat,
+  body: (if (support <=? (Engine::weightMin)) then (Engine::weightMin) else (if ((Engine::weightMax) <=? support) then (Engine::weightMax) else support)),
+  executable: true
+}
+
+definition{
+  name: labelled,
+  parameters: [candidates : (List Candidate)],
+  result: (List Hypothesis),
+  body: (match candidates
+    | List.nil => (nil Hypothesis)
+    | List.cons head tail => (cons (record Hypothesis {statement := (project head statement), form := (project head form), label := (labelOf (project head form)), weight := (boundedWeight (project head support)), sources := (project head sources)}) (labelled tail))),
+  axioms: [Quot.sound, propext],
+  recursive_argument: candidates,
+  executable: true
+}
+
+definition{
+  name: hypothesisStrategy,
+  parameters: [],
+  result: String,
+  body: "hypothesis",
+  executable: true
+}
+
+definition{
+  name: exclusionFamily,
+  parameters: [],
+  result: String,
+  body: "exclusion",
+  executable: true
+}
+
+definition{
+  name: obligationFamily,
+  parameters: [],
+  result: String,
+  body: "obligation",
+  executable: true
+}
+
+definition{
+  name: initialFamilyWeights,
+  parameters: [],
+  result: (List Engine::Weight),
+  body: (cons (record Engine::Weight {strategy := (hypothesisStrategy), family := (exclusionFamily), value := (Engine::weightInitial)}) (cons (record Engine::Weight {strategy := (hypothesisStrategy), family := (obligationFamily), value := (Engine::weightInitial)}) (nil Engine::Weight))),
+  executable: true
+}
+
+definition{
+  name: scoreOf,
+  parameters: [table : (List Engine::Weight), item : Hypothesis],
+  result: Nat,
+  body: (prim multiply (project item weight) (match (project item statement)
+    | Statement.exclusion clause => (Engine::weightOf (hypothesisStrategy) (exclusionFamily) table)
+    | Statement.obligation key => (Engine::weightOf (hypothesisStrategy) (obligationFamily) table)) : Nat),
+  executable: true
+}
+
+definition{
+  name: rankedBefore,
+  parameters: [table : (List Engine::Weight), left : Hypothesis, right : Hypothesis],
+  result: Bool,
+  body: (let leftScore : Nat := (scoreOf table left); (let rightScore : Nat := (scoreOf table right); (if (leftScore =? rightScore) then (lessBytes (project left form) (project right form)) else (rightScore <? leftScore)))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: insertRanked,
+  parameters: [table : (List Engine::Weight), item : Hypothesis, ranked : (List Hypothesis)],
+  result: (List Hypothesis),
+  body: (match ranked
+    | List.nil => (cons item (nil Hypothesis))
+    | List.cons head tail => (if (rankedBefore table item head) then (cons item (cons head tail)) else (cons head (insertRanked table item tail)))),
+  axioms: [propext],
+  recursive_argument: ranked,
+  executable: true
+}
+
+definition{
+  name: rank,
+  parameters: [table : (List Engine::Weight), items : (List Hypothesis)],
+  result: (List Hypothesis),
+  body: (match items
+    | List.nil => (nil Hypothesis)
+    | List.cons head tail => (insertRanked table head (rank table tail))),
+  axioms: [propext],
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: unknown,
+  parameters: [known : (List Bytes), items : (List Hypothesis)],
+  result: (List Hypothesis),
+  body: (match items
+    | List.nil => (nil Hypothesis)
+    | List.cons head tail => (if (memberBytes (project head label) known) then (unknown known tail) else (cons head (unknown known tail)))),
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: takeFirst,
+  parameters: [count : Nat, items : (List Hypothesis)],
+  result: (List Hypothesis),
+  body: (match count
+    | Nat.zero => (nil Hypothesis)
+    | Nat.succ fewer => (match items
+      | List.nil => (nil Hypothesis)
+      | List.cons head tail => (cons head (takeFirst fewer tail)))),
+  recursive_argument: count,
+  executable: true
+}
+
+definition{
+  name: minNat,
+  parameters: [left : Nat, right : Nat],
+  result: Nat,
+  body: (if (left <=? right) then left else right),
+  executable: true
+}
+
+definition{
+  name: exclusionShare,
+  parameters: [table : (List Engine::Weight), budget : Nat],
+  result: Nat,
+  body: (let exclusionWeight : Nat := (Engine::weightOf (hypothesisStrategy) (exclusionFamily) table); (let obligationWeight : Nat := (Engine::weightOf (hypothesisStrategy) (obligationFamily) table); (prim quotient (prim multiply budget exclusionWeight : Nat) (exclusionWeight + obligationWeight) 0 : Nat))),
+  executable: true
+}
+
+definition{
+  name: select,
+  parameters: [table : (List Engine::Weight), exclusions : (List Hypothesis), obligations : (List Hypothesis), known : (List Bytes), budget : Nat],
+  result: (List Hypothesis),
+  body: (let firstExclusions : (List Hypothesis) := (rank table (unknown known exclusions)); (let firstObligations : (List Hypothesis) := (rank table (unknown known obligations)); (let exclusionCount : Nat := (prim length firstExclusions : Nat); (let obligationCount : Nat := (prim length firstObligations : Nat); (let obligationsTaken : Nat := (minNat obligationCount (prim subtract budget (minNat exclusionCount (exclusionShare table budget)) : Nat)); (let exclusionsTaken : Nat := (minNat exclusionCount (prim subtract budget obligationsTaken : Nat)); (rank table (prim append (takeFirst exclusionsTaken firstExclusions) (takeFirst obligationsTaken firstObligations) : (List Hypothesis))))))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: mint,
+  parameters: [failures : (List FailureRecord), obligations : (List Obligation), known : (List Bytes), budget : Nat, outcomes : (List Engine::Outcome)],
+  result: (List Hypothesis),
+  body: (select (Engine::learnAll (initialFamilyWeights) outcomes) (labelled (exclusionCandidates failures)) (labelled (obligationCandidates obligations)) known budget),
+  axioms: [Quot.sound, propext],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: sameClause,
+  parameters: [left : (List Literal), right : (List Literal)],
+  result: Bool,
+  body: (match left
+    | List.nil => ((prim length right : Nat) =? 0)
+    | List.cons head tail => (match right
+      | List.nil => false
+      | List.cons other rest => ((sameLiteral head other) && (sameClause tail rest)))),
+  recursive_argument: left
+}
+
+definition{
+  name: canonicalAgrees,
+  parameters: [orders : (List (List Literal)), base : (List Literal)],
+  result: Bool,
+  body: (match orders
+    | List.nil => true
+    | List.cons head tail => ((sameClause (canonicalClause head) base) && (canonicalAgrees tail base))),
+  axioms: [propext],
+  recursive_argument: orders
+}
+
+definition{
+  name: isAbsent,
+  parameters: [clause : (Option (List Literal))],
+  result: Bool,
+  body: (match clause
+    | Option.none => true
+    | Option.some literals => false)
+}
+
+definition{
+  name: isClause,
+  parameters: [clause : (Option (List Literal)), wanted : (List Literal)],
+  result: Bool,
+  body: (match clause
+    | Option.none => false
+    | Option.some literals => (sameClause literals wanted))
+}
+
+definition{
+  name: formsOf,
+  parameters: [items : (List Hypothesis)],
+  result: (List Bytes),
+  body: (match items
+    | List.nil => (nil Bytes)
+    | List.cons head tail => (cons (project head form) (formsOf tail))),
+  recursive_argument: items
+}
+
+definition{
+  name: distinctBytes,
+  parameters: [items : (List Bytes)],
+  result: Bool,
+  body: (match items
+    | List.nil => true
+    | List.cons head tail => ((not (memberBytes head tail)) && (distinctBytes tail))),
+  recursive_argument: items
+}
+
+definition{
+  name: sameByteLists,
+  parameters: [left : (List Bytes), right : (List Bytes)],
+  result: Bool,
+  body: (match left
+    | List.nil => ((prim length right : Nat) =? 0)
+    | List.cons head tail => (match right
+      | List.nil => false
+      | List.cons other rest => ((Toml::sameBytes head other) && (sameByteLists tail rest)))),
+  recursive_argument: left
+}
+
+definition{
+  name: noneKnown,
+  parameters: [items : (List Hypothesis), known : (List Bytes)],
+  result: Bool,
+  body: (match items
+    | List.nil => true
+    | List.cons head tail => ((not (memberBytes (project head label) known)) && (noneKnown tail known))),
+  recursive_argument: items
+}
+
+definition{
+  name: allWeightsBounded,
+  parameters: [items : (List Hypothesis)],
+  result: Bool,
+  body: (match items
+    | List.nil => true
+    | List.cons head tail => ((Engine::inBounds (project head weight)) && (allWeightsBounded tail))),
+  recursive_argument: items
+}
+
+definition{
+  name: boundedForAll,
+  parameters: [supports : (List Nat)],
+  result: Bool,
+  body: (match supports
+    | List.nil => true
+    | List.cons head tail => ((Engine::inBounds (boundedWeight head)) && (boundedForAll tail))),
+  recursive_argument: supports
+}
+
+definition{
+  name: formLabelled,
+  parameters: [candidates : (List Candidate)],
+  result: (List Hypothesis),
+  body: (match candidates
+    | List.nil => (nil Hypothesis)
+    | List.cons head tail => (cons (record Hypothesis {statement := (project head statement), form := (project head form), label := (project head form), weight := (boundedWeight (project head support)), sources := (project head sources)}) (formLabelled tail))),
+  recursive_argument: candidates
+}
+
+definition{
+  name: atomLeftOne,
+  parameters: [],
+  result: Bytes,
+  body: 0x436f72652e6c64696167203120287429
+}
+
+definition{
+  name: atomLeftOneEven,
+  parameters: [],
+  result: Bytes,
+  body: 0x436f72652e6c646961672031202832202a207429
+}
+
+definition{
+  name: atomRightOne,
+  parameters: [],
+  result: Bytes,
+  body: 0x436f72652e7264696167203120287429
+}
+
+definition{
+  name: claimOne,
+  parameters: [],
+  result: Bytes,
+  body: 0x6f627365727665642d613364373061356666623263
+}
+
+definition{
+  name: claimTwo,
+  parameters: [],
+  result: Bytes,
+  body: 0x6f627365727665642d663731303438343739323130
+}
+
+definition{
+  name: literalA,
+  parameters: [],
+  result: Literal,
+  body: (record Literal {atom := (atomLeftOne), value := true})
+}
+
+definition{
+  name: literalNotA,
+  parameters: [],
+  result: Literal,
+  body: (record Literal {atom := (atomLeftOne), value := false})
+}
+
+definition{
+  name: literalB,
+  parameters: [],
+  result: Literal,
+  body: (record Literal {atom := (atomLeftOneEven), value := false})
+}
+
+definition{
+  name: literalC,
+  parameters: [],
+  result: Literal,
+  body: (record Literal {atom := (atomRightOne), value := false})
+}
+
+definition{
+  name: sortedABC,
+  parameters: [],
+  result: (List Literal),
+  body: (cons (literalB) (cons (literalA) (cons (literalC) (nil Literal))))
+}
+
+definition{
+  name: ordersOfABC,
+  parameters: [],
+  result: (List (List Literal)),
+  body: (cons (cons (literalA) (cons (literalB) (cons (literalC) (nil Literal)))) (cons (cons (literalA) (cons (literalC) (cons (literalB) (nil Literal)))) (cons (cons (literalB) (cons (literalA) (cons (literalC) (nil Literal)))) (cons (cons (literalB) (cons (literalC) (cons (literalA) (nil Literal)))) (cons (cons (literalC) (cons (literalA) (cons (literalB) (nil Literal)))) (cons (cons (literalC) (cons (literalB) (cons (literalA) (nil Literal)))) (cons (cons (literalA) (cons (literalB) (cons (literalA) (cons (literalC) (cons (literalB) (nil Literal)))))) (nil (List Literal)))))))))
+}
+
+definition{
+  name: exclusionAB,
+  parameters: [],
+  result: Candidate,
+  body: (candidateOf (ctor Statement.exclusion (cons (literalB) (cons (literalA) (nil Literal)))) 1 (claimOne))
+}
+
+definition{
+  name: exclusionC,
+  parameters: [],
+  result: Candidate,
+  body: (candidateOf (ctor Statement.exclusion (cons (literalC) (nil Literal))) 1 (claimTwo))
+}
+
+definition{
+  name: keyOne,
+  parameters: [],
+  result: Bytes,
+  body: 0x52756c653330554f522e5363616c652e4e6f506572696f64
+}
+
+definition{
+  name: keyTwo,
+  parameters: [],
+  result: Bytes,
+  body: 0x52756c653330554f522e46697865642e4e6f506572696f6469634669786564
+}
+
+definition{
+  name: keyNotAHypothesis,
+  parameters: [],
+  result: Bytes,
+  body: 0x286e6f206879706f746865736973
+}
+
+definition{
+  name: obligationsFixture,
+  parameters: [],
+  result: (List Obligation),
+  body: (cons (record Obligation {theorem := (claimOne), live := true, open := (cons (keyOne) (nil Bytes))}) (cons (record Obligation {theorem := (claimTwo), live := true, open := (cons (keyOne) (cons (keyTwo) (cons (keyNotAHypothesis) (nil Bytes))))}) (cons (record Obligation {theorem := (atomLeftOne), live := false, open := (cons (keyTwo) (nil Bytes))}) (nil Obligation))))
+}
+
+definition{
+  name: exclusionsFixture,
+  parameters: [],
+  result: (List Hypothesis),
+  body: (formLabelled (addCandidate (exclusionAB) (cons (exclusionC) (nil Candidate)))),
+  axioms: [propext]
+}
+
+definition{
+  name: obligationsLabelled,
+  parameters: [],
+  result: (List Hypothesis),
+  body: (formLabelled (obligationCandidates (obligationsFixture))),
+  axioms: [propext]
+}
+
+definition{
+  name: selected,
+  parameters: [known : (List Bytes), budget : Nat],
+  result: (List Hypothesis),
+  body: (select (initialFamilyWeights) (exclusionsFixture) (obligationsLabelled) known budget),
+  axioms: [propext]
+}
+
+definition{
+  name: selectionSound,
+  parameters: [known : (List Bytes), budget : Nat],
+  result: Bool,
+  body: (let chosen : (List Hypothesis) := (selected known budget); (((prim length chosen : Nat) <=? budget) && ((distinctBytes (formsOf chosen)) && ((noneKnown chosen known) && (allWeightsBounded chosen))))),
+  axioms: [propext]
+}
+
+definition{
+  name: soundForBudgets,
+  parameters: [known : (List Bytes), budgets : (List Nat)],
+  result: Bool,
+  body: (match budgets
+    | List.nil => true
+    | List.cons head tail => ((selectionSound known head) && (soundForBudgets known tail))),
+  axioms: [propext],
+  recursive_argument: budgets
+}
+
+definition{
+  name: formsFromRecord,
+  parameters: [],
+  result: (List Bytes),
+  body: (cons (formOf (ctor Statement.obligation (keyOne))) (nil Bytes))
+}
+
+theorem{
+  name: canonicalIsOrderIndependent,
+  parameters: [],
+  statement: ((canonicalAgrees (ordersOfABC) (sortedABC)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: canonicalIsIdempotent,
+  parameters: [],
+  statement: ((sameClause (canonicalClause (canonicalClause (cons (literalC) (cons (literalA) (cons (literalB) (cons (literalA) (nil Literal))))))) (sortedABC)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: contradictoryClauseAbsent,
+  parameters: [],
+  statement: ((isAbsent (clauseOf (cons (literalA) (cons (literalC) (cons (literalNotA) (nil Literal)))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: emptyClauseAbsent,
+  parameters: [],
+  statement: ((isAbsent (clauseOf (nil Literal))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: contradictoryTextAbsent,
+  parameters: [],
+  statement: ((isAbsent (clauseOfText 0x613d747275652c20613d66616c7365 0)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: unfinishedTextAbsent,
+  parameters: [],
+  statement: (((isAbsent (clauseOfText 0x613d747275652c20436f72 0)) && (isAbsent (clauseOfText 0x613d74 0))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: otherFailureAbsent,
+  parameters: [],
+  statement: ((isAbsent (clauseOfFailure 0x32363a343a206572726f723a204e6f20676f616c7320746f20626520736f6c766564)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: mergedAcrossRelations,
+  parameters: [],
+  statement: ((match (clauseCandidates (claimTwo) (clauseOf (cons (literalA) (cons (literalB) (nil Literal)))) (clauseCandidates (claimOne) (clauseOf (cons (literalB) (cons (literalA) (nil Literal)))) (nil Candidate)))
+    | List.nil => false
+    | List.cons head tail => (((project head support) =? 2) && (((prim length tail : Nat) =? 0) && ((prim length (project head sources) : Nat) =? 2)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: sameRelationCountsOnce,
+  parameters: [],
+  statement: ((match (clauseCandidates (claimOne) (clauseOf (cons (literalA) (cons (literalB) (nil Literal)))) (clauseCandidates (claimOne) (clauseOf (cons (literalB) (cons (literalA) (nil Literal)))) (nil Candidate)))
+    | List.nil => false
+    | List.cons head tail => (((project head support) =? 1) && ((prim length tail : Nat) =? 0))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: weightsStayInBounds,
+  parameters: [],
+  statement: ((boundedForAll (cons 0 (cons 1 (cons 2 (cons 15 (cons 16 (cons 17 (cons 1000 (nil Nat))))))))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: familyWeightsStayInBounds,
+  parameters: [],
+  statement: ((Engine::weightsBounded (Engine::learnAll (initialFamilyWeights) (cons (record Engine::Outcome {strategy := (hypothesisStrategy), family := (exclusionFamily), success := true}) (cons (record Engine::Outcome {strategy := (hypothesisStrategy), family := (obligationFamily), success := false}) (nil Engine::Outcome))))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: budgetAndDistinctnessHold,
+  parameters: [],
+  statement: ((soundForBudgets (nil Bytes) (cons 0 (cons 1 (cons 2 (cons 3 (cons 4 (cons 9 (nil Nat)))))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+definition{
+  name: realFailure,
+  parameters: [],
+  result: Bytes,
+  body: 0x286465636964656420696e20507974686f6e2920746865206c6962726172792773206661637473206c6561766520616e2061737369676e6d656e74206f66207468652061746f6d73207468617420627265616b73207468652072656c6174696f6e3a20436f72652e72646961672035202832202a2074293d74727565
+}
+
+definition{
+  name: realAtom,
+  parameters: [],
+  result: Bytes,
+  body: 0x436f72652e72646961672035202832202a207429
+}
+
+definition{
+  name: realClause,
+  parameters: [],
+  result: (List Literal),
+  body: (cons (record Literal {atom := (realAtom), value := true}) (nil Literal))
+}
+
+definition{
+  name: cutFailure,
+  parameters: [],
+  result: Bytes,
+  body: 0x286465636964656420696e20507974686f6e2920746865206c6962726172792773206661637473206c6561766520616e2061737369676e6d656e74206f66207468652061746f6d73207468617420627265616b73207468652072656c6174696f6e3a20436f72652e72646961672031202874293d66616c73652c20436f72652e72646961672032202874293d66616c73652c20436f72652e72646961672033202832202a2074293d66616c73652c20436f72652e72646961672033202874293d66616c73652c20436f72652e72646961672034202832202a2074293d66616c73652c20436f72652e72646961672034202874293d66616c73652c20436f72652e72646961672035202832202a2074293d66616c73652c20436f72652e72646961672035202874293d74727565
+}
+
+definition{
+  name: realForm,
+  parameters: [],
+  result: Bytes,
+  body: 0x28393a6578636c7573696f6e202832303a436f72652e72646961672035202832202a20742920343a747275652929
+}
+
+definition{
+  name: realLabel,
+  parameters: [],
+  result: Bytes,
+  body: 0x7368613235363a36363936316461643166333738353465623532346539306562326530336337326530616531393436613766336238623036626638613030366537373434316235
+}
+
+definition{
+  name: reversedHypotheses,
+  parameters: [items : (List Hypothesis), onto : (List Hypothesis)],
+  result: (List Hypothesis),
+  body: (match items
+    | List.nil => onto
+    | List.cons head tail => (reversedHypotheses tail (cons head onto))),
+  recursive_argument: items
+}
+
+definition{
+  name: weightOfForm,
+  parameters: [items : (List Hypothesis), wanted : Bytes],
+  result: Nat,
+  body: (match items
+    | List.nil => 0
+    | List.cons head tail => (if (Toml::sameBytes (project head form) wanted) then (project head weight) else (weightOfForm tail wanted))),
+  recursive_argument: items
+}
+
+theorem{
+  name: knownIsNotMintedAgain,
+  parameters: [],
+  statement: ((soundForBudgets (cons (project (exclusionC) form) (cons (formOf (ctor Statement.obligation (keyOne))) (nil Bytes))) (cons 1 (cons 2 (cons 9 (nil Nat))))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: everyFamilyGetsItsShare,
+  parameters: [],
+  statement: (((prim length (selected (nil Bytes) 2) : Nat) =? 2) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: unusedShareIsNotWasted,
+  parameters: [],
+  statement: (((prim length (selected (cons (project (exclusionC) form) (nil Bytes)) 3) : Nat) =? 3) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: selectionOrderIsDeterministic,
+  parameters: [],
+  statement: ((sameByteLists (formsOf (select (initialFamilyWeights) (reversedHypotheses (exclusionsFixture) (nil Hypothesis)) (reversedHypotheses (obligationsLabelled) (nil Hypothesis)) (nil Bytes) 3)) (formsOf (selected (nil Bytes) 3))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: oneShortCountsMost,
+  parameters: [],
+  statement: ((((weightOfForm (obligationsLabelled) (formOf (ctor Statement.obligation (keyOne)))) =? 5) && (((weightOfForm (obligationsLabelled) (formOf (ctor Statement.obligation (keyTwo)))) =? 1) && ((prim length (obligationsLabelled) : Nat) =? 2))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: cutRecordIsRefused,
+  parameters: [],
+  statement: ((isAbsent (clauseOfFailure (cutFailure))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: realRecordParses,
+  parameters: [],
+  statement: ((isClause (clauseOfFailure (realFailure)) (realClause)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: realFormIsCanonical,
+  parameters: [],
+  statement: ((Toml::sameBytes (formOf (ctor Statement.exclusion (realClause))) (realForm)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: labelIsTheDigestOfTheForm,
+  parameters: [],
+  statement: ((Toml::sameBytes (labelOf (realForm)) (realLabel)) = true),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: mintOnARealRecord,
+  parameters: [],
+  statement: ((sameByteLists (formsOf (mint (cons (record FailureRecord {claim := (claimOne), live := true, failure := (realFailure)}) (nil FailureRecord)) (nil Obligation) (nil Bytes) 1 (nil Engine::Outcome))) (cons (realForm) (nil Bytes))) = true),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: mintKeepsTheKnownOut,
+  parameters: [],
+  statement: (((prim length (mint (cons (record FailureRecord {claim := (claimOne), live := true, failure := (realFailure)}) (nil FailureRecord)) (nil Obligation) (cons (realLabel) (nil Bytes)) 1 (nil Engine::Outcome)) : Nat) =? 0) = true),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: provedRelationMintsNothing,
+  parameters: [],
+  statement: (((prim length (exclusionCandidates (cons (record FailureRecord {claim := (claimOne), live := false, failure := (realFailure)}) (nil FailureRecord))) : Nat) =? 0) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}
