@@ -892,7 +892,7 @@ evidence = "bin/r30 api production; bin/r30 api check; scripts/tests/test_r30.py
 [[claim]]
 id = "discover-command"
 level = "build"
-statement = "bin/r30 discover [--window W] [--degree 1|2] [--write] runs the engines on the basis (the certified Rust of the roots when they are built and cargo runs them, otherwise the Python mirror re-checked by the mirror of the validators, and says which), reports every relation with its columns, κ-label (relation <sorted column labels>), class (register, trivial, consequence, new) and certificate (the rank before its dependent column), and the recurrence of every base window; --write appends the new relations to the register as status observed."
+statement = "bin/r30 discover [--window W] [--degree 1|2] [--write] runs the engines on the basis (the certified Rust of the roots, and is refused when they cannot run), reports every relation with its columns, κ-label (relation <sorted column labels>), class (register, trivial, consequence, new) and certificate (the rank before its dependent column), and the recurrence of every base window; --write appends the new relations to the register as status observed."
 feature = "tools/r30/discover.py"
 evidence = "scripts/tests/test_r30.py DiscoveryTests; bin/r30 discover --window 256 --degree 2"
 
@@ -962,7 +962,7 @@ evidence = "bin/r30 api check; scripts/tests/test_engine.py"
 [[claim]]
 id = "strategy-learning"
 level = "build"
-statement = "Engine.lex.tex declares the learning layer: integer strategy weights per relation family, the bounded Hebbian rule learn (a success raises the weight by 2, a failure lowers it by 1, clamped to [1, 16]), learnAll and the scheduler schedule (applicable strategies by weight, ties by portfolio order) as production roots exported to certified Rust; the kernel decides that learn keeps every weight in bounds, that the committed weights are in bounds, that the schedule of every subset of the portfolio in every family is a permutation ordered by weight, and the fixtures the Python mirror computes; the tests compare the mirror with the certified roots."
+statement = "Engine.lex.tex declares the learning layer: integer strategy weights per relation family, the bounded Hebbian rule learn (a success raises the weight by 2, a failure lowers it by 1, clamped to [1, 16]), learnAll and the scheduler schedule (applicable strategies by weight, ties by portfolio order) as production roots exported to certified Rust; the kernel decides that learn keeps every weight in bounds, that the committed weights are in bounds, that the schedule of every subset of the portfolio in every family is a permutation ordered by weight, and the frozen fixtures; the tests compare the fixtures with the certified roots."
 feature = "rule30-api/src/Engine.lex.tex"
 evidence = "bin/r30 verify api --modules src/Engine.lex.tex; scripts/tests/test_engine.py"
 
@@ -972,3 +972,10 @@ level = "build"
 statement = "rule30-api/model/engine.toml (r30/engine/1) is the engine's ledger: the consolidated weights, every attempt (claim, κ-label, strategy, template digest, family, outcome proved, known, refuted, failed or timeout, failure point, seconds, theorem, tick, and for library-rewrite the library digest: the research modules and the register's proved relations it read) and the last ticks; no (claim κ, strategy, template digest, library digest) is attempted twice, so library-rewrite is attempted again once the library changed, and the weights are reproducible from the attempts."
 feature = "rule30-api/model/engine.toml"
 evidence = "scripts/tests/test_engine.py"
+
+[[claim]]
+id = "hypothesis-store"
+level = "build"
+statement = "rule30-api/model/hypotheses.toml (r30/hypotheses/1) holds the hypotheses the tick's hypotheses stage minted through the certified root mint of Hypotheses.lex.tex: label (the SHA-256 of the form), form (the canonical form of the statement), sources, weight, tick and status; no label twice, and nothing in it is a claim of the register."
+feature = "rule30-api/model/hypotheses.toml"
+evidence = "bin/r30 engine status; scripts/tests/test_engine.py"

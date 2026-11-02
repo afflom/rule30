@@ -113,7 +113,7 @@ definition{
   name: timeoutMinutes,
   parameters: [],
   result: Nat,
-  body: 340,
+  body: 355,
   axioms: []
 }
 
@@ -121,7 +121,7 @@ definition{
   name: setupMinutes,
   parameters: [],
   result: Nat,
-  body: 40,
+  body: 55,
   axioms: []
 }
 
@@ -138,6 +138,14 @@ definition{
   parameters: [],
   result: Nat,
   body: 60,
+  axioms: []
+}
+
+definition{
+  name: hypothesisBudget,
+  parameters: [],
+  result: Nat,
+  body: 16,
   axioms: []
 }
 
@@ -225,7 +233,7 @@ definition{
   name: stages,
   parameters: [],
   result: (List Stage),
-  body: (cons (record Stage {id := "build", budget := 60, gate := false}) (cons (record Stage {id := "induction", budget := 30, gate := false}) (cons (record Stage {id := "pruning", budget := 20, gate := false}) (cons (record Stage {id := "deduction", budget := 100, gate := false}) (cons (record Stage {id := "learning", budget := 5, gate := false}) (cons (record Stage {id := "gate", budget := 85, gate := true}) (nil Stage))))))),
+  body: (cons (record Stage {id := "build", budget := 60, gate := false}) (cons (record Stage {id := "induction", budget := 30, gate := false}) (cons (record Stage {id := "pruning", budget := 20, gate := false}) (cons (record Stage {id := "deduction", budget := 95, gate := false}) (cons (record Stage {id := "learning", budget := 5, gate := false}) (cons (record Stage {id := "hypotheses", budget := 5, gate := false}) (cons (record Stage {id := "gate", budget := 85, gate := true}) (nil Stage)))))))),
   axioms: []
 }
 
@@ -233,7 +241,7 @@ definition{
   name: caches,
   parameters: [],
   result: (List CacheFamily),
-  body: (cons (record CacheFamily {id := "lexlean", path := ".local"}) (cons (record CacheFamily {id := "lake", path := "Rule30PrizeKit/lean/.lake\nrule30-core-lean/.lake\nrule30-bridge/.lake\nrule30-paper/.lake\nrule30-lexlean/.lake\nrule30-api/.lake"}) (cons (record CacheFamily {id := "gate", path := ".git/rule30-validation"}) (cons (record CacheFamily {id := "settled", path := ".r30/settled"}) (nil CacheFamily))))),
+  body: (cons (record CacheFamily {id := "lexlean", path := ".local"}) (cons (record CacheFamily {id := "bundle", path := "rule30-api/.lexlean/production"}) (cons (record CacheFamily {id := "lake", path := "Rule30PrizeKit/lean/.lake\nrule30-core-lean/.lake\nrule30-bridge/.lake\nrule30-paper/.lake\nrule30-lexlean/.lake\nrule30-api/.lake"}) (cons (record CacheFamily {id := "gate", path := ".git/rule30-validation"}) (cons (record CacheFamily {id := "settled", path := ".r30/settled"}) (nil CacheFamily)))))),
   axioms: []
 }
 
@@ -241,7 +249,7 @@ definition{
   name: portfolio,
   parameters: [],
   result: (List Strategy),
-  body: (cons (record Strategy {id := "library-rewrite", template := "library-rewrite.lean.tmpl", digest := "sha256:2cf951e75c29ffd42511a5a767d795be092dc8bb0e28b463ab4c985844fbc9d9"}) (cons (record Strategy {id := "step-induction", template := "step-induction.lean.tmpl", digest := "sha256:c8c229cfafccba7ebe5597435a7aa83c1961ff62aec96f9f6b4041a601f96e77"}) (cons (record Strategy {id := "period-reduction", template := "period-reduction.lean.tmpl", digest := "sha256:70af029fd89043aaa09855395e245adc8ae3b6fc2f1c644c747dcfcdf6eccdac"}) (cons (record Strategy {id := "counterexample", template := "counterexample.lean.tmpl", digest := "sha256:040271ce0f0d0bd1aed2eda1f17e6d38e79aa62d52a8042f81389bb8e05d417e"}) (nil Strategy))))),
+  body: (cons (record Strategy {id := "library-rewrite", template := "library-rewrite.lean.tmpl", digest := "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"}) (cons (record Strategy {id := "step-induction", template := "step-induction.lean.tmpl", digest := "sha256:f57700ca05d53e84bedb354c9dd6a1988528935580258cf9313a43dbca06e53f"}) (cons (record Strategy {id := "period-reduction", template := "period-reduction.lean.tmpl", digest := "sha256:f9bf7d3cbe1bb2236e43f1c83b9466ec2dfc892753c737f409d9d62ae3272a59"}) (cons (record Strategy {id := "counterexample", template := "counterexample.lean.tmpl", digest := "sha256:32690643eb2aca6e89663e989a822acbd162ede4e1bbfdb873ff75a37de30d7d"}) (nil Strategy))))),
   axioms: []
 }
 

@@ -54,10 +54,8 @@ for the tower word 2 and `s(t) = s(t-3)` for the period-3 word `100`; and
 every relation the register attaches to a claim holds on the discovery
 window of the committed data (`registerRelationsHold`).
 
-`bin/r30 discover` (tools/r30/discover.py) is the runtime: the certified Rust
-of the roots when `bin/r30 api production` has built them and cargo is
-present, otherwise the Python mirror below, whose every output is re-checked
-by the mirror of the validators."""
+`bin/r30 discover` (tools/r30/discover.py) runs the certified Rust of the roots
+(`bin/r30 api production`); it is refused when they cannot run."""
 
 from . import repo, sequencemodel, frontier
 from .semantic import (BOOL, NAT, STR, b, beq, ble, blt, call, definition, holds, if_, list_t, lst, match_list, n, proj,
@@ -140,8 +138,8 @@ def column_spec(cid, index):
 # -------------------------------------------------------------- the mirror
 
 class Mirror:
-    """The module's definitions in Python, step for step (the fallback runtime
-    of `bin/r30 discover` and the generator of the fixtures' expected values)."""
+    """The module's definitions in Python, step for step: the register's window check and the
+    generator of the fixtures' expected values, never a runtime of `bin/r30 discover`."""
 
     @staticmethod
     def xor_word(w, u):
@@ -234,11 +232,6 @@ class Mirror:
         return out
 
     @staticmethod
-    def window_misfits(window):
-        width, ws = window
-        return sum((0 if len(w) * CHUNK_BITS == width else 1) + sum(1 for c in w if c >= CHUNK_BOUND) for w in ws)
-
-    @staticmethod
     def relation_residue(ws, rs):
         return sum((0 if Mirror.word_weight(Mirror.selected_xor(ws, r)) == 0 else 1) + (1 if sum(r) == 0 else 0)
                    + (0 if len(r) == len(ws) else 1) for r in rs)
@@ -261,21 +254,6 @@ class Mirror:
                 m += 1
             hist = h2
         return (conn + [0] * (l + 1))[:l + 1]
-
-    @staticmethod
-    def recurrence_defects(sq, c):
-        lead = 0 if c and c[0] == 1 else 1
-        rc = list(reversed(c))
-        bad = 0
-        for k in range(len(sq)):
-            u = sq[k:]
-            if len(u) < len(rc):
-                continue
-            d = 0
-            for x, y in zip(rc, u):
-                d ^= x & y
-            bad += d
-        return lead + bad
 
 
 # ---------------------------------------------------------- the data form

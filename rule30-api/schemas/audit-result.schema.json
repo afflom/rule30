@@ -105,6 +105,7 @@
         "position",
         "key",
         "label",
+        "statement",
         "status",
         "dischargedBy"
        ],
@@ -119,6 +120,9 @@
          "type": "string"
         },
         "label": {
+         "type": "string"
+        },
+        "statement": {
          "type": "string"
         },
         "status": {

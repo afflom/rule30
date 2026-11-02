@@ -689,12 +689,12 @@ def cmd_sequences(args):
 def cmd_discover(args):
     """Induction mechanized: the relation and recurrence engines of
     Discovery.lex.tex on the basis (tools/r30/discover.py)."""
-    from . import discover
+    from . import discover, engine_rust
     try:
         r = discover.run(window=args.window, degree=args.degree, write=args.write)
     except discover.BasisError as e:
         fail("R307002", str(e))
-    except discover.Refused as e:
+    except (discover.Refused, engine_rust.NoRoot) as e:
         fail("R307003", str(e)[:1200])
     out(args, r, discover.render(r))
 
@@ -722,6 +722,13 @@ def cmd_engine(args):
     if args.sub == "status":
         st = engine.status()
         out(args, st, engine.render_status(st))
+        return
+    if args.sub == "hypotheses":
+        try:
+            minted = engine.mint(engine.current_tick(engine.load()), args.budget)
+        except RuntimeError as e:
+            fail("R309003", str(e)[:1200])
+        out(args, minted, f"{len(minted)} minted, {len(engine.store())} in the store")
         return
     if args.sub == "prune":
         r = engine.prune_evidence(apply=args.apply)
@@ -885,6 +892,9 @@ def build_parser():
     s.add_argument("--push", action="store_true", help="push the commit when origin/main still is the base (never a force push)")
     s.set_defaults(fn=cmd_engine)
     en.add_parser("status", help="the last tick, the ledger and the learned weights").set_defaults(fn=cmd_engine)
+    s = en.add_parser("hypotheses", help="the tick's hypotheses stage alone: mint new hypotheses by the certified root into model/hypotheses.toml")
+    s.add_argument("--budget", type=int, default=16, help="the most it adds (default: the tick's budget)")
+    s.set_defaults(fn=cmd_engine)
     s = en.add_parser("prune", help="the gate's evidence the next run can use (the current tools key's Lake builds, the newest LexLean attestation per project, the replay receipts, the current κ memo; never a certificate) and what it cannot; the workflow runs it with --apply before caching")
     s.add_argument("--apply", action="store_true", help="delete what the next run cannot use (default: report it)")
     s.set_defaults(fn=cmd_engine)

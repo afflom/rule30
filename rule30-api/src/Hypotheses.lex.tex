@@ -10,7 +10,7 @@ definition{
   name: purpose,
   parameters: [],
   result: String,
-  body: "The engine's role is to label new hypotheses. A hypothesis is a statement minted from data the engine already keeps, in a canonical form, with its sources: the exclusion a failed library-rewrite attempt names (for all t, not these atoms with these values together), or an open hypothesis of a conditional refutation in the audit. Its label is the SHA-256 of the canonical bytes of the statement, with no prefix or framing added to those bytes, as UOR-Foundation/uor-addr mints labels. An exclusion is a consequence of the relation whose attempt named it, never evidence for it: the attempt found an assignment that breaks the relation, so wherever the relation holds that assignment does not occur. This module proves none of the hypotheses and enumerates no cell or time.",
+  body: "The engine's role is to label new hypotheses. A hypothesis is a statement minted from data the engine already keeps, in a canonical form, with its sources: the exclusion a failed library-rewrite attempt names (for all t, not these atoms with these values together), or an open hypothesis of a conditional refutation in the audit, read as its meaning: the canonical form of the Lean type closed over the variables it reads, in the node vocabulary of the gate's statement label (binder names and binder information omitted, universe parameters by first occurrence, de Bruijn indices), never the head constant of the type. Its label is the SHA-256 of the canonical bytes of the statement, with no prefix or framing added to those bytes, as UOR-Foundation/uor-addr mints labels. Nothing here reads the hypotheses already minted except to leave them out, so a minted hypothesis is never an input of a later one and minting ends once the store holds every statement the ledger and the audit give. An exclusion is a consequence of the relation whose attempt named it, never evidence for it: the attempt found an assignment that breaks the relation, so wherever the relation holds that assignment does not occur. This module proves none of the hypotheses and enumerates no cell or time.",
   executable: true
 }
 
@@ -43,6 +43,27 @@ structure{
   type_parameters: [],
   parameters: [],
   fields: [{name: theorem, type: Bytes}, {name: live, type: Bool}, {name: open, type: (List Bytes)}]
+}
+
+structure{
+  name: LedgerAttempt,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: claim, type: Bytes}, {name: strategy, type: Bytes}, {name: failure, type: Bytes}]
+}
+
+structure{
+  name: RegisterClaim,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: claim, type: Bytes}, {name: status, type: Bytes}, {name: kappa, type: Bytes}]
+}
+
+structure{
+  name: AuditRow,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: theorem, type: Bytes}, {name: status, type: Bytes}, {name: open, type: (List Bytes)}]
 }
 
 structure{
@@ -219,7 +240,7 @@ definition{
   result: Bytes,
   body: (match statement
     | Statement.exclusion clause => (prim append 0x28393a6578636c7573696f6e (literalsForm clause) : Bytes)
-    | Statement.obligation key => (prim append 0x2831303a6f626c69676174696f6e20 (prim append (atomForm key) 0x29 : Bytes) : Bytes)),
+    | Statement.obligation key => (prim append 0x2831303a6f626c69676174696f6e20 (prim append key 0x29 : Bytes) : Bytes)),
   executable: true
 }
 
@@ -245,6 +266,14 @@ definition{
   parameters: [],
   result: Nat,
   body: 300,
+  executable: true
+}
+
+definition{
+  name: failureEnd,
+  parameters: [],
+  result: Bytes,
+  body: 0x2e,
   executable: true
 }
 
@@ -307,10 +336,19 @@ definition{
 }
 
 definition{
+  name: clauseOfRecord,
+  parameters: [cut : Nat, failure : Bytes],
+  result: (Option (List Literal)),
+  body: (if (hasAt failure 0 (failurePrefix)) then (let last : Nat := (prim subtract (prim length failure : Nat) 1 : Nat); (if (hasAt failure last (failureEnd)) then (clauseOfText (Toml::sliceOr failure 0 last) (prim length (failurePrefix) : Nat)) else (if (cut <=? (prim length failure : Nat)) then (ctor Option.none [(List Literal)]) else (clauseOfText failure (prim length (failurePrefix) : Nat))))) else (ctor Option.none [(List Literal)])),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
   name: clauseOfFailure,
   parameters: [failure : Bytes],
   result: (Option (List Literal)),
-  body: (if ((failureCut) <=? (prim length failure : Nat)) then (ctor Option.none [(List Literal)]) else (if (hasAt failure 0 (failurePrefix)) then (clauseOfText failure (prim length (failurePrefix) : Nat)) else (ctor Option.none [(List Literal)]))),
+  body: (clauseOfRecord (failureCut) failure),
   axioms: [propext],
   executable: true
 }
@@ -413,22 +451,12 @@ definition{
 }
 
 definition{
-  name: isStatementKey,
-  parameters: [key : Bytes],
-  result: Bool,
-  body: (match (prim index key 0 : (Option UInt8))
-    | Option.none => false
-    | Option.some byte => (not (prim equal byte (40 : UInt8) : Bool))),
-  executable: true
-}
-
-definition{
   name: keysCandidates,
   parameters: [theorem : Bytes, credit : Nat, keys : (List Bytes), sorted : (List Candidate)],
   result: (List Candidate),
   body: (match keys
     | List.nil => sorted
-    | List.cons head tail => (keysCandidates theorem credit tail (if (isStatementKey head) then (addCandidate (candidateOf (ctor Statement.obligation head) credit theorem) sorted) else sorted))),
+    | List.cons head tail => (keysCandidates theorem credit tail (addCandidate (candidateOf (ctor Statement.obligation head) credit theorem) sorted))),
   axioms: [propext],
   recursive_argument: keys,
   executable: true
@@ -591,10 +619,82 @@ definition{
 }
 
 definition{
-  name: mint,
+  name: mintLive,
   parameters: [failures : (List FailureRecord), obligations : (List Obligation), known : (List Bytes), budget : Nat, outcomes : (List Engine::Outcome)],
   result: (List Hypothesis),
   body: (select (Engine::learnAll (initialFamilyWeights) outcomes) (labelled (exclusionCandidates failures)) (labelled (obligationCandidates obligations)) known budget),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: isObserved,
+  parameters: [claim : Bytes, claims : (List RegisterClaim)],
+  result: Bool,
+  body: (match claims
+    | List.nil => false
+    | List.cons head tail => (if (Toml::sameBytes (project head claim) claim) then (Toml::sameBytes (project head status) 0x6f62736572766564) else (isObserved claim tail))),
+  recursive_argument: claims,
+  executable: true
+}
+
+definition{
+  name: isLibraryRewrite,
+  parameters: [attempt : LedgerAttempt],
+  result: Bool,
+  body: (Toml::sameBytes (project attempt strategy) 0x6c6962726172792d72657772697465),
+  executable: true
+}
+
+definition{
+  name: attemptedLater,
+  parameters: [claim : Bytes, attempts : (List LedgerAttempt)],
+  result: Bool,
+  body: (match attempts
+    | List.nil => false
+    | List.cons head tail => (((isLibraryRewrite head) && (Toml::sameBytes (project head claim) claim)) || (attemptedLater claim tail))),
+  recursive_argument: attempts,
+  executable: true
+}
+
+definition{
+  name: failureRecords,
+  parameters: [attempts : (List LedgerAttempt), claims : (List RegisterClaim)],
+  result: (List FailureRecord),
+  body: (match attempts
+    | List.nil => (nil FailureRecord)
+    | List.cons head tail => (if (isLibraryRewrite head) then (cons (record FailureRecord {claim := (project head claim), live := ((isObserved (project head claim) claims) && (not (attemptedLater (project head claim) tail))), failure := (project head failure)}) (failureRecords tail claims)) else (failureRecords tail claims))),
+  recursive_argument: attempts,
+  executable: true
+}
+
+definition{
+  name: obligationRows,
+  parameters: [rows : (List AuditRow)],
+  result: (List Obligation),
+  body: (match rows
+    | List.nil => (nil Obligation)
+    | List.cons head tail => (cons (record Obligation {theorem := (project head theorem), live := (Toml::sameBytes (project head status) 0x6f70656e), open := (project head open)}) (obligationRows tail))),
+  recursive_argument: rows,
+  executable: true
+}
+
+definition{
+  name: knownLabels,
+  parameters: [store : (List Bytes), claims : (List RegisterClaim)],
+  result: (List Bytes),
+  body: (match claims
+    | List.nil => store
+    | List.cons head tail => (cons (project head kappa) (knownLabels store tail))),
+  recursive_argument: claims,
+  executable: true
+}
+
+definition{
+  name: mint,
+  parameters: [attempts : (List LedgerAttempt), claims : (List RegisterClaim), conditionals : (List AuditRow), store : (List Bytes), budget : Nat, outcomes : (List Engine::Outcome)],
+  result: (List Hypothesis),
+  body: (mintLive (failureRecords attempts claims) (obligationRows conditionals) (knownLabels store claims) budget outcomes),
   axioms: [Quot.sound, propext],
   executable: true,
   production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
@@ -819,17 +919,10 @@ definition{
 }
 
 definition{
-  name: keyNotAHypothesis,
-  parameters: [],
-  result: Bytes,
-  body: 0x286e6f206879706f746865736973
-}
-
-definition{
   name: obligationsFixture,
   parameters: [],
   result: (List Obligation),
-  body: (cons (record Obligation {theorem := (claimOne), live := true, open := (cons (keyOne) (nil Bytes))}) (cons (record Obligation {theorem := (claimTwo), live := true, open := (cons (keyOne) (cons (keyTwo) (cons (keyNotAHypothesis) (nil Bytes))))}) (cons (record Obligation {theorem := (atomLeftOne), live := false, open := (cons (keyTwo) (nil Bytes))}) (nil Obligation))))
+  body: (cons (record Obligation {theorem := (claimOne), live := true, open := (cons (keyOne) (nil Bytes))}) (cons (record Obligation {theorem := (claimTwo), live := true, open := (cons (keyOne) (cons (keyTwo) (nil Bytes)))}) (cons (record Obligation {theorem := (atomLeftOne), live := false, open := (cons (keyTwo) (nil Bytes))}) (nil Obligation))))
 }
 
 definition{
@@ -1118,7 +1211,7 @@ theorem{
 theorem{
   name: mintOnARealRecord,
   parameters: [],
-  statement: ((sameByteLists (formsOf (mint (cons (record FailureRecord {claim := (claimOne), live := true, failure := (realFailure)}) (nil FailureRecord)) (nil Obligation) (nil Bytes) 1 (nil Engine::Outcome))) (cons (realForm) (nil Bytes))) = true),
+  statement: ((sameByteLists (formsOf (mintLive (cons (record FailureRecord {claim := (claimOne), live := true, failure := (realFailure)}) (nil FailureRecord)) (nil Obligation) (nil Bytes) 1 (nil Engine::Outcome))) (cons (realForm) (nil Bytes))) = true),
   proof: decide{},
   axioms: [Quot.sound, propext]
 }
@@ -1126,7 +1219,7 @@ theorem{
 theorem{
   name: mintKeepsTheKnownOut,
   parameters: [],
-  statement: (((prim length (mint (cons (record FailureRecord {claim := (claimOne), live := true, failure := (realFailure)}) (nil FailureRecord)) (nil Obligation) (cons (realLabel) (nil Bytes)) 1 (nil Engine::Outcome)) : Nat) =? 0) = true),
+  statement: (((prim length (mintLive (cons (record FailureRecord {claim := (claimOne), live := true, failure := (realFailure)}) (nil FailureRecord)) (nil Obligation) (cons (realLabel) (nil Bytes)) 1 (nil Engine::Outcome)) : Nat) =? 0) = true),
   proof: decide{},
   axioms: [Quot.sound, propext]
 }
@@ -1135,6 +1228,99 @@ theorem{
   name: provedRelationMintsNothing,
   parameters: [],
   statement: (((prim length (exclusionCandidates (cons (record FailureRecord {claim := (claimOne), live := false, failure := (realFailure)}) (nil FailureRecord))) : Nat) =? 0) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+definition{
+  name: fixtureAttempts,
+  parameters: [],
+  result: (List LedgerAttempt),
+  body: (cons (record LedgerAttempt {claim := (claimOne), strategy := 0x6c6962726172792d72657772697465, failure := 0x286465636964656420696e20507974686f6e2920746865206c6962726172792773206661637473206c6561766520616e2061737369676e6d656e74206f66207468652061746f6d73207468617420627265616b73207468652072656c6174696f6e3a20436f72652e6c646961672031202874293d74727565}) (cons (record LedgerAttempt {claim := (claimOne), strategy := 0x737465702d696e64756374696f6e, failure := 0x286465636964656420696e20507974686f6e2920746865206c6962726172792773206661637473206c6561766520616e2061737369676e6d656e74206f66207468652061746f6d73207468617420627265616b73207468652072656c6174696f6e3a20436f72652e6c646961672032202874293d74727565}) (cons (record LedgerAttempt {claim := (claimOne), strategy := 0x6c6962726172792d72657772697465, failure := (realFailure)}) (cons (record LedgerAttempt {claim := (claimTwo), strategy := 0x6c6962726172792d72657772697465, failure := 0x286465636964656420696e20507974686f6e2920746865206c6962726172792773206661637473206c6561766520616e2061737369676e6d656e74206f66207468652061746f6d73207468617420627265616b73207468652072656c6174696f6e3a20436f72652e6c646961672033202874293d74727565}) (nil LedgerAttempt)))))
+}
+
+definition{
+  name: fixtureClaims,
+  parameters: [],
+  result: (List RegisterClaim),
+  body: (cons (record RegisterClaim {claim := (claimOne), status := 0x6f62736572766564, kappa := 0x7368613235363a6f6e65}) (cons (record RegisterClaim {claim := (claimTwo), status := 0x70726f766564, kappa := 0x7368613235363a74776f}) (nil RegisterClaim)))
+}
+
+definition{
+  name: fixtureRows,
+  parameters: [],
+  result: (List AuditRow),
+  body: (cons (record AuditRow {theorem := (claimOne), status := 0x6f70656e, open := (cons (keyOne) (nil Bytes))}) (cons (record AuditRow {theorem := (claimTwo), status := 0x64656164, open := (cons (keyTwo) (nil Bytes))}) (nil AuditRow)))
+}
+
+definition{
+  name: fixtureMint,
+  parameters: [store : (List Bytes), budget : Nat],
+  result: (List Hypothesis),
+  body: (select (initialFamilyWeights) (formLabelled (exclusionCandidates (failureRecords (fixtureAttempts) (fixtureClaims)))) (formLabelled (obligationCandidates (obligationRows (fixtureRows)))) (knownLabels store (fixtureClaims)) budget),
+  axioms: [propext]
+}
+
+definition{
+  name: labelsOf,
+  parameters: [items : (List Hypothesis)],
+  result: (List Bytes),
+  body: (match items
+    | List.nil => (nil Bytes)
+    | List.cons head tail => (cons (project head label) (labelsOf tail))),
+  recursive_argument: items
+}
+
+theorem{
+  name: aCompleteRecordOutlivesTheCut,
+  parameters: [],
+  statement: ((isClause (clauseOfRecord 8 (prim append (realFailure) (failureEnd) : Bytes)) (realClause)) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: anUnmarkedRecordAtTheCutIsRefused,
+  parameters: [],
+  statement: ((isAbsent (clauseOfRecord 8 (realFailure))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: onlyTheLastAttemptOfAnObservedClaimIsLive,
+  parameters: [],
+  statement: ((sameByteLists (formsOf (fixtureMint (nil Bytes) 2)) (cons (formOf (ctor Statement.obligation (keyOne))) (cons (realForm) (nil Bytes)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: registerLabelsAreKnown,
+  parameters: [],
+  statement: ((memberBytes 0x7368613235363a74776f (knownLabels (nil Bytes) (fixtureClaims))) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: theSecondRunMintsNothing,
+  parameters: [],
+  statement: (((prim length (fixtureMint (labelsOf (fixtureMint (nil Bytes) 2)) 2) : Nat) =? 0) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: aBudgetDrainsTheCandidates,
+  parameters: [],
+  statement: ((let once : (List Bytes) := (labelsOf (fixtureMint (nil Bytes) 1)); (let twice : (List Bytes) := (prim append once (labelsOf (fixtureMint once 1)) : (List Bytes)); (((prim length twice : Nat) =? 2) && ((prim length (fixtureMint twice 1) : Nat) =? 0)))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: theTickBudgetIsSound,
+  parameters: [],
+  statement: ((soundForBudgets (nil Bytes) (cons (Engine::hypothesisBudget) (nil Nat))) = true),
   proof: decide{},
   axioms: [propext]
 }

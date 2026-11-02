@@ -6,6 +6,7 @@
  "additionalProperties": false,
  "required": [
   "last",
+  "hypotheses",
   "units",
   "synapses",
   "events",
@@ -53,7 +54,16 @@
    }
   },
   "pending": {
-   "type": "integer"
+   "type": [
+    "integer",
+    "string"
+   ]
+  },
+  "hypotheses": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "integer"
+   }
   },
   "weights": {
    "type": "array",

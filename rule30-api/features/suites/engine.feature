@@ -33,7 +33,7 @@ Feature: engine
     Then its oracle accepts it: bin/r30 api check; scripts/tests/test_engine.py
 
   @strategy-learning @build
-  Scenario: Engine.lex.tex declares the learning layer: integer strategy weights per relation family, the bounded Hebbian rule learn (a success raises the weight by 2, a failure lowers it by 1, clamped to [1, 16]), learnAll and the scheduler schedule (applicable strategies by weight, ties by portfolio order) as production roots exported to certified Rust; the kernel decides that learn keeps every weight in bounds, that the committed weights are in bounds, that the schedule of every subset of the portfolio in every family is a permutation ordered by weight, and the fixtures the Python mirror computes; the tests compare the mirror with the certified roots.
+  Scenario: Engine.lex.tex declares the learning layer: integer strategy weights per relation family, the bounded Hebbian rule learn (a success raises the weight by 2, a failure lowers it by 1, clamped to [1, 16]), learnAll and the scheduler schedule (applicable strategies by weight, ties by portfolio order) as production roots exported to certified Rust; the kernel decides that learn keeps every weight in bounds, that the committed weights are in bounds, that the schedule of every subset of the portfolio in every family is a permutation ordered by weight, and the frozen fixtures; the tests compare the fixtures with the certified roots.
     Given rule30-api/src/Engine.lex.tex
     When the suite exercises strategy-learning
     Then its oracle accepts it: bin/r30 verify api --modules src/Engine.lex.tex; scripts/tests/test_engine.py
@@ -43,3 +43,9 @@ Feature: engine
     Given rule30-api/model/engine.toml
     When the suite exercises engine-ledger
     Then its oracle accepts it: scripts/tests/test_engine.py
+
+  @hypothesis-store @build
+  Scenario: rule30-api/model/hypotheses.toml (r30/hypotheses/1) holds the hypotheses the tick's hypotheses stage minted through the certified root mint of Hypotheses.lex.tex: label (the SHA-256 of the form), form (the canonical form of the statement), sources, weight, tick and status; no label twice, and nothing in it is a claim of the register.
+    Given rule30-api/model/hypotheses.toml
+    When the suite exercises hypothesis-store
+    Then its oracle accepts it: bin/r30 engine status; scripts/tests/test_engine.py

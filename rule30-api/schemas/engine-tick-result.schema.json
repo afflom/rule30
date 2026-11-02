@@ -21,7 +21,8 @@
     "refuted",
     "known",
     "attempts",
-    "new_relations"
+    "new_relations",
+    "minted"
    ],
    "properties": {
     "number": {
@@ -45,7 +46,8 @@
        "seconds",
        "allowance",
        "outcome",
-       "note"
+       "note",
+       "runtime"
       ],
       "additionalProperties": false,
       "properties": {
@@ -57,8 +59,12 @@
          "pruning",
          "deduction",
          "learning",
+         "hypotheses",
          "gate"
         ]
+       },
+       "runtime": {
+        "type": "string"
        },
        "seconds": {
         "type": "number"
@@ -123,6 +129,9 @@
      "type": "integer"
     },
     "new_relations": {
+     "type": "integer"
+    },
+    "minted": {
      "type": "integer"
     }
    }

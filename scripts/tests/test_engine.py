@@ -10,8 +10,8 @@ of the basis and their Boolean cores decided in Python, as `deduce` does before
 it runs Lean. Each PrismPM id of the suite has a test whose name ends in the id."""
 
 from pathlib import Path
+import hashlib
 import json
-import random
 import re
 import sys
 import tempfile
@@ -37,7 +37,30 @@ def needs_basis(test):
         test.skipTest("model/sequences.toml is absent (bin/r30 sequences --write)")
 
 
+class RecordedRoots:
+    """What the certified roots answer, recorded for tests that have no bundle (the gate's snapshot never
+    has one); `test_learning...` compares the frozen fixtures with the real roots when a bundle exists."""
+    why = "recorded"
+
+    def schedule(self, table, fam, apps):
+        w = {(s, f): v for s, f, v in table}
+        return sorted(apps, key=lambda x: -w.get((x, fam), em.W_INIT))
+
+    def learn_all(self, table, outcomes):
+        t = {(s, f): v for s, f, v in table}
+        for s, f, ok in outcomes:
+            v = t.get((s, f), em.W_INIT)
+            t[(s, f)] = min(v + em.RAISE, em.W_MAX) if ok else max(v - em.LOWER, em.W_MIN)
+        return [(s, f, v) for (s, f), v in t.items()]
+
+
 class EngineTests(unittest.TestCase):
+
+    def setUp(self):
+        from tools.r30 import engine_rust
+        self.addCleanup(setattr, engine_rust, "runner", engine_rust.runner)
+        self.real_runner = engine_rust.runner
+        engine_rust.runner = RecordedRoots
 
     # -------------------------------------------------------------- the workload
 
@@ -52,7 +75,7 @@ class EngineTests(unittest.TestCase):
         self.assertIn("permissions:\n  contents: write\n  actions: write\n\n", text)
         self.assertIn("concurrency:\n  group: r30-engine\n  cancel-in-progress: false\n", text)
         self.assertIn("runs-on: ubuntu-24.04", text)
-        self.assertIn("timeout-minutes: 340", text)
+        self.assertIn("timeout-minutes: 355", text)
         self.assertIn("if: github.repository == 'afflom/rule30' && vars.R30_ENGINE != 'off'", text)
         self.assertIn("run: bin/r30 engine tick --budget-minutes 300 --commit --push", text)
         self.assertIn("make hooks", text)
@@ -203,52 +226,30 @@ class EngineTests(unittest.TestCase):
     # -------------------------------------------------------------- the learning layer
 
     def test_learning_rule_scheduler_and_certified_roots_strategy_learning(self):
-        m = em.Mirror
-        for w in range(em.W_MIN, em.W_MAX + 1):
-            for ok in (True, False):
-                self.assertTrue(em.W_MIN <= m.learn(w, ok) <= em.W_MAX)
-        self.assertEqual(m.learn(em.W_MAX, True), em.W_MAX)
-        self.assertEqual(m.learn(em.W_MIN, False), em.W_MIN)
-        self.assertEqual(m.learn(8, True), 8 + em.RAISE)
-        self.assertEqual(m.learn(8, False), 8 - em.LOWER)
-        rnd = random.Random(30)
-        ids = [p["id"] for p in em.PORTFOLIO]
-        for _ in range(200):
-            table = [(s, f, rnd.randint(em.W_MIN, em.W_MAX)) for s in ids for f in em.FAMILIES[:3]]
-            fam = rnd.choice(em.FAMILIES[:3])
-            apps = [x for x in ids if rnd.random() < 0.7]
-            order = m.schedule(table, fam, apps)
-            self.assertEqual(sorted(order), sorted(apps))  # a permutation
-            ws = [m.weight_of(x, fam, table) for x in order]
-            self.assertEqual(ws, sorted(ws, reverse=True))  # by weight
-            for a, b in zip(order, order[1:]):  # ties in portfolio order
-                if m.weight_of(a, fam, table) == m.weight_of(b, fam, table):
-                    self.assertLess(apps.index(a), apps.index(b))
-        # the module decides the mirror's fixtures and the invariants over the committed table
+        # the module decides the frozen fixtures and the invariants over the committed table
         module = em.MODULE.read_text()
         for name in ("learnStaysInBounds", "committedWeightsBounded", "learnAllFixture", "everyScheduleIsSound",
                      "scheduleFixture0", "scheduleFixture1", "scheduleFixture2"):
             self.assertIn(f"name: {name},", module)
         self.assertIn("production: {effects: [allocation, overflow, recursion], targets: [rust-std]}", module)
-        from tools.r30 import production
+        from tools.r30 import engine_rust, production
         roots = {r["root"] for r in production.roots()}
-        self.assertTrue({"Rule30Api.Engine.learnAll", "Rule30Api.Engine.schedule"} <= roots)
-        # the certified roots agree with the mirror (when `bin/r30 api production` has built them)
-        from tools.r30 import engine_rust
-        kind, runner = engine_rust.locate(build=True)
-        if kind != "rust":
-            self.skipTest(f"no certified roots to compare: {runner}")
+        self.assertTrue({"Rule30Api.Engine.learnAll", "Rule30Api.Engine.schedule", "Rule30Api.Hypotheses.mint"} <= roots)
+        self.assertFalse(hasattr(em, "Mirror"))  # the roots have no other runtime
+        # the certified roots answer the frozen fixtures (when `bin/r30 api production` has built them)
+        try:
+            runner = self.real_runner()
+        except engine_rust.NoRoot as e:
+            self.skipTest(f"no certified roots to compare: {e}")
         start = em.initial_table()
-        self.assertEqual(runner.learn_all(start, em.FIXTURE_OUTCOMES), m.learn_all(start, em.FIXTURE_OUTCOMES))
-        learned = m.learn_all(start, em.FIXTURE_OUTCOMES)
-        for fam, apps in em.FIXTURE_SCHEDULES:
-            self.assertEqual(runner.schedule(learned, fam, apps), m.schedule(learned, fam, apps))
-        for _ in range(30):  # and on random tables, outcomes and subsets
-            table = [(s, f, rnd.randint(em.W_MIN, em.W_MAX)) for s in ids for f in em.FAMILIES]
-            outs = [(rnd.choice(ids), rnd.choice(em.FAMILIES), rnd.random() < 0.5) for _ in range(rnd.randint(0, 20))]
-            self.assertEqual(runner.learn_all(table, outs), m.learn_all(table, outs))
-            fam, apps = rnd.choice(em.FAMILIES), [x for x in ids if rnd.random() < 0.7]
-            self.assertEqual(runner.schedule(table, fam, apps), m.schedule(table, fam, apps))
+        learned = [(s, f, em.FIXTURE_LEARNED.get((s, f), v)) for s, f, v in start]
+        self.assertEqual(runner.learn_all(start, em.FIXTURE_OUTCOMES), learned)
+        for fam, apps, expected in em.FIXTURE_SCHEDULES:
+            self.assertEqual(runner.schedule(learned, fam, apps), expected)
+        recorded = RecordedRoots()  # and the answers the other tests record are the roots' own
+        self.assertEqual(runner.learn_all(start, em.FIXTURE_OUTCOMES), recorded.learn_all(start, em.FIXTURE_OUTCOMES))
+        for fam, apps, expected in em.FIXTURE_SCHEDULES:
+            self.assertEqual(recorded.schedule(learned, fam, apps), expected)
 
     # -------------------------------------------------------------- the ledger
 
@@ -268,19 +269,14 @@ class EngineTests(unittest.TestCase):
         # a changed library is a new library-rewrite attempt (a lemma pushed since may close the claim)
         engine.record_attempt(data, {**data["attempt"][-1], "library": "sha256:" + "2" * 64})
         data["attempt"].pop()
-        data["weight"] = [{"strategy": s, "family": f, "value": v} for s, f, v in em.Mirror.learn_all(
-            em.initial_table(), [(x["strategy"], x["family"], x["outcome"] in em.SUCCESS) for x in data["attempt"]])]
+        data["weight"] = engine.learned(em.initial_table(), data["attempt"])
         w = {(r["strategy"], r["family"]): r["value"] for r in engine.weights(data)}
         self.assertEqual(w[("step-induction", "left-plain")], em.W_INIT + em.RAISE)
         self.assertEqual(w[("library-rewrite", "left-plain")], em.W_INIT - em.LOWER)
-        # the weights are reproducible from the attempts
-        replay = em.Mirror.learn_all(em.initial_table(), [(x["strategy"], x["family"], x["outcome"] in em.SUCCESS)
-                                                          for x in data["attempt"]])
-        self.assertEqual({(s, f): v for s, f, v in replay}, w)
         data["tick"].append({"number": 1, "start": "2026-11-01T00:00:00Z", "base": "0" * 40, "budget": 300,
                              "stages": [{"id": "build", "seconds": 12.5, "allowance": 60.0, "outcome": "ok", "note": ""}],
                              "outcome": "committed", "seconds": 13.0, "commit": "", "observed": 0, "proved": 1, "refuted": 0,
-                             "known": 0, "attempts": 2, "new_relations": 0})
+                             "known": 0, "attempts": 2, "new_relations": 0, "minted": 0})
         with tempfile.TemporaryDirectory() as d:
             path = Path(d) / "engine.toml"
             engine.save(data, path)
@@ -456,7 +452,7 @@ class EngineTests(unittest.TestCase):
                          {"build": 60, "induction": 30, "pruning": 20})
         # what the earlier stages left goes to deduction, recomputed when it starts
         after = engine.allowances(300, data, elapsed=2 * 60, done=("build", "induction", "pruning"))
-        self.assertAlmostEqual(after["deduction"], 300 - 2 - 125 - 5)
+        self.assertAlmostEqual(after["deduction"], 300 - 2 - 125 - 5 - 5)
         # a cut stage is not measured (its seconds are a lower bound): the gate's reservation ignores a cut
         data["tick"].append({"number": 3, "stages": [{"id": "gate", "seconds": 60, "outcome": "cut"}]})
         self.assertEqual(engine.measured(data)["gate"], 6000)
@@ -481,7 +477,7 @@ class EngineTests(unittest.TestCase):
         self.assertIsNone(engine.backfill_gate(data))  # measured once
 
     def _tick(self, changes, push_moved=False, commit=False, push=False, moved_early=False, push_rejected=False,
-              build=None, deduced=None, pending=0):
+              build=None, deduced=None, pending=0, minted=0):
         """A tick with its stages replaced by recorded answers. `moved_early`: main is not the base when
         the tick starts; `push_moved`: main moves while the tick runs; `push_rejected`: the remote refuses
         the push; `build`: the build's answer (an exception to raise); `deduced`: deduce's report."""
@@ -526,7 +522,8 @@ class EngineTests(unittest.TestCase):
                        (deduce, "run", lambda budget_minutes, log=print, tick=0: deduced or {
                            "attempts": [], "proved": [], "refuted": [], "known": [], "skipped": [], "dry_run": False}),
                        (deduce, "plan", lambda ledger=None: [{"pending": ["step-induction"] * pending}]),
-                       (engine, "consolidate", lambda data, tick, start: {"outcomes": 0, "runtime": "python"}),
+                       (engine, "consolidate", lambda data, tick, start: {"outcomes": 0, "runtime": "certified"}),
+                       (engine, "mint", lambda tick, budget, data=None: [{"label": "x"}] * minted),
                        (frontier, "load", lambda: {"claim": []})]
             import subprocess as sp
             patches.append((sp, "run", lambda *a, **k: type("P", (), {"returncode": 0, "stdout": "", "stderr": ""})()))
@@ -548,7 +545,7 @@ class EngineTests(unittest.TestCase):
         s, calls, recorded = self._tick([])
         self.assertEqual(s["outcome"], "idle")
         self.assertTrue(self.settled.startswith("b" * 40 + " idle"))  # the file the workflow caches as settled
-        self.assertEqual([st["id"] for st in s["stages"]], ["build", "induction", "pruning", "deduction", "learning"])
+        self.assertEqual([st["id"] for st in s["stages"]], ["build", "induction", "pruning", "deduction", "learning", "hypotheses"])
         self.assertFalse(any(c[:2] == ["r30", "commit"] for c in calls))
         self.assertEqual(recorded[-1]["outcome"], "idle")
         schema.validate(schema.document("engine-tick-result"), json.loads(json.dumps(s)))
@@ -754,12 +751,72 @@ class EngineTests(unittest.TestCase):
         self.assertIn("build", text)
         self.assertIn("step-induction/left-plain=10", text)
         self.assertIn("no tick recorded yet", engine.render_status(engine.status({"weight": [], "attempt": [], "tick": []})))
+        self.assertIn("exclusions", text)
+        self.assertIn("[not recorded]", text)  # a stage's runtime, for a tick from before it was kept
+
+    def test_the_store_grows_by_new_labels_only_hypothesis_store(self):
+        from tools.r30 import auditmodel, engine_rust
+        seen = []
+
+        class Roots(RecordedRoots):
+            def mint(self, attempts, claims, rows, store, budget):
+                seen.append((rows, list(store)))
+                return [r for r in [{"label": "sha256:" + hashlib.sha256(b"(f)").hexdigest(), "form": "(f)", "weight": 1,
+                                     "sources": ["a b"]}] if r["label"] not in store][:budget]
+        engine_rust.runner = Roots
+        with tempfile.TemporaryDirectory() as d:
+            old = engine.HYPOTHESES, auditmodel.load, frontier.load
+            self.addCleanup(lambda: (setattr(engine, "HYPOTHESES", old[0]), setattr(auditmodel, "load", old[1]), setattr(frontier, "load", old[2])))
+            engine.HYPOTHESES = Path(d) / "hypotheses.toml"
+            row = {"theorem": "T", "status": "open", "hypotheses": [{"status": "open", "statement": "(s)"}, {"status": "refuted", "statement": ""}]}
+            auditmodel.load, frontier.load = (lambda: ([row], {})), (lambda: {"claim": [{"id": "c", "status": "observed"}]})
+            data = {"attempt": [], "weight": [], "tick": []}
+            self.assertEqual(len(engine.mint(3, 5, data)), 1)
+            self.assertEqual(engine.mint(4, 5, data), [])  # the second run mints nothing: what the store holds is known
+            self.assertEqual(seen[0][0], [("T", "open", ["(s)"])])
+            self.assertEqual(len(seen[1][1]), 1)
+            self.assertEqual([(r["form"], r["sources"], r["tick"], r["status"]) for r in engine.store()], [("(f)", ["a b"], 3, "minted")])
+            row["hypotheses"][0]["statement"] = ""  # an audit from before the statements is refused, not read as a key
+            with self.assertRaises(RuntimeError):
+                engine.mint(5, 5, data)
+        engine.HYPOTHESES = old[0]
+        rows = engine.store()  # the committed store: every label is the digest of its form, no label twice
+        self.assertEqual(len({r["label"] for r in rows}), len(rows))
+        for r in rows:
+            self.assertEqual(r["label"], "sha256:" + hashlib.sha256(r["form"].encode()).hexdigest())
+            self.assertEqual(r["status"], "minted")
+        self.assertEqual(tomllib.loads(engine.HYPOTHESES.read_text())["spec"], "r30/hypotheses/1")
+        from tools.r30 import cli
+        self.assertEqual(cli.build_parser().parse_args(["engine", "hypotheses"]).budget, em.WORKLOAD["hypothesisBudget"])
+        self.assertFalse({r["label"] for r in rows} & {c.get("kappa") for c in frontier.load()["claim"]})
+
+    def test_a_root_that_cannot_run_ends_the_stage_and_new_rows_are_no_idle_tick_engine_tick(self):
+        from tools.r30 import engine_rust
+        text = em.WORKFLOW.read_text()
+        self.assertLess(text.index("run: bin/r30 api production"), text.index("run: bin/r30 engine tick"))  # the bundle, before the tick
+        self.assertIn("for family in r30-bundle ", text)
+        s, _, _ = self._tick(["rule30-api/model/hypotheses.toml"], minted=3)
+        self.assertEqual((s["minted"], s["outcome"]), (3, "uncommitted"))
+        self.assertEqual(s["stages"][-1]["id"], "hypotheses")
+        self.assertEqual(s["stages"][-1]["runtime"], "no root")  # the stand-in ran no root, and says so
+        s, _, _ = self._tick([], minted=0)
+        self.assertEqual(s["outcome"], "idle")  # nothing new: the tick may settle
+
+        def no_root():
+            raise engine_rust.NoRoot("no production bundle")
+        engine_rust.runner = no_root
+        with self.assertRaises(engine_rust.NoRoot):
+            em.schedule([], "open", ["library-rewrite"])
+        # the record of the last tick is still printed, and says what cannot be known without the root
+        self.addCleanup(setattr, deduce, "plan", deduce.plan)
+        deduce.plan = lambda ledger=None: no_root()
+        self.assertIn("unknown", engine.status({"weight": [], "attempt": [], "tick": []})["pending"])
 
     def test_every_engine_id_has_a_test_engine_ledger(self):
         from tools.r30 import prismmodel
         ids = [x["id"] for x in prismmodel.API_IDS if x["suite"] == "engine"]
         self.assertEqual(sorted(ids), sorted(["engine-workload", "engine-tick", "engine-status", "deduce-command",
-                                              "strategy-portfolio", "strategy-learning", "engine-ledger"]))
+                                              "strategy-portfolio", "strategy-learning", "engine-ledger", "hypothesis-store"]))
         for i in ids:
             self.assertTrue(any(n.endswith(i.replace("-", "_")) for n in dir(EngineTests)), i)
         feature = (prismmodel.FEATURES / "engine.feature").read_text()

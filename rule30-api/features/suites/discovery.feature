@@ -27,7 +27,7 @@ Feature: discovery
     Then its oracle accepts it: bin/r30 api production; bin/r30 api check; scripts/tests/test_r30.py DiscoveryTests
 
   @discover-command @build
-  Scenario: bin/r30 discover [--window W] [--degree 1|2] [--write] runs the engines on the basis (the certified Rust of the roots when they are built and cargo runs them, otherwise the Python mirror re-checked by the mirror of the validators, and says which), reports every relation with its columns, κ-label (relation <sorted column labels>), class (register, trivial, consequence, new) and certificate (the rank before its dependent column), and the recurrence of every base window; --write appends the new relations to the register as status observed.
+  Scenario: bin/r30 discover [--window W] [--degree 1|2] [--write] runs the engines on the basis (the certified Rust of the roots, and is refused when they cannot run), reports every relation with its columns, κ-label (relation <sorted column labels>), class (register, trivial, consequence, new) and certificate (the rank before its dependent column), and the recurrence of every base window; --write appends the new relations to the register as status observed.
     Given tools/r30/discover.py
     When the suite exercises discover-command
     Then its oracle accepts it: scripts/tests/test_r30.py DiscoveryTests; bin/r30 discover --window 256 --degree 2

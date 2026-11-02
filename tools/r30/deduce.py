@@ -868,7 +868,7 @@ def render_library_rewrite(claim, name, cache, facts=None):
         val = dict(zip(atoms, bits))
         if all(val[z] for z in zero) and all(h(val) for h in hyps) and not rhs_val(val):
             raise Unprovable("the library's facts leave an assignment of the atoms that breaks the relation: "
-                             + ", ".join(f"{a}={_b(v)}" for a, v in val.items()))
+                             + ", ".join(f"{a}={_b(v)}" for a, v in val.items()) + ".")
     occ_lines, occ_names = occurrence_equations(occurrences(rel))
     fact_lines, fact_names = [], []
     for z in sorted(zero):
@@ -1195,7 +1195,7 @@ def run(budget_minutes=60, claims=None, dry_run=False, log=print, tick=0):
                 else:
                     body, info = RENDER[sid](claim, name if sid != "counterexample" else name + "_fails", cache)
             except Unprovable as e:
-                attempt.update(outcome="failed", failure="(decided in Python) " + str(e)[:280])
+                attempt.update(outcome="failed", failure="(decided in Python) " + str(e))
                 body, info = None, {}
             except RuntimeError as e:
                 # the environment failed (Lean did not answer a query), not the template: nothing more
@@ -1260,7 +1260,8 @@ def record_attempts(ledger, attempts, tick, settled):
     stopped), a success the register does not show is left out, so the claim stays pending for that
     strategy instead of carrying a proof that does not exist. A failure is recorded either way."""
     from . import engine
-    shown = None
+    shown, table = None, [(r["strategy"], r["family"], r["value"]) for r in engine.weights(ledger)]
+    recorded = []
     for attempt in attempts:
         if attempt["outcome"] in em.SUCCESS and not settled:
             if shown is None:
@@ -1268,6 +1269,9 @@ def record_attempts(ledger, attempts, tick, settled):
             if (attempt["claim"], attempt["theorem"]) not in shown:
                 continue
         engine.record_attempt(ledger, attempt, tick)
+        recorded.append(attempt)
+    if tick == 0 and recorded:  # a tick's learning stage folds its own attempts
+        ledger["weight"] = engine.learned(table, recorded)
     engine.save(ledger)
 
 

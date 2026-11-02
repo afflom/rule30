@@ -12,11 +12,9 @@ which holds on the window and is a candidate for deduction (a Lean theorem,
 then `frontier set --status proved`).
 
 The runtime is the certified Rust of the three production roots
-(`buildColumns`, `findRelations`, `findRecurrence`) when `bin/r30 api
-production` has exported them and cargo builds the harness
-(`discover_rust.py`); otherwise the Python mirror of the realizations
-(`discoverymodel.Mirror`), whose every output is re-checked by the mirror of
-the validators. The report says which path ran and why.
+(`buildColumns`, `findRelations`, `findRecurrence`), exported by `bin/r30 api
+production` and driven by a harness cargo builds (`discover_rust.py`). There is
+no other runtime: without them the run is refused. The report says why it ran.
 
 What the report separates:
 
@@ -124,9 +122,9 @@ def _mask_int(indices):
 
 
 def runtime():
-    """('rust', handle) when the certified roots are built and cargo runs them, else ('python', reason)."""
+    """The harness of the certified roots; `engine_rust.NoRoot` when it cannot be had."""
     from . import discover_rust
-    return discover_rust.locate()
+    return discover_rust.runner()
 
 
 def run(window=256, degree=2, write=False, data=None, claims=None, engine=None):
@@ -144,28 +142,11 @@ def run(window=256, degree=2, write=False, data=None, claims=None, engine=None):
     bases = dm.bases_of(data)
     cols = columns_of(data, degree)
     specs = [dm.column_spec(c, index) for c in cols]
-    kind, handle = (engine or runtime())
-    if kind == "rust":
-        words = handle.build_columns(window, bases, specs)
-        found = handle.find_relations(window, words)
-        recurrences = handle.find_recurrences([sequencemodel.unchunk(w, stored) for w in bases])
-        path = {"runtime": "rust", "why": handle.why}
-    else:
-        words = Mirror.build_columns(window, bases, specs)
-        x = (window, words)
-        if Mirror.window_misfits(x):
-            raise Refused("contract violation: precondition (IsWindow) refuses the columns")
-        found = Mirror.find_relations(x)
-        if Mirror.relation_residue(words, found):
-            raise Refused("contract violation: postcondition (AllRelationsHold) refuses the relations")
-        recurrences = []
-        for w in bases:
-            bits = sequencemodel.unchunk(w, stored)
-            conn = Mirror.find_recurrence(bits)
-            if Mirror.recurrence_defects(bits, conn):
-                raise Refused("contract violation: postcondition (SatisfiesRecurrence) refuses a recurrence")
-            recurrences.append(conn)
-        path = {"runtime": "python", "why": handle}
+    handle = engine or runtime()
+    words = handle.build_columns(window, bases, specs)
+    found = handle.find_relations(window, words)
+    recurrences = handle.find_recurrences([sequencemodel.unchunk(w, stored) for w in bases])
+    path = {"runtime": "rust", "why": handle.why}
     col_kappa = {c: dm.column_kappa(c, kappas) for c in cols}
     position = {col_kappa[c]: i for i, c in enumerate(cols)}
 

@@ -19,8 +19,8 @@ the request, replays the published bundle with `verify-artifact`, and reports
 the bundle (content-addressed under `rule30-api/.lexlean/production/`, never
 committed), each package with its certification and effects, and the number
 of outputs that need an input-sized stack. The emitted crate of `commands`
-compiles with cargo and its `run()` returns the command list; nothing of the
-Python runtime calls it yet."""
+compiles with cargo and its `run()` returns the command list; `engine_rust.py`
+and `discover_rust.py` run the engine's roots, and they have no other runtime."""
 
 import json
 
@@ -41,6 +41,7 @@ TARGET_DIGESTS = {
     "rust-std": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
 }
 PACKAGE_VERSION = "0.1.0"
+USED = set()  # the bundles whose certified roots this process ran (`engine.tick` reads it per stage)
 
 
 def crate_name(definition, group=None):
@@ -64,6 +65,8 @@ def roots():
     from . import enginemodel
     rows += [{"root": f"{enginemodel.LEAN_MODULE}.{name}", "package": crate_name(name, "engine"), "targets": sorted(spec["targets"]),
               "effects": sorted(spec["effects"])} for name, spec in enginemodel.PRODUCTION_ROOTS.items()]
+    rows += [{"root": f"{enginemodel.HYPOTHESES_MODULE}.{name}", "package": crate_name(name, "hypotheses"), "targets": sorted(spec["targets"]),
+              "effects": sorted(spec["effects"])} for name, spec in enginemodel.HYPOTHESES_ROOTS.items()]
     return sorted(rows, key=lambda r: r["root"])
 
 
@@ -83,7 +86,7 @@ def runtime_roots_toml():
     from . import coremodel
     from . import discoverymodel, enginemodel
     lines = ['spec = "prismpm/runtime-roots/1"',
-             f'lean_modules = ["{MODULE}", "{coremodel.LEAN_MODULE}", "{discoverymodel.LEAN_MODULE}", "{enginemodel.LEAN_MODULE}"]',
+             f'lean_modules = ["{MODULE}", "{coremodel.LEAN_MODULE}", "{discoverymodel.LEAN_MODULE}", "{enginemodel.LEAN_MODULE}", "{enginemodel.HYPOTHESES_MODULE}"]',
              'ir_module = "Rule30Api"', "roots = ["]
     lines += [f'  "{r["root"]}",' for r in roots()]
     lines += ["]", ""]

@@ -179,13 +179,14 @@ RESULTS = {
         "$defs": {"tick": {
             "type": "object", "additionalProperties": False,
             "required": ["number", "start", "base", "budget", "stages", "outcome", "seconds", "commit", "observed", "proved",
-                         "refuted", "known", "attempts", "new_relations"],
+                         "refuted", "known", "attempts", "new_relations", "minted"],
             "properties": {
                 "number": {"type": "integer"}, "start": {"type": "string"}, "base": {"type": "string"},
                 "budget": {"type": "integer"},
                 "stages": {"type": "array", "items": {
-                    "type": "object", "required": ["id", "seconds", "allowance", "outcome", "note"], "additionalProperties": False,
-                    "properties": {"id": {"type": "string", "enum": ["build", "induction", "pruning", "deduction", "learning", "gate"]},
+                    "type": "object", "required": ["id", "seconds", "allowance", "outcome", "note", "runtime"], "additionalProperties": False,
+                    "properties": {"id": {"type": "string", "enum": ["build", "induction", "pruning", "deduction", "learning", "hypotheses", "gate"]},
+                                   "runtime": {"type": "string"},
                                    "seconds": {"type": "number"}, "allowance": {"type": "number"},
                                    "outcome": {"type": "string", "enum": ["ok", "cut", "error"]}, "note": {"type": "string"}}}},
                 "outcome": {"type": "string", "enum": ["idle", "cut", "stale", "uncommitted", "committed", "pushed", "dropped",
@@ -193,12 +194,12 @@ RESULTS = {
                 "pending": {"type": ["integer", "null"]},
                 "seconds": {"type": "number"}, "commit": {"type": "string"},
                 "observed": {"type": "integer"}, "proved": {"type": "integer"}, "refuted": {"type": "integer"},
-                "known": {"type": "integer"}, "attempts": {"type": "integer"}, "new_relations": {"type": "integer"}}}},
+                "known": {"type": "integer"}, "attempts": {"type": "integer"}, "new_relations": {"type": "integer"}, "minted": {"type": "integer"}}}},
     },
     "engine-status-result": {
         "title": "engine status --json: the last tick, the network (units, synapses, events), the attempts by outcome, the pending attempts and the learned weights",
         "type": "object", "additionalProperties": False,
-        "required": ["last", "units", "synapses", "events", "attempts", "pending", "weights"],
+        "required": ["last", "hypotheses", "units", "synapses", "events", "attempts", "pending", "weights"],
         "properties": {
             "last": {"type": ["object", "null"]},
             "units": {"type": "integer"},
@@ -206,7 +207,8 @@ RESULTS = {
                          "properties": {k: {"type": "integer"} for k in ("observed", "proved", "refuted")}},
             "events": {"type": "integer"},
             "attempts": {"type": "object", "additionalProperties": {"type": "integer"}},
-            "pending": {"type": "integer"},
+            "pending": {"type": ["integer", "string"]},
+            "hypotheses": {"type": "object", "additionalProperties": {"type": "integer"}},
             "weights": {"type": "array", "items": {
                 "type": "object", "required": ["strategy", "family", "value"], "additionalProperties": False,
                 "properties": {"strategy": {"type": "string"}, "family": {"type": "string"}, "value": {"type": "integer"}}}},

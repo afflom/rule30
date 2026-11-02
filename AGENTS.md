@@ -163,8 +163,8 @@ on dispatch and on pushes of the engine's inputs, `bin/r30 engine tick --commit 
 builds the library (as the gate's `make core` does: `LexLeanRuntime.Laws`, which no Lake
 root covers, then `lake build`; `modules.build` does the same for `module build` and
 `deduce`), runs induction (`sequences --write` when its inputs changed,
-`discover --write`), pruning (`audit --write`), deduction (`deduce`) and learning,
-commits through the unchanged gate (`commit --wait`, in the foreground) and pushes
+`discover --write`), pruning (`audit --write`), deduction (`deduce`), learning and
+hypotheses (the certified root `mint`), commits through the unchanged gate (`commit --wait`, in the foreground) and pushes
 only when `origin/main` is still the tick's base. You intervene only by pushing
 features; the engine's commits are yours to read like any other.
 
@@ -172,6 +172,7 @@ features; the engine's commits are yours to read like any other.
 bin/r30 deduce [--budget-minutes N] [--claims <ids>] [--dry-run]   # prove the observed claims for all t
 bin/r30 engine tick [--budget-minutes N] [--commit] [--push]        # one cycle (CI runs it with --commit --push)
 bin/r30 engine status                                               # the last tick, the ledger, the weights
+bin/r30 engine hypotheses [--budget N]                              # the tick's hypotheses stage alone
 bin/r30 engine prune [--apply]                                      # the gate's evidence a next run can use; --apply deletes the rest
 bin/r30 commit -m "..." --wait [--coauthor ""]                      # the gate in the foreground (the engine's path)
 ```
@@ -205,6 +206,18 @@ bin/r30 commit -m "..." --wait [--coauthor ""]                      # the gate i
   deduction deadline cuts is not recorded (it stays pending), and a success is
   recorded only once the register has it. The weights (plasticity) are a function
   of the attempts, decided in bounds by `Engine.lex.tex`.
+- **Hypotheses.** The engine's role is to label new hypotheses. `rule30-api/src/Hypotheses.lex.tex`
+  decides what is live and what is known; its root `mint` runs on the ledger's failed
+  `library-rewrite` attempts (the exclusion each names) and the audit's open hypotheses, each read
+  as its meaning: the canonical form of the Lean type closed over the variables it reads
+  (`audit.lean.tmpl`, in the vocabulary of the gate's statement κ), labelled by the SHA-256 of that
+  form. New rows go to `rule30-api/model/hypotheses.toml` (`r30/hypotheses/1`), at most the model's
+  `hypothesisBudget` a tick; none is a claim of the register and none is promoted here. The store is
+  no input of `mint` but as the labels to leave out, so minting ends when it holds what the ledger
+  and the audit give; a tick that minted is not idle.
+- **The certified roots** (`bin/r30 api production`, cached by the workflow under the digest of the
+  sources) are the only runtime of `learnAll`, `schedule`, `mint` and the discovery engines: a root
+  that cannot run ends the tick `error`. `engine status` prints the runtime each stage used.
 - **Homeostasis.** The gate's share is reserved first and never cut (1.25 times its
   last measured duration when that is larger; the gate's own record cannot hold it, so
   the next tick measures it from the commit's time); every other stage may take its

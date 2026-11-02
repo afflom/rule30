@@ -44,6 +44,63 @@ partial def r30Shape (e : Expr) (names : List Name) (fvars : Array Expr) : MetaM
       return (s!"({if prop then "prop" else "data"} {kind} {n'} {tS})" :: bs, c)
   | _ => return ([], ← r30Sexp e names)
 
+/-- A universe in the statement's canonical form: parameters numbered by first occurrence. -/
+partial def r30CanonLevel (params : Array Name) : Level → String
+  | .zero => "(5:lzero)"
+  | .succ u => s!"(5:lsucc {r30CanonLevel params u})"
+  | .max u v => s!"(4:lmax {r30CanonLevel params u} {r30CanonLevel params v})"
+  | .imax u v => s!"(5:limax {r30CanonLevel params u} {r30CanonLevel params v})"
+  | .param n => let k := s!"#{params.idxOf n}"; s!"(6:lparam {k.utf8ByteSize}:{k})"
+  | .mvar _ => "(?)"
+
+/-- A statement's canonical form, in the node vocabulary of `scripts/KappaExport.lean` as the gate's
+statement κ reads it, written out as a canonical S-expression: `mdata` transparent, binder names and
+binder information omitted, universe parameters by first occurrence, de Bruijn indices. -/
+partial def r30Canon (params : Array Name) : Expr → String
+  | .bvar i => let k := toString i; s!"(4:bvar {k.utf8ByteSize}:{k})"
+  | .sort u => s!"(4:sort {r30CanonLevel params u})"
+  | .const n us =>
+    let a := n.toString
+    s!"(5:const {a.utf8ByteSize}:{a}{String.join (us.map (" " ++ r30CanonLevel params ·))})"
+  | .app f a => s!"(3:app {r30Canon params f} {r30Canon params a})"
+  | .lam _ t b _ => s!"(3:lam {r30Canon params t} {r30Canon params b})"
+  | .forallE _ t b _ => s!"(7:forallE {r30Canon params t} {r30Canon params b})"
+  | .letE _ t v b nd =>
+    s!"(4:letE 1:{if nd then 1 else 0} {r30Canon params t} {r30Canon params v} {r30Canon params b})"
+  | .lit (.natVal n) => let k := toString n; s!"(3:lit 3:nat {k.utf8ByteSize}:{k})"
+  | .lit (.strVal v) => let k := v.quote; s!"(3:lit 3:str {k.utf8ByteSize}:{k})"
+  | .mdata _ b => r30Canon params b
+  | .proj s i b =>
+    let a := s.toString; let k := toString i
+    s!"(4:proj {a.utf8ByteSize}:{a} {k.utf8ByteSize}:{k} {r30Canon params b})"
+  | .fvar .. | .mvar .. => "(?)"
+
+/-- The local variables a type reads, by first occurrence, each after what its own type reads. -/
+partial def r30Reads (e : Expr) (acc : Array Expr) : MetaM (Array Expr) := do
+  let mut acc := acc
+  for id in (Lean.collectFVars {} e).fvarIds do
+    let x := mkFVar id
+    unless acc.contains x do
+      acc ← r30Reads (← inferType x) acc
+      acc := acc.push x
+  return acc
+
+/-- The canonical form of a proposition in a theorem's context: the proposition closed over exactly
+the variables it reads, so neither the theorem's other binders nor their order are part of it. -/
+def r30Statement (t : Expr) : MetaM String := do
+  let closed ← mkForallFVars (← r30Reads t #[]) t
+  return r30Canon (Lean.collectLevelParams {} closed).params closed
+
+/-- `(position, canonical form)` of the propositional binders of a theorem's type. -/
+partial def r30Forms (e : Expr) (fvars : Array Expr) : MetaM (List (Nat × String)) := do
+  match e with
+  | .mdata _ b => r30Forms b fvars
+  | .forallE n t b bi =>
+    let tI := t.instantiateRev fvars
+    let here ← if ← isProp tI then pure [(fvars.size, ← r30Statement tI)] else pure []
+    withLocalDecl n bi tI fun x => return here ++ (← r30Forms b (fvars.push x))
+  | _ => return []
+
 elab "#r30audit " prefixes:ident* " : " targets:ident* : command => do
   let env ← getEnv
   for (name, info) in env.constants.toList do
@@ -55,6 +112,8 @@ elab "#r30audit " prefixes:ident* " : " targets:ident* : command => do
     let (bs, c) ← liftTermElabM <| r30Shape ty [] #[]
     if full then
       logInfo m!"R30AUDIT (theorem {name} (binders {" ".intercalate bs}) {c})"
+      for (i, form) in ← liftTermElabM <| r30Forms ty #[] do
+        logInfo m!"R30FORM {name} {i} {form}"
     else
       logInfo m!"R30AUDIT (conclusion {name} {c})"
 

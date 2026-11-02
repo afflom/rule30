@@ -186,6 +186,7 @@ def research_modules():
 def parse(out):
     """The `R30AUDIT` lines: ({name: theorem}, {name: conclusion})."""
     full, conclusions = {}, {}
+    forms = dict(((n, int(i)), f) for _, n, i, f in (x.split(" ", 3) for x in out.splitlines() if x.startswith("R30FORM ")))
     for line in out.splitlines():
         if not line.startswith("R30AUDIT "):
             continue
@@ -193,7 +194,8 @@ def parse(out):
         if node[0] == "theorem":
             _, name, binders, conclusion = node
             full[name] = {"name": name, "conclusion": conclusion,
-                          "binders": [{"role": x[0], "kind": x[1], "name": x[2], "type": x[3]} for x in binders[1:]]}
+                          "binders": [{"role": x[0], "kind": x[1], "name": x[2], "type": x[3], "statement": forms.get((name, i), "")}
+                                      for i, x in enumerate(binders[1:])]}
         elif node[0] == "conclusion":
             conclusions[node[1]] = node[2]
     return full, conclusions
@@ -281,7 +283,7 @@ def classify(full, conclusions):
             row = keys[kk]
             refuted = [r for r in row["refutedBy"] if r != name]
             discharged = [d for d in row["dischargedUnderPeriod"] + row["dischargedWithoutPeriod"] if d != name]
-            hyps.append({"binder": x["name"], "position": i, "key": kk, "label": label(t),
+            hyps.append({"binder": x["name"], "position": i, "key": kk, "label": label(t), "statement": x["statement"],
                          "status": "refuted" if refuted else "open", "dischargedBy": "", "byKey": bool(discharged)})
         if any(h["status"] == "refuted" for h in hyps):
             status = "dead"
@@ -390,7 +392,7 @@ def register_toml(rep):
                   f"recordedBy = {_l(e.get('recordedBy', []))}", f"composition = {_q(e['composition'])}", ""]
         for h in e["hypotheses"]:
             lines += ["[[conditional.hypothesis]]", f"binder = {_q(h['binder'])}", f"position = {int(h['position'])}",
-                      f"key = {_q(h['key'])}", f"label = {_q(h['label'])}", f"status = {_q(h['status'])}",
+                      f"key = {_q(h['key'])}", f"label = {_q(h['label'])}", f"statement = {_q(h['statement'] if h['status'] == 'open' else '')}", f"status = {_q(h['status'])}",
                       f"dischargedBy = {_q(h['dischargedBy'])}", ""]
     for k in sorted(rep["keys"]):
         row = rep["keys"][k]
@@ -527,9 +529,9 @@ RESULT_SCHEMA = {
                 "composition": {"type": "string"},
                 "hypotheses": {"type": "array", "items": {
                     "type": "object", "additionalProperties": False,
-                    "required": ["binder", "position", "key", "label", "status", "dischargedBy"],
+                    "required": ["binder", "position", "key", "label", "statement", "status", "dischargedBy"],
                     "properties": {"binder": {"type": "string"}, "position": {"type": "integer"}, "key": {"type": "string"},
-                                   "label": {"type": "string"},
+                                   "label": {"type": "string"}, "statement": {"type": "string"},
                                    "status": {"type": "string", "enum": ["refuted", "discharged", "open"]},
                                    "dischargedBy": {"type": "string"}}}},
             }}},

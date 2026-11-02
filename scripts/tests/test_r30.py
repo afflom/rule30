@@ -2120,6 +2120,16 @@ class CoreModelTests(unittest.TestCase):
 
 
 
+class MirrorRoots:
+    """The discovery roots' answers for a snapshot without a bundle: the fixtures' generator, in a test only."""
+    why = "the fixtures' generator"
+
+    def __init__(self, dm):
+        self.build_columns = dm.Mirror.build_columns
+        self.find_relations = lambda width, words: dm.Mirror.find_relations((width, words))
+        self.find_recurrences = lambda windows: [dm.Mirror.find_recurrence(bits) for bits in windows]
+
+
 class DiscoveryTests(unittest.TestCase):
     """Induction mechanized (suite `discovery` of ids.toml): the basis of the
     map, the relation and recurrence engines of Discovery.lex.tex, their
@@ -2178,13 +2188,11 @@ class DiscoveryTests(unittest.TestCase):
             self.assertIn(rel, found)
         self.assertEqual(len(found), 4)
         words = fx["window"][1]
-        self.assertEqual(dm.Mirror.window_misfits(fx["window"]), 0)
         self.assertEqual(dm.Mirror.relation_residue(words, fx["relations"]), 0)
         false = [list(fx["relations"][0])]
         false[0][2] ^= 1
         self.assertGreater(dm.Mirror.relation_residue(words, false), 0)
         self.assertGreater(dm.Mirror.relation_residue(words, [[0] * len(words)]), 0)
-        self.assertGreater(dm.Mirror.window_misfits((fx["window"][0], [words[0] + [1 << 32]] + words[1:])), 0)
         self.assertEqual(dm.Mirror.find_relations((32, [[5], [3], [6]])), [[1, 1, 1]])
         self.assertEqual([t["id"] for t in dm.TRANSFORMS], ["base", "shift", "even", "odd", "and"])
         kappas = dm.kappas_of(self.data)
@@ -2202,11 +2210,7 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(mirror.find_recurrence([t % 2 for t in range(64)]), [1, 0, 1])
         self.assertEqual(mirror.find_recurrence(([1, 0, 0] * 22)[:64]), [1, 0, 0, 1])
         center = sequencemodel.windows(self.data)["center"]
-        conn = mirror.find_recurrence(center)
-        self.assertEqual(mirror.recurrence_defects(center, conn), 0)
-        self.assertGreater(len(conn) - 1, len(center) // 2 - 8)
-        self.assertGreater(mirror.recurrence_defects([t % 2 for t in range(64)], [1, 1]), 0)
-        self.assertEqual(mirror.recurrence_defects([0] * 8, [0, 1]), 1)  # a leading coefficient 0 is refused
+        self.assertGreater(len(mirror.find_recurrence(center)) - 1, len(center) // 2 - 8)
         for rec in dm.fixtures(self.data)["recurrences"]:
             self.assertEqual(rec["found"], rec["expected"], rec["name"])
 
@@ -2233,8 +2237,7 @@ class DiscoveryTests(unittest.TestCase):
         from tools.r30 import discover_rust, discoverymodel as dm
         if not discover_rust.bundles() or not shutil.which("cargo"):
             self.skipTest("no production bundle with the discovery packages, or no cargo")
-        kind, runner = discover_rust.locate()
-        self.assertEqual(kind, "rust", runner)
+        runner = discover_rust.runner()
         fx = dm.fixtures(self.data)
         bases = dm.bases_of(self.data)
         words = runner.build_columns(dm.FIXTURE_WIDTH, bases, fx["specs"])
@@ -2246,9 +2249,8 @@ class DiscoveryTests(unittest.TestCase):
         import json
         from tools.r30 import discover, discoverymodel as dm, schema, prismmodel
         before = repo.FRONTIER.read_text()
-        r = discover.run(window=256, degree=2, engine=("python", "test"))
+        r = discover.run(window=256, degree=2, engine=MirrorRoots(dm))
         self.assertEqual(repo.FRONTIER.read_text(), before)
-        self.assertEqual(r["runtime"], "python")
         self.assertEqual(r["columns"], 79 * 4 + 21)
         kappas = dm.kappas_of(self.data)
         classes = {}
@@ -2272,7 +2274,7 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(rec["time-parity"]["margin"], self.data["window"] - 4)
         self.assertLessEqual(rec["center"]["margin"], 8)  # the center's window has no short recurrence
         with self.assertRaises(discover.Refused):
-            discover.run(window=self.data["window"], degree=1, engine=("python", "test"))
+            discover.run(window=self.data["window"], degree=1, engine=MirrorRoots(dm))
         self.assertIn("relations:", discover.render(r))
 
     def test_observed_claims_are_validated_on_their_window_observed_status(self):

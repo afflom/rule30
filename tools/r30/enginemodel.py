@@ -34,11 +34,11 @@ and the scheduler.
   weight of its domain in bounds, that the committed table is in bounds,
   that the schedule of every subset of the portfolio under the committed
   table, in every family, is a permutation of the subset ordered by weight,
-  and the fixtures the Python mirror computes.
+  and the frozen fixtures.
 
-`learnAll` and `schedule` are production roots (rust-std): `bin/r30 api
-production` exports them to certified Rust, `engine_rust.py` drives them, and
-the tests compare the Python mirror below with the certified roots."""
+`learnAll` and `schedule`, with `mint` of Hypotheses.lex.tex, are production
+roots (rust-std): `bin/r30 api production` exports them to certified Rust and
+`engine_rust.py` drives them; they have no other runtime."""
 
 import hashlib
 import json
@@ -56,6 +56,7 @@ WORKFLOW = repo.ROOT / ".github" / "workflows" / "engine.yml"
 TEMPLATES = Path(__file__).with_name("templates")
 EFFECTS = {"effects": ["allocation", "overflow", "recursion"], "targets": ["rust-std"]}
 PRODUCTION_ROOTS = {"learnAll": EFFECTS, "schedule": EFFECTS}
+HYPOTHESES_MODULE, HYPOTHESES_ROOTS = "Rule30Api.Hypotheses", {"mint": EFFECTS}
 
 # ------------------------------------------------------------ plasticity
 
@@ -109,9 +110,14 @@ PUSH_PATHS = ["tools/r30/**", "rule30-core-lean/**", "rule30-api/src/**", "rule3
               "frontier.toml", "scripts/**", "Makefile", ".github/workflows/engine.yml", ".github/actions/**"]
 LAKE_DIRS = ["Rule30PrizeKit/lean/.lake", "rule30-core-lean/.lake", "rule30-bridge/.lake", "rule30-paper/.lake",
              "rule30-lexlean/.lake", "rule30-api/.lake"]
+BUNDLE_DIR = "rule30-api/.lexlean/production"
+# what the bundle is built from: a new key only when one of these changed
+BUNDLE_INPUTS = ["rule30-api/src/**", "rule30-api/stdlib/**", "rule30-api/language/**", "lexlean-stdlib/**",
+                 "rule30-api/lexlean.toml", "rule30-api/lean-toolchain", "rule30-api/lexlean.lock",
+                 "rule30-api/production/request.json", ".github/lexlean-revision"]
 WORKLOAD = {
     "workflow": "Engine", "file": ".github/workflows/engine.yml", "repository": "afflom/rule30",
-    "runsOn": "ubuntu-24.04", "timeoutMinutes": 340, "setupMinutes": 40, "tickBudget": 300,
+    "runsOn": "ubuntu-24.04", "timeoutMinutes": 355, "setupMinutes": 55, "tickBudget": 300,  # the setup holds a cold bundle
     "cronMinutes": [17, 47], "concurrencyGroup": "r30-engine", "cancelInProgress": False,
     "killSwitch": "R30_ENGINE", "secrets": ["GITHUB_TOKEN"],
     "permissions": [("contents", "write"), ("actions", "write")],
@@ -123,12 +129,13 @@ WORKLOAD = {
                        "dtolnay/rust-toolchain@stable", "./.github/actions/setup-proof-tools"],
     # the stages of a tick with their budget shares (minutes of the tick budget); the gate's share is
     # reserved first and never cut
-    "stages": [("build", 60, False), ("induction", 30, False), ("pruning", 20, False), ("deduction", 100, False),
-               ("learning", 5, False), ("gate", 85, True)],
+    "stages": [("build", 60, False), ("induction", 30, False), ("pruning", 20, False), ("deduction", 95, False),
+               ("learning", 5, False), ("hypotheses", 5, False), ("gate", 85, True)],
+    "hypothesisBudget": 16,  # the most `Hypotheses.mint` adds in one full tick
     "gateMinimum": 60,
-    # cache families (actions/cache): the compiler, the Lake builds, the gate's evidence (pruned,
-    # never a certificate) and the settled marker of a commit the engine has nothing more to do on
-    "caches": [("lexlean", ".local"), ("lake", "\n".join(LAKE_DIRS)), ("gate", ".git/rule30-validation"),
+    # cache families (actions/cache): the compiler, the certified bundle, the Lake builds, the gate's evidence
+    # (pruned, never a certificate) and the settled marker of a commit the engine has nothing more to do on
+    "caches": [("lexlean", ".local"), ("bundle", BUNDLE_DIR), ("lake", "\n".join(LAKE_DIRS)), ("gate", ".git/rule30-validation"),
                ("settled", ".r30/settled")],
     "identity": ("r30-engine", "r30-engine@users.noreply.github.com"),
 }
@@ -138,70 +145,10 @@ def cron():
     return ",".join(str(m) for m in WORKLOAD["cronMinutes"]) + " * * * *"
 
 
-# ------------------------------------------------------------ the mirror
-
-class Mirror:
-    """The learning rule and the scheduler in Python, step for step (the fallback runtime and the
-    generator of the fixtures' expected values)."""
-
-    @staticmethod
-    def learn(w, success):
-        if success:
-            return w + RAISE if w + RAISE <= W_MAX else W_MAX
-        return w - LOWER if W_MIN + LOWER <= w else W_MIN
-
-    @staticmethod
-    def weight_of(strategy, fam, table):
-        for st, f, v in table:
-            if st == strategy and f == fam:
-                return v
-        return W_INIT
-
-    @staticmethod
-    def update(table, strategy, fam, success):
-        out, done = [], False
-        for st, f, v in table:
-            if not done and st == strategy and f == fam:
-                out.append((st, f, Mirror.learn(v, success)))
-                done = True
-            else:
-                out.append((st, f, v))
-        if not done:
-            out.append((strategy, fam, Mirror.learn(W_INIT, success)))
-        return out
-
-    @staticmethod
-    def learn_all(table, outcomes):
-        for strategy, fam, success in outcomes:
-            table = Mirror.update(table, strategy, fam, success)
-        return table
-
-    @staticmethod
-    def insert(fam, table, x, ordered):
-        for i, h in enumerate(ordered):
-            if Mirror.weight_of(h, fam, table) < Mirror.weight_of(x, fam, table):
-                return ordered[:i] + [x] + ordered[i:]
-        return ordered + [x]
-
-    @staticmethod
-    def schedule(table, fam, applicable):
-        ordered = []
-        for x in applicable:
-            ordered = Mirror.insert(fam, table, x, ordered)
-        return ordered
-
-
 def schedule(weights, fam, applicable):
-    """The learned order of the applicable strategies (the certified root when built, else the mirror)."""
+    """The learned order of the applicable strategies, by the certified root (`engine_rust.NoRoot` when it cannot run)."""
     from . import engine_rust
-    kind, runner = engine_rust.locate(build=False)
-    table = [(r["strategy"], r["family"], r["value"]) for r in weights]
-    if kind == "rust":
-        try:
-            return runner.schedule(table, fam, applicable)
-        except RuntimeError:
-            pass
-    return Mirror.schedule(table, fam, applicable)
+    return engine_rust.runner().schedule([(r["strategy"], r["family"], r["value"]) for r in weights], fam, applicable)
 
 
 def initial_table():
@@ -384,15 +331,21 @@ def subsets(ids):
 FIXTURE_OUTCOMES = [("step-induction", "left-plain", True), ("library-rewrite", "left-plain", False),
                     ("library-rewrite", "left-plain", False), ("period-reduction", "right-shift", True),
                     ("step-induction", "right-shift", False), ("counterexample", "open", False)]
-FIXTURE_SCHEDULES = [("left-plain", ["library-rewrite", "step-induction", "period-reduction"]),
-                     ("right-shift", ["library-rewrite", "step-induction", "period-reduction"]),
-                     ("open", ["library-rewrite"])]
+# what the kernel decides `learnAll` and `schedule` answer on them (Engine.lex.tex)
+FIXTURE_LEARNED = {("step-induction", "left-plain"): 10, ("library-rewrite", "left-plain"): 6,
+                   ("period-reduction", "right-shift"): 10, ("step-induction", "right-shift"): 7,
+                   ("counterexample", "open"): 7}
+FIXTURE_SCHEDULES = [("left-plain", ["library-rewrite", "step-induction", "period-reduction"],
+                      ["step-induction", "period-reduction", "library-rewrite"]),
+                     ("right-shift", ["library-rewrite", "step-induction", "period-reduction"],
+                      ["period-reduction", "library-rewrite", "step-induction"]),
+                     ("open", ["library-rewrite"], ["library-rewrite"])]
 
 
 def fixture_declarations(committed):
     ids = [p["id"] for p in PORTFOLIO]
     start = initial_table()
-    learned = Mirror.learn_all(start, FIXTURE_OUTCOMES)
+    learned = [(a, c, FIXTURE_LEARNED.get((a, c), v)) for a, c, v in start]
     decls = [
         definition("initialWeights", list_t(WEIGHT_T), lst([_weight(*r) for r in start], WEIGHT_T), executable=True),
         definition("fixtureOutcomes", list_t(OUTCOME_T), lst([_outcome(*o) for o in FIXTURE_OUTCOMES], OUTCOME_T),
@@ -424,8 +377,7 @@ def fixture_declarations(committed):
         holds("everyScheduleIsSound", call("soundForFamilies", call("committedWeights"), call("familyIds"),
                                            call("portfolioSubsets"))),
     ]
-    for i, (fam, apps) in enumerate(FIXTURE_SCHEDULES):
-        expected = Mirror.schedule(learned, fam, apps)
+    for i, (fam, apps, expected) in enumerate(FIXTURE_SCHEDULES):
         decls.append(holds(f"scheduleFixture{i}", call("sameStrings",
                                                        call("schedule", call("fixtureLearned"), s(fam), strings(apps)),
                                                        strings(expected))))
@@ -482,6 +434,7 @@ def workload_declarations():
         definition("setupMinutes", NAT, n(wl["setupMinutes"])),
         definition("tickBudget", NAT, n(wl["tickBudget"])),
         definition("gateMinimum", NAT, n(wl["gateMinimum"])),
+        definition("hypothesisBudget", NAT, n(wl["hypothesisBudget"])),
         definition("cronMinutes", LN, lst([n(m) for m in wl["cronMinutes"]], NAT)),
         definition("concurrencyGroups", LS, strings([wl["concurrencyGroup"]])),
         definition("cancelInProgress", BOOL, b(wl["cancelInProgress"])),
@@ -537,7 +490,7 @@ THEOREMS = [
     {"name": "templatesPinnedByDigest", "statement": "every template is pinned by a distinct, nonempty digest"},
     {"name": "learnStaysInBounds", "statement": "learn keeps every weight of [W_MIN, W_MAX] in bounds, on success and on failure"},
     {"name": "committedWeightsBounded", "statement": "the committed weights are in bounds"},
-    {"name": "learnAllFixture", "statement": "learnAll on the fixture outcomes gives the mirror's table"},
+    {"name": "learnAllFixture", "statement": "learnAll on the fixture outcomes gives the frozen table"},
     {"name": "everyScheduleIsSound", "statement": "under the committed weights, the schedule of every subset of the portfolio in every family is a permutation of it ordered by weight"},
 ]
 
@@ -568,6 +521,7 @@ def render_workflow():
     save_if = f"always() && {run_if} && steps.tick.outputs.outcome != 'stale'"
     lake = "\n".join("            " + p for p in LAKE_DIRS)
     toolchain = "${{ hashFiles('rule30-core-lean/lean-toolchain', '.github/lexlean-revision') }}"
+    bundle = "${{ hashFiles(" + ", ".join(f"'{p}'" for p in BUNDLE_INPUTS) + ") }}"
     paths = "\n".join(f'      - "{p}"' for p in PUSH_PATHS)
     name, email = wl["identity"]
     return f"""# Generated by `bin/r30 api sync` from rule30-api/src/Engine.lex.tex (tools/r30/enginemodel.py).
@@ -575,9 +529,10 @@ def render_workflow():
 # (Engine.lex.tex): no secret but GITHUB_TOKEN, contents and actions write only, the stage budgets
 # within the timeout, the cron off the hour, one concurrency group that never cancels a run.
 #
-# One tick of the engine (`bin/r30 engine tick`): build the library, induction (sequences when their
-# inputs changed, discover), pruning (audit), deduction (deduce), learning, then the commit through
-# the unchanged pre-commit gate and a push only when main has not moved. Pushes made with
+# One tick of the engine (`bin/r30 engine tick`), on the certified bundle of the production roots (restored,
+# or built here; a build that fails ends the job, there is no other runtime of the roots): build the library,
+# induction (sequences when their inputs changed, discover), pruning (audit), deduction (deduce), learning,
+# hypotheses (mint), then the commit through the unchanged pre-commit gate and a push only when main has not moved. Pushes made with
 # GITHUB_TOKEN start no workflow, so the engine never triggers itself; the view is dispatched.
 # A commit the engine has nothing more to do on (an idle tick), or one whose tick the gate refused or
 # a stage failed on, is marked settled (a cache entry), and later ticks on it stop after the checkout
@@ -647,6 +602,25 @@ jobs:
           path: .local
           key: r30-lexlean-${{{{ runner.os }}}}-${{{{ hashFiles('.github/lexlean-revision') }}}}
 
+      - name: Restore the certified bundle
+        if: {run_if}
+        id: bundle
+        uses: actions/cache/restore@v4
+        with:
+          path: {BUNDLE_DIR}
+          key: r30-bundle-${{{{ runner.os }}}}-{bundle}
+
+      - name: Build the certified bundle
+        if: {run_if} && steps.bundle.outputs.cache-hit != 'true'
+        run: bin/r30 api production
+
+      - name: Save the certified bundle
+        if: {run_if} && steps.bundle.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: {BUNDLE_DIR}
+          key: r30-bundle-${{{{ runner.os }}}}-{bundle}
+
       - name: Restore the Lake builds
         if: {run_if}
         uses: actions/cache/restore@v4
@@ -715,7 +689,7 @@ jobs:
         env:
           GH_TOKEN: ${{{{ github.token }}}}
         run: |
-          for family in r30-lake r30-gate r30-settled; do
+          for family in r30-bundle r30-lake r30-gate r30-settled; do
             gh cache list --key "$family-" --sort created_at --order desc --limit 100 --json id --jq '.[1:][].id' \\
               | xargs -r -n1 gh cache delete || true
           done

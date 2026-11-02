@@ -16,10 +16,16 @@ inputs):
 4. `pruning`: `audit --write`, the conditional refutations of the period
    classified dead, live-discharged or open;
 5. `deduction`: `deduce` within what is left of the budget (`deduce.py`);
-6. `learning`: the tick's outcomes folded into the weights by `learnAll`
-   (the certified root when built, else the mirror), the table consolidated
-   in `model/engine.toml` and `Engine.lex.tex` (`api sync`);
-7. `gate`: with `--commit`, `bin/r30 commit --wait` in the foreground through
+6. `learning`: the tick's outcomes folded into the weights by the certified
+   root `learnAll`, the table consolidated in `model/engine.toml` and
+   `Engine.lex.tex` (`api sync`);
+7. `hypotheses`: the certified root `mint` on the ledger, the register and the
+   audit, its new rows appended to `model/hypotheses.toml`; its budget is the
+   model's (`hypothesisBudget`), scaled like the stage shares. A row is a change,
+   so a tick that minted is not idle. The store is no input of `mint` but as the
+   labels to leave out and no other stage reads it, so the rows end once the
+   store holds what the ledger and the audit give;
+8. `gate`: with `--commit`, `bin/r30 commit --wait` in the foreground through
    the unchanged pre-commit gate; with `--push`, `git fetch` and a push only
    when `origin/main` still is the base (otherwise the work is dropped and the
    next tick redoes it from the new main; never a force push). A push the
@@ -39,7 +45,8 @@ itself) and nothing was cut or is still pending, the tick ends `idle` without
 a commit; the workflow then marks the commit settled and later ticks on it
 stop after the checkout, until a developer pushes a new feature. A tick that
 changed nothing because a stage was cut ends `cut`, which settles nothing: the
-next tick on the commit does the work.
+next tick on the commit does the work. A certified root that cannot run ends the
+tick `error`: there is no other runtime of the roots.
 
 `model/engine.toml` (`r30/engine/1`) is the engine's ledger: the weights,
 every attempt, and the last ticks with their stages, seconds and outcome.
@@ -59,9 +66,10 @@ import tomllib
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import enginemodel as em, repo
+from . import enginemodel as em, production, repo
 
 LEDGER = repo.ROOT / "rule30-api" / "model" / "engine.toml"
+HYPOTHESES = LEDGER.with_name("hypotheses.toml")
 SPEC = "r30/engine/1"
 KEEP_TICKS = 12
 STAGES = [s for s, _, _ in em.WORKLOAD["stages"]]
@@ -144,46 +152,61 @@ def attempt_key(attempt):
 
 
 def record_attempt(data, attempt, tick=0):
-    """Append an attempt (never one already recorded) and potentiate or depress its strategy for
-    the relation's family (plasticity, the mirror of `learn`). `tick` is the tick that made it
-    (0: a `deduce` run outside a tick)."""
+    """Append an attempt (never one already recorded). `tick` is the tick that made it (0: a `deduce`
+    run outside a tick); the weights follow by `learned`, at the end of the tick or the run."""
     key = attempt_key(attempt)
     if any(attempt_key(a) == key for a in data["attempt"]):
         raise RuntimeError(f"attempt {key} is already in the ledger (the redundancy rule)")
-    attempt = {**attempt, "tick": tick}
-    data["attempt"].append(attempt)
-    table = [(r["strategy"], r["family"], r["value"]) for r in weights(data)]
-    table = em.Mirror.update(table, attempt["strategy"], attempt["family"], attempt["outcome"] in em.SUCCESS)
-    data["weight"] = [{"strategy": a, "family": b, "value": c} for a, b, c in table]
+    data["attempt"].append({**attempt, "tick": tick})
 
 
 def current_tick(data):
     return (data["tick"][-1]["number"] + 1) if data["tick"] else 1
 
 
-def consolidate(data, tick, start):
-    """Learning: the weights recomputed by `learnAll` (the certified root when built, else the
-    mirror) from the table the tick started from and the tick's outcomes, checked against the
-    table the attempts updated one by one."""
+def learned(table, attempts):
+    """`table` with the attempts' outcomes folded in by the certified root `learnAll`, as weight rows."""
     from . import engine_rust
-    outcomes = [(a["strategy"], a["family"], a["outcome"] in em.SUCCESS) for a in data["attempt"] if a.get("tick") == tick]
-    kind, runner = engine_rust.locate(build=True)
-    runtime = "python"
-    if kind == "rust":
-        try:
-            learned = runner.learn_all(start, outcomes)
-            runtime = "rust"
-        except RuntimeError:
-            learned = em.Mirror.learn_all(start, outcomes)
-    else:
-        learned = em.Mirror.learn_all(start, outcomes)
-    incremental = [(r["strategy"], r["family"], r["value"]) for r in weights(data)]
-    by = {(a, b): c for a, b, c in learned}
-    if {(a, b): c for a, b, c in incremental} != {**{(a, b): c for a, b, c in start}, **by}:
-        raise RuntimeError("the weights learned during the tick differ from learnAll over its outcomes")
-    data["weight"] = [{"strategy": a, "family": b, "value": c} for (a, b), c in
-                      {**{(a, b): c for a, b, c in start}, **by}.items()]
-    return {"outcomes": len(outcomes), "runtime": runtime}
+    outcomes = [(a["strategy"], a["family"], a["outcome"] in em.SUCCESS) for a in attempts]
+    return [{"strategy": a, "family": b, "value": c} for a, b, c in engine_rust.runner().learn_all(table, outcomes)]
+
+
+def consolidate(data, tick, start):
+    """Learning: the weights recomputed by `learnAll` from the table the tick started from and the tick's outcomes."""
+    attempts = [a for a in data["attempt"] if a.get("tick") == tick]
+    data["weight"] = learned(start, attempts)
+    return {"outcomes": len(attempts), "runtime": "certified"}
+
+
+# ---------------------------------------------------------------- hypotheses
+
+def store(path=None):
+    """The rows of the hypothesis store (`model/hypotheses.toml`, `r30/hypotheses/1`)."""
+    path = HYPOTHESES if path is None else path
+    return tomllib.loads(path.read_text()).get("hypothesis", []) if path.exists() else []
+
+
+def mint(tick, budget, data=None):
+    """New hypotheses by the certified root `Hypotheses.mint`, appended to the store; the rule of what is
+    live and what is known is the root's. Nothing here or there reads a minted row but to leave it out."""
+    from . import auditmodel, engine_rust, frontier
+    data = load() if data is None else data
+    record = auditmodel.load()
+    if record is None:
+        raise RuntimeError("no audit recorded yet; run bin/r30 audit --write")
+    rows = [(r["theorem"], r["status"], [h["statement"] for h in r["hypotheses"] if h["status"] == "open"]) for r in record[0]]
+    if not all(all(statements) for _, _, statements in rows):
+        raise RuntimeError("the audit carries an open hypothesis without its statement; run bin/r30 audit --write")
+    attempts = [(a["claim"], a["strategy"], a.get("failure", "")) for a in data["attempt"]]
+    claims = [(c["id"], c["status"], c.get("kappa", "")) for c in frontier.load()["claim"]]
+    minted = engine_rust.runner().mint(attempts, claims, rows, [r["label"] for r in store()], budget)
+    lines = [] if HYPOTHESES.exists() else ['# The labelled hypotheses (bin/r30 engine): written by the engine only.', 'spec = "r30/hypotheses/1"', ""]
+    for m in minted:
+        lines += ["[[hypothesis]]", f"label = {_q(m['label'])}", f"form = {_q(m['form'])}", f"sources = {_value(m['sources'])}",
+                  f"weight = {m['weight']}", f"tick = {tick}", 'status = "minted"', ""]
+    with HYPOTHESES.open("a") as f:
+        f.write("".join(line + "\n" for line in lines))
+    return minted
 
 
 # ---------------------------------------------------------------- homeostasis
@@ -461,7 +484,7 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
     base = base.strip()
     summary = {"number": number, "start": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "base": base,
                "budget": budget_minutes, "stages": [], "outcome": "running", "seconds": 0.0, "commit": "",
-               "observed": 0, "proved": 0, "refuted": 0, "known": 0, "attempts": 0, "new_relations": 0}
+               "observed": 0, "proved": 0, "refuted": 0, "known": 0, "attempts": 0, "new_relations": 0, "minted": 0}
     ledger_rel = str(LEDGER.relative_to(repo.ROOT)) if LEDGER.is_relative_to(repo.ROOT) else None
     if [p for p in dirty() if p != ledger_rel]:  # the ledger may carry the record of an idle tick
         raise RuntimeError("the working tree is not clean; a tick starts from a clean checkout of main")
@@ -478,12 +501,13 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
     def stage(name, fn):
         allow = allowances(budget_minutes, data, time.time() - t0, done)[name]
         s0 = time.time()
+        production.USED.clear()
         try:
             outcome, note = fn(allow)
         except Exception as e:  # a stage error ends the tick, the record says where
             outcome, note = "error", f"{type(e).__name__}: {str(e)[:400]}"
         row = {"id": name, "seconds": round(time.time() - s0, 1), "allowance": round(allow, 1), "outcome": outcome,
-               "note": note[:300]}
+               "note": note[:300], "runtime": ", ".join(sorted(production.USED)) or "no root"}
         summary["stages"].append(row)
         done.append(name)
         log(f"[{name}] {outcome} in {row['seconds']} s (allowance {row['allowance']} min){': ' + note[:200] if note else ''}")
@@ -527,6 +551,13 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
             return "error", "api sync: " + (r.stdout + r.stderr)[-300:]
         return "ok", f"{info['outcomes']} outcomes through learnAll ({info['runtime']})"
 
+    def hypotheses(allow):
+        if allow <= 0:
+            return "cut", "no budget left"
+        minted = mint(number, round(em.WORKLOAD["hypothesisBudget"] * budget_minutes / em.WORKLOAD["tickBudget"]), data)
+        summary["minted"] = len(minted)
+        return "ok", f"{len(minted)} minted through mint"
+
     try:
         if stage("build", build_library) == "cut":
             summary["outcome"] = "cut"  # nothing runs on an unbuilt library; the next tick resumes the build
@@ -542,6 +573,7 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
         stage("deduction", deduction)
         data.update({k: v for k, v in load().items() if k in ("attempt", "weight")})
         stage("learning", learning)
+        stage("hypotheses", hypotheses)
         summary["observed"] = sum(1 for c in frontier.load()["claim"] if c["status"] == "observed")
         changed = [p for p in dirty() if p != ledger_rel]
         attempted = any(a.get("tick") == number for a in data["attempt"])
@@ -568,7 +600,7 @@ def tick(budget_minutes=300, commit=False, push=False, log=print):
 
             def gate(allow):
                 msg = (f"Engine tick {number}: {summary['proved']} proved, {summary['known']} known to the library, "
-                       f"{summary['refuted']} refuted, {summary['new_relations']} new relations observed "
+                       f"{summary['refuted']} refuted, {summary['new_relations']} new relations observed, {summary['minted']} hypotheses minted "
                        f"(base {base[:12]})")
                 ok, out = _r30(["commit", "--wait", "--coauthor", "", "-m", msg], 10 ** 6)
                 return ("ok" if ok else "error"), out.splitlines()[-1] if out else ""
@@ -653,9 +685,14 @@ def status(data=None):
     by_outcome = {}
     for a in data["attempt"]:
         by_outcome[a["outcome"]] = by_outcome.get(a["outcome"], 0) + 1
-    from . import deduce
-    pending = sum(len(r["pending"]) for r in deduce.plan(ledger=data))
-    return {"last": last, "units": len(basis["sequence"]) if basis else 0, "synapses": synapses,
+    from . import deduce, engine_rust
+    try:
+        pending = sum(len(r["pending"]) for r in deduce.plan(ledger=data))
+    except engine_rust.NoRoot as e:
+        pending = f"unknown ({e})"
+    rows = store()
+    forms = {f: sum(1 for r in rows if r["form"].startswith(f"(9:{f}") or r["form"].startswith(f"(10:{f}")) for f in ("exclusion", "obligation")}
+    return {"last": last, "hypotheses": {"total": len(rows), **forms}, "units": len(basis["sequence"]) if basis else 0, "synapses": synapses,
             "events": data["tick"][-1]["number"] if data["tick"] else 0,
             "attempts": by_outcome, "pending": pending,
             "weights": [w for w in weights(data) if w["value"] != em.W_INIT]}
@@ -666,14 +703,16 @@ def render_status(st):
              + ", ".join(f"{v} {k}" for k, v in st["synapses"].items()) + f", {st['events']} events (ticks)",
              "attempts: " + (", ".join(f"{v} {k}" for k, v in sorted(st["attempts"].items())) or "none")
              + f"; pending {st['pending']}"]
+    h = st["hypotheses"]
+    lines.append(f"hypotheses: {h['total']} labelled ({h['exclusion']} exclusions, {h['obligation']} obligations)")
     t = st["last"]
     if t:
         lines.append(f"last tick {t['number']} ({t['start']}, base {t['base'][:12]}): {t['outcome']} in {t['seconds']} s"
                      + (f", commit {t['commit'][:12]}" if t.get("commit") else ""))
         lines.append(f"  {t['proved']} proved, {t['known']} known to the library, {t['refuted']} refuted, "
-                     f"{t['new_relations']} new relations, {t['observed']} observed left, {t['attempts']} attempts")
+                     f"{t['new_relations']} new relations, {t.get('minted', 0)} hypotheses minted, {t['observed']} observed left, {t['attempts']} attempts")
         for s in t.get("stages", []):
-            lines.append(f"  {s['id']:10s} {s['outcome']:6s} {s['seconds']:8.1f} s / {s['allowance']} min  {s.get('note', '')[:100]}")
+            lines.append(f"  {s['id']:10s} {s['outcome']:6s} {s['seconds']:8.1f} s / {s['allowance']} min  [{s.get('runtime', 'not recorded')}]  {s.get('note', '')[:100]}")
     else:
         lines.append("no tick recorded yet")
     if st["weights"]:

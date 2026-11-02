@@ -766,7 +766,7 @@ statement = "The production roots buildColumns, findRelations and findRecurrence
 id = "discover-command"
 level = "build"
 suite = "discovery"
-statement = "bin/r30 discover [--window W] [--degree 1|2] [--write] runs the engines on the basis (the certified Rust of the roots when they are built and cargo runs them, otherwise the Python mirror re-checked by the mirror of the validators, and says which), reports every relation with its columns, κ-label (relation <sorted column labels>), class (register, trivial, consequence, new) and certificate (the rank before its dependent column), and the recurrence of every base window; --write appends the new relations to the register as status observed."
+statement = "bin/r30 discover [--window W] [--degree 1|2] [--write] runs the engines on the basis (the certified Rust of the roots, and is refused when they cannot run), reports every relation with its columns, κ-label (relation <sorted column labels>), class (register, trivial, consequence, new) and certificate (the rank before its dependent column), and the recurrence of every base window; --write appends the new relations to the register as status observed."
 
 [[id]]
 id = "observed-status"
@@ -826,10 +826,16 @@ statement = "The portfolio is four deterministic Lean proof templates under tool
 id = "strategy-learning"
 level = "build"
 suite = "engine"
-statement = "Engine.lex.tex declares the learning layer: integer strategy weights per relation family, the bounded Hebbian rule learn (a success raises the weight by 2, a failure lowers it by 1, clamped to [1, 16]), learnAll and the scheduler schedule (applicable strategies by weight, ties by portfolio order) as production roots exported to certified Rust; the kernel decides that learn keeps every weight in bounds, that the committed weights are in bounds, that the schedule of every subset of the portfolio in every family is a permutation ordered by weight, and the fixtures the Python mirror computes; the tests compare the mirror with the certified roots."
+statement = "Engine.lex.tex declares the learning layer: integer strategy weights per relation family, the bounded Hebbian rule learn (a success raises the weight by 2, a failure lowers it by 1, clamped to [1, 16]), learnAll and the scheduler schedule (applicable strategies by weight, ties by portfolio order) as production roots exported to certified Rust; the kernel decides that learn keeps every weight in bounds, that the committed weights are in bounds, that the schedule of every subset of the portfolio in every family is a permutation ordered by weight, and the frozen fixtures; the tests compare the fixtures with the certified roots."
 
 [[id]]
 id = "engine-ledger"
 level = "build"
 suite = "engine"
 statement = "rule30-api/model/engine.toml (r30/engine/1) is the engine's ledger: the consolidated weights, every attempt (claim, κ-label, strategy, template digest, family, outcome proved, known, refuted, failed or timeout, failure point, seconds, theorem, tick, and for library-rewrite the library digest: the research modules and the register's proved relations it read) and the last ticks; no (claim κ, strategy, template digest, library digest) is attempted twice, so library-rewrite is attempted again once the library changed, and the weights are reproducible from the attempts."
+
+[[id]]
+id = "hypothesis-store"
+level = "build"
+suite = "engine"
+statement = "rule30-api/model/hypotheses.toml (r30/hypotheses/1) holds the hypotheses the tick's hypotheses stage minted through the certified root mint of Hypotheses.lex.tex: label (the SHA-256 of the form), form (the canonical form of the statement), sources, weight, tick and status; no label twice, and nothing in it is a claim of the register."

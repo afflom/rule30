@@ -3,9 +3,10 @@
 # (Engine.lex.tex): no secret but GITHUB_TOKEN, contents and actions write only, the stage budgets
 # within the timeout, the cron off the hour, one concurrency group that never cancels a run.
 #
-# One tick of the engine (`bin/r30 engine tick`): build the library, induction (sequences when their
-# inputs changed, discover), pruning (audit), deduction (deduce), learning, then the commit through
-# the unchanged pre-commit gate and a push only when main has not moved. Pushes made with
+# One tick of the engine (`bin/r30 engine tick`), on the certified bundle of the production roots (restored,
+# or built here; a build that fails ends the job, there is no other runtime of the roots): build the library,
+# induction (sequences when their inputs changed, discover), pruning (audit), deduction (deduce), learning,
+# hypotheses (mint), then the commit through the unchanged pre-commit gate and a push only when main has not moved. Pushes made with
 # GITHUB_TOKEN start no workflow, so the engine never triggers itself; the view is dispatched.
 # A commit the engine has nothing more to do on (an idle tick), or one whose tick the gate refused or
 # a stage failed on, is marked settled (a cache entry), and later ticks on it stop after the checkout
@@ -46,7 +47,7 @@ jobs:
     name: One tick of the engine
     if: github.repository == 'afflom/rule30' && vars.R30_ENGINE != 'off'
     runs-on: ubuntu-24.04
-    timeout-minutes: 340
+    timeout-minutes: 355
     steps:
       - name: Checkout (full history, so the tick can push)
         uses: actions/checkout@v4
@@ -83,6 +84,25 @@ jobs:
         with:
           path: .local
           key: r30-lexlean-${{ runner.os }}-${{ hashFiles('.github/lexlean-revision') }}
+
+      - name: Restore the certified bundle
+        if: steps.tip.outputs.current == 'true' && steps.settled.outputs.cache-hit != 'true'
+        id: bundle
+        uses: actions/cache/restore@v4
+        with:
+          path: rule30-api/.lexlean/production
+          key: r30-bundle-${{ runner.os }}-${{ hashFiles('rule30-api/src/**', 'rule30-api/stdlib/**', 'rule30-api/language/**', 'lexlean-stdlib/**', 'rule30-api/lexlean.toml', 'rule30-api/lean-toolchain', 'rule30-api/lexlean.lock', 'rule30-api/production/request.json', '.github/lexlean-revision') }}
+
+      - name: Build the certified bundle
+        if: steps.tip.outputs.current == 'true' && steps.settled.outputs.cache-hit != 'true' && steps.bundle.outputs.cache-hit != 'true'
+        run: bin/r30 api production
+
+      - name: Save the certified bundle
+        if: steps.tip.outputs.current == 'true' && steps.settled.outputs.cache-hit != 'true' && steps.bundle.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: rule30-api/.lexlean/production
+          key: r30-bundle-${{ runner.os }}-${{ hashFiles('rule30-api/src/**', 'rule30-api/stdlib/**', 'rule30-api/language/**', 'lexlean-stdlib/**', 'rule30-api/lexlean.toml', 'rule30-api/lean-toolchain', 'rule30-api/lexlean.lock', 'rule30-api/production/request.json', '.github/lexlean-revision') }}
 
       - name: Restore the Lake builds
         if: steps.tip.outputs.current == 'true' && steps.settled.outputs.cache-hit != 'true'
@@ -162,7 +182,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          for family in r30-lake r30-gate r30-settled; do
+          for family in r30-bundle r30-lake r30-gate r30-settled; do
             gh cache list --key "$family-" --sort created_at --order desc --limit 100 --json id --jq '.[1:][].id' \
               | xargs -r -n1 gh cache delete || true
           done
