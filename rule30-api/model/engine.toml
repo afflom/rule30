@@ -1306,12 +1306,155 @@ library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc7736
 seconds = 0.0
 tick = 1
 
+[[attempt]]
+claim = "observed-45032769ad68"
+kappa = "sha256:45032769ad68d40f67c00a1117d2a64a444440be3c92bcf2031bdb8b19740451"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.interiorThreeDiagonal (t)=false, Band.lowDiagonal (t)=false, Core.center (t)=false, Core.rdiag 1 (t)=false."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-7d29142e6567"
+kappa = "sha256:7d29142e656716dcc38bb3cc1e123b4c371113c9a942aeea585c8860fa6ce27c"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.center (t)=false, Core.rdiag 1 (t)=false, LeftBand.interiorEightDiagonal (t)=false, LeftBand.leftBandDiagonal (t)=false."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-92e58d165f11"
+kappa = "sha256:92e58d165f111307e5e2ff8bc52da31b9f5d2726544c4a7c38474cba32f04f5d"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.ldiag 1 (t)=false, Core.ldiag 10 (t)=false, Core.ldiag 12 (t)=false, Core.ldiag 7 (t)=false, Core.ldiag 8 (t)=false, Core.ldiag 9 (t)=false, Core.rdiag 2 (t)=false, Core.rdiag 3 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t)=false."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-e8a1ed6dc127"
+kappa = "sha256:e8a1ed6dc12788c2e3ce1eb3a5c958204b4091a905c8c34cea1e2cf6bb5d9e6c"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t + 1)=false, Core.ldiag 1 (t)=false, Core.ldiag 2 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t + 1)=false, LeftBand.rulerBackground (t)=true."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-b64d3d0ba07b"
+kappa = "sha256:b64d3d0ba07b4fcc2acc9e41173e6c6918dbe4410014e61aa722386380d6a298"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, LeftBand.leftBandDiagonal (t + 1)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t)=false."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-3d3fa55c7c91"
+kappa = "sha256:3d3fa55c7c9177d29e779d7afbf7f53030ab9a279975a51efdf5bfa2e5461f37"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.ldiag 1 (t)=false, Core.ldiag 2 (t)=false, Core.rdiag 1 (t)=false, LeftBand.rulerBackground (2 * t)=false."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-b75a73f46242"
+kappa = "sha256:b75a73f46242f8b15f9e5a8945db0ed93b5b9c27d0c6e11124be61a2cef4b441"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.ldiag 1 (t)=false, Core.ldiag 9 (2 * t)=false, Core.rdiag 1 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t)=false."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-409a7755bc68"
+kappa = "sha256:409a7755bc68d2dc89f53187a0220eb88a77541243929d7bfd112277178aa122"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.ldiag 1 (t)=false, Core.ldiag 10 (2 * t)=false, Core.ldiag 2 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (t)=false."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-f71048479210"
+kappa = "sha256:f71048479210320604c4ce84b6682bcb6fd7535476bb4f95427bd294d5141560"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (2 * t)=false, Core.ldiag 1 (t)=true."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-843066692439"
+kappa = "sha256:843066692439dec5cd1c0601334e5713686b9083ae1fd6794c964492eaaafa7c"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Band.lowDiagonal (t)=false, Core.rdiag 1 (t)=false, LeftBand.leftBandDiagonal (2 * t)=true."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
+[[attempt]]
+claim = "observed-9a440c6ece8c"
+kappa = "sha256:9a440c6ece8c81ea6e5971a8699cbeb5f07c5cc540cbbc3c225a6c1b5429763f"
+strategy = "library-rewrite"
+template = "sha256:7a7daaffa8216ed54c33d348240700c78235419661616af3f05c08b1b2e44693"
+family = "open"
+outcome = "failed"
+failure = "(decided in Python) the library's facts leave an assignment of the atoms that breaks the relation: Core.rdiag 1 (t)=false, LeftBand.leftBandDiagonal (t)=false, LeftBand.rulerBackground (2 * t + 1)=false, LeftBand.rulerBackground (t + 1)=false, LeftBand.rulerBackground (t)=false."
+theorem = ""
+library = "sha256:79c65c93aff1584642b7f41e28f33fa002d8b02b80e19f2222891237fc773633"
+seconds = 0.0
+tick = 2
+
 [[tick]]
 number = 1
 start = "2026-11-01T20:50:38Z"
 base = "3c85de493ae44f58b969e914655d717b88729bb3"
 budget = 300
-stages = [{id = "build", seconds = 135.4, allowance = 60.0, outcome = "ok", note = ""}, {id = "induction", seconds = 194.3, allowance = 30.0, outcome = "ok", note = "sequences re-evaluated; discover: 0 new, 0 written"}, {id = "pruning", seconds = 29.0, allowance = 20.0, outcome = "ok", note = "ree_dyadic_pred_col_twopow"}, {id = "deduction", seconds = 13.1, allowance = 204.0, outcome = "ok", note = "attempts 11: failed 11"}, {id = "learning", seconds = 0.6, allowance = 5.0, outcome = "ok", note = "11 outcomes through learnAll (python)"}]
+stages = [{id = "build", seconds = 135.4, allowance = 60.0, outcome = "ok", note = ""}, {id = "induction", seconds = 194.3, allowance = 30.0, outcome = "ok", note = "sequences re-evaluated; discover: 0 new, 0 written"}, {id = "pruning", seconds = 29.0, allowance = 20.0, outcome = "ok", note = "ree_dyadic_pred_col_twopow"}, {id = "deduction", seconds = 13.1, allowance = 204.0, outcome = "ok", note = "attempts 11: failed 11"}, {id = "learning", seconds = 0.6, allowance = 5.0, outcome = "ok", note = "11 outcomes through learnAll (python)"}, {id = "gate", seconds = 0.2, allowance = 0.0, outcome = "ok", note = "measured by the next tick from the commit's time"}]
 outcome = "committed"
 seconds = 372.8
 commit = ""
@@ -1321,3 +1464,20 @@ refuted = 0
 known = 0
 attempts = 11
 new_relations = 0
+
+[[tick]]
+number = 2
+start = "2026-11-02T06:44:49Z"
+base = "0b33b82d10a8ce2a7143dc3ad03433ef9d34dd2a"
+budget = 300
+stages = [{id = "build", seconds = 0.1, allowance = 60.0, outcome = "ok", note = "", runtime = "no root"}, {id = "induction", seconds = 11.8, allowance = 30.0, outcome = "ok", note = "discover: 0 new, 0 written", runtime = "certified 2ddcedf424e5"}, {id = "pruning", seconds = 21.9, allowance = 20.0, outcome = "ok", note = "ree_dyadic_pred_col_twopow", runtime = "no root"}, {id = "deduction", seconds = 14.5, allowance = 204.4, outcome = "ok", note = "attempts 11: failed 11", runtime = "certified 2ddcedf424e5"}, {id = "learning", seconds = 0.6, allowance = 5.0, outcome = "ok", note = "11 outcomes through learnAll (certified)", runtime = "certified 2ddcedf424e5"}, {id = "hypotheses", seconds = 0.1, allowance = 5.0, outcome = "ok", note = "16 minted through mint", runtime = "certified 2ddcedf424e5"}]
+outcome = "committed"
+seconds = 49.4
+commit = ""
+observed = 11
+proved = 0
+refuted = 0
+known = 0
+attempts = 11
+new_relations = 0
+minted = 16
