@@ -257,3 +257,131 @@ weight = 1
 tick = 3
 status = "minted"
 
+[[hypothesis]]
+label = "sha256:ea800f161a36d0f84e521ebc56f922b3a77627854403167a4745b529d822853a"
+form = "(10:obligation (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (3:app (3:app (5:const 33:Rule30UOR.CompilePoints.DoublesAt) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HMul.hMul (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHMul (5:lzero)) (5:const 3:Nat)) (5:const 10:instMulNat))) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HMul.hMul (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHMul (5:lzero)) (5:const 3:Nat)) (5:const 10:instMulNat))) (4:bvar 1:3)) (3:app (5:const 21:Rule30UOR.Core.twopow) (4:bvar 1:2)))) (4:bvar 1:1))) (4:bvar 1:0)))))))"
+sources = ["Rule30UOR.Interfaces.not_centerPeriodic_of_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles", "Rule30UOR.Interfaces.not_centerPeriodic_of_rdrv_dyadic_mul_period_single_row_left_corridor_spatial_agree_at_zero_diag_doubles", "Rule30UOR.Interfaces.not_centerPeriodic_of_single_lh_row_dyadic_mul_period_spatial_agree_at_zero_diag_doubles", "Rule30UOR.Interfaces.not_centerPeriodic_of_two_scale_single_rdrv_row_prefix_and_tail_settleBound", "Rule30UOR.Interfaces.not_centerPeriodic_of_two_scale_single_rh_row_prefix_and_tail_settleBound", "Rule30UOR.Interfaces.not_centerPeriodic_of_two_scale_single_row_at_zero_diag_doubles"]
+weight = 6
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:54040d1fe8c1cbf58fbb898c569643fdc4243379f35f8e019f6dd39d04e392b8"
+form = "(10:obligation (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (3:app (3:app (5:const 33:Rule30UOR.CompilePoints.DoublesAt) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HMul.hMul (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHMul (5:lzero)) (5:const 3:Nat)) (5:const 10:instMulNat))) (4:bvar 1:3)) (4:bvar 1:2))) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HSub.hSub (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHSub (5:lzero)) (5:const 3:Nat)) (5:const 10:instSubNat))) (4:bvar 1:1)) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (4:bvar 1:0)) (3:app (3:app (3:app (5:const 11:OfNat.ofNat (5:lzero)) (5:const 3:Nat)) (3:lit 3:nat 1:1)) (3:app (5:const 12:instOfNatNat) (3:lit 3:nat 1:1)))))))))))"
+sources = ["Rule30UOR.Interfaces.not_centerPeriodic_of_maskparity_zero_agree_doubles", "Rule30UOR.Interfaces.not_centerPeriodic_of_maskparity_zero_agree_doubles_prop", "Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhCenter_one_doubles", "Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhCenter_one_doubles_prop", "Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhOrAgree_one_doubles", "Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhOrAgree_one_doubles_prop"]
+weight = 6
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:089904c02320d155697b8ab0e3e994567b4f9d71a123c014b3076e1df766ba59"
+form = "(10:obligation (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (3:app (3:app (3:app (3:app (5:const 5:LE.le (5:lzero)) (5:const 3:Nat)) (5:const 9:instLENat)) (4:bvar 1:0)) (4:bvar 1:4)) (3:app (3:app (3:app (5:const 2:Eq (5:lsucc (5:lzero))) (5:const 4:Bool)) (3:app (3:app (5:const 26:Rule30UOR.Scale.maskparity) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (4:bvar 1:4)) (4:bvar 1:1))) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HMul.hMul (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHMul (5:lzero)) (5:const 3:Nat)) (5:const 10:instMulNat))) (4:bvar 1:3)) (4:bvar 1:2)))) (3:app (3:app (3:app (5:const 11:OfNat.ofNat (5:lzero)) (5:const 3:Nat)) (3:lit 3:nat 1:0)) (3:app (5:const 12:instOfNatNat) (3:lit 3:nat 1:0))))) (3:app (3:app (5:const 26:Rule30UOR.Scale.maskparity) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (4:bvar 1:4)) (4:bvar 1:1))) (3:app (3:app (3:app (5:const 11:OfNat.ofNat (5:lzero)) (5:const 3:Nat)) (3:lit 3:nat 1:0)) (3:app (5:const 12:instOfNatNat) (3:lit 3:nat 1:0))))))))))))"
+sources = ["Rule30UOR.Interfaces.not_centerPeriodic_of_maskparity_zero_agree_at_twopow", "Rule30UOR.Interfaces.not_centerPeriodic_of_maskparity_zero_agree_doubles", "Rule30UOR.Interfaces.not_centerPeriodic_of_maskparity_zero_agree_doubles_prop"]
+weight = 6
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:9202c6481106cb89a2e48d747313aa46ed3f20219b1387dbaeb424b57c6cd1e5"
+form = "(10:obligation (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (3:app (3:app (3:app (3:app (5:const 5:LE.le (5:lzero)) (5:const 3:Nat)) (5:const 9:instLENat)) (4:bvar 1:0)) (4:bvar 1:4)) (7:forallE (3:app (3:app (3:app (5:const 2:Eq (5:lsucc (5:lzero))) (5:const 4:Bool)) (3:app (5:const 21:Rule30UOR.Core.center) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (4:bvar 1:4)) (4:bvar 1:1)))) (5:const 10:Bool.false)) (3:app (3:app (3:app (5:const 2:Eq (5:lsucc (5:lzero))) (5:const 4:Bool)) (3:app (3:app (5:const 29:Rule30UOR.Interfaces.rhCenter) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (4:bvar 1:5)) (4:bvar 1:2))) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HMul.hMul (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHMul (5:lzero)) (5:const 3:Nat)) (5:const 10:instMulNat))) (4:bvar 1:4)) (4:bvar 1:3)))) (3:app (3:app (3:app (5:const 11:OfNat.ofNat (5:lzero)) (5:const 3:Nat)) (3:lit 3:nat 1:1)) (3:app (5:const 12:instOfNatNat) (3:lit 3:nat 1:1))))) (3:app (3:app (5:const 29:Rule30UOR.Interfaces.rhCenter) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (4:bvar 1:5)) (4:bvar 1:2))) (3:app (3:app (3:app (5:const 11:OfNat.ofNat (5:lzero)) (5:const 3:Nat)) (3:lit 3:nat 1:1)) (3:app (5:const 12:instOfNatNat) (3:lit 3:nat 1:1)))))))))))))"
+sources = ["Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhCenter_one_at_twopow", "Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhCenter_one_doubles", "Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhCenter_one_doubles_prop"]
+weight = 6
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:822a6d3869e17d8f8da87df2eec01a048732dd64e9a4818a800a9b628cbd0c37"
+form = "(10:obligation (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (7:forallE (5:const 3:Nat) (3:app (3:app (5:const 30:Rule30UOR.Interfaces.SettledBy) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (4:bvar 1:3)) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HMul.hMul (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHMul (5:lzero)) (5:const 3:Nat)) (5:const 10:instMulNat))) (4:bvar 1:2)) (4:bvar 1:1)))) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HAdd.hAdd (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHAdd (5:lzero)) (5:const 3:Nat)) (5:const 10:instAddNat))) (4:bvar 1:3)) (3:app (3:app (3:app (3:app (3:app (3:app (5:const 9:HMul.hMul (5:lzero) (5:lzero) (5:lzero)) (5:const 3:Nat)) (5:const 3:Nat)) (5:const 3:Nat)) (3:app (3:app (5:const 8:instHMul (5:lzero)) (5:const 3:Nat)) (5:const 10:instMulNat))) (4:bvar 1:2)) (4:bvar 1:1)))) (3:app (5:const 21:Rule30UOR.Core.twopow) (4:bvar 1:0)))))))))"
+sources = ["Rule30UOR.Interfaces.not_centerPeriodic_of_lhBandAgree_one_at_zero_diag_pair", "Rule30UOR.Interfaces.not_centerPeriodic_of_maskparity_zero_agree_of_two_zero_diags_prop", "Rule30UOR.Interfaces.not_centerPeriodic_of_rdrv_dyadic_exact_row_step_agree_at_zero_diag_pair", "Rule30UOR.Interfaces.not_centerPeriodic_of_rdrv_dyadic_shifted_init_agree_at_zero_diag_pair", "Rule30UOR.Interfaces.not_centerPeriodic_of_white_center_rhCenter_one_of_two_zero_diags_prop"]
+weight = 5
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:e359234a212ac7aa71ba4aae401604c97b6861658a135fb18ea7271378489063"
+form = "(10:obligation (3:app (5:const 3:Not) (5:const 43:Rule30UOR.KernelParity.InteriorKernelFinite)))"
+sources = ["Rule30UOR.KernelParity.problem1_of_interior_infinite_kernel"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:c6b30582fc66d2e07fe00ab9c3814f94b7ed37086edf22572372a81aa899a8a5"
+form = "(10:obligation (5:const 23:Rule30UOR.Right.LeftPos))"
+sources = ["Rule30UOR.Right.problem1_of_leftPos"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:554b934e7e7b8e5f6b12c819f0a0e22d1634dddb259dfda5bd50471c8d82e120"
+form = "(10:obligation (5:const 23:Rule30UOR.Right.MaskPos))"
+sources = ["Rule30UOR.Right.problem1_of_maskPos"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:a91caaccbe43e7a28d3f3478bea0144fcab915350bc0a5d0a9ac93f8fcdfd620"
+form = "(10:obligation (5:const 24:Rule30UOR.Scale.NoPeriod))"
+sources = ["Rule30UOR.Scale.problem1_of_noPeriod"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:91ebe4272abb6b197c7ab0f41fcb88db0024e6beab8bd6d26e792d225742ecaf"
+form = "(10:obligation (5:const 29:Rule30UOR.Band.ThreeAperiodic))"
+sources = ["Rule30UOR.Band.problem1_of_threeAperiodic"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:a70541bd3365fa957ea8eb88b9e399314cbd493b7f91e9240661b0c306d5eda8"
+form = "(10:obligation (5:const 31:Rule30UOR.Fixed.NoPeriodicFixed))"
+sources = ["Rule30UOR.Fixed.problem1_of_noPeriodicFixed"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:3a927adb22cc190a92056d99134a5ec27c24f8ca95697b3c063fb0ba34d2ff1a"
+form = "(10:obligation (5:const 31:Rule30UOR.Rational.Irrational30))"
+sources = ["Rule30UOR.Rational.problem1_of_irrational"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:0d3d323bf650fe4b7c1e1508e440ae4f682bc0518139435677a7b2b05b607802"
+form = "(10:obligation (5:const 33:Rule30UOR.LeftBand.EightAperiodic))"
+sources = ["Rule30UOR.LeftBand.problem1_of_eightAperiodic"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:909e1a490f96c4535d58d4843348c3c58c4ade510186015e98081bdfcae56131"
+form = "(10:obligation (5:const 33:Rule30UOR.Project.Resp15Aperiodic))"
+sources = ["Rule30UOR.Project.problem1_of_resp15"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:ee0561bc1a2c93a03ddcc3dbd315b20c66f31c11b9c298d78069566dafe10082"
+form = "(10:obligation (5:const 33:Rule30UOR.Project.Resp60Aperiodic))"
+sources = ["Rule30UOR.Project.problem1_of_resp60"]
+weight = 4
+tick = 4
+status = "minted"
+
+[[hypothesis]]
+label = "sha256:47d5eafe31725fa00a7f3262e4ae83abf477ea9303bf2bea79416029c991c06b"
+form = "(10:obligation (5:const 38:Rule30UOR.Interfaces.NoRowCenterPeriod))"
+sources = ["Rule30UOR.Interfaces.problem1_of_noRowCenterPeriod"]
+weight = 4
+tick = 4
+status = "minted"
+
