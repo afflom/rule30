@@ -1,0 +1,271 @@
+\begin{lexlean}{ResearchExecutionTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchTraces}
+\importmodule{ResearchExecution}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+  name: job,
+  parameters: [allowance : Nat, quantum : Nat, polls : Nat],
+  result: ResearchExecution::Job,
+  body: (record ResearchExecution::Job {request := (ResearchTraces::request (ctor Research::Purpose.prove)), tool := (ctor ResearchExecution::Tool.lean), arguments := (cons "Candidate.lean" (nil String)), directory := "/research", environment := (nil (String * String)), output := "attempt.out", errors := "attempt.err", allowance := allowance, quantum := quantum, polls := polls})
+}
+
+definition{
+  name: failedHost,
+  parameters: [],
+  result: LexLeanStd.Host::Failure,
+  body: (record LexLeanStd.Host::Failure {kind := (ctor LexLeanStd.Host::FailureKind.other), message := 0x6661696c})
+}
+
+definition{
+  name: active,
+  parameters: [allowance : Nat, quantum : Nat, polls : Nat],
+  result: ResearchExecution::State,
+  body: (first (ResearchExecution::spawned (job allowance quantum polls) (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))
+}
+
+definition{
+  name: waitEvent,
+  parameters: [clock : Nat, finished : (List (Nat * (Option Int32)))],
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.waited (ctor Result.ok [LexLeanStd.Host::Waited, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Waited {finished := finished, clock := clock})))
+}
+
+definition{
+  name: exitEvent,
+  parameters: [child : Nat, code : (Option Int32), clock : Nat],
+  result: LexLeanStd.Host::Event,
+  body: (waitEvent clock (cons (child, code) (nil (Nat * (Option Int32)))))
+}
+
+definition{
+  name: stopOk,
+  parameters: [],
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.finished (ctor Result.ok [Unit, LexLeanStd.Host::Failure] ()))
+}
+
+definition{
+  name: stopTarget,
+  parameters: [result : (ResearchExecution::State * ResearchExecution::Emission)],
+  result: Nat,
+  body: (match (second result) | ResearchExecution::Emission.awaiting => 0 | ResearchExecution::Emission.complete receipt => 0 | ResearchExecution::Emission.host request => (match request
+    | LexLeanStd.Host::Request.read path => 0
+    | LexLeanStd.Host::Request.write path contents => 0
+    | LexLeanStd.Host::Request.list path => 0
+    | LexLeanStd.Host::Request.stat path => 0
+    | LexLeanStd.Host::Request.createDir path => 0
+    | LexLeanStd.Host::Request.removeFile path => 0
+    | LexLeanStd.Host::Request.removeTree path => 0
+    | LexLeanStd.Host::Request.rename source target => 0
+    | LexLeanStd.Host::Request.canonical path => 0
+    | LexLeanStd.Host::Request.lock path => 0
+    | LexLeanStd.Host::Request.spawn child => 0
+    | LexLeanStd.Host::Request.wait children duration => 0
+    | LexLeanStd.Host::Request.stop child => child
+    | LexLeanStd.Host::Request.exit status output errors => 0))
+}
+
+definition{
+  name: waitDuration,
+  parameters: [result : (ResearchExecution::State * ResearchExecution::Emission)],
+  result: Nat,
+  body: (match (second result) | ResearchExecution::Emission.awaiting => 0 | ResearchExecution::Emission.complete receipt => 0 | ResearchExecution::Emission.host request => (match request
+    | LexLeanStd.Host::Request.read path => 0
+    | LexLeanStd.Host::Request.write path contents => 0
+    | LexLeanStd.Host::Request.list path => 0
+    | LexLeanStd.Host::Request.stat path => 0
+    | LexLeanStd.Host::Request.createDir path => 0
+    | LexLeanStd.Host::Request.removeFile path => 0
+    | LexLeanStd.Host::Request.removeTree path => 0
+    | LexLeanStd.Host::Request.rename source target => 0
+    | LexLeanStd.Host::Request.canonical path => 0
+    | LexLeanStd.Host::Request.lock path => 0
+    | LexLeanStd.Host::Request.spawn child => 0
+    | LexLeanStd.Host::Request.wait children duration => (match children | List.nil => 0 | List.cons head tail => (if (head =? 7) then (match tail | List.nil => duration | List.cons other rest => 0) else 0))
+    | LexLeanStd.Host::Request.stop child => 0
+    | LexLeanStd.Host::Request.exit status output errors => 0))
+}
+
+definition{
+  name: kindOf,
+  parameters: [result : (ResearchExecution::State * ResearchExecution::Emission)],
+  result: Nat,
+  body: (match (second result) | ResearchExecution::Emission.awaiting => 7 | ResearchExecution::Emission.host request => 7 | ResearchExecution::Emission.complete receipt => (match (project receipt kind) | ResearchExecution::EndKind.succeeded => 0 | ResearchExecution::EndKind.failed => 1 | ResearchExecution::EndKind.cut => 2 | ResearchExecution::EndKind.unavailable => 3 | ResearchExecution::EndKind.protocol => 4 | ResearchExecution::EndKind.cleanupFailed => 5 | ResearchExecution::EndKind.refused => 6))
+}
+
+theorem{
+  name: zeroBudgetNeverSpawns,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::begin (job 0 4 3))) = 6),
+  proof: decide{}
+}
+
+theorem{
+  name: zeroPollLimitNeverSpawns,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::begin (job 10 4 0))) = 6),
+  proof: decide{}
+}
+
+theorem{
+  name: zeroQuantumNeverSpawns,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::begin (job 10 0 3))) = 6),
+  proof: decide{}
+}
+
+theorem{
+  name: spawnFailureIsUnavailable,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::spawned (job 10 4 3) (ctor Result.error [(Nat * Nat), LexLeanStd.Host::Failure] (failedHost)))) = 3),
+  proof: decide{}
+}
+
+theorem{
+  name: waitNeverExceedsBudget,
+  parameters: [],
+  statement: ((waitDuration (ResearchExecution::spawned (job 10 100 3) (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100)))) = 10),
+  proof: decide{}
+}
+
+theorem{
+  name: relativeBudgetNeedsNoClockAddition,
+  parameters: [],
+  statement: ((waitDuration (ResearchExecution::spawned (job 10 100 3) (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 18446744073709551610)))) = 10),
+  proof: decide{}
+}
+
+theorem{
+  name: normalZeroExitSucceeds,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (active 10 4 3) (exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105))) = 0),
+  proof: decide{}
+}
+
+theorem{
+  name: nonzeroExitFails,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (active 10 4 3) (exitEvent 7 (ctor Option.some [Int32] (1 : Int32)) 105))) = 1),
+  proof: decide{}
+}
+
+theorem{
+  name: signalTerminationFails,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (active 10 4 3) (exitEvent 7 (ctor Option.none [Int32]) 105))) = 1),
+  proof: decide{}
+}
+
+theorem{
+  name: anExitAtTheDeadlineIsACut,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (active 10 4 3) (exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 110))) = 2),
+  proof: decide{}
+}
+
+theorem{
+  name: deadlineStopsTheOwnedChild,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (active 10 4 3) (waitEvent 110 (nil (Nat * (Option Int32)))))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: aCutCompletesOnlyAfterStop,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::step (active 10 4 3) (waitEvent 110 (nil (Nat * (Option Int32)))))) (stopOk))) = 2),
+  proof: decide{}
+}
+
+theorem{
+  name: aStoppedClockCannotPollForever,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (active 10 4 1) (waitEvent 100 (nil (Nat * (Option Int32)))))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: backwardClockStopsTheChild,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (active 10 4 3) (waitEvent 99 (nil (Nat * (Option Int32)))))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: backwardClockIsProtocolFailure,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::step (active 10 4 3) (waitEvent 99 (nil (Nat * (Option Int32)))))) (stopOk))) = 4),
+  proof: decide{}
+}
+
+theorem{
+  name: foreignChildCannotCompleteTheJob,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (active 10 4 3) (exitEvent 8 (ctor Option.some [Int32] (0 : Int32)) 105))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: duplicateExitCannotCompleteTheJob,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (active 10 4 3) (waitEvent 105 (cons (7, (ctor Option.some [Int32] (0 : Int32))) (cons (7, (ctor Option.some [Int32] (0 : Int32))) (nil (Nat * (Option Int32)))))))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: waitFailureStillStopsTheChild,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (active 10 4 3) (ctor LexLeanStd.Host::Event.waited (ctor Result.error [LexLeanStd.Host::Waited, LexLeanStd.Host::Failure] (failedHost))))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: stopFailureIsNotACut,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::step (active 10 4 3) (waitEvent 110 (nil (Nat * (Option Int32)))))) (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (failedHost))))) = 5),
+  proof: decide{}
+}
+
+theorem{
+  name: aDelayedSpawnAfterCancellationIsStopped,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (first (ResearchExecution::cancel (first (ResearchExecution::begin (job 10 4 3))))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: cancellationStopsAnActiveChild,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (first (ResearchExecution::cancel (active 10 4 3))) (waitEvent 102 (nil (Nat * (Option Int32)))))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: wrongEventWhileWaitingStopsTheChild,
+  parameters: [],
+  statement: ((stopTarget (ResearchExecution::step (active 10 4 3) (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x)))) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: wrongStopAcknowledgementBlocks,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::step (active 10 4 3) (waitEvent 110 (nil (Nat * (Option Int32)))))) (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x)))) = 5),
+  proof: decide{}
+}
+
+theorem{
+  name: completedJobCannotBeRestartedByAnEvent,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::step (active 10 4 3) (exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))) = 0),
+  proof: decide{}
+}
+
+\end{semanticmodule}
+\end{lexlean}

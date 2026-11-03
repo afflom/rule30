@@ -79,7 +79,7 @@ inductive{
   name: ResultKind,
   type_parameters: [],
   parameters: [],
-  constructors: [{name: inspected, fields: [Sequent]}, {name: checked, fields: [Bytes, (List String)]}, {name: failed, fields: [Bytes]}, {name: cut, fields: []}, {name: unavailable, fields: []}]
+  constructors: [{name: inspected, fields: [Sequent]}, {name: checked, fields: [Sequent, Bytes, (List String)]}, {name: maintained, fields: [(List Bytes), Bytes]}, {name: failed, fields: [Bytes]}, {name: cut, fields: []}, {name: unavailable, fields: []}]
 }
 
 structure{
@@ -174,10 +174,26 @@ definition{
 }
 
 definition{
+  name: sameSources,
+  parameters: [left : (List Bytes), right : (List Bytes)],
+  result: Bool,
+  body: (match left
+    | List.nil => (match right | List.nil => true | List.cons head tail => false)
+    | List.cons head tail => (match right | List.nil => false | List.cons other rest => ((Toml::sameBytes head other) && (sameSources tail rest)))),
+  recursive_argument: left,
+  executable: true
+}
+
+definition{
   name: sameRequest,
   parameters: [a : Request, b : Request],
   result: Bool,
-  body: (((project a serial) =? (project b serial)) && ((sameSnapshot (project a snapshot) (project b snapshot)) && ((Toml::sameBytes (project (project a task) id) (project (project b task) id)) && ((samePurpose (project (project a task) purpose) (project (project b task) purpose)) && ((samePurpose (project (project a task) intent) (project (project b task) intent)) && ((prim equal (project (project a task) component) (project (project b task) component) : Bool) && ((Toml::sameBytes (project (project a task) schema) (project (project b task) schema)) && (sameSequent (project (project a task) sequent) (project (project b task) sequent))))))))),
+  body: (let left : Task := (project a task); (let right : Task := (project b task);
+    (((project a serial) =? (project b serial)) && ((sameSnapshot (project a snapshot) (project b snapshot)) &&
+    ((Toml::sameBytes (project left id) (project right id)) && ((samePurpose (project left purpose) (project right purpose)) &&
+    ((samePurpose (project left intent) (project right intent)) && ((prim equal (project left component) (project right component) : Bool) &&
+    ((sameSources (project left sources) (project right sources)) && ((Toml::sameBytes (project left schema) (project right schema)) &&
+    (sameSequent (project left sequent) (project right sequent)))))))))))),
   executable: true
 }
 
@@ -206,12 +222,21 @@ definition{
 }
 
 definition{
+  name: uniqueComponent,
+  parameters: [key : String, components : (List Component)],
+  result: Bool,
+  body: (match components | List.nil => true | List.cons head tail => ((not (prim equal key (project head id) : Bool)) && (uniqueComponent key tail))),
+  recursive_argument: components,
+  executable: true
+}
+
+definition{
   name: componentAvailable,
   parameters: [key : String, components : (List Component)],
   result: Bool,
   body: (match components
     | List.nil => false
-    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head available) else (componentAvailable key tail))),
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then ((project head available) && (uniqueComponent key tail)) else (componentAvailable key tail))),
   recursive_argument: components,
   executable: true
 }
@@ -442,7 +467,7 @@ definition{
   result: (List Task),
   body: (match tasks
     | List.nil => (nil Task)
-    | List.cons head tail => (cons (if ((memberString (project head component) changed) || (match (project head status) | Status.waiting => true | Status.ready => false | Status.blocked => false | Status.established => false | Status.exhausted => false)) then (refreshTask head ((project head age) + 1)) else head) (invalidate tail changed))),
+    | List.cons head tail => (cons (if (memberString (project head component) changed) then (refreshTask head ((project head age) + 1)) else head) (invalidate tail changed))),
   recursive_argument: tasks,
   executable: true
 }
@@ -460,7 +485,8 @@ definition{
   parameters: [answer : Answer, snapshot : Snapshot, goal : Sequent],
   result: Bool,
   body: ((contextual goal) && ((sameSnapshot (project (project answer request) snapshot) snapshot) && ((samePurpose (project (project (project answer request) task) purpose) (ctor Purpose.refute)) && ((sameSequent (project (project (project answer request) task) sequent) goal) && (match (project answer result)
-    | ResultKind.checked theorem axioms => ((0 <? (prim length theorem : Nat)) && (axiomsAllowed axioms))
+    | ResultKind.checked witnessed theorem axioms => ((sameSequent witnessed goal) && ((0 <? (prim length theorem : Nat)) && (axiomsAllowed axioms)))
+    | ResultKind.maintained sources report => false
     | ResultKind.inspected other => false
     | ResultKind.failed detail => false
     | ResultKind.cut => false
@@ -518,7 +544,8 @@ definition{
   result: Task,
   body: (match result
     | ResultKind.inspected goal => (if (((samePurpose (project task purpose) (ctor Purpose.inspect)) && ((samePurpose (project task intent) (ctor Purpose.prove)) || (samePurpose (project task intent) (ctor Purpose.refute)))) && ((contextual goal) && (Hypotheses::memberBytes (project goal origin) (project task sources)))) then (record Task {id := (project task id), purpose := (project task intent), intent := (project task intent), status := (ctor Status.ready), component := "deduction", sources := (project task sources), schema := (project task schema), sequent := goal, age := (project task age), weight := (project task weight)}) else (withStatus task (ctor Status.blocked) (project task age)))
-    | ResultKind.checked theorem axioms => (if (((samePurpose (project task purpose) (ctor Purpose.maintain)) || ((contextual (project task sequent)) && ((samePurpose (project task purpose) (ctor Purpose.prove)) || (samePurpose (project task purpose) (ctor Purpose.refute))))) && ((0 <? (prim length theorem : Nat)) && (axiomsAllowed axioms))) then (withOutcome task (ctor Status.established) true) else (withStatus task (ctor Status.blocked) (project task age)))
+    | ResultKind.checked goal theorem axioms => (if ((contextual (project task sequent)) && ((sameSequent goal (project task sequent)) && (((samePurpose (project task purpose) (ctor Purpose.prove)) || (samePurpose (project task purpose) (ctor Purpose.refute))) && ((0 <? (prim length theorem : Nat)) && (axiomsAllowed axioms))))) then (withOutcome task (ctor Status.established) true) else (withStatus task (ctor Status.blocked) (project task age)))
+    | ResultKind.maintained sources report => (if ((samePurpose (project task purpose) (ctor Purpose.maintain)) && ((sameSources sources (project task sources)) && (0 <? (prim length report : Nat)))) then (withOutcome task (ctor Status.established) true) else (withStatus task (ctor Status.blocked) (project task age)))
     | ResultKind.failed detail => (withOutcome task (ctor Status.exhausted) false)
     | ResultKind.cut => (withStatus task (ctor Status.ready) (project task age))
     | ResultKind.unavailable => (withStatus task (ctor Status.blocked) (project task age))),
@@ -548,12 +575,56 @@ definition{
 }
 
 definition{
+  name: releaseStale,
+  parameters: [tasks : (List Task), key : Bytes],
+  result: (List Task),
+  body: (match tasks
+    | List.nil => (nil Task)
+    | List.cons head tail => (cons (if ((Toml::sameBytes (project head id) key) && (match (project head status) | Status.waiting => true | Status.ready => false | Status.blocked => false | Status.established => false | Status.exhausted => false)) then (refreshTask head (project head age)) else head) (releaseStale tail key))),
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
   name: receive,
   parameters: [state : State, answer : Answer],
   result: (State * Action),
   body: (match (project state pending)
     | Option.none => (state, (ctor Action.refused))
-    | Option.some request => (if (sameRequest request (project answer request)) then (dispatch (record State {snapshot := (project state snapshot), components := (project state components), tasks := (if ((sameSnapshot (project state snapshot) (project request snapshot)) && (requestStillCurrent request (project state tasks))) then (receiveTasks (project state tasks) (project (project request task) id) (project answer result)) else (project state tasks)), pending := (ctor Option.none [Request]), next := (project state next), history := (cons answer (project state history))})) else (state, (ctor Action.refused)))),
+    | Option.some request => (if (sameRequest request (project answer request)) then (dispatch (record State {snapshot := (project state snapshot), components := (project state components), tasks := (if ((sameSnapshot (project state snapshot) (project request snapshot)) && (requestStillCurrent request (project state tasks))) then (receiveTasks (project state tasks) (project (project request task) id) (project answer result)) else (releaseStale (project state tasks) (project (project request task) id))), pending := (ctor Option.none [Request]), next := (project state next), history := (if ((sameSnapshot (project state snapshot) (project request snapshot)) && (requestStillCurrent request (project state tasks))) then (cons answer (project state history)) else (project state history))})) else (state, (ctor Action.refused)))),
+  executable: true
+}
+
+definition{
+  name: componentUnchanged,
+  parameters: [component : Component, components : (List Component)],
+  result: Bool,
+  body: (match components
+    | List.nil => false
+    | List.cons head tail => (if (prim equal (project component id) (project head id) : Bool) then ((prim equal (project component available) (project head available) : Bool) && ((prim equal (project component concern) (project head concern) : Bool) && ((allStringsWithin (project component dependencies) (project head dependencies)) && ((allStringsWithin (project head dependencies) (project component dependencies)) && (uniqueComponent (project component id) tail))))) else (componentUnchanged component tail))),
+  recursive_argument: components,
+  executable: true
+}
+
+definition{
+  name: changedComponents,
+  parameters: [before : (List Component), after : (List Component)],
+  result: (List String),
+  body: (match before
+    | List.nil => (nil String)
+    | List.cons head tail => (if (componentUnchanged head after) then (changedComponents tail after) else (cons (project head id) (changedComponents tail after)))),
+  recursive_argument: before,
+  executable: true
+}
+
+definition{
+  name: retainHistory,
+  parameters: [history : (List Answer), snapshot : Snapshot, changed : (List String)],
+  result: (List Answer),
+  body: (match history
+    | List.nil => (nil Answer)
+    | List.cons head tail => (if ((sameSnapshot (project (project head request) snapshot) snapshot) && (not (memberString (project (project (project head request) task) component) changed))) then (cons head (retainHistory tail snapshot changed)) else (retainHistory tail snapshot changed))),
+  recursive_argument: history,
   executable: true
 }
 
@@ -565,7 +636,7 @@ definition{
     | Event.tick => (dispatch state)
     | Event.ingest hypotheses => (dispatch (record State {snapshot := (project state snapshot), components := (project state components), tasks := (ingest hypotheses (project state tasks)), pending := (project state pending), next := (project state next), history := (project state history)}))
     | Event.answered answer => (receive state answer)
-    | Event.changed snapshot components changed => (dispatch (record State {snapshot := snapshot, components := components, tasks := (invalidate (project state tasks) (closure components (if (sameSnapshot snapshot (project state snapshot)) then changed else (unionStrings (componentIds (project state components)) (componentIds components))) (prim length components : Nat))), pending := (project state pending), next := (project state next), history := (project state history)}))),
+    | Event.changed snapshot components changed => (let graph : (List Component) := (prim append (project state components) components : (List Component)); (let invalid : (List String) := (closure graph (if (sameSnapshot snapshot (project state snapshot)) then (unionStrings changed (unionStrings (changedComponents (project state components) components) (changedComponents components (project state components)))) else (unionStrings (componentIds (project state components)) (componentIds components))) (prim length graph : Nat)); (dispatch (record State {snapshot := snapshot, components := components, tasks := (invalidate (project state tasks) invalid), pending := (project state pending), next := (project state next), history := (retainHistory (project state history) snapshot invalid)}))))),
   axioms: [],
   executable: true,
   production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
