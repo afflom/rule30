@@ -290,6 +290,9 @@ Pushing any version tag `v*` (e.g. `v0.1`) triggers [`.github/workflows/release.
 
 The compiler development pin follows LexLean `release/v0.5` through
 [the Host interface contribution](https://github.com/UOR-Foundation/LexLean/pull/396).
+That source package ports the actual interface from
+[LexLean #389](https://github.com/UOR-Foundation/LexLean/pull/389) to v0.5,
+including fallible startup paths, timed child waits and byte output.
 The API imports `LexLeanStd.Host` from the pinned source package; its local
 `Host` module contains only the application harness. The attention catalog
 covers all 30 application and library modules. The generated executable

@@ -8,8 +8,8 @@ inductive{
   parameters: [],
   constructors: [
     {name: notFound, fields: []},
+    {name: alreadyExists, fields: []},
     {name: denied, fields: []},
-    {name: invalid, fields: []},
     {name: other, fields: []}
   ]
 }
@@ -28,42 +28,53 @@ inductive{
   constructors: [
     {name: file, fields: []},
     {name: directory, fields: []},
-    {name: link, fields: []},
+    {name: symlink, fields: []},
     {name: other, fields: []}
   ]
 }
 
 structure{
-  name: Stat,
+  name: Entry,
   type_parameters: [],
   parameters: [],
   fields: [
     {name: kind, type: EntryKind},
     {name: size, type: Nat},
-    {name: device, type: Nat},
-    {name: inode, type: Nat}
+    {name: identity, type: (Option (Nat * Nat))}
   ]
 }
 
-inductive{
-  name: Event,
+structure{
+  name: Child,
   type_parameters: [],
   parameters: [],
-  constructors: [
-    {name: start, fields: [(List Bytes), Bytes, Bytes, (List (Bytes * Bytes)), Bool]},
-    {name: read, fields: [(Result Bytes Failure)]},
-    {name: wrote, fields: [(Result Unit Failure)]},
-    {name: listed, fields: [(Result (List Bytes) Failure)]},
-    {name: stated, fields: [(Result Stat Failure)]},
-    {name: createdDir, fields: [(Result Unit Failure)]},
-    {name: removedFile, fields: [(Result Unit Failure)]},
-    {name: removedTree, fields: [(Result Unit Failure)]},
-    {name: renamed, fields: [(Result Unit Failure)]},
-    {name: canonicalized, fields: [(Result Bytes Failure)]},
-    {name: locked, fields: [(Result Unit Failure)]},
-    {name: spawned, fields: [(Result Nat Failure)]},
-    {name: waited, fields: [(Result (Option Int32) Failure)]},
-    {name: stopped, fields: [(Result Unit Failure)]}
+  fields: [
+    {name: program, type: String},
+    {name: arguments, type: (List String)},
+    {name: directory, type: String},
+    {name: environment, type: (List (String * String))},
+    {name: output, type: String},
+    {name: errors, type: String}
+  ]
+}
+
+structure{
+  name: Waited,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: finished, type: (List (Nat * (Option Int32)))}, {name: clock, type: Nat}]
+}
+
+structure{
+  name: Start,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: arguments, type: (List Bytes)},
+    {name: directory, type: (Result Bytes Failure)},
+    {name: executable, type: (Result Bytes Failure)},
+    {name: environment, type: (List (Bytes * Bytes))},
+    {name: terminal, type: Bool}
   ]
 }
 
@@ -82,13 +93,26 @@ inductive{
     {name: rename, fields: [String, String]},
     {name: canonical, fields: [String]},
     {name: lock, fields: [String]},
-    {
-      name: spawn,
-      fields: [String, (List String), String, (List (String * String)), String, String]
-    },
-    {name: wait, fields: [Nat]},
+    {name: spawn, fields: [Child]},
+    {name: wait, fields: [(List Nat), Nat]},
     {name: stop, fields: [Nat]},
-    {name: exit, fields: [UInt8, String, String]}
+    {name: exit, fields: [UInt8, Bytes, Bytes]}
+  ]
+}
+
+inductive{
+  name: Event,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: start, fields: [Start]},
+    {name: read, fields: [(Result Bytes Failure)]},
+    {name: finished, fields: [(Result Unit Failure)]},
+    {name: listed, fields: [(Result (List Bytes) Failure)]},
+    {name: stat, fields: [(Result Entry Failure)]},
+    {name: canonical, fields: [(Result Bytes Failure)]},
+    {name: spawned, fields: [(Result (Nat * Nat) Failure)]},
+    {name: waited, fields: [(Result Waited Failure)]}
   ]
 }
 \end{semanticmodule}

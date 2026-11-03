@@ -111,7 +111,7 @@ with no `main` and no effects beyond allocation, overflow and recursion: no file
 arguments or exit codes. An executable entry for a root that reads files and runs `lake`,
 `lexlean` and `git` is LexLean issue #271 (the effects boundary). So the logic moves into LexLean
 now, as authored modules with certified roots, and the remaining Python and shell glue is deleted
-as the effect boundary is implemented on our v0.5-based LexLean branch. The vendored LexLeanStd.Host types are the upstream PR #396 interface; they are imported directly rather than mirrored in Rule30Api.Host. A capability LexLean, PrismPM or
+as the effect boundary is implemented on our v0.5-based LexLean branch. The vendored LexLeanStd.Host types are the actual PR #389 interface ported to v0.5 in upstream PR #396; they are imported directly rather than mirrored in Rule30Api.Host. A capability LexLean, PrismPM or
 prism-stdlib cannot yet express is an upstream issue for those projects, never a reason for new
 Python or shell. The logic already moved: the command surface, the register, the
 converter (`rule30-api/src/Convert.lex.tex`), the engine's learning rule and schedule

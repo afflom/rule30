@@ -218,10 +218,17 @@ definition{
 }
 
 definition{
+  name: startedUnavailable,
+  parameters: [arguments : (List Bytes)],
+  result: LexLeanStd.Host::Event,
+  body: (let failure : LexLeanStd.Host::Failure := (record LexLeanStd.Host::Failure {kind := (ctor LexLeanStd.Host::FailureKind.denied), message := (permissionDenied)}); (ctor LexLeanStd.Host::Event.start (record LexLeanStd.Host::Start {arguments := arguments, directory := (ctor Result.error [Bytes, LexLeanStd.Host::Failure] failure), executable := (ctor Result.error [Bytes, LexLeanStd.Host::Failure] failure), environment := (nil (Bytes * Bytes)), terminal := false})))
+}
+
+definition{
   name: startedIn,
   parameters: [arguments : (List Bytes), directory : Bytes],
   result: LexLeanStd.Host::Event,
-  body: (ctor LexLeanStd.Host::Event.start arguments directory (executablePath) (nil (Bytes * Bytes)) false)
+  body: (ctor LexLeanStd.Host::Event.start (record LexLeanStd.Host::Start {arguments := arguments, directory := (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] directory), executable := (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (executablePath)), environment := (nil (Bytes * Bytes)), terminal := false}))
 }
 
 definition{
@@ -235,21 +242,21 @@ definition{
   name: statedDirectory,
   parameters: [],
   result: LexLeanStd.Host::Event,
-  body: (ctor LexLeanStd.Host::Event.stated (ctor Result.ok [LexLeanStd.Host::Stat, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Stat {kind := (ctor LexLeanStd.Host::EntryKind.directory), size := 4096, device := 0, inode := 0})))
+  body: (ctor LexLeanStd.Host::Event.stat (ctor Result.ok [LexLeanStd.Host::Entry, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Entry {kind := (ctor LexLeanStd.Host::EntryKind.directory), size := 4096, identity := (ctor Option.none [(Nat * Nat)])})))
 }
 
 definition{
   name: statedMissing,
   parameters: [],
   result: LexLeanStd.Host::Event,
-  body: (ctor LexLeanStd.Host::Event.stated (ctor Result.error [LexLeanStd.Host::Stat, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Failure {kind := (ctor LexLeanStd.Host::FailureKind.notFound), message := (noSuchFile)})))
+  body: (ctor LexLeanStd.Host::Event.stat (ctor Result.error [LexLeanStd.Host::Entry, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Failure {kind := (ctor LexLeanStd.Host::FailureKind.notFound), message := (noSuchFile)})))
 }
 
 definition{
   name: statedFailed,
   parameters: [kind : LexLeanStd.Host::FailureKind, message : Bytes],
   result: LexLeanStd.Host::Event,
-  body: (ctor LexLeanStd.Host::Event.stated (ctor Result.error [LexLeanStd.Host::Stat, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Failure {kind := kind, message := message})))
+  body: (ctor LexLeanStd.Host::Event.stat (ctor Result.error [LexLeanStd.Host::Entry, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Failure {kind := kind, message := message})))
 }
 
 definition{
@@ -575,6 +582,38 @@ theorem{
 }
 
 theorem{
+  name: traceStartDirectoryFailure,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (startedUnavailable (cons (argFrontier) (cons (argList) (nil Bytes)))) (nil LexLeanStd.Host::Event))) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece "working directory") (cons (piece ": ") (cons (piece "permission denied") (cons (piece " (") (cons (ctor Host::Piece.taken (permissionDenied)) (cons (piece ")") (nil Host::Piece))))))))) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceHelpWithoutDirectory,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (startedUnavailable (cons (argHelp) (nil Bytes))) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceListHelpWithoutDirectory,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (startedUnavailable (cons (argFrontier) (cons (argList) (cons (argHelpFlag) (nil Bytes))))) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::listHelp)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: traceVersionWithoutDirectory,
+  parameters: [],
+  statement: ((Host::traceAgrees (run (cons (startedUnavailable (cons (argVersion) (nil Bytes))) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (R30::versionOutput) (nil Host::Piece)) (nil Host::Draft))) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
   name: realizeRead,
   parameters: [path : (List Host::Piece)],
   statement: ((Host::realize (ctor Host::Draft.read path)) = (ctor LexLeanStd.Host::Request.read (Host::render path))),
@@ -593,7 +632,23 @@ theorem{
 theorem{
   name: realizeExit,
   parameters: [status : UInt8, output : (List Host::Piece), errorOutput : (List Host::Piece)],
-  statement: ((Host::realize (ctor Host::Draft.exit status output errorOutput)) = (ctor LexLeanStd.Host::Request.exit status (Host::render output) (Host::render errorOutput))),
+  statement: ((Host::realize (ctor Host::Draft.exit status output errorOutput)) = (ctor LexLeanStd.Host::Request.exit status (Host::renderBytes output) (Host::renderBytes errorOutput))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: takenOutputBytesAreExact,
+  parameters: [bytes : Bytes],
+  statement: ((Host::pieceBytes (ctor Host::Piece.taken bytes)) = bytes),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: exitComposesLiteralAndArbitraryBytes,
+  parameters: [status : UInt8, prefix : String, bytes : Bytes],
+  statement: ((Host::realize (ctor Host::Draft.exit status (cons (piece prefix) (cons (ctor Host::Piece.taken bytes) (nil Host::Piece))) (nil Host::Piece))) = (ctor LexLeanStd.Host::Request.exit status (prim append (prim utf8_encode prefix : Bytes) (prim append bytes 0x : Bytes) : Bytes) 0x)),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]
 }

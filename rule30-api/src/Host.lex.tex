@@ -4,38 +4,19 @@
 \importmodule{LexLeanStd.Host}
 \title{Boolean}
 \begin{semanticmodule}
-structure{
-  name: Start,
-  type_parameters: [],
-  parameters: [],
-  fields: [
-    {name: arguments, type: (List Bytes)},
-    {name: directory, type: Bytes},
-    {name: executable, type: Bytes},
-    {name: environment, type: (List (Bytes * Bytes))},
-    {name: stderrTerminal, type: Bool}
-  ]
-}
-
 definition{
   name: asStart,
   parameters: [event : LexLeanStd.Host::Event],
-  result: (Option Start),
+  result: (Option LexLeanStd.Host::Start),
   body: (match event
-    | LexLeanStd.Host::Event.start arguments directory executable environment terminal => (ctor Option.some [Start] (record Start {arguments := arguments, directory := directory, executable := executable, environment := environment, stderrTerminal := terminal}))
-    | LexLeanStd.Host::Event.read o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.wrote o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.listed o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.stated o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.createdDir o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.removedFile o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.removedTree o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.renamed o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.canonicalized o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.locked o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.spawned o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.waited o => (ctor Option.none [Start])
-    | LexLeanStd.Host::Event.stopped o => (ctor Option.none [Start])),
+    | LexLeanStd.Host::Event.start value => (ctor Option.some [LexLeanStd.Host::Start] value)
+    | LexLeanStd.Host::Event.read value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.finished value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.listed value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.stat value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.canonical value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.spawned value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.waited value => (ctor Option.none [LexLeanStd.Host::Start])),
   executable: true
 }
 
@@ -44,42 +25,30 @@ definition{
   parameters: [event : LexLeanStd.Host::Event],
   result: (Option (Result Bytes LexLeanStd.Host::Failure)),
   body: (match event
-    | LexLeanStd.Host::Event.start arguments directory executable environment terminal => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.read o => (ctor Option.some [(Result Bytes LexLeanStd.Host::Failure)] o)
-    | LexLeanStd.Host::Event.wrote o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.listed o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.stated o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.createdDir o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.removedFile o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.removedTree o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.renamed o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.canonicalized o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.locked o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.spawned o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.waited o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.stopped o => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])),
+    | LexLeanStd.Host::Event.start value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.read value => (ctor Option.some [(Result Bytes LexLeanStd.Host::Failure)] value)
+    | LexLeanStd.Host::Event.finished value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.listed value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.stat value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.canonical value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.spawned value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.waited value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])),
   executable: true
 }
 
 definition{
   name: asStated,
   parameters: [event : LexLeanStd.Host::Event],
-  result: (Option (Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)),
+  result: (Option (Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)),
   body: (match event
-    | LexLeanStd.Host::Event.start arguments directory executable environment terminal => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.read o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.wrote o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.listed o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.stated o => (ctor Option.some [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)] o)
-    | LexLeanStd.Host::Event.createdDir o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.removedFile o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.removedTree o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.renamed o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.canonicalized o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.locked o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.spawned o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.waited o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])
-    | LexLeanStd.Host::Event.stopped o => (ctor Option.none [(Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)])),
+    | LexLeanStd.Host::Event.start value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.read value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.finished value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.listed value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.stat value => (ctor Option.some [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)] value)
+    | LexLeanStd.Host::Event.canonical value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.spawned value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.waited value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])),
   executable: true
 }
 
@@ -147,7 +116,7 @@ definition{
   name: textOfNote,
   parameters: [],
   result: String,
-  body: "textOf is rule30's stand-in for prim utf8_decode at the String boundary: at the pinned LexLean, utf8_decode (like format_decimal and split_exact) depends on Classical.choice in its Lean model, which rule30 forbids, and no other primitive turns Bytes into a String. textOf is exact on ASCII and on the scalars of multibyte, the non-ASCII characters of rule30's registers and prose (frontier.toml has only ≤, the fixture of R30Traces has ⊕); every other scalar becomes one U+FFFD (its lead byte gives U+FFFD, its continuation bytes nothing). So bytes taken from the host reach the driver unchanged exactly when they are ASCII or scalars of multibyte. The traces of R30Traces and its sibling modules compare the pieces of plan byte for byte with the deprecated runtime's output. pieceScalars is a parallel definition, for the kernel: pieceText joins what pieceScalars lists, and the reflexivity theorems realize*, render*, pieceText* and textOf* of R30Traces state that link for any argument, so realize, render, pieceTexts, pieceText and textOf cannot change without a theorem failing. realizedAgrees decides the scalars of pieceScalars on a run, and R30TracesClaims.traceClaimAlpha uses it on a register that holds ⊕; R30Traces.textChars* decide charsFrom on all of ASCII and all of multibyte. The one stated gap: join does not reduce under decide (it is Lean's String.intercalate), so no theorem states that joining the joined texts of the pieces, which render does, gives the join of their scalars in one list. textOf becomes utf8_decode the day that primitive is choice-free.",
+  body: "textOf is rule30's stand-in for prim utf8_decode at the String boundary: at the pinned LexLean, utf8_decode (like format_decimal and split_exact) depends on Classical.choice in its Lean model, which rule30 forbids, and no other primitive turns Bytes into a String. textOf is exact on ASCII and on the scalars of multibyte, the non-ASCII characters of rule30's registers and prose (frontier.toml has only ≤, the fixture of R30Traces has ⊕); every other scalar becomes one U+FFFD (its lead byte gives U+FFFD, its continuation bytes nothing). This limitation applies to paths converted through render. Exit output uses renderBytes instead: literal pieces are UTF-8 encoded and taken pieces are appended unchanged, including bytes outside the decoder's scalar table. The traces of R30Traces and its sibling modules compare the pieces of plan byte for byte with the deprecated runtime's output. pieceScalars is a parallel definition, for the kernel: pieceText joins what pieceScalars lists, and the reflexivity theorems realize*, render*, pieceText* and textOf* of R30Traces state that link for any argument, so realize, render, pieceTexts, pieceText and textOf cannot change without a theorem failing. realizedAgrees decides the scalars of pieceScalars on a run, and R30TracesClaims.traceClaimAlpha uses it on a register that holds ⊕; R30Traces.textChars* decide charsFrom on all of ASCII and all of multibyte. The one stated gap: join does not reduce under decide (it is Lean's String.intercalate), so no theorem states that joining the joined texts of the pieces, which render does, gives the join of their scalars in one list. textOf becomes utf8_decode the day that primitive is choice-free.",
   executable: true
 }
 
@@ -270,13 +239,34 @@ definition{
 }
 
 definition{
+  name: pieceBytes,
+  parameters: [piece : Piece],
+  result: Bytes,
+  body: (match piece
+    | Piece.literal text => (prim utf8_encode text : Bytes)
+    | Piece.taken bytes => bytes),
+  executable: true
+}
+
+definition{
+  name: renderBytes,
+  parameters: [pieces : (List Piece)],
+  result: Bytes,
+  body: (match pieces
+    | List.nil => 0x
+    | List.cons piece rest => (prim append (pieceBytes piece) (renderBytes rest) : Bytes)),
+  recursive_argument: pieces,
+  executable: true
+}
+
+definition{
   name: realize,
   parameters: [draft : Draft],
   result: LexLeanStd.Host::Request,
   body: (match draft
     | Draft.read path => (ctor LexLeanStd.Host::Request.read (render path))
     | Draft.stat path => (ctor LexLeanStd.Host::Request.stat (render path))
-    | Draft.exit status output errors => (ctor LexLeanStd.Host::Request.exit status (render output) (render errors))),
+    | Draft.exit status output errors => (ctor LexLeanStd.Host::Request.exit status (renderBytes output) (renderBytes errors))),
   axioms: [Quot.sound, propext],
   executable: true
 }
