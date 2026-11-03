@@ -1,0 +1,442 @@
+\begin{lexlean}{Json}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+inductive{
+  name: Value,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: null, fields: []}, {name: boolean, fields: [Bool]}, {name: number, fields: [Bytes]}, {name: string, fields: [Bytes]}, {name: array, fields: [(List Value)]}, {name: object, fields: [(List (Bytes * Value))]}]
+}
+
+structure{
+  name: Problem,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: offset, type: Nat}, {name: reason, type: String}]
+}
+
+inductive{
+  name: Frame,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: arrayStart, fields: [(List Value)]}, {name: arrayItem, fields: [(List Value)]}, {name: arrayComma, fields: [(List Value)]}, {name: objectStart, fields: [(List (Bytes * Value))]}, {name: objectKey, fields: [(List (Bytes * Value))]}, {name: objectColon, fields: [(List (Bytes * Value)), Bytes]}, {name: objectValue, fields: [(List (Bytes * Value)), Bytes]}, {name: objectComma, fields: [(List (Bytes * Value))]}]
+}
+
+structure{
+  name: State,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: position, type: Nat}, {name: frames, type: (List Frame)}, {name: value, type: (Option Value)}]
+}
+
+definition{
+  name: contract,
+  parameters: [],
+  result: String,
+  body: "JSON is decoded as UTF-8 bytes without a String conversion. Numbers retain their complete JSON spelling. Duplicate object keys, including escaped spellings of the same key, are rejected. All JSON escapes and Unicode surrogate pairs are supported; malformed UTF-8, unpaired surrogates, controls, trailing data and incomplete containers are rejected. The caller supplies byte and container-depth limits. Decoding a report establishes its syntax, never its truth or provenance.",
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: byte,
+  parameters: [value : Nat],
+  result: Bytes,
+  body: (Toml::sliceOr 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff value 1),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: append,
+  parameters: [left : Bytes, right : Bytes],
+  result: Bytes,
+  body: (prim append left right : Bytes),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: scalar,
+  parameters: [value : Nat],
+  result: Bytes,
+  body: (if (value <? 128) then (byte value) else (if (value <? 2048) then (append (byte (192 + (prim quotient value 64 0 : Nat))) (byte (128 + (prim remainder value 64 0 : Nat)))) else (if (value <? 65536) then (append (byte (224 + (prim quotient value 4096 0 : Nat))) (append (byte (128 + (prim remainder (prim quotient value 64 0 : Nat) 64 0 : Nat))) (byte (128 + (prim remainder value 64 0 : Nat))))) else (append (byte (240 + (prim quotient value 262144 0 : Nat))) (append (byte (128 + (prim remainder (prim quotient value 4096 0 : Nat) 64 0 : Nat))) (append (byte (128 + (prim remainder (prim quotient value 64 0 : Nat) 64 0 : Nat))) (byte (128 + (prim remainder value 64 0 : Nat))))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: join,
+  parameters: [pieces : (List Bytes), onto : Bytes],
+  result: Bytes,
+  body: (match pieces | List.nil => onto | List.cons head tail => (join tail (append onto head))),
+  axioms: [],
+  recursive_argument: pieces,
+  executable: true
+}
+
+definition{
+  name: whitespace,
+  parameters: [source : Bytes, position : Nat],
+  result: Bool,
+  body: ((Toml::byteIs source position (32 : UInt8)) || ((Toml::byteIs source position (9 : UInt8)) || ((Toml::byteIs source position (10 : UInt8)) || (Toml::byteIs source position (13 : UInt8))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: skip,
+  parameters: [source : Bytes, position : Nat, fuel : Nat],
+  result: Nat,
+  body: (match fuel | Nat.zero => position | Nat.succ more => (if (whitespace source position) then (skip source (position + 1) more) else position)),
+  axioms: [],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: hexDigit,
+  parameters: [source : Bytes, position : Nat],
+  result: (Option Nat),
+  body: (match (Toml::digitAt source position) | Option.some value => (ctor Option.some [Nat] value) | Option.none => (if ((Toml::byteIs source position (65 : UInt8)) || (Toml::byteIs source position (97 : UInt8))) then (ctor Option.some [Nat] 10) else (if ((Toml::byteIs source position (66 : UInt8)) || (Toml::byteIs source position (98 : UInt8))) then (ctor Option.some [Nat] 11) else (if ((Toml::byteIs source position (67 : UInt8)) || (Toml::byteIs source position (99 : UInt8))) then (ctor Option.some [Nat] 12) else (if ((Toml::byteIs source position (68 : UInt8)) || (Toml::byteIs source position (100 : UInt8))) then (ctor Option.some [Nat] 13) else (if ((Toml::byteIs source position (69 : UInt8)) || (Toml::byteIs source position (101 : UInt8))) then (ctor Option.some [Nat] 14) else (if ((Toml::byteIs source position (70 : UInt8)) || (Toml::byteIs source position (102 : UInt8))) then (ctor Option.some [Nat] 15) else (ctor Option.none [Nat])))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: hexFrom,
+  parameters: [source : Bytes, position : Nat, count : Nat, value : Nat],
+  result: (Option Nat),
+  body: (match count | Nat.zero => (ctor Option.some [Nat] value) | Nat.succ more => (match (hexDigit source position) | Option.none => (ctor Option.none [Nat]) | Option.some digit => (hexFrom source (position + 1) more ((prim multiply value 16 : Nat) + digit)))),
+  axioms: [],
+  recursive_argument: count,
+  executable: true
+}
+
+definition{
+  name: unicode,
+  parameters: [source : Bytes, position : Nat],
+  result: (Option (Bytes * Nat)),
+  body: (match (hexFrom source position 4 0)
+    | Option.none => (ctor Option.none [(Bytes * Nat)])
+    | Option.some high => (if ((55296 <=? high) && (high <=? 56319)) then (if ((Toml::byteIs source (position + 4) (92 : UInt8)) && (Toml::byteIs source (position + 5) (117 : UInt8))) then (match (hexFrom source (position + 6) 4 0) | Option.none => (ctor Option.none [(Bytes * Nat)]) | Option.some low => (if ((56320 <=? low) && (low <=? 57343)) then (ctor Option.some [(Bytes * Nat)] ((scalar (65536 + ((prim multiply (prim subtract high 55296 : Nat) 1024 : Nat) + (prim subtract low 56320 : Nat)))), (position + 10))) else (ctor Option.none [(Bytes * Nat)]))) else (ctor Option.none [(Bytes * Nat)])) else (if ((56320 <=? high) && (high <=? 57343)) then (ctor Option.none [(Bytes * Nat)]) else (ctor Option.some [(Bytes * Nat)] ((scalar high), (position + 4)))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: escape,
+  parameters: [source : Bytes, position : Nat],
+  result: (Option (Bytes * Nat)),
+  body: (if (Toml::byteIs source position (34 : UInt8)) then (ctor Option.some [(Bytes * Nat)] (0x22, (position + 1))) else (if (Toml::byteIs source position (92 : UInt8)) then (ctor Option.some [(Bytes * Nat)] (0x5c, (position + 1))) else (if (Toml::byteIs source position (47 : UInt8)) then (ctor Option.some [(Bytes * Nat)] (0x2f, (position + 1))) else (if (Toml::byteIs source position (98 : UInt8)) then (ctor Option.some [(Bytes * Nat)] (0x08, (position + 1))) else (if (Toml::byteIs source position (102 : UInt8)) then (ctor Option.some [(Bytes * Nat)] (0x0c, (position + 1))) else (if (Toml::byteIs source position (110 : UInt8)) then (ctor Option.some [(Bytes * Nat)] (0x0a, (position + 1))) else (if (Toml::byteIs source position (114 : UInt8)) then (ctor Option.some [(Bytes * Nat)] (0x0d, (position + 1))) else (if (Toml::byteIs source position (116 : UInt8)) then (ctor Option.some [(Bytes * Nat)] (0x09, (position + 1))) else (if (Toml::byteIs source position (117 : UInt8)) then (unicode source (position + 1)) else (ctor Option.none [(Bytes * Nat)])))))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: stringFrom,
+  parameters: [source : Bytes, position : Nat, start : Nat, pieces : (List Bytes), fuel : Nat],
+  result: (Option (Bytes * Nat)),
+  body: (match fuel
+    | Nat.zero => (ctor Option.none [(Bytes * Nat)])
+    | Nat.succ more => (match (prim index source position : (Option UInt8))
+      | Option.none => (ctor Option.none [(Bytes * Nat)])
+      | Option.some value => (if (prim equal value (34 : UInt8) : Bool) then (ctor Option.some [(Bytes * Nat)] ((join (Toml::reverseBytesOnto (cons (Toml::sliceOr source start (prim subtract position start : Nat)) pieces) (nil Bytes)) 0x), (position + 1))) else (if (prim equal value (92 : UInt8) : Bool) then (match (escape source (position + 1)) | Option.none => (ctor Option.none [(Bytes * Nat)]) | Option.some escaped => (stringFrom source (second escaped) (second escaped) (cons (first escaped) (cons (Toml::sliceOr source start (prim subtract position start : Nat)) pieces)) more)) else (if (prim less_than value (32 : UInt8) : Bool) then (ctor Option.none [(Bytes * Nat)]) else (stringFrom source (position + 1) start pieces more)))))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: stringAt,
+  parameters: [source : Bytes, position : Nat],
+  result: (Option (Bytes * Nat)),
+  body: (if (Toml::byteIs source position (34 : UInt8)) then (stringFrom source (position + 1) (position + 1) (nil Bytes) (prim length source : Nat)) else (ctor Option.none [(Bytes * Nat)])),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: digitsEnd,
+  parameters: [source : Bytes, position : Nat, fuel : Nat],
+  result: Nat,
+  body: (match fuel | Nat.zero => position | Nat.succ more => (match (Toml::digitAt source position) | Option.none => position | Option.some digit => (digitsEnd source (position + 1) more))),
+  axioms: [],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: requiredDigits,
+  parameters: [source : Bytes, position : Nat],
+  result: (Option Nat),
+  body: (match (Toml::digitAt source position) | Option.none => (ctor Option.none [Nat]) | Option.some digit => (ctor Option.some [Nat] (digitsEnd source (position + 1) (prim length source : Nat)))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: exponent,
+  parameters: [source : Bytes, position : Nat],
+  result: (Option Nat),
+  body: (if ((Toml::byteIs source position (101 : UInt8)) || (Toml::byteIs source position (69 : UInt8))) then (let next : Nat := (position + 1); (requiredDigits source (if ((Toml::byteIs source next (43 : UInt8)) || (Toml::byteIs source next (45 : UInt8))) then (next + 1) else next))) else (ctor Option.some [Nat] position)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: fraction,
+  parameters: [source : Bytes, position : Nat],
+  result: (Option Nat),
+  body: (if (Toml::byteIs source position (46 : UInt8)) then (match (requiredDigits source (position + 1)) | Option.none => (ctor Option.none [Nat]) | Option.some next => (exponent source next)) else (exponent source position)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: numberEnd,
+  parameters: [source : Bytes, position : Nat],
+  result: (Option Nat),
+  body: (let start : Nat := (if (Toml::byteIs source position (45 : UInt8)) then (position + 1) else position); (if (Toml::byteIs source start (48 : UInt8)) then (fraction source (start + 1)) else (match (Toml::digitAt source start) | Option.none => (ctor Option.none [Nat]) | Option.some digit => (fraction source (digitsEnd source (start + 1) (prim length source : Nat)))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: reverseValues,
+  parameters: [items : (List Value), onto : (List Value)],
+  result: (List Value),
+  body: (match items | List.nil => onto | List.cons head tail => (reverseValues tail (cons head onto))),
+  axioms: [],
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: reverseEntries,
+  parameters: [items : (List (Bytes * Value)), onto : (List (Bytes * Value))],
+  result: (List (Bytes * Value)),
+  body: (match items | List.nil => onto | List.cons head tail => (reverseEntries tail (cons head onto))),
+  axioms: [],
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: hasKey,
+  parameters: [key : Bytes, entries : (List (Bytes * Value))],
+  result: Bool,
+  body: (match entries | List.nil => false | List.cons head tail => ((Toml::sameBytes key (first head)) || (hasKey key tail))),
+  axioms: [],
+  recursive_argument: entries,
+  executable: true
+}
+
+definition{
+  name: lookup,
+  parameters: [key : Bytes, entries : (List (Bytes * Value))],
+  result: (Option Value),
+  body: (match entries | List.nil => (ctor Option.none [Value]) | List.cons head tail => (if (Toml::sameBytes key (first head)) then (ctor Option.some [Value] (second head)) else (lookup key tail))),
+  axioms: [],
+  recursive_argument: entries,
+  executable: true
+}
+
+definition{
+  name: field,
+  parameters: [value : Value, key : Bytes],
+  result: (Option Value),
+  body: (match value | Value.object entries => (lookup key entries) | Value.null => (ctor Option.none [Value]) | Value.boolean b => (ctor Option.none [Value]) | Value.number n => (ctor Option.none [Value]) | Value.string s => (ctor Option.none [Value]) | Value.array a => (ctor Option.none [Value])),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: bad,
+  parameters: [position : Nat, reason : String],
+  result: (Result State Problem),
+  body: (ctor Result.error [State, Problem] (record Problem {offset := position, reason := reason})),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: state,
+  parameters: [position : Nat, frames : (List Frame), value : (Option Value)],
+  result: State,
+  body: (record State {position := position, frames := frames, value := value}),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: pending,
+  parameters: [position : Nat, frames : (List Frame)],
+  result: (Result State Problem),
+  body: (ctor Result.ok [State, Problem] (state position frames (ctor Option.none [Value]))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: deliver,
+  parameters: [position : Nat, frames : (List Frame), value : Value],
+  result: (Result State Problem),
+  body: (match frames
+    | List.nil => (ctor Result.ok [State, Problem] (state position (nil Frame) (ctor Option.some [Value] value)))
+    | List.cons head tail => (match head
+      | Frame.arrayStart items => (pending position (cons (ctor Frame.arrayComma (cons value items)) tail))
+      | Frame.arrayItem items => (pending position (cons (ctor Frame.arrayComma (cons value items)) tail))
+      | Frame.objectValue entries key => (pending position (cons (ctor Frame.objectComma (cons (key, value) entries)) tail))
+      | Frame.arrayComma items => (bad position "expected array separator")
+      | Frame.objectStart entries => (bad position "expected object key")
+      | Frame.objectKey entries => (bad position "expected object key")
+      | Frame.objectColon entries key => (bad position "expected colon")
+      | Frame.objectComma entries => (bad position "expected object separator"))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: openContainer,
+  parameters: [position : Nat, frames : (List Frame), frame : Frame, maxDepth : Nat],
+  result: (Result State Problem),
+  body: (if ((prim length frames : Nat) <? maxDepth) then (pending (position + 1) (cons frame frames)) else (bad position "container depth limit")),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: token,
+  parameters: [source : Bytes, position : Nat, frames : (List Frame), maxDepth : Nat],
+  result: (Result State Problem),
+  body: (if (Toml::byteIs source position (91 : UInt8)) then (openContainer position frames (ctor Frame.arrayStart (nil Value)) maxDepth) else (if (Toml::byteIs source position (123 : UInt8)) then (openContainer position frames (ctor Frame.objectStart (nil (Bytes * Value))) maxDepth) else (if (Toml::byteIs source position (34 : UInt8)) then (match (stringAt source position) | Option.none => (bad position "invalid string") | Option.some text => (deliver (second text) frames (ctor Value.string (first text)))) else (if (Toml::bytesAgreeFrom source position 0x6e756c6c 0 4) then (deliver (position + 4) frames (ctor Value.null)) else (if (Toml::bytesAgreeFrom source position 0x74727565 0 4) then (deliver (position + 4) frames (ctor Value.boolean true)) else (if (Toml::bytesAgreeFrom source position 0x66616c7365 0 5) then (deliver (position + 5) frames (ctor Value.boolean false)) else (match (numberEnd source position) | Option.none => (bad position "expected JSON value") | Option.some next => (deliver next frames (ctor Value.number (Toml::sliceOr source position (prim subtract next position : Nat))))))))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: objectKey,
+  parameters: [source : Bytes, position : Nat, entries : (List (Bytes * Value)), tail : (List Frame)],
+  result: (Result State Problem),
+  body: (match (stringAt source position) | Option.none => (bad position "expected object key") | Option.some key => (if (hasKey (first key) entries) then (bad position "duplicate object key") else (pending (second key) (cons (ctor Frame.objectColon entries (first key)) tail)))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: advance,
+  parameters: [source : Bytes, position : Nat, frames : (List Frame), maxDepth : Nat],
+  result: (Result State Problem),
+  body: (match frames
+    | List.nil => (token source position frames maxDepth)
+    | List.cons head tail => (match head
+      | Frame.arrayStart items => (if (Toml::byteIs source position (93 : UInt8)) then (deliver (position + 1) tail (ctor Value.array (nil Value))) else (token source position frames maxDepth))
+      | Frame.arrayItem items => (token source position frames maxDepth)
+      | Frame.arrayComma items => (if (Toml::byteIs source position (44 : UInt8)) then (pending (position + 1) (cons (ctor Frame.arrayItem items) tail)) else (if (Toml::byteIs source position (93 : UInt8)) then (deliver (position + 1) tail (ctor Value.array (reverseValues items (nil Value)))) else (bad position "expected comma or closing bracket")))
+      | Frame.objectStart entries => (if (Toml::byteIs source position (125 : UInt8)) then (deliver (position + 1) tail (ctor Value.object (nil (Bytes * Value)))) else (objectKey source position entries tail))
+      | Frame.objectKey entries => (objectKey source position entries tail)
+      | Frame.objectColon entries key => (if (Toml::byteIs source position (58 : UInt8)) then (pending (position + 1) (cons (ctor Frame.objectValue entries key) tail)) else (bad position "expected colon"))
+      | Frame.objectValue entries key => (token source position frames maxDepth)
+      | Frame.objectComma entries => (if (Toml::byteIs source position (44 : UInt8)) then (pending (position + 1) (cons (ctor Frame.objectKey entries) tail)) else (if (Toml::byteIs source position (125 : UInt8)) then (deliver (position + 1) tail (ctor Value.object (reverseEntries entries (nil (Bytes * Value))))) else (bad position "expected comma or closing brace"))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: conclude,
+  parameters: [source : Bytes, current : State],
+  result: (Result Value Problem),
+  body: (let position : Nat := (skip source (project current position) (prim length source : Nat)); (match (project current value) | Option.none => (ctor Result.error [Value, Problem] (record Problem {offset := position, reason := "incomplete JSON"})) | Option.some value => (if (position =? (prim length source : Nat)) then (ctor Result.ok [Value, Problem] value) else (ctor Result.error [Value, Problem] (record Problem {offset := position, reason := "trailing data"}))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: scan,
+  parameters: [source : Bytes, current : State, maxDepth : Nat, fuel : Nat],
+  result: (Result Value Problem),
+  body: (match fuel | Nat.zero => (conclude source current) | Nat.succ more => (match (project current value) | Option.some value => (conclude source current) | Option.none => (let position : Nat := (skip source (project current position) (prim length source : Nat)); (match (advance source position (project current frames) maxDepth) | Result.error problem => (ctor Result.error [Value, Problem] problem) | Result.ok next => (scan source next maxDepth more))))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: fromUtf8,
+  parameters: [source : Bytes, maxDepth : Nat, valid : Bool],
+  result: (Result Value Problem),
+  body: (match valid | Bool.true => (scan source (state 0 (nil Frame) (ctor Option.none [Value])) maxDepth (prim length source : Nat)) | Bool.false => (ctor Result.error [Value, Problem] (record Problem {offset := 0, reason := "invalid UTF-8"}))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: fromLimit,
+  parameters: [source : Bytes, maxDepth : Nat, oversized : Bool],
+  result: (Result Value Problem),
+  body: (match oversized | Bool.true => (ctor Result.error [Value, Problem] (record Problem {offset := 0, reason := "byte limit"})) | Bool.false => (fromUtf8 source maxDepth (Toml::validFrom source 0 (prim length source : Nat)))),
+  axioms: [propext],
+  executable: true
+}
+
+theorem{
+  name: fromLimitWithin,
+  parameters: [source : Bytes, maxDepth : Nat],
+  statement: ((fromLimit source maxDepth false) = (fromUtf8 source maxDepth (Toml::validFrom source 0 (prim length source : Nat)))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: fromUtf8Valid,
+  parameters: [source : Bytes, maxDepth : Nat],
+  statement: ((fromUtf8 source maxDepth true) = (scan source (state 0 (nil Frame) (ctor Option.none [Value])) maxDepth (prim length source : Nat))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+definition{
+  name: parse,
+  parameters: [source : Bytes, maxBytes : Nat, maxDepth : Nat],
+  result: (Result Value Problem),
+  body: (fromLimit source maxDepth (maxBytes <? (prim length source : Nat))),
+  axioms: [propext],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: naturalFrom,
+  parameters: [source : Bytes, position : Nat, value : Nat, maximum : Nat, fuel : Nat],
+  result: (Option Nat),
+  body: (match fuel | Nat.zero => (if (position =? (prim length source : Nat)) then (ctor Option.some [Nat] value) else (ctor Option.none [Nat])) | Nat.succ more => (if (position =? (prim length source : Nat)) then (ctor Option.some [Nat] value) else (match (Toml::digitAt source position) | Option.none => (ctor Option.none [Nat]) | Option.some digit => (if ((maximum <? digit) || ((prim quotient (prim subtract maximum digit : Nat) 10 0 : Nat) <? value)) then (ctor Option.none [Nat]) else (naturalFrom source (position + 1) ((prim multiply value 10 : Nat) + digit) maximum more))))),
+  axioms: [],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: natural,
+  parameters: [value : Value, maximum : Nat],
+  result: (Option Nat),
+  body: (match value | Value.number source => (if ((0 <? (prim length source : Nat)) && (not ((1 <? (prim length source : Nat)) && (Toml::byteIs source 0 (48 : UInt8))))) then (naturalFrom source 0 0 maximum (prim length source : Nat)) else (ctor Option.none [Nat])) | Value.null => (ctor Option.none [Nat]) | Value.boolean b => (ctor Option.none [Nat]) | Value.string s => (ctor Option.none [Nat]) | Value.array a => (ctor Option.none [Nat]) | Value.object o => (ctor Option.none [Nat])),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: features,
+  parameters: [],
+  result: (List String),
+  body: (cons "json-structure" (cons "utf8-and-unicode-escapes" (cons "duplicate-key-rejection" (cons "resource-limits" (cons "lossless-numbers" (cons "bounded-natural-decoding" (nil String))))))),
+  axioms: [],
+  executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

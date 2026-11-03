@@ -1,0 +1,1116 @@
+\begin{lexlean}{VerificationCommandFixtures}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{VerificationJsonData}
+\importmodule{VerificationUtf8Fixtures}
+\title{Boolean}
+\begin{semanticmodule}
+
+theorem{
+  name: commandStep0,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState0) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState0) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState1))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending0,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState0) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance0,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState0) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState1) 32 fuel)),
+  proof: simplify{definitions: [commandPending0, commandStep0, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep1,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState1) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState1) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState2))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending1,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState1) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance1,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState1) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState2) 32 fuel)),
+  proof: simplify{definitions: [commandPending1, commandStep1, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep2,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState2) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState2) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState3))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending2,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState2) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance2,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState2) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState3) 32 fuel)),
+  proof: simplify{definitions: [commandPending2, commandStep2, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep3,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState3) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState3) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState4))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending3,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState3) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance3,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState3) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState4) 32 fuel)),
+  proof: simplify{definitions: [commandPending3, commandStep3, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep4,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState4) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState4) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState5))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending4,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState4) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance4,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState4) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState5) 32 fuel)),
+  proof: simplify{definitions: [commandPending4, commandStep4, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep5,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState5) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState5) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState6))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending5,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState5) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance5,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState5) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState6) 32 fuel)),
+  proof: simplify{definitions: [commandPending5, commandStep5, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep6,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState6) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState6) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState7))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending6,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState6) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance6,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState6) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState7) 32 fuel)),
+  proof: simplify{definitions: [commandPending6, commandStep6, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep7,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState7) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState7) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState8))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending7,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState7) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance7,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState7) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState8) 32 fuel)),
+  proof: simplify{definitions: [commandPending7, commandStep7, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep8,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState8) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState8) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState9))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending8,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState8) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance8,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState8) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState9) 32 fuel)),
+  proof: simplify{definitions: [commandPending8, commandStep8, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep9,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState9) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState9) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState10))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending9,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState9) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance9,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState9) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState10) 32 fuel)),
+  proof: simplify{definitions: [commandPending9, commandStep9, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep10,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState10) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState10) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState11))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending10,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState10) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance10,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState10) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState11) 32 fuel)),
+  proof: simplify{definitions: [commandPending10, commandStep10, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep11,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState11) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState11) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState12))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending11,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState11) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance11,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState11) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState12) 32 fuel)),
+  proof: simplify{definitions: [commandPending11, commandStep11, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep12,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState12) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState12) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState13))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending12,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState12) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance12,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState12) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState13) 32 fuel)),
+  proof: simplify{definitions: [commandPending12, commandStep12, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep13,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState13) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState13) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState14))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending13,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState13) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance13,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState13) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState14) 32 fuel)),
+  proof: simplify{definitions: [commandPending13, commandStep13, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep14,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState14) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState14) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState15))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending14,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState14) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance14,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState14) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState15) 32 fuel)),
+  proof: simplify{definitions: [commandPending14, commandStep14, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep15,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState15) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState15) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState16))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending15,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState15) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance15,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState15) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState16) 32 fuel)),
+  proof: simplify{definitions: [commandPending15, commandStep15, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep16,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState16) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState16) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState17))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending16,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState16) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance16,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState16) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState17) 32 fuel)),
+  proof: simplify{definitions: [commandPending16, commandStep16, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep17,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState17) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState17) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState18))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending17,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState17) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance17,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState17) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState18) 32 fuel)),
+  proof: simplify{definitions: [commandPending17, commandStep17, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep18,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState18) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState18) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState19))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending18,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState18) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance18,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState18) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState19) 32 fuel)),
+  proof: simplify{definitions: [commandPending18, commandStep18, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep19,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState19) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState19) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState20))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending19,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState19) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance19,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState19) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState20) 32 fuel)),
+  proof: simplify{definitions: [commandPending19, commandStep19, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep20,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState20) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState20) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState21))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending20,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState20) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance20,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState20) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState21) 32 fuel)),
+  proof: simplify{definitions: [commandPending20, commandStep20, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep21,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState21) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState21) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState22))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending21,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState21) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance21,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState21) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState22) 32 fuel)),
+  proof: simplify{definitions: [commandPending21, commandStep21, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep22,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState22) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState22) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState23))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending22,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState22) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance22,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState22) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState23) 32 fuel)),
+  proof: simplify{definitions: [commandPending22, commandStep22, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep23,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState23) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState23) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState24))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending23,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState23) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance23,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState23) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState24) 32 fuel)),
+  proof: simplify{definitions: [commandPending23, commandStep23, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep24,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState24) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState24) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState25))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending24,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState24) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance24,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState24) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState25) 32 fuel)),
+  proof: simplify{definitions: [commandPending24, commandStep24, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep25,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState25) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState25) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState26))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending25,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState25) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance25,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState25) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState26) 32 fuel)),
+  proof: simplify{definitions: [commandPending25, commandStep25, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep26,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState26) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState26) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState27))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending26,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState26) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance26,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState26) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState27) 32 fuel)),
+  proof: simplify{definitions: [commandPending26, commandStep26, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep27,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState27) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState27) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState28))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending27,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState27) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance27,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState27) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState28) 32 fuel)),
+  proof: simplify{definitions: [commandPending27, commandStep27, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep28,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState28) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState28) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState29))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending28,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState28) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance28,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState28) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState29) 32 fuel)),
+  proof: simplify{definitions: [commandPending28, commandStep28, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep29,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState29) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState29) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState30))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending29,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState29) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance29,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState29) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState30) 32 fuel)),
+  proof: simplify{definitions: [commandPending29, commandStep29, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep30,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState30) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState30) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState31))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending30,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState30) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance30,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState30) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState31) 32 fuel)),
+  proof: simplify{definitions: [commandPending30, commandStep30, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep31,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState31) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState31) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState32))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending31,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState31) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance31,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState31) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState32) 32 fuel)),
+  proof: simplify{definitions: [commandPending31, commandStep31, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandStep32,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::commandBytes) (Json::skip (VerificationJsonData::commandBytes) (project (VerificationJsonData::commandState32) position) (prim length (VerificationJsonData::commandBytes) : Nat)) (project (VerificationJsonData::commandState32) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::commandState33))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandPending32,
+  parameters: [],
+  statement: ((project (VerificationJsonData::commandState32) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandAdvance32,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState32) 32 (fuel + 1)) = (Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState33) 32 fuel)),
+  proof: simplify{definitions: [commandPending32, commandStep32, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest33,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState33) 32 373) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest32,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState32) 32 374) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance32, commandRest33]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest31,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState31) 32 375) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance31, commandRest32]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest30,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState30) 32 376) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance30, commandRest31]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest29,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState29) 32 377) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance29, commandRest30]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest28,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState28) 32 378) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance28, commandRest29]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest27,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState27) 32 379) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance27, commandRest28]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest26,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState26) 32 380) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance26, commandRest27]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest25,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState25) 32 381) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance25, commandRest26]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest24,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState24) 32 382) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance24, commandRest25]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest23,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState23) 32 383) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance23, commandRest24]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest22,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState22) 32 384) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance22, commandRest23]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest21,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState21) 32 385) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance21, commandRest22]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest20,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState20) 32 386) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance20, commandRest21]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest19,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState19) 32 387) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance19, commandRest20]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest18,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState18) 32 388) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance18, commandRest19]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest17,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState17) 32 389) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance17, commandRest18]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest16,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState16) 32 390) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance16, commandRest17]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest15,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState15) 32 391) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance15, commandRest16]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest14,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState14) 32 392) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance14, commandRest15]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest13,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState13) 32 393) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance13, commandRest14]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest12,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState12) 32 394) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance12, commandRest13]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest11,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState11) 32 395) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance11, commandRest12]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest10,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState10) 32 396) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance10, commandRest11]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest9,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState9) 32 397) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance9, commandRest10]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest8,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState8) 32 398) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance8, commandRest9]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest7,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState7) 32 399) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance7, commandRest8]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest6,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState6) 32 400) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance6, commandRest7]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest5,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState5) 32 401) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance5, commandRest6]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest4,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState4) 32 402) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance4, commandRest5]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest3,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState3) 32 403) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance3, commandRest4]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest2,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState2) 32 404) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance2, commandRest3]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest1,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState1) 32 405) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance1, commandRest2]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandRest0,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (VerificationJsonData::commandState0) 32 406) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandAdvance0, commandRest1]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandSize,
+  parameters: [],
+  statement: ((prim length (VerificationJsonData::commandBytes) : Nat) = 406),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandFits,
+  parameters: [],
+  statement: ((8192 <? 406) = false),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandInitialState,
+  parameters: [],
+  statement: ((Json::state 0 (nil Json::Frame) (ctor Option.none [Json::Value])) = (VerificationJsonData::commandState0)),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandScanInitial,
+  parameters: [],
+  statement: ((Json::scan (VerificationJsonData::commandBytes) (Json::state 0 (nil Json::Frame) (ctor Option.none [Json::Value])) 32 406) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandInitialState, commandRest0]},
+  axioms: [propext]
+}
+
+theorem{
+  name: parseCommand,
+  parameters: [],
+  statement: ((Json::parse (VerificationJsonData::commandBytes) 8192 32) = (ctor Result.ok [Json::Value, Json::Problem] (VerificationJsonData::commandValue))),
+  proof: simplify{definitions: [commandFits, commandScanInitial, commandSize, Json::fromLimitWithin, Json::fromUtf8Valid, Json::parse, VerificationUtf8Fixtures::commandUtf8]},
+  axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

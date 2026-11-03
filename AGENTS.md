@@ -106,7 +106,7 @@ the registers. Never add a `.py` file or a shell script, and never extend `tools
 `scripts/*.py` or the shell glue: the pre-commit authoring policy refuses a commit that adds a
 Python file or grows the Python it touches, with no bypass.
 
-At the pinned compiler (the release/v0.5 development line, revision 7037c54) a production root compiles to a Rust library
+At the pinned compiler (the release/v0.5 development line, revision 1cf52d6) a production root compiles to a Rust library
 with no `main` and no effects beyond allocation, overflow and recursion: no files, processes,
 arguments or exit codes. An executable entry for a root that reads files and runs `lake`,
 `lexlean` and `git` is LexLean issue #271 (the effects boundary). So the logic moves into LexLean
@@ -123,10 +123,13 @@ The research execution modules are authored directly in LexLean:
 `ResearchRunner` connects its lifecycle to `Research`. A process exit is not a
 proof receipt. Report review must establish the exact contextual sequent,
 kernel replay, axiom policy and snapshot before returning a checked answer.
+`ResearchVerification` owns a fixed LexLean verification job and the ordered
+command/attestation reads. Its accepted outcome is validated report data;
+promotion still requires binding to the generated candidate's exact statement.
 Maintenance reports have a separate result kind. Cancellation consumes the
 outstanding host reply before issuing stop; failed cleanup retains ownership
-and halts dispatch. The generated driver, strategy planner, report decoder and
-publication path still need integration; these modules do not replace the
+and halts dispatch. The generated driver, strategy planner, report integration and
+publication path still need completion; these modules do not replace the
 legacy engine yet. Add every new application or library module and its modeled
 features to `ResearchCatalog`, and add behavioral evidence for the capability;
 a module-count theorem alone does not establish feature completeness.
