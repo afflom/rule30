@@ -6,17 +6,17 @@ act on them without reading build logs.
 
 ## The one rule
 
-LexLean is the authoring surface. Host Lean (`rule30-core-lean/Rule30UOR`) is
-where proofs are written, but a theorem exists for the paper only once it has a
-glossary entry and a statement in a `.lex.tex` file, verified by `lexlean`.
-Never write a glossary entry by hand: generate it from the Lean declaration
-with `bin/r30 theorem add`, which also writes the statement, checks it, and
-elaborates the same probe `lexlean verify` will run. The generator refuses
-what LexLean cannot state and says why (implicit binders, casts, `Bool.xor`
-instead of `bxor`, `2 ^ k` instead of `twopow k`, a lexeme not visible from the
-target lexicon, a function-typed argument such as `x : Int → Bool`: the surface
-is first-order, so operator lemmas stay host lemmas). Fix the Lean statement,
-not the entry.
+LexLean is the only authoring surface for new implementation and proof-surface
+changes. `rule30-core-lean/Rule30UOR` retains the host proof library; its presence
+does not authorize new handwritten Lean or runtime code. New logic and proof
+candidates belong in `.lex.tex` source and must pass the unchanged gate.
+
+When publishing an existing or generated Lean declaration into the paper,
+use `bin/r30 theorem add`: it generates the glossary entry and statement and
+elaborates the probe used by `lexlean verify`. Never hand-edit a glossary entry
+to make an unsupported statement appear representable. A retained host lemma
+that LexLean cannot state remains host evidence until the language can express
+it; new application logic still belongs in LexLean.
 
 Every theorem depends on at most `propext` and `Quot.sound`. `Classical.choice`
 is forbidden: `by_cases` on an undecidable proposition is a compile error, and
@@ -118,6 +118,19 @@ converter (`rule30-api/src/Convert.lex.tex`), the engine's learning rule and sch
 (`Engine.lex.tex`), the relation and recurrence engines (`Discovery.lex.tex`), all with
 certified rust-std roots.
 
+The research execution modules are authored directly in LexLean:
+`ResearchExecution` supervises one local tool through `LexLeanStd.Host`, and
+`ResearchRunner` connects its lifecycle to `Research`. A process exit is not a
+proof receipt. Report review must establish the exact contextual sequent,
+kernel replay, axiom policy and snapshot before returning a checked answer.
+Maintenance reports have a separate result kind. Cancellation consumes the
+outstanding host reply before issuing stop; failed cleanup retains ownership
+and halts dispatch. The generated driver, strategy planner, report decoder and
+publication path still need integration; these modules do not replace the
+legacy engine yet. Add every new application or library module and its modeled
+features to `ResearchCatalog`, and add behavioral evidence for the capability;
+a module-count theorem alone does not establish feature completeness.
+
 ## A round of the loop
 
 Retired (2026-11-01): the research runs inside the repository, in the engine on GitHub Actions
@@ -194,10 +207,10 @@ bin/r30 commit -m "..." --wait [--coauthor ""]                      # the gate i
   library theorem proves the claim (outcome `known`: no statement is proved twice,
   `kappa --duplicates` prints no group), and the claim is set `proved` only with a
   published, kernel-checked theorem (`frontier check`).
-- **Adding a strategy** is a feature: a template file, a row of `PORTFOLIO`, its
-  renderer and applicability in `deduce.py`, then `api sync`. A changed template
-  or renderer has a new digest, so every observed claim it applies to is attempted
-  again; an unchanged digest is never attempted twice on a claim.
+- **Adding a strategy** means authoring its selection, applicability and candidate
+  construction in LexLean. The Python portfolio and templates above describe the
+  legacy executor, not an extension point. Preserve its identity discipline:
+  changed strategy inputs get a new digest, and unchanged attempts are not repeated.
 - **The ledger** `rule30-api/model/engine.toml` records every attempt (claim κ,
   strategy, template digest, family, outcome, failure point, seconds, and for
   `library-rewrite` the library digest: the research modules' sources and the
@@ -236,13 +249,14 @@ bin/r30 commit -m "..." --wait [--coauthor ""]                      # the gate i
   run by hand leaves its record in the ledger; the next tick accepts that one dirty
   file.
 
-## A theorem's life
+## Publishing retained or generated host evidence
 
-1. State and prove it in a research module (`rule30-core-lean/Rule30UOR/*.lean`).
-   Use the paper's vocabulary in the statement: `twopow`, `bxor`, `rowBit`,
-   `naturalBit`, named predicates rather than inline quantifiers. A new module
-   is created and registered with `bin/r30 module add <Name>` (never by editing
-   `lakefile.toml` or the audit by hand); `bin/r30 module build <Name>` builds it.
+New proof candidates are authored in LexLean. The following commands publish
+declarations already present in the retained or generated host library.
+
+1. Confirm the declaration uses the paper's vocabulary: `twopow`, `bxor`,
+   `rowBit`, `naturalBit` and named predicates. Use the module registration API
+   for generated research modules; never hand-edit Lake roots or the audit.
 2. `bin/r30 theorem add Rule30UOR.<Module>.<name>`. The entry lands in
    `r30.observation` (override with `--lexicon`), the statement at the end of
    `Observations.lex.tex` (override with `--target`). Known limitation: a
@@ -296,15 +310,15 @@ with a published theorem is restated as a theorem block generated from its
 Lean type and closed by its lexeme, so `lexlean verify` checks the content of
 the register and `frontier check` refuses a stale render. Work happens only on `open` claims; a new route is an `open` claim
 before it is a theorem, and a dead route stays in the file as `refuted` so it is
-not walked again. This is the one idea taken from PrismPM's model registers
-(every registered capability covered by a fixture): every registered claim is
-covered by kernel evidence. PrismPM itself compiles LexLean application models
-into Cargo, Wasm and Hologram artifacts behind a Rust and devcontainer
-toolchain, and `prism-stdlib` is its generated runtime (Holo containers,
-checked integers, UTF-8, system manifests). Nothing in a proof repository needs
-those artifacts or that runtime, so neither is a dependency here. No tool
-constructs the proof; what the tooling does is make every statement, claim and
-cost explicit and checked, so that effort goes only to `open` claims.
+not walked again. PrismPM models both the research register and the application:
+open claims remain open, finite observations remain observations, and proof
+status requires kernel evidence. The API imports the vendored prism-stdlib
+`Foundation.Arch` and `Foundation.Qual` modules for stakeholders, concerns,
+views and quality, and the locked LexLean standard library for executable
+components. Its production roots compile to certified Rust libraries.
+Tools may construct proof candidates; only verification establishes a result.
+The research controller and runner track their contexts, dependencies, costs
+and evidence so that execution remains directed at the open obligations.
 
 ## Layout
 

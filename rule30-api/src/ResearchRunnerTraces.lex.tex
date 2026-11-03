@@ -1,0 +1,302 @@
+\begin{lexlean}{ResearchRunnerTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchTraces}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchRunner}
+\importmodule{Hypotheses}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+  name: initial,
+  parameters: [],
+  result: (ResearchRunner::State * ResearchRunner::Action),
+  body: (ResearchRunner::begin (ResearchTraces::state (cons (ResearchTraces::task 0x61 (ctor Research::Purpose.prove) 0 8) (nil Research::Task))))
+}
+
+definition{
+  name: launch,
+  parameters: [],
+  result: (ResearchRunner::State * ResearchRunner::Action),
+  body: (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))
+}
+
+definition{
+  name: running,
+  parameters: [],
+  result: (ResearchRunner::State * ResearchRunner::Action),
+  body: (ResearchRunner::step (first (launch)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100)))))
+}
+
+definition{
+  name: success,
+  parameters: [],
+  result: (ResearchRunner::State * ResearchRunner::Action),
+  body: (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105)))
+}
+
+definition{
+  name: checkedAnswer,
+  parameters: [target : Bytes],
+  result: Research::Answer,
+  body: (record Research::Answer {request := (ResearchTraces::request (ctor Research::Purpose.prove)), result := (ctor Research::ResultKind.checked (ResearchTraces::goal target 0x47 0) 0x70726f6f66 (nil String))})
+}
+
+definition{
+  name: kindOf,
+  parameters: [result : (ResearchRunner::State * ResearchRunner::Action)],
+  result: Nat,
+  body: (match (second result) | ResearchRunner::Action.work request => 0 | ResearchRunner::Action.host request => 1 | ResearchRunner::Action.review receipt => 2 | ResearchRunner::Action.wait  => 3 | ResearchRunner::Action.idle  => 4 | ResearchRunner::Action.blocked  => 5 | ResearchRunner::Action.refused  => 6)
+}
+
+definition{
+  name: historySize,
+  parameters: [result : (ResearchRunner::State * ResearchRunner::Action)],
+  result: Nat,
+  body: (prim length (project (project (first result) research) history) : Nat)
+}
+
+definition{
+  name: taskStatus,
+  parameters: [result : (ResearchRunner::State * ResearchRunner::Action)],
+  result: Nat,
+  body: (match (project (project (first result) research) tasks) | List.nil => 9 | List.cons task tail => (match (project task status) | Research::Status.ready => 0 | Research::Status.waiting => 1 | Research::Status.blocked => 2 | Research::Status.established => 3 | Research::Status.exhausted => 4))
+}
+
+definition{
+  name: ownedChild,
+  parameters: [result : (ResearchRunner::State * ResearchRunner::Action)],
+  result: Nat,
+  body: (match (project (first result) execution) | Option.none => 0 | Option.some execution => (match (project execution owner) | Option.none => 0 | Option.some child => child))
+}
+
+definition{
+  name: stopTarget,
+  parameters: [result : (ResearchRunner::State * ResearchRunner::Action)],
+  result: Nat,
+  body: (match (second result) | ResearchRunner::Action.host request => (match request | LexLeanStd.Host::Request.read path => 0 | LexLeanStd.Host::Request.write path contents => 0 | LexLeanStd.Host::Request.list path => 0 | LexLeanStd.Host::Request.stat path => 0 | LexLeanStd.Host::Request.createDir path => 0 | LexLeanStd.Host::Request.removeFile path => 0 | LexLeanStd.Host::Request.removeTree path => 0 | LexLeanStd.Host::Request.rename source target => 0 | LexLeanStd.Host::Request.canonical path => 0 | LexLeanStd.Host::Request.lock path => 0 | LexLeanStd.Host::Request.spawn child => 0 | LexLeanStd.Host::Request.wait children duration => 0 | LexLeanStd.Host::Request.stop child => child | LexLeanStd.Host::Request.exit status output errors => 0) | ResearchRunner::Action.work request => 0 | ResearchRunner::Action.review receipt => 0 | ResearchRunner::Action.wait => 0 | ResearchRunner::Action.idle => 0 | ResearchRunner::Action.blocked => 0 | ResearchRunner::Action.refused => 0)
+}
+
+theorem{
+  name: attentionProducesWork,
+  parameters: [],
+  statement: ((kindOf (initial)) = 0),
+  proof: decide{}
+}
+
+theorem{
+  name: matchingJobLaunches,
+  parameters: [],
+  statement: ((kindOf (launch)) = 1),
+  proof: decide{}
+}
+
+theorem{
+  name: aSecondJobCannotLaunchWhileRunning,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))) = 6),
+  proof: decide{}
+}
+
+theorem{
+  name: unsolicitedHostReplyIsRefused,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100)))))) = 6),
+  proof: decide{}
+}
+
+theorem{
+  name: receiptBeforeExecutionIsRefused,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 6),
+  proof: decide{}
+}
+
+theorem{
+  name: zeroExitRequiresReportReview,
+  parameters: [],
+  statement: ((kindOf (success)) = 2),
+  proof: decide{}
+}
+
+theorem{
+  name: zeroExitDoesNotEstablishTheTask,
+  parameters: [],
+  statement: ((taskStatus (success)) = 1),
+  proof: decide{}
+}
+
+theorem{
+  name: zeroExitAddsNoKernelEvidence,
+  parameters: [],
+  statement: ((historySize (success)) = 0),
+  proof: decide{}
+}
+
+theorem{
+  name: matchingCheckedReportEstablishesTheTask,
+  parameters: [],
+  statement: ((taskStatus (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 3),
+  proof: decide{}
+}
+
+theorem{
+  name: matchingCheckedReportSettlesTheController,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 4),
+  proof: decide{}
+}
+
+theorem{
+  name: acceptedReportIsRecordedOnce,
+  parameters: [],
+  statement: ((historySize (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 1),
+  proof: decide{}
+}
+
+theorem{
+  name: replayedReportIsRefused,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 6),
+  proof: decide{}
+}
+
+theorem{
+  name: anotherTargetCannotEstablishTheTask,
+  parameters: [],
+  statement: ((taskStatus (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4862)))) = 2),
+  proof: decide{}
+}
+
+definition{
+  name: invalidated,
+  parameters: [],
+  result: (ResearchRunner::State * ResearchRunner::Action),
+  body: (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "stdlib" (nil String))))
+}
+
+theorem{
+  name: changeDrainsTheOutstandingWait,
+  parameters: [],
+  statement: ((kindOf (invalidated)) = 3),
+  proof: decide{}
+}
+
+definition{
+  name: stopping,
+  parameters: [],
+  result: (ResearchRunner::State * ResearchRunner::Action),
+  body: (ResearchRunner::step (first (invalidated)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::waitEvent 105 (nil (Nat * (Option Int32))))))
+}
+
+theorem{
+  name: changedDependencyStopsTheOwnedChild,
+  parameters: [],
+  statement: ((stopTarget (stopping)) = 7),
+  proof: decide{}
+}
+
+definition{
+  name: cancelled,
+  parameters: [],
+  result: (ResearchRunner::State * ResearchRunner::Action),
+  body: (ResearchRunner::step (first (stopping)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::stopOk)))
+}
+
+theorem{
+  name: cancelledEvidenceIsNotRecorded,
+  parameters: [],
+  statement: ((historySize (cancelled)) = 0),
+  proof: decide{}
+}
+
+theorem{
+  name: invalidatedTaskIsRescheduledForInspection,
+  parameters: [],
+  statement: ((kindOf (cancelled)) = 0),
+  proof: decide{}
+}
+
+theorem{
+  name: staleReportAfterCancellationIsRefused,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (cancelled)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 6),
+  proof: decide{}
+}
+
+definition{
+  name: failedStop,
+  parameters: [],
+  result: (ResearchRunner::State * ResearchRunner::Action),
+  body: (ResearchRunner::step (first (stopping)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))
+}
+
+theorem{
+  name: failedStopHaltsTheRunner,
+  parameters: [],
+  statement: ((project (first (failedStop)) halted) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: failedStopPreservesChildOwnership,
+  parameters: [],
+  statement: ((ownedChild (failedStop)) = 7),
+  proof: decide{}
+}
+
+theorem{
+  name: haltedRunnerCannotLaunchAnotherJob,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (failedStop)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))) = 5),
+  proof: decide{}
+}
+
+theorem{
+  name: unrelatedFeatureChangeDoesNotCancelWork,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "presentation" (nil String))))) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105)))) = 2),
+  proof: decide{}
+}
+
+theorem{
+  name: newHypothesesDoNotCancelIndependentWork,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.ingest (cons (ResearchTraces::hypothesis) (nil Hypotheses::Hypothesis))))) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105)))) = 2),
+  proof: decide{}
+}
+
+theorem{
+  name: modelChangeDiscardsPendingReview,
+  parameters: [],
+  statement: ((kindOf (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "stdlib" (nil String))))) = 0),
+  proof: decide{}
+}
+
+theorem{
+  name: discardedReviewAddsNoEvidence,
+  parameters: [],
+  statement: ((historySize (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "stdlib" (nil String))))) = 0),
+  proof: decide{}
+}
+
+definition{
+  name: lostDependency,
+  parameters: [],
+  result: (List Research::Component),
+  body: (cons (record Research::Component {id := "deduction", dependencies := (cons "audit" (nil String)), concern := "proof", available := true}) (cons (record Research::Component {id := "audit", dependencies := (cons "stdlib" (nil String)), concern := "context", available := true}) (cons (record Research::Component {id := "stdlib", dependencies := (nil String), concern := "identity", available := false}) (nil Research::Component))))
+}
+
+theorem{
+  name: availabilityChangesAreDetectedWithoutAHint,
+  parameters: [],
+  statement: ((stopTarget (ResearchRunner::step (first (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (lostDependency) (nil String)))) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::waitEvent 105 (nil (Nat * (Option Int32))))))) = 7),
+  proof: decide{}
+}
+
+\end{semanticmodule}
+\end{lexlean}

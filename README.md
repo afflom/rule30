@@ -295,6 +295,15 @@ That source package ports the actual interface from
 including fallible startup paths, timed child waits and byte output.
 The API imports `LexLeanStd.Host` from the pinned source package; its local
 `Host` module contains only the application harness. The attention catalog
-covers all 30 application and library modules. The generated executable
-driver and research executor integration are still required. CI and runtime
+covers all 34 application and library modules. `ResearchRunner` connects the
+controller to the local-tool supervisor in `ResearchExecution`: it binds each
+job to the outstanding request, drains cancelled host requests, preserves child
+ownership on cleanup failure, and requires report review after a successful
+process exit. Checked proof reports must name the exact sequent; maintenance
+reports must cover the requested sources. Dependency changes invalidate both
+active work and remembered evidence.
+
+The generated executable driver, strategy job construction, report decoding and
+durable publication are still required for the new runner to replace the legacy
+engine. Its exported functions are currently pure libraries. CI and runtime
 use deterministic local tools and no remote models.
