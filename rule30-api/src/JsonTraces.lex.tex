@@ -1,0 +1,853 @@
+\begin{lexlean}{JsonTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: accepted,
+  parameters: [source : Bytes, bytes : Nat, depth : Nat],
+  result: Bool,
+  body: (match (Json::parse source bytes depth) | Result.ok value => true | Result.error problem => false),
+  axioms: [propext]
+}
+definition{
+  name: payload,
+  parameters: [source : Bytes],
+  result: Bytes,
+  body: (match (Json::parse source 8192 32) | Result.error problem => 0x | Result.ok value => (match value | Json::Value.string text => text | Json::Value.number text => text | Json::Value.null => 0x | Json::Value.boolean b => 0x | Json::Value.array items => 0x | Json::Value.object entries => 0x)),
+  axioms: [propext]
+}
+definition{
+  name: number,
+  parameters: [source : Bytes, maximum : Nat],
+  result: (Option Nat),
+  body: (match (Json::parse source 8192 32) | Result.error problem => (ctor Option.none [Nat]) | Result.ok value => (Json::natural value maximum)),
+  axioms: [propext]
+}
+
+theorem{
+  name: valid0,
+  parameters: [],
+  statement: ((accepted 0x6e756c6c 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid1,
+  parameters: [],
+  statement: ((accepted 0x74727565 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid2,
+  parameters: [],
+  statement: ((accepted 0x66616c7365 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid3,
+  parameters: [],
+  statement: ((accepted 0x30 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid4,
+  parameters: [],
+  statement: ((accepted 0x2d30 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid5,
+  parameters: [],
+  statement: ((accepted 0x313233 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid6,
+  parameters: [],
+  statement: ((accepted 0x2d31322e3530652b37 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid7,
+  parameters: [],
+  statement: ((accepted 0x31452d33 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid8,
+  parameters: [],
+  statement: ((accepted 0x5b5d 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid9,
+  parameters: [],
+  statement: ((accepted 0x7b7d 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid10,
+  parameters: [],
+  statement: ((accepted 0x5b6e756c6c2c747275652c66616c73652c302c7b7d2c5b5d5d 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid11,
+  parameters: [],
+  statement: ((accepted 0x7b2261223a5b312c325d2c2262223a7b2263223a6e756c6c7d7d 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid12,
+  parameters: [],
+  statement: ((accepted 0x20090d0a2030200d0a 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid13,
+  parameters: [],
+  statement: ((accepted 0x2222 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid14,
+  parameters: [],
+  statement: ((accepted 0x222f22 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid15,
+  parameters: [],
+  statement: ((accepted 0x225c2f22 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid16,
+  parameters: [],
+  statement: ((accepted 0x225c625c665c6e5c725c745c225c5c22 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid17,
+  parameters: [],
+  statement: ((accepted 0x22c3a920e289a420e28a9520f090808020f09f988022 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid18,
+  parameters: [],
+  statement: ((accepted 0x225c753030303022 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid19,
+  parameters: [],
+  statement: ((accepted 0x225c756437666622 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid20,
+  parameters: [],
+  statement: ((accepted 0x225c756530303022 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid21,
+  parameters: [],
+  statement: ((accepted 0x225c75643830305c756463303022 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid22,
+  parameters: [],
+  statement: ((accepted 0x225c75646266665c756466666622 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid23,
+  parameters: [],
+  statement: ((accepted 0x225c75443833445c754445303022 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid24,
+  parameters: [],
+  statement: ((accepted 0x227f22 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: valid25,
+  parameters: [],
+  statement: ((accepted 0x39393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939 8192 32) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid0,
+  parameters: [],
+  statement: ((accepted 0x 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid1,
+  parameters: [],
+  statement: ((accepted 0x20 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid2,
+  parameters: [],
+  statement: ((accepted 0x6e756c 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid3,
+  parameters: [],
+  statement: ((accepted 0x747275652066616c7365 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid4,
+  parameters: [],
+  statement: ((accepted 0x7472756578 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid5,
+  parameters: [],
+  statement: ((accepted 0x4e756c6c 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid6,
+  parameters: [],
+  statement: ((accepted 0x4e614e 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid7,
+  parameters: [],
+  statement: ((accepted 0x496e66696e697479 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid8,
+  parameters: [],
+  statement: ((accepted 0x2b31 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid9,
+  parameters: [],
+  statement: ((accepted 0x2e31 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid10,
+  parameters: [],
+  statement: ((accepted 0x312e 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid11,
+  parameters: [],
+  statement: ((accepted 0x3031 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid12,
+  parameters: [],
+  statement: ((accepted 0x2d3031 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid13,
+  parameters: [],
+  statement: ((accepted 0x3165 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid14,
+  parameters: [],
+  statement: ((accepted 0x31652b 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid15,
+  parameters: [],
+  statement: ((accepted 0x31652d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid16,
+  parameters: [],
+  statement: ((accepted 0x2d2d31 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid17,
+  parameters: [],
+  statement: ((accepted 0x5b 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid18,
+  parameters: [],
+  statement: ((accepted 0x5d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid19,
+  parameters: [],
+  statement: ((accepted 0x7b 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid20,
+  parameters: [],
+  statement: ((accepted 0x7d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid21,
+  parameters: [],
+  statement: ((accepted 0x5b312c5d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid22,
+  parameters: [],
+  statement: ((accepted 0x5b2c315d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid23,
+  parameters: [],
+  statement: ((accepted 0x5b3120325d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid24,
+  parameters: [],
+  statement: ((accepted 0x5b312c2c325d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid25,
+  parameters: [],
+  statement: ((accepted 0x7b2261223a312c7d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid26,
+  parameters: [],
+  statement: ((accepted 0x7b22612220317d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid27,
+  parameters: [],
+  statement: ((accepted 0x7b2261223a7d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid28,
+  parameters: [],
+  statement: ((accepted 0x7b313a327d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid29,
+  parameters: [],
+  statement: ((accepted 0x7b2261223a31202262223a327d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid30,
+  parameters: [],
+  statement: ((accepted 0x7b2261223a312c2261223a327d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid31,
+  parameters: [],
+  statement: ((accepted 0x7b2261223a312c225c7530303631223a327d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid32,
+  parameters: [],
+  statement: ((accepted 0x7b22f09f9880223a312c225c75643833645c7564653030223a327d 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid33,
+  parameters: [],
+  statement: ((accepted 0x225c7822 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid34,
+  parameters: [],
+  statement: ((accepted 0x225c7522 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid35,
+  parameters: [],
+  statement: ((accepted 0x225c753067303022 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid36,
+  parameters: [],
+  statement: ((accepted 0x225c756438303022 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid37,
+  parameters: [],
+  statement: ((accepted 0x225c756463303022 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid38,
+  parameters: [],
+  statement: ((accepted 0x225c75643830305c753030303022 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid39,
+  parameters: [],
+  statement: ((accepted 0x225c75643830307822 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid40,
+  parameters: [],
+  statement: ((accepted 0x220a22 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid41,
+  parameters: [],
+  statement: ((accepted 0x220022 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid42,
+  parameters: [],
+  statement: ((accepted 0x22616263 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid43,
+  parameters: [],
+  statement: ((accepted 0x226162635c 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid44,
+  parameters: [],
+  statement: ((accepted 0x2f2a612a2f6e756c6c 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid45,
+  parameters: [],
+  statement: ((accepted 0x22c0af22 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid46,
+  parameters: [],
+  statement: ((accepted 0x22eda08022 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid47,
+  parameters: [],
+  statement: ((accepted 0x22f490808022 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid48,
+  parameters: [],
+  statement: ((accepted 0x228022 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid49,
+  parameters: [],
+  statement: ((accepted 0x22c222 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: invalid50,
+  parameters: [],
+  statement: ((accepted 0xefbbbf6e756c6c 8192 32) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: payload0,
+  parameters: [],
+  statement: ((Toml::sameBytes (payload 0x225c753030653922) 0xc3a9) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: payload1,
+  parameters: [],
+  statement: ((Toml::sameBytes (payload 0x225c75643830305c756463303022) 0xf0908080) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: payload2,
+  parameters: [],
+  statement: ((Toml::sameBytes (payload 0x225c75646266665c756466666622) 0xf48fbfbf) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: payload3,
+  parameters: [],
+  statement: ((Toml::sameBytes (payload 0x225c75443833445c754445303022) 0xf09f9880) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: payload4,
+  parameters: [],
+  statement: ((Toml::sameBytes (payload 0x22c3a95c6eceb15c745c753030303022) 0xc3a90aceb10900) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: payload5,
+  parameters: [],
+  statement: ((Toml::sameBytes (payload 0x225c625c665c6e5c725c745c225c5c5c2f22) 0x080c0a0d09225c2f) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: payload6,
+  parameters: [],
+  statement: ((Toml::sameBytes (payload 0x2d31322e3530452b37) 0x2d31322e3530452b37) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: exactByteLimit,
+  parameters: [],
+  statement: ((accepted 0x6e756c6c 4 0) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: overByteLimit,
+  parameters: [],
+  statement: ((accepted 0x6e756c6c 3 0) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: zeroByteLimit,
+  parameters: [],
+  statement: ((accepted 0x30 0 0) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: scalarAtZeroDepth,
+  parameters: [],
+  statement: ((accepted 0x31 1 0) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: containerAtZeroDepth,
+  parameters: [],
+  statement: ((accepted 0x5b5d 2 0) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: exactDepth,
+  parameters: [],
+  statement: ((accepted 0x5b5b5d5d 4 2) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: overDepth,
+  parameters: [],
+  statement: ((accepted 0x5b5b5d5d 4 1) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: mixedDepth,
+  parameters: [],
+  statement: ((accepted 0x7b2261223a5b7b7d5d7d 10 3) = true),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: mixedOverDepth,
+  parameters: [],
+  statement: ((accepted 0x7b2261223a5b7b7d5d7d 10 2) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: zeroNatural,
+  parameters: [],
+  statement: ((number 0x30 0) = (ctor Option.some [Nat] 0)),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: exactNatural,
+  parameters: [],
+  statement: ((number 0x313233 123) = (ctor Option.some [Nat] 123)),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: overNatural,
+  parameters: [],
+  statement: ((number 0x313234 123) = (ctor Option.none [Nat])),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: negativeNatural,
+  parameters: [],
+  statement: ((number 0x2d31 100) = (ctor Option.none [Nat])),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: fractionNatural,
+  parameters: [],
+  statement: ((number 0x312e30 100) = (ctor Option.none [Nat])),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: exponentNatural,
+  parameters: [],
+  statement: ((number 0x316530 100) = (ctor Option.none [Nat])),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: largeNatural,
+  parameters: [],
+  statement: ((number 0x3138343436373434303733373039353531363135 18446744073709551615) = (ctor Option.some [Nat] 18446744073709551615)),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: overflowNatural,
+  parameters: [],
+  statement: ((number 0x3138343436373434303733373039353531363136 18446744073709551615) = (ctor Option.none [Nat])),
+  proof: decide{},
+  axioms: [propext]
+}
+
+definition{
+  name: objectNumber,
+  parameters: [],
+  result: (Option Nat),
+  body: (match (Json::parse 0x7b2261223a312c2262223a327d 64 2) | Result.error problem => (ctor Option.none [Nat]) | Result.ok value => (match (Json::field value 0x62) | Option.none => (ctor Option.none [Nat]) | Option.some found => (Json::natural found 10))),
+  axioms: [propext]
+}
+theorem{
+  name: lookupPreservesObjectValues,
+  parameters: [],
+  statement: ((objectNumber) = (ctor Option.some [Nat] 2)),
+  proof: decide{},
+  axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

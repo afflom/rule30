@@ -295,7 +295,7 @@ That source package ports the actual interface from
 including fallible startup paths, timed child waits and byte output.
 The API imports `LexLeanStd.Host` from the pinned source package; its local
 `Host` module contains only the application harness. The attention catalog
-covers all 34 application and library modules. `ResearchRunner` connects the
+covers all 49 application and library modules. `ResearchRunner` connects the
 controller to the local-tool supervisor in `ResearchExecution`: it binds each
 job to the outstanding request, drains cancelled host requests, preserves child
 ownership on cleanup failure, and requires report review after a successful
@@ -303,7 +303,18 @@ process exit. Checked proof reports must name the exact sequent; maintenance
 reports must cover the requested sources. Dependency changes invalidate both
 active work and remembered evidence.
 
-The generated executable driver, strategy job construction, report decoding and
+The `Json` and `VerificationReport` modules decode tool reports with explicit
+resource limits, exact tool identities, declaration axiom checks and module
+kernel-replay records. The decoder recomputes the attestation content identity;
+`ResearchVerification` owns the fixed local verify job, reads its command output
+before the matching attestation, and returns a receipt only after decoding it.
+Cancellation drains pending reads; failed process cleanup retains ownership.
+The receipt still needs binding to the generated candidate's exact statement.
+UTF-8 chunk, parser-state and SHA-256 block facts keep the complete report
+acceptance proof compositional; lifecycle traces reuse that checked receipt and verify rejection,
+cancellation, ownership and terminal behavior.
+
+The generated executable driver, strategy candidate construction, runner integration and
 durable publication are still required for the new runner to replace the legacy
 engine. Its exported functions are currently pure libraries. CI and runtime
 use deterministic local tools and no remote models.

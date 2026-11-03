@@ -1,0 +1,549 @@
+\begin{lexlean}{ResearchVerificationTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{VerificationReportTraces}
+\importmodule{VerificationJsonFixtures}
+\importmodule{VerificationHashFixtures}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+  name: config,
+  parameters: [limit : Nat, projectFile : String, output : String, errors : String],
+  result: ResearchVerification::Config,
+  body: (record ResearchVerification::Config {project := projectFile, moduleSource := "src/Candidate.lex.tex", directory := "/research", environment := (nil (String * String)), output := output, errors := errors, verifiedRoot := "/research/.lexlean/verified", maxBytes := limit, allowance := 100, quantum := 10, polls := 10})
+}
+
+definition{
+  name: settings,
+  parameters: [],
+  result: ResearchVerification::Config,
+  body: (config 8192 "/research/lexlean.toml" "/research/attempt.out" "/research/attempt.err")
+}
+
+definition{
+  name: begin,
+  parameters: [],
+  result: (ResearchVerification::State * ResearchVerification::Emission),
+  body: (ResearchVerification::begin (VerificationReportTraces::pins) (settings)),
+  axioms: [propext]
+}
+
+definition{
+  name: spawned,
+  parameters: [],
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100)))
+}
+
+definition{
+  name: active,
+  parameters: [],
+  result: ResearchVerification::State,
+  body: (first (ResearchVerification::step (first (begin)) (ctor ResearchVerification::Event.host (spawned)))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: exited,
+  parameters: [],
+  result: LexLeanStd.Host::Event,
+  body: (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 101)
+}
+
+definition{
+  name: completedExecution,
+  parameters: [],
+  result: ResearchExecution::State,
+  body: (let finished : ResearchExecution::State := (first (ResearchExecution::finish (ResearchVerification::job (VerificationReportTraces::pins) (settings)) (ctor ResearchExecution::EndKind.succeeded) (ctor Option.some [Int32] (0 : Int32)) 101 0x)); (record ResearchExecution::State {job := (project finished job), phase := (project finished phase), owner := (ctor Option.some [Nat] 7)})),
+  axioms: [propext]
+}
+
+definition{
+  name: commandPending,
+  parameters: [],
+  result: ResearchVerification::State,
+  body: (record ResearchVerification::State {pins := (VerificationReportTraces::pins), config := (settings), execution := (completedExecution), phase := (ctor ResearchVerification::Phase.command), cancelled := false, outcome := (ctor Option.none [ResearchVerification::Outcome])}),
+  axioms: [propext]
+}
+
+definition{
+  name: commandBytes,
+  parameters: [],
+  result: Bytes,
+  body: (VerificationJsonFixtures::commandBytes)
+}
+
+definition{
+  name: reportBytes,
+  parameters: [],
+  result: Bytes,
+  body: (VerificationJsonFixtures::reportBytes)
+}
+
+definition{
+  name: reportPending,
+  parameters: [],
+  result: ResearchVerification::State,
+  body: (record ResearchVerification::State {pins := (VerificationReportTraces::pins), config := (settings), execution := (completedExecution), phase := (ctor ResearchVerification::Phase.attestation (VerificationJsonFixtures::commandBytes)), cancelled := false, outcome := (ctor Option.none [ResearchVerification::Outcome])}),
+  axioms: [propext]
+}
+
+definition{
+  name: accepted,
+  parameters: [],
+  result: (ResearchVerification::State * ResearchVerification::Emission),
+  body: (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (VerificationJsonFixtures::reportBytes))))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: kind,
+  parameters: [result : (ResearchVerification::State * ResearchVerification::Emission)],
+  result: Nat,
+  body: (match (second result) | ResearchVerification::Emission.awaiting => 1 | ResearchVerification::Emission.host request => 0 | ResearchVerification::Emission.complete outcome => (match outcome | ResearchVerification::Outcome.accepted receipt => 2 | ResearchVerification::Outcome.rejected reason => 3 | ResearchVerification::Outcome.cancelled => 4 | ResearchVerification::Outcome.terminated completion => 5))
+}
+
+definition{
+  name: readPath,
+  parameters: [result : (ResearchVerification::State * ResearchVerification::Emission)],
+  result: String,
+  body: (match (second result) | ResearchVerification::Emission.awaiting => "" | ResearchVerification::Emission.complete outcome => "" | ResearchVerification::Emission.host request => (match request | LexLeanStd.Host::Request.read path => path | LexLeanStd.Host::Request.write path contents => "" | LexLeanStd.Host::Request.list path => "" | LexLeanStd.Host::Request.stat path => "" | LexLeanStd.Host::Request.createDir path => "" | LexLeanStd.Host::Request.removeFile path => "" | LexLeanStd.Host::Request.removeTree path => "" | LexLeanStd.Host::Request.rename source target => "" | LexLeanStd.Host::Request.canonical path => "" | LexLeanStd.Host::Request.lock path => "" | LexLeanStd.Host::Request.spawn child => "" | LexLeanStd.Host::Request.wait children duration => "" | LexLeanStd.Host::Request.stop child => "" | LexLeanStd.Host::Request.exit status output errors => ""))
+}
+
+definition{
+  name: stopTarget,
+  parameters: [result : (ResearchVerification::State * ResearchVerification::Emission)],
+  result: Nat,
+  body: (match (second result) | ResearchVerification::Emission.awaiting => 0 | ResearchVerification::Emission.complete outcome => 0 | ResearchVerification::Emission.host request => (match request | LexLeanStd.Host::Request.read path => 0 | LexLeanStd.Host::Request.write path contents => 0 | LexLeanStd.Host::Request.list path => 0 | LexLeanStd.Host::Request.stat path => 0 | LexLeanStd.Host::Request.createDir path => 0 | LexLeanStd.Host::Request.removeFile path => 0 | LexLeanStd.Host::Request.removeTree path => 0 | LexLeanStd.Host::Request.rename source target => 0 | LexLeanStd.Host::Request.canonical path => 0 | LexLeanStd.Host::Request.lock path => 0 | LexLeanStd.Host::Request.spawn child => 0 | LexLeanStd.Host::Request.wait children duration => 0 | LexLeanStd.Host::Request.stop child => child | LexLeanStd.Host::Request.exit status output errors => 0))
+}
+
+definition{
+  name: program,
+  parameters: [result : (ResearchVerification::State * ResearchVerification::Emission)],
+  result: String,
+  body: (match (second result) | ResearchVerification::Emission.awaiting => "" | ResearchVerification::Emission.complete outcome => "" | ResearchVerification::Emission.host request => (match request | LexLeanStd.Host::Request.read path => "" | LexLeanStd.Host::Request.write path contents => "" | LexLeanStd.Host::Request.list path => "" | LexLeanStd.Host::Request.stat path => "" | LexLeanStd.Host::Request.createDir path => "" | LexLeanStd.Host::Request.removeFile path => "" | LexLeanStd.Host::Request.removeTree path => "" | LexLeanStd.Host::Request.rename source target => "" | LexLeanStd.Host::Request.canonical path => "" | LexLeanStd.Host::Request.lock path => "" | LexLeanStd.Host::Request.spawn child => (project child program) | LexLeanStd.Host::Request.wait children duration => "" | LexLeanStd.Host::Request.stop child => "" | LexLeanStd.Host::Request.exit status output errors => ""))
+}
+
+definition{
+  name: argumentCount,
+  parameters: [result : (ResearchVerification::State * ResearchVerification::Emission)],
+  result: Nat,
+  body: (match (second result) | ResearchVerification::Emission.awaiting => 0 | ResearchVerification::Emission.complete outcome => 0 | ResearchVerification::Emission.host request => (match request | LexLeanStd.Host::Request.read path => 0 | LexLeanStd.Host::Request.write path contents => 0 | LexLeanStd.Host::Request.list path => 0 | LexLeanStd.Host::Request.stat path => 0 | LexLeanStd.Host::Request.createDir path => 0 | LexLeanStd.Host::Request.removeFile path => 0 | LexLeanStd.Host::Request.removeTree path => 0 | LexLeanStd.Host::Request.rename source target => 0 | LexLeanStd.Host::Request.canonical path => 0 | LexLeanStd.Host::Request.lock path => 0 | LexLeanStd.Host::Request.spawn child => (prim length (project child arguments) : Nat) | LexLeanStd.Host::Request.wait children duration => 0 | LexLeanStd.Host::Request.stop child => 0 | LexLeanStd.Host::Request.exit status output errors => 0))
+}
+
+definition{
+  name: owned,
+  parameters: [result : (ResearchVerification::State * ResearchVerification::Emission)],
+  result: (Option Nat),
+  body: (project (project (first result) execution) owner)
+}
+
+definition{
+  name: acceptedRequest,
+  parameters: [result : (ResearchVerification::State * ResearchVerification::Emission)],
+  result: Bool,
+  body: (match (second result) | ResearchVerification::Emission.awaiting => false | ResearchVerification::Emission.host request => false | ResearchVerification::Emission.complete outcome => (match outcome | ResearchVerification::Outcome.accepted receipt => (Research::sameRequest (project receipt request) (VerificationReportTraces::request)) | ResearchVerification::Outcome.rejected reason => false | ResearchVerification::Outcome.cancelled => false | ResearchVerification::Outcome.terminated completion => false))
+}
+
+theorem{
+  name: ownedExitReachesCommandRead,
+  parameters: [],
+  statement: ((first (ResearchVerification::step (active) (ctor ResearchVerification::Event.host (exited)))) = (commandPending)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: maxBytes,
+  parameters: [],
+  statement: ((project (settings) maxBytes) = 8192),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: commandValid,
+  parameters: [],
+  statement: ((VerificationReport::commandMatches (VerificationReportTraces::pins) (VerificationJsonFixtures::commandValue)) = true),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandIdentity,
+  parameters: [],
+  statement: ((VerificationReport::bytes (VerificationReport::get (VerificationJsonFixtures::commandValue) 0x6174746573746174696f6e5f6964)) = (VerificationHashFixtures::identity)),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportPath,
+  parameters: [],
+  statement: ((ResearchVerification::attestationPath (settings) (VerificationHashFixtures::identity)) = "/research/.lexlean/verified/672116e8db6acfd42a3328c24c3ad91bdbea1509f1895abb6d314516747e2a9b/attestation.json"),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: commandTransition,
+  parameters: [],
+  statement: ((ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (VerificationJsonFixtures::commandBytes))))) = ((reportPending), (ctor ResearchVerification::Emission.host (ctor LexLeanStd.Host::Request.read "/research/.lexlean/verified/672116e8db6acfd42a3328c24c3ad91bdbea1509f1895abb6d314516747e2a9b/attestation.json")))),
+  proof: simplify{definitions: [commandIdentity, commandPending, commandValid, maxBytes, reportPath, reportPending, ResearchVerification::commandMatchedValid, ResearchVerification::commandParsedOk, ResearchVerification::commandRead, ResearchVerification::read, ResearchVerification::readResponse, ResearchVerification::reading, ResearchVerification::step, ResearchVerification::withPhase, VerificationJsonFixtures::parseCommand]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: acceptedTransition,
+  parameters: [],
+  statement: ((accepted) = (ResearchVerification::finish (reportPending) (ctor ResearchVerification::Outcome.accepted (VerificationReportTraces::expectedReceipt)))),
+  proof: simplify{definitions: [accepted, maxBytes, reportPending, ResearchVerification::attestationDecodedOk, ResearchVerification::attestationRead, ResearchVerification::readResponse, ResearchVerification::reading, ResearchVerification::step, VerificationReportTraces::decodeReceipt]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: kindAccepted,
+  parameters: [state : ResearchVerification::State, receipt : VerificationReport::Receipt],
+  statement: ((kind (ResearchVerification::finish state (ctor ResearchVerification::Outcome.accepted receipt))) = 2),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: kindTerminal,
+  parameters: [state : ResearchVerification::State, outcome : ResearchVerification::Outcome, event : ResearchVerification::Event],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::finish state outcome)) event)) = 1),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: expectedRequestAccepted,
+  parameters: [state : ResearchVerification::State],
+  statement: ((acceptedRequest (ResearchVerification::finish state (ctor ResearchVerification::Outcome.accepted (VerificationReportTraces::expectedReceipt)))) = true),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: startsOnlyLocalLexLean,
+  parameters: [],
+  statement: ((program (begin)) = "lexlean"),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: fixedArgumentShape,
+  parameters: [],
+  statement: ((argumentCount (begin)) = 5),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: zeroLimit,
+  parameters: [],
+  statement: ((kind (ResearchVerification::begin (VerificationReportTraces::pins) (config 0 "/research/lexlean.toml" "out" "err"))) = 3),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: emptyProject,
+  parameters: [],
+  statement: ((kind (ResearchVerification::begin (VerificationReportTraces::pins) (config 8192 "" "out" "err"))) = 3),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: overlappingLogs,
+  parameters: [],
+  statement: ((kind (ResearchVerification::begin (VerificationReportTraces::pins) (config 8192 "project" "same" "same"))) = 3),
+  proof: decide{},
+  axioms: [propext]
+}
+
+theorem{
+  name: exitZeroOnlyRequestsCommand,
+  parameters: [],
+  statement: ((readPath (ResearchVerification::step (active) (ctor ResearchVerification::Event.host (exited)))) = "/research/attempt.out"),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: nonzeroExitNeverReadsReport,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (active) (ctor ResearchVerification::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (1 : Int32)) 101)))) = 5),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: signalledExitNeverReadsReport,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (active) (ctor ResearchVerification::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.none [Int32]) 101)))) = 5),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: foreignChildResultStopsOwnedChild,
+  parameters: [],
+  statement: ((stopTarget (ResearchVerification::step (active) (ctor ResearchVerification::Event.host (ResearchExecutionTraces::exitEvent 8 (ctor Option.some [Int32] (0 : Int32)) 101)))) = 7),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: spawnFailureCannotReadReports,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (begin)) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.spawned (ctor Result.error [(Nat * Nat), LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = 5),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: invalidCommand,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b7d))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: duplicateCommandIdentity,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b2273756363657373223a747275652c2273756363657373223a66616c73657d))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: invalidCommandUtf8,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0xff))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: foreignCommandSource,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b226174746573746174696f6e5f6964223a2236373231313665386462366163666434326133333238633234633361643931626462656131353039663138393561626236643331343531363734376532613962222c226275696c645f6964223a2239393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939222c22636f6d6d616e64223a22766572696679222c22657869745f636f6465223a302c2273656d616e7469635f6964223a2232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232222c22736f757263655f6964223a2230303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030222c2273706563223a226c65786c65616e2f636f6d6d616e642d726573756c742f31222c2273756363657373223a747275657d))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: commandSelectsItsAttestation,
+  parameters: [],
+  statement: ((readPath (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (VerificationJsonFixtures::commandBytes)))))) = "/research/.lexlean/verified/672116e8db6acfd42a3328c24c3ad91bdbea1509f1895abb6d314516747e2a9b/attestation.json"),
+  proof: simplify{definitions: [commandTransition, readPath]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: commandArtifactPathCannotRedirectRead,
+  parameters: [],
+  statement: ((readPath (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b22617274696661637473223a5b7b2270617468223a222f666f726569676e2f6174746573746174696f6e2e6a736f6e227d5d2c226174746573746174696f6e5f6964223a2236373231313665386462366163666434326133333238633234633361643931626462656131353039663138393561626236643331343531363734376532613962222c226275696c645f6964223a2239393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939222c22636f6d6d616e64223a22766572696679222c22657869745f636f6465223a302c2273656d616e7469635f6964223a2232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232222c22736f757263655f6964223a2231313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131222c2273706563223a226c65786c65616e2f636f6d6d616e642d726573756c742f31222c2273756363657373223a747275657d0a))))) = "/research/.lexlean/verified/672116e8db6acfd42a3328c24c3ad91bdbea1509f1895abb6d314516747e2a9b/attestation.json"),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: successfulReportIsAccepted,
+  parameters: [],
+  statement: ((kind (accepted)) = 2),
+  proof: simplify{definitions: [acceptedTransition, kindAccepted]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: acceptedReportKeepsExactRequest,
+  parameters: [],
+  statement: ((acceptedRequest (accepted)) = true),
+  proof: simplify{definitions: [acceptedTransition, expectedRequestAccepted]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: malformedReportIsRejected,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: invalidReportUtf8IsRejected,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0xff))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: missingReportIsRejected,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.error [Bytes, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: outOfOrderHostReplyIsRejected,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (spawned)))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelDuringCommandReadWaits,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.cancel))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelledCommandReplyCannotReadAttestation,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (commandBytes)))))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelDuringAttestationReadWaits,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.cancel))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelledAttestationCannotPromoteReport,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (reportBytes)))))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelledReadFailureStillCompletesCancellation,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.error [Bytes, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelDuringSpawnWaits,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (begin)) (ctor ResearchVerification::Event.cancel))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelledSpawnDrainsThenStops,
+  parameters: [],
+  statement: ((stopTarget (ResearchVerification::step (first (ResearchVerification::step (first (begin)) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (spawned)))) = 7),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: failedCleanupRetainsOwner,
+  parameters: [],
+  statement: ((owned (ResearchVerification::step (first (ResearchVerification::step (first (ResearchVerification::step (first (begin)) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (spawned)))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = (ctor Option.some [Nat] 7)),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: failedCleanupDoesNotBecomeCancellation,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::step (first (ResearchVerification::step (first (begin)) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (spawned)))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = 5),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: failedCleanupNeverDispatchesAgain,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::step (first (ResearchVerification::step (first (ResearchVerification::step (first (begin)) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (spawned)))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) (ctor ResearchVerification::Event.cancel))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: successfulStopCompletesCancellation,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::step (first (ResearchVerification::step (first (begin)) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (spawned)))) (ctor ResearchVerification::Event.host (ResearchExecutionTraces::stopOk)))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelDuringWaitDrainsFirst,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (active) (ctor ResearchVerification::Event.cancel))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: cancelledSuccessfulExitCannotReadCommand,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::step (active) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (exited)))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: unchangedSnapshotPreservesRead,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.changed (project (VerificationReportTraces::request) snapshot)))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: changedSnapshotCancelsPendingReport,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (ResearchVerification::step (reportPending) (ctor ResearchVerification::Event.changed (record Research::Snapshot {library := 0x6368616e676564, compiler := (project (project (VerificationReportTraces::request) snapshot) compiler), model := (project (project (VerificationReportTraces::request) snapshot) model)})))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (reportBytes)))))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: acceptedOutcomeIsEmittedOnce,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (accepted)) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (reportBytes)))))) = 1),
+  proof: simplify{definitions: [acceptedTransition, kindTerminal]},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: endedVerificationNeverRestarts,
+  parameters: [],
+  statement: ((kind (ResearchVerification::step (first (accepted)) (ctor ResearchVerification::Event.host  (spawned)))) = 1),
+  proof: simplify{definitions: [acceptedTransition, kindTerminal]},
+  axioms: [Quot.sound, propext]
+}
+
+\end{semanticmodule}
+
+\end{lexlean}

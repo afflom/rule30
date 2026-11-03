@@ -1,0 +1,342 @@
+\begin{lexlean}{ResearchVerification}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Host}
+\importmodule{Json}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{VerificationReport}
+\title{Boolean}
+\begin{semanticmodule}
+
+structure{
+  name: Config,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: project, type: String}, {name: moduleSource, type: String}, {name: directory, type: String}, {name: environment, type: (List (String * String))}, {name: output, type: String}, {name: errors, type: String}, {name: verifiedRoot, type: String}, {name: maxBytes, type: Nat}, {name: allowance, type: Nat}, {name: quantum, type: Nat}, {name: polls, type: Nat}]
+}
+
+inductive{
+  name: Outcome,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: accepted, fields: [VerificationReport::Receipt]}, {name: terminated, fields: [ResearchExecution::Completion]}, {name: rejected, fields: [String]}, {name: cancelled, fields: []}]
+}
+
+inductive{
+  name: Phase,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: running, fields: []}, {name: command, fields: []}, {name: attestation, fields: [Bytes]}, {name: ended, fields: []}]
+}
+
+structure{
+  name: State,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: pins, type: VerificationReport::Pins}, {name: config, type: Config}, {name: execution, type: ResearchExecution::State}, {name: phase, type: Phase}, {name: cancelled, type: Bool}, {name: outcome, type: (Option Outcome)}]
+}
+
+inductive{
+  name: Emission,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: complete, fields: [Outcome]}]
+}
+
+inductive{
+  name: Event,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}, {name: changed, fields: [Research::Snapshot]}]
+}
+
+definition{
+  name: boundary,
+  parameters: [],
+  result: String,
+  body: "This lifecycle owns one fixed local lexlean verify invocation and its expected identities. Only a successful owned process permits reading its command output; only a valid command identity permits reading the attestation path derived from that identity under the configured verification root. The decoder validates the report before an accepted outcome. Cancellation drains outstanding host replies, and failed process cleanup retains its execution state and owner. Accepted means verified report data, not a Research checked answer. The generated candidate must still bind the declaration to the exact contextual sequent before proof promotion. The caller supplies an isolated project, canonical paths and pinned tool environment. maxBytes bounds decoding; the host driver must also enforce its file-read and process resource limits.",
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: nonempty,
+  parameters: [value : String],
+  result: Bool,
+  body: (not (prim equal value "" : Bool)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: concat,
+  parameters: [left : String, right : String],
+  result: String,
+  body: (prim join (cons left (cons right (nil String))) "" : String),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: arguments,
+  parameters: [config : Config],
+  result: (List String),
+  body: (cons (concat "--project=" (project config project)) (cons "--diagnostic-format=json" (cons "verify" (cons "--" (cons (project config moduleSource) (nil String)))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: job,
+  parameters: [pins : VerificationReport::Pins, config : Config],
+  result: ResearchExecution::Job,
+  body: (record ResearchExecution::Job {request := (project pins request), tool := (ctor ResearchExecution::Tool.lexlean), arguments := (arguments config), directory := (project config directory), environment := (project config environment), output := (project config output), errors := (project config errors), allowance := (project config allowance), quantum := (project config quantum), polls := (project config polls)}),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: validConfig,
+  parameters: [pins : VerificationReport::Pins, config : Config],
+  result: Bool,
+  body: ((VerificationReport::validPins pins) && ((ResearchExecution::validJob (job pins config)) && ((nonempty (project config project)) && ((nonempty (project config moduleSource)) && ((nonempty (project config verifiedRoot)) && (0 <? (project config maxBytes))))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: withPhase,
+  parameters: [state : State, phase : Phase],
+  result: State,
+  body: (record State {pins := (project state pins), config := (project state config), execution := (project state execution), phase := phase, cancelled := (project state cancelled), outcome := (project state outcome)}),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: finish,
+  parameters: [state : State, outcome : Outcome],
+  result: (State * Emission),
+  body: ((record State {pins := (project state pins), config := (project state config), execution := (project state execution), phase := (ctor Phase.ended), cancelled := (project state cancelled), outcome := (ctor Option.some [Outcome] outcome)}), (ctor Emission.complete outcome)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: read,
+  parameters: [state : State, phase : Phase, path : String],
+  result: (State * Emission),
+  body: ((withPhase state phase), (ctor Emission.host (ctor LexLeanStd.Host::Request.read path))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: sameCompletion,
+  parameters: [state : State, completion : ResearchExecution::Completion],
+  result: Bool,
+  body: ((Research::sameRequest (project completion request) (project (project state pins) request)) && ((prim equal (project completion output) (project (project state config) output) : Bool) && ((prim equal (project completion errors) (project (project state config) errors) : Bool) && (match (project completion code) | Option.none => false | Option.some code => (prim equal code (0 : Int32) : Bool))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: completed,
+  parameters: [state : State, completion : ResearchExecution::Completion],
+  result: (State * Emission),
+  body: (if (not (ResearchExecution::resumeAllowed completion)) then (finish state (ctor Outcome.terminated completion)) else (if (project state cancelled) then (finish state (ctor Outcome.cancelled)) else (match (project completion kind)
+ | ResearchExecution::EndKind.succeeded => (if (sameCompletion state completion) then (read state (ctor Phase.command) (project (project state config) output)) else (finish state (ctor Outcome.rejected "verification completion does not match")))
+ | ResearchExecution::EndKind.failed => (finish state (ctor Outcome.terminated completion))
+ | ResearchExecution::EndKind.cut => (finish state (ctor Outcome.terminated completion))
+ | ResearchExecution::EndKind.unavailable => (finish state (ctor Outcome.terminated completion))
+ | ResearchExecution::EndKind.protocol => (finish state (ctor Outcome.terminated completion))
+ | ResearchExecution::EndKind.cleanupFailed => (finish state (ctor Outcome.terminated completion))
+ | ResearchExecution::EndKind.refused => (finish state (ctor Outcome.terminated completion))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: executionResult,
+  parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)],
+  result: (State * Emission),
+  body: (let next : State := (record State {pins := (project state pins), config := (project state config), execution := (first result), phase := (ctor Phase.running), cancelled := (project state cancelled), outcome := (ctor Option.none [Outcome])}); (match (second result)
+ | ResearchExecution::Emission.host request => (next, (ctor Emission.host request))
+ | ResearchExecution::Emission.awaiting => (next, (ctor Emission.awaiting))
+ | ResearchExecution::Emission.complete completion => (completed next completion))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: begin,
+  parameters: [pins : VerificationReport::Pins, config : Config],
+  result: (State * Emission),
+  body: (let initial : ResearchExecution::State := (record ResearchExecution::State {job := (job pins config), phase := (ctor ResearchExecution::Phase.spawning), owner := (ctor Option.none [Nat])}); (let state : State := (record State {pins := pins, config := config, execution := initial, phase := (ctor Phase.running), cancelled := false, outcome := (ctor Option.none [Outcome])}); (if (validConfig pins config) then (executionResult state (ResearchExecution::begin (job pins config))) else (finish state (ctor Outcome.rejected "invalid verification plan"))))),
+  axioms: [propext],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: attestationPath,
+  parameters: [config : Config, identity : Bytes],
+  result: String,
+  body: (concat (project config verifiedRoot) (concat "/" (concat (Host::textOf identity) (concat "/" "attestation.json")))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: commandMatched,
+  parameters: [state : State, source : Bytes, command : Json::Value, matched : Bool],
+  result: (State * Emission),
+  body: (match matched | Bool.true => (read state (ctor Phase.attestation source) (attestationPath (project state config) (VerificationReport::bytes (VerificationReport::get command 0x6174746573746174696f6e5f6964)))) | Bool.false => (finish state (ctor Outcome.rejected "verification command identities do not match"))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: commandParsed,
+  parameters: [state : State, source : Bytes, parsed : (Result Json::Value Json::Problem)],
+  result: (State * Emission),
+  body: (match parsed | Result.error problem => (finish state (ctor Outcome.rejected "invalid verification command report")) | Result.ok command => (commandMatched state source command (VerificationReport::commandMatches (project state pins) command))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+theorem{
+  name: commandParsedOk,
+  parameters: [state : State, source : Bytes, command : Json::Value],
+  statement: ((commandParsed state source (ctor Result.ok [Json::Value, Json::Problem] command)) = (commandMatched state source command (VerificationReport::commandMatches (project state pins) command))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: commandMatchedValid,
+  parameters: [state : State, source : Bytes, command : Json::Value],
+  statement: ((commandMatched state source command true) = (read state (ctor Phase.attestation source) (attestationPath (project state config) (VerificationReport::bytes (VerificationReport::get command 0x6174746573746174696f6e5f6964))))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: commandRead,
+  parameters: [state : State, source : Bytes],
+  result: (State * Emission),
+  body: (commandParsed state source (Json::parse source (project (project state config) maxBytes) 32)),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: attestationDecoded,
+  parameters: [state : State, decoded : (Result VerificationReport::Receipt String)],
+  result: (State * Emission),
+  body: (match decoded | Result.error reason => (finish state (ctor Outcome.rejected reason)) | Result.ok receipt => (finish state (ctor Outcome.accepted receipt))),
+  axioms: [],
+  executable: true
+}
+
+theorem{
+  name: attestationDecodedOk,
+  parameters: [state : State, receipt : VerificationReport::Receipt],
+  statement: ((attestationDecoded state (ctor Result.ok [VerificationReport::Receipt, String] receipt)) = (finish state (ctor Outcome.accepted receipt))),
+  proof: reflexivity{},
+  axioms: []
+}
+
+definition{
+  name: attestationRead,
+  parameters: [state : State, command : Bytes, source : Bytes],
+  result: (State * Emission),
+  body: (attestationDecoded state (VerificationReport::decode (project state pins) command source (project (project state config) maxBytes))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: readResponse,
+  parameters: [event : LexLeanStd.Host::Event],
+  result: (Option (Result Bytes LexLeanStd.Host::Failure)),
+  body: (match event | LexLeanStd.Host::Event.start start => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.read result => (ctor Option.some [(Result Bytes LexLeanStd.Host::Failure)] result) | LexLeanStd.Host::Event.finished result => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.listed result => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.stat result => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.canonical result => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.spawned result => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.waited result => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: reading,
+  parameters: [state : State, event : LexLeanStd.Host::Event],
+  result: (State * Emission),
+  body: (match (readResponse event)
+ | Option.none => (finish state (ctor Outcome.rejected "unexpected verification host response"))
+ | Option.some response => (match (project state cancelled) | Bool.true => (finish state (ctor Outcome.cancelled)) | Bool.false => (match response
+   | Result.error problem => (finish state (ctor Outcome.rejected "verification report read failed"))
+   | Result.ok source => (match (project state phase)
+     | Phase.command => (commandRead state source)
+     | Phase.attestation command => (attestationRead state command source)
+     | Phase.running => (finish state (ctor Outcome.rejected "no pending verification read"))
+     | Phase.ended => (state, (ctor Emission.awaiting)))))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: cancel,
+  parameters: [state : State],
+  result: (State * Emission),
+  body: (match (project state phase)
+ | Phase.ended => (state, (ctor Emission.awaiting))
+ | Phase.running => (let next : State := (record State {pins := (project state pins), config := (project state config), execution := (project state execution), phase := (project state phase), cancelled := true, outcome := (project state outcome)}); (executionResult next (ResearchExecution::cancel (project state execution))))
+ | Phase.command => ((record State {pins := (project state pins), config := (project state config), execution := (project state execution), phase := (project state phase), cancelled := true, outcome := (project state outcome)}), (ctor Emission.awaiting))
+ | Phase.attestation command => ((record State {pins := (project state pins), config := (project state config), execution := (project state execution), phase := (project state phase), cancelled := true, outcome := (project state outcome)}), (ctor Emission.awaiting))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: step,
+  parameters: [state : State, event : Event],
+  result: (State * Emission),
+  body: (match (project state phase)
+ | Phase.ended => (state, (ctor Emission.awaiting))
+ | Phase.running => (match event
+   | Event.cancel => (cancel state)
+   | Event.changed snapshot => (if (Research::sameSnapshot snapshot (project (project (project state pins) request) snapshot)) then (state, (ctor Emission.awaiting)) else (cancel state))
+   | Event.host response => (executionResult state (ResearchExecution::step (project state execution) response)))
+ | Phase.command => (match event
+   | Event.cancel => (cancel state)
+   | Event.changed snapshot => (if (Research::sameSnapshot snapshot (project (project (project state pins) request) snapshot)) then (state, (ctor Emission.awaiting)) else (cancel state))
+   | Event.host response => (reading state response))
+ | Phase.attestation command => (match event
+   | Event.cancel => (cancel state)
+   | Event.changed snapshot => (if (Research::sameSnapshot snapshot (project (project (project state pins) request) snapshot)) then (state, (ctor Emission.awaiting)) else (cancel state))
+   | Event.host response => (reading state response))),
+  axioms: [Quot.sound, propext],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+theorem{
+  name: endedIsSilent,
+  parameters: [state : State, outcome : Outcome, event : Event],
+  statement: ((step (first (finish state outcome)) event) = ((first (finish state outcome)), (ctor Emission.awaiting))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: features,
+  parameters: [],
+  result: (List String),
+  body: (cons "fixed-local-verification-job" (cons "owned-process-completion" (cons "command-attestation-read-order" (cons "derived-attestation-path" (cons "report-identity-validation" (cons "cancellation-reply-draining" (cons "snapshot-cancellation" (cons "cleanup-ownership" (cons "single-outcome-emission" (nil String)))))))))),
+  axioms: [],
+  executable: true
+}
+
+\end{semanticmodule}
+
+\end{lexlean}

@@ -1,0 +1,438 @@
+\begin{lexlean}{VerificationReport}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{Research}
+\importmodule{LexLeanStd.Sha256}
+\title{Boolean}
+\begin{semanticmodule}
+
+structure{
+  name: Pins,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: request, type: Research::Request}, {name: source, type: Bytes}, {name: semantic, type: Bytes}, {name: compiler, type: Bytes}, {name: lexlean, type: Bytes}, {name: lean, type: Bytes}, {name: lake, type: Bytes}, {name: checker, type: Bytes}, {name: theorem, type: Bytes}, {name: module, type: Bytes}]
+}
+
+structure{
+  name: Receipt,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: request, type: Research::Request}, {name: source, type: Bytes}, {name: semantic, type: Bytes}, {name: build, type: Bytes}, {name: attestation, type: Bytes}, {name: theorem, type: Bytes}, {name: module, type: Bytes}, {name: axioms, type: (List String)}]
+}
+
+definition{
+  name: boundary,
+  parameters: [],
+  result: String,
+  body: "The decoder consumes stdout of a completed pinned lexlean verify job and the attestation file named by that stdout. It checks source, semantic and compiler identities; exact tool binaries; a unique audited declaration; allowed observed axioms and source policy; successful recorded processes; and elaboration plus kernel replay of the declaration module. It recomputes the attestation identity using LexLean framing and the canonical file body. A Receipt is verified report data, not a Research checked answer: the caller must own the successful verify job and bind the generated declaration source to the requested contextual sequent before promoting evidence. Arbitrary JSON supplied outside that execution boundary has no authority.",
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: get,
+  parameters: [value : Json::Value, key : Bytes],
+  result: Json::Value,
+  body: (match (Json::field value key) | Option.none => (ctor Json::Value.null) | Option.some found => found),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: bytes,
+  parameters: [value : Json::Value],
+  result: Bytes,
+  body: (match value | Json::Value.string text => text | Json::Value.null => 0x | Json::Value.boolean b => 0x | Json::Value.number n => 0x | Json::Value.array a => 0x | Json::Value.object o => 0x),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: isString,
+  parameters: [value : Json::Value],
+  result: Bool,
+  body: (match value | Json::Value.string text => true | Json::Value.null => false | Json::Value.boolean b => false | Json::Value.number n => false | Json::Value.array a => false | Json::Value.object o => false),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: isTrue,
+  parameters: [value : Json::Value],
+  result: Bool,
+  body: (match value | Json::Value.boolean b => b | Json::Value.null => false | Json::Value.string text => false | Json::Value.number n => false | Json::Value.array a => false | Json::Value.object o => false),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: isZero,
+  parameters: [value : Json::Value],
+  result: Bool,
+  body: (match (Json::natural value 0) | Option.none => false | Option.some n => (n =? 0)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: hexFrom,
+  parameters: [value : Bytes, position : Nat, fuel : Nat],
+  result: Bool,
+  body: (match fuel | Nat.zero => (position =? (prim length value : Nat)) | Nat.succ more => (match (prim index value position : (Option UInt8)) | Option.none => false | Option.some byte => (((Toml::between byte (48 : UInt8) (57 : UInt8)) || (Toml::between byte (97 : UInt8) (102 : UInt8))) && (hexFrom value (position + 1) more)))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: digest,
+  parameters: [value : Bytes],
+  result: Bool,
+  body: (((prim length value : Nat) =? 64) && (hexFrom value 0 64)),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: validPins,
+  parameters: [pins : Pins],
+  result: Bool,
+  body: ((digest (project pins source)) && ((digest (project pins semantic)) && ((digest (project pins compiler)) && ((digest (project pins lexlean)) && ((digest (project pins lean)) && ((digest (project pins lake)) && ((digest (project pins checker)) && ((Toml::sameBytes (project (project (project pins request) snapshot) compiler) (project pins compiler)) && ((0 <? (prim length (project pins module) : Nat)) && (((prim length (project pins module) : Nat) <? (prim length (project pins theorem) : Nat)) && (Toml::bytesAgreeFrom (project pins theorem) 0 (Json::append (project pins module) 0x2e) 0 ((prim length (project pins module) : Nat) + 1)))))))))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: strings,
+  parameters: [items : (List Json::Value)],
+  result: Bool,
+  body: (match items | List.nil => true | List.cons head tail => ((isString head) && (strings tail))),
+  axioms: [],
+  recursive_argument: items,
+  executable: true
+}
+
+definition{
+  name: arguments,
+  parameters: [value : Json::Value],
+  result: Bool,
+  body: (match value | Json::Value.array items => (match items | List.nil => false | List.cons head tail => ((0 <? (prim length (bytes head) : Nat)) && (strings items))) | Json::Value.null => false | Json::Value.boolean b => false | Json::Value.number n => false | Json::Value.string s => false | Json::Value.object o => false),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: commandMatches,
+  parameters: [pins : Pins, command : Json::Value],
+  result: Bool,
+  body: ((Toml::sameBytes (bytes (get command 0x73706563)) 0x6c65786c65616e2f636f6d6d616e642d726573756c742f31) && ((Toml::sameBytes (bytes (get command 0x636f6d6d616e64)) 0x766572696679) && ((isTrue (get command 0x73756363657373)) && ((isZero (get command 0x657869745f636f6465)) && ((Toml::sameBytes (bytes (get command 0x736f757263655f6964)) (project pins source)) && ((Toml::sameBytes (bytes (get command 0x73656d616e7469635f6964)) (project pins semantic)) && ((digest (bytes (get command 0x6275696c645f6964))) && (digest (bytes (get command 0x6174746573746174696f6e5f6964)))))))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: toolchainMatches,
+  parameters: [pins : Pins, value : Json::Value],
+  result: Bool,
+  body: ((Toml::sameBytes (bytes (get (get value 0x6c65616e) 0x65786563757461626c655f736861323536)) (project pins lean)) && ((Toml::sameBytes (bytes (get (get value 0x6c616b65) 0x65786563757461626c655f736861323536)) (project pins lake)) && (Toml::sameBytes (bytes (get (get value 0x6c65616e636865636b6572) 0x65786563757461626c655f736861323536)) (project pins checker)))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: sameArguments,
+  parameters: [actual : (List Json::Value), expected : (List Bytes)],
+  result: Bool,
+  body: (match actual | List.nil => (match expected | List.nil => true | List.cons head tail => false) | List.cons head tail => (match expected | List.nil => false | List.cons wanted rest => ((isString head) && ((Toml::sameBytes (bytes head) wanted) && (sameArguments tail rest))))),
+  axioms: [],
+  recursive_argument: actual,
+  executable: true
+}
+
+definition{
+  name: argumentsEqual,
+  parameters: [value : Json::Value, expected : (List Bytes)],
+  result: Bool,
+  body: (match value | Json::Value.array values => (sameArguments values expected) | Json::Value.null => false | Json::Value.boolean b => false | Json::Value.number n => false | Json::Value.string s => false | Json::Value.object o => false),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: modulePathFrom,
+  parameters: [name : Bytes, position : Nat, fuel : Nat],
+  result: Bytes,
+  body: (match fuel | Nat.zero => 0x | Nat.succ more => (Json::append (if (Toml::byteIs name position (46 : UInt8)) then 0x2f else (Toml::sliceOr name position 1)) (modulePathFrom name (position + 1) more))),
+  axioms: [],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: invocationMatches,
+  parameters: [pins : Pins, process : Json::Value],
+  result: Bool,
+  body: (if (Toml::sameBytes (bytes (get process 0x746f6f6c)) 0x6c65616e636865636b6572) then (argumentsEqual (get process 0x61726776) (cons 0x656e76 (cons 0x24544f4f4c434841494e2f62696e2f6c65616e636865636b6572 (cons (bytes (get process 0x6d6f64756c65)) (nil Bytes))))) else (if ((Toml::sameBytes (bytes (get process 0x746f6f6c)) 0x6c65616e) && (Toml::sameBytes (bytes (get process 0x6d6f64756c65)) (project pins module))) then (let path : Bytes := (modulePathFrom (project pins module) 0 (prim length (project pins module) : Nat)); (argumentsEqual (get process 0x61726776) (cons 0x656e76 (cons 0x6c65616e (cons 0x2d52 (cons 0x2453544147494e472f6c65616e2d737263 (cons 0x2d6f (cons (Json::append 0x2453544147494e472f6f6c65616e732f (Json::append path 0x2e6f6c65616e)) (cons (Json::append 0x2453544147494e472f6c65616e2d7372632f (Json::append path 0x2e6c65616e)) (nil Bytes)))))))))) else true)),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: processMatches,
+  parameters: [pins : Pins, process : Json::Value],
+  result: Bool,
+  body: (let tool : Bytes := (bytes (get process 0x746f6f6c)); ((invocationMatches pins process) && ((isZero (get process 0x657869745f636f6465)) && ((0 <? (prim length (bytes (get process 0x6d6f64756c65)) : Nat)) && ((arguments (get process 0x61726776)) && ((isString (get process 0x7374646f7574)) && ((isString (get process 0x737464657272)) && ((digest (bytes (get process 0x7374646f75745f736861323536))) && ((digest (bytes (get process 0x7374646572725f736861323536))) && (if (Toml::sameBytes tool 0x6c65616e) then (Toml::sameBytes (bytes (get process 0x65786563757461626c655f736861323536)) (project pins lean)) else (if (Toml::sameBytes tool 0x6c616b65) then (Toml::sameBytes (bytes (get process 0x65786563757461626c655f736861323536)) (project pins lake)) else ((Toml::sameBytes tool 0x6c65616e636865636b6572) && (Toml::sameBytes (bytes (get process 0x65786563757461626c655f736861323536)) (project pins checker)))))))))))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: processesMatch,
+  parameters: [pins : Pins, processes : (List Json::Value)],
+  result: Bool,
+  body: (match processes | List.nil => true | List.cons head tail => ((processMatches pins head) && (processesMatch pins tail))),
+  axioms: [propext],
+  recursive_argument: processes,
+  executable: true
+}
+
+definition{
+  name: countProcess,
+  parameters: [processes : (List Json::Value), tool : Bytes, moduleName : Bytes],
+  result: Nat,
+  body: (match processes | List.nil => 0 | List.cons head tail => ((if ((Toml::sameBytes (bytes (get head 0x746f6f6c)) tool) && (Toml::sameBytes (bytes (get head 0x6d6f64756c65)) moduleName)) then 1 else 0) + (countProcess tail tool moduleName))),
+  axioms: [],
+  recursive_argument: processes,
+  executable: true
+}
+
+definition{
+  name: replayMatches,
+  parameters: [pins : Pins, value : Json::Value],
+  result: Bool,
+  body: (match value | Json::Value.array processes => ((processesMatch pins processes) && (((countProcess processes 0x6c65616e (project pins module)) =? 1) && ((countProcess processes 0x6c65616e636865636b6572 (project pins module)) =? 1))) | Json::Value.null => false | Json::Value.boolean b => false | Json::Value.number n => false | Json::Value.string s => false | Json::Value.object o => false),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: axiomList,
+  parameters: [values : (List Json::Value)],
+  result: (Option (List String)),
+  body: (match values | List.nil => (ctor Option.some [(List String)] (nil String)) | List.cons head tail => (match (axiomList tail) | Option.none => (ctor Option.none [(List String)]) | Option.some rest => (if (Toml::sameBytes (bytes head) 0x70726f70657874) then (if (Research::memberString "propext" rest) then (ctor Option.none [(List String)]) else (ctor Option.some [(List String)] (cons "propext" rest))) else (if (Toml::sameBytes (bytes head) 0x51756f742e736f756e64) then (if (Research::memberString "Quot.sound" rest) then (ctor Option.none [(List String)]) else (ctor Option.some [(List String)] (cons "Quot.sound" rest))) else (ctor Option.none [(List String)]))))),
+  axioms: [],
+  recursive_argument: values,
+  executable: true
+}
+
+definition{
+  name: axioms,
+  parameters: [value : Json::Value],
+  result: (Option (List String)),
+  body: (match value | Json::Value.array values => (axiomList values) | Json::Value.null => (ctor Option.none [(List String)]) | Json::Value.boolean b => (ctor Option.none [(List String)]) | Json::Value.number n => (ctor Option.none [(List String)]) | Json::Value.string s => (ctor Option.none [(List String)]) | Json::Value.object o => (ctor Option.none [(List String)])),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: policyMatches,
+  parameters: [policy : Json::Value, observed : (List String)],
+  result: Bool,
+  body: (match (axioms (get policy 0x6178696f6d73)) | Option.none => false | Option.some permitted => (let kind : Bytes := (bytes (get policy 0x6b696e64)); (if (Toml::sameBytes kind 0x6e6f6e65) then (((prim length permitted : Nat) =? 0) && ((prim length observed : Nat) =? 0)) else (if (Toml::sameBytes kind 0x616c6c6f77) then (Research::allStringsWithin observed permitted) else ((Toml::sameBytes kind 0x6578616374) && ((Research::allStringsWithin observed permitted) && (Research::allStringsWithin permitted observed))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: declarationAxioms,
+  parameters: [declaration : Json::Value],
+  result: (Option (List String)),
+  body: (if (Toml::sameBytes (bytes (get declaration 0x726573756c74)) 0x6f6b) then (match (axioms (get declaration 0x6f62736572766564)) | Option.none => (ctor Option.none [(List String)]) | Option.some observed => (if (policyMatches (get declaration 0x706f6c696379) observed) then (ctor Option.some [(List String)] observed) else (ctor Option.none [(List String)]))) else (ctor Option.none [(List String)])),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: countDeclaration,
+  parameters: [declarations : (List Json::Value), name : Bytes],
+  result: Nat,
+  body: (match declarations | List.nil => 0 | List.cons head tail => ((if (Toml::sameBytes (bytes (get head 0x6e616d65)) name) then 1 else 0) + (countDeclaration tail name))),
+  axioms: [],
+  recursive_argument: declarations,
+  executable: true
+}
+
+definition{
+  name: findDeclaration,
+  parameters: [declarations : (List Json::Value), name : Bytes],
+  result: (Option (List String)),
+  body: (match declarations | List.nil => (ctor Option.none [(List String)]) | List.cons head tail => (if (Toml::sameBytes (bytes (get head 0x6e616d65)) name) then (declarationAxioms head) else (findDeclaration tail name))),
+  axioms: [],
+  recursive_argument: declarations,
+  executable: true
+}
+
+definition{
+  name: audited,
+  parameters: [pins : Pins, value : Json::Value],
+  result: (Option (List String)),
+  body: (match value | Json::Value.array declarations => (if ((countDeclaration declarations (project pins theorem)) =? 1) then (findDeclaration declarations (project pins theorem)) else (ctor Option.none [(List String)])) | Json::Value.null => (ctor Option.none [(List String)]) | Json::Value.boolean b => (ctor Option.none [(List String)]) | Json::Value.number n => (ctor Option.none [(List String)]) | Json::Value.string s => (ctor Option.none [(List String)]) | Json::Value.object o => (ctor Option.none [(List String)])),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: metadataMatches,
+  parameters: [pins : Pins, command : Json::Value, report : Json::Value],
+  result: Bool,
+  body: ((Toml::sameBytes (bytes (get report 0x73706563)) 0x6c65786c65616e2f6174746573746174696f6e2f32) && ((Toml::sameBytes (bytes (get report 0x737461747573)) 0x7665726966696564) && ((Toml::sameBytes (bytes (get report 0x736f757263655f6964)) (project pins source)) && ((Toml::sameBytes (bytes (get report 0x73656d616e7469635f6964)) (project pins semantic)) && ((Toml::sameBytes (bytes (get report 0x6275696c645f6964)) (bytes (get command 0x6275696c645f6964))) && ((Toml::sameBytes (bytes (get report 0x6174746573746174696f6e5f6964)) (bytes (get command 0x6174746573746174696f6e5f6964))) && ((Toml::sameBytes (bytes (get (get report 0x6c65786c65616e) 0x636f6d70696c65725f73656d616e74696373)) (project pins compiler)) && ((Toml::sameBytes (bytes (get (get report 0x6c65786c65616e) 0x65786563757461626c655f736861323536)) (project pins lexlean)) && ((toolchainMatches pins (get report 0x746f6f6c636861696e)) && (replayMatches pins (get report 0x70726f636573736573))))))))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: bigEndian,
+  parameters: [count : Nat, value : Nat],
+  result: Bytes,
+  body: (match count | Nat.zero => 0x | Nat.succ more => (Json::append (bigEndian more (prim quotient value 256 0 : Nat)) (Json::byte (prim remainder value 256 0 : Nat)))),
+  axioms: [],
+  recursive_argument: count,
+  executable: true
+}
+
+definition{
+  name: hashBody,
+  parameters: [body : Bytes],
+  result: Bytes,
+  body: (LexLeanStd.Sha256::sha256Hex (Json::append 0x6c65786c65616e2d6174746573746174696f6e2d763100000000106174746573746174696f6e2d626f6479 (Json::append (bigEndian 8 (prim length body : Nat)) body))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: boundBody,
+  parameters: [file : Bytes, identity : Bytes],
+  result: (Option Bytes),
+  body: (let size : Nat := (prim length file : Nat); (if ((digest identity) && ((86 <? size) && ((Toml::bytesAgreeFrom file 0 0x7b226174746573746174696f6e5f6964223a22 0 19) && ((Toml::bytesAgreeFrom file 19 identity 0 64) && ((Toml::bytesAgreeFrom file 83 0x222c 0 2) && (Toml::byteIs file (prim subtract size 1 : Nat) (10 : UInt8))))))) then (ctor Option.some [Bytes] (Json::append 0x7b (Toml::sliceOr file 85 (prim subtract size 86 : Nat)))) else (ctor Option.none [Bytes]))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: identityMatches,
+  parameters: [file : Bytes, identity : Bytes],
+  result: Bool,
+  body: (match (boundBody file identity) | Option.none => false | Option.some body => (Toml::sameBytes (hashBody body) identity)),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: reject,
+  parameters: [reason : String],
+  result: (Result Receipt String),
+  body: (ctor Result.error [Receipt, String] reason),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: checkedMetadata,
+  parameters: [pins : Pins, command : Json::Value, report : Json::Value],
+  result: (Result Receipt String),
+  body: (if (not (validPins pins)) then (reject "invalid expected identities") else (if (not (commandMatches pins command)) then (reject "verification command does not match") else (if (not (metadataMatches pins command report)) then (reject "attestation identities or process evidence do not match") else (match (audited pins (get report 0x6465636c61726174696f6e73)) | Option.none => (reject "declaration audit or axiom policy refused") | Option.some observed => (ctor Result.ok [Receipt, String] (record Receipt {request := (project pins request), source := (project pins source), semantic := (project pins semantic), build := (bytes (get report 0x6275696c645f6964)), attestation := (bytes (get report 0x6174746573746174696f6e5f6964)), theorem := (project pins theorem), module := (project pins module), axioms := observed})))))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: fromIdentity,
+  parameters: [receipt : Receipt, matched : Bool],
+  result: (Result Receipt String),
+  body: (match matched | Bool.true => (ctor Result.ok [Receipt, String] receipt) | Bool.false => (reject "attestation content identity mismatch")),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: fromMetadata,
+  parameters: [reportBytes : Bytes, reviewed : (Result Receipt String)],
+  result: (Result Receipt String),
+  body: (match reviewed | Result.error reason => (reject reason) | Result.ok receipt => (fromIdentity receipt (identityMatches reportBytes (project receipt attestation)))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: fromReport,
+  parameters: [pins : Pins, command : Json::Value, reportBytes : Bytes, parsed : (Result Json::Value Json::Problem)],
+  result: (Result Receipt String),
+  body: (match parsed | Result.error problem => (reject (project problem reason)) | Result.ok report => (fromMetadata reportBytes (checkedMetadata pins command report))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: fromCommand,
+  parameters: [pins : Pins, reportBytes : Bytes, maxBytes : Nat, parsed : (Result Json::Value Json::Problem)],
+  result: (Result Receipt String),
+  body: (match parsed | Result.error problem => (reject (project problem reason)) | Result.ok command => (fromReport pins command reportBytes (Json::parse reportBytes maxBytes 128))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+theorem{
+  name: fromCommandOk,
+  parameters: [pins : Pins, reportBytes : Bytes, maxBytes : Nat, command : Json::Value],
+  statement: ((fromCommand pins reportBytes maxBytes (ctor Result.ok [Json::Value, Json::Problem] command)) = (fromReport pins command reportBytes (Json::parse reportBytes maxBytes 128))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: fromReportOk,
+  parameters: [pins : Pins, command : Json::Value, reportBytes : Bytes, report : Json::Value],
+  statement: ((fromReport pins command reportBytes (ctor Result.ok [Json::Value, Json::Problem] report)) = (fromMetadata reportBytes (checkedMetadata pins command report))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: fromMetadataOk,
+  parameters: [reportBytes : Bytes, receipt : Receipt],
+  statement: ((fromMetadata reportBytes (ctor Result.ok [Receipt, String] receipt)) = (fromIdentity receipt (identityMatches reportBytes (project receipt attestation)))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: fromIdentityTrue,
+  parameters: [receipt : Receipt],
+  statement: ((fromIdentity receipt true) = (ctor Result.ok [Receipt, String] receipt)),
+  proof: reflexivity{},
+  axioms: []
+}
+
+definition{
+  name: decode,
+  parameters: [pins : Pins, commandBytes : Bytes, reportBytes : Bytes, maxBytes : Nat],
+  result: (Result Receipt String),
+  body: (fromCommand pins reportBytes maxBytes (Json::parse commandBytes maxBytes 32)),
+  axioms: [Quot.sound, propext],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: features,
+  parameters: [],
+  result: (List String),
+  body: (cons "pinned-tool-identity" (cons "declaration-axiom-policy" (cons "unique-module-replay" (cons "attestation-content-binding" (cons "execution-boundary-custody" (nil String)))))),
+  axioms: [],
+  executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}
