@@ -1,230 +1,54 @@
 \begin{lexlean}{Host}
 \useglossary{lexlean.std.bool@1.2.0}
 \useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
 \title{Boolean}
 \begin{semanticmodule}
-structure{
-  name: Assumption,
-  type_parameters: [],
-  parameters: [],
-  fields: [
-    {name: subject, type: String},
-    {name: assumed, type: String},
-    {name: because, type: String}
-  ]
-}
-
-definition{
-  name: mirrorOf,
-  parameters: [],
-  result: String,
-  body: "This module mirrors LexLeanStd.Host, the effects boundary of LexLean issue 271 (UOR-Foundation/LexLean#271) as its design was accepted on 2026-11-01: a command root is a pure step (state : Option Session) (event : LexLeanStd.Host::Event) : Session * LexLeanStd.Host::Request, and the generated driver performs each request and feeds the outcome back as the next event. rule30 pins LexLean 0.4.0, which has no LexLeanStd.Host, so the declarations named by mirrored are rule30's copy, as exact as the design text allows, and assumptions lists every choice that text leaves open. When rule30 pins the LexLean release that lands 271, they are deleted, rule30-api imports LexLeanStd.Host from LexLean's stdlib as a source package (SPEC 10.5: a [[source_package]] in rule30-api/lexlean.toml naming a member of a lexlean-workspace.toml at the repository root), and every Host:: name of a mirrored declaration becomes LexLeanStd.Host::. A copy vendored under rule30-api would carry the Rule30Api prefix, and a step over it would be no command root. The declarations named by harness are rule30's own and stay: a Draft is a Request whose text is still a list of pieces (a literal String or Bytes taken from the host), so the kernel can decide what a step asks, and realize joins the pieces into the Request the driver receives. Draft has a constructor only for each request a step of rule30 makes (read, stat, exit), so the closure of a step built on realize builds only those Request constructors and, under rule 5 of 271, realizes files and nothing else; a verb that needs another request adds its constructor to Draft and an arm to realize, and one that spawns brings process with it.",
-  executable: true
-}
-
-definition{
-  name: mirrored,
-  parameters: [],
-  result: (List String),
-  body: (cons "FailureKind" (cons "Failure" (cons "EntryKind" (cons "Stat" (cons "Event" (cons "Request" (nil String))))))),
-  executable: true
-}
-
-definition{
-  name: harness,
-  parameters: [],
-  result: (List String),
-  body: (cons "Start" (cons "asStart" (cons "asRead" (cons "asStated" (cons "Piece" (cons "Draft" (cons "isExit" (cons "multibyte" (cons "charsFrom" (cons "textOf" (cons "realize" (cons "traceFrom" (cons "trace" (cons "textAgrees" (cons "draftAgrees" (cons "traceAgrees" (cons "pieceScalars" (cons "piecesScalars" (cons "draftScalars" (cons "tracedScalars" (cons "scalarsAgree" (cons "realizedAgrees" (nil String))))))))))))))))))))))),
-  executable: true
-}
-
-definition{
-  name: assumptions,
-  parameters: [],
-  result: (List Assumption),
-  body: (cons (record Assumption {subject := "Event.start", assumed := "five positional fields in the order the design names them: arguments (List Bytes), working directory (Bytes), executable path (Bytes), environment (List (Bytes * Bytes), name and value, in the host's order), whether stderr is a terminal (Bool)", because := "the design says only that Event.start carries these five; text from the host is Bytes"})
-    (cons (record Assumption {subject := "Event.start arguments", assumed := "the arguments after the program name: argv[0] is not among them (the executable path is a field of its own), so the first argument is the command word", because := "the design lists the arguments and the executable path as two inputs, while the first design's driver names std::env::args_os, which yields argv[0] first; R30.begin reads the first argument as the verb, and R30Traces.traceProgramName shows what a start that keeps argv[0] would get"})
-    (cons (record Assumption {subject := "Event.start working directory", assumed := "the absolute working directory with its components separated by /, as std::env::current_dir gives it on unix; a relative path in a request is resolved against it, because the driver passes paths to std unchanged", because := "the design names the working directory and says nothing of relative paths; R30 finds the repository root through the relative paths .git, ../.git and so on, one level for each component of the directory"})
-    (cons (record Assumption {subject := "Event", assumed := "one constructor per request, carrying Result outcome Failure, named in the past tense as the first design named read, listed, wrote and ran: read, wrote, listed, stated, createdDir, removedFile, removedTree, renamed, canonicalized, locked, spawned, waited, stopped", because := "the accepted design names the requests, not the events that answer them"})
-    (cons (record Assumption {subject := "Failure", assumed := "a structure of a FailureKind and the host's message as Bytes; FailureKind is the first design's notFound, denied, invalid, other", because := "the accepted design says a failure is a closed kind plus the host's message as bytes, without listing the kinds"})
-    (cons (record Assumption {subject := "Request.write", assumed := "write (path : String) (contents : Bytes)", because := "paths are text to the host, so String; contents are data, kept as Bytes so a step can write any file"})
-    (cons (record Assumption {subject := "Request.rename", assumed := "rename (source : String) (target : String), the source first", because := "the design names rename only; the order is that of std::fs::rename(from, to)"})
-    (cons (record Assumption {subject := "write, createDir, removeFile, removeTree, rename and lock outcomes", assumed := "each is answered by Result Unit Failure (the events wrote, createdDir, removedFile, removedTree, renamed, locked)", because := "each std call returns io::Result<()>, and the design names no answer"})
-    (cons (record Assumption {subject := "read, canonical, list outcomes", assumed := "read answers Bytes, canonical answers the path as Bytes, list answers List Bytes ascending by bytes", because := "text from the host is Bytes; the ascending order is stated"})
-    (cons (record Assumption {subject := "Stat", assumed := "a structure of kind (file, directory, link, other), size (Nat), device (Nat), inode (Nat), device and inode 0 where the host has none; stat does not follow a final symbolic link, which it reports as kind link, as std::fs::symlink_metadata does", because := "the design names stat and uses dev and ino under cfg(unix) for hard links, and says nothing else of its answer"})
-    (cons (record Assumption {subject := "Request.createDir", assumed := "createDir (path : String) creates missing parents", because := "the first design's driver names create_dir_all"})
-    (cons (record Assumption {subject := "Request.lock", assumed := "lock (path : String); the lock is held until the process exits", because := "the design replaces fs4 by std File::lock and says no more"})
-    (cons (record Assumption {subject := "Request.spawn", assumed := "spawn (program : String) (arguments : List String) (directory : String) (environment : List (String * String)) (output : String) (errors : String), answered by a child handle Nat", because := "the design states the environment explicit, stdin null, no shell and output to two files the step names; the working directory is assumed explicit like the environment, and the handle type is not stated"})
-    (cons (record Assumption {subject := "Request.wait", assumed := "wait (child : Nat), answered by Result (Option Int32) Failure: the exit code, none when a signal ended the child", because := "the first design's Ran.status is Option Int32"})
-    (cons (record Assumption {subject := "Request.stop", assumed := "stop (child : Nat), answered by Result Unit Failure", because := "the design says the driver stops a child's process group and names no answer"})
-    (cons (record Assumption {subject := "Request.exit", assumed := "exit (status : UInt8) (output : String) (errors : String)", because := "the design writes exit status output errors with text to the host as String; the first design's status is UInt8"})
-    (nil Assumption))))))))))))))))),
-  executable: true
-}
-
-inductive{
-  name: FailureKind,
-  type_parameters: [],
-  parameters: [],
-  constructors: [
-    {name: notFound, fields: []},
-    {name: denied, fields: []},
-    {name: invalid, fields: []},
-    {name: other, fields: []}
-  ]
-}
-
-structure{
-  name: Failure,
-  type_parameters: [],
-  parameters: [],
-  fields: [{name: kind, type: FailureKind}, {name: message, type: Bytes}]
-}
-
-inductive{
-  name: EntryKind,
-  type_parameters: [],
-  parameters: [],
-  constructors: [
-    {name: file, fields: []},
-    {name: directory, fields: []},
-    {name: link, fields: []},
-    {name: other, fields: []}
-  ]
-}
-
-structure{
-  name: Stat,
-  type_parameters: [],
-  parameters: [],
-  fields: [
-    {name: kind, type: EntryKind},
-    {name: size, type: Nat},
-    {name: device, type: Nat},
-    {name: inode, type: Nat}
-  ]
-}
-
-inductive{
-  name: Event,
-  type_parameters: [],
-  parameters: [],
-  constructors: [
-    {name: start, fields: [(List Bytes), Bytes, Bytes, (List (Bytes * Bytes)), Bool]},
-    {name: read, fields: [(Result Bytes Failure)]},
-    {name: wrote, fields: [(Result Unit Failure)]},
-    {name: listed, fields: [(Result (List Bytes) Failure)]},
-    {name: stated, fields: [(Result Stat Failure)]},
-    {name: createdDir, fields: [(Result Unit Failure)]},
-    {name: removedFile, fields: [(Result Unit Failure)]},
-    {name: removedTree, fields: [(Result Unit Failure)]},
-    {name: renamed, fields: [(Result Unit Failure)]},
-    {name: canonicalized, fields: [(Result Bytes Failure)]},
-    {name: locked, fields: [(Result Unit Failure)]},
-    {name: spawned, fields: [(Result Nat Failure)]},
-    {name: waited, fields: [(Result (Option Int32) Failure)]},
-    {name: stopped, fields: [(Result Unit Failure)]}
-  ]
-}
-
-inductive{
-  name: Request,
-  type_parameters: [],
-  parameters: [],
-  constructors: [
-    {name: read, fields: [String]},
-    {name: write, fields: [String, Bytes]},
-    {name: list, fields: [String]},
-    {name: stat, fields: [String]},
-    {name: createDir, fields: [String]},
-    {name: removeFile, fields: [String]},
-    {name: removeTree, fields: [String]},
-    {name: rename, fields: [String, String]},
-    {name: canonical, fields: [String]},
-    {name: lock, fields: [String]},
-    {name: spawn, fields: [String, (List String), String, (List (String * String)), String, String]},
-    {name: wait, fields: [Nat]},
-    {name: stop, fields: [Nat]},
-    {name: exit, fields: [UInt8, String, String]}
-  ]
-}
-
-structure{
-  name: Start,
-  type_parameters: [],
-  parameters: [],
-  fields: [
-    {name: arguments, type: (List Bytes)},
-    {name: directory, type: Bytes},
-    {name: executable, type: Bytes},
-    {name: environment, type: (List (Bytes * Bytes))},
-    {name: stderrTerminal, type: Bool}
-  ]
-}
-
 definition{
   name: asStart,
-  parameters: [event : Event],
-  result: (Option Start),
+  parameters: [event : LexLeanStd.Host::Event],
+  result: (Option LexLeanStd.Host::Start),
   body: (match event
-    | Event.start arguments directory executable environment terminal => (ctor Option.some [Start] (record Start {arguments := arguments, directory := directory, executable := executable, environment := environment, stderrTerminal := terminal}))
-    | Event.read o => (ctor Option.none [Start])
-    | Event.wrote o => (ctor Option.none [Start])
-    | Event.listed o => (ctor Option.none [Start])
-    | Event.stated o => (ctor Option.none [Start])
-    | Event.createdDir o => (ctor Option.none [Start])
-    | Event.removedFile o => (ctor Option.none [Start])
-    | Event.removedTree o => (ctor Option.none [Start])
-    | Event.renamed o => (ctor Option.none [Start])
-    | Event.canonicalized o => (ctor Option.none [Start])
-    | Event.locked o => (ctor Option.none [Start])
-    | Event.spawned o => (ctor Option.none [Start])
-    | Event.waited o => (ctor Option.none [Start])
-    | Event.stopped o => (ctor Option.none [Start])),
+    | LexLeanStd.Host::Event.start value => (ctor Option.some [LexLeanStd.Host::Start] value)
+    | LexLeanStd.Host::Event.read value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.finished value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.listed value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.stat value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.canonical value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.spawned value => (ctor Option.none [LexLeanStd.Host::Start])
+    | LexLeanStd.Host::Event.waited value => (ctor Option.none [LexLeanStd.Host::Start])),
   executable: true
 }
 
 definition{
   name: asRead,
-  parameters: [event : Event],
-  result: (Option (Result Bytes Failure)),
+  parameters: [event : LexLeanStd.Host::Event],
+  result: (Option (Result Bytes LexLeanStd.Host::Failure)),
   body: (match event
-    | Event.start arguments directory executable environment terminal => (ctor Option.none [(Result Bytes Failure)])
-    | Event.read o => (ctor Option.some [(Result Bytes Failure)] o)
-    | Event.wrote o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.listed o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.stated o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.createdDir o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.removedFile o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.removedTree o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.renamed o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.canonicalized o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.locked o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.spawned o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.waited o => (ctor Option.none [(Result Bytes Failure)])
-    | Event.stopped o => (ctor Option.none [(Result Bytes Failure)])),
+    | LexLeanStd.Host::Event.start value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.read value => (ctor Option.some [(Result Bytes LexLeanStd.Host::Failure)] value)
+    | LexLeanStd.Host::Event.finished value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.listed value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.stat value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.canonical value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.spawned value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.waited value => (ctor Option.none [(Result Bytes LexLeanStd.Host::Failure)])),
   executable: true
 }
 
 definition{
   name: asStated,
-  parameters: [event : Event],
-  result: (Option (Result Stat Failure)),
+  parameters: [event : LexLeanStd.Host::Event],
+  result: (Option (Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)),
   body: (match event
-    | Event.start arguments directory executable environment terminal => (ctor Option.none [(Result Stat Failure)])
-    | Event.read o => (ctor Option.none [(Result Stat Failure)])
-    | Event.wrote o => (ctor Option.none [(Result Stat Failure)])
-    | Event.listed o => (ctor Option.none [(Result Stat Failure)])
-    | Event.stated o => (ctor Option.some [(Result Stat Failure)] o)
-    | Event.createdDir o => (ctor Option.none [(Result Stat Failure)])
-    | Event.removedFile o => (ctor Option.none [(Result Stat Failure)])
-    | Event.removedTree o => (ctor Option.none [(Result Stat Failure)])
-    | Event.renamed o => (ctor Option.none [(Result Stat Failure)])
-    | Event.canonicalized o => (ctor Option.none [(Result Stat Failure)])
-    | Event.locked o => (ctor Option.none [(Result Stat Failure)])
-    | Event.spawned o => (ctor Option.none [(Result Stat Failure)])
-    | Event.waited o => (ctor Option.none [(Result Stat Failure)])
-    | Event.stopped o => (ctor Option.none [(Result Stat Failure)])),
+    | LexLeanStd.Host::Event.start value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.read value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.finished value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.listed value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.stat value => (ctor Option.some [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)] value)
+    | LexLeanStd.Host::Event.canonical value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.spawned value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])
+    | LexLeanStd.Host::Event.waited value => (ctor Option.none [(Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)])),
   executable: true
 }
 
@@ -292,7 +116,7 @@ definition{
   name: textOfNote,
   parameters: [],
   result: String,
-  body: "textOf is rule30's stand-in for prim utf8_decode at the String boundary: at the pinned LexLean, utf8_decode (like format_decimal and split_exact) depends on Classical.choice in its Lean model, which rule30 forbids, and no other primitive turns Bytes into a String. textOf is exact on ASCII and on the scalars of multibyte, the non-ASCII characters of rule30's registers and prose (frontier.toml has only ≤, the fixture of R30Traces has ⊕); every other scalar becomes one U+FFFD (its lead byte gives U+FFFD, its continuation bytes nothing). So bytes taken from the host reach the driver unchanged exactly when they are ASCII or scalars of multibyte. The traces of R30Traces and its sibling modules compare the pieces of plan byte for byte with the deprecated runtime's output. pieceScalars is a parallel definition, for the kernel: pieceText joins what pieceScalars lists, and the reflexivity theorems realize*, render*, pieceText* and textOf* of R30Traces state that link for any argument, so realize, render, pieceTexts, pieceText and textOf cannot change without a theorem failing. realizedAgrees decides the scalars of pieceScalars on a run, and R30TracesClaims.traceClaimAlpha uses it on a register that holds ⊕; R30Traces.textChars* decide charsFrom on all of ASCII and all of multibyte. The one stated gap: join does not reduce under decide (it is Lean's String.intercalate), so no theorem states that joining the joined texts of the pieces, which render does, gives the join of their scalars in one list. textOf becomes utf8_decode the day that primitive is choice-free.",
+  body: "textOf is rule30's stand-in for prim utf8_decode at the String boundary: at the pinned LexLean, utf8_decode (like format_decimal and split_exact) depends on Classical.choice in its Lean model, which rule30 forbids, and no other primitive turns Bytes into a String. textOf is exact on ASCII and on the scalars of multibyte, the non-ASCII characters of rule30's registers and prose (frontier.toml has only ≤, the fixture of R30Traces has ⊕); every other scalar becomes one U+FFFD (its lead byte gives U+FFFD, its continuation bytes nothing). This limitation applies to paths converted through render. Exit output uses renderBytes instead: literal pieces are UTF-8 encoded and taken pieces are appended unchanged, including bytes outside the decoder's scalar table. The traces of R30Traces and its sibling modules compare the pieces of plan byte for byte with the deprecated runtime's output. pieceScalars is a parallel definition, for the kernel: pieceText joins what pieceScalars lists, and the reflexivity theorems realize*, render*, pieceText* and textOf* of R30Traces state that link for any argument, so realize, render, pieceTexts, pieceText and textOf cannot change without a theorem failing. realizedAgrees decides the scalars of pieceScalars on a run, and R30TracesClaims.traceClaimAlpha uses it on a register that holds ⊕; R30Traces.textChars* decide charsFrom on all of ASCII and all of multibyte. The one stated gap: join does not reduce under decide (it is Lean's String.intercalate), so no theorem states that joining the joined texts of the pieces, which render does, gives the join of their scalars in one list. textOf becomes utf8_decode the day that primitive is choice-free.",
   executable: true
 }
 
@@ -415,13 +239,34 @@ definition{
 }
 
 definition{
+  name: pieceBytes,
+  parameters: [piece : Piece],
+  result: Bytes,
+  body: (match piece
+    | Piece.literal text => (prim utf8_encode text : Bytes)
+    | Piece.taken bytes => bytes),
+  executable: true
+}
+
+definition{
+  name: renderBytes,
+  parameters: [pieces : (List Piece)],
+  result: Bytes,
+  body: (match pieces
+    | List.nil => 0x
+    | List.cons piece rest => (prim append (pieceBytes piece) (renderBytes rest) : Bytes)),
+  recursive_argument: pieces,
+  executable: true
+}
+
+definition{
   name: realize,
   parameters: [draft : Draft],
-  result: Request,
+  result: LexLeanStd.Host::Request,
   body: (match draft
-    | Draft.read path => (ctor Request.read (render path))
-    | Draft.stat path => (ctor Request.stat (render path))
-    | Draft.exit status output errors => (ctor Request.exit status (render output) (render errors))),
+    | Draft.read path => (ctor LexLeanStd.Host::Request.read (render path))
+    | Draft.stat path => (ctor LexLeanStd.Host::Request.stat (render path))
+    | Draft.exit status output errors => (ctor LexLeanStd.Host::Request.exit status (renderBytes output) (renderBytes errors))),
   axioms: [Quot.sound, propext],
   executable: true
 }
@@ -429,7 +274,7 @@ definition{
 definition{
   name: traceFrom,
   type_parameters: [S, R],
-  parameters: [step : (Fn ((Option 'S) Event) ('S * 'R)), final : (Fn ('R) Bool), state : (Option 'S), events : (List Event), fuel : Nat],
+  parameters: [step : (Fn ((Option 'S) LexLeanStd.Host::Event) ('S * 'R)), final : (Fn ('R) Bool), state : (Option 'S), events : (List LexLeanStd.Host::Event), fuel : Nat],
   result: (List 'R),
   body: (match events
     | List.nil => (nil 'R)
@@ -442,7 +287,7 @@ definition{
 definition{
   name: trace,
   type_parameters: [S, R],
-  parameters: [step : (Fn ((Option 'S) Event) ('S * 'R)), final : (Fn ('R) Bool), events : (List Event), fuel : Nat],
+  parameters: [step : (Fn ((Option 'S) LexLeanStd.Host::Event) ('S * 'R)), final : (Fn ('R) Bool), events : (List LexLeanStd.Host::Event), fuel : Nat],
   result: (List 'R),
   body: (traceFrom ['S, 'R] step final (ctor Option.none ['S]) events fuel)
 }

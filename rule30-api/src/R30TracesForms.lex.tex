@@ -3,6 +3,7 @@
 \useglossary{lexlean.std.nat@1.2.0}
 \importmodule{Application}
 \importmodule{Host}
+\importmodule{LexLeanStd.Host}
 \importmodule{R30}
 \importmodule{R30Traces}
 \title{Boolean}
@@ -79,7 +80,7 @@ theorem{
 theorem{
   name: traceRootAbove,
   parameters: [],
-  statement: ((Host::traceAgrees (R30Traces::run (cons (R30Traces::startedIn (cons (R30Traces::argFrontier) (cons (R30Traces::argList) (nil Bytes))) (R30Traces::subDirectory)) (cons (R30Traces::statedMissing) (cons (R30Traces::statedDirectory) (cons (R30Traces::readOk (R30Traces::fixtureOne)) (nil Host::Event)))))) (cons (R30Traces::statsGit) (cons (R30Traces::statsGitAbove) (cons (R30Traces::readsRegisterAbove) (cons (R30Traces::exited (0 : UInt8) (R30Traces::shown (R30Traces::pythonListOne)) (nil Host::Piece)) (nil Host::Draft)))))) = true),
+  statement: ((Host::traceAgrees (R30Traces::run (cons (R30Traces::startedIn (cons (R30Traces::argFrontier) (cons (R30Traces::argList) (nil Bytes))) (R30Traces::subDirectory)) (cons (R30Traces::statedMissing) (cons (R30Traces::statedDirectory) (cons (R30Traces::readOk (R30Traces::fixtureOne)) (nil LexLeanStd.Host::Event)))))) (cons (R30Traces::statsGit) (cons (R30Traces::statsGitAbove) (cons (R30Traces::readsRegisterAbove) (cons (R30Traces::exited (0 : UInt8) (R30Traces::shown (R30Traces::pythonListOne)) (nil Host::Piece)) (nil Host::Draft)))))) = true),
   proof: decide{},
   axioms: [propext]
 }

@@ -2,6 +2,7 @@
 \useglossary{lexlean.std.bool@1.2.0}
 \useglossary{lexlean.std.nat@1.2.0}
 \importmodule{Host}
+\importmodule{LexLeanStd.Host}
 \importmodule{Toml}
 \title{Boolean}
 \begin{semanticmodule}
@@ -9,7 +10,7 @@ definition{
   name: rootKind,
   parameters: [],
   result: String,
-  body: "step has the signature of a command root of LexLean issue 271 over the mirror Host, and is declared a production root for rust-std with the effects LexLean 0.4.0 admits (allocation, overflow, recursion): lexlean verify certifies the root, and lexlean production compiles it to a Rust library function with no main when a request names it. rule30-api/production/request.json does not name it, because that file and model/runtime-roots.toml are generated from the tables of the deprecated tools/r30, which take no additions; so bin/r30 api production does not build this root, and exporting it takes a request of its own until the runtime moves. Its closure builds three Request constructors, read, stat and exit, through Host::realize, so under rule 5 of 271 it realizes files and not process. When rule30 pins the release that lands 271, Host:: becomes LexLeanStd.Host:: (imported from LexLean's stdlib as a source package, SPEC 10.5), the root's effects become [allocation, files, overflow, recursion], and the same signature makes it the command root whose generated driver is rule30's binary; a verb that spawns a process adds Draft.spawn, and process with it. plan is the step before its texts are joined (step realizes plan, by definition); the kernel decides traces of plan.",
+  body: "step consumes LexLeanStd.Host.Event and returns a session and LexLeanStd.Host.Request. These are imported source-package types from the v0.5 development branch; Rule30Api.Host supplies application adapters, not duplicate protocol types. The root is certified for rust-std with allocation, overflow and recursion, and production exports a pure Rust library function when a request names it. Its closure constructs read, stat and exit through Host::realize. Constructing a request does not execute an effect: the compiler's generated command driver, files and process effect checking, and connection to the research executor remain implementation work on our v0.5-based LexLean branch. rule30-api/production/request.json and model/runtime-roots.toml still describe the deprecated runtime's roots, so bin/r30 api production does not export step. plan carries paths and output as pieces; step realizes paths as text and output as exact bytes. step realizes plan by definition, and the kernel decides traces of plan.",
   executable: true
 }
 
@@ -46,7 +47,7 @@ definition{
   name: registerUnreadable,
   parameters: [],
   result: ErrorRow,
-  body: (record ErrorRow {code := "R301004", title := "Register cannot be read", family := "register", status := (1 : UInt8), statement := "No directory at or above the working directory holds .git, the host could not stat a .git on the way up, or it could not read frontier.toml in the repository root; the path, the failure's kind and the host's message follow."}),
+  body: (record ErrorRow {code := "R301004", title := "Register cannot be read", family := "register", status := (1 : UInt8), statement := "The host could not obtain the working directory, no directory at or above it holds .git, the host could not stat a .git on the way up, or it could not read frontier.toml in the repository root; the path, the failure's kind and the host's message follow."}),
   executable: true
 }
 
@@ -644,31 +645,6 @@ definition{
 }
 
 definition{
-  name: frontierCommand,
-  parameters: [arguments : (List Bytes), rest : (List Bytes), top : Nat],
-  result: (Session * Host::Draft),
-  body: (match rest
-    | List.cons sub options => (if (word sub (wordList)) then (match (scanList options (ctor Option.none [Bytes]) false false)
-      | ListForm.listed filter => ((record Session {awaiting := (ctor Awaiting.root filter 0 top)}), (ctor Host::Draft.stat (gitAt 0)))
-      | ListForm.help => (finish (0 : UInt8) (lit (listHelp)) (nil Host::Piece))
-      | ListForm.refused detail => (failWith (commandLineRefused) (lit detail))) else (refuse arguments))
-    | List.nil => (refuse arguments)),
-  executable: true
-}
-
-definition{
-  name: begin,
-  parameters: [start : Host::Start],
-  result: (Session * Host::Draft),
-  body: (let arguments : (List Bytes) := (project start arguments); (match arguments
-    | List.nil => (finish (0 : UInt8) (lit (usage)) (nil Host::Piece))
-    | List.cons verb rest => (if ((word verb (wordHelp)) || ((word verb (wordHelpFlag)) || (word verb (wordHelpShort)))) then (finish (0 : UInt8) (lit (usage)) (nil Host::Piece)) else (if ((word verb (wordVersion)) || (word verb (wordVersionFlag))) then (match rest
-      | List.nil => (finish (0 : UInt8) (versionOutput) (nil Host::Piece))
-      | List.cons extra others => (failWith (commandLineRefused) (lit "version takes no arguments"))) else (if (word verb (wordFrontier)) then (frontierCommand arguments rest (components (project start directory))) else (refuse arguments)))))),
-  executable: true
-}
-
-definition{
   name: scalarsFrom,
   parameters: [bytes : Bytes, position : Nat, fuel : Nat],
   result: Nat,
@@ -776,33 +752,58 @@ definition{
 
 definition{
   name: failureText,
-  parameters: [kind : Host::FailureKind],
+  parameters: [kind : LexLeanStd.Host::FailureKind],
   result: String,
   body: (match kind
-    | Host::FailureKind.notFound => "not found"
-    | Host::FailureKind.denied => "permission denied"
-    | Host::FailureKind.invalid => "invalid path"
-    | Host::FailureKind.other => "failed"),
+    | LexLeanStd.Host::FailureKind.notFound => "not found"
+    | LexLeanStd.Host::FailureKind.denied => "permission denied"
+    | LexLeanStd.Host::FailureKind.alreadyExists => "already exists"
+    | LexLeanStd.Host::FailureKind.other => "failed"),
   executable: true
 }
 
 definition{
   name: isNotFound,
-  parameters: [kind : Host::FailureKind],
+  parameters: [kind : LexLeanStd.Host::FailureKind],
   result: Bool,
   body: (match kind
-    | Host::FailureKind.notFound => true
-    | Host::FailureKind.denied => false
-    | Host::FailureKind.invalid => false
-    | Host::FailureKind.other => false),
+    | LexLeanStd.Host::FailureKind.notFound => true
+    | LexLeanStd.Host::FailureKind.denied => false
+    | LexLeanStd.Host::FailureKind.alreadyExists => false
+    | LexLeanStd.Host::FailureKind.other => false),
   executable: true
 }
 
 definition{
   name: failureDetail,
-  parameters: [path : (List Host::Piece), failure : Host::Failure],
+  parameters: [path : (List Host::Piece), failure : LexLeanStd.Host::Failure],
   result: (List Host::Piece),
   body: (prim append path (cons (ctor Host::Piece.literal ": ") (cons (ctor Host::Piece.literal (failureText (project failure kind))) (if ((prim length (project failure message) : Nat) =? 0) then (nil Host::Piece) else (cons (ctor Host::Piece.literal " (") (cons (taken (project failure message)) (lit ")")))))) : (List Host::Piece)),
+  executable: true
+}
+
+definition{
+  name: frontierCommand,
+  parameters: [arguments : (List Bytes), rest : (List Bytes), directory : (Result Bytes LexLeanStd.Host::Failure)],
+  result: (Session * Host::Draft),
+  body: (match rest
+    | List.cons sub options => (if (word sub (wordList)) then (match (scanList options (ctor Option.none [Bytes]) false false)
+      | ListForm.listed filter => (match directory | Result.ok path => ((record Session {awaiting := (ctor Awaiting.root filter 0 (components path))}), (ctor Host::Draft.stat (gitAt 0))) | Result.error failure => (failWith (registerUnreadable) (failureDetail (lit "working directory") failure)))
+      | ListForm.help => (finish (0 : UInt8) (lit (listHelp)) (nil Host::Piece))
+      | ListForm.refused detail => (failWith (commandLineRefused) (lit detail))) else (refuse arguments))
+    | List.nil => (refuse arguments)),
+  executable: true
+}
+
+definition{
+  name: begin,
+  parameters: [start : LexLeanStd.Host::Start],
+  result: (Session * Host::Draft),
+  body: (let arguments : (List Bytes) := (project start arguments); (match arguments
+    | List.nil => (finish (0 : UInt8) (lit (usage)) (nil Host::Piece))
+    | List.cons verb rest => (if ((word verb (wordHelp)) || ((word verb (wordHelpFlag)) || (word verb (wordHelpShort)))) then (finish (0 : UInt8) (lit (usage)) (nil Host::Piece)) else (if ((word verb (wordVersion)) || (word verb (wordVersionFlag))) then (match rest
+      | List.nil => (finish (0 : UInt8) (versionOutput) (nil Host::Piece))
+      | List.cons extra others => (failWith (commandLineRefused) (lit "version takes no arguments"))) else (if (word verb (wordFrontier)) then (frontierCommand arguments rest (project start directory)) else (refuse arguments)))))),
   executable: true
 }
 
@@ -824,7 +825,7 @@ definition{
 
 definition{
   name: probed,
-  parameters: [filter : (Option Bytes), level : Nat, top : Nat, outcome : (Result Host::Stat Host::Failure)],
+  parameters: [filter : (Option Bytes), level : Nat, top : Nat, outcome : (Result LexLeanStd.Host::Entry LexLeanStd.Host::Failure)],
   result: (Session * Host::Draft),
   body: (match outcome
     | Result.ok found => ((record Session {awaiting := (ctor Awaiting.register filter level)}), (ctor Host::Draft.read (registerAt level)))
@@ -834,7 +835,7 @@ definition{
 
 definition{
   name: listing,
-  parameters: [filter : (Option Bytes), level : Nat, outcome : (Result Bytes Host::Failure)],
+  parameters: [filter : (Option Bytes), level : Nat, outcome : (Result Bytes LexLeanStd.Host::Failure)],
   result: (Session * Host::Draft),
   body: (let path : (List Host::Piece) := (registerAt level); (match outcome
     | Result.error failure => (failWith (registerUnreadable) (failureDetail path failure))
@@ -851,7 +852,7 @@ definition{
 
 definition{
   name: plan,
-  parameters: [state : (Option Session), event : Host::Event],
+  parameters: [state : (Option Session), event : LexLeanStd.Host::Event],
   result: (Session * Host::Draft),
   body: (match state
     | Option.none => (match (Host::asStart event)
@@ -871,8 +872,8 @@ definition{
 
 definition{
   name: step,
-  parameters: [state : (Option Session), event : Host::Event],
-  result: (Session * Host::Request),
+  parameters: [state : (Option Session), event : LexLeanStd.Host::Event],
+  result: (Session * LexLeanStd.Host::Request),
   body: (let drafted : (Session * Host::Draft) := (plan state event); ((first drafted), (Host::realize (second drafted)))),
   axioms: [Quot.sound, propext],
   executable: true,
@@ -881,7 +882,7 @@ definition{
 
 theorem{
   name: stepRealizesPlan,
-  parameters: [state : (Option Session), event : Host::Event],
+  parameters: [state : (Option Session), event : LexLeanStd.Host::Event],
   statement: ((step state event) = ((first (plan state event)), (Host::realize (second (plan state event))))),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]

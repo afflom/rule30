@@ -106,12 +106,12 @@ the registers. Never add a `.py` file or a shell script, and never extend `tools
 `scripts/*.py` or the shell glue: the pre-commit authoring policy refuses a commit that adds a
 Python file or grows the Python it touches, with no bypass.
 
-At the pinned compiler (0.4.0, revision 3877351) a production root compiles to a Rust library
+At the pinned compiler (the release/v0.5 development line, revision 7037c54) a production root compiles to a Rust library
 with no `main` and no effects beyond allocation, overflow and recursion: no files, processes,
 arguments or exit codes. An executable entry for a root that reads files and runs `lake`,
 `lexlean` and `git` is LexLean issue #271 (the effects boundary). So the logic moves into LexLean
 now, as authored modules with certified roots, and the remaining Python and shell glue is deleted
-as LexLean gains the effect boundary and rule30 pins it. A capability LexLean, PrismPM or
+as the effect boundary is implemented on our v0.5-based LexLean branch. The vendored LexLeanStd.Host types are the actual PR #389 interface ported to v0.5 in upstream PR #396; they are imported directly rather than mirrored in Rule30Api.Host. A capability LexLean, PrismPM or
 prism-stdlib cannot yet express is an upstream issue for those projects, never a reason for new
 Python or shell. The logic already moved: the command surface, the register, the
 converter (`rule30-api/src/Convert.lex.tex`), the engine's learning rule and schedule
