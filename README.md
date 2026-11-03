@@ -287,3 +287,11 @@ writes to `dist/`; the pre-commit gate publishes those outputs to all tracked PD
 
 ### Automated Releases
 Pushing any version tag `v*` (e.g. `v0.1`) triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which builds `rule30-core-lean`, `Rule30PrizeKit/lean`, and `rule30-bridge`, compiles `Rule30-Paper.pdf` and `Rule30-Core.pdf`, packages the verified LexLean bundles, and attaches all PDFs and LexLean artifacts to the GitHub Release.
+
+The compiler development pin follows LexLean `release/v0.5` through
+[the Host interface contribution](https://github.com/UOR-Foundation/LexLean/pull/396).
+The API imports `LexLeanStd.Host` from the pinned source package; its local
+`Host` module contains only the application harness. The attention catalog
+covers all 30 application and library modules. The generated executable
+driver and research executor integration are still required. CI and runtime
+use deterministic local tools and no remote models.

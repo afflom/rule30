@@ -2,6 +2,7 @@
 \useglossary{lexlean.std.bool@1.2.0}
 \useglossary{lexlean.std.nat@1.2.0}
 \importmodule{Host}
+\importmodule{LexLeanStd.Host}
 \importmodule{R30}
 \title{Boolean}
 \begin{semanticmodule}
@@ -219,57 +220,57 @@ definition{
 definition{
   name: startedIn,
   parameters: [arguments : (List Bytes), directory : Bytes],
-  result: Host::Event,
-  body: (ctor Host::Event.start arguments directory (executablePath) (nil (Bytes * Bytes)) false)
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.start arguments directory (executablePath) (nil (Bytes * Bytes)) false)
 }
 
 definition{
   name: started,
   parameters: [arguments : (List Bytes)],
-  result: Host::Event,
+  result: LexLeanStd.Host::Event,
   body: (startedIn arguments (workDirectory))
 }
 
 definition{
   name: statedDirectory,
   parameters: [],
-  result: Host::Event,
-  body: (ctor Host::Event.stated (ctor Result.ok [Host::Stat, Host::Failure] (record Host::Stat {kind := (ctor Host::EntryKind.directory), size := 4096, device := 0, inode := 0})))
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.stated (ctor Result.ok [LexLeanStd.Host::Stat, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Stat {kind := (ctor LexLeanStd.Host::EntryKind.directory), size := 4096, device := 0, inode := 0})))
 }
 
 definition{
   name: statedMissing,
   parameters: [],
-  result: Host::Event,
-  body: (ctor Host::Event.stated (ctor Result.error [Host::Stat, Host::Failure] (record Host::Failure {kind := (ctor Host::FailureKind.notFound), message := (noSuchFile)})))
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.stated (ctor Result.error [LexLeanStd.Host::Stat, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Failure {kind := (ctor LexLeanStd.Host::FailureKind.notFound), message := (noSuchFile)})))
 }
 
 definition{
   name: statedFailed,
-  parameters: [kind : Host::FailureKind, message : Bytes],
-  result: Host::Event,
-  body: (ctor Host::Event.stated (ctor Result.error [Host::Stat, Host::Failure] (record Host::Failure {kind := kind, message := message})))
+  parameters: [kind : LexLeanStd.Host::FailureKind, message : Bytes],
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.stated (ctor Result.error [LexLeanStd.Host::Stat, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Failure {kind := kind, message := message})))
 }
 
 definition{
   name: listedNothing,
   parameters: [],
-  result: Host::Event,
-  body: (ctor Host::Event.listed (ctor Result.ok [(List Bytes), Host::Failure] (nil Bytes)))
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.listed (ctor Result.ok [(List Bytes), LexLeanStd.Host::Failure] (nil Bytes)))
 }
 
 definition{
   name: readOk,
   parameters: [contents : Bytes],
-  result: Host::Event,
-  body: (ctor Host::Event.read (ctor Result.ok [Bytes, Host::Failure] contents))
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] contents))
 }
 
 definition{
   name: readFailed,
-  parameters: [kind : Host::FailureKind, message : Bytes],
-  result: Host::Event,
-  body: (ctor Host::Event.read (ctor Result.error [Bytes, Host::Failure] (record Host::Failure {kind := kind, message := message})))
+  parameters: [kind : LexLeanStd.Host::FailureKind, message : Bytes],
+  result: LexLeanStd.Host::Event,
+  body: (ctor LexLeanStd.Host::Event.read (ctor Result.error [Bytes, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Failure {kind := kind, message := message})))
 }
 
 definition{
@@ -344,7 +345,7 @@ definition{
 
 definition{
   name: run,
-  parameters: [events : (List Host::Event)],
+  parameters: [events : (List LexLeanStd.Host::Event)],
   result: (List Host::Draft),
   body: (Host::trace [R30::Session, Host::Draft] (ref R30::plan) (ref Host::isExit) events 8),
   axioms: [propext]
@@ -354,7 +355,7 @@ definition{
   name: listRun,
   parameters: [arguments : (List Bytes), register : Bytes],
   result: (List Host::Draft),
-  body: (run (cons (started (cons (argFrontier) (cons (argList) arguments))) (cons (statedDirectory) (cons (readOk register) (nil Host::Event))))),
+  body: (run (cons (started (cons (argFrontier) (cons (argList) arguments))) (cons (statedDirectory) (cons (readOk register) (nil LexLeanStd.Host::Event))))),
   axioms: [propext]
 }
 
@@ -368,7 +369,7 @@ definition{
 theorem{
   name: traceHelp,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argHelp) (nil Bytes))) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argHelp) (nil Bytes))) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -376,7 +377,7 @@ theorem{
 theorem{
   name: traceHelpFlag,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argHelpFlag) (nil Bytes))) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argHelpFlag) (nil Bytes))) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -384,7 +385,7 @@ theorem{
 theorem{
   name: traceNoArguments,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (nil Bytes)) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (nil Bytes)) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -392,7 +393,7 @@ theorem{
 theorem{
   name: traceStopsAtExit,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argHelp) (nil Bytes))) (cons (readOk (fixtureOne)) (nil Host::Event)))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argHelp) (nil Bytes))) (cons (readOk (fixtureOne)) (nil LexLeanStd.Host::Event)))) (cons (exited (0 : UInt8) (R30::lit (R30::usage)) (nil Host::Piece)) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -400,7 +401,7 @@ theorem{
 theorem{
   name: traceVersion,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argVersion) (nil Bytes))) (nil Host::Event))) (cons (exited (0 : UInt8) (cons (piece "r30 ") (cons (piece "0.1.0") (cons (piece "\n") (nil Host::Piece)))) (nil Host::Piece)) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argVersion) (nil Bytes))) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (cons (piece "r30 ") (cons (piece "0.1.0") (cons (piece "\n") (nil Host::Piece)))) (nil Host::Piece)) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -408,7 +409,7 @@ theorem{
 theorem{
   name: traceVersionArguments,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argVersion) (cons (argFrontier) (nil Bytes)))) (nil Host::Event))) (cons (refusedWith (cons (piece "version takes no arguments") (nil Host::Piece))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argVersion) (cons (argFrontier) (nil Bytes)))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (piece "version takes no arguments") (nil Host::Piece))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -416,7 +417,7 @@ theorem{
 theorem{
   name: traceStatusWithoutValue,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (nil Bytes))))) (nil Host::Event))) (cons (refusedWith (cons (piece "argument --status of frontier list expects one value") (nil Host::Piece))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (nil Bytes))))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (piece "argument --status of frontier list expects one value") (nil Host::Piece))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -424,7 +425,7 @@ theorem{
 theorem{
   name: traceListHelp,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argBogus) (cons (argHelpFlag) (nil Bytes)))))) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit "usage: r30 frontier list [-h] [--status STATUS]\n\noptions:\n  -h, --help       show this help message and exit\n  --status STATUS\n") (nil Host::Piece)) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argBogus) (cons (argHelpFlag) (nil Bytes)))))) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (R30::lit "usage: r30 frontier list [-h] [--status STATUS]\n\noptions:\n  -h, --help       show this help message and exit\n  --status STATUS\n") (nil Host::Piece)) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -432,7 +433,7 @@ theorem{
 theorem{
   name: traceRootMissing,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedMissing) (cons (statedMissing) (cons (readOk (fixtureOne)) (nil Host::Event)))))) (cons (statsGit) (cons (statsGitAbove) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece "frontier.toml: no directory at or above the working directory holds .git") (nil Host::Piece)))) (nil Host::Draft))))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedMissing) (cons (statedMissing) (cons (readOk (fixtureOne)) (nil LexLeanStd.Host::Event)))))) (cons (statsGit) (cons (statsGitAbove) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece "frontier.toml: no directory at or above the working directory holds .git") (nil Host::Piece)))) (nil Host::Draft))))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -440,7 +441,7 @@ theorem{
 theorem{
   name: traceRegisterUnreadable,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedDirectory) (cons (readFailed (ctor Host::FailureKind.notFound) (noSuchFile)) (nil Host::Event))))) (listedAs (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece "frontier.toml") (cons (piece ": ") (cons (piece "not found") (cons (piece " (") (cons (ctor Host::Piece.taken (noSuchFile)) (cons (piece ")") (nil Host::Piece))))))))))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedDirectory) (cons (readFailed (ctor LexLeanStd.Host::FailureKind.notFound) (noSuchFile)) (nil LexLeanStd.Host::Event))))) (listedAs (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece "frontier.toml") (cons (piece ": ") (cons (piece "not found") (cons (piece " (") (cons (ctor Host::Piece.taken (noSuchFile)) (cons (piece ")") (nil Host::Piece))))))))))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -464,7 +465,7 @@ theorem{
 theorem{
   name: traceUnknownVerb,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrobnicate) (nil Bytes))) (nil Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrobnicate)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrobnicate) (nil Bytes))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrobnicate)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -472,7 +473,7 @@ theorem{
 theorem{
   name: traceProgramName,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argProgram) (cons (argHelp) (nil Bytes)))) (nil Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argProgram)) (cons (piece " ") (cons (ctor Host::Piece.taken (argHelp)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argProgram) (cons (argHelp) (nil Bytes)))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argProgram)) (cons (piece " ") (cons (ctor Host::Piece.taken (argHelp)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -480,7 +481,7 @@ theorem{
 theorem{
   name: traceHostProtocol,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (readOk (fixtureOne)) (nil Host::Event))) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (readOk (fixtureOne)) (nil LexLeanStd.Host::Event))) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -488,7 +489,7 @@ theorem{
 theorem{
   name: traceHostProtocolListed,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (listedNothing) (nil Host::Event)))) (cons (statsGit) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))) (nil Host::Draft)))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (listedNothing) (nil LexLeanStd.Host::Event)))) (cons (statsGit) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))) (nil Host::Draft)))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -496,7 +497,7 @@ theorem{
 theorem{
   name: traceHostProtocolRegister,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedDirectory) (cons (statedDirectory) (nil Host::Event))))) (listedAs (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (nil Bytes)))) (cons (statedDirectory) (cons (statedDirectory) (nil LexLeanStd.Host::Event))))) (listedAs (exited (1 : UInt8) (nil Host::Piece) (expectError "R300002" "Host answered another request" (cons (piece "the event answers no request of this step") (nil Host::Piece)))))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -504,7 +505,7 @@ theorem{
 theorem{
   name: traceListStray,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argBogus) (nil Bytes))))) (nil Host::Event))) (cons (refusedWith (cons (piece "frontier list takes no arguments but --status S") (nil Host::Piece))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argBogus) (nil Bytes))))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (piece "frontier list takes no arguments but --status S") (nil Host::Piece))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -512,7 +513,7 @@ theorem{
 theorem{
   name: traceListSeparator,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argSeparator) (nil Bytes))))) (nil Host::Event))) (cons (refusedWith (cons (piece "frontier list takes no arguments but --status S") (nil Host::Piece))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argSeparator) (nil Bytes))))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (piece "frontier list takes no arguments but --status S") (nil Host::Piece))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -520,7 +521,7 @@ theorem{
 theorem{
   name: traceStatusOptionLike,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (cons (argDashX) (nil Bytes)))))) (nil Host::Event))) (cons (refusedWith (cons (piece "argument --status of frontier list expects one value") (nil Host::Piece))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (cons (argDashX) (nil Bytes)))))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (piece "argument --status of frontier list expects one value") (nil Host::Piece))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -528,7 +529,7 @@ theorem{
 theorem{
   name: traceStatusNegative,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (cons (argMinusOne) (nil Bytes)))))) (nil Host::Event))) (cons (statsGit) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argStatus) (cons (argMinusOne) (nil Bytes)))))) (nil LexLeanStd.Host::Event))) (cons (statsGit) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -536,7 +537,7 @@ theorem{
 theorem{
   name: traceHelpValue,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argHelpValue) (nil Bytes))))) (nil Host::Event))) (cons (refusedWith (cons (piece "argument -h/--help of frontier list takes no value") (nil Host::Piece))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argHelpValue) (nil Bytes))))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (piece "argument -h/--help of frontier list takes no value") (nil Host::Piece))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -544,7 +545,7 @@ theorem{
 theorem{
   name: traceHelpGlued,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argHelpGlued) (nil Bytes))))) (nil Host::Event))) (cons (exited (0 : UInt8) (R30::lit "usage: r30 frontier list [-h] [--status STATUS]\n\noptions:\n  -h, --help       show this help message and exit\n  --status STATUS\n") (nil Host::Piece)) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argList) (cons (argHelpGlued) (nil Bytes))))) (nil LexLeanStd.Host::Event))) (cons (exited (0 : UInt8) (R30::lit "usage: r30 frontier list [-h] [--status STATUS]\n\noptions:\n  -h, --help       show this help message and exit\n  --status STATUS\n") (nil Host::Piece)) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -552,7 +553,7 @@ theorem{
 theorem{
   name: traceFrontierAlone,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (nil Bytes))) (nil Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrontier)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (nil Bytes))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrontier)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -560,7 +561,7 @@ theorem{
 theorem{
   name: traceFrontierOtherWord,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argFrobnicate) (nil Bytes)))) (nil Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrontier)) (cons (piece " ") (cons (ctor Host::Piece.taken (argFrobnicate)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))))) (nil Host::Draft))) = true),
+  statement: ((Host::traceAgrees (run (cons (started (cons (argFrontier) (cons (argFrobnicate) (nil Bytes)))) (nil LexLeanStd.Host::Event))) (cons (refusedWith (cons (ctor Host::Piece.taken (argFrontier)) (cons (piece " ") (cons (ctor Host::Piece.taken (argFrobnicate)) (cons (piece " names no command of this runtime; r30 help lists them") (nil Host::Piece)))))) (nil Host::Draft))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -568,7 +569,7 @@ theorem{
 theorem{
   name: traceRootDenied,
   parameters: [],
-  statement: ((Host::traceAgrees (run (cons (startedIn (cons (argFrontier) (cons (argList) (nil Bytes))) (subDirectory)) (cons (statedFailed (ctor Host::FailureKind.denied) (permissionDenied)) (nil Host::Event)))) (cons (statsGit) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece ".git") (cons (piece ": ") (cons (piece "permission denied") (cons (piece " (") (cons (ctor Host::Piece.taken (permissionDenied)) (cons (piece ")") (nil Host::Piece))))))))) (nil Host::Draft)))) = true),
+  statement: ((Host::traceAgrees (run (cons (startedIn (cons (argFrontier) (cons (argList) (nil Bytes))) (subDirectory)) (cons (statedFailed (ctor LexLeanStd.Host::FailureKind.denied) (permissionDenied)) (nil LexLeanStd.Host::Event)))) (cons (statsGit) (cons (exited (1 : UInt8) (nil Host::Piece) (expectError "R301004" "Register cannot be read" (cons (piece ".git") (cons (piece ": ") (cons (piece "permission denied") (cons (piece " (") (cons (ctor Host::Piece.taken (permissionDenied)) (cons (piece ")") (nil Host::Piece))))))))) (nil Host::Draft)))) = true),
   proof: decide{},
   axioms: [propext]
 }
@@ -576,7 +577,7 @@ theorem{
 theorem{
   name: realizeRead,
   parameters: [path : (List Host::Piece)],
-  statement: ((Host::realize (ctor Host::Draft.read path)) = (ctor Host::Request.read (Host::render path))),
+  statement: ((Host::realize (ctor Host::Draft.read path)) = (ctor LexLeanStd.Host::Request.read (Host::render path))),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]
 }
@@ -584,7 +585,7 @@ theorem{
 theorem{
   name: realizeStat,
   parameters: [path : (List Host::Piece)],
-  statement: ((Host::realize (ctor Host::Draft.stat path)) = (ctor Host::Request.stat (Host::render path))),
+  statement: ((Host::realize (ctor Host::Draft.stat path)) = (ctor LexLeanStd.Host::Request.stat (Host::render path))),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]
 }
@@ -592,7 +593,7 @@ theorem{
 theorem{
   name: realizeExit,
   parameters: [status : UInt8, output : (List Host::Piece), errorOutput : (List Host::Piece)],
-  statement: ((Host::realize (ctor Host::Draft.exit status output errorOutput)) = (ctor Host::Request.exit status (Host::render output) (Host::render errorOutput))),
+  statement: ((Host::realize (ctor Host::Draft.exit status output errorOutput)) = (ctor LexLeanStd.Host::Request.exit status (Host::render output) (Host::render errorOutput))),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]
 }

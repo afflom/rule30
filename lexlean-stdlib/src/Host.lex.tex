@@ -1,0 +1,95 @@
+\begin{lexlean}{Host}
+\useglossary{lexlean.std.nat@1.2.0}
+\title{Natural number addition}
+\begin{semanticmodule}
+inductive{
+  name: FailureKind,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: notFound, fields: []},
+    {name: denied, fields: []},
+    {name: invalid, fields: []},
+    {name: other, fields: []}
+  ]
+}
+
+structure{
+  name: Failure,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: kind, type: FailureKind}, {name: message, type: Bytes}]
+}
+
+inductive{
+  name: EntryKind,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: file, fields: []},
+    {name: directory, fields: []},
+    {name: link, fields: []},
+    {name: other, fields: []}
+  ]
+}
+
+structure{
+  name: Stat,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: kind, type: EntryKind},
+    {name: size, type: Nat},
+    {name: device, type: Nat},
+    {name: inode, type: Nat}
+  ]
+}
+
+inductive{
+  name: Event,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: start, fields: [(List Bytes), Bytes, Bytes, (List (Bytes * Bytes)), Bool]},
+    {name: read, fields: [(Result Bytes Failure)]},
+    {name: wrote, fields: [(Result Unit Failure)]},
+    {name: listed, fields: [(Result (List Bytes) Failure)]},
+    {name: stated, fields: [(Result Stat Failure)]},
+    {name: createdDir, fields: [(Result Unit Failure)]},
+    {name: removedFile, fields: [(Result Unit Failure)]},
+    {name: removedTree, fields: [(Result Unit Failure)]},
+    {name: renamed, fields: [(Result Unit Failure)]},
+    {name: canonicalized, fields: [(Result Bytes Failure)]},
+    {name: locked, fields: [(Result Unit Failure)]},
+    {name: spawned, fields: [(Result Nat Failure)]},
+    {name: waited, fields: [(Result (Option Int32) Failure)]},
+    {name: stopped, fields: [(Result Unit Failure)]}
+  ]
+}
+
+inductive{
+  name: Request,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: read, fields: [String]},
+    {name: write, fields: [String, Bytes]},
+    {name: list, fields: [String]},
+    {name: stat, fields: [String]},
+    {name: createDir, fields: [String]},
+    {name: removeFile, fields: [String]},
+    {name: removeTree, fields: [String]},
+    {name: rename, fields: [String, String]},
+    {name: canonical, fields: [String]},
+    {name: lock, fields: [String]},
+    {
+      name: spawn,
+      fields: [String, (List String), String, (List (String * String)), String, String]
+    },
+    {name: wait, fields: [Nat]},
+    {name: stop, fields: [Nat]},
+    {name: exit, fields: [UInt8, String, String]}
+  ]
+}
+\end{semanticmodule}
+\end{lexlean}

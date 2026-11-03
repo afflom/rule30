@@ -2,6 +2,7 @@
 \useglossary{lexlean.std.bool@1.2.0}
 \useglossary{lexlean.std.nat@1.2.0}
 \importmodule{Host}
+\importmodule{LexLeanStd.Host}
 \importmodule{Toml}
 \title{Boolean}
 \begin{semanticmodule}
@@ -776,31 +777,31 @@ definition{
 
 definition{
   name: failureText,
-  parameters: [kind : Host::FailureKind],
+  parameters: [kind : LexLeanStd.Host::FailureKind],
   result: String,
   body: (match kind
-    | Host::FailureKind.notFound => "not found"
-    | Host::FailureKind.denied => "permission denied"
-    | Host::FailureKind.invalid => "invalid path"
-    | Host::FailureKind.other => "failed"),
+    | LexLeanStd.Host::FailureKind.notFound => "not found"
+    | LexLeanStd.Host::FailureKind.denied => "permission denied"
+    | LexLeanStd.Host::FailureKind.invalid => "invalid path"
+    | LexLeanStd.Host::FailureKind.other => "failed"),
   executable: true
 }
 
 definition{
   name: isNotFound,
-  parameters: [kind : Host::FailureKind],
+  parameters: [kind : LexLeanStd.Host::FailureKind],
   result: Bool,
   body: (match kind
-    | Host::FailureKind.notFound => true
-    | Host::FailureKind.denied => false
-    | Host::FailureKind.invalid => false
-    | Host::FailureKind.other => false),
+    | LexLeanStd.Host::FailureKind.notFound => true
+    | LexLeanStd.Host::FailureKind.denied => false
+    | LexLeanStd.Host::FailureKind.invalid => false
+    | LexLeanStd.Host::FailureKind.other => false),
   executable: true
 }
 
 definition{
   name: failureDetail,
-  parameters: [path : (List Host::Piece), failure : Host::Failure],
+  parameters: [path : (List Host::Piece), failure : LexLeanStd.Host::Failure],
   result: (List Host::Piece),
   body: (prim append path (cons (ctor Host::Piece.literal ": ") (cons (ctor Host::Piece.literal (failureText (project failure kind))) (if ((prim length (project failure message) : Nat) =? 0) then (nil Host::Piece) else (cons (ctor Host::Piece.literal " (") (cons (taken (project failure message)) (lit ")")))))) : (List Host::Piece)),
   executable: true
@@ -824,7 +825,7 @@ definition{
 
 definition{
   name: probed,
-  parameters: [filter : (Option Bytes), level : Nat, top : Nat, outcome : (Result Host::Stat Host::Failure)],
+  parameters: [filter : (Option Bytes), level : Nat, top : Nat, outcome : (Result LexLeanStd.Host::Stat LexLeanStd.Host::Failure)],
   result: (Session * Host::Draft),
   body: (match outcome
     | Result.ok found => ((record Session {awaiting := (ctor Awaiting.register filter level)}), (ctor Host::Draft.read (registerAt level)))
@@ -834,7 +835,7 @@ definition{
 
 definition{
   name: listing,
-  parameters: [filter : (Option Bytes), level : Nat, outcome : (Result Bytes Host::Failure)],
+  parameters: [filter : (Option Bytes), level : Nat, outcome : (Result Bytes LexLeanStd.Host::Failure)],
   result: (Session * Host::Draft),
   body: (let path : (List Host::Piece) := (registerAt level); (match outcome
     | Result.error failure => (failWith (registerUnreadable) (failureDetail path failure))
@@ -851,7 +852,7 @@ definition{
 
 definition{
   name: plan,
-  parameters: [state : (Option Session), event : Host::Event],
+  parameters: [state : (Option Session), event : LexLeanStd.Host::Event],
   result: (Session * Host::Draft),
   body: (match state
     | Option.none => (match (Host::asStart event)
@@ -871,8 +872,8 @@ definition{
 
 definition{
   name: step,
-  parameters: [state : (Option Session), event : Host::Event],
-  result: (Session * Host::Request),
+  parameters: [state : (Option Session), event : LexLeanStd.Host::Event],
+  result: (Session * LexLeanStd.Host::Request),
   body: (let drafted : (Session * Host::Draft) := (plan state event); ((first drafted), (Host::realize (second drafted)))),
   axioms: [Quot.sound, propext],
   executable: true,
@@ -881,7 +882,7 @@ definition{
 
 theorem{
   name: stepRealizesPlan,
-  parameters: [state : (Option Session), event : Host::Event],
+  parameters: [state : (Option Session), event : LexLeanStd.Host::Event],
   statement: ((step state event) = ((first (plan state event)), (Host::realize (second (plan state event))))),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]

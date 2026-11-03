@@ -37,8 +37,8 @@ MODULE = "Rule30Api.Api"
 # visible here; the tests compare both with the binary when it is present.
 LEXLEAN_VERSION = "0.4.0"
 TARGET_DIGESTS = {
-    "rust-core": "b120ca1bfec593473116198fb21e7c9c1b625cbcc858a0e4cfd92fbe4aeb6757",
-    "rust-std": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027",
+    "rust-core": "a8fe3888c091b64d07e75bc326eeb808f058537d5133faa918f41ea8dd5858c3",
+    "rust-std": "012071cfe87ce1a8e1334858ab92832a929aa9d70b7277f92e2c9d9c9eb1398c",
 }
 PACKAGE_VERSION = "0.1.0"
 USED = set()  # the bundles whose certified roots this process ran (`engine.tick` reads it per stage)
