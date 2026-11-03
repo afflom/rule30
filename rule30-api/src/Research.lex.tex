@@ -1,0 +1,609 @@
+\begin{lexlean}{Research}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Engine}
+\importmodule{Hypotheses}
+\importmodule{Register}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: boundary,
+  parameters: [],
+  result: String,
+  body: "Research is the pure research controller. A schema minted by Hypotheses is a retrieval key, never a universally quantified goal to prove. Inspecting it must return the source theorem's exact telescope and premise position before deduction can begin. A kernel answer is an outcome of the controller's outstanding request, supplied by the execution boundary after elaboration, axiom checking and replay; a row read from a register is not a kernel answer. Matching a receipt establishes custody and applicability, not the truth of a proposition. Only the kernel establishes the latter. The controller never turns a strategy failure, a budget cut or a shared head symbol into a refutation. Actions carry their complete snapshot, task and sequent so an executor cannot substitute a different instance. The pinned compiler exports this step as a pure Rust library; its host driver remains the upstream LexLean issue 271 boundary.",
+  executable: true
+}
+
+inductive{
+  name: Purpose,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: inspect, fields: []}, {name: prove, fields: []}, {name: refute, fields: []}, {name: maintain, fields: []}]
+}
+
+inductive{
+  name: Status,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: ready, fields: []}, {name: waiting, fields: []}, {name: blocked, fields: []}, {name: established, fields: []}, {name: exhausted, fields: []}]
+}
+
+structure{
+  name: Snapshot,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: library, type: Bytes}, {name: compiler, type: Bytes}, {name: model, type: Bytes}]
+}
+
+structure{
+  name: Sequent,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: origin, type: Bytes}, {name: theorem, type: Bytes}, {name: premise, type: Nat}, {name: telescope, type: Bytes}, {name: target, type: Bytes}]
+}
+
+structure{
+  name: Component,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: id, type: String}, {name: dependencies, type: (List String)}, {name: concern, type: String}, {name: available, type: Bool}]
+}
+
+structure{
+  name: Task,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: id, type: Bytes},
+    {name: purpose, type: Purpose},
+    {name: intent, type: Purpose},
+    {name: status, type: Status},
+    {name: component, type: String},
+    {name: sources, type: (List Bytes)},
+    {name: schema, type: Bytes},
+    {name: sequent, type: Sequent},
+    {name: age, type: Nat},
+    {name: weight, type: Nat}
+  ]
+}
+
+structure{
+  name: Request,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: serial, type: Nat}, {name: snapshot, type: Snapshot}, {name: task, type: Task}]
+}
+
+inductive{
+  name: ResultKind,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: inspected, fields: [Sequent]}, {name: checked, fields: [Bytes, (List String)]}, {name: failed, fields: [Bytes]}, {name: cut, fields: []}, {name: unavailable, fields: []}]
+}
+
+structure{
+  name: Answer,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: request, type: Request}, {name: result, type: ResultKind}]
+}
+
+inductive{
+  name: Event,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: tick, fields: []},
+    {name: changed, fields: [Snapshot, (List Component), (List String)]},
+    {name: answered, fields: [Answer]},
+    {name: ingest, fields: [(List Hypotheses::Hypothesis)]}
+  ]
+}
+
+inductive{
+  name: Action,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: run, fields: [Request]}, {name: wait, fields: []}, {name: idle, fields: []}, {name: blocked, fields: []}, {name: refused, fields: []}]
+}
+
+structure{
+  name: State,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: snapshot, type: Snapshot}, {name: components, type: (List Component)}, {name: tasks, type: (List Task)}, {name: pending, type: (Option Request)}, {name: next, type: Nat}, {name: history, type: (List Answer)}]
+}
+
+definition{
+  name: emptySequent,
+  parameters: [],
+  result: Sequent,
+  body: (record Sequent {origin := 0x, theorem := 0x, premise := 0, telescope := 0x, target := 0x}),
+  executable: true
+}
+
+definition{
+  name: memberString,
+  parameters: [value : String, values : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => false
+    | List.cons head tail => ((prim equal value head : Bool) || (memberString value tail))),
+  recursive_argument: values,
+  executable: true
+}
+
+definition{
+  name: allStringsWithin,
+  parameters: [values : (List String), within : (List String)],
+  result: Bool,
+  body: (match values
+    | List.nil => true
+    | List.cons head tail => ((memberString head within) && (allStringsWithin tail within))),
+  recursive_argument: values,
+  executable: true
+}
+
+definition{
+  name: sameSnapshot,
+  parameters: [a : Snapshot, b : Snapshot],
+  result: Bool,
+  body: ((Toml::sameBytes (project a library) (project b library)) && ((Toml::sameBytes (project a compiler) (project b compiler)) && (Toml::sameBytes (project a model) (project b model)))),
+  executable: true
+}
+
+definition{
+  name: sameSequent,
+  parameters: [a : Sequent, b : Sequent],
+  result: Bool,
+  body: ((Toml::sameBytes (project a origin) (project b origin)) && ((Toml::sameBytes (project a theorem) (project b theorem)) && (((project a premise) =? (project b premise)) && ((Toml::sameBytes (project a telescope) (project b telescope)) && (Toml::sameBytes (project a target) (project b target)))))),
+  executable: true
+}
+
+definition{
+  name: samePurpose,
+  parameters: [a : Purpose, b : Purpose],
+  result: Bool,
+  body: (match a
+    | Purpose.inspect => (match b | Purpose.inspect => true | Purpose.prove => false | Purpose.refute => false | Purpose.maintain => false)
+    | Purpose.prove => (match b | Purpose.inspect => false | Purpose.prove => true | Purpose.refute => false | Purpose.maintain => false)
+    | Purpose.refute => (match b | Purpose.inspect => false | Purpose.prove => false | Purpose.refute => true | Purpose.maintain => false)
+    | Purpose.maintain => (match b | Purpose.inspect => false | Purpose.prove => false | Purpose.refute => false | Purpose.maintain => true)),
+  executable: true
+}
+
+definition{
+  name: sameRequest,
+  parameters: [a : Request, b : Request],
+  result: Bool,
+  body: (((project a serial) =? (project b serial)) && ((sameSnapshot (project a snapshot) (project b snapshot)) && ((Toml::sameBytes (project (project a task) id) (project (project b task) id)) && ((samePurpose (project (project a task) purpose) (project (project b task) purpose)) && ((samePurpose (project (project a task) intent) (project (project b task) intent)) && ((prim equal (project (project a task) component) (project (project b task) component) : Bool) && ((Toml::sameBytes (project (project a task) schema) (project (project b task) schema)) && (sameSequent (project (project a task) sequent) (project (project b task) sequent))))))))),
+  executable: true
+}
+
+definition{
+  name: contextual,
+  parameters: [goal : Sequent],
+  result: Bool,
+  body: ((0 <? (prim length (project goal origin) : Nat)) && ((0 <? (prim length (project goal theorem) : Nat)) && ((0 <? (prim length (project goal telescope) : Nat)) && (0 <? (prim length (project goal target) : Nat))))),
+  executable: true
+}
+
+definition{
+  name: isReady,
+  parameters: [status : Status],
+  result: Bool,
+  body: (match status | Status.ready => true | Status.waiting => false | Status.blocked => false | Status.established => false | Status.exhausted => false),
+  executable: true
+}
+
+definition{
+  name: isBlocked,
+  parameters: [status : Status],
+  result: Bool,
+  body: (match status | Status.ready => false | Status.waiting => false | Status.blocked => true | Status.established => false | Status.exhausted => false),
+  executable: true
+}
+
+definition{
+  name: componentAvailable,
+  parameters: [key : String, components : (List Component)],
+  result: Bool,
+  body: (match components
+    | List.nil => false
+    | List.cons head tail => (if (prim equal key (project head id) : Bool) then (project head available) else (componentAvailable key tail))),
+  recursive_argument: components,
+  executable: true
+}
+
+definition{
+  name: componentIds,
+  parameters: [components : (List Component)],
+  result: (List String),
+  body: (match components
+    | List.nil => (nil String)
+    | List.cons head tail => (cons (project head id) (componentIds tail))),
+  recursive_argument: components,
+  executable: true
+}
+
+definition{
+  name: dependenciesReady,
+  parameters: [dependencies : (List String), components : (List Component)],
+  result: Bool,
+  body: (match dependencies
+    | List.nil => true
+    | List.cons head tail => ((componentAvailable head components) && (dependenciesReady tail components))),
+  recursive_argument: dependencies,
+  executable: true
+}
+
+definition{
+  name: unionStrings,
+  parameters: [values : (List String), within : (List String)],
+  result: (List String),
+  body: (match values
+    | List.nil => within
+    | List.cons head tail => (unionStrings tail (if (memberString head within) then within else (cons head within)))),
+  recursive_argument: values,
+  executable: true
+}
+
+definition{
+  name: requireDependencies,
+  parameters: [components : (List Component), required : (List String)],
+  result: (List String),
+  body: (match components
+    | List.nil => required
+    | List.cons head tail => (requireDependencies tail (if (memberString (project head id) required) then (unionStrings (project head dependencies) required) else required))),
+  recursive_argument: components,
+  executable: true
+}
+
+definition{
+  name: requiredClosure,
+  parameters: [components : (List Component), required : (List String), fuel : Nat],
+  result: (List String),
+  body: (match fuel
+    | Nat.zero => required
+    | Nat.succ more => (requiredClosure components (requireDependencies components required) more)),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: componentReady,
+  parameters: [key : String, components : (List Component)],
+  result: Bool,
+  body: (dependenciesReady (requiredClosure components (cons key (nil String)) (prim length components : Nat)) components),
+  executable: true
+}
+
+definition{
+  name: applicable,
+  parameters: [task : Task, components : (List Component)],
+  result: Bool,
+  body: ((isReady (project task status)) && ((componentReady (project task component) components) && (match (project task purpose)
+    | Purpose.inspect => ((0 <? (prim length (project task schema) : Nat)) && (0 <? (prim length (project task sources) : Nat)))
+    | Purpose.prove => (contextual (project task sequent))
+    | Purpose.refute => (contextual (project task sequent))
+    | Purpose.maintain => true))),
+  executable: true
+}
+
+definition{
+  name: rankedBefore,
+  parameters: [a : Task, b : Task],
+  result: Bool,
+  body: (((project b age) <? (project a age)) || (((project a age) =? (project b age)) && ((project b weight) <? (project a weight)))),
+  executable: true
+}
+
+definition{
+  name: choose,
+  parameters: [tasks : (List Task), components : (List Component), best : (Option Task)],
+  result: (Option Task),
+  body: (match tasks
+    | List.nil => best
+    | List.cons head tail => (choose tail components (if (applicable head components) then (match best
+      | Option.none => (ctor Option.some [Task] head)
+      | Option.some previous => (if (rankedBefore head previous) then (ctor Option.some [Task] head) else best)) else best))),
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
+  name: withStatus,
+  parameters: [task : Task, status : Status, age : Nat],
+  result: Task,
+  body: (record Task {id := (project task id), purpose := (project task purpose), intent := (project task intent), status := status, component := (project task component), sources := (project task sources), schema := (project task schema), sequent := (project task sequent), age := age, weight := (project task weight)}),
+  executable: true
+}
+
+definition{
+  name: selectTask,
+  parameters: [tasks : (List Task), selected : Bytes],
+  result: (List Task),
+  body: (match tasks
+    | List.nil => (nil Task)
+    | List.cons head tail => (cons (if (Toml::sameBytes (project head id) selected) then (withStatus head (ctor Status.waiting) 0) else (withStatus head (project head status) ((project head age) + 1))) (selectTask tail selected))),
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
+  name: hasBlocked,
+  parameters: [tasks : (List Task), components : (List Component)],
+  result: Bool,
+  body: (match tasks
+    | List.nil => false
+    | List.cons head tail => ((match (project head status) | Status.blocked => true | Status.exhausted => true | Status.waiting => true | Status.ready => (not (applicable head components)) | Status.established => false) || (hasBlocked tail components))),
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
+  name: dispatchReady,
+  parameters: [state : State],
+  result: (State * Action),
+  body: (match (project state pending)
+    | Option.some request => (state, (ctor Action.wait))
+    | Option.none => (match (choose (project state tasks) (project state components) (ctor Option.none [Task]))
+      | Option.none => (state, (if (hasBlocked (project state tasks) (project state components)) then (ctor Action.blocked) else (ctor Action.idle)))
+      | Option.some task => (let request : Request := (record Request {serial := (project state next), snapshot := (project state snapshot), task := task}); ((record State {snapshot := (project state snapshot), components := (project state components), tasks := (selectTask (project state tasks) (project task id)), pending := (ctor Option.some [Request] request), next := ((project state next) + 1), history := (project state history)}), (ctor Action.run request))))),
+  executable: true
+}
+
+definition{
+  name: knownTask,
+  parameters: [key : Bytes, tasks : (List Task)],
+  result: Bool,
+  body: (match tasks
+    | List.nil => false
+    | List.cons head tail => ((Toml::sameBytes key (project head id)) || (knownTask key tail))),
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
+  name: hypothesisTask,
+  parameters: [hypothesis : Hypotheses::Hypothesis, source : Bytes],
+  result: Task,
+  body: (record Task {id := (prim append (Hypotheses::atomForm (project hypothesis label)) (Hypotheses::atomForm source) : Bytes), purpose := (ctor Purpose.inspect), intent := (ctor Purpose.prove), status := (ctor Status.ready), component := "audit", sources := (cons source (nil Bytes)), schema := (project hypothesis form), sequent := (emptySequent), age := 0, weight := (project hypothesis weight)}),
+  executable: true
+}
+
+definition{
+  name: ingestSources,
+  parameters: [hypothesis : Hypotheses::Hypothesis, sources : (List Bytes), tasks : (List Task)],
+  result: (List Task),
+  body: (match sources
+    | List.nil => tasks
+    | List.cons head tail => (let task : Task := (hypothesisTask hypothesis head); (ingestSources hypothesis tail (if (knownTask (project task id) tasks) then tasks else (prim append tasks (cons task (nil Task)) : (List Task)))))),
+  recursive_argument: sources,
+  executable: true
+}
+
+definition{
+  name: ingest,
+  parameters: [hypotheses : (List Hypotheses::Hypothesis), tasks : (List Task)],
+  result: (List Task),
+  body: (match hypotheses
+    | List.nil => tasks
+    | List.cons head tail => (ingest tail (ingestSources head (project head sources) tasks))),
+  recursive_argument: hypotheses,
+  executable: true
+}
+
+definition{
+  name: intersects,
+  parameters: [dependencies : (List String), changed : (List String)],
+  result: Bool,
+  body: (match dependencies
+    | List.nil => false
+    | List.cons head tail => ((memberString head changed) || (intersects tail changed))),
+  recursive_argument: dependencies,
+  executable: true
+}
+
+definition{
+  name: expand,
+  parameters: [components : (List Component), changed : (List String)],
+  result: (List String),
+  body: (match components
+    | List.nil => changed
+    | List.cons head tail => (expand tail (if ((intersects (project head dependencies) changed) && (not (memberString (project head id) changed))) then (cons (project head id) changed) else changed))),
+  recursive_argument: components,
+  executable: true
+}
+
+definition{
+  name: closure,
+  parameters: [components : (List Component), changed : (List String), fuel : Nat],
+  result: (List String),
+  body: (match fuel
+    | Nat.zero => changed
+    | Nat.succ more => (closure components (expand components changed) more)),
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: refreshTask,
+  parameters: [task : Task, age : Nat],
+  result: Task,
+  body: (if (samePurpose (project task purpose) (ctor Purpose.maintain)) then (withStatus task (ctor Status.ready) age) else (record Task {id := (project task id), purpose := (ctor Purpose.inspect), intent := (project task intent), status := (ctor Status.ready), component := "audit", sources := (project task sources), schema := (project task schema), sequent := (emptySequent), age := age, weight := (project task weight)})),
+  executable: true
+}
+
+definition{
+  name: invalidate,
+  parameters: [tasks : (List Task), changed : (List String)],
+  result: (List Task),
+  body: (match tasks
+    | List.nil => (nil Task)
+    | List.cons head tail => (cons (if ((memberString (project head component) changed) || (match (project head status) | Status.waiting => true | Status.ready => false | Status.blocked => false | Status.established => false | Status.exhausted => false)) then (refreshTask head ((project head age) + 1)) else head) (invalidate tail changed))),
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
+  name: axiomsAllowed,
+  parameters: [axioms : (List String)],
+  result: Bool,
+  body: (allStringsWithin axioms (cons "propext" (cons "Quot.sound" (nil String)))),
+  executable: true
+}
+
+definition{
+  name: refutationMatches,
+  parameters: [answer : Answer, snapshot : Snapshot, goal : Sequent],
+  result: Bool,
+  body: ((contextual goal) && ((sameSnapshot (project (project answer request) snapshot) snapshot) && ((samePurpose (project (project (project answer request) task) purpose) (ctor Purpose.refute)) && ((sameSequent (project (project (project answer request) task) sequent) goal) && (match (project answer result)
+    | ResultKind.checked theorem axioms => ((0 <? (prim length theorem : Nat)) && (axiomsAllowed axioms))
+    | ResultKind.inspected other => false
+    | ResultKind.failed detail => false
+    | ResultKind.cut => false
+    | ResultKind.unavailable => false))))),
+  executable: true
+}
+
+definition{
+  name: routeDead,
+  parameters: [history : (List Answer), snapshot : Snapshot, goal : Sequent],
+  result: Bool,
+  body: (match history
+    | List.nil => false
+    | List.cons head tail => ((refutationMatches head snapshot goal) || (routeDead tail snapshot goal))),
+  recursive_argument: history,
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: pruneTasks,
+  parameters: [tasks : (List Task), history : (List Answer), snapshot : Snapshot],
+  result: (List Task),
+  body: (match tasks
+    | List.nil => (nil Task)
+    | List.cons head tail => (cons (if ((samePurpose (project head purpose) (ctor Purpose.prove)) && (routeDead history snapshot (project head sequent))) then (withStatus head (ctor Status.blocked) (project head age)) else head) (pruneTasks tail history snapshot))),
+  axioms: [],
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
+  name: dispatch,
+  parameters: [state : State],
+  result: (State * Action),
+  body: (match (project state pending)
+    | Option.some request => (dispatchReady state)
+    | Option.none => (dispatchReady (record State {snapshot := (project state snapshot), components := (project state components), tasks := (pruneTasks (project state tasks) (project state history) (project state snapshot)), pending := (ctor Option.none [Request]), next := (project state next), history := (project state history)}))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: withOutcome,
+  parameters: [task : Task, status : Status, success : Bool],
+  result: Task,
+  body: (record Task {id := (project task id), purpose := (project task purpose), intent := (project task intent), status := status, component := (project task component), sources := (project task sources), schema := (project task schema), sequent := (project task sequent), age := (project task age), weight := (Engine::learn (project task weight) success)}),
+  executable: true
+}
+
+definition{
+  name: resultTask,
+  parameters: [task : Task, result : ResultKind],
+  result: Task,
+  body: (match result
+    | ResultKind.inspected goal => (if (((samePurpose (project task purpose) (ctor Purpose.inspect)) && ((samePurpose (project task intent) (ctor Purpose.prove)) || (samePurpose (project task intent) (ctor Purpose.refute)))) && ((contextual goal) && (Hypotheses::memberBytes (project goal origin) (project task sources)))) then (record Task {id := (project task id), purpose := (project task intent), intent := (project task intent), status := (ctor Status.ready), component := "deduction", sources := (project task sources), schema := (project task schema), sequent := goal, age := (project task age), weight := (project task weight)}) else (withStatus task (ctor Status.blocked) (project task age)))
+    | ResultKind.checked theorem axioms => (if (((samePurpose (project task purpose) (ctor Purpose.maintain)) || ((contextual (project task sequent)) && ((samePurpose (project task purpose) (ctor Purpose.prove)) || (samePurpose (project task purpose) (ctor Purpose.refute))))) && ((0 <? (prim length theorem : Nat)) && (axiomsAllowed axioms))) then (withOutcome task (ctor Status.established) true) else (withStatus task (ctor Status.blocked) (project task age)))
+    | ResultKind.failed detail => (withOutcome task (ctor Status.exhausted) false)
+    | ResultKind.cut => (withStatus task (ctor Status.ready) (project task age))
+    | ResultKind.unavailable => (withStatus task (ctor Status.blocked) (project task age))),
+  executable: true
+}
+
+definition{
+  name: receiveTasks,
+  parameters: [tasks : (List Task), key : Bytes, result : ResultKind],
+  result: (List Task),
+  body: (match tasks
+    | List.nil => (nil Task)
+    | List.cons head tail => (cons (if (Toml::sameBytes (project head id) key) then (resultTask head result) else head) (receiveTasks tail key result))),
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
+  name: requestStillCurrent,
+  parameters: [request : Request, tasks : (List Task)],
+  result: Bool,
+  body: (match tasks
+    | List.nil => false
+    | List.cons head tail => (if (Toml::sameBytes (project head id) (project (project request task) id)) then (sameRequest request (record Request {serial := (project request serial), snapshot := (project request snapshot), task := head})) else (requestStillCurrent request tail))),
+  recursive_argument: tasks,
+  executable: true
+}
+
+definition{
+  name: receive,
+  parameters: [state : State, answer : Answer],
+  result: (State * Action),
+  body: (match (project state pending)
+    | Option.none => (state, (ctor Action.refused))
+    | Option.some request => (if (sameRequest request (project answer request)) then (dispatch (record State {snapshot := (project state snapshot), components := (project state components), tasks := (if ((sameSnapshot (project state snapshot) (project request snapshot)) && (requestStillCurrent request (project state tasks))) then (receiveTasks (project state tasks) (project (project request task) id) (project answer result)) else (project state tasks)), pending := (ctor Option.none [Request]), next := (project state next), history := (cons answer (project state history))})) else (state, (ctor Action.refused)))),
+  executable: true
+}
+
+definition{
+  name: step,
+  parameters: [state : State, event : Event],
+  result: (State * Action),
+  body: (match event
+    | Event.tick => (dispatch state)
+    | Event.ingest hypotheses => (dispatch (record State {snapshot := (project state snapshot), components := (project state components), tasks := (ingest hypotheses (project state tasks)), pending := (project state pending), next := (project state next), history := (project state history)}))
+    | Event.answered answer => (receive state answer)
+    | Event.changed snapshot components changed => (dispatch (record State {snapshot := snapshot, components := components, tasks := (invalidate (project state tasks) (closure components (if (sameSnapshot snapshot (project state snapshot)) then changed else (unionStrings (componentIds (project state components)) (componentIds components))) (prim length components : Nat))), pending := (project state pending), next := (project state next), history := (project state history)}))),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+theorem{
+  name: aCutRemainsResearch,
+  parameters: [task : Task],
+  statement: ((project (resultTask task (ctor ResultKind.cut)) status) = (ctor Status.ready)),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: aFailureIsNotARefutation,
+  parameters: [task : Task, detail : Bytes],
+  statement: ((project (resultTask task (ctor ResultKind.failed detail)) status) = (ctor Status.exhausted)),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: anUnavailableExecutorBlocks,
+  parameters: [task : Task],
+  statement: ((project (resultTask task (ctor ResultKind.unavailable)) status) = (ctor Status.blocked)),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: anUnsolicitedAnswerChangesNothing,
+  parameters: [snapshot : Snapshot, components : (List Component), tasks : (List Task), next : Nat, history : (List Answer), answer : Answer],
+  statement: ((receive (record State {snapshot := snapshot, components := components, tasks := tasks, pending := (ctor Option.none [Request]), next := next, history := history}) answer) = ((record State {snapshot := snapshot, components := components, tasks := tasks, pending := (ctor Option.none [Request]), next := next, history := history}), (ctor Action.refused))),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: pendingWorkIsNotDispatchedTwice,
+  parameters: [snapshot : Snapshot, components : (List Component), tasks : (List Task), next : Nat, history : (List Answer), request : Request],
+  statement: ((dispatch (record State {snapshot := snapshot, components := components, tasks := tasks, pending := (ctor Option.some [Request] request), next := next, history := history})) = ((record State {snapshot := snapshot, components := components, tasks := tasks, pending := (ctor Option.some [Request] request), next := next, history := history}), (ctor Action.wait))),
+  proof: reflexivity{}
+}
+\end{semanticmodule}
+\end{lexlean}
