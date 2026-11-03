@@ -1,0 +1,352 @@
+\begin{lexlean}{ResearchTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Research}
+\importmodule{ResearchCatalog}
+\importmodule{Engine}
+\importmodule{Hypotheses}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+  name: snapshot,
+  parameters: [],
+  result: Research::Snapshot,
+  body: (record Research::Snapshot {library := 0x6c, compiler := 0x63, model := 0x6d})
+}
+
+definition{
+  name: otherSnapshot,
+  parameters: [],
+  result: Research::Snapshot,
+  body: (record Research::Snapshot {library := 0x6c32, compiler := 0x63, model := 0x6d})
+}
+
+definition{
+  name: goal,
+  parameters: [target : Bytes, context : Bytes, premise : Nat],
+  result: Research::Sequent,
+  body: (record Research::Sequent {origin := 0x74, theorem := 0x74, premise := premise, telescope := context, target := target})
+}
+
+definition{
+  name: task,
+  parameters: [key : Bytes, purpose : Research::Purpose, age : Nat, weight : Nat],
+  result: Research::Task,
+  body: (record Research::Task {id := key, purpose := purpose, intent := purpose, status := (ctor Research::Status.ready), component := "deduction", sources := (cons 0x74 (nil Bytes)), schema := 0x73, sequent := (goal 0x4861 0x47 0), age := age, weight := weight})
+}
+
+definition{
+  name: components,
+  parameters: [],
+  result: (List Research::Component),
+  body: (cons (record Research::Component {id := "deduction", dependencies := (cons "audit" (nil String)), concern := "proof", available := true}) (cons (record Research::Component {id := "audit", dependencies := (cons "stdlib" (nil String)), concern := "context", available := true}) (cons (record Research::Component {id := "stdlib", dependencies := (nil String), concern := "identity", available := true}) (nil Research::Component))))
+}
+
+definition{
+  name: state,
+  parameters: [tasks : (List Research::Task)],
+  result: Research::State,
+  body: (record Research::State {snapshot := (snapshot), components := (components), tasks := tasks, pending := (ctor Option.none [Research::Request]), next := 1, history := (nil Research::Answer)})
+}
+
+definition{
+  name: request,
+  parameters: [purpose : Research::Purpose],
+  result: Research::Request,
+  body: (record Research::Request {serial := 1, snapshot := (snapshot), task := (task 0x61 purpose 0 8)})
+}
+
+definition{
+  name: refutation,
+  parameters: [],
+  result: Research::Answer,
+  body: (record Research::Answer {request := (request (ctor Research::Purpose.refute)), result := (ctor Research::ResultKind.checked 0x70726f6f66 (cons "propext" (nil String)))})
+}
+
+definition{
+  name: runs,
+  parameters: [result : (Research::State * Research::Action), key : Bytes],
+  result: Bool,
+  body: (match (second result)
+    | Research::Action.run active => (Toml::sameBytes (project (project active task) id) key)
+    | Research::Action.wait => false
+    | Research::Action.idle => false
+    | Research::Action.blocked => false
+    | Research::Action.refused => false)
+}
+
+definition{
+  name: refuses,
+  parameters: [result : (Research::State * Research::Action)],
+  result: Bool,
+  body: (match (second result)
+    | Research::Action.run active => false
+    | Research::Action.wait => false
+    | Research::Action.idle => false
+    | Research::Action.blocked => false
+    | Research::Action.refused => true)
+}
+
+definition{
+  name: readyFor,
+  parameters: [tasks : (List Research::Task), key : Bytes],
+  result: Bool,
+  body: (match tasks
+    | List.nil => false
+    | List.cons head tail => (((Toml::sameBytes (project head id) key) && (Research::isReady (project head status))) || (readyFor tail key))),
+  recursive_argument: tasks
+}
+
+definition{
+  name: hypothesis,
+  parameters: [],
+  result: Hypotheses::Hypothesis,
+  body: (record Hypotheses::Hypothesis {statement := (ctor Hypotheses::Statement.obligation 0x73), form := 0x73, label := 0x6c, weight := 8, sources := (cons 0x74 (cons 0x75 (nil Bytes)))})
+}
+
+definition{
+  name: twoTasks,
+  parameters: [],
+  result: (List Research::Task),
+  body: (cons (task 0x61 (ctor Research::Purpose.prove) 0 16) (cons (task 0x62 (ctor Research::Purpose.prove) 0 1) (nil Research::Task)))
+}
+
+theorem{
+  name: exactRefutationApplies,
+  parameters: [],
+  statement: ((Research::routeDead (cons (refutation) (nil Research::Answer)) (snapshot) (goal 0x4861 0x47 0)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: aSharedHeadDoesNotRefuteAnotherInstance,
+  parameters: [],
+  statement: ((Research::routeDead (cons (refutation) (nil Research::Answer)) (snapshot) (goal 0x4862 0x47 0)) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: anotherContextDoesNotRefuteTheGoal,
+  parameters: [],
+  statement: ((Research::routeDead (cons (refutation) (nil Research::Answer)) (snapshot) (goal 0x4861 0x4732 0)) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: anotherPremiseDoesNotRefuteTheGoal,
+  parameters: [],
+  statement: ((Research::routeDead (cons (refutation) (nil Research::Answer)) (snapshot) (goal 0x4861 0x47 1)) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: aStaleRefutationDoesNotPrune,
+  parameters: [],
+  statement: ((Research::routeDead (cons (refutation) (nil Research::Answer)) (otherSnapshot) (goal 0x4861 0x47 0)) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: aProofIsNotARefutation,
+  parameters: [],
+  statement: ((Research::routeDead (cons (record Research::Answer {request := (request (ctor Research::Purpose.prove)), result := (ctor Research::ResultKind.checked 0x70726f6f66 (nil String))}) (nil Research::Answer)) (snapshot) (goal 0x4861 0x47 0)) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: anUnacceptedAxiomDoesNotPrune,
+  parameters: [],
+  statement: ((Research::routeDead (cons (record Research::Answer {request := (request (ctor Research::Purpose.refute)), result := (ctor Research::ResultKind.checked 0x70726f6f66 (cons "sorryAx" (nil String)))}) (nil Research::Answer)) (snapshot) (goal 0x4861 0x47 0)) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: schemasEnterAsInspections,
+  parameters: [],
+  statement: ((Research::samePurpose (project (Research::hypothesisTask (hypothesis) 0x74) purpose) (ctor Research::Purpose.inspect)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: aSchemaIsNotAUniversallyClosedGoal,
+  parameters: [],
+  statement: ((Research::contextual (project (Research::hypothesisTask (hypothesis) 0x74) sequent)) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: eachSourceRetainsItsOwnTask,
+  parameters: [],
+  statement: ((prim length (Research::ingest (cons (hypothesis) (nil Hypotheses::Hypothesis)) (nil Research::Task)) : Nat) = 2),
+  proof: decide{}
+}
+
+theorem{
+  name: ingestionIsIdempotent,
+  parameters: [],
+  statement: ((prim length (Research::ingest (cons (hypothesis) (nil Hypotheses::Hypothesis)) (Research::ingest (cons (hypothesis) (nil Hypotheses::Hypothesis)) (nil Research::Task))) : Nat) = 2),
+  proof: decide{}
+}
+
+theorem{
+  name: inspectedContextBecomesAnActionableGoal,
+  parameters: [],
+  statement: ((Research::samePurpose (project (Research::resultTask (Research::hypothesisTask (hypothesis) 0x74) (ctor Research::ResultKind.inspected (goal 0x4861 0x47 0))) purpose) (ctor Research::Purpose.prove)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: inspectionCannotInventAnotherSource,
+  parameters: [],
+  statement: ((Research::isBlocked (project (Research::resultTask (Research::hypothesisTask (hypothesis) 0x75) (ctor Research::ResultKind.inspected (goal 0x4861 0x47 0))) status)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: agePrecedesLearnedWeight,
+  parameters: [],
+  statement: ((runs (Research::dispatch (state (cons (task 0x61 (ctor Research::Purpose.prove) 0 16) (cons (task 0x62 (ctor Research::Purpose.prove) 1 1) (nil Research::Task))))) 0x62) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: aCutLetsTheNextTaskRun,
+  parameters: [],
+  statement: ((let started : (Research::State * Research::Action) := (Research::dispatch (state (twoTasks))); (match (second started)
+    | Research::Action.run active => (runs (Research::receive (first started) (record Research::Answer {request := active, result := (ctor Research::ResultKind.cut)})) 0x62)
+    | Research::Action.wait => false
+    | Research::Action.idle => false
+    | Research::Action.blocked => false
+    | Research::Action.refused => false)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: changesReachTransitiveDependents,
+  parameters: [],
+  statement: ((Engine::memberString "deduction" (Research::closure (components) (cons "stdlib" (nil String)) 3)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: aStaleCompletionDoesNotEstablishEvidence,
+  parameters: [],
+  statement: ((let started : (Research::State * Research::Action) := (Research::dispatch (state (twoTasks))); (match (second started)
+    | Research::Action.run active => (let changed : (Research::State * Research::Action) := (Research::step (first started) (ctor Research::Event.changed (otherSnapshot) (components) (nil String))); (let completed : (Research::State * Research::Action) := (Research::receive (first changed) (record Research::Answer {request := active, result := (ctor Research::ResultKind.checked 0x70726f6f66 (nil String))})); ((runs completed 0x62) && (readyFor (project (first completed) tasks) 0x61))))
+    | Research::Action.wait => false
+    | Research::Action.idle => false
+    | Research::Action.blocked => false
+    | Research::Action.refused => false)) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: snapshotChangesWaitForOutstandingWork,
+  parameters: [],
+  statement: ((let started : (Research::State * Research::Action) := (Research::dispatch (state (twoTasks))); (match (second (Research::step (first started) (ctor Research::Event.changed (otherSnapshot) (components) (nil String))))
+    | Research::Action.wait => true
+    | Research::Action.run active => false
+    | Research::Action.idle => false
+    | Research::Action.blocked => false
+    | Research::Action.refused => false)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: changedContextsAreInspectedAgain,
+  parameters: [],
+  statement: ((Research::contextual (project (Research::refreshTask (task 0x61 (ctor Research::Purpose.prove) 0 8) 1) sequent)) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: reinspectionPreservesRefutationIntent,
+  parameters: [],
+  statement: ((Research::samePurpose (project (Research::resultTask (Research::refreshTask (task 0x61 (ctor Research::Purpose.refute) 0 8) 1) (ctor Research::ResultKind.inspected (goal 0x4861 0x47 0))) purpose) (ctor Research::Purpose.refute)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: aNewCapabilityGraphCanResumeBlockedWork,
+  parameters: [],
+  statement: ((runs (Research::step (record Research::State {snapshot := (snapshot), components := (nil Research::Component), tasks := (twoTasks), pending := (ctor Option.none [Research::Request]), next := 1, history := (nil Research::Answer)}) (ctor Research::Event.changed (snapshot) (components) (cons "deduction" (nil String)))) 0x61) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: anotherRequestCannotCompletePendingWork,
+  parameters: [],
+  statement: ((let started : (Research::State * Research::Action) := (Research::dispatch (state (twoTasks))); (match (second started)
+    | Research::Action.run active => (refuses (Research::receive (first started) (record Research::Answer {request := (record Research::Request {serial := 999, snapshot := (project active snapshot), task := (project active task)}), result := (ctor Research::ResultKind.cut)})))
+    | Research::Action.wait => false
+    | Research::Action.idle => false
+    | Research::Action.blocked => false
+    | Research::Action.refused => false)) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: anUnknownExecutorIsBlockedRatherThanIdle,
+  parameters: [],
+  statement: ((match (second (Research::dispatch (record Research::State {snapshot := (snapshot), components := (nil Research::Component), tasks := (twoTasks), pending := (ctor Option.none [Research::Request]), next := 1, history := (nil Research::Answer)})))
+    | Research::Action.blocked => true
+    | Research::Action.run active => false
+    | Research::Action.wait => false
+    | Research::Action.idle => false
+    | Research::Action.refused => false) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: anUnavailableTransitiveDependencyBlocks,
+  parameters: [],
+  statement: ((Research::componentReady "deduction" (cons (record Research::Component {id := "deduction", dependencies := (cons "audit" (nil String)), concern := "proof", available := true}) (cons (record Research::Component {id := "audit", dependencies := (cons "stdlib" (nil String)), concern := "context", available := true}) (cons (record Research::Component {id := "stdlib", dependencies := (nil String), concern := "identity", available := false}) (nil Research::Component))))) = false),
+  proof: decide{}
+}
+
+theorem{
+  name: exactRefutationPreventsDispatch,
+  parameters: [],
+  statement: ((match (second (Research::dispatch (record Research::State {snapshot := (snapshot), components := (components), tasks := (cons (task 0x61 (ctor Research::Purpose.prove) 0 8) (nil Research::Task)), pending := (ctor Option.none [Research::Request]), next := 1, history := (cons (refutation) (nil Research::Answer))})))
+    | Research::Action.blocked => true
+    | Research::Action.run active => false
+    | Research::Action.wait => false
+    | Research::Action.idle => false
+    | Research::Action.refused => false) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: anEmptySequentCannotAuthorizePruning,
+  parameters: [],
+  statement: ((Research::routeDead (cons (refutation) (nil Research::Answer)) (snapshot) (Research::emptySequent)) = false),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: outcomesUseTheBoundedLearningRule,
+  parameters: [],
+  statement: ((((project (Research::resultTask (task 0x61 (ctor Research::Purpose.prove) 0 8) (ctor Research::ResultKind.failed 0x66)) weight) =? 7) && (((project (Research::resultTask (task 0x61 (ctor Research::Purpose.prove) 0 8) (ctor Research::ResultKind.checked 0x70 (nil String))) weight) =? 10) && ((project (Research::resultTask (task 0x61 (ctor Research::Purpose.prove) 0 8) (ctor Research::ResultKind.cut)) weight) =? 8))) = true),
+  proof: decide{}
+}
+
+theorem{
+  name: oneModuleIsNotCheckedForEachOfItsFeatures,
+  parameters: [],
+  statement: ((prim length (ResearchCatalog::maintenanceTasks (cons (record ResearchCatalog::Scope {id := 0x61, module := "M", features := (cons "a" (nil String))}) (cons (record ResearchCatalog::Scope {id := 0x62, module := "M", features := (cons "b" (nil String))}) (nil ResearchCatalog::Scope)))) : Nat) = 1),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyApplicationAndLibraryModuleGetsOneMaintenanceTask,
+  parameters: [],
+  statement: ((prim length (ResearchCatalog::maintenanceTasks (ResearchCatalog::registeredScopes)) : Nat) = 29),
+  proof: decide{}
+}
+\end{semanticmodule}
+\end{lexlean}

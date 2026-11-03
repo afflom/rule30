@@ -1,0 +1,192 @@
+\begin{lexlean}{ResearchCatalog}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Api}
+\importmodule{Architecture}
+\importmodule{Engine}
+\importmodule{Hypotheses}
+\importmodule{Observer}
+\importmodule{Presentation}
+\importmodule{Research}
+\importmodule{Register}
+\importmodule{Sequences}
+\importmodule{Standards}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+  name: Scope,
+  type_parameters: [],
+  parameters: [],
+  fields: [{name: id, type: Bytes}, {name: module, type: String}, {name: features, type: (List String)}]
+}
+
+definition{
+  name: unitScope,
+  parameters: [key : Bytes, moduleName : String],
+  result: Scope,
+  body: (record Scope {id := key, module := moduleName, features := (cons moduleName (nil String))})
+}
+
+definition{
+  name: moduleScopes,
+  parameters: [],
+  result: (List Scope),
+  body: (cons (unitScope 0x6d6f64756c652f417069 "Api") (cons (unitScope 0x6d6f64756c652f4170706c69636174696f6e "Application") (cons (unitScope 0x6d6f64756c652f417263686974656374757265 "Architecture") (cons (unitScope 0x6d6f64756c652f4175646974 "Audit") (cons (unitScope 0x6d6f64756c652f436f6e76657274 "Convert") (cons (unitScope 0x6d6f64756c652f446973636f76657279 "Discovery") (cons (unitScope 0x6d6f64756c652f456e67696e65 "Engine") (cons (unitScope 0x6d6f64756c652f486f7374 "Host") (cons (unitScope 0x6d6f64756c652f4879706f746865736573 "Hypotheses") (cons (unitScope 0x6d6f64756c652f4f62736572766572 "Observer") (cons (unitScope 0x6d6f64756c652f50726573656e746174696f6e "Presentation") (cons (unitScope 0x6d6f64756c652f523330 "R30") (cons (unitScope 0x6d6f64756c652f523330547261636573 "R30Traces") (cons (unitScope 0x6d6f64756c652f523330547261636573436c61696d73 "R30TracesClaims") (cons (unitScope 0x6d6f64756c652f523330547261636573466f726d73 "R30TracesForms") (cons (unitScope 0x6d6f64756c652f5233305472616365735265676973746572 "R30TracesRegister") (cons (unitScope 0x6d6f64756c652f5265676973746572 "Register") (cons (unitScope 0x6d6f64756c652f5265736561726368 "Research") (cons (unitScope 0x6d6f64756c652f5265736561726368436174616c6f67 "ResearchCatalog") (cons (unitScope 0x6d6f64756c652f5265736561726368547261636573 "ResearchTraces") (cons (unitScope 0x6d6f64756c652f52756c653330436f7265 "Rule30Core") (cons (unitScope 0x6d6f64756c652f53657175656e636573 "Sequences") (cons (unitScope 0x6d6f64756c652f5374616e6461726473 "Standards") (cons (unitScope 0x6d6f64756c652f546f6d6c "Toml") (cons (unitScope 0x6d6f64756c652f466f756e646174696f6e2e41726368 "Foundation.Arch") (cons (unitScope 0x6d6f64756c652f466f756e646174696f6e2e5175616c "Foundation.Qual") (cons (unitScope 0x6d6f64756c652f4c65784c65616e5374642e427566666572 "LexLeanStd.Buffer") (cons (unitScope 0x6d6f64756c652f4c65784c65616e5374642e54657874 "LexLeanStd.Text") (cons (unitScope 0x6d6f64756c652f4c65784c65616e5374642e536861323536 "LexLeanStd.Sha256") (nil Scope)))))))))))))))))))))))))))))),
+  axioms: []
+}
+
+definition{
+  name: facetScopes,
+  parameters: [],
+  result: (List Scope),
+  body: (cons (record Scope {id := 0x617069, module := "Api", features := (Architecture::commandNames (Api::commands))})
+    (cons (record Scope {id := 0x636c61696d73, module := "Register", features := (Register::idsOf (Register::claims))})
+    (cons (record Scope {id := 0x7374616b65686f6c64657273, module := "Architecture", features := (Architecture::stakeholderIds (Architecture::stakeholders))})
+    (cons (record Scope {id := 0x636f6e6365726e73, module := "Architecture", features := (Architecture::concernIds (Architecture::concerns))})
+    (cons (record Scope {id := 0x76696577706f696e7473, module := "Architecture", features := (Architecture::viewpointIds (Architecture::viewpoints))})
+    (cons (record Scope {id := 0x7669657773, module := "Architecture", features := (Architecture::viewIds (Architecture::views))})
+    (cons (record Scope {id := 0x7175616c697479, module := "Architecture", features := (Architecture::requirementIds (Architecture::requirements))})
+    (cons (record Scope {id := 0x7075626c69636174696f6e, module := "Presentation", features := (Presentation::artifactIds (Presentation::artifacts))})
+    (cons (record Scope {id := 0x70616e656c73, module := "Presentation", features := (Presentation::panelIds (Presentation::panels))})
+    (cons (record Scope {id := 0x6a6f75726e657973, module := "Presentation", features := (Presentation::journeyIds (Presentation::journeys))})
+    (cons (record Scope {id := 0x7374657073, module := "Presentation", features := (Presentation::stepIds (Presentation::steps))})
+    (cons (record Scope {id := 0x6e617669676174696f6e, module := "Presentation", features := (Presentation::navItemIds (Presentation::navItems))})
+    (cons (record Scope {id := 0x64657369676e, module := "Presentation", features := (Presentation::tokenIds (Presentation::tokens))})
+    (cons (record Scope {id := 0x6f62736572766572, module := "Observer", features := (Observer::facetIds (Observer::facets))})
+    (cons (record Scope {id := 0x7374616e6461726473, module := "Standards", features := (Standards::standardIds (Standards::standards))})
+    (cons (record Scope {id := 0x6261736973, module := "Sequences", features := (Sequences::idsOf (Sequences::sequences))})
+    (cons (record Scope {id := 0x706f7274666f6c696f, module := "Engine", features := (Engine::strategyIdsOf (Engine::portfolio))})
+    (cons (record Scope {id := 0x7265616c697a657273, module := "Standards", features := (Standards::declaredIds)})
+    (cons (record Scope {id := 0x7374646c6962, module := "Research", features := (cons "Foundation.Arch" (cons "Foundation.Qual" (cons "LexLeanStd.Buffer" (cons "LexLeanStd.Text" (cons "LexLeanStd.Sha256" (nil String))))))})
+    (nil Scope)))))))))))))))))))),
+  axioms: []
+}
+
+definition{
+  name: registeredScopes,
+  parameters: [],
+  result: (List Scope),
+  body: (prim append (facetScopes) (moduleScopes) : (List Scope)),
+  axioms: []
+}
+
+definition{
+  name: ids,
+  parameters: [scopes : (List Scope)],
+  result: (List Bytes),
+  body: (match scopes
+    | List.nil => (nil Bytes)
+    | List.cons head tail => (cons (project head id) (ids tail))),
+  recursive_argument: scopes,
+  executable: true
+}
+
+definition{
+  name: encodeNames,
+  parameters: [names : (List String)],
+  result: (List Bytes),
+  body: (match names
+    | List.nil => (nil Bytes)
+    | List.cons head tail => (cons (prim utf8_encode head : Bytes) (encodeNames tail))),
+  recursive_argument: names,
+  executable: true
+}
+
+definition{
+  name: covered,
+  parameters: [scopes : (List Scope)],
+  result: Bool,
+  body: (match scopes
+    | List.nil => true
+    | List.cons head tail => ((0 <? (prim length (project head features) : Nat)) && (covered tail))),
+  recursive_argument: scopes
+}
+
+definition{
+  name: maintenanceTask,
+  parameters: [scope : Scope],
+  result: Research::Task,
+  body: (record Research::Task {id := (project scope id), purpose := (ctor Research::Purpose.maintain), intent := (ctor Research::Purpose.maintain), status := (ctor Research::Status.ready), component := "model", sources := (encodeNames (project scope features)), schema := (prim utf8_encode (project scope module) : Bytes), sequent := (Research::emptySequent), age := 0, weight := 1}),
+  executable: true
+}
+
+definition{
+  name: mergeScope,
+  parameters: [scope : Scope, within : (List Scope)],
+  result: (List Scope),
+  body: (match within
+    | List.nil => (cons scope (nil Scope))
+    | List.cons head tail => (if (prim equal (project head module) (project scope module) : Bool) then (cons (record Scope {id := (project head id), module := (project head module), features := (Research::unionStrings (project scope features) (project head features))}) tail) else (cons head (mergeScope scope tail)))),
+  recursive_argument: within,
+  executable: true
+}
+
+definition{
+  name: groupScopes,
+  parameters: [scopes : (List Scope)],
+  result: (List Scope),
+  body: (match scopes
+    | List.nil => (nil Scope)
+    | List.cons head tail => (mergeScope head (groupScopes tail))),
+  recursive_argument: scopes,
+  executable: true
+}
+
+definition{
+  name: tasksFromScopes,
+  parameters: [scopes : (List Scope)],
+  result: (List Research::Task),
+  body: (match scopes
+    | List.nil => (nil Research::Task)
+    | List.cons head tail => (cons (maintenanceTask head) (tasksFromScopes tail))),
+  recursive_argument: scopes,
+  executable: true
+}
+
+definition{
+  name: maintenanceTasks,
+  parameters: [scopes : (List Scope)],
+  result: (List Research::Task),
+  body: (tasksFromScopes (groupScopes scopes)),
+  executable: true
+}
+
+definition{
+  name: claimTasks,
+  parameters: [claims : (List Register::Claim)],
+  result: (List Research::Task),
+  body: (match claims
+    | List.nil => (nil Research::Task)
+    | List.cons head tail => (if ((prim equal (project head status) "open" : Bool) || (prim equal (project head status) "observed" : Bool)) then (cons (record Research::Task {id := (prim append 0x636c61696d3a (prim utf8_encode (project head id) : Bytes) : Bytes), purpose := (ctor Research::Purpose.inspect), intent := (ctor Research::Purpose.prove), status := (if (prim equal (project head lean) "" : Bool) then (ctor Research::Status.blocked) else (ctor Research::Status.ready)), component := "audit", sources := (cons (prim utf8_encode (project head lean) : Bytes) (nil Bytes)), schema := (prim utf8_encode (project head id) : Bytes), sequent := (Research::emptySequent), age := 0, weight := 8}) (claimTasks tail)) else (claimTasks tail))),
+  recursive_argument: claims,
+  executable: true
+}
+
+definition{
+  name: initial,
+  parameters: [snapshot : Research::Snapshot, components : (List Research::Component), scopes : (List Scope), claims : (List Register::Claim), hypotheses : (List Hypotheses::Hypothesis)],
+  result: Research::State,
+  body: (record Research::State {snapshot := snapshot, components := components, tasks := (Research::ingest hypotheses (prim append (claimTasks claims) (maintenanceTasks scopes) : (List Research::Task))), pending := (ctor Option.none [Research::Request]), next := 1, history := (nil Research::Answer)}),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+theorem{
+  name: scopeIdsAreDistinct,
+  parameters: [],
+  statement: ((Hypotheses::distinctBytes (ids (registeredScopes))) = true),
+  proof: decide{},
+  axioms: []
+}
+
+theorem{
+  name: everyScopeHasFeatures,
+  parameters: [],
+  statement: ((covered (registeredScopes)) = true),
+  proof: decide{},
+  axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

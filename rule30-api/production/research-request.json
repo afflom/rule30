@@ -1,0 +1,20 @@
+{
+  "roots": [
+    {
+      "package": {"name": "rule30_research_route_dead", "version": "0.1.0"},
+      "root": "Rule30Api.Research.routeDead",
+      "targets": [{"digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027", "id": "rust-std"}]
+    },
+    {
+      "package": {"name": "rule30_research_step", "version": "0.1.0"},
+      "root": "Rule30Api.Research.step",
+      "targets": [{"digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027", "id": "rust-std"}]
+    },
+    {
+      "package": {"name": "rule30_research_initial", "version": "0.1.0"},
+      "root": "Rule30Api.ResearchCatalog.initial",
+      "targets": [{"digest": "e3db2e96823c5f2c710fdace992d11e5fbb6b63b1500045eff45f85eedf94027", "id": "rust-std"}]
+    }
+  ],
+  "spec": "lexlean/production-request/1"
+}

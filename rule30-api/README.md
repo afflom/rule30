@@ -1,5 +1,36 @@
 <p align="center"><img src="site/logo.svg" alt="" width="96" height="96"></p>
 
+`Research.lex.tex` authors the replacement research controller in LexLean. Its
+pure `step` consumes an event and returns a state plus one correlated action.
+Hypotheses become source-specific inspection tasks; an inspection must supply
+the exact sequent before a proof task can run. Refutation receipts match the
+source origin, theorem, premise, telescope, target, library, compiler and model.
+Failure exhausts an attempt, a cut leaves it ready, and an unavailable executor
+blocks it. Pending actions are never dispatched twice. Attention ages before
+learned weight; outcomes update weights through Engine.learn, dependency changes
+reactivate work. Availability includes transitive dependencies. Exact refutations
+are applied before dispatching proof tasks. Snapshot changes refresh contexts
+and capability graphs, preserve proof/refutation intent, and wait for outstanding
+work to finish; stale completions release that fence without establishing evidence.
+The history retains accepted responses and their requests, including failures.
+
+`ResearchCatalog.lex.tex` covers all 29 application and vendored library modules,
+derives attention scopes from the existing models,
+groups maintenance by module to avoid repeating verification for each feature,
+and initializes tasks from the register and hypotheses. `ResearchTraces.lex.tex`
+checks instance/context separation, source identity, ingestion, scheduling,
+cuts, dependency propagation and stale responses; the repository pre-commit
+gate verifies these modules with the rest of the application.
+
+`production/research-request.json` exports `Research.routeDead`, `Research.step` and
+`ResearchCatalog.initial` through the pinned compiler. These pure library roots
+do not replace the running Python engine: its handwritten harness cannot call
+them, and the generated host driver remains LexLean issue 271. Kernel answers
+are a trusted execution-boundary input after elaboration, axiom audit and replay;
+the controller's receipt matching checks applicability, not mathematical truth.
+Legacy audit classifications and universally closed hypothesis schemas are
+retrieval hints, never sufficient evidence for this controller to prune a route.
+
 <h1 align="center">Centerline</h1>
 <p align="center"><em>Every arrow a theorem.</em></p>
 
