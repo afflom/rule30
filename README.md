@@ -332,6 +332,9 @@ UTF-8 chunk, parser-state and SHA-256 block facts keep the complete report
 acceptance proof compositional; lifecycle traces reuse that checked receipt and verify rejection,
 cancellation, ownership and terminal behavior.
 
+`rule30-api/production/research-request.json` exports the research controller,
+catalog initializer, and runner `begin`/`step` component libraries.
+
 Native application wiring, source inspection into the binding schema,
 strategy candidate construction and durable publication are still required for
 the new runner to replace the legacy engine. CI and runtime
