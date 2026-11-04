@@ -4,6 +4,10 @@
 \importmodule{LexLeanStd.Host}
 \importmodule{Research}
 \importmodule{ResearchExecution}
+\importmodule{ResearchProof}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{CandidateBinding}
 \importmodule{Hypotheses}
 \title{Boolean}
 \begin{semanticmodule}
@@ -11,7 +15,7 @@ definition{
   name: boundary,
   parameters: [],
   result: String,
-  body: "The runner composes research attention with local process supervision. A work action requests a concrete strategy job; a review action requires the verified report of a successful process. Only that report may supply an inspected sequent or checked proof answer. Successful exit alone cannot establish a task. Changed dependencies cancel the active job and discard stale review evidence. A host protocol or cleanup failure halts the runner while preserving its outstanding request for recovery. The generated driver, strategy job construction, report decoding and durable publication remain separate execution-boundary responsibilities.",
+  body: "The runner composes research attention with local process supervision. A work action requests a concrete strategy job; a review action requires the verified report of a successful process. Inspection and maintenance reports remain distinct from proof verification. A checked proof answer is produced only by the owned ResearchProof verifier after its report is bound to the exact candidate type; the reviewed event refuses externally supplied checked answers. Successful exit alone cannot establish a task. Changed dependencies cancel the active job and discard stale review evidence. A host protocol or cleanup failure halts the runner while preserving its outstanding request for recovery. The generated driver, strategy job construction, source inspection and durable publication remain separate execution-boundary responsibilities.",
   executable: true
 }
 
@@ -19,7 +23,7 @@ structure{
   name: State,
   type_parameters: [],
   parameters: [],
-  fields: [{name: research, type: Research::State}, {name: execution, type: (Option ResearchExecution::State)}, {name: review, type: (Option ResearchExecution::Completion)}, {name: halted, type: Bool}]
+  fields: [{name: research, type: Research::State}, {name: execution, type: (Option ResearchExecution::State)}, {name: review, type: (Option ResearchExecution::Completion)}, {name: proof, type: (Option ResearchProof::State)}, {name: halted, type: Bool}]
 }
 
 inductive{
@@ -33,7 +37,7 @@ inductive{
   name: Event,
   type_parameters: [],
   parameters: [],
-  constructors: [{name: tick, fields: []}, {name: ingest, fields: [(List Hypotheses::Hypothesis)]}, {name: job, fields: [ResearchExecution::Job]}, {name: host, fields: [LexLeanStd.Host::Event]}, {name: reviewed, fields: [Research::Answer]}, {name: changed, fields: [Research::Snapshot, (List Research::Component), (List String)]}, {name: cancel, fields: []}]
+  constructors: [{name: tick, fields: []}, {name: ingest, fields: [(List Hypotheses::Hypothesis)]}, {name: job, fields: [ResearchExecution::Job]}, {name: proof, fields: [VerificationReport::Pins, ResearchVerification::Config, CandidateBinding::Input, Nat, Nat]}, {name: host, fields: [LexLeanStd.Host::Event]}, {name: reviewed, fields: [Research::Answer]}, {name: changed, fields: [Research::Snapshot, (List Research::Component), (List String)]}, {name: cancel, fields: []}]
 }
 
 definition{
@@ -48,7 +52,7 @@ definition{
   name: forward,
   parameters: [state : State, result : (Research::State * Research::Action)],
   result: (State * Action),
-  body: ((record State {research := (first result), execution := (project state execution), review := (project state review), halted := (project state halted)}), (match (second result)
+  body: ((record State {research := (first result), execution := (project state execution), review := (project state review), proof := (project state proof), halted := (project state halted)}), (match (second result)
     | Research::Action.run request => (ctor Action.work request)
     | Research::Action.wait => (ctor Action.wait)
     | Research::Action.idle => (ctor Action.idle)
@@ -61,7 +65,7 @@ definition{
   name: clear,
   parameters: [research : Research::State, halted : Bool],
   result: State,
-  body: (record State {research := research, execution := (ctor Option.none [ResearchExecution::State]), review := (ctor Option.none [ResearchExecution::Completion]), halted := halted}),
+  body: (record State {research := research, execution := (ctor Option.none [ResearchExecution::State]), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.none [ResearchProof::State]), halted := halted}),
   executable: true
 }
 
@@ -77,14 +81,14 @@ definition{
   name: completed,
   parameters: [research : Research::State, execution : ResearchExecution::State, completion : ResearchExecution::Completion],
   result: (State * Action),
-  body: (let request : Research::Request := (project completion request); (if (not (ResearchExecution::resumeAllowed completion)) then ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] execution), review := (ctor Option.none [ResearchExecution::Completion]), halted := true}), (ctor Action.blocked)) else (if (not (current research request)) then (answer research request (ctor Research::ResultKind.unavailable)) else (match (project completion kind)
-    | ResearchExecution::EndKind.succeeded => ((record State {research := research, execution := (ctor Option.none [ResearchExecution::State]), review := (ctor Option.some [ResearchExecution::Completion] completion), halted := false}), (ctor Action.review completion))
+  body: (let request : Research::Request := (project completion request); (if (not (ResearchExecution::resumeAllowed completion)) then ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] execution), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.none [ResearchProof::State]), halted := true}), (ctor Action.blocked)) else (if (not (current research request)) then (answer research request (ctor Research::ResultKind.unavailable)) else (match (project completion kind)
+    | ResearchExecution::EndKind.succeeded => ((record State {research := research, execution := (ctor Option.none [ResearchExecution::State]), review := (ctor Option.some [ResearchExecution::Completion] completion), proof := (ctor Option.none [ResearchProof::State]), halted := false}), (ctor Action.review completion))
     | ResearchExecution::EndKind.failed => (answer research request (ctor Research::ResultKind.failed (prim utf8_encode (project completion errors) : Bytes)))
     | ResearchExecution::EndKind.cut => (answer research request (ctor Research::ResultKind.cut))
     | ResearchExecution::EndKind.unavailable => (answer research request (ctor Research::ResultKind.unavailable))
-    | ResearchExecution::EndKind.protocol => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] execution), review := (ctor Option.none [ResearchExecution::Completion]), halted := true}), (ctor Action.blocked))
-    | ResearchExecution::EndKind.cleanupFailed => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] execution), review := (ctor Option.none [ResearchExecution::Completion]), halted := true}), (ctor Action.blocked))
-    | ResearchExecution::EndKind.refused => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] execution), review := (ctor Option.none [ResearchExecution::Completion]), halted := true}), (ctor Action.blocked)))))),
+    | ResearchExecution::EndKind.protocol => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] execution), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.none [ResearchProof::State]), halted := true}), (ctor Action.blocked))
+    | ResearchExecution::EndKind.cleanupFailed => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] execution), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.none [ResearchProof::State]), halted := true}), (ctor Action.blocked))
+    | ResearchExecution::EndKind.refused => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] execution), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.none [ResearchProof::State]), halted := true}), (ctor Action.blocked)))))),
   executable: true
 }
 
@@ -94,8 +98,8 @@ definition{
   result: (State * Action),
   body: (match (second result)
     | ResearchExecution::Emission.complete completion => (completed research (first result) completion)
-    | ResearchExecution::Emission.awaiting => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] (first result)), review := (ctor Option.none [ResearchExecution::Completion]), halted := false}), (ctor Action.wait))
-    | ResearchExecution::Emission.host request => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] (first result)), review := (ctor Option.none [ResearchExecution::Completion]), halted := false}), (ctor Action.host request))),
+    | ResearchExecution::Emission.awaiting => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] (first result)), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.none [ResearchProof::State]), halted := false}), (ctor Action.wait))
+    | ResearchExecution::Emission.host request => ((record State {research := research, execution := (ctor Option.some [ResearchExecution::State] (first result)), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.none [ResearchProof::State]), halted := false}), (ctor Action.host request))),
   executable: true
 }
 
@@ -124,7 +128,7 @@ definition{
 }
 
 definition{
-  name: reviewed,
+  name: reviewedNonProof,
   parameters: [state : State, receipt : Research::Answer],
   result: (State * Action),
   body: (match (project state review)
@@ -134,14 +138,59 @@ definition{
 }
 
 definition{
-  name: reconcile,
+  name: reviewed,
+  parameters: [state : State, receipt : Research::Answer],
+  result: (State * Action),
+  body: (match (project receipt result) | Research::ResultKind.checked goal theorem axioms => (state, (ctor Action.refused)) | Research::ResultKind.inspected goal => (reviewedNonProof state receipt) | Research::ResultKind.maintained sources evidence => (reviewedNonProof state receipt) | Research::ResultKind.failed reason => (reviewedNonProof state receipt) | Research::ResultKind.cut => (reviewedNonProof state receipt) | Research::ResultKind.unavailable => (reviewedNonProof state receipt)),
+  executable: true
+}
+
+definition{
+  name: reconcileOther,
   parameters: [state : State, result : (Research::State * Research::Action)],
   result: (State * Action),
   body: (let research : Research::State := (first result); (match (project state execution)
-    | Option.some execution => (if (current research (project (project execution job) request)) then ((record State {research := research, execution := (project state execution), review := (project state review), halted := false}), (ctor Action.wait)) else (executionResult research (ResearchExecution::cancel execution)))
+    | Option.some execution => (if (current research (project (project execution job) request)) then ((record State {research := research, execution := (project state execution), review := (project state review), proof := (project state proof), halted := false}), (ctor Action.wait)) else (executionResult research (ResearchExecution::cancel execution)))
     | Option.none => (match (project state review)
-      | Option.some completion => (if (current research (project completion request)) then ((record State {research := research, execution := (project state execution), review := (project state review), halted := false}), (ctor Action.review completion)) else (answer research (project completion request) (ctor Research::ResultKind.unavailable)))
+      | Option.some completion => (if (current research (project completion request)) then ((record State {research := research, execution := (project state execution), review := (project state review), proof := (project state proof), halted := false}), (ctor Action.review completion)) else (answer research (project completion request) (ctor Research::ResultKind.unavailable)))
       | Option.none => (forward state result)))),
+  executable: true
+}
+
+definition{
+  name: proofResult,
+  parameters: [research : Research::State, result : (ResearchProof::State * ResearchProof::Emission)],
+  result: (State * Action),
+  body: (let active : State := (record State {research := research, execution := (ctor Option.none [ResearchExecution::State]), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.some [ResearchProof::State] (first result)), halted := false}); (match (second result)
+    | ResearchProof::Emission.host request => (active, (ctor Action.host request))
+    | ResearchProof::Emission.awaiting => (active, (ctor Action.wait))
+    | ResearchProof::Emission.complete receipt => (if (current research (project receipt request)) then (forward (clear research false) (Research::receive research receipt)) else (answer research (project receipt request) (ctor Research::ResultKind.unavailable)))
+    | ResearchProof::Emission.blocked completion => ((record State {research := research, execution := (ctor Option.none [ResearchExecution::State]), review := (ctor Option.none [ResearchExecution::Completion]), proof := (ctor Option.some [ResearchProof::State] (first result)), halted := true}), (ctor Action.blocked)))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: startProof,
+  parameters: [state : State, pins : VerificationReport::Pins, config : ResearchVerification::Config, binding : CandidateBinding::Input, maxDepth : Nat, maxSteps : Nat],
+  result: (State * Action),
+  body: (match (project state proof)
+    | Option.some active => (state, (ctor Action.refused))
+    | Option.none => (match (project state execution)
+      | Option.some active => (state, (ctor Action.refused))
+      | Option.none => (if ((current (project state research) (project pins request)) && (match (project state review) | Option.none => true | Option.some completion => (Research::sameRequest (project completion request) (project pins request)))) then (proofResult (project state research) (ResearchProof::begin pins config binding maxDepth maxSteps)) else (state, (ctor Action.refused))))),
+  axioms: [Quot.sound, propext],
+  executable: true
+}
+
+definition{
+  name: reconcile,
+  parameters: [state : State, result : (Research::State * Research::Action)],
+  result: (State * Action),
+  body: (match (project state proof)
+    | Option.none => (reconcileOther state result)
+    | Option.some proof => (if (current (first result) (project (project (project proof verification) pins) request)) then ((record State {research := (first result), execution := (project state execution), review := (project state review), proof := (project state proof), halted := false}), (ctor Action.wait)) else (proofResult (first result) (ResearchProof::step proof (ctor ResearchVerification::Event.cancel))))),
+  axioms: [Quot.sound, propext],
   executable: true
 }
 
@@ -149,7 +198,18 @@ definition{
   name: step,
   parameters: [state : State, event : Event],
   result: (State * Action),
-  body: (if (project state halted) then (state, (ctor Action.blocked)) else (match event
+  body: (if (project state halted) then (state, (ctor Action.blocked)) else (match (project state proof)
+    | Option.some proof => (match event
+      | Event.host response => (proofResult (project state research) (ResearchProof::step proof (ctor ResearchVerification::Event.host response)))
+      | Event.cancel => (proofResult (project state research) (ResearchProof::step proof (ctor ResearchVerification::Event.cancel)))
+      | Event.changed snapshot components affected => (reconcile state (Research::step (project state research) (ctor Research::Event.changed snapshot components affected)))
+      | Event.ingest hypotheses => (reconcile state (Research::step (project state research) (ctor Research::Event.ingest hypotheses)))
+      | Event.tick => (state, (ctor Action.wait))
+      | Event.job job => (state, (ctor Action.refused))
+      | Event.proof pins config binding maxDepth maxSteps => (state, (ctor Action.refused))
+      | Event.reviewed receipt => (state, (ctor Action.refused)))
+    | Option.none => (match event
+    | Event.proof pins config binding maxDepth maxSteps => (startProof state pins config binding maxDepth maxSteps)
     | Event.job job => (startJob state job)
     | Event.reviewed receipt => (reviewed state receipt)
     | Event.changed snapshot components affected => (reconcile state (Research::step (project state research) (ctor Research::Event.changed snapshot components affected)))
@@ -166,17 +226,18 @@ definition{
       | Option.some execution => (executionResult (project state research) (ResearchExecution::cancel execution))
       | Option.none => (match (project state review)
         | Option.some completion => (answer (project state research) (project completion request) (ctor Research::ResultKind.cut))
-        | Option.none => (state, (ctor Action.refused)))))),
-  axioms: [],
+        | Option.none => (state, (ctor Action.refused))))))),
+  axioms: [Quot.sound, propext],
   executable: true,
-  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+  production: {effects: [allocation, files, overflow, process, recursion], targets: [rust-std]}
 }
 
 theorem{
   name: haltedRunnerNeverDispatches,
-  parameters: [research : Research::State, execution : (Option ResearchExecution::State), review : (Option ResearchExecution::Completion), event : Event],
-  statement: ((step (record State {research := research, execution := execution, review := review, halted := true}) event) = ((record State {research := research, execution := execution, review := review, halted := true}), (ctor Action.blocked))),
-  proof: reflexivity{}
+  parameters: [research : Research::State, execution : (Option ResearchExecution::State), review : (Option ResearchExecution::Completion), proof : (Option ResearchProof::State), event : Event],
+  statement: ((step (record State {research := research, execution := execution, review := review, proof := proof, halted := true}) event) = ((record State {research := research, execution := execution, review := review, proof := proof, halted := true}), (ctor Action.blocked))),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
 }
 \end{semanticmodule}
 \end{lexlean}

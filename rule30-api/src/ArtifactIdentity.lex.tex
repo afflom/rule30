@@ -1,0 +1,113 @@
+\begin{lexlean}{ArtifactIdentity}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\importmodule{LexLeanStd.Sha256}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "LexLean section 21 framing and the language 1.2 semantic/build identities. Compiler and artifact digests decode exactly 64 lowercase hexadecimal bytes to 32 raw bytes before hashing. Semantic identity uses canonical linked IR and lexicon closure with the pinned toolchain; it is not a digest of the source filename, theorem name, or JSON presentation. Equality binds content, not provenance or kernel acceptance.",
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: bigEndian,
+ parameters: [count : Nat, value : Nat],
+ result: Bytes,
+ body: (match count | Nat.zero => 0x | Nat.succ more => (Json::append (bigEndian more (prim quotient value 256 0 : Nat)) (Json::byte (prim remainder value 256 0 : Nat)))),
+ axioms: [],
+ recursive_argument: count,
+ executable: true
+}
+
+definition{
+ name: frame,
+ parameters: [label : Bytes, value : Bytes],
+ result: Bytes,
+ body: (Json::append (bigEndian 4 (prim length label : Nat)) (Json::append label (Json::append (bigEndian 8 (prim length value : Nat)) value))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: hexFrom,
+ parameters: [source : Bytes, position : Nat, remaining : Nat, output : Bytes],
+ result: (Option Bytes),
+ body: (match remaining | Nat.zero => (ctor Option.some [Bytes] output) | Nat.succ more => (match (Json::hexFrom source position 2 0) | Option.none => (ctor Option.none [Bytes]) | Option.some value => (hexFrom source (position + 2) more (Json::append output (Json::byte value))))),
+ axioms: [],
+ recursive_argument: remaining,
+ executable: true
+}
+
+definition{
+ name: lowerHex,
+ parameters: [source : Bytes, position : Nat, remaining : Nat],
+ result: Bool,
+ body: (match remaining | Nat.zero => true | Nat.succ more => (match (prim index source position : (Option UInt8)) | Option.none => false | Option.some value => (((Toml::between value (48 : UInt8) (57 : UInt8)) || (Toml::between value (97 : UInt8) (102 : UInt8))) && (lowerHex source (position + 1) more)))),
+ axioms: [propext],
+ recursive_argument: remaining,
+ executable: true
+}
+
+definition{
+ name: rawDigest,
+ parameters: [source : Bytes],
+ result: (Option Bytes),
+ body: (if (((prim length source : Nat) =? 64) && (lowerHex source 0 64)) then (hexFrom source 0 32 0x) else (ctor Option.none [Bytes])),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: semanticMessage,
+ parameters: [compiler : Bytes, linked : Bytes, closure : Bytes],
+ result: Bytes,
+ body: (Json::append 0x6c65786c65616e2d73656d616e7469632d763100 (Json::append (frame 0x636f6d70696c65722d73656d616e74696373 compiler) (Json::append (frame 0x6c616e6775616765 0x312e32) (Json::append (frame 0x746f6f6c636861696e 0x6c65616e70726f7665722f6c65616e343a76342e33322e31) (Json::append (frame 0x6c696e6b65642d6972 linked) (frame 0x6c657869636f6e2d636c6f73757265 closure)))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: semantic,
+ parameters: [compiler : Bytes, linked : Json::Value, closure : Json::Value, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Bytes),
+ body: (match (rawDigest compiler) | Option.none => (ctor Option.none [Bytes]) | Option.some digest => (match (JsonCanonical::encode linked maxBytes maxSteps) | Option.none => (ctor Option.none [Bytes]) | Option.some ir => (match (JsonCanonical::encode closure maxBytes maxSteps) | Option.none => (ctor Option.none [Bytes]) | Option.some lexicon => (ctor Option.some [Bytes] (LexLeanStd.Sha256::sha256Hex (semanticMessage digest ir lexicon)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: buildMessage,
+ parameters: [source : Bytes, meaning : Bytes],
+ result: Bytes,
+ body: (Json::append 0x6c65786c65616e2d6275696c642d763100 (Json::append (frame 0x736f757263652d6964 source) (frame 0x73656d616e7469632d6964 meaning))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: build,
+ parameters: [source : Bytes, meaning : Bytes],
+ result: (Option Bytes),
+ body: (match (rawDigest source) | Option.none => (ctor Option.none [Bytes]) | Option.some a => (match (rawDigest meaning) | Option.none => (ctor Option.none [Bytes]) | Option.some b => (ctor Option.some [Bytes] (LexLeanStd.Sha256::sha256Hex (buildMessage a b))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "lexlean-content-framing" (cons "lowercase-raw-digests" (cons "canonical-semantic-identity" (cons "source-semantic-build-identity" (nil String))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

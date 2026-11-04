@@ -177,7 +177,7 @@ definition{
   body: (let initial : ResearchExecution::State := (record ResearchExecution::State {job := (job pins config), phase := (ctor ResearchExecution::Phase.spawning), owner := (ctor Option.none [Nat])}); (let state : State := (record State {pins := pins, config := config, execution := initial, phase := (ctor Phase.running), cancelled := false, outcome := (ctor Option.none [Outcome])}); (if (validConfig pins config) then (executionResult state (ResearchExecution::begin (job pins config))) else (finish state (ctor Outcome.rejected "invalid verification plan"))))),
   axioms: [propext],
   executable: true,
-  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+  production: {effects: [allocation, files, overflow, process, recursion], targets: [rust-std]}
 }
 
 definition{
@@ -317,7 +317,7 @@ definition{
    | Event.host response => (reading state response))),
   axioms: [Quot.sound, propext],
   executable: true,
-  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+  production: {effects: [allocation, files, overflow, process, recursion], targets: [rust-std]}
 }
 
 theorem{

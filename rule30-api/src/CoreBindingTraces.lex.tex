@@ -1,0 +1,273 @@
+\begin{lexlean}{CoreBindingTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{CoreBinding}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: source,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (nil Json::Value))))))))))), root := 9}),
+ axioms: []
+}
+
+definition{
+ name: expected,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x36)) (nil (Bytes * Json::Value)))))))) (nil Json::Value)))))))))))), root := 10}),
+ axioms: []
+}
+
+definition{
+ name: renamed,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x72656e616d6564)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x36)) (nil (Bytes * Json::Value)))))))) (nil Json::Value)))))))))))), root := 10}),
+ axioms: []
+}
+
+definition{
+ name: wrongVariable,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x31)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x36)) (nil (Bytes * Json::Value)))))))) (nil Json::Value)))))))))))), root := 10}),
+ axioms: []
+}
+
+definition{
+ name: wrongUniverse,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x36)) (nil (Bytes * Json::Value)))))))) (nil Json::Value)))))))))))), root := 10}),
+ axioms: []
+}
+
+definition{
+ name: wrongConstant,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x46616c7365)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x36)) (nil (Bytes * Json::Value)))))))) (nil Json::Value)))))))))))), root := 10}),
+ axioms: []
+}
+
+definition{
+ name: implicit,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x69)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x36)) (nil (Bytes * Json::Value)))))))) (nil Json::Value)))))))))))), root := 10}),
+ axioms: []
+}
+
+definition{
+ name: forward,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (nil Json::Value)), root := 0}),
+ axioms: []
+}
+
+definition{
+ name: missingField,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (nil (Bytes * Json::Value))))) (nil Json::Value)), root := 0}),
+ axioms: []
+}
+
+definition{
+ name: unknown,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x667574757265)) (nil (Bytes * Json::Value)))) (nil Json::Value)), root := 0}),
+ axioms: []
+}
+
+definition{
+ name: targetWithoutContext,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (nil Json::Value))))))))))), root := 6}),
+ axioms: []
+}
+
+definition{
+ name: conclusion,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (nil Json::Value))))))))))), root := 7}),
+ axioms: []
+}
+
+theorem{
+ name: closesSelectedPremise,
+ parameters: [],
+ statement: ((match (CoreBinding::premise (source) 1 512 128) | Option.none => false | Option.some actualGoal => (CoreBinding::sameType actualGoal (expected) 4096 256)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: firstBinderHasNoAssumptions,
+ parameters: [],
+ statement: ((match (CoreBinding::premise (source) 0 512 128) | Option.none => false | Option.some actualGoal => (CoreBinding::sameType actualGoal (record CoreBinding::Goal {nodes := (project (source) nodes), root := 0}) 4096 256)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: pastTheTelescope,
+ parameters: [],
+ statement: ((CoreBinding::premise (source) 2 512 128) = (ctor Option.none [CoreBinding::Goal])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: premiseBudget,
+ parameters: [],
+ statement: ((CoreBinding::premise (source) 1 512 0) = (ctor Option.none [CoreBinding::Goal])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareExpected,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (expected) 512 128) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareRenamed,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (renamed) 512 128) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareSource,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (source) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareWrongvariable,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (wrongVariable) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareWronguniverse,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (wrongUniverse) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareWrongconstant,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (wrongConstant) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareImplicit,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (implicit) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareTargetwithoutcontext,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (targetWithoutContext) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: compareConclusion,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (conclusion) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectForward,
+ parameters: [],
+ statement: ((CoreBinding::sameType (forward) (forward) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectMissingfield,
+ parameters: [],
+ statement: ((CoreBinding::sameType (missingField) (missingField) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectUnknown,
+ parameters: [],
+ statement: ((CoreBinding::sameType (unknown) (unknown) 512 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: comparisonBudget,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (expected) 512 0) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: shapeBudget,
+ parameters: [],
+ statement: ((CoreBinding::sameType (expected) (expected) 0 128) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+definition{
+ name: shiftedNat,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (nil Json::Value))), root := 1}),
+ axioms: []
+}
+
+definition{
+ name: nat,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4e6174)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x69, (ctor Json::Value.number 0x30)) (cons (0x6b, (ctor Json::Value.string 0x62)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6e)) (cons (0x76, (ctor Json::Value.string 0x30)) (nil (Bytes * Json::Value))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x4571)) (cons (0x75, (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x61, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (cons (0x6b, (ctor Json::Value.string 0x73)) (nil (Bytes * Json::Value))))) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x33)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x34)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x66, (ctor Json::Value.number 0x35)) (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x78, (ctor Json::Value.number 0x32)) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x54727565)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x68)) (cons (0x74, (ctor Json::Value.number 0x36)) (cons (0x76, (ctor Json::Value.number 0x37)) (nil (Bytes * Json::Value)))))))) (cons (ctor Json::Value.object (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (ctor Json::Value.string 0x6e)) (cons (0x74, (ctor Json::Value.number 0x30)) (cons (0x76, (ctor Json::Value.number 0x38)) (nil (Bytes * Json::Value)))))))) (nil Json::Value))))))))))), root := 0}),
+ axioms: []
+}
+
+theorem{
+ name: arenaOrderIndependent,
+ parameters: [],
+ statement: ((CoreBinding::sameType (nat) (shiftedNat) 512 128) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

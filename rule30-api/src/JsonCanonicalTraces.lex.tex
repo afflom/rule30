@@ -1,0 +1,331 @@
+\begin{lexlean}{JsonCanonicalTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{LexLeanStd.Buffer}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: hasBytes,
+ parameters: [result : (Option Bytes), expectedBytes : Bytes],
+ result: Bool,
+ body: (match result | Option.none => false | Option.some actual => (Toml::sameBytes actual expectedBytes)),
+ axioms: []
+}
+
+theorem{
+ name: sorted,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x207b20227a223a205b747275652c202d305d2c202261223a2022612f6222207d 512 16 128) 0x7b2261223a22612f62222c227a223a5b747275652c305d7d) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: nested,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x7b2278223a7b2262223a322c2261223a317d7d 512 16 128) 0x7b2278223a7b2261223a312c2262223a327d7d) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: unicode,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x7b22f09f9880223a312c22c3a9223a322c2261223a337d 512 16 128) 0x7b2261223a332c22c3a9223a322c22f09f9880223a317d) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: escaped,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x225c75303030305c625c665c6e5c725c745c75303031665c225c5c5c2f22 512 16 128) 0x225c75303030305c625c665c6e5c725c745c75303031665c225c5c2f22) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: surrogate,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x225c75643833645c756465303022 512 16 128) 0x22f09f988022) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: minimum,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x2d39323233333732303336383534373735383038 512 16 128) 0x2d39323233333732303336383534373735383038) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: maximum,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x39323233333732303336383534373735383037 512 16 128) 0x39323233333732303336383534373735383037) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: zero,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x2d30 512 16 128) 0x30) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: null,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x6e756c6c 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: nestedNull,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x5b312c6e756c6c5d 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: positiveOverflow,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x39323233333732303336383534373735383038 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: negativeOverflow,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x2d39323233333732303336383534373735383039 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: fraction,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x312e30 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: exponent,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x316530 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: duplicate,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x7b2261223a312c225c7530303631223a327d 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: leadingZero,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x3031 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: emptyNumber,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: plus,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x2b31 512 16 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rawDuplicate,
+ parameters: [],
+ statement: ((JsonCanonical::encode (ctor Json::Value.object (cons (0x61, (ctor Json::Value.boolean true)) (cons (0x61, (ctor Json::Value.boolean false)) (nil (Bytes * Json::Value))))) 512 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: invalidUtf8,
+ parameters: [],
+ statement: ((JsonCanonical::encode (ctor Json::Value.string 0xc080) 512 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: invalidKey,
+ parameters: [],
+ statement: ((JsonCanonical::encode (ctor Json::Value.object (cons (0xff, (ctor Json::Value.boolean true)) (nil (Bytes * Json::Value)))) 512 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rawFraction,
+ parameters: [],
+ statement: ((JsonCanonical::encode (ctor Json::Value.number 0x312e30) 512 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rawLeadingZero,
+ parameters: [],
+ statement: ((JsonCanonical::encode (ctor Json::Value.number 0x3031) 512 128) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: exactLimit,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x226122 3 16 2) 0x226122) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: shortLimit,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x226122 2 16 2) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: escapeLimit,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x225c6e22 4 16 2) 0x225c6e22) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: shortEscape,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x225c6e22 3 16 2) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: workExhausted,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x74727565 4 16 1) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: zeroWork,
+ parameters: [],
+ statement: ((JsonCanonical::canonicalize 0x5b5d 2 16 0) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: emptyArray,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x5b5d 2 16 4) 0x5b5d) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: emptyString,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::canonicalize 0x2222 2 16 2) 0x2222) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: exhaustedWorkDoesNotTraverseContainers,
+ parameters: [head : JsonCanonical::Work, tail : (List JsonCanonical::Work), output : LexLeanStd.Buffer::Buffer, byteLimit : Nat],
+ statement: ((JsonCanonical::render (cons head tail) output byteLimit 0) = (ctor Option.none [Bytes])),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+
+theorem{
+ name: objectExpansionSchedulesSorting,
+ parameters: [entries : (List (Bytes * Json::Value)), tail : (List JsonCanonical::Work), byteLimit : Nat],
+ statement: ((JsonCanonical::expand (ctor Json::Value.object entries) tail byteLimit) = (ctor Option.some [(List JsonCanonical::Work)] (cons (ctor JsonCanonical::Work.sortEntries entries (nil (Bytes * Json::Value))) tail))),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+
+theorem{
+ name: oversizedKeyStopsBeforeSorting,
+ parameters: [value : Json::Value, sortedItems : (List (Bytes * Json::Value)), prefix : (List (Bytes * Json::Value)), remaining : (List (Bytes * Json::Value)), tail : (List JsonCanonical::Work), output : LexLeanStd.Buffer::Buffer, fuel : Nat],
+ statement: ((JsonCanonical::render (cons (ctor JsonCanonical::Work.insertEntry (0x616263, value) sortedItems prefix remaining) tail) output 4 (ctor Nat.succ fuel)) = (ctor Option.none [Bytes])),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+
+theorem{
+ name: oversizedStoredKeyStopsBeforeComparison,
+ parameters: [value : Json::Value, stored : Json::Value, rest : (List (Bytes * Json::Value)), prefix : (List (Bytes * Json::Value)), remaining : (List (Bytes * Json::Value)), tail : (List JsonCanonical::Work), output : LexLeanStd.Buffer::Buffer, fuel : Nat],
+ statement: ((JsonCanonical::render (cons (ctor JsonCanonical::Work.insertEntry (0x61, value) (cons (0x616263, stored) rest) prefix remaining) tail) output 4 (ctor Nat.succ fuel)) = (ctor Option.none [Bytes])),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+
+theorem{
+ name: oversizedNumberStopsBeforeParsing,
+ parameters: [tail : (List JsonCanonical::Work), byteLimit : Nat],
+ statement: ((JsonCanonical::expand (ctor Json::Value.number 0x2d393232333337323033363835343737353830383030) tail byteLimit) = (ctor Option.none [(List JsonCanonical::Work)])),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+
+theorem{
+ name: negativeZeroFitsCanonicalBudget,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::encode (ctor Json::Value.number 0x2d30) 1 2) 0x30) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: canonicalFileHasOneNewline,
+ parameters: [],
+ statement: ((hasBytes (JsonCanonical::file (ctor Json::Value.boolean true) 5 2) 0x747275650a) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: fileLimitIncludesNewline,
+ parameters: [],
+ statement: ((JsonCanonical::file (ctor Json::Value.boolean true) 4 2) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

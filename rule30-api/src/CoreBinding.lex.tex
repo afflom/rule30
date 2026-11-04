@@ -1,0 +1,240 @@
+\begin{lexlean}{CoreBinding}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\importmodule{Hypotheses}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "This boundary compares the types of kernel-checked native core declarations. It retains de Bruijn indices, universe levels, constants, binder visibility and every semantic node field, ignoring only binder display names. It refuses unknown constructors, duplicate or missing fields, forward references and exhausted bounds. A selected source premise is closed over preceding binders only; the premise itself and later binders never become assumptions. Arena data must be tied to the current verified source and candidate identities by the owning verifier. Comparison establishes exact applicability; it does not verify a proof or grant authority to arbitrary JSON.",
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: Goal,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: nodes, type: (List Json::Value)}, {name: root, type: Nat}]
+}
+
+structure{
+ name: Node,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: shape, type: Bytes}, {name: children, type: (List Nat)}]
+}
+
+definition{
+ name: get,
+ parameters: [value : Json::Value, key : Bytes],
+ result: Json::Value,
+ body: (match (Json::field value key) | Option.none => (ctor Json::Value.null) | Option.some found => found),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: kind,
+ parameters: [node : Json::Value],
+ result: Bytes,
+ body: (match (get node 0x6b) | Json::Value.string text => text | Json::Value.null => 0x | Json::Value.boolean b => 0x | Json::Value.number n => 0x | Json::Value.array a => 0x | Json::Value.object o => 0x),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: nodeKeys,
+ parameters: [tag : Bytes],
+ result: (Option (List Bytes)),
+ body: (if (Toml::sameBytes tag 0x62) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x69 (nil Bytes)))) else (if (Toml::sameBytes tag 0x73) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x6c (nil Bytes)))) else (if (Toml::sameBytes tag 0x63) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x6e (cons 0x75 (nil Bytes))))) else (if (Toml::sameBytes tag 0x61) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x66 (cons 0x78 (nil Bytes))))) else (if (Toml::sameBytes tag 0x6c) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x6e (cons 0x62 (cons 0x74 (cons 0x76 (nil Bytes))))))) else (if (Toml::sameBytes tag 0x70) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x6e (cons 0x62 (cons 0x74 (cons 0x76 (nil Bytes))))))) else (if (Toml::sameBytes tag 0x65) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x6e (cons 0x74 (cons 0x76 (cons 0x626f6479 (cons 0x64 (nil Bytes)))))))) else (if (Toml::sameBytes tag 0x6e) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x76 (nil Bytes)))) else (if (Toml::sameBytes tag 0x74) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x76 (nil Bytes)))) else (if (Toml::sameBytes tag 0x6a) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x6e (cons 0x73 (cons 0x69 (cons 0x78 (nil Bytes))))))) else (if (Toml::sameBytes tag 0x64) then (ctor Option.some [(List Bytes)] (cons 0x6b (cons 0x6d (cons 0x78 (nil Bytes))))) else (ctor Option.none [(List Bytes)])))))))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: childKeys,
+ parameters: [tag : Bytes],
+ result: (List Bytes),
+ body: (if (Toml::sameBytes tag 0x61) then (cons 0x66 (cons 0x78 (nil Bytes))) else (if (Toml::sameBytes tag 0x6c) then (cons 0x74 (cons 0x76 (nil Bytes))) else (if (Toml::sameBytes tag 0x70) then (cons 0x74 (cons 0x76 (nil Bytes))) else (if (Toml::sameBytes tag 0x65) then (cons 0x74 (cons 0x76 (cons 0x626f6479 (nil Bytes)))) else (if (Toml::sameBytes tag 0x6a) then (cons 0x78 (nil Bytes)) else (if (Toml::sameBytes tag 0x64) then (cons 0x78 (nil Bytes)) else (nil Bytes))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: contains,
+ parameters: [key : Bytes, keys : (List Bytes)],
+ result: Bool,
+ body: (match keys | List.nil => false | List.cons head tail => ((Toml::sameBytes key head) || (contains key tail))),
+ axioms: [],
+ recursive_argument: keys,
+ executable: true
+}
+
+definition{
+ name: fieldsKnown,
+ parameters: [entries : (List (Bytes * Json::Value)), keys : (List Bytes)],
+ result: Bool,
+ body: (match entries | List.nil => true | List.cons head tail => ((contains (first head) keys) && (fieldsKnown tail keys))),
+ axioms: [],
+ recursive_argument: entries,
+ executable: true
+}
+
+definition{
+ name: removeFields,
+ parameters: [entries : (List (Bytes * Json::Value)), keys : (List Bytes)],
+ result: (List (Bytes * Json::Value)),
+ body: (match entries | List.nil => (nil (Bytes * Json::Value)) | List.cons head tail => (if (contains (first head) keys) then (removeFields tail keys) else (cons head (removeFields tail keys)))),
+ axioms: [],
+ recursive_argument: entries,
+ executable: true
+}
+
+definition{
+ name: references,
+ parameters: [node : Json::Value, keys : (List Bytes), before : Nat],
+ result: (Option (List Nat)),
+ body: (match keys | List.nil => (ctor Option.some [(List Nat)] (nil Nat)) | List.cons head tail => (match (Json::natural (get node head) before) | Option.none => (ctor Option.none [(List Nat)]) | Option.some index => (if (index <? before) then (match (references node tail before) | Option.none => (ctor Option.none [(List Nat)]) | Option.some rest => (ctor Option.some [(List Nat)] (cons index rest))) else (ctor Option.none [(List Nat)])))),
+ axioms: [],
+ recursive_argument: keys,
+ executable: true
+}
+
+definition{
+ name: describe,
+ parameters: [node : Json::Value, before : Nat, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Node),
+ body: (match node | Json::Value.object entries => (let tag : Bytes := (kind node); (match (nodeKeys tag) | Option.none => (ctor Option.none [Node]) | Option.some expected => (if (((prim length entries : Nat) =? (prim length expected : Nat)) && (fieldsKnown entries expected)) then (match (JsonCanonical::encode node maxBytes maxSteps) | Option.none => (ctor Option.none [Node]) | Option.some full => (let children : (List Bytes) := (childKeys tag); (let removed : (List Bytes) := (if ((Toml::sameBytes tag 0x6c) || ((Toml::sameBytes tag 0x70) || (Toml::sameBytes tag 0x65))) then (cons 0x6e children) else children); (match (references node children before) | Option.none => (ctor Option.none [Node]) | Option.some refs => (match (JsonCanonical::encode (ctor Json::Value.object (removeFields entries removed)) maxBytes maxSteps) | Option.none => (ctor Option.none [Node]) | Option.some shape => (ctor Option.some [Node] (record Node {shape := shape, children := refs}))))))) else (ctor Option.none [Node])))) | Json::Value.null => (ctor Option.none [Node]) | Json::Value.boolean b => (ctor Option.none [Node]) | Json::Value.number n => (ctor Option.none [Node]) | Json::Value.string t => (ctor Option.none [Node]) | Json::Value.array a => (ctor Option.none [Node])),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: nodeAt,
+ parameters: [nodes : (List Json::Value), index : Nat, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Node),
+ body: (match (prim index nodes index : (Option Json::Value)) | Option.none => (ctor Option.none [Node]) | Option.some value => (describe value index maxBytes maxSteps)),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: zipOnto,
+ parameters: [left : (List Nat), right : (List Nat), tail : (List (Nat * Nat))],
+ result: (Option (List (Nat * Nat))),
+ body: (match left | List.nil => (match right | List.nil => (ctor Option.some [(List (Nat * Nat))] tail) | List.cons head rest => (ctor Option.none [(List (Nat * Nat))])) | List.cons head rest => (match right | List.nil => (ctor Option.none [(List (Nat * Nat))]) | List.cons other others => (zipOnto rest others (cons (head, other) tail)))),
+ axioms: [],
+ recursive_argument: left,
+ executable: true
+}
+
+definition{
+ name: compare,
+ parameters: [left : (List Json::Value), right : (List Json::Value), pending : (List (Nat * Nat)), maxBytes : Nat, maxSteps : Nat, fuel : Nat],
+ result: Bool,
+ body: (match fuel | Nat.zero => (match pending | List.nil => true | List.cons head tail => false) | Nat.succ more => (match pending | List.nil => true | List.cons head tail => (match (nodeAt left (first head) maxBytes maxSteps) | Option.none => false | Option.some a => (match (nodeAt right (second head) maxBytes maxSteps) | Option.none => false | Option.some b => (if (Toml::sameBytes (project a shape) (project b shape)) then (match (zipOnto (project a children) (project b children) tail) | Option.none => false | Option.some next => (compare left right next maxBytes maxSteps more)) else false))))),
+ axioms: [propext],
+ recursive_argument: fuel,
+ executable: true
+}
+
+definition{
+ name: sameType,
+ parameters: [left : Goal, right : Goal, maxBytes : Nat, maxSteps : Nat],
+ result: Bool,
+ body: (compare (project left nodes) (project right nodes) (cons ((project left root), (project right root)) (nil (Nat * Nat))) maxBytes maxSteps maxSteps),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: number,
+ parameters: [value : Nat],
+ result: Json::Value,
+ body: (ctor Json::Value.number (Hypotheses::decimal value)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: binderNode,
+ parameters: [binder : Json::Value, root : Nat],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x6e, (get binder 0x6e)) (cons (0x62, (get binder 0x62)) (cons (0x74, (get binder 0x74)) (cons (0x76, (number root)) (nil (Bytes * Json::Value)))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: close,
+ parameters: [binders : (List Json::Value), goal : Goal],
+ result: Goal,
+ body: (match binders | List.nil => goal | List.cons head tail => (close tail (record Goal {nodes := (prim append (project goal nodes) (cons (binderNode head (project goal root)) (nil Json::Value)) : (List Json::Value)), root := (prim length (project goal nodes) : Nat)}))),
+ axioms: [],
+ recursive_argument: binders,
+ executable: true
+}
+
+definition{
+ name: pi,
+ parameters: [nodes : (List Json::Value), index : Nat, maxBytes : Nat, maxSteps : Nat],
+ result: (Option (Nat * Nat)),
+ body: (match (prim index nodes index : (Option Json::Value)) | Option.none => (ctor Option.none [(Nat * Nat)]) | Option.some node => (if (Toml::sameBytes (kind node) 0x70) then (match (describe node index maxBytes maxSteps) | Option.none => (ctor Option.none [(Nat * Nat)]) | Option.some found => (match (project found children) | List.nil => (ctor Option.none [(Nat * Nat)]) | List.cons domain rest => (match rest | List.nil => (ctor Option.none [(Nat * Nat)]) | List.cons body others => (ctor Option.some [(Nat * Nat)] (domain, body))))) else (ctor Option.none [(Nat * Nat)]))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: negated,
+ parameters: [goal : Goal],
+ result: Goal,
+ body: (let index : Nat := (prim length (project goal nodes) : Nat); (let falseNode : Json::Value := (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string 0x46616c7365)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))); (let binder : Json::Value := (ctor Json::Value.object (cons (0x6e, (ctor Json::Value.string 0x6e656761746564)) (cons (0x62, (ctor Json::Value.string 0x65)) (cons (0x74, (number (project goal root))) (nil (Bytes * Json::Value)))))); (record Goal {nodes := (prim append (project goal nodes) (cons falseNode (cons (binderNode binder index) (nil Json::Value))) : (List Json::Value)), root := (index + 1)})))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: premiseFrom,
+ parameters: [nodes : (List Json::Value), index : Nat, preceding : (List Json::Value), position : Nat, negative : Bool, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Goal),
+ body: (match position | Nat.zero => (match (pi nodes index maxBytes maxSteps) | Option.none => (ctor Option.none [Goal]) | Option.some pair => (ctor Option.some [Goal] (close preceding (if negative then (negated (record Goal {nodes := nodes, root := (first pair)})) else (record Goal {nodes := nodes, root := (first pair)}))))) | Nat.succ more => (match (pi nodes index maxBytes maxSteps) | Option.none => (ctor Option.none [Goal]) | Option.some pair => (match (prim index nodes index : (Option Json::Value)) | Option.none => (ctor Option.none [Goal]) | Option.some binder => (premiseFrom nodes (second pair) (cons binder preceding) more negative maxBytes maxSteps)))),
+ axioms: [propext],
+ recursive_argument: position,
+ executable: true
+}
+
+definition{
+ name: premise,
+ parameters: [source : Goal, position : Nat, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Goal),
+ body: (if (position <=? maxSteps) then (premiseFrom (project source nodes) (project source root) (nil Json::Value) position false maxBytes maxSteps) else (ctor Option.none [Goal])),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: refutation,
+ parameters: [source : Goal, position : Nat, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Goal),
+ body: (if (position <=? maxSteps) then (premiseFrom (project source nodes) (project source root) (nil Json::Value) position true maxBytes maxSteps) else (ctor Option.none [Goal])),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "exact-core-type-comparison" (cons "de-bruijn-context-preservation" (cons "binder-alpha-renaming" (cons "selected-premise-closure" (cons "exclude-target-assumption" (cons "reject-forward-edges" (cons "comparison-resource-bounds" (cons "contextual-refutation" (nil String))))))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

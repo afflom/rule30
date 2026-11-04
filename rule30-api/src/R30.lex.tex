@@ -10,7 +10,7 @@ definition{
   name: rootKind,
   parameters: [],
   result: String,
-  body: "step consumes LexLeanStd.Host.Event and returns a session and LexLeanStd.Host.Request. These are imported source-package types from the v0.5 development branch; Rule30Api.Host supplies application adapters, not duplicate protocol types. The root is certified for rust-std with allocation, overflow and recursion, and production exports a pure Rust library function when a request names it. Its closure constructs read, stat and exit through Host::realize. Constructing a request does not execute an effect: the compiler's generated command driver, files and process effect checking, and connection to the research executor remain implementation work on our v0.5-based LexLean branch. rule30-api/production/request.json and model/runtime-roots.toml still describe the deprecated runtime's roots, so bin/r30 api production does not export step. plan carries paths and output as pieces; step realizes paths as text and output as exact bytes. step realizes plan by definition, and the kernel decides traces of plan.",
+  body: "step consumes LexLeanStd.Host.Event and returns a session and LexLeanStd.Host.Request. These are imported source-package types from the v0.5 development branch; Rule30Api.Host supplies application adapters. The root declares allocation, files, overflow and recursion for rust-std. Its closure constructs read, stat and exit through Host::realize; a production request naming step can export the native executable driver that executes these requests. Connection to the research executor remains application work. rule30-api/production/request.json and model/runtime-roots.toml describe the legacy runtime's roots, so bin/r30 api production does not export step. plan carries paths and output as pieces; step realizes paths as text and output as exact bytes. step realizes plan by definition, and the kernel decides traces of plan.",
   executable: true
 }
 
@@ -877,7 +877,7 @@ definition{
   body: (let drafted : (Session * Host::Draft) := (plan state event); ((first drafted), (Host::realize (second drafted)))),
   axioms: [Quot.sound, propext],
   executable: true,
-  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+  production: {effects: [allocation, files, overflow, recursion], targets: [rust-std]}
 }
 
 theorem{
