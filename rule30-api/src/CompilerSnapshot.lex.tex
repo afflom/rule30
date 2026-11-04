@@ -1,0 +1,84 @@
+\begin{lexlean}{CompilerSnapshot}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{CoreBinding}
+\importmodule{ArtifactIdentity}
+\importmodule{CandidateBinding}
+\importmodule{VerificationReport}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "A local lexlean snapshot exposes the public semantic snapshot, not the linked IR itself. Reconstruct linked IR from each module's full linked_ir value in snapshot order and retain the exact envelope lexicon_closure. Recompute the language 1.2 semantic identity against the expected compiler before deriving verification pins. A decoded snapshot is candidate metadata, never proof evidence. Its authority requires the caller to own the local snapshot invocation and subsequent verification in the same isolated project; the verified report must match the derived source and semantic identities. Imported library ownership remains part of the research snapshot boundary.",
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: Metadata,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: source, type: Bytes}, {name: semantic, type: Bytes}, {name: binding, type: CandidateBinding::Input}]
+}
+
+definition{
+ name: modules,
+ parameters: [rows : (List Json::Value), fuel : Nat],
+ result: (Option (List Json::Value)),
+ body: (match rows | List.nil => (ctor Option.some [(List Json::Value)] (nil Json::Value)) | List.cons head tail => (match fuel | Nat.zero => (ctor Option.none [(List Json::Value)]) | Nat.succ more => (match (CoreBinding::get head 0x6c696e6b65645f6972) | Json::Value.object entries => (match (modules tail more) | Option.none => (ctor Option.none [(List Json::Value)]) | Option.some rest => (ctor Option.some [(List Json::Value)] (cons (ctor Json::Value.object entries) rest))) | Json::Value.null => (ctor Option.none [(List Json::Value)]) | Json::Value.boolean b => (ctor Option.none [(List Json::Value)]) | Json::Value.number n => (ctor Option.none [(List Json::Value)]) | Json::Value.string s => (ctor Option.none [(List Json::Value)]) | Json::Value.array a => (ctor Option.none [(List Json::Value)])))),
+ axioms: [],
+ recursive_argument: rows,
+ executable: true
+}
+
+definition{
+ name: linked,
+ parameters: [rows : (List Json::Value)],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x6c65786c65616e2f6c696e6b65642d69722f31)) (cons (0x6d6f64756c6573, (ctor Json::Value.array rows)) (nil (Bytes * Json::Value))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: bind,
+ parameters: [value : Json::Value, compiler : Bytes, rows : (List Json::Value), maxBytes : Nat, maxSteps : Nat],
+ result: (Option Metadata),
+ body: (match (modules rows maxSteps) | Option.none => (ctor Option.none [Metadata]) | Option.some content => (let input : CandidateBinding::Input := (record CandidateBinding::Input {linked := (linked content), lexicon := (CoreBinding::get value 0x6c657869636f6e5f636c6f73757265)}); (match (ArtifactIdentity::semantic compiler (project input linked) (project input lexicon) maxBytes maxSteps) | Option.none => (ctor Option.none [Metadata]) | Option.some meaning => (if (Toml::sameBytes meaning (VerificationReport::bytes (CoreBinding::get value 0x73656d616e7469635f6964))) then (ctor Option.some [Metadata] (record Metadata {source := (VerificationReport::bytes (CoreBinding::get value 0x736f757263655f6964)), semantic := meaning, binding := input})) else (ctor Option.none [Metadata]))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: metadata,
+ parameters: [value : Json::Value, compiler : Bytes, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Metadata),
+ body: (if ((Toml::sameBytes (VerificationReport::bytes (CoreBinding::get value 0x73706563)) 0x6c65786c65616e2f73656d616e7469632d736e617073686f742f32) && ((Toml::sameBytes (VerificationReport::bytes (CoreBinding::get value 0x6c616e6775616765)) 0x312e32) && ((Toml::sameBytes (VerificationReport::bytes (CoreBinding::get value 0x636f6d70696c65725f73656d616e746963735f6964)) compiler) && (VerificationReport::digest (VerificationReport::bytes (CoreBinding::get value 0x736f757263655f6964)))))) then (match (CandidateBinding::array (CoreBinding::get value 0x6d6f64756c6573)) | Option.none => (ctor Option.none [Metadata]) | Option.some rows => (bind value compiler rows maxBytes maxSteps)) else (ctor Option.none [Metadata])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: decode,
+ parameters: [source : Bytes, compiler : Bytes, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+ result: (Option Metadata),
+ body: (match (Json::parse source maxBytes maxDepth) | Result.error problem => (ctor Option.none [Metadata]) | Result.ok value => (metadata value compiler maxBytes maxSteps)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "local-compiler-snapshot-decoding" (cons "full-linked-ir-reconstruction" (cons "exact-lexicon-closure" (cons "compiler-and-semantic-identity" (cons "bounded-module-decoding" (cons "metadata-is-not-proof" (nil String))))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

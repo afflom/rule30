@@ -1,0 +1,92 @@
+\begin{lexlean}{CompilerSnapshotTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{CoreBinding}
+\importmodule{CandidateBinding}
+\importmodule{CompilerSnapshot}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: compiler,
+ parameters: [],
+ result: Bytes,
+ body: 0x31313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131,
+ axioms: []
+}
+
+definition{
+ name: snapshot,
+ parameters: [],
+ result: Bytes,
+ body: 0x7b22636f6d70696c65725f73656d616e746963735f6964223a2231313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131222c226c616e6775616765223a22312e32222c226c657869636f6e5f636c6f73757265223a7b7d2c226d6f64756c6573223a5b5d2c2273656d616e7469635f6964223a2231323832343634323638663461333466653233396462666237636236643864366436633235316234346639643865373738316635643862343532353432633039222c22736f757263655f6964223a2232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232222c2273706563223a226c65786c65616e2f73656d616e7469632d736e617073686f742f32227d0a,
+ axioms: []
+}
+
+definition{
+ name: row,
+ parameters: [name : Bytes],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x6e616d65, (ctor Json::Value.string 0x646973706c6179)) (cons (0x6c696e6b65645f6972, (ctor Json::Value.object (cons (0x6e616d65, (ctor Json::Value.string name)) (cons (0x7469746c65, (ctor Json::Value.string 0x6b657074)) (nil (Bytes * Json::Value)))))) (nil (Bytes * Json::Value))))),
+ axioms: []
+}
+
+theorem{
+ name: fullLinkedValuesKeepTheirOrder,
+ parameters: [],
+ statement: ((match (CompilerSnapshot::modules (cons (row 0x61) (cons (row 0x62) (nil Json::Value))) 2) | Option.none => false | Option.some rows => (match rows | List.nil => false | List.cons a rest => (match rest | List.nil => false | List.cons b others => ((Toml::sameBytes (match (CoreBinding::get a 0x6e616d65) | Json::Value.string s => s | Json::Value.null => 0x | Json::Value.boolean v => 0x | Json::Value.number n => 0x | Json::Value.array x => 0x | Json::Value.object o => 0x) 0x61) && ((Toml::sameBytes (match (CoreBinding::get b 0x6e616d65) | Json::Value.string s => s | Json::Value.null => 0x | Json::Value.boolean v => 0x | Json::Value.number n => 0x | Json::Value.array x => 0x | Json::Value.object o => 0x) 0x62) && (match (CoreBinding::get a 0x7469746c65) | Json::Value.string title => (Toml::sameBytes title 0x6b657074) | Json::Value.null => false | Json::Value.boolean v => false | Json::Value.number n => false | Json::Value.array x => false | Json::Value.object o => false)))))) = true),
+ proof: decide{},
+ axioms: []
+}
+
+theorem{
+ name: missingLinkedValueIsRefused,
+ parameters: [],
+ statement: ((CompilerSnapshot::modules (cons (ctor Json::Value.object (cons (0x6e616d65, (ctor Json::Value.string 0x61)) (nil (Bytes * Json::Value)))) (nil Json::Value)) 1) = (ctor Option.none [(List Json::Value)])),
+ proof: decide{},
+ axioms: []
+}
+
+theorem{
+ name: moduleBudgetStopsBeforeReadingTheNextRow,
+ parameters: [next : Json::Value],
+ statement: ((CompilerSnapshot::modules (cons (row 0x61) (cons next (nil Json::Value))) 1) = (ctor Option.none [(List Json::Value)])),
+ proof: reflexivity{},
+ axioms: []
+}
+
+theorem{
+ name: emptyModulesNeedNoTraversalBudget,
+ parameters: [],
+ statement: ((CompilerSnapshot::modules (nil Json::Value) 0) = (ctor Option.some [(List Json::Value)] (nil Json::Value))),
+ proof: reflexivity{},
+ axioms: []
+}
+
+theorem{
+ name: metadataDoesNotSupplyAProofDeclaration,
+ parameters: [],
+ statement: ((match (CompilerSnapshot::decode (snapshot) (compiler) 1024 16 256) | Option.none => false | Option.some data => ((Toml::sameBytes (project data semantic) 0x31323832343634323638663461333466653233396462666237636236643864366436633235316234346639643865373738316635643862343532353432633039) && (match (CandidateBinding::candidate (project data binding) 0x46697874757265 0x466978747572652e70726f6f66 1024 16) | Option.none => true | Option.some proof => false))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: aDifferentCompilerIsRefused,
+ parameters: [],
+ statement: ((CompilerSnapshot::decode (snapshot) 0x626164 1024 16 256) = (ctor Option.none [CompilerSnapshot::Metadata])),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: oversizedSnapshotIsRefused,
+ parameters: [],
+ statement: ((CompilerSnapshot::decode (snapshot) (compiler) 10 16 256) = (ctor Option.none [CompilerSnapshot::Metadata])),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

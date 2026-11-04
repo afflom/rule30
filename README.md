@@ -298,11 +298,12 @@ step roots can export a generated executable with explicit file/process effects
 and child cleanup; pure roots remain libraries.
 The API imports `LexLeanStd.Host` from the pinned source package; its local
 `Host` module contains only the application harness. The attention catalog
-covers all 60 application and library modules. `ResearchRunner` connects the
+covers all 64 application and library modules. `ResearchRunner` connects the
 controller to the local-tool supervisor in `ResearchExecution`: it binds each
 job to the outstanding request, drains cancelled host requests, preserves child
 ownership on cleanup failure, and requires report review after a successful
 process exit. External checked answers are refused: proof jobs use the owned
+`ResearchCandidate` lifecycle, which obtains an owned local compiler snapshot before starting the
 `ResearchProof` verifier. Maintenance reports must cover the requested sources. Dependency changes invalidate both
 active work and remembered evidence.
 
@@ -311,7 +312,14 @@ resource limits, exact tool identities, declaration axiom checks and module
 kernel-replay records. The decoder recomputes the attestation content identity;
 `ResearchVerification` owns the fixed local verify job, reads its command output
 before the matching attestation, and returns a receipt only after decoding it.
-Cancellation drains pending reads; failed process cleanup retains ownership.
+Cancellation drains pending reads; unexpected replies halt dispatch with ownership
+retained, as do failed process cleanups.
+`CompilerSnapshot` reconstructs the full linked IR and exact lexicon closure from
+`lexlean snapshot`, checks the compiler and recomputes its semantic identity.
+`ResearchCandidate` owns that command and output read, derives the verification
+pins, checks the requested contextual goal, and starts verification in the same
+isolated project. A snapshot alone is metadata; only the subsequent verifier can
+produce proof evidence. Cancellation cannot cross the handoff into verification.
 `ResearchProof` then binds the receipt to the candidate's actual native declaration.
 `ArtifactIdentity` recomputes the semantic identity from canonical linked IR and
 lexicon closure; `CandidateBinding` selects the unique audited theorem and

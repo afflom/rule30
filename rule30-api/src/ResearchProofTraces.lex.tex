@@ -193,5 +193,29 @@ theorem{
  proof: decide{},
  axioms: [Quot.sound, propext]
 }
+
+definition{
+ name: wrongReportReply,
+ parameters: [],
+ result: (ResearchProof::State * ResearchProof::Emission),
+ body: (ResearchProof::step (record ResearchProof::State {verification := (ResearchVerificationTraces::commandPending), binding := (input), maxDepth := 32, maxSteps := 1024}) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::spawned))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: unexpectedReportReplyBlocksProofDispatch,
+ parameters: [],
+ statement: ((match (second (wrongReportReply)) | ResearchProof::Emission.blocked completion => true | ResearchProof::Emission.complete answer => false | ResearchProof::Emission.host request => false | ResearchProof::Emission.awaiting => false) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: unexpectedReportReplyHaltsRunnerAndRetainsOwner,
+ parameters: [],
+ statement: ((let result : (ResearchRunner::State * ResearchRunner::Action) := (ResearchRunner::proofResult (research) (wrongReportReply)); ((project (first result) halted) && (match (project (first result) proof) | Option.none => false | Option.some owner => true))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
 \end{semanticmodule}
 \end{lexlean}
