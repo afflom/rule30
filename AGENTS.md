@@ -106,12 +106,14 @@ the registers. Never add a `.py` file or a shell script, and never extend `tools
 `scripts/*.py` or the shell glue: the pre-commit authoring policy refuses a commit that adds a
 Python file or grows the Python it touches, with no bypass.
 
-At the pinned compiler (the release/v0.5 development line, revision 1cf52d6) a production root compiles to a Rust library
-with no `main` and no effects beyond allocation, overflow and recursion: no files, processes,
-arguments or exit codes. An executable entry for a root that reads files and runs `lake`,
-`lexlean` and `git` is LexLean issue #271 (the effects boundary). So the logic moves into LexLean
-now, as authored modules with certified roots, and the remaining Python and shell glue is deleted
-as the effect boundary is implemented on our v0.5-based LexLean branch. The vendored LexLeanStd.Host types are the actual PR #389 interface ported to v0.5 in upstream PR #396; they are imported directly rather than mirrored in Rule30Api.Host. A capability LexLean, PrismPM or
+The development compiler pinned in `.github/lexlean-revision` follows `release/v0.5`.
+LexLean PR #396 supplies the actual PR #389 `LexLeanStd.Host` interface; PR #439
+adds a generated executable entry for a root with the native Host step signature,
+explicit file/process effects, and owned child cleanup. The API imports these
+types directly; `Rule30Api.Host` is the application harness. Use this compiler
+to complete the native application and remove legacy glue as each replacement
+passes the gate. Ordinary pure roots still export as libraries. Issue #271 does
+not prevent work on this development branch. A capability LexLean, PrismPM or
 prism-stdlib cannot yet express is an upstream issue for those projects, never a reason for new
 Python or shell. The logic already moved: the command surface, the register, the
 converter (`rule30-api/src/Convert.lex.tex`), the engine's learning rule and schedule
@@ -125,10 +127,15 @@ proof receipt. Report review must establish the exact contextual sequent,
 kernel replay, axiom policy and snapshot before returning a checked answer.
 `ResearchVerification` owns a fixed LexLean verification job and the ordered
 command/attestation reads. Its accepted outcome is validated report data;
-promotion still requires binding to the generated candidate's exact statement.
+`ResearchProof` promotes it only after `CandidateBinding` recomputes the candidate
+semantic identity and compares the audited declaration's actual type with the
+requested contextual goal. `ResearchRunner.Event.reviewed` refuses checked
+answers; submit proof jobs through `Event.proof`. The binding schema encodes the
+inspected source type and closed target as core arenas in the sequent; source
+inspection must establish their origin and snapshot before dispatch.
 Maintenance reports have a separate result kind. Cancellation consumes the
 outstanding host reply before issuing stop; failed cleanup retains ownership
-and halts dispatch. The generated driver, strategy planner, report integration and
+and halts dispatch. Native application wiring, source inspection, strategy planner and
 publication path still need completion; these modules do not replace the
 legacy engine yet. Add every new application or library module and its modeled
 features to `ResearchCatalog`, and add behavioral evidence for the capability;

@@ -1,0 +1,140 @@
+\begin{lexlean}{CandidateBinding}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{JsonCanonical}
+\importmodule{ArtifactIdentity}
+\importmodule{CoreBinding}
+\importmodule{Research}
+\importmodule{Hypotheses}
+\importmodule{VerificationReport}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Candidate binding consumes the linked IR and lexicon closure of the owned verification job. Their canonical semantic digest must equal the pinned verified digest. The audited module and theorem must select exactly one proof-bearing native declaration; its actual type is compared with the requested contextual goal. In this schema, sequent.telescope is a JSON object with nodes and root for the inspected source type; sequent.target is the same representation of the premise closed over its preceding binders. Inspection must bind these to the source origin and snapshot before dispatch. Proving uses that closure; refuting negates the premise inside its context. This function is not an authority for externally supplied receipts; ResearchProof owns the verify process and report reads before calling it.",
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: Input,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: linked, type: Json::Value}, {name: lexicon, type: Json::Value}]
+}
+
+definition{
+ name: array,
+ parameters: [value : Json::Value],
+ result: (Option (List Json::Value)),
+ body: (match value | Json::Value.array items => (ctor Option.some [(List Json::Value)] items) | Json::Value.null => (ctor Option.none [(List Json::Value)]) | Json::Value.boolean b => (ctor Option.none [(List Json::Value)]) | Json::Value.number n => (ctor Option.none [(List Json::Value)]) | Json::Value.string t => (ctor Option.none [(List Json::Value)]) | Json::Value.object o => (ctor Option.none [(List Json::Value)])),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: unique,
+ parameters: [items : (List Json::Value), key : Bytes, value : Bytes, found : (Option Json::Value)],
+ result: (Option Json::Value),
+ body: (match items | List.nil => found | List.cons head tail => (if (Toml::sameBytes (VerificationReport::bytes (CoreBinding::get head key)) value) then (match found | Option.some previous => (ctor Option.none [Json::Value]) | Option.none => (unique tail key value (ctor Option.some [Json::Value] head))) else (unique tail key value found))),
+ axioms: [],
+ recursive_argument: items,
+ executable: true
+}
+
+definition{
+ name: named,
+ parameters: [items : Json::Value, key : Bytes, value : Bytes],
+ result: (Option Json::Value),
+ body: (match (array items) | Option.none => (ctor Option.none [Json::Value]) | Option.some entries => (unique entries key value (ctor Option.none [Json::Value]))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: goal,
+ parameters: [value : Json::Value],
+ result: (Option CoreBinding::Goal),
+ body: (match (array (CoreBinding::get value 0x6e6f646573)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some nodes => (match (Json::natural (CoreBinding::get value 0x726f6f74) (prim length nodes : Nat)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some index => (if (index <? (prim length nodes : Nat)) then (ctor Option.some [CoreBinding::Goal] (record CoreBinding::Goal {nodes := nodes, root := index})) else (ctor Option.none [CoreBinding::Goal])))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: parseGoal,
+ parameters: [source : Bytes, maxBytes : Nat, maxDepth : Nat],
+ result: (Option CoreBinding::Goal),
+ body: (match (Json::parse source maxBytes maxDepth) | Result.error problem => (ctor Option.none [CoreBinding::Goal]) | Result.ok value => (goal value)),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: selected,
+ parameters: [request : Research::Request, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+ result: (Option CoreBinding::Goal),
+ body: (let sequent : Research::Sequent := (project (project request task) sequent); (if ((Research::contextual sequent) && (Hypotheses::memberBytes (project sequent origin) (project (project request task) sources))) then (match (parseGoal (project sequent telescope) maxBytes maxDepth) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some source => (match (CoreBinding::premise source (project sequent premise) maxBytes maxSteps) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some expected => (match (parseGoal (project sequent target) maxBytes maxDepth) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some target => (if (CoreBinding::sameType expected target maxBytes maxSteps) then (match (project (project request task) purpose) | Research::Purpose.prove => (ctor Option.some [CoreBinding::Goal] expected) | Research::Purpose.refute => (CoreBinding::refutation source (project sequent premise) maxBytes maxSteps) | Research::Purpose.inspect => (ctor Option.none [CoreBinding::Goal]) | Research::Purpose.maintain => (ctor Option.none [CoreBinding::Goal])) else (ctor Option.none [CoreBinding::Goal]))))) else (ctor Option.none [CoreBinding::Goal]))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: coreGoal,
+ parameters: [core : Json::Value, theorem : Bytes],
+ result: (Option CoreBinding::Goal),
+ body: (if ((Toml::sameBytes (VerificationReport::bytes (CoreBinding::get core 0x73706563)) 0x6c65786c65616e2f636f72652d6d6f64756c652f31) || (Toml::sameBytes (VerificationReport::bytes (CoreBinding::get core 0x73706563)) 0x6c65786c65616e2f636f72652d6d6f64756c652f32)) then (match (named (CoreBinding::get core 0x6465636c61726174696f6e73) 0x6e616d65 theorem) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some declaration => (if (Toml::sameBytes (VerificationReport::bytes (CoreBinding::get declaration 0x6b696e64)) 0x7468656f72656d) then (match (array (CoreBinding::get core 0x6e6f646573)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some nodes => (match (Json::natural (CoreBinding::get declaration 0x76616c7565) (prim length nodes : Nat)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some proof => (if (proof <? (prim length nodes : Nat)) then (match (Json::natural (CoreBinding::get declaration 0x74797065) (prim length nodes : Nat)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some index => (if (index <? (prim length nodes : Nat)) then (ctor Option.some [CoreBinding::Goal] (record CoreBinding::Goal {nodes := nodes, root := index})) else (ctor Option.none [CoreBinding::Goal]))) else (ctor Option.none [CoreBinding::Goal])))) else (ctor Option.none [CoreBinding::Goal]))) else (ctor Option.none [CoreBinding::Goal])),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: candidate,
+ parameters: [input : Input, moduleName : Bytes, theorem : Bytes, maxBytes : Nat, maxDepth : Nat],
+ result: (Option CoreBinding::Goal),
+ body: (let linked : Json::Value := (project input linked); (if (Toml::sameBytes (VerificationReport::bytes (CoreBinding::get linked 0x73706563)) 0x6c65786c65616e2f6c696e6b65642d69722f31) then (match (named (CoreBinding::get linked 0x6d6f64756c6573) 0x6c65616e5f6d6f64756c65 moduleName) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some owner => (match (Json::parse (VerificationReport::bytes (CoreBinding::get owner 0x636f7265)) maxBytes maxDepth) | Result.error problem => (ctor Option.none [CoreBinding::Goal]) | Result.ok core => (coreGoal core theorem))) else (ctor Option.none [CoreBinding::Goal]))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: matches,
+ parameters: [pins : VerificationReport::Pins, input : Input, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+ result: Bool,
+ body: ((VerificationReport::validPins pins) && (match (ArtifactIdentity::semantic (project pins compiler) (project input linked) (project input lexicon) maxBytes maxSteps) | Option.none => false | Option.some meaning => ((Toml::sameBytes meaning (project pins semantic)) && (match (selected (project pins request) maxBytes maxDepth maxSteps) | Option.none => false | Option.some expected => (match (candidate input (project pins module) (project pins theorem) maxBytes maxDepth) | Option.none => false | Option.some actual => (CoreBinding::sameType expected actual maxBytes maxSteps)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: receiptMatches,
+ parameters: [pins : VerificationReport::Pins, receipt : VerificationReport::Receipt],
+ result: Bool,
+ body: ((Research::sameRequest (project pins request) (project receipt request)) && ((Toml::sameBytes (project pins source) (project receipt source)) && ((Toml::sameBytes (project pins semantic) (project receipt semantic)) && ((Toml::sameBytes (project pins module) (project receipt module)) && ((Toml::sameBytes (project pins theorem) (project receipt theorem)) && ((Research::axiomsAllowed (project receipt axioms)) && (match (ArtifactIdentity::build (project pins source) (project pins semantic)) | Option.none => false | Option.some identity => (Toml::sameBytes identity (project receipt build))))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: accept,
+ parameters: [pins : VerificationReport::Pins, input : Input, receipt : VerificationReport::Receipt, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+ result: (Option Research::Answer),
+ body: (if ((receiptMatches pins receipt) && (matches pins input maxBytes maxDepth maxSteps)) then (ctor Option.some [Research::Answer] (record Research::Answer {request := (project pins request), result := (ctor Research::ResultKind.checked (project (project (project pins request) task) sequent) (project receipt theorem) (project receipt axioms))})) else (ctor Option.none [Research::Answer])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "candidate-semantic-hash" (cons "unique-audited-declaration" (cons "proof-bearing-native-type" (cons "source-premise-reconstruction" (cons "contextual-refutation-binding" (cons "verified-build-recipe" (nil String))))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

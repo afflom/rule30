@@ -289,18 +289,21 @@ writes to `dist/`; the pre-commit gate publishes those outputs to all tracked PD
 Pushing any version tag `v*` (e.g. `v0.1`) triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which builds `rule30-core-lean`, `Rule30PrizeKit/lean`, and `rule30-bridge`, compiles `Rule30-Paper.pdf` and `Rule30-Core.pdf`, packages the verified LexLean bundles, and attaches all PDFs and LexLean artifacts to the GitHub Release.
 
 The compiler development pin follows LexLean `release/v0.5` through
-[the Host interface contribution](https://github.com/UOR-Foundation/LexLean/pull/396).
+[the Host interface contribution](https://github.com/UOR-Foundation/LexLean/pull/396)
+and [native command execution](https://github.com/UOR-Foundation/LexLean/pull/439).
 That source package ports the actual interface from
 [LexLean #389](https://github.com/UOR-Foundation/LexLean/pull/389) to v0.5,
-including fallible startup paths, timed child waits and byte output.
+including fallible startup paths, timed child waits and byte output. Native Host
+step roots can export a generated executable with explicit file/process effects
+and child cleanup; pure roots remain libraries.
 The API imports `LexLeanStd.Host` from the pinned source package; its local
 `Host` module contains only the application harness. The attention catalog
-covers all 49 application and library modules. `ResearchRunner` connects the
+covers all 60 application and library modules. `ResearchRunner` connects the
 controller to the local-tool supervisor in `ResearchExecution`: it binds each
 job to the outstanding request, drains cancelled host requests, preserves child
 ownership on cleanup failure, and requires report review after a successful
-process exit. Checked proof reports must name the exact sequent; maintenance
-reports must cover the requested sources. Dependency changes invalidate both
+process exit. External checked answers are refused: proof jobs use the owned
+`ResearchProof` verifier. Maintenance reports must cover the requested sources. Dependency changes invalidate both
 active work and remembered evidence.
 
 The `Json` and `VerificationReport` modules decode tool reports with explicit
@@ -309,12 +312,19 @@ kernel-replay records. The decoder recomputes the attestation content identity;
 `ResearchVerification` owns the fixed local verify job, reads its command output
 before the matching attestation, and returns a receipt only after decoding it.
 Cancellation drains pending reads; failed process cleanup retains ownership.
-The receipt still needs binding to the generated candidate's exact statement.
+`ResearchProof` then binds the receipt to the candidate's actual native declaration.
+`ArtifactIdentity` recomputes the semantic identity from canonical linked IR and
+lexicon closure; `CandidateBinding` selects the unique audited theorem and
+`CoreBinding` compares its type with the selected source premise, closed over
+preceding binders only. Refutation negates the premise inside that context.
+Binder names may differ; variables, universes, constants and binder visibility
+must agree. The runner retains verifier ownership through cancellation and
+blocks dispatch after failed cleanup.
 UTF-8 chunk, parser-state and SHA-256 block facts keep the complete report
 acceptance proof compositional; lifecycle traces reuse that checked receipt and verify rejection,
 cancellation, ownership and terminal behavior.
 
-The generated executable driver, strategy candidate construction, runner integration and
-durable publication are still required for the new runner to replace the legacy
-engine. Its exported functions are currently pure libraries. CI and runtime
+Native application wiring, source inspection into the binding schema,
+strategy candidate construction and durable publication are still required for
+the new runner to replace the legacy engine. CI and runtime
 use deterministic local tools and no remote models.

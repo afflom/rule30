@@ -1,0 +1,30 @@
+\begin{lexlean}{BindingFixture}
+\useglossary{lexlean.std.nat@1.2.0}
+\title{Natural number addition}
+\begin{coremodule}
+imports [Init]
+
+theorem Rule30Api.BindingFixture.reflexive : @6 := @10 {
+  class: false,
+  generated: false,
+  policy: none{},
+  transparency: semireducible
+}
+theorem Rule30Api.BindingFixture.context : @14 := @16 {
+  class: false,
+  generated: false,
+  policy: none{},
+  transparency: semireducible
+}
+
+@0 := Nat
+@1 := #0
+@5 := Eq.{1} @0 @1 @1
+@6 := (n : @0) -> @5
+@10 := fun (n : @0) => Eq.refl.{1} @0 @1
+@11 := True
+@12 := True.intro
+@14 := (n : @0) -> (h : @5) -> @11
+@16 := fun (n : @0) => fun (h : @5) => @12
+\end{coremodule}
+\end{lexlean}

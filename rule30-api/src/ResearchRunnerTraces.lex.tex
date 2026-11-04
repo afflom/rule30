@@ -22,21 +22,24 @@ definition{
   name: launch,
   parameters: [],
   result: (ResearchRunner::State * ResearchRunner::Action),
-  body: (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))
+  body: (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3))),
+  axioms: [Quot.sound, propext]
 }
 
 definition{
   name: running,
   parameters: [],
   result: (ResearchRunner::State * ResearchRunner::Action),
-  body: (ResearchRunner::step (first (launch)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100)))))
+  body: (ResearchRunner::step (first (launch)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))),
+  axioms: [Quot.sound, propext]
 }
 
 definition{
   name: success,
   parameters: [],
   result: (ResearchRunner::State * ResearchRunner::Action),
-  body: (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105)))
+  body: (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105))),
+  axioms: [Quot.sound, propext]
 }
 
 definition{
@@ -92,196 +95,224 @@ theorem{
   name: matchingJobLaunches,
   parameters: [],
   statement: ((kindOf (launch)) = 1),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: aSecondJobCannotLaunchWhileRunning,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))) = 6),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: unsolicitedHostReplyIsRefused,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100)))))) = 6),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: receiptBeforeExecutionIsRefused,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 6),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: zeroExitRequiresReportReview,
   parameters: [],
   statement: ((kindOf (success)) = 2),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: zeroExitDoesNotEstablishTheTask,
   parameters: [],
   statement: ((taskStatus (success)) = 1),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: zeroExitAddsNoKernelEvidence,
   parameters: [],
   statement: ((historySize (success)) = 0),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
-  name: matchingCheckedReportEstablishesTheTask,
+  name: externalCheckedAnswerCannotEstablishTheTask,
   parameters: [],
-  statement: ((taskStatus (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 3),
-  proof: decide{}
+  statement: ((taskStatus (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
-  name: matchingCheckedReportSettlesTheController,
+  name: externalCheckedAnswerIsRefused,
   parameters: [],
-  statement: ((kindOf (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 4),
-  proof: decide{}
+  statement: ((kindOf (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 6),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
-  name: acceptedReportIsRecordedOnce,
+  name: externalCheckedAnswerAddsNoEvidence,
   parameters: [],
-  statement: ((historySize (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 1),
-  proof: decide{}
+  statement: ((historySize (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 0),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: replayedReportIsRefused,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 6),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: anotherTargetCannotEstablishTheTask,
   parameters: [],
-  statement: ((taskStatus (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4862)))) = 2),
-  proof: decide{}
+  statement: ((taskStatus (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4862)))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 definition{
   name: invalidated,
   parameters: [],
   result: (ResearchRunner::State * ResearchRunner::Action),
-  body: (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "stdlib" (nil String))))
+  body: (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "stdlib" (nil String)))),
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: changeDrainsTheOutstandingWait,
   parameters: [],
   statement: ((kindOf (invalidated)) = 3),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 definition{
   name: stopping,
   parameters: [],
   result: (ResearchRunner::State * ResearchRunner::Action),
-  body: (ResearchRunner::step (first (invalidated)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::waitEvent 105 (nil (Nat * (Option Int32))))))
+  body: (ResearchRunner::step (first (invalidated)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::waitEvent 105 (nil (Nat * (Option Int32)))))),
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: changedDependencyStopsTheOwnedChild,
   parameters: [],
   statement: ((stopTarget (stopping)) = 7),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 definition{
   name: cancelled,
   parameters: [],
   result: (ResearchRunner::State * ResearchRunner::Action),
-  body: (ResearchRunner::step (first (stopping)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::stopOk)))
+  body: (ResearchRunner::step (first (stopping)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::stopOk))),
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: cancelledEvidenceIsNotRecorded,
   parameters: [],
   statement: ((historySize (cancelled)) = 0),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: invalidatedTaskIsRescheduledForInspection,
   parameters: [],
   statement: ((kindOf (cancelled)) = 0),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: staleReportAfterCancellationIsRefused,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (cancelled)) (ctor ResearchRunner::Event.reviewed (checkedAnswer 0x4861)))) = 6),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 definition{
   name: failedStop,
   parameters: [],
   result: (ResearchRunner::State * ResearchRunner::Action),
-  body: (ResearchRunner::step (first (stopping)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))
+  body: (ResearchRunner::step (first (stopping)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost))))),
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: failedStopHaltsTheRunner,
   parameters: [],
   statement: ((project (first (failedStop)) halted) = true),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: failedStopPreservesChildOwnership,
   parameters: [],
   statement: ((ownedChild (failedStop)) = 7),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: haltedRunnerCannotLaunchAnotherJob,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (failedStop)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))) = 5),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: unrelatedFeatureChangeDoesNotCancelWork,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "presentation" (nil String))))) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105)))) = 2),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: newHypothesesDoNotCancelIndependentWork,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.ingest (cons (ResearchTraces::hypothesis) (nil Hypotheses::Hypothesis))))) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105)))) = 2),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: modelChangeDiscardsPendingReview,
   parameters: [],
   statement: ((kindOf (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "stdlib" (nil String))))) = 0),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: discardedReviewAddsNoEvidence,
   parameters: [],
   statement: ((historySize (ResearchRunner::step (first (success)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (ResearchTraces::components) (cons "stdlib" (nil String))))) = 0),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 definition{
@@ -295,7 +326,8 @@ theorem{
   name: availabilityChangesAreDetectedWithoutAHint,
   parameters: [],
   statement: ((stopTarget (ResearchRunner::step (first (ResearchRunner::step (first (running)) (ctor ResearchRunner::Event.changed (ResearchTraces::snapshot) (lostDependency) (nil String)))) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::waitEvent 105 (nil (Nat * (Option Int32))))))) = 7),
-  proof: decide{}
+  proof: decide{},
+  axioms: [Quot.sound, propext]
 }
 
 \end{semanticmodule}

@@ -1,0 +1,197 @@
+\begin{lexlean}{ResearchProofTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Json}
+\importmodule{Research}
+\importmodule{ResearchTraces}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchVerification}
+\importmodule{ResearchVerificationTraces}
+\importmodule{VerificationReport}
+\importmodule{VerificationReportTraces}
+\importmodule{CandidateBinding}
+\importmodule{ResearchProof}
+\importmodule{ResearchRunner}
+\importmodule{ResearchRunnerTraces}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: input,
+ parameters: [],
+ result: CandidateBinding::Input,
+ body: (record CandidateBinding::Input {linked := (ctor Json::Value.null), lexicon := (ctor Json::Value.null)}),
+ axioms: []
+}
+
+definition{
+ name: research,
+ parameters: [],
+ result: Research::State,
+ body: (record Research::State {snapshot := (project (VerificationReportTraces::request) snapshot), components := (ResearchTraces::components), tasks := (cons (project (VerificationReportTraces::request) task) (nil Research::Task)), pending := (ctor Option.none [Research::Request]), next := 1, history := (nil Research::Answer)}),
+ axioms: []
+}
+
+definition{
+ name: initial,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::begin (research)),
+ axioms: []
+}
+
+definition{
+ name: started,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.proof (VerificationReportTraces::pins) (ResearchVerificationTraces::settings) (input) 32 1024)),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: cancelled,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (started)) (ctor ResearchRunner::Event.cancel)),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: stopping,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (cancelled)) (ctor ResearchRunner::Event.host (ResearchVerificationTraces::spawned))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: failedStop,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (stopping)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost))))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: verificationStartsLocalJob,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (started)) = 1),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: proofOwnerIsRetained,
+ parameters: [],
+ statement: ((match (project (first (started)) proof) | Option.none => false | Option.some owner => true) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: aSecondProcessCannotLaunch,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (started)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))) = 6),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: aSecondVerifierCannotLaunch,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (started)) (ctor ResearchRunner::Event.proof (VerificationReportTraces::pins) (ResearchVerificationTraces::settings) (input) 32 1024))) = 6),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: externalAnswerDuringVerificationIsRefused,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (started)) (ctor ResearchRunner::Event.reviewed (ResearchRunnerTraces::checkedAnswer 0x4861)))) = 6),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelDrainsSpawnFirst,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (cancelled)) = 3),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelStopsTheOwnedChild,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::stopTarget (stopping)) = 7),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedCleanupHaltsResearch,
+ parameters: [],
+ statement: ((project (first (failedStop)) halted) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedCleanupRetainsProofChild,
+ parameters: [],
+ statement: ((match (project (first (failedStop)) proof) | Option.none => (ctor Option.none [Nat]) | Option.some owner => (project (project (project owner verification) execution) owner)) = (ctor Option.some [Nat] 7)),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedCleanupCannotDispatch,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (failedStop)) (ctor ResearchRunner::Event.tick))) = 5),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedCleanupCreatesNoProofEvidence,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::historySize (failedStop)) = 0),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: changed,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (started)) (ctor ResearchRunner::Event.changed (ResearchTraces::otherSnapshot) (ResearchTraces::components) (cons "stdlib" (nil String)))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: changedSnapshotDrainsSpawn,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (changed)) = 3),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: changedSnapshotStopsChild,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::stopTarget (ResearchRunner::step (first (changed)) (ctor ResearchRunner::Event.host (ResearchVerificationTraces::spawned)))) = 7),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: wrongSnapshotCannotStartVerification,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (ResearchRunnerTraces::initial)) (ctor ResearchRunner::Event.proof (VerificationReportTraces::pins) (ResearchVerificationTraces::settings) (input) 32 1024))) = 6),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,160 @@
+\begin{lexlean}{JsonCanonical}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{Hypotheses}
+\importmodule{LexLeanStd.Buffer}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+  name: contract,
+  parameters: [],
+  result: String,
+  body: "Canonical JSON follows LexLean section 21.7: signed 64-bit integers, no null or floating point, byte-sorted distinct UTF-8 object keys, minimal escapes, no whitespace and no trailing newline. Encoding validates manually constructed values too. The byte and work limits reject incomplete encodings, including sorting and container traversal. Output uses the standard library chunk buffer. File output adds exactly one newline. Canonical bytes establish identity, never proof authority.",
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: integer,
+  parameters: [source : Bytes],
+  result: (Option Bytes),
+  body: (let negative : Bool := (Toml::byteIs source 0 (45 : UInt8)); (let digits : Bytes := (if negative then (Toml::sliceOr source 1 (prim subtract (prim length source : Nat) 1 : Nat)) else source); (match (Json::natural (ctor Json::Value.number digits) (if negative then 9223372036854775808 else 9223372036854775807)) | Option.none => (ctor Option.none [Bytes]) | Option.some value => (ctor Option.some [Bytes] (if (value =? 0) then 0x30 else source))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: escapedByte,
+  parameters: [source : Bytes, position : Nat],
+  result: Bytes,
+  body: (if (Toml::byteIs source position (34 : UInt8)) then 0x5c22 else (if (Toml::byteIs source position (92 : UInt8)) then 0x5c5c else (if (Toml::byteIs source position (0 : UInt8)) then 0x5c7530303030 else (if (Toml::byteIs source position (1 : UInt8)) then 0x5c7530303031 else (if (Toml::byteIs source position (2 : UInt8)) then 0x5c7530303032 else (if (Toml::byteIs source position (3 : UInt8)) then 0x5c7530303033 else (if (Toml::byteIs source position (4 : UInt8)) then 0x5c7530303034 else (if (Toml::byteIs source position (5 : UInt8)) then 0x5c7530303035 else (if (Toml::byteIs source position (6 : UInt8)) then 0x5c7530303036 else (if (Toml::byteIs source position (7 : UInt8)) then 0x5c7530303037 else (if (Toml::byteIs source position (8 : UInt8)) then 0x5c62 else (if (Toml::byteIs source position (9 : UInt8)) then 0x5c74 else (if (Toml::byteIs source position (10 : UInt8)) then 0x5c6e else (if (Toml::byteIs source position (11 : UInt8)) then 0x5c7530303062 else (if (Toml::byteIs source position (12 : UInt8)) then 0x5c66 else (if (Toml::byteIs source position (13 : UInt8)) then 0x5c72 else (if (Toml::byteIs source position (14 : UInt8)) then 0x5c7530303065 else (if (Toml::byteIs source position (15 : UInt8)) then 0x5c7530303066 else (if (Toml::byteIs source position (16 : UInt8)) then 0x5c7530303130 else (if (Toml::byteIs source position (17 : UInt8)) then 0x5c7530303131 else (if (Toml::byteIs source position (18 : UInt8)) then 0x5c7530303132 else (if (Toml::byteIs source position (19 : UInt8)) then 0x5c7530303133 else (if (Toml::byteIs source position (20 : UInt8)) then 0x5c7530303134 else (if (Toml::byteIs source position (21 : UInt8)) then 0x5c7530303135 else (if (Toml::byteIs source position (22 : UInt8)) then 0x5c7530303136 else (if (Toml::byteIs source position (23 : UInt8)) then 0x5c7530303137 else (if (Toml::byteIs source position (24 : UInt8)) then 0x5c7530303138 else (if (Toml::byteIs source position (25 : UInt8)) then 0x5c7530303139 else (if (Toml::byteIs source position (26 : UInt8)) then 0x5c7530303161 else (if (Toml::byteIs source position (27 : UInt8)) then 0x5c7530303162 else (if (Toml::byteIs source position (28 : UInt8)) then 0x5c7530303163 else (if (Toml::byteIs source position (29 : UInt8)) then 0x5c7530303164 else (if (Toml::byteIs source position (30 : UInt8)) then 0x5c7530303165 else (if (Toml::byteIs source position (31 : UInt8)) then 0x5c7530303166 else (Toml::sliceOr source position 1))))))))))))))))))))))))))))))))))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: escapeFrom,
+  parameters: [source : Bytes, position : Nat, remaining : Nat, output : LexLeanStd.Buffer::Buffer],
+  result: (Option Bytes),
+  body: (match remaining | Nat.zero => (match (LexLeanStd.Buffer::finish (LexLeanStd.Buffer::writeBytes output 0x22)) | Result.error problem => (ctor Option.none [Bytes]) | Result.ok bytes => (ctor Option.some [Bytes] bytes)) | Nat.succ more => (let next : LexLeanStd.Buffer::Buffer := (LexLeanStd.Buffer::writeBytes output (escapedByte source position)); (if (LexLeanStd.Buffer::exceeded next) then (ctor Option.none [Bytes]) else (escapeFrom source (position + 1) more next)))),
+  axioms: [],
+  recursive_argument: remaining,
+  executable: true
+}
+
+definition{
+  name: quote,
+  parameters: [source : Bytes, maximum : Nat],
+  result: (Option Bytes),
+  body: (if ((2 <=? maximum) && (((prim length source : Nat) <=? (prim subtract maximum 2 : Nat)) && (Toml::validFrom source 0 (prim length source : Nat)))) then (escapeFrom source 0 (prim length source : Nat) (LexLeanStd.Buffer::writeBytes (LexLeanStd.Buffer::new maximum) 0x22)) else (ctor Option.none [Bytes])),
+  axioms: [propext],
+  executable: true
+}
+
+
+
+inductive{
+  name: Work,
+  type_parameters: [],
+  parameters: [],
+  constructors: [
+    {name: value, fields: [Json::Value]},
+    {name: raw, fields: [Bytes]},
+    {name: arrayTail, fields: [(List Json::Value)]},
+    {name: objectTail, fields: [(List (Bytes * Json::Value))]},
+    {name: sortEntries, fields: [(List (Bytes * Json::Value)), (List (Bytes * Json::Value))]},
+    {name: insertEntry, fields: [(Bytes * Json::Value), (List (Bytes * Json::Value)), (List (Bytes * Json::Value)), (List (Bytes * Json::Value))]},
+    {name: restoreEntries, fields: [(List (Bytes * Json::Value)), (List (Bytes * Json::Value)), (List (Bytes * Json::Value))]}
+  ]
+}
+
+
+
+definition{
+  name: expand,
+  parameters: [value : Json::Value, tail : (List Work), maximum : Nat],
+  result: (Option (List Work)),
+  body: (match value
+ | Json::Value.null => (ctor Option.none [(List Work)])
+ | Json::Value.boolean b => (ctor Option.some [(List Work)] (cons (ctor Work.raw (if b then 0x74727565 else 0x66616c7365)) tail))
+ | Json::Value.number n => (if ((prim length n : Nat) <=? 20) then (match (integer n) | Option.none => (ctor Option.none [(List Work)]) | Option.some text => (ctor Option.some [(List Work)] (cons (ctor Work.raw text) tail))) else (ctor Option.none [(List Work)]))
+ | Json::Value.string text => (match (quote text maximum) | Option.none => (ctor Option.none [(List Work)]) | Option.some quoted => (ctor Option.some [(List Work)] (cons (ctor Work.raw quoted) tail)))
+ | Json::Value.array items => (ctor Option.some [(List Work)] (cons (ctor Work.raw 0x5b) (cons (ctor Work.arrayTail items) (cons (ctor Work.raw 0x5d) tail))))
+ | Json::Value.object entries => (ctor Option.some [(List Work)] (cons (ctor Work.sortEntries entries (nil (Bytes * Json::Value))) tail))),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: keyFits,
+  parameters: [key : Bytes, maximum : Nat],
+  result: Bool,
+  body: ((2 <=? maximum) && ((prim length key : Nat) <=? (prim subtract maximum 2 : Nat))),
+  axioms: [],
+  executable: true
+}
+
+definition{
+  name: render,
+  parameters: [pending : (List Work), output : LexLeanStd.Buffer::Buffer, maximum : Nat, fuel : Nat],
+  result: (Option Bytes),
+  body: (match fuel
+ | Nat.zero => (match pending | List.nil => (match (LexLeanStd.Buffer::finish output) | Result.error problem => (ctor Option.none [Bytes]) | Result.ok bytes => (ctor Option.some [Bytes] bytes)) | List.cons head tail => (ctor Option.none [Bytes]))
+ | Nat.succ more => (match pending | List.nil => (match (LexLeanStd.Buffer::finish output) | Result.error problem => (ctor Option.none [Bytes]) | Result.ok bytes => (ctor Option.some [Bytes] bytes)) | List.cons head tail => (match head
+   | Work.raw text => (let next : LexLeanStd.Buffer::Buffer := (LexLeanStd.Buffer::writeBytes output text); (if (LexLeanStd.Buffer::exceeded next) then (ctor Option.none [Bytes]) else (render tail next maximum more)))
+   | Work.value value => (match (expand value tail (prim subtract maximum (LexLeanStd.Buffer::length output) : Nat)) | Option.none => (ctor Option.none [Bytes]) | Option.some next => (render next output maximum more))
+   | Work.arrayTail items => (match items | List.nil => (render tail output maximum more) | List.cons item rest => (render (cons (ctor Work.value item) (match rest | List.nil => tail | List.cons another others => (cons (ctor Work.raw 0x2c) (cons (ctor Work.arrayTail rest) tail)))) output maximum more))
+   | Work.objectTail entries => (match entries | List.nil => (render tail output maximum more) | List.cons entry rest => (render (cons (ctor Work.value (ctor Json::Value.string (first entry))) (cons (ctor Work.raw 0x3a) (cons (ctor Work.value (second entry)) (match rest | List.nil => tail | List.cons another others => (cons (ctor Work.raw 0x2c) (cons (ctor Work.objectTail rest) tail)))))) output maximum more))
+   | Work.sortEntries entries sorted => (match entries | List.nil => (render (cons (ctor Work.raw 0x7b) (cons (ctor Work.objectTail sorted) (cons (ctor Work.raw 0x7d) tail))) output maximum more) | List.cons entry rest => (render (cons (ctor Work.insertEntry entry sorted (nil (Bytes * Json::Value)) rest) tail) output maximum more))
+   | Work.insertEntry entry sorted prefix remaining => (if (keyFits (first entry) maximum) then (match sorted
+     | List.nil => (render (cons (ctor Work.restoreEntries prefix (cons entry (nil (Bytes * Json::Value))) remaining) tail) output maximum more)
+     | List.cons firstEntry rest => (if (keyFits (first firstEntry) maximum) then (if (Toml::sameBytes (first entry) (first firstEntry)) then (ctor Option.none [Bytes]) else (if (Hypotheses::lessBytes (first entry) (first firstEntry)) then (render (cons (ctor Work.restoreEntries prefix (cons entry sorted) remaining) tail) output maximum more) else (render (cons (ctor Work.insertEntry entry rest (cons firstEntry prefix) remaining) tail) output maximum more))) else (ctor Option.none [Bytes]))) else (ctor Option.none [Bytes]))
+   | Work.restoreEntries prefix sorted remaining => (match prefix
+     | List.nil => (render (cons (ctor Work.sortEntries remaining sorted) tail) output maximum more)
+     | List.cons entry rest => (render (cons (ctor Work.restoreEntries rest (cons entry sorted) remaining) tail) output maximum more))))),
+  axioms: [propext],
+  recursive_argument: fuel,
+  executable: true
+}
+
+definition{
+  name: encode,
+  parameters: [value : Json::Value, maxBytes : Nat, maxSteps : Nat],
+  result: (Option Bytes),
+  body: (render (cons (ctor Work.value value) (nil Work)) (LexLeanStd.Buffer::new maxBytes) maxBytes maxSteps),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: canonicalize,
+  parameters: [source : Bytes, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+  result: (Option Bytes),
+  body: (match (Json::parse source maxBytes maxDepth) | Result.error problem => (ctor Option.none [Bytes]) | Result.ok value => (encode value maxBytes maxSteps)),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: file,
+  parameters: [value : Json::Value, maxBytes : Nat, maxSteps : Nat],
+  result: (Option Bytes),
+  body: (if (0 <? maxBytes) then (match (encode value (prim subtract maxBytes 1 : Nat) maxSteps) | Option.none => (ctor Option.none [Bytes]) | Option.some bytes => (ctor Option.some [Bytes] (Json::append bytes 0x0a))) else (ctor Option.none [Bytes])),
+  axioms: [propext],
+  executable: true
+}
+
+definition{
+  name: features,
+  parameters: [],
+  result: (List String),
+  body: (cons "signed-integer-domain" (cons "utf8-byte-key-order" (cons "duplicate-key-rejection" (cons "minimal-string-escaping" (cons "bounded-canonical-encoding" (cons "newline-free-identity" (cons "canonical-file-newline" (nil String)))))))),
+  axioms: [],
+  executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,122 @@
+\begin{lexlean}{ResearchProof}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{CandidateBinding}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "One owned local verification lifecycle promotes a proof only after its accepted report is bound to the candidate linked IR and exact contextual sequent. Host events and cancellation are the only runtime inputs after begin; an external Answer or Receipt is not an event. A rejected type or identity produces failed evidence. Cancellation, stale snapshots and failed process cleanup preserve the verifier lifecycle; cleanup failure blocks dispatch with the owned state retained. Candidate source construction, source inspection and durable publication are caller responsibilities.",
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: verification, type: ResearchVerification::State}, {name: binding, type: CandidateBinding::Input}, {name: maxDepth, type: Nat}, {name: maxSteps, type: Nat}]
+}
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: complete, fields: [Research::Answer]}, {name: blocked, fields: [ResearchExecution::Completion]}]
+}
+
+definition{
+ name: answer,
+ parameters: [state : State, result : Research::ResultKind],
+ result: Emission,
+ body: (ctor Emission.complete (record Research::Answer {request := (project (project (project state verification) pins) request), result := result})),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: terminated,
+ parameters: [state : State, completion : ResearchExecution::Completion],
+ result: Emission,
+ body: (if (ResearchExecution::resumeAllowed completion) then (match (project completion kind)
+ | ResearchExecution::EndKind.cut => (answer state (ctor Research::ResultKind.cut))
+ | ResearchExecution::EndKind.unavailable => (answer state (ctor Research::ResultKind.unavailable))
+ | ResearchExecution::EndKind.failed => (answer state (ctor Research::ResultKind.failed 0x766572696669636174696f6e206661696c6564))
+ | ResearchExecution::EndKind.succeeded => (answer state (ctor Research::ResultKind.failed 0x766572696669636174696f6e20686173206e6f207265706f7274))
+ | ResearchExecution::EndKind.protocol => (ctor Emission.blocked completion)
+ | ResearchExecution::EndKind.cleanupFailed => (ctor Emission.blocked completion)
+ | ResearchExecution::EndKind.refused => (ctor Emission.blocked completion)) else (ctor Emission.blocked completion)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: accepted,
+ parameters: [state : State, receipt : VerificationReport::Receipt],
+ result: Emission,
+ body: (match (CandidateBinding::accept (project (project state verification) pins) (project state binding) receipt (project (project (project state verification) config) maxBytes) (project state maxDepth) (project state maxSteps)) | Option.none => (answer state (ctor Research::ResultKind.failed 0x63616e6469646174652073746174656d656e74206f72206964656e7469747920646f6573206e6f74206d61746368)) | Option.some result => (ctor Emission.complete result)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: outcome,
+ parameters: [state : State, result : ResearchVerification::Outcome],
+ result: Emission,
+ body: (match result | ResearchVerification::Outcome.accepted receipt => (accepted state receipt) | ResearchVerification::Outcome.terminated completion => (terminated state completion) | ResearchVerification::Outcome.rejected reason => (answer state (ctor Research::ResultKind.failed (prim utf8_encode reason : Bytes))) | ResearchVerification::Outcome.cancelled => (answer state (ctor Research::ResultKind.cut))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: forward,
+ parameters: [binding : CandidateBinding::Input, maxDepth : Nat, maxSteps : Nat, result : (ResearchVerification::State * ResearchVerification::Emission)],
+ result: (State * Emission),
+ body: (let state : State := (record State {verification := (first result), binding := binding, maxDepth := maxDepth, maxSteps := maxSteps}); (state, (match (second result) | ResearchVerification::Emission.host request => (ctor Emission.host request) | ResearchVerification::Emission.awaiting => (ctor Emission.awaiting) | ResearchVerification::Emission.complete finished => (outcome state finished)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: begin,
+ parameters: [pins : VerificationReport::Pins, config : ResearchVerification::Config, binding : CandidateBinding::Input, maxDepth : Nat, maxSteps : Nat],
+ result: (State * Emission),
+ body: (forward binding maxDepth maxSteps (ResearchVerification::begin pins config)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: step,
+ parameters: [state : State, event : ResearchVerification::Event],
+ result: (State * Emission),
+ body: (forward (project state binding) (project state maxDepth) (project state maxSteps) (ResearchVerification::step (project state verification) event)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+theorem{
+ name: completedProofIsSilent,
+ parameters: [verification : ResearchVerification::State, result : ResearchVerification::Outcome, binding : CandidateBinding::Input, maxDepth : Nat, maxSteps : Nat, event : ResearchVerification::Event],
+ statement: ((step (record State {verification := (first (ResearchVerification::finish verification result)), binding := binding, maxDepth := maxDepth, maxSteps := maxSteps}) event) = ((record State {verification := (first (ResearchVerification::finish verification result)), binding := binding, maxDepth := maxDepth, maxSteps := maxSteps}), (ctor Emission.awaiting))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "owned-proof-verification" (cons "semantic-and-statement-promotion" (cons "no-external-receipt-event" (cons "cancel-before-promotion" (cons "cleanup-blocks-dispatch" (cons "single-proof-outcome" (nil String))))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

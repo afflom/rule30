@@ -93,7 +93,7 @@ definition{
   body: (if (validJob job) then ((record State {job := job, phase := (ctor Phase.spawning), owner := (ctor Option.none [Nat])}), (ctor Emission.host (ctor LexLeanStd.Host::Request.spawn (record LexLeanStd.Host::Child {program := (program (project job tool)), arguments := (project job arguments), directory := (project job directory), environment := (project job environment), output := (project job output), errors := (project job errors)})))) else (finish job (ctor EndKind.refused) (ctor Option.none [Int32]) 0 0x696e76616c6964206a6f62)),
   axioms: [],
   executable: true,
-  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+  production: {effects: [allocation, overflow, process, recursion], targets: [rust-std]}
 }
 
 definition{
@@ -265,7 +265,7 @@ definition{
   body: (let result : (State * Emission) := (advance state event); ((record State {job := (project (first result) job), phase := (project (first result) phase), owner := (match (project (first result) owner) | Option.some child => (ctor Option.some [Nat] child) | Option.none => (project state owner))}), (second result))),
   axioms: [],
   executable: true,
-  production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+  production: {effects: [allocation, overflow, process, recursion], targets: [rust-std]}
 }
 
 definition{
