@@ -1,0 +1,163 @@
+\begin{lexlean}{CoreNotationTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{CoreNotation}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: node,
+ parameters: [data : Bytes, before : Nat, maximum : Nat, steps : Nat],
+ result: (Option Bytes),
+ body: (match (Json::parse data 4096 32) | Result.error error => (ctor Option.none [Bytes]) | Result.ok value => (CoreNotation::encode (cons (ctor CoreNotation::Work.node value before) (nil CoreNotation::Work)) maximum steps)),
+ axioms: [propext]
+}
+
+definition{
+ name: renders,
+ parameters: [data : Bytes, before : Nat, expected : Bytes],
+ result: Bool,
+ body: (match (node data before 4096 1024) | Option.none => false | Option.some text => (Toml::sameBytes text expected)),
+ axioms: [propext]
+}
+
+theorem{
+ name: preserveSharedApplication,
+ parameters: [],
+ statement: ((renders 0x7b226b223a2261222c2266223a302c2278223a307d 1 0x4030204030) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: preserveAnonymousLambda,
+ parameters: [],
+ statement: ((renders 0x7b226b223a226c222c226e223a22222c2262223a2265222c2274223a302c2276223a307d 1 0x66756e20282222203a20403029203d3e204030) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: preserveStrictImplicitBinder,
+ parameters: [],
+ statement: ((renders 0x7b226b223a2270222c226e223a2266756e222c2262223a2273222c2274223a302c2276223a307d 1 0x7b7b2266756e22203a2040307d7d202d3e204030) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: preserveUniverseStructure,
+ parameters: [],
+ statement: ((renders 0x7b226b223a2273222c226c223a7b226b223a2273222c2261223a7b226b223a226d222c2261223a5b7b226b223a227a227d2c7b226b223a2270222c2261223a2275227d5d7d7d7d 1 0x536f727420286d617828302c22752229292b31) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: preserveProjectionIdentity,
+ parameters: [],
+ statement: ((renders 0x7b226b223a226a222c2273223a2250726f64222c226e223a2250726f642e667374222c2269223a302c2278223a307d 1 0x70726f6a202250726f6422202250726f642e667374222030204030) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: escapeUnicodeAndDelimiters,
+ parameters: [],
+ statement: ((renders 0x7b226b223a2274222c2276223a5b33342c39322c31302c3935352c3132383531325d7d 1 0x225c225c5c5c6ecebbf09f988022) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: preserveNoncanonicalNaturalSpelling,
+ parameters: [],
+ statement: ((renders 0x7b226b223a226e222c2276223a22303031227d 1 0x6e6174202230303122) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: preserveTypedMetadata,
+ parameters: [],
+ statement: ((renders 0x7b226b223a2264222c226d223a5b7b226e223a2278222c2276223a7b2274223a2269222c2276223a222d303031227d7d5d2c2278223a307d 1 0x616e6e6f74205b227822203a3d20696e7420222d303031225d204030) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectForwardReference,
+ parameters: [],
+ statement: ((node 0x7b226b223a2261222c2266223a302c2278223a317d 1 4096 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectUnknownBinderMode,
+ parameters: [],
+ statement: ((node 0x7b226b223a2270222c226e223a2268222c2262223a22696e76616c6964222c2274223a302c2276223a307d 1 4096 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectUnknownUniverseField,
+ parameters: [],
+ statement: ((node 0x7b226b223a2273222c226c223a7b226b223a227a222c226578747261223a307d7d 1 4096 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectSurrogateLiteral,
+ parameters: [],
+ statement: ((node 0x7b226b223a2274222c2276223a5b35353239365d7d 1 4096 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectNonScalarLiteral,
+ parameters: [],
+ statement: ((node 0x7b226b223a2274222c2276223a5b313131343131325d7d 1 4096 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectMalformedNatural,
+ parameters: [],
+ statement: ((node 0x7b226b223a226e222c2276223a22313b204039203a3d2032227d 1 4096 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: rejectMalformedMetadataInteger,
+ parameters: [],
+ statement: ((node 0x7b226b223a2264222c226d223a5b7b226e223a2278222c2276223a7b2274223a2269222c2276223a222d227d7d5d2c2278223a307d 1 4096 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: refuseWorkExhaustion,
+ parameters: [],
+ statement: ((node 0x7b226b223a2262222c2269223a307d 1 4096 0) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: refuseOutputExhaustion,
+ parameters: [],
+ statement: ((node 0x7b226b223a2262222c2269223a307d 1 1 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

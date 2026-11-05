@@ -16,7 +16,7 @@ definition{
  name: contract,
  parameters: [],
  result: String,
- body: "Candidate binding consumes the linked IR and lexicon closure of the owned verification job. Their canonical semantic digest must equal the pinned verified digest. The audited module and theorem must select exactly one proof-bearing native declaration; its actual type is compared with the requested contextual goal. In this schema, sequent.telescope is a JSON object with nodes and root for the inspected source type; sequent.target is the same representation of the premise closed over its preceding binders. Inspection must bind these to the source origin and snapshot before dispatch. Proving uses that closure; refuting negates the premise inside its context. This function is not an authority for externally supplied receipts; ResearchProof owns the verify process and report reads before calling it.",
+ body: "Candidate binding consumes the linked IR and lexicon closure of the owned verification job. Their canonical semantic digest must equal the pinned verified digest. The audited module and theorem must select exactly one proof-bearing native declaration; its actual type is compared with the requested contextual goal. Premise goals use sequent.telescope as a JSON object with nodes and root for the inspected source type and sequent.target for the premise closed over its preceding binders. Inspection must bind these to the source origin and snapshot before dispatch. Closed goals have no telescope, use premise zero and name the same source constant as their theorem; their target must be exactly that constant. Proving uses the selected goal; refuting a premise negates it inside its context, while refuting a closed goal proves that goal implies False. This function is not an authority for externally supplied receipts; ResearchProof owns the verify process and report reads before calling it.",
  axioms: [],
  executable: true
 }
@@ -75,10 +75,28 @@ definition{
 }
 
 definition{
+ name: selectedPremise,
+ parameters: [request : Research::Request, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+ result: (Option CoreBinding::Goal),
+ body: (let sequent : Research::Sequent := (project (project request task) sequent); (if (((Research::sameGoalKind (project sequent kind) (ctor Research::GoalKind.premise)) && (Research::contextual sequent)) && (Hypotheses::memberBytes (project sequent origin) (project (project request task) sources))) then (match (parseGoal (project sequent telescope) maxBytes maxDepth) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some source => (match (CoreBinding::premise source (project sequent premise) maxBytes maxSteps) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some expected => (match (parseGoal (project sequent target) maxBytes maxDepth) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some target => (if (CoreBinding::sameType expected target maxBytes maxSteps) then (match (project (project request task) purpose) | Research::Purpose.prove => (ctor Option.some [CoreBinding::Goal] expected) | Research::Purpose.refute => (CoreBinding::refutation source (project sequent premise) maxBytes maxSteps) | Research::Purpose.inspect => (ctor Option.none [CoreBinding::Goal]) | Research::Purpose.maintain => (ctor Option.none [CoreBinding::Goal])) else (ctor Option.none [CoreBinding::Goal]))))) else (ctor Option.none [CoreBinding::Goal]))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: selectedClosed,
+ parameters: [request : Research::Request, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+ result: (Option CoreBinding::Goal),
+ body: (let sequent : Research::Sequent := (project (project request task) sequent); (if (((Research::sameGoalKind (project sequent kind) (ctor Research::GoalKind.closed)) && (Research::contextual sequent)) && (Hypotheses::memberBytes (project sequent origin) (project (project request task) sources))) then (let expected : CoreBinding::Goal := (CoreBinding::namedGoal (project sequent origin)); (match (parseGoal (project sequent target) maxBytes maxDepth) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some target => (if (CoreBinding::sameType expected target maxBytes maxSteps) then (match (project (project request task) purpose) | Research::Purpose.prove => (ctor Option.some [CoreBinding::Goal] expected) | Research::Purpose.refute => (ctor Option.some [CoreBinding::Goal] (CoreBinding::negated expected)) | Research::Purpose.inspect => (ctor Option.none [CoreBinding::Goal]) | Research::Purpose.maintain => (ctor Option.none [CoreBinding::Goal])) else (ctor Option.none [CoreBinding::Goal])))) else (ctor Option.none [CoreBinding::Goal]))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
  name: selected,
  parameters: [request : Research::Request, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
  result: (Option CoreBinding::Goal),
- body: (let sequent : Research::Sequent := (project (project request task) sequent); (if ((Research::contextual sequent) && (Hypotheses::memberBytes (project sequent origin) (project (project request task) sources))) then (match (parseGoal (project sequent telescope) maxBytes maxDepth) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some source => (match (CoreBinding::premise source (project sequent premise) maxBytes maxSteps) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some expected => (match (parseGoal (project sequent target) maxBytes maxDepth) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some target => (if (CoreBinding::sameType expected target maxBytes maxSteps) then (match (project (project request task) purpose) | Research::Purpose.prove => (ctor Option.some [CoreBinding::Goal] expected) | Research::Purpose.refute => (CoreBinding::refutation source (project sequent premise) maxBytes maxSteps) | Research::Purpose.inspect => (ctor Option.none [CoreBinding::Goal]) | Research::Purpose.maintain => (ctor Option.none [CoreBinding::Goal])) else (ctor Option.none [CoreBinding::Goal]))))) else (ctor Option.none [CoreBinding::Goal]))),
+ body: (match (project (project (project request task) sequent) kind) | Research::GoalKind.premise => (selectedPremise request maxBytes maxDepth maxSteps) | Research::GoalKind.closed => (selectedClosed request maxBytes maxDepth maxSteps)),
  axioms: [propext],
  executable: true
 }
@@ -132,7 +150,7 @@ definition{
  name: features,
  parameters: [],
  result: (List String),
- body: (cons "candidate-semantic-hash" (cons "unique-audited-declaration" (cons "proof-bearing-native-type" (cons "source-premise-reconstruction" (cons "contextual-refutation-binding" (cons "verified-build-recipe" (nil String))))))),
+ body: (cons "closed-goal-source-binding" (cons "candidate-semantic-hash" (cons "unique-audited-declaration" (cons "proof-bearing-native-type" (cons "source-premise-reconstruction" (cons "contextual-refutation-binding" (cons "verified-build-recipe" (nil String)))))))),
  axioms: [],
  executable: true
 }

@@ -1,0 +1,27 @@
+\begin{lexlean}{ClosedBindingFixture}
+\useglossary{lexlean.std.bool@1.2.0}
+\title{Boolean}
+\begin{coremodule}
+imports [Init]
+
+theorem Rule30Api.ClosedBindingFixture.truth : @0 := @1 {
+  class: false,
+  generated: false,
+  policy: none{},
+  transparency: semireducible
+}
+theorem Rule30Api.ClosedBindingFixture.notFalse : @3 := @5 {
+  class: false,
+  generated: false,
+  policy: none{},
+  transparency: semireducible
+}
+
+@0 := True
+@1 := True.intro
+@2 := False
+@3 := (h : @2) -> @2
+@4 := #0
+@5 := fun (h : @2) => @4
+\end{coremodule}
+\end{lexlean}

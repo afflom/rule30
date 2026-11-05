@@ -298,7 +298,7 @@ step roots can export a generated executable with explicit file/process effects
 and child cleanup; pure roots remain libraries.
 The API imports `LexLeanStd.Host` from the pinned source package; its local
 `Host` module contains only the application harness. The attention catalog
-covers all 64 application and library modules. `ResearchRunner` connects the
+covers all 70 application and library modules. `ResearchRunner` connects the
 controller to the local-tool supervisor in `ResearchExecution`: it binds each
 job to the outstanding request, drains cancelled host requests, preserves child
 ownership on cleanup failure, and requires report review after a successful
@@ -335,7 +335,22 @@ cancellation, ownership and terminal behavior.
 `rule30-api/production/research-request.json` exports the research controller,
 catalog initializer, and runner `begin`/`step` component libraries.
 
+`CandidateSource.construct` emits one unverified `.lex.tex` native-core theorem
+for the selected goal, with explicit imports, universe parameters and an exact
+axiom policy. It uses native LexLean 1.2 notation and a fixed candidate theorem
+name; the local compiler checks the proposed term. The output budget includes
+the complete document. The caller still owns the isolated project and file writes.
+
+Closed goals and conditional premises have separate request identities.
+For the six open claims with defined propositions, the catalog constructs the
+canonical named goal, including the prize kit's `Problem1`; mismatched register
+metadata blocks the task without changing its target. A closed proof has no
+extra assumptions, and a closed refutation must prove that exact proposition
+implies `False`. Dependency changes reopen the same goal for verification.
+This binding relies on the caller's ownership of the pinned imported library;
+a matching constant name alone does not establish that library's identity.
+
 Native application wiring, source inspection into the binding schema,
-strategy candidate construction and durable publication are still required for
+strategy search, owned candidate workspaces and durable publication are still required for
 the new runner to replace the legacy engine. CI and runtime
 use deterministic local tools and no remote models.

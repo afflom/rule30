@@ -134,11 +134,18 @@ answers; submit constructed candidates through `Event.candidate`.
 `ResearchCandidate` owns the local `lexlean snapshot` process and output read,
 reconstructs the full compiler IR with `CompilerSnapshot`, derives verification
 pins and preflights the exact goal before entering `ResearchProof`. Snapshot
-metadata is not a proof. Its caller still owns candidate construction, the
+metadata is not a proof. Its caller still owns candidate term selection, the
 isolated project and imported library snapshot. `Event.proof` remains the
-internal typed entry for already-owned candidate data. The binding schema encodes the
-inspected source type and closed target as core arenas in the sequent; source
-inspection must establish their origin and snapshot before dispatch.
+internal typed entry for already-owned candidate data. The binding schema distinguishes inspected premises from named closed propositions.
+For premises it encodes the source type and closed target as core arenas; source
+inspection must establish their origin and snapshot before dispatch. Closed goals
+have no telescope and designate the exact registered source constant.
+`CandidateSource.construct` builds an unverified native-core theorem in the
+LexLean 1.2 notation. Its output remains a candidate until owned verification
+succeeds. Its fixed
+module prefix is `Rule30Candidate`, module `Candidate`, theorem `proof`.
+The caller owns the isolated project and imported library; exact name matching
+does not establish the identity of an arbitrary imported environment.
 Maintenance reports have a separate result kind. Cancellation consumes the
 outstanding host reply before issuing stop; failed cleanup retains ownership
 and halts dispatch. Native application wiring, source inspection, strategy planner and

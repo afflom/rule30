@@ -26,7 +26,7 @@ definition{
   name: goal,
   parameters: [target : Bytes, context : Bytes, premise : Nat],
   result: Research::Sequent,
-  body: (record Research::Sequent {origin := 0x74, theorem := 0x74, premise := premise, telescope := context, target := target})
+  body: (record Research::Sequent {origin := 0x74, theorem := 0x74, premise := premise, telescope := context, target := target, kind := (ctor Research::GoalKind.premise)})
 }
 
 definition{
@@ -345,7 +345,7 @@ theorem{
 theorem{
   name: everyApplicationAndLibraryModuleGetsOneMaintenanceTask,
   parameters: [],
-  statement: ((prim length (ResearchCatalog::maintenanceTasks (ResearchCatalog::registeredScopes)) : Nat) = 64),
+  statement: ((prim length (ResearchCatalog::maintenanceTasks (ResearchCatalog::registeredScopes)) : Nat) = 70),
   proof: decide{}
 }
 definition{

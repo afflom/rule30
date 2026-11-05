@@ -172,7 +172,7 @@ definition{
  name: sourceRequest,
  parameters: [originName : Bytes, sourceNames : (List Bytes), goalBytes : Bytes, purpose : Research::Purpose],
  result: Research::Request,
- body: (record Research::Request {serial := 1, snapshot := (record Research::Snapshot {library := 0x6c, compiler := 0x63, model := 0x6d}), task := (record Research::Task {id := 0x74, purpose := purpose, intent := purpose, status := (ctor Research::Status.waiting), component := "deduction", sources := sourceNames, schema := 0x73, sequent := (record Research::Sequent {origin := originName, theorem := 0x52756c653330554f522e496e74657266616365732e736f75726365, premise := 0, telescope := 0x7b226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d2c7b226b223a2270222c226e223a2268222c2262223a2265222c2274223a302c2276223a307d5d2c22726f6f74223a317d, target := goalBytes}), age := 0, weight := 1})}),
+ body: (record Research::Request {serial := 1, snapshot := (record Research::Snapshot {library := 0x6c, compiler := 0x63, model := 0x6d}), task := (record Research::Task {id := 0x74, purpose := purpose, intent := purpose, status := (ctor Research::Status.waiting), component := "deduction", sources := sourceNames, schema := 0x73, sequent := (record Research::Sequent {origin := originName, theorem := 0x52756c653330554f522e496e74657266616365732e736f75726365, premise := 0, telescope := 0x7b226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d2c7b226b223a2270222c226e223a2268222c2262223a2265222c2274223a302c2276223a307d5d2c22726f6f74223a317d, target := goalBytes, kind := (ctor Research::GoalKind.premise)}), age := 0, weight := 1})}),
  axioms: []
 }
 
