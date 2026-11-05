@@ -1,0 +1,216 @@
+\begin{lexlean}{ClosedGoalTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ClosedBindingFixture}
+\importmodule{Research}
+\importmodule{ResearchCatalog}
+\importmodule{CoreBinding}
+\importmodule{CandidateBinding}
+\importmodule{Toml}
+\importmodule{Register}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: goalBytes,
+ parameters: [source : Bytes],
+ result: Bytes,
+ body: (match (CoreBinding::encodeGoal (CoreBinding::namedGoal source) 2048 256) | Option.none => 0x | Option.some value => value),
+ axioms: [propext]
+}
+
+definition{
+ name: request,
+ parameters: [source : Bytes, target : Bytes, kind : Research::GoalKind, context : Bytes, index : Nat, purpose : Research::Purpose],
+ result: Research::Request,
+ body: (record Research::Request {serial := 1, snapshot := (record Research::Snapshot {library := 0x6c, compiler := 0x63, model := 0x6d}), task := (record Research::Task {id := 0x67, purpose := purpose, intent := purpose, status := (ctor Research::Status.waiting), component := "deduction", sources := (cons source (nil Bytes)), schema := 0x67, sequent := (record Research::Sequent {origin := source, theorem := source, premise := index, telescope := context, target := target, kind := kind}), age := 0, weight := 8})}),
+ axioms: []
+}
+
+definition{
+ name: selects,
+ parameters: [attempt : Research::Request, expected : CoreBinding::Goal],
+ result: Bool,
+ body: (match (CandidateBinding::selected attempt 2048 32 1024) | Option.none => false | Option.some actual => (CoreBinding::sameType actual expected 2048 1024)),
+ axioms: [propext]
+}
+
+theorem{
+ name: closedGoalNeedsNoPremise,
+ parameters: [],
+ statement: ((selects (request 0x54727565 (goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: closedGoalCannotCarryAssumptions,
+ parameters: [],
+ statement: ((not (selects (request 0x54727565 (goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x78 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: closedGoalHasNoPremisePosition,
+ parameters: [],
+ statement: ((not (selects (request 0x54727565 (goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 1 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: premiseKindStillRequiresInspection,
+ parameters: [],
+ statement: ((not (selects (request 0x54727565 (goalBytes 0x54727565) (ctor Research::GoalKind.premise) 0x 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: sourceNameCannotBeSubstituted,
+ parameters: [],
+ statement: ((not (selects (request 0x46616c7365 (goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: truthCannotStandInForProblemOne,
+ parameters: [],
+ statement: ((not (selects (request 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31 (goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: closedRefutationHasNoAdditionalAssumptions,
+ parameters: [],
+ statement: ((match (CandidateBinding::parseGoal 0x7b226e6f646573223a5b7b226b223a2263222c226e223a2246616c7365222c2275223a5b5d7d2c7b226b223a2270222c226e223a2268222c2262223a2265222c2274223a302c2276223a307d5d2c22726f6f74223a317d 2048 32) | Option.none => false | Option.some arrow => (selects (request 0x46616c7365 (goalBytes 0x46616c7365) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.refute)) arrow)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: goalKindIsPartOfRequestIdentity,
+ parameters: [],
+ statement: ((not (Research::sameRequest (request 0x54727565 (goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)) (request 0x54727565 (goalBytes 0x54727565) (ctor Research::GoalKind.premise) 0x 0 (ctor Research::Purpose.prove)))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: prizeGoalUsesItsCanonicalDefinition,
+ parameters: [],
+ statement: ((match (ResearchCatalog::closedSequent "problem1") | Option.none => false | Option.some goal => ((Research::contextual goal) && (Toml::sameBytes (project goal origin) 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: conditionalSourcesAreNotAssumedToBeClosedGoals,
+ parameters: [],
+ statement: ((match (ResearchCatalog::closedSource "horizon-criterion") | Option.none => true | Option.some source => false) = true),
+ proof: decide{},
+ axioms: []
+}
+
+definition{
+ name: registered,
+ parameters: [claimId : String, source : String, status : String],
+ result: Register::Claim,
+ body: (record Register::Claim {id := claimId, status := status, lean := source, depends := (nil String), relation := (nil String), kappa := ""}),
+ axioms: []
+}
+
+theorem{
+ name: redirectedPrizeMetadataIsBlocked,
+ parameters: [],
+ statement: ((match (project (ResearchCatalog::claimTask (registered "problem1" "True" "open")) status) | Research::Status.blocked => true | Research::Status.ready => false | Research::Status.waiting => false | Research::Status.established => false | Research::Status.exhausted => false) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: redirectedMetadataCannotChangeThePrizeTarget,
+ parameters: [],
+ statement: ((Toml::sameBytes (project (project (ResearchCatalog::claimTask (registered "problem1" "True" "open")) sequent) origin) 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: changedDependenciesCannotAuthorizeMismatchedRegistry,
+ parameters: [],
+ statement: ((let task : Research::Task := (ResearchCatalog::claimTask (registered "problem1" "True" "open")); (let refreshed : Research::Task := (Research::refreshTask task 1); ((Research::sameSequent (project refreshed sequent) (project task sequent)) && (((prim length (project refreshed sources) : Nat) =? 0) && (match (project refreshed status) | Research::Status.blocked => true | Research::Status.ready => false | Research::Status.waiting => false | Research::Status.established => false | Research::Status.exhausted => false))))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: establishedClaimsDoNotBecomeResearchWork,
+ parameters: [],
+ statement: ((prim length (ResearchCatalog::claimTasks (cons (registered "problem1" "Ruliology.CellularAutomata.Rule30Prize.Problem1" "proved") (nil Register::Claim))) : Nat) = 0),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: canonicalPrizeGoalCanBeScheduled,
+ parameters: [],
+ statement: ((let task : Research::Task := (ResearchCatalog::claimTask (registered "problem1" "Ruliology.CellularAutomata.Rule30Prize.Problem1" "open")); ((Research::samePurpose (project task purpose) (ctor Research::Purpose.prove)) && ((Research::contextual (project task sequent)) && (match (project task status) | Research::Status.ready => true | Research::Status.waiting => false | Research::Status.blocked => false | Research::Status.established => false | Research::Status.exhausted => false)))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: changedDependenciesReopenTheSameClosedGoal,
+ parameters: [],
+ statement: ((let task : Research::Task := (ResearchCatalog::claimTask (registered "problem1" "Ruliology.CellularAutomata.Rule30Prize.Problem1" "open")); (let refreshed : Research::Task := (Research::refreshTask (Research::withStatus task (ctor Research::Status.established) 0) 1); ((Research::sameSequent (project refreshed sequent) (project task sequent)) && ((Research::samePurpose (project refreshed purpose) (ctor Research::Purpose.prove)) && (match (project refreshed status) | Research::Status.ready => true | Research::Status.waiting => false | Research::Status.blocked => false | Research::Status.established => false | Research::Status.exhausted => false))))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+definition{
+ name: nativeCore,
+ parameters: [],
+ result: Json::Value,
+ body: (match (Json::parse 0x7b226465636c61726174696f6e73223a5b7b22636c617373223a66616c73652c2267656e657261746564223a66616c73652c226b696e64223a227468656f72656d222c226c6576656c73223a5b5d2c226e616d65223a2252756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468222c22706f6c696379223a7b226b696e64223a226e6f6e65227d2c227472616e73706172656e6379223a2273656d69726564756369626c65222c2274797065223a302c2276616c7565223a317d2c7b22636c617373223a66616c73652c2267656e657261746564223a66616c73652c226b696e64223a227468656f72656d222c226c6576656c73223a5b5d2c226e616d65223a2252756c6533304170692e436c6f73656442696e64696e67466978747572652e6e6f7446616c7365222c22706f6c696379223a7b226b696e64223a226e6f6e65227d2c227472616e73706172656e6379223a2273656d69726564756369626c65222c2274797065223a332c2276616c7565223a357d5d2c22696d706f727473223a5b22496e6974225d2c226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d2c7b226b223a2263222c226e223a22547275652e696e74726f222c2275223a5b5d7d2c7b226b223a2263222c226e223a2246616c7365222c2275223a5b5d7d2c7b2262223a2265222c226b223a2270222c226e223a2268222c2274223a322c2276223a327d2c7b2269223a302c226b223a2262227d2c7b2262223a2265222c226b223a226c222c226e223a2268222c2274223a322c2276223a347d5d2c2270726f6f665f6e6f646573223a5b5d2c2273706563223a226c65786c65616e2f636f72652d6d6f64756c652f32227d 4096 32) | Result.error problem => (ctor Json::Value.null) | Result.ok value => value),
+ axioms: [propext]
+}
+
+definition{
+ name: nativeMatches,
+ parameters: [constant : Bytes, mode : Research::Purpose, candidate : Bytes],
+ result: Bool,
+ body: (match (CandidateBinding::coreGoal (nativeCore) candidate) | Option.none => false | Option.some actual => (selects (request constant (goalBytes constant) (ctor Research::GoalKind.closed) 0x 0 mode) actual)),
+ axioms: [propext]
+}
+
+theorem{
+ name: nativeProofDischargesClosedTruth,
+ parameters: [],
+ statement: ((nativeMatches 0x54727565 (ctor Research::Purpose.prove) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: nativeRefutationDischargesClosedFalse,
+ parameters: [],
+ statement: ((nativeMatches 0x46616c7365 (ctor Research::Purpose.refute) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e6e6f7446616c7365) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: nativeTruthDoesNotDischargeThePrizeGoal,
+ parameters: [],
+ statement: ((nativeMatches 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31 (ctor Research::Purpose.prove) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

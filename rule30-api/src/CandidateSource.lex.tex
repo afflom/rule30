@@ -1,0 +1,96 @@
+\begin{lexlean}{CandidateSource}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{CoreBinding}
+\importmodule{CandidateBinding}
+\importmodule{Research}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Construct one unverified LexLean native-core theorem for the exact selected research goal. The shared arena supplies the target and proposed proof; only the local compiler and kernel can establish that the proposal is well typed. The source contains one fixed theorem, explicit imports and universe parameters, and an exact allowed axiom policy. JSON is carried by the language coredata form, never emitted as Lean backend text. Construction refuses a substituted goal, missing proof node, forbidden axiom or exhausted output budget. The caller owns the isolated project, imports, file writes and subsequent ResearchCandidate lifecycle.",
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: strings,
+ parameters: [values : (List Bytes)],
+ result: (List Json::Value),
+ body: (match values | List.nil => (nil Json::Value) | List.cons head tail => (cons (ctor Json::Value.string head) (strings tail))),
+ axioms: [],
+ executable: true,
+ recursive_argument: values
+}
+
+definition{
+ name: axiomStrings,
+ parameters: [values : (List String)],
+ result: (List Json::Value),
+ body: (let tail : (List Json::Value) := (if (Research::memberString "propext" values) then (cons (ctor Json::Value.string 0x70726f70657874) (nil Json::Value)) else (nil Json::Value)); (if (Research::memberString "Quot.sound" values) then (cons (ctor Json::Value.string 0x51756f742e736f756e64) tail) else tail)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: declaration,
+ parameters: [goal : CoreBinding::Goal, proof : Nat, levels : (List Bytes), axioms : (List String)],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x6e616d65, (ctor Json::Value.string 0x52756c65333043616e6469646174652e43616e6469646174652e70726f6f66)) (cons (0x6c6576656c73, (ctor Json::Value.array (strings levels))) (cons (0x6b696e64, (ctor Json::Value.string 0x7468656f72656d)) (cons (0x7472616e73706172656e6379, (ctor Json::Value.string 0x73656d69726564756369626c65)) (cons (0x706f6c696379, (ctor Json::Value.object (cons (0x6b696e64, (ctor Json::Value.string 0x6578616374)) (cons (0x6178696f6d73, (ctor Json::Value.array (axiomStrings axioms))) (nil (Bytes * Json::Value)))))) (cons (0x74797065, (CoreBinding::number (project goal root))) (cons (0x76616c7565, (CoreBinding::number proof)) (cons (0x636c617373, (ctor Json::Value.boolean false)) (cons (0x67656e657261746564, (ctor Json::Value.boolean false)) (nil (Bytes * Json::Value)))))))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: core,
+ parameters: [goal : CoreBinding::Goal, proof : Nat, imports : (List Bytes), levels : (List Bytes), axioms : (List String)],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x6c65786c65616e2f636f72652d6d6f64756c652f32)) (cons (0x696d706f727473, (ctor Json::Value.array (strings imports))) (cons (0x70726f6f665f6e6f646573, (ctor Json::Value.array (nil Json::Value))) (cons (0x6e6f646573, (ctor Json::Value.array (project goal nodes))) (cons (0x6465636c61726174696f6e73, (ctor Json::Value.array (cons (declaration goal proof levels axioms) (nil Json::Value)))) (nil (Bytes * Json::Value)))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: wrap,
+ parameters: [body : Bytes],
+ result: Bytes,
+ body: (prim append 0x5c626567696e7b6c65786c65616e7d7b43616e6469646174657d0a5c757365676c6f73736172797b6c65786c65616e2e7374642e626f6f6c40312e322e307d0a5c7469746c657b426f6f6c65616e7d0a5c626567696e7b636f72656d6f64756c657d0a5c636f7265646174617b (prim append body 0x7d0a5c656e647b636f72656d6f64756c657d0a5c656e647b6c65786c65616e7d0a : Bytes) : Bytes),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: encode,
+ parameters: [value : Json::Value, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Bytes),
+ body: (match (JsonCanonical::encode value maxBytes maxSteps) | Option.none => (ctor Option.none [Bytes]) | Option.some data => (let source : Bytes := (wrap data); (if ((prim length source : Nat) <=? maxBytes) then (ctor Option.some [Bytes] source) else (ctor Option.none [Bytes])))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: construct,
+ parameters: [request : Research::Request, goal : CoreBinding::Goal, proof : Nat, imports : (List Bytes), levels : (List Bytes), axioms : (List String), maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+ result: (Option Bytes),
+ body: (if ((proof <? (prim length (project goal nodes) : Nat)) && ((0 <? (prim length imports : Nat)) && (Research::axiomsAllowed axioms))) then (match (CandidateBinding::selected request maxBytes maxDepth maxSteps) | Option.none => (ctor Option.none [Bytes]) | Option.some expected => (if (CoreBinding::sameType expected goal maxBytes maxSteps) then (encode (core goal proof imports levels axioms) maxBytes maxSteps) else (ctor Option.none [Bytes]))) else (ctor Option.none [Bytes])),
+ axioms: [propext],
+ executable: true,
+ production: {effects: [allocation, overflow, recursion], targets: [rust-std]}
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "native-lexlean-candidate-source" (cons "exact-selected-goal" (cons "single-proof-declaration" (cons "bounded-source-output" (cons "exact-axiom-policy" (cons "unverified-construction" (nil String))))))),
+ axioms: [],
+ executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

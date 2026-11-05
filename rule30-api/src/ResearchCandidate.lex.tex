@@ -16,7 +16,7 @@ definition{
  name: contract,
  parameters: [],
  result: String,
- body: "Own the local candidate snapshot process, its output read, and the subsequent proof verifier as one lifecycle. Source and semantic pins come from the owned snapshot; the caller cannot submit candidate IR or a receipt as an event. Before verification starts the reconstructed candidate must match the inspected contextual goal. Verification then binds the report to the same source, semantics, tools, declaration and request. Cancellation drains an outstanding reply before cleanup and cannot cross from snapshot reading into verification; failed cleanup retains ownership and blocks dispatch. The caller owns candidate construction, the isolated project and pinned imported library. Snapshot metadata alone creates no proof evidence.",
+ body: "Own the local candidate snapshot process, its output read, and the subsequent proof verifier as one lifecycle. Source and semantic pins come from the owned snapshot; the caller cannot submit candidate IR or a receipt as an event. Before verification starts the reconstructed candidate must match the inspected contextual goal. Verification then binds the report to the same source, semantics, tools, declaration and request. Cancellation drains an outstanding reply before cleanup and cannot cross from snapshot reading into verification; failed cleanup retains ownership and blocks dispatch. The caller selects candidate terms and owns their isolated project and pinned imported library. Snapshot metadata alone creates no proof evidence.",
  axioms: [],
  executable: true
 }

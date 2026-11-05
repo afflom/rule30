@@ -1,0 +1,94 @@
+\begin{lexlean}{CandidateSourceTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{CandidateSource}
+\importmodule{ClosedGoalTraces}
+\importmodule{CoreBinding}
+\importmodule{Research}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: truth,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (prim append (project (CoreBinding::namedGoal 0x54727565) nodes) (project (CoreBinding::namedGoal 0x547275652e696e74726f) nodes) : (List Json::Value)), root := 0}),
+ axioms: []
+}
+
+definition{
+ name: request,
+ parameters: [origin : Bytes],
+ result: Research::Request,
+ body: (ClosedGoalTraces::request origin (ClosedGoalTraces::goalBytes origin) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)),
+ axioms: [propext]
+}
+
+definition{
+ name: source,
+ parameters: [origin : Bytes, proof : Nat, axioms : (List String)],
+ result: (Option Bytes),
+ body: (CandidateSource::construct (request origin) (truth) proof (cons 0x496e6974 (nil Bytes)) (nil Bytes) axioms 4096 32 1024),
+ axioms: [propext]
+}
+
+theorem{
+ name: constructClosedTruth,
+ parameters: [],
+ statement: ((match (source 0x54727565 1 (nil String)) | Option.none => false | Option.some data => true) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: cannotSubstituteTruthForTheRequestedPrizeGoal,
+ parameters: [],
+ statement: ((source 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31 1 (nil String)) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: missingProofNodeCannotBeEmitted,
+ parameters: [],
+ statement: ((source 0x54727565 2 (nil String)) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: forbiddenAxiomCannotBeEmitted,
+ parameters: [],
+ statement: ((source 0x54727565 1 (cons "forbidden" (nil String))) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: sourceWrapperCountsAgainstTheByteBudget,
+ parameters: [],
+ statement: ((CandidateSource::encode (ctor Json::Value.object (nil (Bytes * Json::Value))) 100 16) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: inspectionCannotBecomeAProofCandidate,
+ parameters: [],
+ statement: ((CandidateSource::construct (ClosedGoalTraces::request 0x54727565 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.inspect)) (truth) 1 (cons 0x496e6974 (nil Bytes)) (nil Bytes) (nil String) 4096 32 1024) = (ctor Option.none [Bytes])),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: axiomOrderAndDuplicatesDoNotChangeTheCandidate,
+ parameters: [],
+ statement: ((match (source 0x54727565 1 (cons "propext" (cons "Quot.sound" (cons "propext" (nil String))))) | Option.none => false | Option.some left => (match (source 0x54727565 1 (cons "Quot.sound" (cons "propext" (nil String)))) | Option.none => false | Option.some right => (Toml::sameBytes left right))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

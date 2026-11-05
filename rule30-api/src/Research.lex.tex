@@ -11,7 +11,7 @@ definition{
   name: boundary,
   parameters: [],
   result: String,
-  body: "Research is the pure research controller. A schema minted by Hypotheses is a retrieval key, never a universally quantified goal to prove. Inspecting it must return the source theorem's exact telescope and premise position before deduction can begin. A kernel answer is an outcome of the controller's outstanding request, supplied by the execution boundary after elaboration, axiom checking and replay; a row read from a register is not a kernel answer. Matching a receipt establishes custody and applicability, not the truth of a proposition. Only the kernel establishes the latter. The controller never turns a strategy failure, a budget cut or a shared head symbol into a refutation. Actions carry their complete snapshot, task and sequent so an executor cannot substitute a different instance. The pinned compiler exports this controller step as a pure Rust library. ResearchRunner owns its verification lifecycle; the native Host command entry must supply application wiring.",
+  body: "Research is the pure research controller. A closed named goal designates one exact source constant without assumptions; the eventual kernel proof must establish that proposition. Goal kind is part of request identity. A schema minted by Hypotheses is a retrieval key, never a universally quantified goal to prove. Inspecting it must return the source theorem's exact telescope and premise position before deduction can begin. A kernel answer is an outcome of the controller's outstanding request, supplied by the execution boundary after elaboration, axiom checking and replay; a row read from a register is not a kernel answer. Matching a receipt establishes custody and applicability, not the truth of a proposition. Only the kernel establishes the latter. The controller never turns a strategy failure, a budget cut or a shared head symbol into a refutation. Actions carry their complete snapshot, task and sequent so an executor cannot substitute a different instance. The pinned compiler exports this controller step as a pure Rust library. ResearchRunner owns its verification lifecycle; the native Host command entry must supply application wiring.",
   executable: true
 }
 
@@ -36,11 +36,18 @@ structure{
   fields: [{name: library, type: Bytes}, {name: compiler, type: Bytes}, {name: model, type: Bytes}]
 }
 
+inductive{
+  name: GoalKind,
+  type_parameters: [],
+  parameters: [],
+  constructors: [{name: premise, fields: []}, {name: closed, fields: []}]
+}
+
 structure{
   name: Sequent,
   type_parameters: [],
   parameters: [],
-  fields: [{name: origin, type: Bytes}, {name: theorem, type: Bytes}, {name: premise, type: Nat}, {name: telescope, type: Bytes}, {name: target, type: Bytes}]
+  fields: [{name: origin, type: Bytes}, {name: theorem, type: Bytes}, {name: premise, type: Nat}, {name: telescope, type: Bytes}, {name: target, type: Bytes}, {name: kind, type: GoalKind}]
 }
 
 structure{
@@ -119,7 +126,7 @@ definition{
   name: emptySequent,
   parameters: [],
   result: Sequent,
-  body: (record Sequent {origin := 0x, theorem := 0x, premise := 0, telescope := 0x, target := 0x}),
+  body: (record Sequent {origin := 0x, theorem := 0x, premise := 0, telescope := 0x, target := 0x, kind := (ctor GoalKind.premise)}),
   executable: true
 }
 
@@ -154,10 +161,18 @@ definition{
 }
 
 definition{
+  name: sameGoalKind,
+  parameters: [a : GoalKind, b : GoalKind],
+  result: Bool,
+  body: (match a | GoalKind.premise => (match b | GoalKind.premise => true | GoalKind.closed => false) | GoalKind.closed => (match b | GoalKind.premise => false | GoalKind.closed => true)),
+  executable: true
+}
+
+definition{
   name: sameSequent,
   parameters: [a : Sequent, b : Sequent],
   result: Bool,
-  body: ((Toml::sameBytes (project a origin) (project b origin)) && ((Toml::sameBytes (project a theorem) (project b theorem)) && (((project a premise) =? (project b premise)) && ((Toml::sameBytes (project a telescope) (project b telescope)) && (Toml::sameBytes (project a target) (project b target)))))),
+  body: ((sameGoalKind (project a kind) (project b kind)) && ((Toml::sameBytes (project a origin) (project b origin)) && ((Toml::sameBytes (project a theorem) (project b theorem)) && (((project a premise) =? (project b premise)) && ((Toml::sameBytes (project a telescope) (project b telescope)) && (Toml::sameBytes (project a target) (project b target))))))),
   executable: true
 }
 
@@ -201,7 +216,7 @@ definition{
   name: contextual,
   parameters: [goal : Sequent],
   result: Bool,
-  body: ((0 <? (prim length (project goal origin) : Nat)) && ((0 <? (prim length (project goal theorem) : Nat)) && ((0 <? (prim length (project goal telescope) : Nat)) && (0 <? (prim length (project goal target) : Nat))))),
+  body: ((0 <? (prim length (project goal origin) : Nat)) && ((0 <? (prim length (project goal theorem) : Nat)) && ((0 <? (prim length (project goal target) : Nat)) && (match (project goal kind) | GoalKind.premise => (0 <? (prim length (project goal telescope) : Nat)) | GoalKind.closed => (((project goal premise) =? 0) && (((prim length (project goal telescope) : Nat) =? 0) && (Toml::sameBytes (project goal origin) (project goal theorem)))))))),
   executable: true
 }
 
@@ -457,7 +472,7 @@ definition{
   name: refreshTask,
   parameters: [task : Task, age : Nat],
   result: Task,
-  body: (if (samePurpose (project task purpose) (ctor Purpose.maintain)) then (withStatus task (ctor Status.ready) age) else (record Task {id := (project task id), purpose := (ctor Purpose.inspect), intent := (project task intent), status := (ctor Status.ready), component := "audit", sources := (project task sources), schema := (project task schema), sequent := (emptySequent), age := age, weight := (project task weight)})),
+  body: (if (samePurpose (project task purpose) (ctor Purpose.maintain)) then (withStatus task (ctor Status.ready) age) else (if ((sameGoalKind (project (project task sequent) kind) (ctor GoalKind.closed)) && (contextual (project task sequent))) then (if (Hypotheses::memberBytes (project (project task sequent) origin) (project task sources)) then (record Task {id := (project task id), purpose := (project task intent), intent := (project task intent), status := (ctor Status.ready), component := "deduction", sources := (project task sources), schema := (project task schema), sequent := (project task sequent), age := age, weight := (project task weight)}) else (withStatus task (ctor Status.blocked) age)) else (record Task {id := (project task id), purpose := (ctor Purpose.inspect), intent := (project task intent), status := (ctor Status.ready), component := "audit", sources := (project task sources), schema := (project task schema), sequent := (emptySequent), age := age, weight := (project task weight)}))),
   executable: true
 }
 

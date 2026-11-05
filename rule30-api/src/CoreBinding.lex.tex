@@ -192,6 +192,24 @@ definition{
 }
 
 definition{
+ name: namedGoal,
+ parameters: [source : Bytes],
+ result: Goal,
+ body: (record Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string source)) (cons (0x75, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (nil Json::Value)), root := 0}),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: encodeGoal,
+ parameters: [goal : Goal, maxBytes : Nat, maxSteps : Nat],
+ result: (Option Bytes),
+ body: (JsonCanonical::encode (ctor Json::Value.object (cons (0x6e6f646573, (ctor Json::Value.array (project goal nodes))) (cons (0x726f6f74, (number (project goal root))) (nil (Bytes * Json::Value))))) maxBytes maxSteps),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
  name: negated,
  parameters: [goal : Goal],
  result: Goal,
@@ -232,7 +250,7 @@ definition{
  name: features,
  parameters: [],
  result: (List String),
- body: (cons "exact-core-type-comparison" (cons "de-bruijn-context-preservation" (cons "binder-alpha-renaming" (cons "selected-premise-closure" (cons "exclude-target-assumption" (cons "reject-forward-edges" (cons "comparison-resource-bounds" (cons "contextual-refutation" (nil String))))))))),
+ body: (cons "named-closed-goal" (cons "canonical-goal-arena" (cons "exact-core-type-comparison" (cons "de-bruijn-context-preservation" (cons "binder-alpha-renaming" (cons "selected-premise-closure" (cons "exclude-target-assumption" (cons "reject-forward-edges" (cons "comparison-resource-bounds" (cons "contextual-refutation" (nil String))))))))))),
  axioms: [],
  executable: true
 }
