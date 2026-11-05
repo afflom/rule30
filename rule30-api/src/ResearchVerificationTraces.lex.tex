@@ -401,9 +401,9 @@ theorem{
 }
 
 theorem{
-  name: outOfOrderHostReplyIsRejected,
+  name: outOfOrderHostReplyTerminatesProtocol,
   parameters: [],
-  statement: ((kind (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (spawned)))) = 3),
+  statement: ((kind (ResearchVerification::step (commandPending) (ctor ResearchVerification::Event.host (spawned)))) = 5),
   proof: decide{},
   axioms: [Quot.sound, propext]
 }

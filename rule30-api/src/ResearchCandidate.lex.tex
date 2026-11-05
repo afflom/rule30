@@ -1,0 +1,243 @@
+\begin{lexlean}{ResearchCandidate}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchVerification}
+\importmodule{ResearchProof}
+\importmodule{VerificationReport}
+\importmodule{CandidateBinding}
+\importmodule{CompilerSnapshot}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Own the local candidate snapshot process, its output read, and the subsequent proof verifier as one lifecycle. Source and semantic pins come from the owned snapshot; the caller cannot submit candidate IR or a receipt as an event. Before verification starts the reconstructed candidate must match the inspected contextual goal. Verification then binds the report to the same source, semantics, tools, declaration and request. Cancellation drains an outstanding reply before cleanup and cannot cross from snapshot reading into verification; failed cleanup retains ownership and blocks dispatch. The caller owns candidate construction, the isolated project and pinned imported library. Snapshot metadata alone creates no proof evidence.",
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: Tools,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: lexlean, type: Bytes}, {name: lean, type: Bytes}, {name: lake, type: Bytes}, {name: checker, type: Bytes}]
+}
+structure{
+ name: Context,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: request, type: Research::Request}, {name: config, type: ResearchVerification::Config}, {name: tools, type: Tools}, {name: module, type: Bytes}, {name: theorem, type: Bytes}, {name: maxDepth, type: Nat}, {name: maxSteps, type: Nat}]
+}
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: running, fields: []}, {name: reading, fields: []}, {name: verifying, fields: []}, {name: ended, fields: []}]
+}
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: context, type: Context}, {name: execution, type: (Option ResearchExecution::State)}, {name: proof, type: (Option ResearchProof::State)}, {name: phase, type: Phase}, {name: cancelled, type: Bool}]
+}
+
+definition{
+ name: arguments,
+ parameters: [config : ResearchVerification::Config],
+ result: (List String),
+ body: (cons (ResearchVerification::concat "--project=" (project config project)) (cons "--diagnostic-format=json" (cons "snapshot" (cons "--" (cons (project config moduleSource) (nil String)))))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: job,
+ parameters: [context : Context],
+ result: ResearchExecution::Job,
+ body: (let config : ResearchVerification::Config := (project context config); (record ResearchExecution::Job {request := (project context request), tool := (ctor ResearchExecution::Tool.lexlean), arguments := (arguments config), directory := (project config directory), environment := (project config environment), output := (project config output), errors := (project config errors), allowance := (project config allowance), quantum := (project config quantum), polls := (project config polls)})),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: valid,
+ parameters: [context : Context],
+ result: Bool,
+ body: (let config : ResearchVerification::Config := (project context config); (let tools : Tools := (project context tools); ((ResearchExecution::validJob (job context)) && ((ResearchVerification::nonempty (project config project)) && ((ResearchVerification::nonempty (project config moduleSource)) && ((ResearchVerification::nonempty (project config verifiedRoot)) && ((0 <? (project config maxBytes)) && ((0 <? (project context maxDepth)) && ((0 <? (project context maxSteps)) && ((VerificationReport::digest (project tools lexlean)) && ((VerificationReport::digest (project tools lean)) && ((VerificationReport::digest (project tools lake)) && ((VerificationReport::digest (project tools checker)) && (VerificationReport::digest (project (project (project context request) snapshot) compiler))))))))))))))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: withPhase,
+ parameters: [state : State, phase : Phase],
+ result: State,
+ body: (record State {context := (project state context), execution := (project state execution), proof := (project state proof), phase := phase, cancelled := (project state cancelled)}),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: finish,
+ parameters: [state : State, emission : ResearchProof::Emission],
+ result: (State * ResearchProof::Emission),
+ body: ((withPhase state (ctor Phase.ended)), emission),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: answer,
+ parameters: [state : State, result : Research::ResultKind],
+ result: (State * ResearchProof::Emission),
+ body: (finish state (ctor ResearchProof::Emission.complete (record Research::Answer {request := (project (project state context) request), result := result}))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: failed,
+ parameters: [state : State, reason : String],
+ result: (State * ResearchProof::Emission),
+ body: (answer state (ctor Research::ResultKind.failed (prim utf8_encode reason : Bytes))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: completed,
+ parameters: [state : State, completion : ResearchExecution::Completion],
+ result: (State * ResearchProof::Emission),
+ body: (if (not (ResearchExecution::resumeAllowed completion)) then (finish state (ctor ResearchProof::Emission.blocked completion)) else (if (project state cancelled) then (answer state (ctor Research::ResultKind.cut)) else (match (project completion kind)
+ | ResearchExecution::EndKind.succeeded => ((withPhase state (ctor Phase.reading)), (ctor ResearchProof::Emission.host (ctor LexLeanStd.Host::Request.read (project (project (project state context) config) output))))
+ | ResearchExecution::EndKind.cut => (answer state (ctor Research::ResultKind.cut))
+ | ResearchExecution::EndKind.unavailable => (answer state (ctor Research::ResultKind.unavailable))
+ | ResearchExecution::EndKind.failed => (failed state "candidate snapshot failed")
+ | ResearchExecution::EndKind.protocol => (finish state (ctor ResearchProof::Emission.blocked completion))
+ | ResearchExecution::EndKind.cleanupFailed => (finish state (ctor ResearchProof::Emission.blocked completion))
+ | ResearchExecution::EndKind.refused => (finish state (ctor ResearchProof::Emission.blocked completion))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: executionResult,
+ parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)],
+ result: (State * ResearchProof::Emission),
+ body: (let next : State := (record State {context := (project state context), execution := (ctor Option.some [ResearchExecution::State] (first result)), proof := (project state proof), phase := (ctor Phase.running), cancelled := (project state cancelled)}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor ResearchProof::Emission.host request)) | ResearchExecution::Emission.awaiting => (next, (ctor ResearchProof::Emission.awaiting)) | ResearchExecution::Emission.complete completion => (completed next completion))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: pins,
+ parameters: [context : Context, metadata : CompilerSnapshot::Metadata],
+ result: VerificationReport::Pins,
+ body: (let tools : Tools := (project context tools); (record VerificationReport::Pins {request := (project context request), source := (project metadata source), semantic := (project metadata semantic), compiler := (project (project (project context request) snapshot) compiler), lexlean := (project tools lexlean), lean := (project tools lean), lake := (project tools lake), checker := (project tools checker), theorem := (project context theorem), module := (project context module)})),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: proofResult,
+ parameters: [state : State, result : (ResearchProof::State * ResearchProof::Emission)],
+ result: (State * ResearchProof::Emission),
+ body: (let next : State := (record State {context := (project state context), execution := (project state execution), proof := (ctor Option.some [ResearchProof::State] (first result)), phase := (ctor Phase.verifying), cancelled := (project state cancelled)}); (match (second result) | ResearchProof::Emission.host request => (next, (ctor ResearchProof::Emission.host request)) | ResearchProof::Emission.awaiting => (next, (ctor ResearchProof::Emission.awaiting)) | ResearchProof::Emission.complete receipt => (finish next (ctor ResearchProof::Emission.complete receipt)) | ResearchProof::Emission.blocked completion => (finish next (ctor ResearchProof::Emission.blocked completion)))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: snapshotRead,
+ parameters: [state : State, source : Bytes],
+ result: (State * ResearchProof::Emission),
+ body: (let context : Context := (project state context); (let config : ResearchVerification::Config := (project context config); (match (CompilerSnapshot::decode source (project (project (project context request) snapshot) compiler) (project config maxBytes) (project context maxDepth) (project context maxSteps)) | Option.none => (failed state "candidate snapshot identity is invalid") | Option.some metadata => (let bound : VerificationReport::Pins := (pins context metadata); (if (CandidateBinding::matches bound (project metadata binding) (project config maxBytes) (project context maxDepth) (project context maxSteps)) then (proofResult state (ResearchProof::begin bound config (project metadata binding) (project context maxDepth) (project context maxSteps))) else (failed state "candidate snapshot does not match the requested goal")))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: protocol,
+ parameters: [state : State, reason : String],
+ result: (State * ResearchProof::Emission),
+ body: (let context : Context := (project state context); (let config : ResearchVerification::Config := (project context config); (finish state (ctor ResearchProof::Emission.blocked (record ResearchExecution::Completion {request := (project context request), kind := (ctor ResearchExecution::EndKind.protocol), code := (ctor Option.none [Int32]), clock := 0, output := (project config output), errors := (project config errors), detail := (prim utf8_encode reason : Bytes)}))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: reading,
+ parameters: [state : State, response : LexLeanStd.Host::Event],
+ result: (State * ResearchProof::Emission),
+ body: (match (ResearchVerification::readResponse response) | Option.none => (protocol state "unexpected candidate snapshot response") | Option.some result => (if (project state cancelled) then (answer state (ctor Research::ResultKind.cut)) else (match result | Result.error problem => (failed state "candidate snapshot read failed") | Result.ok source => (snapshotRead state source)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: begin,
+ parameters: [context : Context],
+ result: (State * ResearchProof::Emission),
+ body: (let state : State := (record State {context := context, execution := (ctor Option.none [ResearchExecution::State]), proof := (ctor Option.none [ResearchProof::State]), phase := (ctor Phase.running), cancelled := false}); (if (valid context) then (executionResult state (ResearchExecution::begin (job context))) else (failed state "invalid candidate snapshot configuration"))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * ResearchProof::Emission),
+ body: (let next : State := (record State {context := (project state context), execution := (project state execution), proof := (project state proof), phase := (project state phase), cancelled := true}); (match (project state phase)
+ | Phase.ended => (state, (ctor ResearchProof::Emission.awaiting))
+ | Phase.reading => (next, (ctor ResearchProof::Emission.awaiting))
+ | Phase.running => (match (project state execution) | Option.none => (protocol next "candidate snapshot has no execution owner") | Option.some execution => (executionResult next (ResearchExecution::cancel execution)))
+ | Phase.verifying => (match (project state proof) | Option.none => (protocol next "candidate has no proof owner") | Option.some proof => (proofResult next (ResearchProof::step proof (ctor ResearchVerification::Event.cancel)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: host,
+ parameters: [state : State, response : LexLeanStd.Host::Event],
+ result: (State * ResearchProof::Emission),
+ body: (match (project state phase)
+ | Phase.ended => (state, (ctor ResearchProof::Emission.awaiting))
+ | Phase.reading => (reading state response)
+ | Phase.running => (match (project state execution) | Option.none => (protocol state "candidate snapshot has no execution owner") | Option.some execution => (executionResult state (ResearchExecution::step execution response)))
+ | Phase.verifying => (match (project state proof) | Option.none => (protocol state "candidate has no proof owner") | Option.some proof => (proofResult state (ResearchProof::step proof (ctor ResearchVerification::Event.host response))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: step,
+ parameters: [state : State, event : ResearchVerification::Event],
+ result: (State * ResearchProof::Emission),
+ body: (match (project state phase) | Phase.ended => (state, (ctor ResearchProof::Emission.awaiting)) | Phase.running => (match event | ResearchVerification::Event.host response => (host state response) | ResearchVerification::Event.cancel => (cancel state) | ResearchVerification::Event.changed snapshot => (if (Research::sameSnapshot snapshot (project (project (project state context) request) snapshot)) then (state, (ctor ResearchProof::Emission.awaiting)) else (cancel state))) | Phase.reading => (match event | ResearchVerification::Event.host response => (host state response) | ResearchVerification::Event.cancel => (cancel state) | ResearchVerification::Event.changed snapshot => (if (Research::sameSnapshot snapshot (project (project (project state context) request) snapshot)) then (state, (ctor ResearchProof::Emission.awaiting)) else (cancel state))) | Phase.verifying => (match event | ResearchVerification::Event.host response => (host state response) | ResearchVerification::Event.cancel => (cancel state) | ResearchVerification::Event.changed snapshot => (if (Research::sameSnapshot snapshot (project (project (project state context) request) snapshot)) then (state, (ctor ResearchProof::Emission.awaiting)) else (cancel state)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+theorem{
+ name: endedCandidateIsSilent,
+ parameters: [state : State, emission : ResearchProof::Emission, event : ResearchVerification::Event],
+ statement: ((step (first (finish state emission)) event) = ((first (finish state emission)), (ctor ResearchProof::Emission.awaiting))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "owned-local-candidate-snapshot" (cons "derive-verification-pins" (cons "preflight-exact-candidate-goal" (cons "snapshot-to-proof-ownership" (cons "cancel-before-verification" (cons "retain-failed-cleanup-owner" (nil String))))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,300 @@
+\begin{lexlean}{ResearchCandidateTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Json}
+\importmodule{CandidateBinding}
+\importmodule{Research}
+\importmodule{ResearchTraces}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchVerification}
+\importmodule{ResearchVerificationTraces}
+\importmodule{VerificationReport}
+\importmodule{VerificationReportTraces}
+\importmodule{ResearchProof}
+\importmodule{ResearchCandidate}
+\importmodule{ResearchRunner}
+\importmodule{ResearchRunnerTraces}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: context,
+ parameters: [config : ResearchVerification::Config],
+ result: ResearchCandidate::Context,
+ body: (let pins : VerificationReport::Pins := (VerificationReportTraces::pins); (record ResearchCandidate::Context {request := (project pins request), config := config, tools := (record ResearchCandidate::Tools {lexlean := (project pins lexlean), lean := (project pins lean), lake := (project pins lake), checker := (project pins checker)}), module := (project pins module), theorem := (project pins theorem), maxDepth := 32, maxSteps := 1024})),
+ axioms: []
+}
+
+definition{
+ name: began,
+ parameters: [],
+ result: (ResearchCandidate::State * ResearchProof::Emission),
+ body: (ResearchCandidate::begin (context (ResearchVerificationTraces::settings))),
+ axioms: [propext]
+}
+
+definition{
+ name: active,
+ parameters: [],
+ result: (ResearchCandidate::State * ResearchProof::Emission),
+ body: (ResearchCandidate::step (first (began)) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::spawned))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: reading,
+ parameters: [],
+ result: (ResearchCandidate::State * ResearchProof::Emission),
+ body: (ResearchCandidate::step (first (active)) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::exited))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: kind,
+ parameters: [result : (ResearchCandidate::State * ResearchProof::Emission)],
+ result: Nat,
+ body: (match (second result) | ResearchProof::Emission.host request => 0 | ResearchProof::Emission.awaiting => 1 | ResearchProof::Emission.complete answer => 2 | ResearchProof::Emission.blocked completion => 3),
+ axioms: []
+}
+
+definition{
+ name: failed,
+ parameters: [result : (ResearchCandidate::State * ResearchProof::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchProof::Emission.host request => false | ResearchProof::Emission.awaiting => false | ResearchProof::Emission.blocked completion => false | ResearchProof::Emission.complete answer => (match (project answer result) | Research::ResultKind.failed reason => true | Research::ResultKind.checked goal theorem axioms => false | Research::ResultKind.inspected goal => false | Research::ResultKind.maintained sources evidence => false | Research::ResultKind.cut => false | Research::ResultKind.unavailable => false)),
+ axioms: []
+}
+
+definition{
+ name: readPath,
+ parameters: [result : (ResearchCandidate::State * ResearchProof::Emission)],
+ result: String,
+ body: (match (second result) | ResearchProof::Emission.awaiting => "" | ResearchProof::Emission.complete outcome => "" | ResearchProof::Emission.blocked completion => "" | ResearchProof::Emission.host request => (match request | LexLeanStd.Host::Request.read path => path | LexLeanStd.Host::Request.write path contents => "" | LexLeanStd.Host::Request.list path => "" | LexLeanStd.Host::Request.stat path => "" | LexLeanStd.Host::Request.createDir path => "" | LexLeanStd.Host::Request.removeFile path => "" | LexLeanStd.Host::Request.removeTree path => "" | LexLeanStd.Host::Request.rename source target => "" | LexLeanStd.Host::Request.canonical path => "" | LexLeanStd.Host::Request.lock path => "" | LexLeanStd.Host::Request.spawn child => "" | LexLeanStd.Host::Request.wait children duration => "" | LexLeanStd.Host::Request.stop child => "" | LexLeanStd.Host::Request.exit status output errors => "")),
+ axioms: []
+}
+
+definition{
+ name: cut,
+ parameters: [result : (ResearchCandidate::State * ResearchProof::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchProof::Emission.host request => false | ResearchProof::Emission.awaiting => false | ResearchProof::Emission.blocked completion => false | ResearchProof::Emission.complete answer => (match (project answer result) | Research::ResultKind.cut => true | Research::ResultKind.checked goal theorem axioms => false | Research::ResultKind.inspected goal => false | Research::ResultKind.maintained sources evidence => false | Research::ResultKind.failed reason => false | Research::ResultKind.unavailable => false)),
+ axioms: []
+}
+
+theorem{
+ name: snapshotUsesTheFixedCompilerCommand,
+ parameters: [],
+ statement: ((match (prim index (ResearchCandidate::arguments (ResearchVerificationTraces::settings)) 2 : (Option String)) | Option.none => false | Option.some command => (prim equal command "snapshot" : Bool)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: invalidDecoderBudgetLaunchesNothing,
+ parameters: [],
+ statement: ((failed (ResearchCandidate::begin (context (ResearchVerificationTraces::config 0 "/research/lexlean.toml" "/research/attempt.out" "/research/attempt.err")))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+theorem{
+ name: snapshotExitOnlyRequestsARead,
+ parameters: [],
+ statement: ((prim equal (readPath (reading)) "/research/attempt.out" : Bool) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: snapshotExitDoesNotCreateAProofOwner,
+ parameters: [],
+ statement: ((match (project (first (reading)) proof) | Option.none => true | Option.some owner => false) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: cancelReading,
+ parameters: [],
+ result: (ResearchCandidate::State * ResearchProof::Emission),
+ body: (ResearchCandidate::step (first (reading)) (ctor ResearchVerification::Event.cancel)),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancellationWaitsForTheOutstandingSnapshotRead,
+ parameters: [],
+ statement: ((kind (cancelReading)) = 1),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelledSnapshotBytesCannotStartVerification,
+ parameters: [source : Bytes],
+ statement: ((cut (ResearchCandidate::step (first (cancelReading)) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] source))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelledReadFailureStillCompletesCancellation,
+ parameters: [],
+ statement: ((cut (ResearchCandidate::step (first (cancelReading)) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.error [Bytes, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: unexpectedReadReplyBlocksDispatch,
+ parameters: [],
+ statement: ((kind (ResearchCandidate::step (first (reading)) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::spawned)))) = 3),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: malformedSnapshotNeverStartsVerification,
+ parameters: [],
+ statement: ((failed (ResearchCandidate::step (first (reading)) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b7d))))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: cancelledSpawn,
+ parameters: [],
+ result: (ResearchCandidate::State * ResearchProof::Emission),
+ body: (ResearchCandidate::step (first (began)) (ctor ResearchVerification::Event.cancel)),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: stopping,
+ parameters: [],
+ result: (ResearchCandidate::State * ResearchProof::Emission),
+ body: (ResearchCandidate::step (first (cancelledSpawn)) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::spawned))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: failedStop,
+ parameters: [],
+ result: (ResearchCandidate::State * ResearchProof::Emission),
+ body: (ResearchCandidate::step (first (stopping)) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost))))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelDuringSpawnDrainsBeforeStopping,
+ parameters: [],
+ statement: ((kind (cancelledSpawn)) = 1),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedCleanupBlocksDispatch,
+ parameters: [],
+ statement: ((kind (failedStop)) = 3),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedCleanupRetainsTheSnapshotChild,
+ parameters: [],
+ statement: ((match (project (first (failedStop)) execution) | Option.none => (ctor Option.none [Nat]) | Option.some execution => (project execution owner)) = (ctor Option.some [Nat] 7)),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: changedSnapshotCancelsThePendingRead,
+ parameters: [],
+ statement: ((project (first (ResearchCandidate::step (first (reading)) (ctor ResearchVerification::Event.changed (ResearchTraces::otherSnapshot)))) cancelled) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: research,
+ parameters: [],
+ result: Research::State,
+ body: (record Research::State {snapshot := (project (VerificationReportTraces::request) snapshot), components := (ResearchTraces::components), tasks := (cons (project (VerificationReportTraces::request) task) (nil Research::Task)), pending := (ctor Option.none [Research::Request]), next := 1, history := (nil Research::Answer)}),
+ axioms: []
+}
+
+definition{
+ name: runnerStarted,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (ResearchRunner::begin (research))) (ctor ResearchRunner::Event.candidate (context (ResearchVerificationTraces::settings)))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: runnerOwnsTheCandidateSnapshot,
+ parameters: [],
+ statement: ((match (project (first (runnerStarted)) candidate) | Option.none => false | Option.some owner => true) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: runnerRefusesOverlappingSnapshotStrategyAndReview,
+ parameters: [],
+ statement: ((((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (runnerStarted)) (ctor ResearchRunner::Event.candidate (context (ResearchVerificationTraces::settings))))) =? 6) && (((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (runnerStarted)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))) =? 6) && ((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (runnerStarted)) (ctor ResearchRunner::Event.reviewed (ResearchRunnerTraces::checkedAnswer 0x4861)))) =? 6))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: runnerStopping,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (ResearchRunner::step (first (runnerStarted)) (ctor ResearchRunner::Event.cancel))) (ctor ResearchRunner::Event.host (ResearchVerificationTraces::spawned))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: runnerFailedStop,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (runnerStopping)) (ctor ResearchRunner::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost))))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: runnerRetainsTheFailedCandidateCleanup,
+ parameters: [],
+ statement: (((project (first (runnerFailedStop)) halted) && (match (project (first (runnerFailedStop)) candidate) | Option.none => false | Option.some owner => (match (project owner execution) | Option.none => false | Option.some execution => (match (project execution owner) | Option.none => false | Option.some child => (child =? 7))))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: candidateCleanupFailureCannotPublishEvidence,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::historySize (runnerFailedStop)) = 0),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: missingOwnerBlocksInsteadOfLearningACandidateFailure,
+ parameters: [],
+ statement: ((kind (ResearchCandidate::step (record ResearchCandidate::State {context := (context (ResearchVerificationTraces::settings)), execution := (ctor Option.none [ResearchExecution::State]), proof := (ctor Option.none [ResearchProof::State]), phase := (ctor ResearchCandidate::Phase.running), cancelled := false}) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::spawned)))) = 3),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: aRawProofEventCannotStartASecondVerifier,
+ parameters: [],
+ statement: ((ResearchRunnerTraces::kindOf (ResearchRunner::step (first (runnerStarted)) (ctor ResearchRunner::Event.proof (VerificationReportTraces::pins) (ResearchVerificationTraces::settings) (record CandidateBinding::Input {linked := (ctor Json::Value.null), lexicon := (ctor Json::Value.null)}) 32 1024))) = 6),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

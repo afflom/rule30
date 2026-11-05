@@ -130,7 +130,13 @@ command/attestation reads. Its accepted outcome is validated report data;
 `ResearchProof` promotes it only after `CandidateBinding` recomputes the candidate
 semantic identity and compares the audited declaration's actual type with the
 requested contextual goal. `ResearchRunner.Event.reviewed` refuses checked
-answers; submit proof jobs through `Event.proof`. The binding schema encodes the
+answers; submit constructed candidates through `Event.candidate`.
+`ResearchCandidate` owns the local `lexlean snapshot` process and output read,
+reconstructs the full compiler IR with `CompilerSnapshot`, derives verification
+pins and preflights the exact goal before entering `ResearchProof`. Snapshot
+metadata is not a proof. Its caller still owns candidate construction, the
+isolated project and imported library snapshot. `Event.proof` remains the
+internal typed entry for already-owned candidate data. The binding schema encodes the
 inspected source type and closed target as core arenas in the sequent; source
 inspection must establish their origin and snapshot before dispatch.
 Maintenance reports have a separate result kind. Cancellation consumes the

@@ -268,17 +268,26 @@ definition{
 }
 
 definition{
+  name: protocol,
+  parameters: [state : State, reason : String],
+  result: (State * Emission),
+  body: (let config : Config := (project state config); (finish state (ctor Outcome.terminated (record ResearchExecution::Completion {request := (project (project state pins) request), kind := (ctor ResearchExecution::EndKind.protocol), code := (ctor Option.none [Int32]), clock := 0, output := (project config output), errors := (project config errors), detail := (prim utf8_encode reason : Bytes)})))),
+  axioms: [],
+  executable: true
+}
+
+definition{
   name: reading,
   parameters: [state : State, event : LexLeanStd.Host::Event],
   result: (State * Emission),
   body: (match (readResponse event)
- | Option.none => (finish state (ctor Outcome.rejected "unexpected verification host response"))
+ | Option.none => (protocol state "unexpected verification host response")
  | Option.some response => (match (project state cancelled) | Bool.true => (finish state (ctor Outcome.cancelled)) | Bool.false => (match response
    | Result.error problem => (finish state (ctor Outcome.rejected "verification report read failed"))
    | Result.ok source => (match (project state phase)
      | Phase.command => (commandRead state source)
      | Phase.attestation command => (attestationRead state command source)
-     | Phase.running => (finish state (ctor Outcome.rejected "no pending verification read"))
+     | Phase.running => (protocol state "no pending verification read")
      | Phase.ended => (state, (ctor Emission.awaiting)))))),
   axioms: [Quot.sound, propext],
   executable: true
