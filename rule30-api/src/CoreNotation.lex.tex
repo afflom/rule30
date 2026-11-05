@@ -1,0 +1,191 @@
+\begin{lexlean}{CoreNotation}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\importmodule{Hypotheses}
+\importmodule{LexLeanStd.Buffer}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Render native core terms as LexLean 1.2 notation with one statement per arena node. Quoted names cannot introduce syntax; references preserve de Bruijn scope and DAG numbering. Every core node constructor, universe level, binder visibility, scalar literal and metadata value has an explicit rendering. Unknown or malformed fields, forward references, non-scalar literals and exhausted work or output limits are refused. Rendering proposes source and confers no proof authority.",
+ axioms: [],
+ executable: true
+}
+
+inductive{
+ name: Work,
+ type_parameters: [],
+ parameters: [],
+ constructors: [
+  {name: invalid, fields: []},
+  {name: raw, fields: [Bytes]},
+  {name: quoted, fields: [Json::Value]},
+  {name: natural, fields: [Json::Value]},
+  {name: level, fields: [Json::Value, Nat]},
+  {name: levels, fields: [Json::Value]},
+  {name: names, fields: [Json::Value]},
+  {name: items, fields: [Nat, (List Json::Value)]},
+  {name: node, fields: [Json::Value, Nat]},
+  {name: nodes, fields: [(List Json::Value), Nat]},
+  {name: binder, fields: [Json::Value]},
+  {name: meta, fields: [Json::Value]},
+  {name: scalar, fields: [Json::Value]}
+ ]
+}
+
+definition{
+ name: hasFields,
+ parameters: [value : Json::Value, keys : (List Bytes)],
+ result: Bool,
+ body: (match keys | List.nil => true | List.cons key rest => (match (Json::field value key) | Option.none => false | Option.some found => (hasFields value rest))),
+ axioms: [],
+ executable: true,
+ recursive_argument: keys
+}
+
+definition{
+ name: shape,
+ parameters: [value : Json::Value, keys : (List Bytes)],
+ result: Bool,
+ body: (match value | Json::Value.object entries => (((prim length entries : Nat) =? (prim length keys : Nat)) && (hasFields value keys)) | Json::Value.null => false | Json::Value.boolean b => false | Json::Value.number n => false | Json::Value.string s => false | Json::Value.array a => false),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: levelWork,
+ parameters: [node : Json::Value, depth : Nat, tail : (List Work)],
+ result: (List Work),
+ body: (if (depth <? 120) then (if ((Toml::sameBytes (CoreBinding::kind node) 0x7a) && (shape node (cons 0x6b (nil Bytes)))) then (cons (ctor Work.raw 0x30) tail) else (if ((Toml::sameBytes (CoreBinding::kind node) 0x70) && (shape node (cons 0x6b (cons 0x61 (nil Bytes))))) then (cons (ctor Work.quoted (CoreBinding::get node 0x61)) tail) else (if ((Toml::sameBytes (CoreBinding::kind node) 0x73) && (shape node (cons 0x6b (cons 0x61 (nil Bytes))))) then (cons (ctor Work.raw 0x28) (cons (ctor Work.level (CoreBinding::get node 0x61) (depth + 1)) (cons (ctor Work.raw 0x292b31) tail))) else (if (((Toml::sameBytes (CoreBinding::kind node) 0x6d) || (Toml::sameBytes (CoreBinding::kind node) 0x69)) && (shape node (cons 0x6b (cons 0x61 (nil Bytes))))) then (match (CoreBinding::get node 0x61) | Json::Value.array pair => (match pair | List.nil => (cons (ctor Work.invalid) tail) | List.cons left rest => (match rest | List.nil => (cons (ctor Work.invalid) tail) | List.cons right extra => (match extra | List.cons other others => (cons (ctor Work.invalid) tail) | List.nil => (cons (ctor Work.raw (if (Toml::sameBytes (CoreBinding::kind node) 0x6d) then 0x6d617828 else 0x696d617828)) (cons (ctor Work.level left (depth + 1)) (cons (ctor Work.raw 0x2c) (cons (ctor Work.level right (depth + 1)) (cons (ctor Work.raw 0x29) tail)))))))) | Json::Value.null => (cons (ctor Work.invalid) tail) | Json::Value.boolean b => (cons (ctor Work.invalid) tail) | Json::Value.number n => (cons (ctor Work.invalid) tail) | Json::Value.string s => (cons (ctor Work.invalid) tail) | Json::Value.object o => (cons (ctor Work.invalid) tail)) else (cons (ctor Work.invalid) tail))))) else (cons (ctor Work.invalid) tail)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: textIs,
+ parameters: [value : Json::Value, expected : Bytes],
+ result: Bool,
+ body: (match value | Json::Value.string text => (Toml::sameBytes text expected) | Json::Value.null => false | Json::Value.boolean b => false | Json::Value.number n => false | Json::Value.array a => false | Json::Value.object o => false),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: binderWork,
+ parameters: [node : Json::Value, tail : (List Work)],
+ result: (List Work),
+ body: (if (textIs (CoreBinding::get node 0x62) 0x65) then (cons (ctor Work.raw 0x28) (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x74)) (cons (ctor Work.raw 0x29) tail)))))) else (if (textIs (CoreBinding::get node 0x62) 0x69) then (cons (ctor Work.raw 0x7b) (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x74)) (cons (ctor Work.raw 0x7d) tail)))))) else (if (textIs (CoreBinding::get node 0x62) 0x73) then (cons (ctor Work.raw 0x7b7b) (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x74)) (cons (ctor Work.raw 0x7d7d) tail)))))) else (if (textIs (CoreBinding::get node 0x62) 0x63) then (cons (ctor Work.raw 0x5b) (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x74)) (cons (ctor Work.raw 0x5d) tail)))))) else (cons (ctor Work.invalid) tail))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: digitsFrom,
+ parameters: [text : Bytes, position : Nat, remaining : Nat],
+ result: Bool,
+ body: (match remaining | Nat.zero => true | Nat.succ more => (match (Toml::digitAt text position) | Option.none => false | Option.some digit => (digitsFrom text (position + 1) more))),
+ axioms: [],
+ executable: true,
+ recursive_argument: remaining
+}
+
+definition{
+ name: digits,
+ parameters: [value : Json::Value, signed : Bool],
+ result: Work,
+ body: (match value | Json::Value.string text => (let start : Nat := (if (signed && (Toml::byteIs text 0 (45 : UInt8))) then 1 else 0); (if ((start <? (prim length text : Nat)) && (digitsFrom text start (prim subtract (prim length text : Nat) start : Nat))) then (ctor Work.quoted value) else (ctor Work.invalid))) | Json::Value.null => (ctor Work.invalid) | Json::Value.boolean b => (ctor Work.invalid) | Json::Value.number n => (ctor Work.invalid) | Json::Value.array a => (ctor Work.invalid) | Json::Value.object o => (ctor Work.invalid)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: nodeWork,
+ parameters: [node : Json::Value, before : Nat, tail : (List Work), maximum : Nat, steps : Nat],
+ result: (List Work),
+ body: (match (CoreBinding::describe node before maximum steps) | Option.none => (cons (ctor Work.invalid) tail) | Option.some valid => (if (Toml::sameBytes (CoreBinding::kind node) 0x62) then (cons (ctor Work.raw 0x23) (cons (ctor Work.natural (CoreBinding::get node 0x69)) tail)) else (if (Toml::sameBytes (CoreBinding::kind node) 0x73) then (cons (ctor Work.raw 0x536f727420) (cons (ctor Work.level (CoreBinding::get node 0x6c) 0) tail)) else (if (Toml::sameBytes (CoreBinding::kind node) 0x63) then (cons (ctor Work.raw 0x636f6e737420) (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.levels (CoreBinding::get node 0x75)) tail))) else (if (Toml::sameBytes (CoreBinding::kind node) 0x61) then (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x66)) (cons (ctor Work.raw 0x20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x78)) tail))))) else (if (Toml::sameBytes (CoreBinding::kind node) 0x6c) then (cons (ctor Work.raw 0x66756e20) (cons (ctor Work.binder node) (cons (ctor Work.raw 0x203d3e20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x76)) tail))))) else (if (Toml::sameBytes (CoreBinding::kind node) 0x70) then (cons (ctor Work.binder node) (cons (ctor Work.raw 0x202d3e20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x76)) tail)))) else (if (Toml::sameBytes (CoreBinding::kind node) 0x6e) then (cons (ctor Work.raw 0x6e617420) (cons (digits (CoreBinding::get node 0x76) false) tail)) else (if (Toml::sameBytes (CoreBinding::kind node) 0x6a) then (cons (ctor Work.raw 0x70726f6a20) (cons (ctor Work.quoted (CoreBinding::get node 0x73)) (cons (ctor Work.raw 0x20) (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x20) (cons (ctor Work.natural (CoreBinding::get node 0x69)) (cons (ctor Work.raw 0x20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x78)) tail))))))))) else (if (Toml::sameBytes (CoreBinding::kind node) 0x65) then (match (CoreBinding::get node 0x64) | Json::Value.null => (cons (ctor Work.invalid) tail) | Json::Value.boolean dependent => (cons (ctor Work.raw (if dependent then 0x6861766520 else 0x6c657420)) (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x74)) (cons (ctor Work.raw 0x203a3d20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x76)) (cons (ctor Work.raw 0x3b20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x626f6479)) tail))))))))))) | Json::Value.number n => (cons (ctor Work.invalid) tail) | Json::Value.string s => (cons (ctor Work.invalid) tail) | Json::Value.array a => (cons (ctor Work.invalid) tail) | Json::Value.object o => (cons (ctor Work.invalid) tail)) else (if (Toml::sameBytes (CoreBinding::kind node) 0x74) then (match (CoreBinding::get node 0x76) | Json::Value.null => (cons (ctor Work.invalid) tail) | Json::Value.boolean b => (cons (ctor Work.invalid) tail) | Json::Value.number n => (cons (ctor Work.invalid) tail) | Json::Value.string s => (cons (ctor Work.invalid) tail) | Json::Value.array scalars => (cons (ctor Work.raw 0x22) (cons (ctor Work.items 3 scalars) (cons (ctor Work.raw 0x22) tail))) | Json::Value.object o => (cons (ctor Work.invalid) tail)) else (if (Toml::sameBytes (CoreBinding::kind node) 0x64) then (match (CoreBinding::get node 0x6d) | Json::Value.null => (cons (ctor Work.invalid) tail) | Json::Value.boolean b => (cons (ctor Work.invalid) tail) | Json::Value.number n => (cons (ctor Work.invalid) tail) | Json::Value.string s => (cons (ctor Work.invalid) tail) | Json::Value.array entries => (cons (ctor Work.raw 0x616e6e6f74205b) (cons (ctor Work.items 2 entries) (cons (ctor Work.raw 0x5d20) (cons (ctor Work.raw 0x40) (cons (ctor Work.natural (CoreBinding::get node 0x78)) tail))))) | Json::Value.object o => (cons (ctor Work.invalid) tail)) else (cons (ctor Work.invalid) tail))))))))))))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: metaWork,
+ parameters: [node : Json::Value, tail : (List Work)],
+ result: (List Work),
+ body: (let value : Json::Value := (CoreBinding::get node 0x76); (if ((shape node (cons 0x6e (cons 0x76 (nil Bytes)))) && (shape value (cons 0x74 (cons 0x76 (nil Bytes))))) then (if (textIs (CoreBinding::get value 0x74) 0x6e) then (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a3d206e617420) (cons (digits (CoreBinding::get value 0x76) false) tail))) else (if (textIs (CoreBinding::get value 0x74) 0x69) then (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a3d20696e7420) (cons (digits (CoreBinding::get value 0x76) true) tail))) else (if (textIs (CoreBinding::get value 0x74) 0x73) then (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a3d2073747220) (cons (ctor Work.quoted (CoreBinding::get value 0x76)) tail))) else (if (textIs (CoreBinding::get value 0x74) 0x6d) then (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a3d206e616d6520) (cons (ctor Work.quoted (CoreBinding::get value 0x76)) tail))) else (if (textIs (CoreBinding::get value 0x74) 0x62) then (match (CoreBinding::get value 0x76) | Json::Value.null => (cons (ctor Work.invalid) tail) | Json::Value.boolean b => (cons (ctor Work.quoted (CoreBinding::get node 0x6e)) (cons (ctor Work.raw 0x203a3d20626f6f6c20) (cons (ctor Work.raw (if b then 0x74727565 else 0x66616c7365)) tail))) | Json::Value.number n => (cons (ctor Work.invalid) tail) | Json::Value.string s => (cons (ctor Work.invalid) tail) | Json::Value.array a => (cons (ctor Work.invalid) tail) | Json::Value.object o => (cons (ctor Work.invalid) tail)) else (cons (ctor Work.invalid) tail)))))) else (cons (ctor Work.invalid) tail))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: itemsWork,
+ parameters: [mode : Nat, items : (List Json::Value), tail : (List Work)],
+ result: (List Work),
+ body: (match items | List.nil => tail | List.cons head rest => (cons (if (mode =? 0) then (ctor Work.quoted head) else (if (mode =? 1) then (ctor Work.level head 0) else (if (mode =? 2) then (ctor Work.meta head) else (ctor Work.scalar head)))) (match rest | List.nil => tail | List.cons next others => (if (mode =? 3) then (cons (ctor Work.items mode rest) tail) else (cons (ctor Work.raw 0x2c) (cons (ctor Work.items mode rest) tail)))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: expand,
+ parameters: [work : Work, tail : (List Work), maximum : Nat, steps : Nat],
+ result: (List Work),
+ body: (match work | Work.invalid => (cons (ctor Work.invalid) tail) | Work.raw text => (cons (ctor Work.invalid) tail) | Work.quoted value => (cons (ctor Work.invalid) tail) | Work.natural value => (cons (ctor Work.invalid) tail) | Work.scalar value => (cons (ctor Work.invalid) tail) | Work.level value depth => (levelWork value depth tail) | Work.levels value => (match value | Json::Value.null => (cons (ctor Work.invalid) tail) | Json::Value.boolean b => (cons (ctor Work.invalid) tail) | Json::Value.number n => (cons (ctor Work.invalid) tail) | Json::Value.string s => (cons (ctor Work.invalid) tail) | Json::Value.array items => (match items | List.nil => tail | List.cons head rest => (cons (ctor Work.raw 0x2e7b) (cons (ctor Work.items 1 items) (cons (ctor Work.raw 0x7d) tail)))) | Json::Value.object o => (cons (ctor Work.invalid) tail)) | Work.names value => (match value | Json::Value.null => (cons (ctor Work.invalid) tail) | Json::Value.boolean b => (cons (ctor Work.invalid) tail) | Json::Value.number n => (cons (ctor Work.invalid) tail) | Json::Value.string s => (cons (ctor Work.invalid) tail) | Json::Value.array items => (itemsWork 0 items tail) | Json::Value.object o => (cons (ctor Work.invalid) tail)) | Work.items mode items => (itemsWork mode items tail) | Work.binder value => (binderWork value tail) | Work.meta value => (metaWork value tail) | Work.node value before => (nodeWork value before tail maximum steps) | Work.nodes items index => (match items | List.nil => tail | List.cons head rest => (cons (ctor Work.raw 0x40) (cons (ctor Work.raw (Hypotheses::decimal index)) (cons (ctor Work.raw 0x203a3d20) (cons (ctor Work.node head index) (cons (ctor Work.raw 0x0a) (cons (ctor Work.nodes rest (index + 1)) tail)))))))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: terminal,
+ parameters: [work : Work, maximum : Nat],
+ result: (Option Bytes),
+ body: (match work | Work.raw text => (ctor Option.some [Bytes] text) | Work.quoted value => (match value | Json::Value.null => (ctor Option.none [Bytes]) | Json::Value.boolean b => (ctor Option.none [Bytes]) | Json::Value.number n => (ctor Option.none [Bytes]) | Json::Value.string text => (JsonCanonical::quote text maximum) | Json::Value.array a => (ctor Option.none [Bytes]) | Json::Value.object o => (ctor Option.none [Bytes])) | Work.natural value => (match (Json::natural value 18446744073709551615) | Option.none => (ctor Option.none [Bytes]) | Option.some number => (ctor Option.some [Bytes] (Hypotheses::decimal number))) | Work.scalar value => (match (Json::natural value 1114111) | Option.none => (ctor Option.none [Bytes]) | Option.some scalar => (if ((scalar <? 55296) || (57343 <? scalar)) then (match (JsonCanonical::quote (Json::scalar scalar) (maximum + 2)) | Option.none => (ctor Option.none [Bytes]) | Option.some text => (ctor Option.some [Bytes] (Toml::sliceOr text 1 (prim subtract (prim length text : Nat) 2 : Nat)))) else (ctor Option.none [Bytes]))) | Work.invalid => (ctor Option.none [Bytes])  | Work.level value depth => (ctor Option.none [Bytes])  | Work.levels value => (ctor Option.none [Bytes])  | Work.names value => (ctor Option.none [Bytes])  | Work.items mode items => (ctor Option.none [Bytes])  | Work.binder value => (ctor Option.none [Bytes])  | Work.meta value => (ctor Option.none [Bytes])  | Work.node value before => (ctor Option.none [Bytes])  | Work.nodes items index => (ctor Option.none [Bytes])),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: isTerminal,
+ parameters: [work : Work],
+ result: Bool,
+ body: (match work | Work.invalid => true | Work.raw text => true | Work.quoted value => true | Work.natural value => true | Work.scalar value => true | Work.level value depth => false | Work.levels value => false | Work.names value => false | Work.items mode items => false | Work.binder value => false | Work.meta value => false | Work.node value before => false | Work.nodes items index => false),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: render,
+ parameters: [pending : (List Work), output : LexLeanStd.Buffer::Buffer, maximum : Nat, steps : Nat, fuel : Nat],
+ result: (Option Bytes),
+ body: (match fuel | Nat.zero => (match pending | List.nil => (match (LexLeanStd.Buffer::finish output) | Result.error error => (ctor Option.none [Bytes]) | Result.ok data => (ctor Option.some [Bytes] data)) | List.cons head tail => (ctor Option.none [Bytes])) | Nat.succ more => (match pending | List.nil => (match (LexLeanStd.Buffer::finish output) | Result.error error => (ctor Option.none [Bytes]) | Result.ok data => (ctor Option.some [Bytes] data)) | List.cons head tail => (if (isTerminal head) then (match (terminal head (prim subtract maximum (LexLeanStd.Buffer::length output) : Nat)) | Option.none => (ctor Option.none [Bytes]) | Option.some bytes => (let next : LexLeanStd.Buffer::Buffer := (LexLeanStd.Buffer::writeBytes output bytes); (if (LexLeanStd.Buffer::exceeded next) then (ctor Option.none [Bytes]) else (render tail next maximum steps more)))) else (render (expand head tail maximum steps) output maximum steps more)))),
+ axioms: [propext],
+ executable: true,
+ recursive_argument: fuel
+}
+
+definition{
+ name: encode,
+ parameters: [pending : (List Work), maximum : Nat, steps : Nat],
+ result: (Option Bytes),
+ body: (render pending (LexLeanStd.Buffer::new maximum) maximum steps steps),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "native-core-notation" (cons "arena-reference-preservation" (cons "universe-levels" (cons "binder-visibility" (cons "unicode-scalar-literals" (cons "typed-metadata" (cons "quoted-name-isolation" (cons "bounded-rendering" (nil String))))))))),
+ axioms: [],
+ executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

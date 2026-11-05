@@ -141,7 +141,7 @@ For premises it encodes the source type and closed target as core arenas; source
 inspection must establish their origin and snapshot before dispatch. Closed goals
 have no telescope and designate the exact registered source constant.
 `CandidateSource.construct` builds an unverified native-core theorem in the
-LexLean `coredata` form. Its output remains a candidate until owned verification
+LexLean 1.2 notation. Its output remains a candidate until owned verification
 succeeds. Its fixed
 module prefix is `Rule30Candidate`, module `Candidate`, theorem `proof`.
 The caller owns the isolated project and imported library; exact name matching

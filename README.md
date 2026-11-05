@@ -298,7 +298,7 @@ step roots can export a generated executable with explicit file/process effects
 and child cleanup; pure roots remain libraries.
 The API imports `LexLeanStd.Host` from the pinned source package; its local
 `Host` module contains only the application harness. The attention catalog
-covers all 68 application and library modules. `ResearchRunner` connects the
+covers all 70 application and library modules. `ResearchRunner` connects the
 controller to the local-tool supervisor in `ResearchExecution`: it binds each
 job to the outstanding request, drains cancelled host requests, preserves child
 ownership on cleanup failure, and requires report review after a successful
@@ -337,7 +337,7 @@ catalog initializer, and runner `begin`/`step` component libraries.
 
 `CandidateSource.construct` emits one unverified `.lex.tex` native-core theorem
 for the selected goal, with explicit imports, universe parameters and an exact
-axiom policy. It uses the language's `coredata` form and a fixed candidate theorem
+axiom policy. It uses native LexLean 1.2 notation and a fixed candidate theorem
 name; the local compiler checks the proposed term. The output budget includes
 the complete document. The caller still owns the isolated project and file writes.
 
