@@ -1,0 +1,61 @@
+\begin{lexlean}{ResearchCohortInput}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchCohort}
+\importmodule{ResearchInput}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{Research}
+\importmodule{CoreNotation}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: libraryOwner,
+ parameters: [base : ResearchWorkspace::Config, candidate : ResearchWorkspace::Config],
+ result: ResearchWorkspace::Config,
+ body: (record ResearchWorkspace::Config {request := (project base request), repository := (project candidate repository), revision := (project candidate revision), environment := (project candidate environment), output := (project candidate output), errors := (project candidate errors), allowance := (project candidate allowance), quantum := (project candidate quantum), polls := (project candidate polls)}),
+ executable: true
+}
+definition{
+ name: share,
+ parameters: [base : ResearchProject::Config, candidate : ResearchProject::Config],
+ result: (Option ResearchProject::Config),
+ body: (if ((ResearchProject::sameWorkspace (project base workspace) (libraryOwner (project base workspace) (project candidate workspace))) && ((ResearchCohort::sameTools (project base tools) (project candidate tools)) && (Research::sameSnapshot (project (project base request) snapshot) (project (project candidate request) snapshot)))) then (ctor Option.some [ResearchProject::Config] (record ResearchProject::Config {request := (project candidate request), workspace := (project base workspace), tools := (project candidate tools), arena := (project candidate arena), proof := (project candidate proof), imports := (project candidate imports), levels := (project candidate levels), axioms := (project candidate axioms), maxBytes := (project candidate maxBytes), maxDepth := (project candidate maxDepth), maxSteps := (project candidate maxSteps)})) else (ctor Option.none [ResearchProject::Config])),
+ executable: true
+}
+definition{
+ name: rest,
+ parameters: [base : ResearchProject::Config, values : (List Json::Value), environment : (List (String * String))],
+ result: (Option (List ResearchProject::Config)),
+ body: (match values | List.nil => (ctor Option.some [(List ResearchProject::Config)] (nil ResearchProject::Config)) | List.cons head tail => (match (ResearchInput::config head environment) | Option.none => (ctor Option.none [(List ResearchProject::Config)]) | Option.some candidate => (match (share base candidate) | Option.none => (ctor Option.none [(List ResearchProject::Config)]) | Option.some shared => (match (rest base tail environment) | Option.none => (ctor Option.none [(List ResearchProject::Config)]) | Option.some more => (ctor Option.some [(List ResearchProject::Config)] (cons shared more)))))),
+ recursive_argument: values,
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: config,
+ parameters: [value : Json::Value, environment : (List (String * String))],
+ result: (Option (List ResearchProject::Config)),
+ body: (if ((CoreNotation::shape value (cons 0x73706563 (cons 0x6669727374 (cons 0x72657374 (nil Bytes))))) && (ResearchInput::stringIs (CoreBinding::get value 0x73706563) 0x7233302f72657365617263682d636f686f72742f31)) then (match (ResearchInput::config (CoreBinding::get value 0x6669727374) environment) | Option.none => (ctor Option.none [(List ResearchProject::Config)]) | Option.some base => (match (ResearchInput::array (CoreBinding::get value 0x72657374)) | Option.none => (ctor Option.none [(List ResearchProject::Config)]) | Option.some values => (if ((prim length values : Nat) <=? 63) then (match (rest base values environment) | Option.none => (ctor Option.none [(List ResearchProject::Config)]) | Option.some more => (let candidates : (List ResearchProject::Config) := (cons base more); (if (ResearchCohort::compatible base candidates (nil Nat)) then (ctor Option.some [(List ResearchProject::Config)] candidates) else (ctor Option.none [(List ResearchProject::Config)])))) else (ctor Option.none [(List ResearchProject::Config)])))) else (ctor Option.none [(List ResearchProject::Config)])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: decode,
+ parameters: [data : Bytes, environment : (List (Bytes * Bytes))],
+ result: (Option (List ResearchProject::Config)),
+ body: (match (Json::parse data 8388608 96) | Result.error problem => (ctor Option.none [(List ResearchProject::Config)]) | Result.ok document => (match (ResearchInput::environment environment) | Option.none => (ctor Option.none [(List ResearchProject::Config)]) | Option.some admitted => (config document admitted))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "bounded-cohort-json" (cons "shared-owner-explicit-normalization" (cons "unchanged-tools-environment-and-library" (cons "unique-attempt-serials-before-effects" (nil String))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

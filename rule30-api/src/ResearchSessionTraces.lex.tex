@@ -1,0 +1,242 @@
+\begin{lexlean}{ResearchSessionTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchSession}
+\importmodule{ResearchRecord}
+\importmodule{ResearchProject}
+\importmodule{ResearchProjectTraces}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchWorkspaceTraces}
+\importmodule{ResearchEvidence}
+\importmodule{ResearchEvidenceTraces}
+\importmodule{ResearchCandidate}
+\importmodule{ResearchProof}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{CandidateBinding}
+\importmodule{Json}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: checkedAnswer,
+ parameters: [],
+ result: Research::Answer,
+ body: (let request : Research::Request := (project (project (ResearchProjectTraces::config) workspace) request); (record Research::Answer {request := request, result := (ctor Research::ResultKind.checked (project (project request task) sequent) 0x70726f6f66 (nil String))})),
+ axioms: [propext]
+}
+
+definition{
+ name: archiving,
+ parameters: [],
+ result: ResearchSession::State,
+ body: (record ResearchSession::State {project := (first (ResearchProjectTraces::ready)), candidate := (ctor Option.none [ResearchCandidate::State]), evidence := (ctor Option.some [ResearchEvidence::State] (ResearchEvidenceTraces::writing)), phase := (ctor ResearchSession::Phase.archiving), files := (ResearchRecord::emptyFiles), pending := (ctor Option.some [Research::Answer] (checkedAnswer)), retained := 0x, cancelled := false}),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: blocked,
+ parameters: [result : (ResearchSession::State * ResearchSession::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchSession::Emission.blocked reason => true | ResearchSession::Emission.host request => false | ResearchSession::Emission.awaiting => false | ResearchSession::Emission.complete answer identity => false),
+ axioms: []
+}
+
+definition{
+ name: completeChecked,
+ parameters: [result : (ResearchSession::State * ResearchSession::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchSession::Emission.complete answer identity => ((ResearchSession::isChecked answer) && (Toml::sameBytes identity 0x6964)) | ResearchSession::Emission.host request => false | ResearchSession::Emission.awaiting => false | ResearchSession::Emission.blocked reason => false),
+ axioms: []
+}
+
+definition{
+ name: completeCut,
+ parameters: [result : (ResearchSession::State * ResearchSession::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchSession::Emission.complete answer identity => (match (project answer result) | Research::ResultKind.cut => true | Research::ResultKind.checked goal theorem axioms => false | Research::ResultKind.inspected goal => false | Research::ResultKind.maintained sources evidence => false | Research::ResultKind.failed reason => false | Research::ResultKind.unavailable => false) | ResearchSession::Emission.host request => false | ResearchSession::Emission.awaiting => false | ResearchSession::Emission.blocked reason => false),
+ axioms: []
+}
+
+definition{
+ name: ownsWorkspace,
+ parameters: [value : ResearchSession::State],
+ result: Bool,
+ body: (ResearchProjectTraces::ownsWorkspace (project value project)),
+ axioms: []
+}
+
+definition{
+ name: host,
+ parameters: [value : ResearchSession::State, event : LexLeanStd.Host::Event],
+ result: (ResearchSession::State * ResearchSession::Emission),
+ body: (ResearchSession::step value (ctor ResearchSession::Event.host event)),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: finishJob,
+ parameters: [value : ResearchSession::State, code : Int32],
+ result: (ResearchSession::State * ResearchSession::Emission),
+ body: (host (first (host (first (host value (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))) (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] code) 101)),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: releasing,
+ parameters: [],
+ result: ResearchSession::State,
+ body: (first (ResearchSession::evidenceResult (archiving) ((ResearchEvidenceTraces::writing), (ctor ResearchEvidence::Emission.complete 0x6964)))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: checkedAnswerWithoutRetentionIsBlocked,
+ parameters: [],
+ statement: ((blocked (ResearchSession::finishPending (archiving))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: storedEvidenceWaitsForWorkspaceRemoval,
+ parameters: [],
+ statement: (((ownsWorkspace (releasing)) && (not (completeChecked (ResearchSession::evidenceResult (archiving) ((ResearchEvidenceTraces::writing), (ctor ResearchEvidence::Emission.complete 0x6964)))))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cleanupThenDeliversCheckedAnswerAndRecord,
+ parameters: [],
+ statement: ((completeChecked (finishJob (releasing) (0 : Int32))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelledCleanupSuppressesCheckedAnswer,
+ parameters: [],
+ statement: ((completeCut (finishJob (first (ResearchSession::step (releasing) (ctor ResearchSession::Event.cancel))) (0 : Int32))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedRemovalCannotDeliverCheckedAnswer,
+ parameters: [],
+ statement: (((blocked (finishJob (releasing) (1 : Int32))) && (ownsWorkspace (first (finishJob (releasing) (1 : Int32))))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: failedArchive,
+ parameters: [],
+ result: (ResearchSession::State * ResearchSession::Emission),
+ body: (ResearchSession::evidenceResult (archiving) ((ResearchEvidenceTraces::writing), (ctor ResearchEvidence::Emission.failed "storage unavailable"))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedArchiveRetainsTheOnlyVerifiedSource,
+ parameters: [],
+ statement: (((blocked (failedArchive)) && (ownsWorkspace (first (failedArchive)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: cancelledArchive,
+ parameters: [],
+ result: (ResearchSession::State * ResearchSession::Emission),
+ body: (host (first (ResearchSession::step (archiving) (ctor ResearchSession::Event.cancel))) (ResearchEvidenceTraces::written)),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelledArchiveRetainsUnpublishedProof,
+ parameters: [],
+ statement: (((blocked (cancelledArchive)) && (ownsWorkspace (first (cancelledArchive)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: checkedAnswerWithoutCandidateStateCannotArchive,
+ parameters: [],
+ statement: ((blocked (ResearchSession::archive (archiving) (checkedAnswer))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: captureVerification,
+ parameters: [phase : ResearchVerification::Phase],
+ result: ResearchVerification::State,
+ body: (let config : ResearchVerification::Config := (ResearchProject::verificationConfig (ResearchProjectTraces::config)); (let pins : VerificationReport::Pins := (record VerificationReport::Pins {request := (project (ResearchProjectTraces::config) request), source := 0x, semantic := 0x, compiler := 0x, lexlean := 0x, lean := 0x, lake := 0x, checker := 0x, theorem := 0x, module := 0x}); (record ResearchVerification::State {pins := pins, config := config, execution := (record ResearchExecution::State {job := (ResearchVerification::job pins config), phase := (ctor ResearchExecution::Phase.clock), owner := (ctor Option.none [Nat])}), phase := phase, cancelled := false, outcome := (ctor Option.none [ResearchVerification::Outcome])}))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: capturing,
+ parameters: [phase : ResearchVerification::Phase],
+ result: ResearchSession::State,
+ body: (let value : ResearchSession::State := (archiving); (record ResearchSession::State {project := (project value project), candidate := (ctor Option.some [ResearchCandidate::State] (record ResearchCandidate::State {context := (ResearchProject::context (ResearchProjectTraces::config)), execution := (ctor Option.none [ResearchExecution::State]), proof := (ctor Option.some [ResearchProof::State] (record ResearchProof::State {verification := (captureVerification phase), binding := (record CandidateBinding::Input {linked := (ctor Json::Value.null), lexicon := (ctor Json::Value.null)}), maxDepth := 32, maxSteps := 1024})), phase := (ctor ResearchCandidate::Phase.verifying), cancelled := false})), evidence := (project value evidence), phase := (ctor ResearchSession::Phase.verifying), files := (project value files), pending := (project value pending), retained := (project value retained), cancelled := (project value cancelled)})),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: captureOwnedCommandBytes,
+ parameters: [],
+ statement: ((Toml::sameBytes (project (project (ResearchSession::capture (capturing (ctor ResearchVerification::Phase.command)) (ResearchWorkspaceTraces::readEvent 0x636f6d6d616e64)) files) command) 0x636f6d6d616e64) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: captureOwnedAttestationBytes,
+ parameters: [],
+ statement: ((Toml::sameBytes (project (project (ResearchSession::capture (capturing (ctor ResearchVerification::Phase.attestation 0x636f6d6d616e64)) (ResearchWorkspaceTraces::readEvent 0x6174746573746174696f6e)) files) attestation) 0x6174746573746174696f6e) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: processOutputBeforeVerificationIsNotCaptured,
+ parameters: [],
+ statement: ((Toml::sameBytes (project (project (ResearchSession::capture (capturing (ctor ResearchVerification::Phase.running)) (ResearchWorkspaceTraces::readEvent 0x66616b65)) files) command) 0x) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: verifyingCandidate,
+ parameters: [],
+ result: ResearchSession::State,
+ body: (let value : ResearchSession::State := (archiving); (record ResearchSession::State {project := (project value project), candidate := (ctor Option.some [ResearchCandidate::State] (first (ResearchCandidate::begin (ResearchProject::context (ResearchProjectTraces::config))))), evidence := (ctor Option.none [ResearchEvidence::State]), phase := (ctor ResearchSession::Phase.verifying), files := (ResearchRecord::emptyFiles), pending := (ctor Option.none [Research::Answer]), retained := 0x, cancelled := false})),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: stoppedCandidate,
+ parameters: [],
+ result: (ResearchSession::State * ResearchSession::Emission),
+ body: (let active : ResearchSession::State := (first (host (first (host (verifyingCandidate) (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))); (let cancelled : ResearchSession::State := (first (ResearchSession::step active (ctor ResearchSession::Event.cancel))); (let stopping : ResearchSession::State := (first (host cancelled (ResearchExecutionTraces::waitEvent 101 (nil (Nat * (Option Int32)))))); (host stopping (ResearchExecutionTraces::stopOk))))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: interruptedCandidateRetainsWorkspace,
+ parameters: [],
+ statement: (((blocked (stoppedCandidate)) && (ownsWorkspace (first (stoppedCandidate)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

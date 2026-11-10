@@ -1,0 +1,319 @@
+\begin{lexlean}{ResearchEvidenceTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{ResearchEvidence}
+\importmodule{ResearchWorkspaceTraces}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: config,
+ parameters: [],
+ result: ResearchEvidence::Config,
+ body: (record ResearchEvidence::Config {request := (project (ResearchWorkspaceTraces::config) request), repository := "/research", recordPath := "/research/.r30/private/evidence.json", environment := (nil (String * String)), output := "/research/.r30/evidence.out", errors := "/research/.r30/evidence.err", maxBytes := 4096, maxSteps := 1024, allowance := 1000, quantum := 10, polls := 100, revision := (ResearchWorkspaceTraces::tree)}),
+ axioms: []
+}
+
+definition{
+ name: writing,
+ parameters: [],
+ result: ResearchEvidence::State,
+ body: (record ResearchEvidence::State {config := (config), body := 0x7b7d0a, identity := 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161, blob := 0x, operation := (ctor ResearchEvidence::Operation.hash), phase := (ctor ResearchEvidence::Phase.writing), execution := (ctor Option.none [ResearchExecution::State]), cancelled := false}),
+ axioms: []
+}
+
+definition{
+ name: host,
+ parameters: [state : ResearchEvidence::State, event : LexLeanStd.Host::Event],
+ result: (ResearchEvidence::State * ResearchEvidence::Emission),
+ body: (ResearchEvidence::step state (ctor ResearchEvidence::Event.host event)),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: written,
+ parameters: [],
+ result: LexLeanStd.Host::Event,
+ body: (ctor LexLeanStd.Host::Event.finished (ctor Result.ok [Unit, LexLeanStd.Host::Failure] ())),
+ axioms: []
+}
+
+definition{
+ name: spawned,
+ parameters: [state : ResearchEvidence::State],
+ result: ResearchEvidence::State,
+ body: (first (host (first (host state (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: finishJob,
+ parameters: [state : ResearchEvidence::State, code : Int32],
+ result: (ResearchEvidence::State * ResearchEvidence::Emission),
+ body: (host (spawned state) (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] code) 101)),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: hashing,
+ parameters: [],
+ result: ResearchEvidence::State,
+ body: (first (host (writing) (written))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: readingHash,
+ parameters: [],
+ result: ResearchEvidence::State,
+ body: (first (finishJob (hashing) (0 : Int32))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: hashReply,
+ parameters: [],
+ result: LexLeanStd.Host::Event,
+ body: (ResearchWorkspaceTraces::readEvent (prim append (ResearchWorkspaceTraces::tree) 0x0a : Bytes)),
+ axioms: []
+}
+
+definition{
+ name: readingBlob,
+ parameters: [],
+ result: ResearchEvidence::State,
+ body: (first (finishJob (first (host (readingHash) (hashReply))) (0 : Int32))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: retainingLibrary,
+ parameters: [],
+ result: ResearchEvidence::State,
+ body: (first (host (readingBlob) (ResearchWorkspaceTraces::readEvent 0x7b7d0a))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: readingLibrary,
+ parameters: [retainExit : Int32],
+ result: ResearchEvidence::State,
+ body: (first (finishJob (first (finishJob (retainingLibrary) retainExit)) (0 : Int32))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: publishing,
+ parameters: [],
+ result: ResearchEvidence::State,
+ body: (first (host (readingLibrary (0 : Int32)) (hashReply))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: readingPublished,
+ parameters: [publishExit : Int32],
+ result: ResearchEvidence::State,
+ body: (first (finishJob (first (finishJob (publishing) publishExit)) (0 : Int32))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: complete,
+ parameters: [result : (ResearchEvidence::State * ResearchEvidence::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchEvidence::Emission.complete identity => (Toml::sameBytes identity (project (writing) identity)) | ResearchEvidence::Emission.host request => false | ResearchEvidence::Emission.awaiting => false | ResearchEvidence::Emission.failed reason => false | ResearchEvidence::Emission.cut => false | ResearchEvidence::Emission.blocked reason => false),
+ axioms: []
+}
+
+definition{
+ name: failed,
+ parameters: [result : (ResearchEvidence::State * ResearchEvidence::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchEvidence::Emission.complete identity => false | ResearchEvidence::Emission.host request => false | ResearchEvidence::Emission.awaiting => false | ResearchEvidence::Emission.failed reason => true | ResearchEvidence::Emission.cut => false | ResearchEvidence::Emission.blocked reason => false),
+ axioms: []
+}
+
+definition{
+ name: cut,
+ parameters: [result : (ResearchEvidence::State * ResearchEvidence::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchEvidence::Emission.complete identity => false | ResearchEvidence::Emission.host request => false | ResearchEvidence::Emission.awaiting => false | ResearchEvidence::Emission.failed reason => false | ResearchEvidence::Emission.cut => true | ResearchEvidence::Emission.blocked reason => false),
+ axioms: []
+}
+
+definition{
+ name: blocked,
+ parameters: [result : (ResearchEvidence::State * ResearchEvidence::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchEvidence::Emission.complete identity => false | ResearchEvidence::Emission.host request => false | ResearchEvidence::Emission.awaiting => false | ResearchEvidence::Emission.failed reason => false | ResearchEvidence::Emission.cut => false | ResearchEvidence::Emission.blocked reason => true),
+ axioms: []
+}
+
+theorem{
+ name: publishedBytesCompleteStorage,
+ parameters: [],
+ statement: ((complete (host (readingPublished (0 : Int32)) (ResearchWorkspaceTraces::readEvent 0x7b7d0a))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: identicalExistingRecordIsIdempotent,
+ parameters: [],
+ statement: ((complete (host (readingPublished (1 : Int32)) (ResearchWorkspaceTraces::readEvent 0x7b7d0a))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: changedPrivateBlobIsRefusedBeforePublication,
+ parameters: [],
+ statement: ((failed (host (readingBlob) (ResearchWorkspaceTraces::readEvent 0x77726f6e67))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: changedPublishedRecordCannotComplete,
+ parameters: [],
+ statement: ((failed (host (readingPublished (0 : Int32)) (ResearchWorkspaceTraces::readEvent 0x77726f6e67))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedPublicationWithoutReadableRecordCannotComplete,
+ parameters: [],
+ statement: ((failed (finishJob (first (finishJob (publishing) (1 : Int32))) (1 : Int32))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: invalidObjectIdentityIsRefused,
+ parameters: [],
+ statement: ((failed (host (readingHash) (ResearchWorkspaceTraces::readEvent 0x2d2d0a))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelledWriteDrainsWithoutStartingGit,
+ parameters: [],
+ statement: ((cut (host (first (ResearchEvidence::step (writing) (ctor ResearchEvidence::Event.cancel))) (written))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelledHashReadDoesNotPublish,
+ parameters: [],
+ statement: ((cut (host (first (ResearchEvidence::step (readingHash) (ctor ResearchEvidence::Event.cancel))) (hashReply))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelledReadbackCannotComplete,
+ parameters: [],
+ statement: ((cut (host (first (ResearchEvidence::step (readingPublished (0 : Int32)) (ctor ResearchEvidence::Event.cancel))) (ResearchWorkspaceTraces::readEvent 0x7b7d0a))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: wrongWriteReplyBlocks,
+ parameters: [],
+ statement: ((blocked (host (writing) (ResearchWorkspaceTraces::readEvent 0x7b7d0a))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: cancelledChild,
+ parameters: [],
+ result: ResearchEvidence::State,
+ body: (first (host (first (ResearchEvidence::step (spawned (hashing)) (ctor ResearchEvidence::Event.cancel))) (ResearchExecutionTraces::waitEvent 101 (nil (Nat * (Option Int32)))))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: ownsChild,
+ parameters: [state : ResearchEvidence::State],
+ result: Bool,
+ body: (match (project state execution) | Option.none => false | Option.some active => (match (project active owner) | Option.none => false | Option.some owner => (owner =? 7))),
+ axioms: []
+}
+
+definition{
+ name: failedCleanup,
+ parameters: [],
+ result: (ResearchEvidence::State * ResearchEvidence::Emission),
+ body: (host (cancelledChild) (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedCleanupRetainsChild,
+ parameters: [],
+ statement: (((blocked (failedCleanup)) && (ownsChild (first (failedCleanup)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: substitutedLibraryRevisionPreventsPublication,
+ parameters: [],
+ statement: ((failed (host (readingLibrary (0 : Int32)) (ResearchWorkspaceTraces::readEvent 0x77726f6e670a))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: identicalRetainedLibraryIsIdempotent,
+ parameters: [],
+ statement: ((match (project (first (host (readingLibrary (1 : Int32)) (hashReply))) operation) | ResearchEvidence::Operation.publish => true | ResearchEvidence::Operation.hash => false | ResearchEvidence::Operation.read => false | ResearchEvidence::Operation.inspect => false | ResearchEvidence::Operation.retainLibrary => false | ResearchEvidence::Operation.inspectLibrary => false) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cancelledLibraryReadCannotPublishProof,
+ parameters: [],
+ statement: ((cut (host (first (ResearchEvidence::step (readingLibrary (0 : Int32)) (ctor ResearchEvidence::Event.cancel))) (hashReply))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+
+theorem{
+ name: signalledBlobWriteBlocks,
+ parameters: [],
+ statement: ((blocked (host (spawned (hashing)) (ResearchExecutionTraces::exitEvent 7 (ctor Option.none [Int32]) 101))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: signalledLibraryRetentionBlocks,
+ parameters: [],
+ statement: ((blocked (host (spawned (retainingLibrary)) (ResearchExecutionTraces::exitEvent 7 (ctor Option.none [Int32]) 101))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: signalledPublicationCannotProceedToReadback,
+ parameters: [],
+ statement: ((blocked (host (spawned (publishing)) (ResearchExecutionTraces::exitEvent 7 (ctor Option.none [Int32]) 101))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

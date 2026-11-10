@@ -3,16 +3,22 @@
 \useglossary{lexlean.std.nat@1.2.0}
 \importmodule{LexLeanStd.Host}
 \importmodule{Research}
-\importmodule{ResearchTraces}
 \importmodule{ResearchExecution}
 \title{Boolean}
 \begin{semanticmodule}
+definition{
+  name: fixtureRequest,
+  parameters: [],
+  result: Research::Request,
+  body: (record Research::Request {serial := 1, snapshot := (record Research::Snapshot {library := 0x6c, compiler := 0x63, model := 0x6d}), task := (record Research::Task {id := 0x61, purpose := (ctor Research::Purpose.prove), intent := (ctor Research::Purpose.prove), status := (ctor Research::Status.ready), component := "deduction", sources := (cons 0x74 (nil Bytes)), schema := 0x73, sequent := (record Research::Sequent {origin := 0x74, theorem := 0x74, premise := 0, telescope := 0x47, target := 0x4861, kind := (ctor Research::GoalKind.premise)}), age := 0, weight := 8})}),
+  axioms: []
+}
 
 definition{
   name: job,
   parameters: [allowance : Nat, quantum : Nat, polls : Nat],
   result: ResearchExecution::Job,
-  body: (record ResearchExecution::Job {request := (ResearchTraces::request (ctor Research::Purpose.prove)), tool := (ctor ResearchExecution::Tool.lean), arguments := (cons "Candidate.lean" (nil String)), directory := "/research", environment := (nil (String * String)), output := "attempt.out", errors := "attempt.err", allowance := allowance, quantum := quantum, polls := polls})
+  body: (record ResearchExecution::Job {request := (fixtureRequest), tool := (ctor ResearchExecution::Tool.lean), arguments := (cons "Candidate.lean" (nil String)), directory := "/research", environment := (nil (String * String)), output := "attempt.out", errors := "attempt.err", allowance := allowance, quantum := quantum, polls := polls})
 }
 
 definition{
@@ -26,7 +32,7 @@ definition{
   name: active,
   parameters: [allowance : Nat, quantum : Nat, polls : Nat],
   result: ResearchExecution::State,
-  body: (first (ResearchExecution::spawned (job allowance quantum polls) (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))
+  body: (first (ResearchExecution::spawned (job allowance quantum polls) 100 (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 99999))))
 }
 
 definition{
@@ -123,21 +129,21 @@ theorem{
 theorem{
   name: spawnFailureIsUnavailable,
   parameters: [],
-  statement: ((kindOf (ResearchExecution::spawned (job 10 4 3) (ctor Result.error [(Nat * Nat), LexLeanStd.Host::Failure] (failedHost)))) = 3),
+  statement: ((kindOf (ResearchExecution::spawned (job 10 4 3) 100 (ctor Result.error [(Nat * Nat), LexLeanStd.Host::Failure] (failedHost)))) = 3),
   proof: decide{}
 }
 
 theorem{
   name: waitNeverExceedsBudget,
   parameters: [],
-  statement: ((waitDuration (ResearchExecution::spawned (job 10 100 3) (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100)))) = 10),
+  statement: ((waitDuration (ResearchExecution::spawned (job 10 100 3) 100 (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 99999)))) = 10),
   proof: decide{}
 }
 
 theorem{
   name: relativeBudgetNeedsNoClockAddition,
   parameters: [],
-  statement: ((waitDuration (ResearchExecution::spawned (job 10 100 3) (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 18446744073709551610)))) = 10),
+  statement: ((waitDuration (ResearchExecution::spawned (job 10 100 3) 18446744073709551610 (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 99999)))) = 10),
   proof: decide{}
 }
 
@@ -235,7 +241,7 @@ theorem{
 theorem{
   name: aDelayedSpawnAfterCancellationIsStopped,
   parameters: [],
-  statement: ((stopTarget (ResearchExecution::step (first (ResearchExecution::cancel (first (ResearchExecution::begin (job 10 4 3))))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))) = 7),
+  statement: ((stopTarget (ResearchExecution::step (first (ResearchExecution::cancel (first (ResearchExecution::spawn (job 10 4 3) 100)))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 99999))))) = 7),
   proof: decide{}
 }
 
@@ -263,7 +269,42 @@ theorem{
 theorem{
   name: completedJobCannotBeRestartedByAnEvent,
   parameters: [],
-  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::step (active 10 4 3) (exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))) = 0),
+  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::step (active 10 4 3) (exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 99999))))) = 0),
+  proof: decide{}
+}
+
+theorem{
+  name: processIdIsNotUsedAsAClock,
+  parameters: [],
+  statement: ((ResearchExecution::spawned (job 10 4 3) 100 (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 99999))) = (ResearchExecution::waitFor (job 10 4 3) 7 100 100 3)),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: beginReadsClockBeforeSpawning,
+  parameters: [],
+  statement: ((second (ResearchExecution::begin (job 10 4 3))) = (ctor ResearchExecution::Emission.host (ctor LexLeanStd.Host::Request.wait (nil Nat) 0))),
+  proof: reflexivity{}
+}
+
+theorem{
+  name: cancelledInitialClockNeverSpawns,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::cancel (first (ResearchExecution::begin (job 10 4 3))))) (waitEvent 100 (nil (Nat * (Option Int32)))))) = 2),
+  proof: decide{}
+}
+
+theorem{
+  name: unsolicitedChildOnClockReadIsRefused,
+  parameters: [],
+  statement: ((kindOf (ResearchExecution::step (first (ResearchExecution::begin (job 10 4 3))) (exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 100))) = 4),
+  proof: decide{}
+}
+
+theorem{
+  name: normalExitReleasesDirectChildOwnership,
+  parameters: [],
+  statement: ((project (first (ResearchExecution::step (active 10 4 3) (exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 105))) owner) = (ctor Option.none [Nat])),
   proof: decide{}
 }
 

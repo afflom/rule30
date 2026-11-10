@@ -1,0 +1,226 @@
+\begin{lexlean}{ResearchInput}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Host}
+\importmodule{Research}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchProject}
+\importmodule{ResearchCandidate}
+\importmodule{CoreBinding}
+\importmodule{CoreNotation}
+\importmodule{Json}
+\importmodule{VerificationReport}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: bytes,
+ parameters: [value : Json::Value],
+ result: (Option Bytes),
+ body: (match value | Json::Value.null => (ctor Option.none [Bytes]) | Json::Value.boolean b => (ctor Option.none [Bytes]) | Json::Value.number n => (ctor Option.none [Bytes]) | Json::Value.string s => (ctor Option.some [Bytes] s) | Json::Value.array a => (ctor Option.none [Bytes]) | Json::Value.object o => (ctor Option.none [Bytes])),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: stringIs,
+ parameters: [value : Json::Value, expected : Bytes],
+ result: Bool,
+ body: (match (bytes value) | Option.none => false | Option.some data => (Toml::sameBytes data expected)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: array,
+ parameters: [value : Json::Value],
+ result: (Option (List Json::Value)),
+ body: (match value | Json::Value.null => (ctor Option.none [(List Json::Value)]) | Json::Value.boolean b => (ctor Option.none [(List Json::Value)]) | Json::Value.number n => (ctor Option.none [(List Json::Value)]) | Json::Value.string s => (ctor Option.none [(List Json::Value)]) | Json::Value.array a => (ctor Option.some [(List Json::Value)] a) | Json::Value.object o => (ctor Option.none [(List Json::Value)])),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: text,
+ parameters: [value : Json::Value],
+ result: (Option String),
+ body: (match (bytes value) | Option.none => (ctor Option.none [String]) | Option.some data => (if (ResearchWorkspace::asciiPath data 0 (prim length data : Nat)) then (ctor Option.some [String] (Host::textOf data)) else (ctor Option.none [String]))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: byteItems,
+ parameters: [values : (List Json::Value)],
+ result: (Option (List Bytes)),
+ body: (match values | List.nil => (ctor Option.some [(List Bytes)] (nil Bytes)) | List.cons head tail => (match (bytes head) | Option.none => (ctor Option.none [(List Bytes)]) | Option.some item => (match (byteItems tail) | Option.none => (ctor Option.none [(List Bytes)]) | Option.some rest => (ctor Option.some [(List Bytes)] (cons item rest))))),
+ axioms: [],
+ recursive_argument: values,
+ executable: true
+}
+
+definition{
+ name: byteList,
+ parameters: [value : Json::Value],
+ result: (Option (List Bytes)),
+ body: (match (array value) | Option.none => (ctor Option.none [(List Bytes)]) | Option.some values => (byteItems values)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: textItems,
+ parameters: [values : (List Json::Value)],
+ result: (Option (List String)),
+ body: (match values | List.nil => (ctor Option.some [(List String)] (nil String)) | List.cons head tail => (match (text head) | Option.none => (ctor Option.none [(List String)]) | Option.some item => (match (textItems tail) | Option.none => (ctor Option.none [(List String)]) | Option.some rest => (ctor Option.some [(List String)] (cons item rest))))),
+ axioms: [Quot.sound, propext],
+ recursive_argument: values,
+ executable: true
+}
+
+definition{
+ name: textList,
+ parameters: [value : Json::Value],
+ result: (Option (List String)),
+ body: (match (array value) | Option.none => (ctor Option.none [(List String)]) | Option.some values => (textItems values)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: environment,
+ parameters: [values : (List (Bytes * Bytes))],
+ result: (Option (List (String * String))),
+ body: (match values | List.nil => (ctor Option.some [(List (String * String))] (nil (String * String))) | List.cons head tail => (if ((ResearchWorkspace::asciiPath (first head) 0 (prim length (first head) : Nat)) && (ResearchWorkspace::asciiPath (second head) 0 (prim length (second head) : Nat))) then (match (environment tail) | Option.none => (ctor Option.none [(List (String * String))]) | Option.some rest => (ctor Option.some [(List (String * String))] (cons ((Host::textOf (first head)), (Host::textOf (second head))) rest))) else (ctor Option.none [(List (String * String))]))),
+ axioms: [Quot.sound, propext],
+ recursive_argument: values,
+ executable: true
+}
+
+definition{
+ name: purposeOf,
+ parameters: [value : Json::Value],
+ result: (Option Research::Purpose),
+ body: (if (stringIs value 0x70726f7665) then (ctor Option.some [Research::Purpose] (ctor Research::Purpose.prove)) else (if (stringIs value 0x726566757465) then (ctor Option.some [Research::Purpose] (ctor Research::Purpose.refute)) else (ctor Option.none [Research::Purpose]))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: goalKind,
+ parameters: [value : Json::Value],
+ result: (Option Research::GoalKind),
+ body: (if (stringIs value 0x636c6f736564) then (ctor Option.some [Research::GoalKind] (ctor Research::GoalKind.closed)) else (if (stringIs value 0x7072656d697365) then (ctor Option.some [Research::GoalKind] (ctor Research::GoalKind.premise)) else (ctor Option.none [Research::GoalKind]))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: snapshot,
+ parameters: [value : Json::Value],
+ result: (Option Research::Snapshot),
+ body: (if (CoreNotation::shape value (cons 0x6c696272617279 (cons 0x636f6d70696c6572 (cons 0x6d6f64656c (nil Bytes))))) then (if ((VerificationReport::digest (VerificationReport::bytes (CoreBinding::get value 0x636f6d70696c6572))) && (VerificationReport::digest (VerificationReport::bytes (CoreBinding::get value 0x6d6f64656c)))) then (match (bytes (CoreBinding::get value 0x6c696272617279)) | Option.none => (ctor Option.none [Research::Snapshot]) | Option.some library => (match (bytes (CoreBinding::get value 0x636f6d70696c6572)) | Option.none => (ctor Option.none [Research::Snapshot]) | Option.some compiler => (match (bytes (CoreBinding::get value 0x6d6f64656c)) | Option.none => (ctor Option.none [Research::Snapshot]) | Option.some model => (ctor Option.some [Research::Snapshot] (record Research::Snapshot {library := library, compiler := compiler, model := model}))))) else (ctor Option.none [Research::Snapshot])) else (ctor Option.none [Research::Snapshot])),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: sequent,
+ parameters: [value : Json::Value],
+ result: (Option Research::Sequent),
+ body: (if (CoreNotation::shape value (cons 0x6f726967696e (cons 0x7468656f72656d (cons 0x7072656d697365 (cons 0x74656c6573636f7065 (cons 0x746172676574 (cons 0x6b696e64 (nil Bytes)))))))) then (match (bytes (CoreBinding::get value 0x6f726967696e)) | Option.none => (ctor Option.none [Research::Sequent]) | Option.some origin => (match (bytes (CoreBinding::get value 0x7468656f72656d)) | Option.none => (ctor Option.none [Research::Sequent]) | Option.some theorem => (match (Json::natural (CoreBinding::get value 0x7072656d697365) 2000000) | Option.none => (ctor Option.none [Research::Sequent]) | Option.some premise => (match (bytes (CoreBinding::get value 0x74656c6573636f7065)) | Option.none => (ctor Option.none [Research::Sequent]) | Option.some telescope => (match (bytes (CoreBinding::get value 0x746172676574)) | Option.none => (ctor Option.none [Research::Sequent]) | Option.some target => (match (goalKind (CoreBinding::get value 0x6b696e64)) | Option.none => (ctor Option.none [Research::Sequent]) | Option.some kind => (ctor Option.some [Research::Sequent] (record Research::Sequent {origin := origin, theorem := theorem, premise := premise, telescope := telescope, target := target, kind := kind})))))))) else (ctor Option.none [Research::Sequent])),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: task,
+ parameters: [value : Json::Value],
+ result: (Option Research::Task),
+ body: (if (CoreNotation::shape value (cons 0x6964 (cons 0x707572706f7365 (cons 0x696e74656e74 (cons 0x737461747573 (cons 0x636f6d706f6e656e74 (cons 0x736f7572636573 (cons 0x736368656d61 (cons 0x73657175656e74 (cons 0x616765 (cons 0x776569676874 (nil Bytes)))))))))))) then (if ((stringIs (CoreBinding::get value 0x737461747573) 0x7265616479) && (Toml::sameBytes (VerificationReport::bytes (CoreBinding::get value 0x707572706f7365)) (VerificationReport::bytes (CoreBinding::get value 0x696e74656e74)))) then (match (bytes (CoreBinding::get value 0x6964)) | Option.none => (ctor Option.none [Research::Task]) | Option.some taskId => (match (purposeOf (CoreBinding::get value 0x707572706f7365)) | Option.none => (ctor Option.none [Research::Task]) | Option.some purpose => (match (purposeOf (CoreBinding::get value 0x696e74656e74)) | Option.none => (ctor Option.none [Research::Task]) | Option.some intent => (match (text (CoreBinding::get value 0x636f6d706f6e656e74)) | Option.none => (ctor Option.none [Research::Task]) | Option.some component => (match (byteList (CoreBinding::get value 0x736f7572636573)) | Option.none => (ctor Option.none [Research::Task]) | Option.some sources => (match (bytes (CoreBinding::get value 0x736368656d61)) | Option.none => (ctor Option.none [Research::Task]) | Option.some schema => (match (sequent (CoreBinding::get value 0x73657175656e74)) | Option.none => (ctor Option.none [Research::Task]) | Option.some goalData => (match (Json::natural (CoreBinding::get value 0x616765) 9223372036854775807) | Option.none => (ctor Option.none [Research::Task]) | Option.some age => (match (Json::natural (CoreBinding::get value 0x776569676874) 9223372036854775807) | Option.none => (ctor Option.none [Research::Task]) | Option.some weight => (ctor Option.some [Research::Task] (record Research::Task {id := taskId, purpose := purpose, intent := intent, status := (ctor Research::Status.ready), component := component, sources := sources, schema := schema, sequent := goalData, age := age, weight := weight}))))))))))) else (ctor Option.none [Research::Task])) else (ctor Option.none [Research::Task])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: request,
+ parameters: [value : Json::Value],
+ result: (Option Research::Request),
+ body: (if (CoreNotation::shape value (cons 0x73657269616c (cons 0x736e617073686f74 (cons 0x7461736b (nil Bytes))))) then (match (Json::natural (CoreBinding::get value 0x73657269616c) 9223372036854775807) | Option.none => (ctor Option.none [Research::Request]) | Option.some serial => (match (snapshot (CoreBinding::get value 0x736e617073686f74)) | Option.none => (ctor Option.none [Research::Request]) | Option.some snapshotData => (match (task (CoreBinding::get value 0x7461736b)) | Option.none => (ctor Option.none [Research::Request]) | Option.some taskData => (ctor Option.some [Research::Request] (record Research::Request {serial := serial, snapshot := snapshotData, task := taskData}))))) else (ctor Option.none [Research::Request])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: tools,
+ parameters: [value : Json::Value],
+ result: (Option ResearchCandidate::Tools),
+ body: (if ((VerificationReport::digest (VerificationReport::bytes (CoreBinding::get value 0x6c65786c65616e))) && ((VerificationReport::digest (VerificationReport::bytes (CoreBinding::get value 0x6c65616e))) && ((VerificationReport::digest (VerificationReport::bytes (CoreBinding::get value 0x6c616b65))) && (VerificationReport::digest (VerificationReport::bytes (CoreBinding::get value 0x636865636b6572)))))) then (if (CoreNotation::shape value (cons 0x6c65786c65616e (cons 0x6c65616e (cons 0x6c616b65 (cons 0x636865636b6572 (nil Bytes)))))) then (match (bytes (CoreBinding::get value 0x6c65786c65616e)) | Option.none => (ctor Option.none [ResearchCandidate::Tools]) | Option.some lexlean => (match (bytes (CoreBinding::get value 0x6c65616e)) | Option.none => (ctor Option.none [ResearchCandidate::Tools]) | Option.some lean => (match (bytes (CoreBinding::get value 0x6c616b65)) | Option.none => (ctor Option.none [ResearchCandidate::Tools]) | Option.some lake => (match (bytes (CoreBinding::get value 0x636865636b6572)) | Option.none => (ctor Option.none [ResearchCandidate::Tools]) | Option.some checker => (ctor Option.some [ResearchCandidate::Tools] (record ResearchCandidate::Tools {lexlean := lexlean, lean := lean, lake := lake, checker := checker})))))) else (ctor Option.none [ResearchCandidate::Tools])) else (ctor Option.none [ResearchCandidate::Tools])),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: arena,
+ parameters: [value : Json::Value],
+ result: (Option CoreBinding::Goal),
+ body: (if (CoreNotation::shape value (cons 0x6e6f646573 (cons 0x726f6f74 (nil Bytes)))) then (match (array (CoreBinding::get value 0x6e6f646573)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some nodes => (match (Json::natural (CoreBinding::get value 0x726f6f74) 2000000) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some root => (ctor Option.some [CoreBinding::Goal] (record CoreBinding::Goal {nodes := nodes, root := root})))) else (ctor Option.none [CoreBinding::Goal])),
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: Bounds,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: maxBytes, type: Nat}, {name: maxDepth, type: Nat}, {name: maxSteps, type: Nat}, {name: allowance, type: Nat}, {name: quantum, type: Nat}, {name: polls, type: Nat}]
+}
+
+definition{
+ name: bounds,
+ parameters: [value : Json::Value],
+ result: (Option Bounds),
+ body: (if (CoreNotation::shape value (cons 0x6d61785f6279746573 (cons 0x6d61785f6465707468 (cons 0x6d61785f7374657073 (cons 0x616c6c6f77616e6365 (cons 0x7175616e74756d (cons 0x706f6c6c73 (nil Bytes)))))))) then (match (Json::natural (CoreBinding::get value 0x6d61785f6279746573) 8388608) | Option.none => (ctor Option.none [Bounds]) | Option.some maxBytes => (match (Json::natural (CoreBinding::get value 0x6d61785f6465707468) 120) | Option.none => (ctor Option.none [Bounds]) | Option.some maxDepth => (match (Json::natural (CoreBinding::get value 0x6d61785f7374657073) 16777216) | Option.none => (ctor Option.none [Bounds]) | Option.some maxSteps => (match (Json::natural (CoreBinding::get value 0x616c6c6f77616e6365) 86400000) | Option.none => (ctor Option.none [Bounds]) | Option.some allowance => (match (Json::natural (CoreBinding::get value 0x7175616e74756d) 60000) | Option.none => (ctor Option.none [Bounds]) | Option.some quantum => (match (Json::natural (CoreBinding::get value 0x706f6c6c73) 86400000) | Option.none => (ctor Option.none [Bounds]) | Option.some polls => (ctor Option.some [Bounds] (record Bounds {maxBytes := maxBytes, maxDepth := maxDepth, maxSteps := maxSteps, allowance := allowance, quantum := quantum, polls := polls})))))))) else (ctor Option.none [Bounds])),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: config,
+ parameters: [value : Json::Value, env : (List (String * String))],
+ result: (Option ResearchProject::Config),
+ body: (if (CoreNotation::shape value (cons 0x73706563 (cons 0x72657175657374 (cons 0x7265706f7369746f7279 (cons 0x7265766973696f6e (cons 0x6f7574707574 (cons 0x6572726f7273 (cons 0x746f6f6c73 (cons 0x6172656e61 (cons 0x70726f6f66 (cons 0x696d706f727473 (cons 0x6c6576656c73 (cons 0x6178696f6d73 (cons 0x626f756e6473 (nil Bytes))))))))))))))) then (if (stringIs (CoreBinding::get value 0x73706563) 0x7233302f72657365617263682d617474656d70742f31) then (match (request (CoreBinding::get value 0x72657175657374)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some ownedRequest => (match (bytes (CoreBinding::get value 0x7265706f7369746f7279)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some repository => (match (bytes (CoreBinding::get value 0x7265766973696f6e)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some revision => (match (text (CoreBinding::get value 0x6f7574707574)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some output => (match (text (CoreBinding::get value 0x6572726f7273)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some errors => (match (tools (CoreBinding::get value 0x746f6f6c73)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some toolData => (match (arena (CoreBinding::get value 0x6172656e61)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some termArena => (match (Json::natural (CoreBinding::get value 0x70726f6f66) 2000000) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some proof => (match (byteList (CoreBinding::get value 0x696d706f727473)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some imports => (match (byteList (CoreBinding::get value 0x6c6576656c73)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some levels => (match (textList (CoreBinding::get value 0x6178696f6d73)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some axioms => (match (bounds (CoreBinding::get value 0x626f756e6473)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some limits => (ctor Option.some [ResearchProject::Config] (record ResearchProject::Config {request := ownedRequest, workspace := (record ResearchWorkspace::Config {request := ownedRequest, repository := repository, revision := revision, environment := env, output := output, errors := errors, allowance := (project limits allowance), quantum := (project limits quantum), polls := (project limits polls)}), tools := toolData, arena := termArena, proof := proof, imports := imports, levels := levels, axioms := axioms, maxBytes := (project limits maxBytes), maxDepth := (project limits maxDepth), maxSteps := (project limits maxSteps)})))))))))))))) else (ctor Option.none [ResearchProject::Config])) else (ctor Option.none [ResearchProject::Config])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: decode,
+ parameters: [data : Bytes, env : (List (Bytes * Bytes))],
+ result: (Option ResearchProject::Config),
+ body: (match (Json::parse data 8388608 96) | Result.error problem => (ctor Option.none [ResearchProject::Config]) | Result.ok value => (match (environment env) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some admitted => (config value admitted))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Decode a bounded structured candidate-attempt request without performing effects. Exact object fields, JSON types, goal kind, numeric bounds and lossless ASCII conversion are required. The caller owns the environment, input file, repository and log paths. Admission establishes data shape, not provenance, premise inspection, a proof, or permission to publish a claim. ResearchSession constructs and verifies the candidate in its owned pinned workspace.",
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "tool-digests-before-effects" (cons "bounded-attempt-json" (cons "exact-field-admission" (cons "explicit-goal-kind" (cons "no-receipt-input" (cons "lossless-ascii-environment" (cons "decode-is-not-proof" (nil String)))))))),
+ axioms: [],
+ executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

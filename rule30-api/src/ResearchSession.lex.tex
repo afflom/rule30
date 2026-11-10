@@ -1,0 +1,317 @@
+\begin{lexlean}{ResearchSession}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Host}
+\importmodule{Research}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchEvidence}
+\importmodule{ResearchRecord}
+\importmodule{ResearchCandidate}
+\importmodule{ResearchProof}
+\importmodule{ResearchExecution}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Own one candidate attempt from exact-goal construction through verification and proof retention. Ordinary begin owns library checkout and release. beginPrepared borrows a ready library from a cohort and returns ownership to that cohort without removing it. Host replies and cancellation are the only inputs after begin. The session captures the same command and attestation reads the verifier consumes; no external receipt or checked answer can enter. A checked answer leaves the session only after exact evidence readback and completion of its project lifecycle. The cohort releases a borrowed library after all attempts finish. Failed archival of a checked proof retains its workspace for recovery. Cancellation drains outstanding replies. Normally exited tools permit cleanup; interrupted tools retain the workspace because descendant termination is not established by direct-child cleanup; cancellation during proof archival stops owned work and retains unarchived evidence. Strategy selection, attempt scheduling, source inspection and publication into the claim register remain enclosing application responsibilities.",
+ axioms: [],
+ executable: true
+}
+
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: preparing, fields: []}, {name: readingLock, fields: []}, {name: readingManifest, fields: []}, {name: verifying, fields: []}, {name: archiving, fields: []}, {name: releasing, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}]
+}
+
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: project, type: ResearchProject::State}, {name: candidate, type: (Option ResearchCandidate::State)}, {name: evidence, type: (Option ResearchEvidence::State)}, {name: phase, type: Phase}, {name: files, type: ResearchRecord::Files}, {name: pending, type: (Option Research::Answer)}, {name: retained, type: Bytes}, {name: cancelled, type: Bool}]
+}
+
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}]
+}
+
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: complete, fields: [Research::Answer, Bytes]}, {name: blocked, fields: [String]}]
+}
+
+definition{
+ name: sessionConfig,
+ parameters: [state : State],
+ result: ResearchProject::Config,
+ body: (project (project state project) config),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: ownedRequest,
+ parameters: [state : State],
+ result: Research::Request,
+ body: (project (sessionConfig state) request),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: answer,
+ parameters: [state : State, result : Research::ResultKind],
+ result: Research::Answer,
+ body: (record Research::Answer {request := (ownedRequest state), result := result}),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := (ctor Phase.blocked), files := (project state files), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}), (ctor Emission.blocked reason)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: finish,
+ parameters: [state : State, outcome : Research::Answer],
+ result: (State * Emission),
+ body: ((record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := (ctor Phase.ended), files := (project state files), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}), (ctor Emission.complete outcome (project state retained))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: isChecked,
+ parameters: [outcome : Research::Answer],
+ result: Bool,
+ body: (match (project outcome result) | Research::ResultKind.checked goal theorem axioms => true | Research::ResultKind.inspected goal => false | Research::ResultKind.maintained sources evidence => false | Research::ResultKind.failed reason => false | Research::ResultKind.cut => false | Research::ResultKind.unavailable => false),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: finishPending,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (if (project state cancelled) then (finish state (answer state (ctor Research::ResultKind.cut))) else (match (project state pending) | Option.none => (blocked state "workspace released without an attempt result") | Option.some outcome => (if ((isChecked outcome) && ((prim length (project state retained) : Nat) =? 0)) then (blocked state "checked proof has no retained evidence") else (finish state outcome)))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: preparationResult,
+ parameters: [state : State, kind : ResearchExecution::EndKind],
+ result: (State * Emission),
+ body: (finish state (answer state (match kind | ResearchExecution::EndKind.cut => (ctor Research::ResultKind.cut) | ResearchExecution::EndKind.unavailable => (ctor Research::ResultKind.unavailable) | ResearchExecution::EndKind.succeeded => (ctor Research::ResultKind.failed 0x7072657061726174696f6e20656e64656420776974686f757420612063616e646964617465) | ResearchExecution::EndKind.failed => (ctor Research::ResultKind.failed 0x63616e646964617465207072657061726174696f6e206661696c6564) | ResearchExecution::EndKind.protocol => (ctor Research::ResultKind.failed 0x63616e646964617465207072657061726174696f6e2070726f746f636f6c206661696c757265) | ResearchExecution::EndKind.cleanupFailed => (ctor Research::ResultKind.failed 0x63616e646964617465207072657061726174696f6e20636c65616e7570206661696c757265) | ResearchExecution::EndKind.refused => (ctor Research::ResultKind.failed 0x63616e646964617465207072657061726174696f6e2072656675736564)))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: projectResult,
+ parameters: [state : State, result : (ResearchProject::State * ResearchProject::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {project := (first result), candidate := (project state candidate), evidence := (project state evidence), phase := (project state phase), files := (project state files), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}); (match (second result) | ResearchProject::Emission.host request => (next, (ctor Emission.host request)) | ResearchProject::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchProject::Emission.blocked reason => (blocked next reason) | ResearchProject::Emission.refused => (blocked next "owned project operation refused") | ResearchProject::Emission.ready context => ((record State {project := (first result), candidate := (project state candidate), evidence := (project state evidence), phase := (ctor Phase.readingLock), files := (project state files), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.read (ResearchProject::path (sessionConfig next) "/lexlean.lock")))) | ResearchProject::Emission.complete kind => (match (project state phase) | Phase.releasing => (match kind | ResearchExecution::EndKind.succeeded => (finishPending next) | ResearchExecution::EndKind.cut => (if (project next cancelled) then (finishPending next) else (blocked next "unexpected cut during workspace release")) | ResearchExecution::EndKind.failed => (blocked next "workspace release failed") | ResearchExecution::EndKind.unavailable => (blocked next "workspace release unavailable") | ResearchExecution::EndKind.protocol => (blocked next "workspace release protocol failure") | ResearchExecution::EndKind.cleanupFailed => (blocked next "workspace release cleanup failure") | ResearchExecution::EndKind.refused => (blocked next "workspace release refused")) | Phase.preparing => (preparationResult next kind) | Phase.readingLock => (blocked next "unexpected project completion") | Phase.readingManifest => (blocked next "unexpected project completion") | Phase.verifying => (blocked next "unexpected project completion") | Phase.archiving => (blocked next "unexpected project completion") | Phase.ended => (blocked next "unexpected project completion") | Phase.blocked => (blocked next "unexpected project completion")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: release,
+ parameters: [state : State, outcome : Research::Answer],
+ result: (State * Emission),
+ body: (let next : State := (record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := (ctor Phase.releasing), files := (project state files), pending := (ctor Option.some [Research::Answer] outcome), retained := (project state retained), cancelled := (project state cancelled)}); (projectResult next (ResearchProject::step (project state project) (ctor ResearchProject::Event.release)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: evidenceConfig,
+ parameters: [state : State],
+ result: ResearchEvidence::Config,
+ body: (let config : ResearchProject::Config := (sessionConfig state); (let workspace : ResearchWorkspace::Config := (project config workspace); (record ResearchEvidence::Config {request := (ownedRequest state), repository := (ResearchWorkspace::path workspace), recordPath := (ResearchProject::path config "/evidence.json"), environment := (project workspace environment), output := (ResearchProject::path config "/evidence.out"), errors := (ResearchProject::path config "/evidence.err"), maxBytes := (project config maxBytes), maxSteps := (project config maxSteps), allowance := (project workspace allowance), quantum := (project workspace quantum), polls := (project workspace polls), revision := (project workspace revision)}))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: evidenceResult,
+ parameters: [state : State, result : (ResearchEvidence::State * ResearchEvidence::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {project := (project state project), candidate := (project state candidate), evidence := (ctor Option.some [ResearchEvidence::State] (first result)), phase := (project state phase), files := (project state files), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}); (match (second result) | ResearchEvidence::Emission.host request => (next, (ctor Emission.host request)) | ResearchEvidence::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchEvidence::Emission.blocked reason => (blocked next reason) | ResearchEvidence::Emission.failed reason => (blocked next reason) | ResearchEvidence::Emission.cut => (blocked next "cancelled archival retains the verified candidate workspace") | ResearchEvidence::Emission.complete identity => (match (project next pending) | Option.none => (blocked next "evidence stored without a checked attempt") | Option.some outcome => (release (record State {project := (project state project), candidate := (project state candidate), evidence := (ctor Option.some [ResearchEvidence::State] (first result)), phase := (project state phase), files := (project state files), pending := (project state pending), retained := identity, cancelled := (project state cancelled)}) outcome)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: archive,
+ parameters: [state : State, outcome : Research::Answer],
+ result: (State * Emission),
+ body: (match (project state candidate) | Option.none => (blocked state "checked answer has no owned candidate") | Option.some candidate => (match (ResearchRecord::fromCandidate (project state project) candidate (project state files)) | Option.none => (blocked state "checked candidate has incomplete replay evidence") | Option.some document => (evidenceResult (record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := (ctor Phase.archiving), files := (project state files), pending := (ctor Option.some [Research::Answer] outcome), retained := (project state retained), cancelled := (project state cancelled)}) (ResearchEvidence::begin (evidenceConfig state) document)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: executionEndedNormally,
+ parameters: [execution : ResearchExecution::State],
+ result: Bool,
+ body: (match (project execution phase) | ResearchExecution::Phase.ended completion => (ResearchWorkspace::exitedNormally completion) | ResearchExecution::Phase.clock => false | ResearchExecution::Phase.cancelledClock => false | ResearchExecution::Phase.spawning started => false | ResearchExecution::Phase.cancelledSpawn started => false | ResearchExecution::Phase.cancelledWait child clock => false | ResearchExecution::Phase.waiting child started previous polls => false | ResearchExecution::Phase.stopping kind clock detail => false),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: candidateEndedNormally,
+ parameters: [candidate : ResearchCandidate::State],
+ result: Bool,
+ body: ((match (project candidate execution) | Option.none => true | Option.some execution => (executionEndedNormally execution)) && (match (project candidate proof) | Option.none => true | Option.some proof => (executionEndedNormally (project (project proof verification) execution)))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: candidateResult,
+ parameters: [state : State, result : (ResearchCandidate::State * ResearchProof::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {project := (project state project), candidate := (ctor Option.some [ResearchCandidate::State] (first result)), evidence := (project state evidence), phase := (project state phase), files := (project state files), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}); (match (second result) | ResearchProof::Emission.host request => (next, (ctor Emission.host request)) | ResearchProof::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchProof::Emission.blocked completion => (blocked next "candidate child or verification protocol remains blocked") | ResearchProof::Emission.complete outcome => (if (candidateEndedNormally (first result)) then (if (isChecked outcome) then (archive next outcome) else (release next outcome)) else (blocked next "interrupted candidate retains workspace until descendant cleanup is established")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: captureBytes,
+ parameters: [state : State, data : Bytes, command : Bool],
+ result: State,
+ body: (record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := (project state phase), files := (record ResearchRecord::Files {lock := (project (project state files) lock), lakeManifest := (project (project state files) lakeManifest), command := (if command then data else (project (project state files) command)), attestation := (if command then (project (project state files) attestation) else data)}), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: capture,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: State,
+ body: (match (Host::asRead event) | Option.none => state | Option.some response => (match response | Result.error failure => state | Result.ok data => (match (project state candidate) | Option.none => state | Option.some candidate => (match (project candidate phase) | ResearchCandidate::Phase.running => state | ResearchCandidate::Phase.reading => state | ResearchCandidate::Phase.ended => state | ResearchCandidate::Phase.verifying => (match (project candidate proof) | Option.none => state | Option.some proof => (match (project (project proof verification) phase) | ResearchVerification::Phase.running => state | ResearchVerification::Phase.command => (captureBytes state data true) | ResearchVerification::Phase.attestation commandBytes => (captureBytes state data false) | ResearchVerification::Phase.ended => state)))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: inputRead,
+ parameters: [state : State, event : LexLeanStd.Host::Event, lockFile : Bool],
+ result: (State * Emission),
+ body: (match (Host::asRead event) | Option.none => (blocked state "unexpected replay input read") | Option.some response => (if (project state cancelled) then (release state (answer state (ctor Research::ResultKind.cut))) else (match response | Result.error failure => (release state (answer state (ctor Research::ResultKind.failed 0x63616e6469646174652070726f6a65637420696e7075742072656164206661696c6564))) | Result.ok data => (if ((0 <? (prim length data : Nat)) && ((prim length data : Nat) <=? (project (sessionConfig state) maxBytes))) then (if lockFile then ((record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := (ctor Phase.readingManifest), files := (record ResearchRecord::Files {lock := data, lakeManifest := (project (project state files) lakeManifest), command := (project (project state files) command), attestation := (project (project state files) attestation)}), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.read (ResearchProject::path (sessionConfig state) "/lake-manifest.json")))) else (candidateResult (record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := (ctor Phase.verifying), files := (record ResearchRecord::Files {lock := (project (project state files) lock), lakeManifest := data, command := (project (project state files) command), attestation := (project (project state files) attestation)}), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}) (ResearchCandidate::begin (ResearchProject::context (sessionConfig state))))) else (release state (answer state (ctor Research::ResultKind.failed 0x63616e6469646174652070726f6a65637420696e7075742076696f6c61746573206279746520626f756e6473))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: host,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.preparing => (projectResult state (ResearchProject::step (project state project) (ctor ResearchProject::Event.host event))) | Phase.releasing => (projectResult state (ResearchProject::step (project state project) (ctor ResearchProject::Event.host event))) | Phase.readingLock => (inputRead state event true) | Phase.readingManifest => (inputRead state event false) | Phase.verifying => (match (project state candidate) | Option.none => (blocked state "missing candidate lifecycle") | Option.some candidate => (candidateResult (capture state event) (ResearchCandidate::step candidate (ctor ResearchVerification::Event.host event)))) | Phase.archiving => (match (project state evidence) | Option.none => (blocked state "missing evidence lifecycle") | Option.some evidence => (evidenceResult state (ResearchEvidence::step evidence (ctor ResearchEvidence::Event.host event)))) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (state, (ctor Emission.blocked "research session remains blocked"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := (project state phase), files := (project state files), pending := (project state pending), retained := (project state retained), cancelled := true}); (match (project state phase) | Phase.preparing => (projectResult next (ResearchProject::step (project state project) (ctor ResearchProject::Event.cancel))) | Phase.releasing => (projectResult next (ResearchProject::step (project state project) (ctor ResearchProject::Event.cancel))) | Phase.readingLock => (next, (ctor Emission.awaiting)) | Phase.readingManifest => (next, (ctor Emission.awaiting)) | Phase.verifying => (match (project state candidate) | Option.none => (blocked next "missing candidate during cancellation") | Option.some candidate => (candidateResult next (ResearchCandidate::step candidate (ctor ResearchVerification::Event.cancel)))) | Phase.archiving => (match (project state evidence) | Option.none => (blocked next "missing evidence during cancellation") | Option.some evidence => (evidenceResult next (ResearchEvidence::step evidence (ctor ResearchEvidence::Event.cancel)))) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (state, (ctor Emission.blocked "research session remains blocked")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: begin,
+ parameters: [config : ResearchProject::Config],
+ result: (State * Emission),
+ body: (let started : (ResearchProject::State * ResearchProject::Emission) := (ResearchProject::begin config); (let state : State := (record State {project := (first started), candidate := (ctor Option.none [ResearchCandidate::State]), evidence := (ctor Option.none [ResearchEvidence::State]), phase := (ctor Phase.preparing), files := (ResearchRecord::emptyFiles), pending := (ctor Option.none [Research::Answer]), retained := 0x, cancelled := false}); (projectResult state started))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: beginPrepared,
+ parameters: [config : ResearchProject::Config, owner : ResearchWorkspace::State],
+ result: (State * Emission),
+ body: (let started : (ResearchProject::State * ResearchProject::Emission) := (ResearchProject::beginPrepared config owner); (let state : State := (record State {project := (first started), candidate := (ctor Option.none [ResearchCandidate::State]), evidence := (ctor Option.none [ResearchEvidence::State]), phase := (ctor Phase.preparing), files := (ResearchRecord::emptyFiles), pending := (ctor Option.none [Research::Answer]), retained := 0x, cancelled := false}); (projectResult state started))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: withPhase,
+ parameters: [state : State, phase : Phase],
+ result: State,
+ body: (record State {project := (project state project), candidate := (project state candidate), evidence := (project state evidence), phase := phase, files := (project state files), pending := (project state pending), retained := (project state retained), cancelled := (project state cancelled)}),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: dispatchEvent,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match event | Event.host response => (host state response) | Event.cancel => (cancel state)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (state, (ctor Emission.blocked "research session remains blocked")) | Phase.preparing => (dispatchEvent state event) | Phase.readingLock => (dispatchEvent state event) | Phase.readingManifest => (dispatchEvent state event) | Phase.verifying => (dispatchEvent state event) | Phase.archiving => (dispatchEvent state event) | Phase.releasing => (dispatchEvent state event)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+theorem{
+ name: endedSessionCannotIssueAnotherRequest,
+ parameters: [state : State, event : Event],
+ statement: ((step (withPhase state (ctor Phase.ended)) event) = ((withPhase state (ctor Phase.ended)), (ctor Emission.awaiting))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: blockedSessionCannotResume,
+ parameters: [state : State, event : Event],
+ statement: ((step (withPhase state (ctor Phase.blocked)) event) = ((withPhase state (ctor Phase.blocked)), (ctor Emission.blocked "research session remains blocked"))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "terminal-session-silence" (cons "blocked-session-retention" (cons "owned-candidate-attempt" (cons "same-read-report-capture" (cons "replay-input-retention" (cons "durability-before-checked-answer" (cons "cleanup-before-result-delivery" (cons "unarchived-proof-workspace-retention" (cons "no-external-receipt-event" (cons "cancellation-suppresses-checked-result" (nil String))))))))))),
+ axioms: [],
+ executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

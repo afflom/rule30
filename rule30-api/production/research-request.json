@@ -29,6 +29,16 @@
       "package": {"name": "rule30_candidate_source", "version": "0.1.0"},
       "root": "Rule30Api.CandidateSource.construct",
       "targets": [{"digest": "0f5802ea18121b6a7a0d03e999589ce4e5ae812dc2a358432c1bf024a8e53f9f", "id": "rust-std"}]
+    },
+    {
+      "package": {"name": "rule30_research_command", "version": "0.1.0"},
+      "root": "Rule30Api.ResearchCommand.step",
+      "targets": [{"digest": "0f5802ea18121b6a7a0d03e999589ce4e5ae812dc2a358432c1bf024a8e53f9f", "id": "rust-std"}]
+    },
+    {
+      "package": {"name": "rule30_research_cohort", "version": "0.1.0"},
+      "root": "Rule30Api.ResearchCohortCommand.step",
+      "targets": [{"digest": "0f5802ea18121b6a7a0d03e999589ce4e5ae812dc2a358432c1bf024a8e53f9f", "id": "rust-std"}]
     }
   ],
   "spec": "lexlean/production-request/1"

@@ -1,0 +1,95 @@
+\begin{lexlean}{ResearchCommandTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{ResearchCommand}
+\importmodule{ResearchInput}
+\importmodule{ResearchInputTraces}
+\importmodule{ResearchSession}
+\importmodule{ResearchSessionTraces}
+\importmodule{ResearchWorkspaceTraces}
+\importmodule{ResearchRecord}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: exitCode,
+ parameters: [result : (ResearchCommand::State * LexLeanStd.Host::Request)],
+ result: UInt8,
+ body: (match (second result) | LexLeanStd.Host::Request.read path => (255 : UInt8) | LexLeanStd.Host::Request.write path contents => (255 : UInt8) | LexLeanStd.Host::Request.list path => (255 : UInt8) | LexLeanStd.Host::Request.stat path => (255 : UInt8) | LexLeanStd.Host::Request.createDir path => (255 : UInt8) | LexLeanStd.Host::Request.removeFile path => (255 : UInt8) | LexLeanStd.Host::Request.removeTree path => (255 : UInt8) | LexLeanStd.Host::Request.rename source target => (255 : UInt8) | LexLeanStd.Host::Request.canonical path => (255 : UInt8) | LexLeanStd.Host::Request.lock path => (255 : UInt8) | LexLeanStd.Host::Request.spawn child => (255 : UInt8) | LexLeanStd.Host::Request.wait children duration => (255 : UInt8) | LexLeanStd.Host::Request.stop child => (255 : UInt8) | LexLeanStd.Host::Request.exit code output errors => code),
+ axioms: []
+}
+definition{
+ name: reading,
+ parameters: [result : (ResearchCommand::State * LexLeanStd.Host::Request)],
+ result: Bool,
+ body: (match (second result) | LexLeanStd.Host::Request.read path => (prim equal path "attempt.json" : Bool) | LexLeanStd.Host::Request.write path contents => false | LexLeanStd.Host::Request.list path => false | LexLeanStd.Host::Request.stat path => false | LexLeanStd.Host::Request.createDir path => false | LexLeanStd.Host::Request.removeFile path => false | LexLeanStd.Host::Request.removeTree path => false | LexLeanStd.Host::Request.rename source target => false | LexLeanStd.Host::Request.canonical path => false | LexLeanStd.Host::Request.lock path => false | LexLeanStd.Host::Request.spawn child => false | LexLeanStd.Host::Request.wait children duration => false | LexLeanStd.Host::Request.stop child => false | LexLeanStd.Host::Request.exit code output errors => false),
+ axioms: []
+}
+definition{
+ name: started,
+ parameters: [arguments : (List Bytes)],
+ result: LexLeanStd.Host::Event,
+ body: (ctor LexLeanStd.Host::Event.start (record LexLeanStd.Host::Start {arguments := arguments, directory := (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x2f776f726b), executable := (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x2f776f726b2f62696e2f723330), environment := (nil (Bytes * Bytes)), terminal := false})),
+ axioms: []
+}
+definition{
+ name: start,
+ parameters: [arguments : (List Bytes)],
+ result: (ResearchCommand::State * LexLeanStd.Host::Request),
+ body: (ResearchCommand::step (ctor Option.none [ResearchCommand::State]) (started arguments)),
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: helpHasNoSideEffects,
+ parameters: [],
+ statement: ((prim equal (exitCode (start (cons 0x2d2d68656c70 (nil Bytes)))) (0 : UInt8) : Bool) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: oneRequestStartsWithRead,
+ parameters: [],
+ statement: ((reading (start (cons 0x617474656d70742e6a736f6e (nil Bytes)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: extraArgumentRejected,
+ parameters: [],
+ statement: ((prim equal (exitCode (start (cons 0x617474656d70742e6a736f6e (cons 0x78 (nil Bytes))))) (2 : UInt8) : Bool) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: nonAsciiPathRejected,
+ parameters: [],
+ statement: ((prim equal (exitCode (start (cons 0xcebb2e6a736f6e (nil Bytes)))) (2 : UInt8) : Bool) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: malformedInputCannotSpawn,
+ parameters: [],
+ statement: ((prim equal (exitCode (ResearchCommand::readResult (nil (Bytes * Bytes)) (ResearchWorkspaceTraces::readEvent 0x7b))) (2 : UInt8) : Bool) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: wrongReadEventIsProtocolFailure,
+ parameters: [],
+ statement: ((prim equal (exitCode (ResearchCommand::readResult (nil (Bytes * Bytes)) (started (nil Bytes)))) (70 : UInt8) : Bool) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: terminalCannotRestart,
+ parameters: [],
+ statement: ((prim equal (exitCode (ResearchCommand::step (ctor Option.some [ResearchCommand::State] (ctor ResearchCommand::State.ended (ctor Option.none [ResearchSession::State]))) (started (cons 0x617474656d70742e6a736f6e (nil Bytes))))) (70 : UInt8) : Bool) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

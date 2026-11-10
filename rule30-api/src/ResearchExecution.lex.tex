@@ -9,7 +9,7 @@ definition{
   name: boundary,
   parameters: [],
   result: String,
-  body: "This supervisor performs one local tool job through LexLeanStd.Host. A completion is process evidence, never a Research checked result. The caller must validate the tool's report, exact contextual target, kernel replay, axiom policy and snapshot before constructing a proof answer. The driver must honor timed waits and stop ownership; a failed stop blocks further work. Poll fuel also bounds a host clock that stops advancing. Tool executables resolve in the caller's pinned tool environment. No model service is a tool.",
+  body: "This supervisor performs one local tool job through LexLeanStd.Host. A completion is process evidence, never a Research checked result. The caller must validate the tool's report, exact contextual target, kernel replay, axiom policy and snapshot before constructing a proof answer. The driver must honor timed waits and stop ownership; a failed stop blocks further work. Before spawning, an empty zero-budget wait obtains the monotonic host clock. The second spawn result is an OS process ID, never a timestamp. Spawn latency counts against the job allowance. Cancellation drains the initial clock read before any spawn. Poll fuel also bounds a host clock that stops advancing. Tool executables resolve in the caller's pinned tool environment. No model service is a tool.",
   executable: true
 }
 
@@ -53,7 +53,7 @@ inductive{
   name: Phase,
   type_parameters: [],
   parameters: [],
-  constructors: [{name: spawning, fields: []}, {name: cancelledSpawn, fields: []}, {name: cancelledWait, fields: [Nat, Nat]}, {name: waiting, fields: [Nat, Nat, Nat, Nat]}, {name: stopping, fields: [EndKind, Nat, Bytes]}, {name: ended, fields: [Completion]}]
+  constructors: [{name: spawning, fields: [Nat]}, {name: cancelledSpawn, fields: [Nat]}, {name: cancelledWait, fields: [Nat, Nat]}, {name: waiting, fields: [Nat, Nat, Nat, Nat]}, {name: stopping, fields: [EndKind, Nat, Bytes]}, {name: ended, fields: [Completion]}, {name: clock, fields: []}, {name: cancelledClock, fields: []}]
 }
 
 structure{
@@ -87,10 +87,18 @@ definition{
 }
 
 definition{
+  name: spawn,
+  parameters: [job : Job, started : Nat],
+  result: (State * Emission),
+  body: ((record State {job := job, phase := (ctor Phase.spawning started), owner := (ctor Option.none [Nat])}), (ctor Emission.host (ctor LexLeanStd.Host::Request.spawn (record LexLeanStd.Host::Child {program := (program (project job tool)), arguments := (project job arguments), directory := (project job directory), environment := (project job environment), output := (project job output), errors := (project job errors)})))),
+  executable: true
+}
+
+definition{
   name: begin,
   parameters: [job : Job],
   result: (State * Emission),
-  body: (if (validJob job) then ((record State {job := job, phase := (ctor Phase.spawning), owner := (ctor Option.none [Nat])}), (ctor Emission.host (ctor LexLeanStd.Host::Request.spawn (record LexLeanStd.Host::Child {program := (program (project job tool)), arguments := (project job arguments), directory := (project job directory), environment := (project job environment), output := (project job output), errors := (project job errors)})))) else (finish job (ctor EndKind.refused) (ctor Option.none [Int32]) 0 0x696e76616c6964206a6f62)),
+  body: (if (validJob job) then ((record State {job := job, phase := (ctor Phase.clock), owner := (ctor Option.none [Nat])}), (ctor Emission.host (ctor LexLeanStd.Host::Request.wait (nil Nat) 0))) else (finish job (ctor EndKind.refused) (ctor Option.none [Int32]) 0 0x696e76616c6964206a6f62)),
   axioms: [],
   executable: true,
   production: {effects: [allocation, overflow, process, recursion], targets: [rust-std]}
@@ -167,11 +175,11 @@ definition{
 
 definition{
   name: spawned,
-  parameters: [job : Job, outcome : (Result (Nat * Nat) LexLeanStd.Host::Failure)],
+  parameters: [job : Job, started : Nat, outcome : (Result (Nat * Nat) LexLeanStd.Host::Failure)],
   result: (State * Emission),
   body: (match outcome
-    | Result.error failure => (finish job (ctor EndKind.unavailable) (ctor Option.none [Int32]) 0 (project failure message))
-    | Result.ok child => (waitFor job (first child) (second child) (second child) (project job polls))),
+    | Result.error failure => (finish job (ctor EndKind.unavailable) (ctor Option.none [Int32]) started (project failure message))
+    | Result.ok child => (waitFor job (first child) started started (project job polls))),
   executable: true
 }
 
@@ -234,21 +242,31 @@ definition{
 }
 
 definition{
+  name: clocked,
+  parameters: [job : Job, cancelled : Bool, event : LexLeanStd.Host::Event],
+  result: (State * Emission),
+  body: (match (asWaited event) | Option.none => (finish job (ctor EndKind.protocol) (ctor Option.none [Int32]) 0 0x657870656374656420636c6f636b) | Option.some outcome => (match outcome | Result.error failure => (finish job (if cancelled then (ctor EndKind.cut) else (ctor EndKind.unavailable)) (ctor Option.none [Int32]) 0 (project failure message)) | Result.ok response => (match (project response finished) | List.nil => (if cancelled then (finish job (ctor EndKind.cut) (ctor Option.none [Int32]) (project response clock) 0x63616e63656c6c6564) else (spawn job (project response clock))) | List.cons head rest => (finish job (ctor EndKind.protocol) (ctor Option.none [Int32]) (project response clock) 0x756e657870656374656420636c6f636b206368696c64)))),
+  executable: true
+}
+
+definition{
   name: advance,
   parameters: [state : State, event : LexLeanStd.Host::Event],
   result: (State * Emission),
   body: (let job : Job := (project state job); (match (project state phase)
     | Phase.ended result => (state, (ctor Emission.complete result))
-    | Phase.cancelledSpawn => (match (asSpawned event)
+    | Phase.clock => (clocked job false event)
+    | Phase.cancelledClock => (clocked job true event)
+    | Phase.cancelledSpawn started => (match (asSpawned event)
       | Option.some outcome => (match outcome
-        | Result.ok child => (stopFor job (first child) (second child) (ctor EndKind.cut) 0x63616e63656c6c6564)
+        | Result.ok child => (stopFor job (first child) started (ctor EndKind.cut) 0x63616e63656c6c6564)
         | Result.error failure => (finish job (ctor EndKind.cut) (ctor Option.none [Int32]) 0 (project failure message)))
       | Option.none => (finish job (ctor EndKind.protocol) (ctor Option.none [Int32]) 0 0x657870656374656420737061776e))
     | Phase.cancelledWait child clock => (match (asWaited event)
       | Option.some outcome => (cancelledReply job child clock outcome)
       | Option.none => (stopFor job child clock (ctor EndKind.protocol) 0x65787065637465642077616974))
-    | Phase.spawning => (match (asSpawned event)
-      | Option.some outcome => (spawned job outcome)
+    | Phase.spawning started => (match (asSpawned event)
+      | Option.some outcome => (spawned job started outcome)
       | Option.none => (finish job (ctor EndKind.protocol) (ctor Option.none [Int32]) 0 0x657870656374656420737061776e))
     | Phase.waiting child started previous polls => (match (asWaited event)
       | Option.some outcome => (waited job child started previous polls outcome)
@@ -258,30 +276,6 @@ definition{
       | Option.none => (finish job (ctor EndKind.cleanupFailed) (ctor Option.none [Int32]) clock 0x65787065637465642073746f70)))),
   executable: true
 }
-definition{
-  name: step,
-  parameters: [state : State, event : LexLeanStd.Host::Event],
-  result: (State * Emission),
-  body: (let result : (State * Emission) := (advance state event); ((record State {job := (project (first result) job), phase := (project (first result) phase), owner := (match (project (first result) owner) | Option.some child => (ctor Option.some [Nat] child) | Option.none => (project state owner))}), (second result))),
-  axioms: [],
-  executable: true,
-  production: {effects: [allocation, overflow, process, recursion], targets: [rust-std]}
-}
-
-definition{
-  name: cancel,
-  parameters: [state : State],
-  result: (State * Emission),
-  body: (match (project state phase)
-    | Phase.spawning => ((record State {job := (project state job), phase := (ctor Phase.cancelledSpawn), owner := (project state owner)}), (ctor Emission.awaiting))
-    | Phase.cancelledSpawn => (state, (ctor Emission.awaiting))
-    | Phase.waiting child started clock polls => ((record State {job := (project state job), phase := (ctor Phase.cancelledWait child clock), owner := (project state owner)}), (ctor Emission.awaiting))
-    | Phase.cancelledWait child clock => (state, (ctor Emission.awaiting))
-    | Phase.stopping reason clock detail => (state, (ctor Emission.awaiting))
-    | Phase.ended result => (state, (ctor Emission.complete result))),
-  executable: true
-}
-
 definition{
   name: resumeAllowed,
   parameters: [completion : Completion],
@@ -297,6 +291,34 @@ definition{
   executable: true
 }
 
+
+definition{
+  name: step,
+  parameters: [state : State, event : LexLeanStd.Host::Event],
+  result: (State * Emission),
+  body: (let result : (State * Emission) := (advance state event); (let next : State := (first result); (let held : (Option Nat) := (match (project next owner) | Option.some child => (ctor Option.some [Nat] child) | Option.none => (project state owner)); ((record State {job := (project next job), phase := (project next phase), owner := (match (project next phase) | Phase.ended completion => (if (resumeAllowed completion) then (ctor Option.none [Nat]) else held) | Phase.clock => held | Phase.cancelledClock => held | Phase.spawning started => held | Phase.cancelledSpawn started => held | Phase.waiting child started clock polls => held | Phase.cancelledWait child clock => held | Phase.stopping kind clock detail => held)}), (second result))))),
+  axioms: [],
+  executable: true,
+  production: {effects: [allocation, overflow, process, recursion], targets: [rust-std]}
+}
+
+definition{
+  name: cancel,
+  parameters: [state : State],
+  result: (State * Emission),
+  body: (match (project state phase)
+    | Phase.clock => ((record State {job := (project state job), phase := (ctor Phase.cancelledClock), owner := (project state owner)}), (ctor Emission.awaiting))
+    | Phase.cancelledClock => (state, (ctor Emission.awaiting))
+    | Phase.spawning started => ((record State {job := (project state job), phase := (ctor Phase.cancelledSpawn started), owner := (project state owner)}), (ctor Emission.awaiting))
+    | Phase.cancelledSpawn started => (state, (ctor Emission.awaiting))
+    | Phase.waiting child started clock polls => ((record State {job := (project state job), phase := (ctor Phase.cancelledWait child clock), owner := (project state owner)}), (ctor Emission.awaiting))
+    | Phase.cancelledWait child clock => (state, (ctor Emission.awaiting))
+    | Phase.stopping reason clock detail => (state, (ctor Emission.awaiting))
+    | Phase.ended result => (state, (ctor Emission.complete result))),
+  executable: true
+}
+
+
 theorem{
   name: completionKeepsRequestCustody,
   parameters: [job : Job, kind : EndKind, code : (Option Int32), clock : Nat, detail : Bytes],
@@ -310,5 +332,14 @@ theorem{
   statement: ((resumeAllowed (record Completion {request := request, kind := (ctor EndKind.cleanupFailed), code := code, clock := clock, output := output, errors := errors, detail := detail})) = false),
   proof: reflexivity{}
 }
+definition{
+  name: features,
+  parameters: [],
+  result: (List String),
+  body: (cons "clock-before-spawn" (cons "process-id-is-not-time" (cons "spawn-latency-budget" (cons "bounded-timed-wait" (cons "drain-before-stop" (cons "terminal-child-ownership" (cons "cleanup-failure-retention" (nil String)))))))),
+  axioms: [],
+  executable: true
+}
+
 \end{semanticmodule}
 \end{lexlean}

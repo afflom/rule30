@@ -120,6 +120,11 @@ converter (`rule30-api/src/Convert.lex.tex`), the engine's learning rule and sch
 (`Engine.lex.tex`), the relation and recurrence engines (`Discovery.lex.tex`), all with
 certified rust-std roots.
 
+The tool supervisor reads the monotonic host clock before spawning. Spawn replies
+carry a process ID, which is never used as time; spawn latency counts against
+the job budget. Normal completion releases direct-child ownership, while failed
+cleanup retains it.
+
 The research execution modules are authored directly in LexLean:
 `ResearchExecution` supervises one local tool through `LexLeanStd.Host`, and
 `ResearchRunner` connects its lifecycle to `Research`. A process exit is not a
@@ -134,8 +139,9 @@ answers; submit constructed candidates through `Event.candidate`.
 `ResearchCandidate` owns the local `lexlean snapshot` process and output read,
 reconstructs the full compiler IR with `CompilerSnapshot`, derives verification
 pins and preflights the exact goal before entering `ResearchProof`. Snapshot
-metadata is not a proof. Its caller still owns candidate term selection, the
-isolated project and imported library snapshot. `Event.proof` remains the
+metadata is not a proof. Its caller selects candidate terms. `ResearchSession` and `ResearchProject`
+own its isolated project; `ResearchWorkspace` checks out and builds the exact
+requested library tree at a pinned Git revision. `Event.proof` remains the
 internal typed entry for already-owned candidate data. The binding schema distinguishes inspected premises from named closed propositions.
 For premises it encodes the source type and closed target as core arenas; source
 inspection must establish their origin and snapshot before dispatch. Closed goals
@@ -144,12 +150,32 @@ have no telescope and designate the exact registered source constant.
 LexLean 1.2 notation. Its output remains a candidate until owned verification
 succeeds. Its fixed
 module prefix is `Rule30Candidate`, module `Candidate`, theorem `proof`.
-The caller owns the isolated project and imported library; exact name matching
-does not establish the identity of an arbitrary imported environment.
+`ResearchSession` owns preparation, verification, evidence retention and release.
+Its only events are host replies and cancellation. `ResearchRecord` captures the
+exact inputs and report reads; `ResearchEvidence` retains both the library commit
+and canonical proof record under verified Git references before workspace removal.
+Only then can the session return a checked answer. A stored record itself confers
+no proof authority. Failed archival or cleanup retains the workspace. Stopped or
+signalled tools also retain it: direct-child cleanup does not establish that all
+descendants have terminated. Exact name matching alone does not establish the
+identity of an arbitrary imported environment.
 Maintenance reports have a separate result kind. Cancellation consumes the
 outstanding host reply before issuing stop; failed cleanup retains ownership
-and halts dispatch. Native application wiring, source inspection, strategy planner and
-publication path still need completion; these modules do not replace the
+and halts dispatch. `ResearchCommand.step` now provides the native Host executable for one structured
+attempt. `ResearchInput` admits the complete `r30/research-attempt/1` request;
+`r30/research-result/1` output carries the session outcome and evidence identity.
+The command accepts no receipt, selects no strategy, and publishes no claim.
+`ResearchCohortCommand.step` runs at most 64 supplied candidates sequentially
+against one owned library. `ResearchCohortInput` checks shared configuration and
+distinct serials before effects. Borrowed projects retain individual request and
+evidence identities; only the cohort releases the shared library. Tracked sources
+are rechecked between attempts. Ordinary candidate failure permits continuation;
+uncertain execution retains the library and stops the cohort. Its
+`r30/research-cohort-result/1` report preserves individual outcomes, and exit 0
+requires all checked results and no cancellation. Cohort execution is bounded
+reuse, not durable recovery or automatic strategy selection.
+Source inspection, strategy scheduling, durable failure diagnostics, recovery,
+and claim publication still need completion; these modules do not replace the
 legacy engine yet. Add every new application or library module and its modeled
 features to `ResearchCatalog`, and add behavioral evidence for the capability;
 a module-count theorem alone does not establish feature completeness.

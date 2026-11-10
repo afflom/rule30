@@ -1,0 +1,285 @@
+\begin{lexlean}{ResearchWorkspaceTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchWorkspace}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: tree,
+ parameters: [],
+ result: Bytes,
+ body: 0x30313233343536373839616263646566303132333435363738396162636465663031323334353637,
+ axioms: []
+}
+definition{
+ name: config,
+ parameters: [],
+ result: ResearchWorkspace::Config,
+ body: (record ResearchWorkspace::Config {request := (record Research::Request {serial := 3, snapshot := (record Research::Snapshot {library := (tree), compiler := 0x63, model := 0x6d}), task := (project (ResearchExecutionTraces::fixtureRequest) task)}), repository := 0x2f7265736561726368, revision := (tree), environment := (nil (String * String)), output := "/research/.r30/workspace.out", errors := "/research/.r30/workspace.err", allowance := 1000, quantum := 10, polls := 100}),
+ axioms: []
+}
+definition{
+ name: absent,
+ parameters: [],
+ result: LexLeanStd.Host::Event,
+ body: (ctor LexLeanStd.Host::Event.stat (ctor Result.error [LexLeanStd.Host::Entry, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Failure {kind := (ctor LexLeanStd.Host::FailureKind.notFound), message := 0x6d697373696e67}))),
+ axioms: []
+}
+definition{
+ name: existing,
+ parameters: [],
+ result: LexLeanStd.Host::Event,
+ body: (ctor LexLeanStd.Host::Event.stat (ctor Result.ok [LexLeanStd.Host::Entry, LexLeanStd.Host::Failure] (record LexLeanStd.Host::Entry {kind := (ctor LexLeanStd.Host::EntryKind.directory), size := 0, identity := (ctor Option.none [(Nat * Nat)])}))),
+ axioms: []
+}
+definition{
+ name: host,
+ parameters: [state : ResearchWorkspace::State, event : LexLeanStd.Host::Event],
+ result: (ResearchWorkspace::State * ResearchWorkspace::Emission),
+ body: (ResearchWorkspace::step state (ctor ResearchWorkspace::Event.host event)),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: spawned,
+ parameters: [state : ResearchWorkspace::State],
+ result: ResearchWorkspace::State,
+ body: (first (host (first (host state (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: finishJob,
+ parameters: [state : ResearchWorkspace::State, code : Int32],
+ result: (ResearchWorkspace::State * ResearchWorkspace::Emission),
+ body: (host (spawned state) (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] code) 101)),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: creating,
+ parameters: [],
+ result: ResearchWorkspace::State,
+ body: (first (host (first (ResearchWorkspace::begin (config))) (absent))),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: reading,
+ parameters: [],
+ result: ResearchWorkspace::State,
+ body: (first (finishJob (first (finishJob (creating) (0 : Int32))) (0 : Int32))),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: readEvent,
+ parameters: [data : Bytes],
+ result: LexLeanStd.Host::Event,
+ body: (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] data)),
+ axioms: []
+}
+definition{
+ name: exactIdentity,
+ parameters: [],
+ result: LexLeanStd.Host::Event,
+ body: (readEvent (prim append (tree) 0x0a : Bytes)),
+ axioms: []
+}
+definition{
+ name: ready,
+ parameters: [],
+ result: ResearchWorkspace::State,
+ body: (first (finishJob (first (finishJob (first (finishJob (first (finishJob (first (finishJob (first (host (reading) (exactIdentity))) (0 : Int32))) (0 : Int32))) (0 : Int32))) (0 : Int32))) (0 : Int32))),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: isReady,
+ parameters: [state : ResearchWorkspace::State],
+ result: Bool,
+ body: ((project state owned) && (match (project state phase) | ResearchWorkspace::Phase.ready => true | ResearchWorkspace::Phase.checking => false | ResearchWorkspace::Phase.executing => false | ResearchWorkspace::Phase.reading => false | ResearchWorkspace::Phase.ended => false | ResearchWorkspace::Phase.blocked => false)),
+ axioms: []
+}
+definition{
+ name: isBlocked,
+ parameters: [result : (ResearchWorkspace::State * ResearchWorkspace::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchWorkspace::Emission.blocked reason => true | ResearchWorkspace::Emission.awaiting => false | ResearchWorkspace::Emission.host request => false | ResearchWorkspace::Emission.ready directory => false | ResearchWorkspace::Emission.complete kind => false | ResearchWorkspace::Emission.refused => false),
+ axioms: []
+}
+definition{
+ name: endedAs,
+ parameters: [result : (ResearchWorkspace::State * ResearchWorkspace::Emission), expected : ResearchExecution::EndKind],
+ result: Bool,
+ body: ((not (project (first result) owned)) && (match (second result) | ResearchWorkspace::Emission.complete kind => (match kind | ResearchExecution::EndKind.succeeded => (match expected | ResearchExecution::EndKind.succeeded => true | ResearchExecution::EndKind.failed => false | ResearchExecution::EndKind.cut => false | ResearchExecution::EndKind.unavailable => false | ResearchExecution::EndKind.protocol => false | ResearchExecution::EndKind.cleanupFailed => false | ResearchExecution::EndKind.refused => false) | ResearchExecution::EndKind.failed => (match expected | ResearchExecution::EndKind.succeeded => false | ResearchExecution::EndKind.failed => true | ResearchExecution::EndKind.cut => false | ResearchExecution::EndKind.unavailable => false | ResearchExecution::EndKind.protocol => false | ResearchExecution::EndKind.cleanupFailed => false | ResearchExecution::EndKind.refused => false) | ResearchExecution::EndKind.cut => (match expected | ResearchExecution::EndKind.succeeded => false | ResearchExecution::EndKind.failed => false | ResearchExecution::EndKind.cut => true | ResearchExecution::EndKind.unavailable => false | ResearchExecution::EndKind.protocol => false | ResearchExecution::EndKind.cleanupFailed => false | ResearchExecution::EndKind.refused => false) | ResearchExecution::EndKind.refused => (match expected | ResearchExecution::EndKind.succeeded => false | ResearchExecution::EndKind.failed => false | ResearchExecution::EndKind.cut => false | ResearchExecution::EndKind.unavailable => false | ResearchExecution::EndKind.protocol => false | ResearchExecution::EndKind.cleanupFailed => false | ResearchExecution::EndKind.refused => true) | ResearchExecution::EndKind.unavailable => false | ResearchExecution::EndKind.protocol => false | ResearchExecution::EndKind.cleanupFailed => false) | ResearchWorkspace::Emission.awaiting => false | ResearchWorkspace::Emission.host request => false | ResearchWorkspace::Emission.ready directory => false | ResearchWorkspace::Emission.blocked reason => false | ResearchWorkspace::Emission.refused => false)),
+ axioms: []
+}
+
+theorem{
+ name: preparedWorkspaceRemainsOwned,
+ parameters: [],
+ statement: ((isReady (ready)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: existingPathIsRefused,
+ parameters: [],
+ statement: ((endedAs (host (first (ResearchWorkspace::begin (config))) (existing)) (ctor ResearchExecution::EndKind.refused)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: mismatchedLibraryIsRemoved,
+ parameters: [],
+ statement: ((endedAs (finishJob (first (host (reading) (readEvent 0x77726f6e670a))) (0 : Int32)) (ctor ResearchExecution::EndKind.failed)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: releaseClearsOwnershipAfterRemoval,
+ parameters: [],
+ statement: ((endedAs (finishJob (first (ResearchWorkspace::step (ready) (ctor ResearchWorkspace::Event.release))) (0 : Int32)) (ctor ResearchExecution::EndKind.succeeded)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: failedRemovalBlocks,
+ parameters: [],
+ statement: ((isBlocked (finishJob (first (ResearchWorkspace::step (ready) (ctor ResearchWorkspace::Event.release))) (1 : Int32))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: failedRemovalRetainsWorkspace,
+ parameters: [],
+ statement: ((project (first (finishJob (first (ResearchWorkspace::step (ready) (ctor ResearchWorkspace::Event.release))) (1 : Int32))) owned) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: failedCreationIsNotAssumedAbsent,
+ parameters: [],
+ statement: ((isBlocked (finishJob (creating) (1 : Int32))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelledStatDoesNotCreate,
+ parameters: [],
+ statement: ((endedAs (host (first (ResearchWorkspace::step (first (ResearchWorkspace::begin (config))) (ctor ResearchWorkspace::Event.cancel))) (absent)) (ctor ResearchExecution::EndKind.cut)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelledIdentityDrainsThenRemoves,
+ parameters: [],
+ statement: ((endedAs (finishJob (first (host (first (ResearchWorkspace::step (reading) (ctor ResearchWorkspace::Event.cancel))) (exactIdentity))) (0 : Int32)) (ctor ResearchExecution::EndKind.cut)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unrelatedIdentityReplyRetainsOwnership,
+ parameters: [],
+ statement: (((isBlocked (host (reading) (existing))) && (project (first (host (reading) (existing))) owned)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: failedRuntimeBuildIsRemoved,
+ parameters: [],
+ statement: ((endedAs (finishJob (first (finishJob (first (finishJob (first (host (reading) (exactIdentity))) (0 : Int32))) (1 : Int32))) (0 : Int32)) (ctor ResearchExecution::EndKind.failed)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: cancelledCreate,
+ parameters: [],
+ result: ResearchWorkspace::State,
+ body: (first (host (first (ResearchWorkspace::step (spawned (creating)) (ctor ResearchWorkspace::Event.cancel))) (ResearchExecutionTraces::waitEvent 101 (nil (Nat * (Option Int32)))))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: ownsChild,
+ parameters: [state : ResearchWorkspace::State],
+ result: Bool,
+ body: (match (project state execution) | Option.none => false | Option.some active => (match (project active owner) | Option.none => false | Option.some child => (child =? 7))),
+ axioms: []
+}
+
+theorem{
+ name: cancelledCheckoutRetainsUncertainWorkspace,
+ parameters: [],
+ statement: ((isBlocked (host (cancelledCreate) (ResearchExecutionTraces::stopOk))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: failedChildCleanupRetainsChildOwnership,
+ parameters: [],
+ statement: ((let result : (ResearchWorkspace::State * ResearchWorkspace::Emission) := (host (cancelledCreate) (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))); ((isBlocked result) && (ownsChild (first result)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: cleanupCannotBeCancelledHalfway,
+ parameters: [],
+ statement: ((endedAs (finishJob (first (ResearchWorkspace::step (first (ResearchWorkspace::step (ready) (ctor ResearchWorkspace::Event.release))) (ctor ResearchWorkspace::Event.cancel))) (0 : Int32)) (ctor ResearchExecution::EndKind.succeeded)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: dirtyTrackedSourcesAreRemovedBeforeReadiness,
+ parameters: [],
+ statement: ((endedAs (finishJob (first (finishJob (first (host (reading) (exactIdentity))) (1 : Int32))) (0 : Int32)) (ctor ResearchExecution::EndKind.failed)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: blockedWorkspaceCannotResume,
+ parameters: [state : ResearchWorkspace::State, event : ResearchWorkspace::Event],
+ statement: ((ResearchWorkspace::step (ResearchWorkspace::withPhase state (ctor ResearchWorkspace::Phase.blocked)) event) = ((ResearchWorkspace::withPhase state (ctor ResearchWorkspace::Phase.blocked)), (ctor ResearchWorkspace::Emission.blocked (project state detail)))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: runtimeBuilding,
+ parameters: [],
+ result: ResearchWorkspace::State,
+ body: (first (finishJob (first (host (reading) (exactIdentity))) (0 : Int32))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: stoppedRuntime,
+ parameters: [],
+ result: (ResearchWorkspace::State * ResearchWorkspace::Emission),
+ body: (host (first (host (first (ResearchWorkspace::step (spawned (runtimeBuilding)) (ctor ResearchWorkspace::Event.cancel))) (ResearchExecutionTraces::waitEvent 101 (nil (Nat * (Option Int32)))))) (ResearchExecutionTraces::stopOk)),
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: stoppedLibraryToolRetainsWorkspace,
+ parameters: [],
+ statement: (((isBlocked (stoppedRuntime)) && (project (first (stoppedRuntime)) owned)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: signalledLibraryToolRetainsWorkspace,
+ parameters: [],
+ statement: ((let result : (ResearchWorkspace::State * ResearchWorkspace::Emission) := (host (spawned (runtimeBuilding)) (ResearchExecutionTraces::exitEvent 7 (ctor Option.none [Int32]) 101)); ((isBlocked result) && (project (first result) owned))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}
