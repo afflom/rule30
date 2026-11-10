@@ -7,6 +7,7 @@
 \importmodule{ResearchProject}
 \importmodule{ResearchCandidate}
 \importmodule{CoreBinding}
+\importmodule{CandidateSource}
 \importmodule{CoreNotation}
 \importmodule{Json}
 \importmodule{VerificationReport}
@@ -187,10 +188,19 @@ definition{
 }
 
 definition{
- name: config,
+ name: suppliedConfig,
  parameters: [value : Json::Value, env : (List (String * String))],
  result: (Option ResearchProject::Config),
  body: (if (CoreNotation::shape value (cons 0x73706563 (cons 0x72657175657374 (cons 0x7265706f7369746f7279 (cons 0x7265766973696f6e (cons 0x6f7574707574 (cons 0x6572726f7273 (cons 0x746f6f6c73 (cons 0x6172656e61 (cons 0x70726f6f66 (cons 0x696d706f727473 (cons 0x6c6576656c73 (cons 0x6178696f6d73 (cons 0x626f756e6473 (nil Bytes))))))))))))))) then (if (stringIs (CoreBinding::get value 0x73706563) 0x7233302f72657365617263682d617474656d70742f31) then (match (request (CoreBinding::get value 0x72657175657374)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some ownedRequest => (match (bytes (CoreBinding::get value 0x7265706f7369746f7279)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some repository => (match (bytes (CoreBinding::get value 0x7265766973696f6e)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some revision => (match (text (CoreBinding::get value 0x6f7574707574)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some output => (match (text (CoreBinding::get value 0x6572726f7273)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some errors => (match (tools (CoreBinding::get value 0x746f6f6c73)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some toolData => (match (arena (CoreBinding::get value 0x6172656e61)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some termArena => (match (Json::natural (CoreBinding::get value 0x70726f6f66) 2000000) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some proof => (match (byteList (CoreBinding::get value 0x696d706f727473)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some imports => (match (byteList (CoreBinding::get value 0x6c6576656c73)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some levels => (match (textList (CoreBinding::get value 0x6178696f6d73)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some axioms => (match (bounds (CoreBinding::get value 0x626f756e6473)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some limits => (ctor Option.some [ResearchProject::Config] (record ResearchProject::Config {request := ownedRequest, workspace := (record ResearchWorkspace::Config {request := ownedRequest, repository := repository, revision := revision, environment := env, output := output, errors := errors, allowance := (project limits allowance), quantum := (project limits quantum), polls := (project limits polls)}), tools := toolData, arena := termArena, proof := proof, imports := imports, levels := levels, axioms := axioms, maxBytes := (project limits maxBytes), maxDepth := (project limits maxDepth), maxSteps := (project limits maxSteps)})))))))))))))) else (ctor Option.none [ResearchProject::Config])) else (ctor Option.none [ResearchProject::Config])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: config,
+ parameters: [value : Json::Value, env : (List (String * String))],
+ result: (Option ResearchProject::Config),
+ body: (if (stringIs (CoreBinding::get value 0x73706563) 0x7233302f72657365617263682d73796e7468657369732f31) then (if (CoreNotation::shape value (cons 0x73706563 (cons 0x72657175657374 (cons 0x7265706f7369746f7279 (cons 0x7265766973696f6e (cons 0x6f7574707574 (cons 0x6572726f7273 (cons 0x746f6f6c73 (cons 0x696d706f727473 (cons 0x6c6576656c73 (cons 0x6178696f6d73 (cons 0x626f756e6473 (nil Bytes))))))))))))) then (match (request (CoreBinding::get value 0x72657175657374)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some owned => (match (bounds (CoreBinding::get value 0x626f756e6473)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some limits => (match (CandidateSource::synthesize owned (project limits maxBytes) (project limits maxDepth) (project limits maxSteps)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some candidate => (suppliedConfig (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d617474656d70742f31)) (cons (0x72657175657374, (CoreBinding::get value 0x72657175657374)) (cons (0x7265706f7369746f7279, (CoreBinding::get value 0x7265706f7369746f7279)) (cons (0x7265766973696f6e, (CoreBinding::get value 0x7265766973696f6e)) (cons (0x6f7574707574, (CoreBinding::get value 0x6f7574707574)) (cons (0x6572726f7273, (CoreBinding::get value 0x6572726f7273)) (cons (0x746f6f6c73, (CoreBinding::get value 0x746f6f6c73)) (cons (0x696d706f727473, (CoreBinding::get value 0x696d706f727473)) (cons (0x6c6576656c73, (CoreBinding::get value 0x6c6576656c73)) (cons (0x6178696f6d73, (CoreBinding::get value 0x6178696f6d73)) (cons (0x626f756e6473, (CoreBinding::get value 0x626f756e6473)) (cons (0x6172656e61, (ctor Json::Value.object (cons (0x6e6f646573, (ctor Json::Value.array (project (first candidate) nodes))) (cons (0x726f6f74, (CoreBinding::number (project (first candidate) root))) (nil (Bytes * Json::Value)))))) (cons (0x70726f6f66, (CoreBinding::number (second candidate))) (nil (Bytes * Json::Value)))))))))))))))) env)))) else (ctor Option.none [ResearchProject::Config])) else (suppliedConfig value env)),
  axioms: [Quot.sound, propext],
  executable: true
 }
@@ -208,7 +218,7 @@ definition{
  name: contract,
  parameters: [],
  result: String,
- body: "Decode a bounded structured candidate-attempt request without performing effects. Exact object fields, JSON types, goal kind, numeric bounds and lossless ASCII conversion are required. The caller owns the environment, input file, repository and log paths. Admission establishes data shape, not provenance, premise inspection, a proof, or permission to publish a claim. ResearchSession constructs and verifies the candidate in its owned pinned workspace.",
+ body: "Decode a bounded structured candidate-attempt or local constructive-synthesis request without performing effects. Synthesis requests omit arena and proof; the selected contextual goal supplies the only synthesis target. Unsupported goals refuse construction without changing research status. Exact object fields, JSON types, goal kind, numeric bounds and lossless ASCII conversion are required. The caller owns the environment, input file, repository and log paths. Admission establishes data shape, not provenance, premise inspection, a proof, or permission to publish a claim. ResearchSession constructs and verifies the candidate in its owned pinned workspace.",
  axioms: [],
  executable: true
 }
@@ -217,7 +227,7 @@ definition{
  name: features,
  parameters: [],
  result: (List String),
- body: (cons "tool-digests-before-effects" (cons "bounded-attempt-json" (cons "exact-field-admission" (cons "explicit-goal-kind" (cons "no-receipt-input" (cons "lossless-ascii-environment" (cons "decode-is-not-proof" (nil String)))))))),
+ body: (cons "native-local-synthesis-without-proof-input" (cons "tool-digests-before-effects" (cons "bounded-attempt-json" (cons "exact-field-admission" (cons "explicit-goal-kind" (cons "no-receipt-input" (cons "lossless-ascii-environment" (cons "decode-is-not-proof" (nil String))))))))),
  axioms: [],
  executable: true
 }

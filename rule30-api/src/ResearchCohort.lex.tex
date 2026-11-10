@@ -5,6 +5,8 @@
 \importmodule{Host}
 \importmodule{Research}
 \importmodule{ResearchProject}
+\importmodule{ResearchFactory}
+\importmodule{ResearchVerification}
 \importmodule{ResearchWorkspace}
 \importmodule{ResearchSession}
 \importmodule{ResearchCandidate}
@@ -16,7 +18,7 @@ definition{
  name: contract,
  parameters: [],
  result: String,
- body: "Run at most 64 distinct candidate attempts sequentially against one owned pinned library. Admission requires identical library configuration, tool identities and snapshots. Each candidate retains its own request, source directory, verification and evidence record. A normally completed failed candidate permits the next attempt; a blocked or interrupted attempt stops the cohort and retains the library for recovery. Cancellation drains the outstanding host reply before library release. Only the cohort releases the shared library, after all active candidate work has completed. Completion reports per-attempt outcomes and does not imply that every candidate was proved. This bounded executor consumes supplied candidates; it does not generate strategies or provide durable restart recovery.",
+ body: "Run at most 64 distinct candidate attempts sequentially against one owned pinned library. Admission requires identical library configuration, tool identities and snapshots. Each candidate retains its own request, source directory, verification and evidence record. A normally completed failed candidate permits the next attempt; a blocked or interrupted attempt stops the cohort and retains the library for recovery. Cancellation drains the outstanding host reply before library release. Only the cohort releases the shared library, after all active candidate work has completed. Completion reports per-attempt outcomes and does not imply that every candidate was proved. The LexLean factory preflights every candidate before constructing the shared library and blocks the batch on invalid source. This bounded executor consumes supplied candidates; it does not generate strategies or provide durable restart recovery.",
  axioms: [],
  executable: true
 }
@@ -48,23 +50,21 @@ definition{
  name: sameTools,
  parameters: [left : ResearchCandidate::Tools, right : ResearchCandidate::Tools],
  result: Bool,
- body: ((Toml::sameBytes (project left lexlean) (project right lexlean)) && ((Toml::sameBytes (project left lean) (project right lean)) && ((Toml::sameBytes (project left lake) (project right lake)) && (Toml::sameBytes (project left checker) (project right checker))))),
+ body: (ResearchFactory::sameTools left right),
  executable: true
 }
 definition{
  name: freshSerial,
  parameters: [serial : Nat, seen : (List Nat)],
  result: Bool,
- body: (match seen | List.nil => true | List.cons head tail => ((not (serial =? head)) && (freshSerial serial tail))),
- recursive_argument: seen,
+ body: (ResearchFactory::freshSerial serial seen),
  executable: true
 }
 definition{
  name: compatible,
  parameters: [base : ResearchProject::Config, pending : (List ResearchProject::Config), seen : (List Nat)],
  result: Bool,
- body: (match pending | List.nil => true | List.cons head tail => ((ResearchProject::sameWorkspace (project base workspace) (project head workspace)) && ((sameTools (project base tools) (project head tools)) && ((Research::sameSnapshot (project (project head request) snapshot) (project (project (project base workspace) request) snapshot)) && ((freshSerial (project (project head request) serial) seen) && (compatible base tail (cons (project (project head request) serial) seen))))))),
- recursive_argument: pending,
+ body: (ResearchFactory::compatible base pending seen),
  executable: true
 }
 definition{
@@ -138,7 +138,7 @@ definition{
  name: advance,
  parameters: [state : State],
  result: (State * Emission),
- body: (if (project state cancelled) then (release state) else (match (project state pending) | List.nil => (release state) | List.cons head tail => (match (project state owner) | Option.none => (blocked state "missing library owner") | Option.some owner => (attemptResult (record State {owner := (project state owner), active := (ctor Option.none [ResearchSession::State]), pending := tail, results := (project state results), phase := (ctor Phase.attempting), cancelled := false}) (ResearchSession::beginPrepared head owner))))),
+ body: (if (project state cancelled) then (release state) else (match (project state pending) | List.nil => (release state) | List.cons head tail => (match (project state owner) | Option.none => (blocked state "missing library owner") | Option.some owner => (match (ResearchFactory::libraryAction head (ctor Option.some [ResearchWorkspace::State] owner)) | ResearchFactory::LibraryAction.reuse => (attemptResult (record State {owner := (project state owner), active := (ctor Option.none [ResearchSession::State]), pending := tail, results := (project state results), phase := (ctor Phase.attempting), cancelled := false}) (ResearchSession::beginPrepared head owner)) | ResearchFactory::LibraryAction.build => (blocked state "factory cannot rebuild an owned library") | ResearchFactory::LibraryAction.idle => (blocked state "factory cannot idle with a pending candidate") | ResearchFactory::LibraryAction.blocked => (blocked state "factory blocked reuse of changed or unavailable library"))))),
  axioms: [Quot.sound, propext],
  executable: true
 }
@@ -147,7 +147,7 @@ definition{
  name: begin,
  parameters: [candidates : (List ResearchProject::Config)],
  result: (State * Emission),
- body: (let state : State := (record State {owner := (ctor Option.none [ResearchWorkspace::State]), active := (ctor Option.none [ResearchSession::State]), pending := candidates, results := (nil (Research::Answer * Bytes)), phase := (ctor Phase.preparing), cancelled := false}); (match candidates | List.nil => (finish state) | List.cons head tail => (if (((prim length candidates : Nat) <=? 64) && (compatible head candidates (nil Nat))) then (ownerResult state (ResearchWorkspace::begin (project head workspace))) else (blocked state "cohort requires at most 64 distinct attempts sharing one library configuration and tool identity")))),
+ body: (let state : State := (record State {owner := (ctor Option.none [ResearchWorkspace::State]), active := (ctor Option.none [ResearchSession::State]), pending := candidates, results := (nil (Research::Answer * Bytes)), phase := (ctor Phase.preparing), cancelled := false}); (let plan : ResearchFactory::Plan := (ResearchFactory::plan candidates (ctor Option.none [ResearchWorkspace::State])); (match (project plan library) | ResearchFactory::LibraryAction.idle => (finish state) | ResearchFactory::LibraryAction.build => (match candidates | List.nil => (blocked state "factory build has no candidates") | List.cons head tail => (ownerResult state (ResearchWorkspace::begin (project head workspace)))) | ResearchFactory::LibraryAction.reuse => (blocked state "factory returned reuse without an owner") | ResearchFactory::LibraryAction.blocked => (blocked state (ResearchVerification::concat "factory preflight refused cohort; rejected candidate serials:" (ResearchFactory::rejectionMessage (project plan rejected))))))),
  axioms: [Quot.sound, propext],
  executable: true
 }
@@ -191,7 +191,7 @@ definition{
  name: features,
  parameters: [],
  result: (List String),
- body: (cons "one-library-owner-per-cohort" (cons "bounded-distinct-candidate-attempts" (cons "exact-shared-configuration" (cons "per-candidate-source-and-evidence" (cons "drain-before-cancel" (cons "retain-library-on-uncertain-attempt" (cons "recheck-tracked-library-between-attempts" (nil String)))))))),
+ body: (cons "factory-preflight-before-library-build" (cons "one-library-owner-per-cohort" (cons "bounded-distinct-candidate-attempts" (cons "exact-shared-configuration" (cons "per-candidate-source-and-evidence" (cons "drain-before-cancel" (cons "retain-library-on-uncertain-attempt" (cons "recheck-tracked-library-between-attempts" (nil String))))))))),
  executable: true
 }
 \end{semanticmodule}

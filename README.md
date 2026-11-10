@@ -378,6 +378,15 @@ stopped. Cancellation drains outstanding replies and suppresses checked results.
 `ResearchInput` admits the exact `r30/research-attempt/1` JSON schema: the complete
 controller request, repository and full revision, output/error paths, four tool
 digests, core arena and proof node, imports, universe levels, axioms, and bounds.
+For local constructive synthesis, use `r30/research-synthesis/1` with the same
+fields except `arena` and `proof`, which must be omitted. The command derives its
+only target from the request and constructs implication introductions, contextual
+assumptions, `True`, and reflexive equality locally. Search is bounded to 4,096
+input nodes and 64 introductions; unsupported goals return input exit 2 without
+marking the research task exhausted. Successful construction still runs the same
+owned compiler, kernel replay, axiom audit and evidence-retention lifecycle.
+No remote model is involved. Both forms are accepted inside a cohort.
+
 The task must be ready and its prove/refute intent must agree with its purpose.
 The snapshot carries the library tree and compiler/model digests. Admission
 checks JSON shape and budgets; it grants no premise provenance or proof authority.
@@ -393,8 +402,8 @@ and blocked operations include the retained workspace location. Optional evidenc
 and recovery paths use an empty string when absent, so output remains compatible
 with the project's canonical JSON profile. Input errors
 exit 2 and host protocol errors exit 70. Receipt injection and restarting a
-terminal command are rejected. The command does not select a proof strategy or
-publish a claim. Source inspection into the binding schema, strategy scheduling,
+terminal command are rejected. The command supports this structural strategy but does not schedule the full
+research portfolio or publish a claim. Source inspection into the binding schema, strategy scheduling,
 durable failure diagnostics, recovery, and publication into the claim register
 remain required for the new components to replace the legacy engine.
 
@@ -415,3 +424,12 @@ attempt separately. A completed cohort can contain failed candidates: exit 0
 requires every result to be checked, with no cancellation. This bounded executor
 does not add automatic candidate generation or durable restart recovery.
 CI and runtime use deterministic local tools and no remote models.
+
+The native research cohort now uses the LexLean `ResearchFactory` planner before
+starting host operations. It checks all candidate sources before constructing the
+shared library and reports rejected attempt serials together. The library is a
+shared prerequisite with an exact workspace, snapshot and tool closure; candidate
+verification remains separate. Only an owned ready library can be reused, and the
+existing cleanliness check still runs between attempts. Factory readiness never
+marks a theorem proved. This integration does not cache compiler verification
+across runs or implement durable recovery; those capabilities remain incomplete.

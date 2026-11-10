@@ -1,0 +1,107 @@
+\begin{lexlean}{ResearchFactory}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Research}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchCandidate}
+\importmodule{CandidateSource}
+\importmodule{Toml}
+\importmodule{Hypotheses}
+\importmodule{ResearchVerification}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "The research factory plans the complete bounded cohort before any host effect. It checks every candidate source and returns all rejected serials together. One library obligation serves every attempt. Its input closure is the exact workspace configuration, snapshot and tool identities; candidate sources are separate downstream obligations. An owned ready library with that closure can be reused; an absent owner must be built; a changed, interrupted or released owner is blocked, never silently rebuilt or trusted. Factory readiness is not proof acceptance. Candidate verification, evidence retention and library cleanliness checks remain owned by the existing runner. No external pass receipt can establish readiness. No cross-run compiler verification cache or durable restart recovery is claimed.",
+ axioms: [],
+ executable: true
+}
+inductive{
+ name: LibraryAction,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: build, fields: []}, {name: reuse, fields: []}, {name: blocked, fields: []}, {name: idle, fields: []}]
+}
+structure{
+ name: Plan,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: library, type: LibraryAction}, {name: rejected, type: (List Nat)}, {name: attempts, type: Nat}]
+}
+definition{
+ name: sameTools,
+ parameters: [left : ResearchCandidate::Tools, right : ResearchCandidate::Tools],
+ result: Bool,
+ body: ((Toml::sameBytes (project left lexlean) (project right lexlean)) && ((Toml::sameBytes (project left lean) (project right lean)) && ((Toml::sameBytes (project left lake) (project right lake)) && (Toml::sameBytes (project left checker) (project right checker))))),
+ executable: true
+}
+definition{
+ name: freshSerial,
+ parameters: [serial : Nat, seen : (List Nat)],
+ result: Bool,
+ body: (match seen | List.nil => true | List.cons head tail => ((not (serial =? head)) && (freshSerial serial tail))),
+ recursive_argument: seen,
+ executable: true
+}
+definition{
+ name: compatible,
+ parameters: [base : ResearchProject::Config, pending : (List ResearchProject::Config), seen : (List Nat)],
+ result: Bool,
+ body: (match pending | List.nil => true | List.cons head tail => ((ResearchProject::sameWorkspace (project base workspace) (project head workspace)) && ((sameTools (project base tools) (project head tools)) && ((Research::sameSnapshot (project (project head request) snapshot) (project (project (project base workspace) request) snapshot)) && ((freshSerial (project (project head request) serial) seen) && (compatible base tail (cons (project (project head request) serial) seen))))))),
+ recursive_argument: pending,
+ executable: true
+}
+definition{
+ name: candidateReady,
+ parameters: [config : ResearchProject::Config],
+ result: Bool,
+ body: (((project config maxBytes) <=? 8388608) && ((ResearchWorkspace::valid (project config workspace)) && ((ResearchCandidate::valid (ResearchProject::context config)) && (match (CandidateSource::construct (project config request) (project config arena) (project config proof) (project config imports) (project config levels) (project config axioms) (project config maxBytes) (project config maxDepth) (project config maxSteps)) | Option.none => false | Option.some source => true)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: rejectedCandidates,
+ parameters: [candidates : (List ResearchProject::Config)],
+ result: (List Nat),
+ body: (match candidates | List.nil => (nil Nat) | List.cons head tail => (let rest : (List Nat) := (rejectedCandidates tail); (if (candidateReady head) then rest else (cons (project (project head request) serial) rest)))),
+ axioms: [Quot.sound, propext],
+ recursive_argument: candidates,
+ executable: true
+}
+definition{
+ name: libraryAction,
+ parameters: [config : ResearchProject::Config, owner : (Option ResearchWorkspace::State)],
+ result: LibraryAction,
+ body: (match owner | Option.none => (ctor LibraryAction.build) | Option.some ready => (if (ResearchProject::preparedFor config ready) then (ctor LibraryAction.reuse) else (ctor LibraryAction.blocked))),
+ executable: true
+}
+definition{
+ name: plan,
+ parameters: [candidates : (List ResearchProject::Config), owner : (Option ResearchWorkspace::State)],
+ result: Plan,
+ body: (let count : Nat := (prim length candidates : Nat); (match candidates | List.nil => (record Plan {library := (ctor LibraryAction.idle), rejected := (nil Nat), attempts := 0}) | List.cons head tail => (if ((count <=? 64) && (compatible head candidates (nil Nat))) then (let rejected : (List Nat) := (rejectedCandidates candidates); (record Plan {library := (match rejected | List.nil => (libraryAction head owner) | List.cons first rest => (ctor LibraryAction.blocked)), rejected := rejected, attempts := count})) else (record Plan {library := (ctor LibraryAction.blocked), rejected := (nil Nat), attempts := count})))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: rejectionMessage,
+ parameters: [serials : (List Nat)],
+ result: String,
+ body: (match serials | List.nil => "" | List.cons head tail => (ResearchVerification::concat " " (ResearchVerification::concat (ResearchWorkspace::text (Hypotheses::decimal head)) (rejectionMessage tail)))),
+ axioms: [Quot.sound, propext],
+ recursive_argument: serials,
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "preflight-all-candidates-before-host-effects" (cons "aggregate-rejected-attempt-serials" (cons "exact-library-input-closure" (cons "reuse-only-owned-ready-library" (cons "block-stale-or-interrupted-owner" (cons "factory-readiness-is-not-proof-evidence" (nil String))))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}
