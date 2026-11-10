@@ -1,0 +1,152 @@
+\begin{lexlean}{ResearchCohortTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchCohort}
+\importmodule{ResearchCohortInput}
+\importmodule{ResearchCohortCommand}
+\importmodule{Json}
+\importmodule{CoreBinding}
+\importmodule{ResearchInput}
+\importmodule{ResearchInputTraces}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchSession}
+\importmodule{ResearchExecution}
+\importmodule{Research}
+\importmodule{LexLeanStd.Host}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: blocked,
+ parameters: [result : (ResearchCohort::State * ResearchCohort::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchCohort::Emission.blocked reason => true | ResearchCohort::Emission.host request => false | ResearchCohort::Emission.awaiting => false | ResearchCohort::Emission.complete answers => false)
+}
+theorem{
+ name: emptyCohortPerformsNoEffects,
+ parameters: [],
+ statement: ((match (second (ResearchCohort::begin (nil ResearchProject::Config))) | ResearchCohort::Emission.complete answers => ((prim length answers : Nat) =? 0) | ResearchCohort::Emission.blocked reason => false | ResearchCohort::Emission.host request => false | ResearchCohort::Emission.awaiting => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: duplicateAttemptCannotReuseCandidateDirectory,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (blocked (ResearchCohort::begin (cons config (cons config (nil ResearchProject::Config)))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: readyOwner,
+ parameters: [config : ResearchProject::Config],
+ result: ResearchWorkspace::State,
+ body: (record ResearchWorkspace::State {config := (project config workspace), operation := (ctor ResearchWorkspace::Operation.finalize), phase := (ctor ResearchWorkspace::Phase.ready), execution := (ctor Option.none [ResearchExecution::State]), owned := true, cancelled := false, result := (ctor ResearchExecution::EndKind.succeeded), detail := ""})
+}
+theorem{
+ name: readyLibrarySkipsCheckoutAndBuild,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (match (second (ResearchProject::beginPrepared config (readyOwner config))) | ResearchProject::Emission.host request => (match request | LexLeanStd.Host::Request.stat path => true | LexLeanStd.Host::Request.read path => false | LexLeanStd.Host::Request.write path data => false | LexLeanStd.Host::Request.createDir path => false | LexLeanStd.Host::Request.removeFile path => false | LexLeanStd.Host::Request.removeTree path => false | LexLeanStd.Host::Request.rename source target => false | LexLeanStd.Host::Request.lock path => false | LexLeanStd.Host::Request.list path => false | LexLeanStd.Host::Request.canonical path => false | LexLeanStd.Host::Request.spawn job => false | LexLeanStd.Host::Request.wait children delay => false | LexLeanStd.Host::Request.stop child => false | LexLeanStd.Host::Request.exit code output errors => false) | ResearchProject::Emission.awaiting => false | ResearchProject::Emission.ready context => false | ResearchProject::Emission.complete kind => false | ResearchProject::Emission.blocked reason => false | ResearchProject::Emission.refused => false)) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: borrowedProjectDoesNotReleaseLibrary,
+ parameters: [config : ResearchProject::Config, owner : ResearchWorkspace::State, source : Bytes],
+ statement: ((match (second (ResearchProject::step (record ResearchProject::State {borrowed := true, config := config, source := source, workspace := (ctor Option.some [ResearchWorkspace::State] owner), execution := (ctor Option.none [ResearchExecution::State]), operation := (ctor ResearchProject::Operation.lock), phase := (ctor ResearchProject::Phase.ready), cancelled := false, result := (ctor ResearchExecution::EndKind.succeeded)}) (ctor ResearchProject::Event.release))) | ResearchProject::Emission.complete kind => true | ResearchProject::Emission.host request => false | ResearchProject::Emission.awaiting => false | ResearchProject::Emission.ready context => false | ResearchProject::Emission.blocked reason => false | ResearchProject::Emission.refused => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: advancing,
+ parameters: [],
+ result: ResearchCohort::State,
+ body: (record ResearchCohort::State {owner := (ctor Option.none [ResearchWorkspace::State]), active := (ctor Option.none [ResearchSession::State]), pending := (nil ResearchProject::Config), results := (nil (Research::Answer * Bytes)), phase := (ctor ResearchCohort::Phase.advancing), cancelled := false})
+}
+theorem{
+ name: cancellationDrainsContinuationBeforeRelease,
+ parameters: [],
+ statement: ((match (second (ResearchCohort::cancel (advancing))) | ResearchCohort::Emission.awaiting => true | ResearchCohort::Emission.complete answers => false | ResearchCohort::Emission.host request => false | ResearchCohort::Emission.blocked reason => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+definition{
+ name: document,
+ parameters: [initial : Json::Value, rest : (List Json::Value)],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d636f686f72742f31)) (cons (0x6669727374, initial) (cons (0x72657374, (ctor Json::Value.array rest)) (nil (Bytes * Json::Value))))))
+}
+definition{
+ name: secondAttempt,
+ parameters: [],
+ result: Json::Value,
+ body: (ResearchInputTraces::put (ResearchInputTraces::fixtureDocument) 0x72657175657374 (ResearchInputTraces::put (ResearchInputTraces::requestDocument) 0x73657269616c (ctor Json::Value.number 0x34))),
+ axioms: [propext]
+}
+theorem{
+ name: candidateSerialIsIndependentOfLibraryOwner,
+ parameters: [],
+ statement: ((match (ResearchCohortInput::config (document (ResearchInputTraces::fixtureDocument) (cons (secondAttempt) (nil Json::Value))) (nil (String * String))) | Option.none => false | Option.some candidates => (match candidates | List.nil => false | List.cons initial rest => (match rest | List.nil => false | List.cons subsequent more => ((((project (project subsequent request) serial) =? 4) && ((project (project (project subsequent workspace) request) serial) =? 3)) && ((prim length more : Nat) =? 0))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: duplicateSerialRejectedByInputBeforeAnyEffects,
+ parameters: [],
+ statement: ((match (ResearchCohortInput::config (document (ResearchInputTraces::fixtureDocument) (cons (ResearchInputTraces::fixtureDocument) (nil Json::Value))) (nil (String * String))) | Option.none => true | Option.some candidates => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: differingWorkspaceLogsCannotBeSilentlyRebound,
+ parameters: [],
+ statement: ((match (ResearchCohortInput::config (document (ResearchInputTraces::fixtureDocument) (cons (ResearchInputTraces::put (secondAttempt) 0x6f7574707574 (ctor Json::Value.string 0x2f6f74686572)) (nil Json::Value))) (nil (String * String))) | Option.none => true | Option.some candidates => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: endedLibraryCannotBeBorrowed,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (not (ResearchProject::preparedFor config (ResearchWorkspace::withPhase (readyOwner config) (ctor ResearchWorkspace::Phase.ended))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: changedToolIdentityCannotBorrowLibrary,
+ parameters: [],
+ statement: ((match (ResearchCohortInput::config (document (ResearchInputTraces::fixtureDocument) (cons (ResearchInputTraces::put (secondAttempt) 0x746f6f6c73 (ResearchInputTraces::put (CoreBinding::get (secondAttempt) 0x746f6f6c73) 0x6c65786c65616e (ctor Json::Value.string 0x65656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565))) (nil Json::Value))) (nil (String * String))) | Option.none => true | Option.some candidates => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: completedCohortDoesNotReleaseTwice,
+ parameters: [owner : (Option ResearchWorkspace::State), answers : (List (Research::Answer * Bytes)), event : LexLeanStd.Host::Event],
+ statement: ((match (second (ResearchCohort::host (record ResearchCohort::State {owner := owner, active := (ctor Option.none [ResearchSession::State]), pending := (nil ResearchProject::Config), results := answers, phase := (ctor ResearchCohort::Phase.ended), cancelled := false}) event)) | ResearchCohort::Emission.complete results => true | ResearchCohort::Emission.host request => false | ResearchCohort::Emission.awaiting => false | ResearchCohort::Emission.blocked reason => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: libraryTimeoutCannotReportEmptySuccess,
+ parameters: [state : ResearchCohort::State, owner : ResearchWorkspace::State],
+ statement: ((project (first (ResearchCohort::ownerResult state (owner, (ctor ResearchWorkspace::Emission.complete (ctor ResearchExecution::EndKind.cut))))) cancelled) = true),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: failedAttemptPreventsAggregateSuccess,
+ parameters: [request : Research::Request, reason : Bytes, evidence : Bytes, tail : (List (Research::Answer * Bytes))],
+ statement: ((ResearchCohortCommand::allChecked (cons ((record Research::Answer {request := request, result := (ctor Research::ResultKind.failed reason)}), evidence) tail)) = false),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: completedCommandCannotStartAnotherCohort,
+ parameters: [cohort : (Option ResearchCohort::State), event : LexLeanStd.Host::Event],
+ statement: ((ResearchCohortCommand::step (ctor Option.some [ResearchCohortCommand::State] (ctor ResearchCohortCommand::State.ended cohort)) event) = (ResearchCohortCommand::error cohort (70 : UInt8) 0x636f6d706c6574656420726573656172636820636f6d6d616e642063616e6e6f742072657374617274)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,283 @@
+\begin{lexlean}{ResearchEvidence}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{LexLeanStd.Sha256}
+\importmodule{Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchVerification}
+\importmodule{ResearchWorkspace}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Persist canonical evidence as a Git blob retained by a content-addressed ref. The caller owns the private record path and workspace; this component writes the exact record, hashes it locally, checks the stored blob before publication, retains the exact library commit under its own compare-and-swap ref and verifies that ref, creates the evidence ref with compare-and-swap against absence, and reads the published blob back byte for byte. An already published identical record is idempotent; another body or failed read is not success. Cancellation drains replies and supervises owned children. A blocked child or protocol failure retains recovery state. Storage is not proof verification: only the enclosing owned research session may promote verified evidence after persistence and workspace release.",
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: Config,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: request, type: Research::Request}, {name: repository, type: String}, {name: recordPath, type: String}, {name: environment, type: (List (String * String))}, {name: output, type: String}, {name: errors, type: String}, {name: maxBytes, type: Nat}, {name: maxSteps, type: Nat}, {name: allowance, type: Nat}, {name: quantum, type: Nat}, {name: polls, type: Nat}, {name: revision, type: Bytes}]
+}
+
+inductive{
+ name: Operation,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: hash, fields: []}, {name: publish, fields: []}, {name: read, fields: []}, {name: inspect, fields: []}, {name: retainLibrary, fields: []}, {name: inspectLibrary, fields: []}]
+}
+
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: writing, fields: []}, {name: executing, fields: []}, {name: readingHash, fields: []}, {name: readingRecord, fields: []}, {name: readingBlob, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}, {name: readingLibrary, fields: []}]
+}
+
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: config, type: Config}, {name: body, type: Bytes}, {name: identity, type: Bytes}, {name: blob, type: Bytes}, {name: operation, type: Operation}, {name: phase, type: Phase}, {name: execution, type: (Option ResearchExecution::State)}, {name: cancelled, type: Bool}]
+}
+
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}]
+}
+
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: complete, fields: [Bytes]}, {name: failed, fields: [String]}, {name: cut, fields: []}, {name: blocked, fields: [String]}]
+}
+
+definition{
+ name: referencePath,
+ parameters: [state : State],
+ result: String,
+ body: (ResearchVerification::concat "refs/r30/evidence/" (Host::textOf (project state identity))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: libraryReference,
+ parameters: [state : State],
+ result: String,
+ body: (ResearchVerification::concat "refs/r30/libraries/" (Host::textOf (project (project state config) revision))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: zeroObject,
+ parameters: [blob : Bytes],
+ result: String,
+ body: (if ((prim length blob : Nat) =? 40) then "0000000000000000000000000000000000000000" else "0000000000000000000000000000000000000000000000000000000000000000"),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: arguments,
+ parameters: [state : State, operation : Operation],
+ result: (List String),
+ body: (match operation | Operation.retainLibrary => (cons "update-ref" (cons (libraryReference state) (cons (Host::textOf (project (project state config) revision)) (cons (zeroObject (project (project state config) revision)) (nil String))))) | Operation.inspectLibrary => (cons "rev-parse" (cons "--verify" (cons (ResearchVerification::concat (libraryReference state) "^{commit}") (nil String)))) | Operation.hash => (cons "hash-object" (cons "-w" (cons "--" (cons (project (project state config) recordPath) (nil String))))) | Operation.publish => (cons "update-ref" (cons (referencePath state) (cons (Host::textOf (project state blob)) (cons (zeroObject (project state blob)) (nil String))))) | Operation.inspect => (cons "cat-file" (cons "blob" (cons (Host::textOf (project state blob)) (nil String)))) | Operation.read => (cons "cat-file" (cons "blob" (cons (referencePath state) (nil String))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: job,
+ parameters: [state : State, operation : Operation],
+ result: ResearchExecution::Job,
+ body: (record ResearchExecution::Job {request := (project (project state config) request), tool := (ctor ResearchExecution::Tool.git), arguments := (arguments state operation), directory := (project (project state config) repository), environment := (project (project state config) environment), output := (project (project state config) output), errors := (project (project state config) errors), allowance := (project (project state config) allowance), quantum := (project (project state config) quantum), polls := (project (project state config) polls)}),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: finish,
+ parameters: [state : State, emission : Emission],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), body := (project state body), identity := (project state identity), blob := (project state blob), operation := (project state operation), phase := (ctor Phase.ended), execution := (ctor Option.none [ResearchExecution::State]), cancelled := (project state cancelled)}), emission),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), body := (project state body), identity := (project state identity), blob := (project state blob), operation := (project state operation), phase := (ctor Phase.blocked), execution := (project state execution), cancelled := (project state cancelled)}), (ctor Emission.blocked reason)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: launch,
+ parameters: [state : State, operation : Operation],
+ result: (State * Emission),
+ body: (let result : (ResearchExecution::State * ResearchExecution::Emission) := (ResearchExecution::begin (job state operation)); (let next : State := (record State {config := (project state config), body := (project state body), identity := (project state identity), blob := (project state blob), operation := operation, phase := (ctor Phase.executing), execution := (ctor Option.some [ResearchExecution::State] (first result)), cancelled := (project state cancelled)}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (blocked next "evidence job did not spawn") | ResearchExecution::Emission.complete completion => (blocked next "evidence job was refused")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: read,
+ parameters: [state : State, phase : Phase],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), body := (project state body), identity := (project state identity), blob := (project state blob), operation := (project state operation), phase := phase, execution := (ctor Option.none [ResearchExecution::State]), cancelled := (project state cancelled)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.read (project (project state config) output)))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: succeeded,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state operation) | Operation.retainLibrary => (launch state (ctor Operation.inspectLibrary)) | Operation.inspectLibrary => (read state (ctor Phase.readingLibrary)) | Operation.hash => (read state (ctor Phase.readingHash)) | Operation.inspect => (read state (ctor Phase.readingBlob)) | Operation.publish => (launch state (ctor Operation.read)) | Operation.read => (read state (ctor Phase.readingRecord))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: failed,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state operation) | Operation.retainLibrary => (launch state (ctor Operation.inspectLibrary)) | Operation.inspectLibrary => (finish state (ctor Emission.failed "library revision retention could not be verified")) | Operation.publish => (launch state (ctor Operation.read)) | Operation.hash => (finish state (ctor Emission.failed "evidence blob write failed")) | Operation.inspect => (finish state (ctor Emission.failed "written evidence blob read failed")) | Operation.read => (finish state (ctor Emission.failed "published evidence read failed"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: completed,
+ parameters: [state : State, completion : ResearchExecution::Completion],
+ result: (State * Emission),
+ body: (if (ResearchExecution::resumeAllowed completion) then (if (project state cancelled) then (finish state (ctor Emission.cut)) else (if (ResearchWorkspace::exitedNormally completion) then (match (project completion kind)
+ | ResearchExecution::EndKind.succeeded => (succeeded state)
+ | ResearchExecution::EndKind.failed => (failed state)
+ | ResearchExecution::EndKind.cut => (finish state (ctor Emission.cut))
+ | ResearchExecution::EndKind.unavailable => (finish state (ctor Emission.failed "evidence tool unavailable"))
+ | ResearchExecution::EndKind.protocol => (blocked state "evidence execution protocol failure")
+ | ResearchExecution::EndKind.cleanupFailed => (blocked state "evidence child cleanup failed")
+ | ResearchExecution::EndKind.refused => (blocked state "evidence execution refused")) else (blocked state "interrupted evidence tool retains workspace until descendant cleanup is established"))) else (blocked state "evidence child remains owned or protocol failed")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: executionResult,
+ parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), body := (project state body), identity := (project state identity), blob := (project state blob), operation := (project state operation), phase := (ctor Phase.executing), execution := (ctor Option.some [ResearchExecution::State] (first result)), cancelled := (project state cancelled)}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchExecution::Emission.complete completion => (completed next completion))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: finishedResponse,
+ parameters: [event : LexLeanStd.Host::Event],
+ result: (Option (Result Unit LexLeanStd.Host::Failure)),
+ body: (match event | LexLeanStd.Host::Event.start value => (ctor Option.none [(Result Unit LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.read value => (ctor Option.none [(Result Unit LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.finished value => (ctor Option.some [(Result Unit LexLeanStd.Host::Failure)] value) | LexLeanStd.Host::Event.listed value => (ctor Option.none [(Result Unit LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.stat value => (ctor Option.none [(Result Unit LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.canonical value => (ctor Option.none [(Result Unit LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.spawned value => (ctor Option.none [(Result Unit LexLeanStd.Host::Failure)]) | LexLeanStd.Host::Event.waited value => (ctor Option.none [(Result Unit LexLeanStd.Host::Failure)])),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: written,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (finishedResponse event) | Option.none => (blocked state "unexpected evidence write reply") | Option.some result => (if (project state cancelled) then (finish state (ctor Emission.cut)) else (match result | Result.error failure => (finish state (ctor Emission.failed "evidence record write failed")) | Result.ok unit => (launch state (ctor Operation.hash))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: hashRead,
+ parameters: [state : State, data : Bytes],
+ result: (State * Emission),
+ body: (let size : Nat := (prim length data : Nat); (if ((size =? 41) || (size =? 65)) then (let blob : Bytes := (Toml::sliceOr data 0 (prim subtract size 1 : Nat)); (if ((ResearchWorkspace::objectId blob) && (Toml::byteIs data (prim subtract size 1 : Nat) (10 : UInt8))) then (launch (record State {config := (project state config), body := (project state body), identity := (project state identity), blob := blob, operation := (project state operation), phase := (project state phase), execution := (project state execution), cancelled := (project state cancelled)}) (ctor Operation.inspect)) else (finish state (ctor Emission.failed "invalid evidence blob identity")))) else (finish state (ctor Emission.failed "invalid evidence blob identity")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: readResult,
+ parameters: [state : State, event : LexLeanStd.Host::Event, isHash : Bool],
+ result: (State * Emission),
+ body: (match (Host::asRead event) | Option.none => (blocked state "unexpected evidence read reply") | Option.some result => (if (project state cancelled) then (finish state (ctor Emission.cut)) else (match result | Result.error failure => (finish state (ctor Emission.failed "evidence output read failed")) | Result.ok data => (if isHash then (hashRead state data) else (if (Toml::sameBytes data (project state body)) then (match (project state phase) | Phase.readingBlob => (launch state (ctor Operation.retainLibrary)) | Phase.readingRecord => (finish state (ctor Emission.complete (project state identity))) | Phase.readingLibrary => (blocked state "unexpected evidence data phase") | Phase.writing => (blocked state "unexpected evidence data phase") | Phase.executing => (blocked state "unexpected evidence data phase") | Phase.readingHash => (blocked state "unexpected evidence data phase") | Phase.ended => (blocked state "unexpected evidence data phase") | Phase.blocked => (blocked state "unexpected evidence data phase")) else (finish state (ctor Emission.failed "stored evidence bytes differ"))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), body := (project state body), identity := (project state identity), blob := (project state blob), operation := (project state operation), phase := (project state phase), execution := (project state execution), cancelled := true}); (match (project state phase) | Phase.writing => (next, (ctor Emission.awaiting)) | Phase.readingHash => (next, (ctor Emission.awaiting)) | Phase.readingRecord => (next, (ctor Emission.awaiting)) | Phase.readingBlob => (next, (ctor Emission.awaiting)) | Phase.readingLibrary => (next, (ctor Emission.awaiting)) | Phase.executing => (match (project state execution) | Option.none => (blocked next "missing evidence child owner") | Option.some active => (executionResult next (ResearchExecution::cancel active))) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (state, (ctor Emission.blocked "evidence lifecycle remains blocked")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: valid,
+ parameters: [state : State],
+ result: Bool,
+ body: ((ResearchWorkspace::objectId (project (project state config) revision)) && ((ResearchExecution::validJob (job state (ctor Operation.hash))) && ((ResearchVerification::nonempty (project (project state config) recordPath)) && ((not (prim equal (project (project state config) recordPath) (project (project state config) output) : Bool)) && ((not (prim equal (project (project state config) recordPath) (project (project state config) errors) : Bool)) && ((0 <? (project (project state config) maxBytes)) && (0 <? (project (project state config) maxSteps)))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: begin,
+ parameters: [config : Config, document : Json::Value],
+ result: (State * Emission),
+ body: (let state : State := (record State {config := config, body := 0x, identity := 0x, blob := 0x, operation := (ctor Operation.hash), phase := (ctor Phase.writing), execution := (ctor Option.none [ResearchExecution::State]), cancelled := false}); (if (valid state) then (match (JsonCanonical::file document (project config maxBytes) (project config maxSteps)) | Option.none => (finish state (ctor Emission.failed "evidence exceeds encoding limits")) | Option.some data => (let next : State := (record State {config := (project state config), body := data, identity := (LexLeanStd.Sha256::sha256Hex data), blob := (project state blob), operation := (project state operation), phase := (project state phase), execution := (project state execution), cancelled := (project state cancelled)}); (next, (ctor Emission.host (ctor LexLeanStd.Host::Request.write (project config recordPath) data))))) else (finish state (ctor Emission.failed "invalid evidence configuration")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: libraryRead,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (Host::asRead event) | Option.none => (blocked state "unexpected library reference reply") | Option.some result => (if (project state cancelled) then (finish state (ctor Emission.cut)) else (match result | Result.error failure => (finish state (ctor Emission.failed "library reference read failed")) | Result.ok data => (if (Toml::sameBytes data (prim append (project (project state config) revision) 0x0a : Bytes)) then (launch state (ctor Operation.publish)) else (finish state (ctor Emission.failed "retained library revision differs")))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match event | Event.cancel => (cancel state) | Event.host response => (match (project state phase) | Phase.writing => (written state response) | Phase.readingHash => (readResult state response true) | Phase.readingRecord => (readResult state response false) | Phase.readingBlob => (readResult state response false) | Phase.readingLibrary => (libraryRead state response) | Phase.executing => (match (project state execution) | Option.none => (blocked state "missing evidence child owner") | Option.some active => (executionResult state (ResearchExecution::step active response))) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (state, (ctor Emission.blocked "evidence lifecycle remains blocked")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "normal-exit-before-retention" (cons "library-revision-gc-retention" (cons "canonical-evidence-record" (cons "content-addressed-retention" (cons "compare-and-swap-publication" (cons "readback-before-completion" (cons "idempotent-identical-record" (cons "drain-before-cancellation" (cons "storage-is-not-proof" (nil String)))))))))),
+ axioms: [],
+ executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

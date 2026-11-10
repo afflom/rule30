@@ -1,0 +1,152 @@
+\begin{lexlean}{ResearchRecord}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Research}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchCandidate}
+\importmodule{ResearchProof}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{CandidateBinding}
+\importmodule{CandidateSource}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "A replay record retains the owned candidate source, exact local project inputs, full request and library revision, compiler and tool identities, linked candidate IR, lexicon closure and the command and attestation bytes consumed by verification. The enclosing session alone establishes custody and decides when a checked result may be archived. Constructing or reading this JSON confers no proof authority; replay must again validate the pinned library, source and proof.",
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: Files,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: lock, type: Bytes}, {name: lakeManifest, type: Bytes}, {name: command, type: Bytes}, {name: attestation, type: Bytes}]
+}
+
+definition{
+ name: emptyFiles,
+ parameters: [],
+ result: Files,
+ body: (record Files {lock := 0x, lakeManifest := 0x, command := 0x, attestation := 0x}),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: purpose,
+ parameters: [value : Research::Purpose],
+ result: Json::Value,
+ body: (match value | Research::Purpose.inspect => (ctor Json::Value.string 0x696e7370656374) | Research::Purpose.prove => (ctor Json::Value.string 0x70726f7665) | Research::Purpose.refute => (ctor Json::Value.string 0x726566757465) | Research::Purpose.maintain => (ctor Json::Value.string 0x6d61696e7461696e)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: status,
+ parameters: [value : Research::Status],
+ result: Json::Value,
+ body: (match value | Research::Status.ready => (ctor Json::Value.string 0x7265616479) | Research::Status.waiting => (ctor Json::Value.string 0x77616974696e67) | Research::Status.blocked => (ctor Json::Value.string 0x626c6f636b6564) | Research::Status.established => (ctor Json::Value.string 0x65737461626c6973686564) | Research::Status.exhausted => (ctor Json::Value.string 0x657868617573746564)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: sequent,
+ parameters: [value : Research::Sequent],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x6f726967696e, (ctor Json::Value.string (project value origin))) (cons (0x7468656f72656d, (ctor Json::Value.string (project value theorem))) (cons (0x74656c6573636f7065, (ctor Json::Value.string (project value telescope))) (cons (0x746172676574, (ctor Json::Value.string (project value target))) (cons (0x7072656d697365, (CoreBinding::number (project value premise))) (cons (0x6b696e64, (match (project value kind) | Research::GoalKind.premise => (ctor Json::Value.string 0x7072656d697365) | Research::GoalKind.closed => (ctor Json::Value.string 0x636c6f736564))) (nil (Bytes * Json::Value))))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: snapshot,
+ parameters: [value : Research::Snapshot],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x6c696272617279, (ctor Json::Value.string (project value library))) (cons (0x636f6d70696c6572, (ctor Json::Value.string (project value compiler))) (cons (0x6d6f64656c, (ctor Json::Value.string (project value model))) (nil (Bytes * Json::Value)))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: task,
+ parameters: [value : Research::Task],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x6964, (ctor Json::Value.string (project value id))) (cons (0x707572706f7365, (purpose (project value purpose))) (cons (0x696e74656e74, (purpose (project value intent))) (cons (0x737461747573, (status (project value status))) (cons (0x636f6d706f6e656e74, (ctor Json::Value.string (prim utf8_encode (project value component) : Bytes))) (cons (0x736f7572636573, (ctor Json::Value.array (CandidateSource::strings (project value sources)))) (cons (0x736368656d61, (ctor Json::Value.string (project value schema))) (cons (0x73657175656e74, (sequent (project value sequent))) (cons (0x616765, (CoreBinding::number (project value age))) (cons (0x776569676874, (CoreBinding::number (project value weight))) (nil (Bytes * Json::Value))))))))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: request,
+ parameters: [value : Research::Request],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73657269616c, (CoreBinding::number (project value serial))) (cons (0x736e617073686f74, (snapshot (project value snapshot))) (cons (0x7461736b, (task (project value task))) (nil (Bytes * Json::Value)))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: pins,
+ parameters: [value : VerificationReport::Pins],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x736f75726365, (ctor Json::Value.string (project value source))) (cons (0x73656d616e746963, (ctor Json::Value.string (project value semantic))) (cons (0x636f6d70696c6572, (ctor Json::Value.string (project value compiler))) (cons (0x6c65786c65616e, (ctor Json::Value.string (project value lexlean))) (cons (0x6c65616e, (ctor Json::Value.string (project value lean))) (cons (0x6c616b65, (ctor Json::Value.string (project value lake))) (cons (0x636865636b6572, (ctor Json::Value.string (project value checker))) (cons (0x7468656f72656d, (ctor Json::Value.string (project value theorem))) (cons (0x6d6f64756c65, (ctor Json::Value.string (project value module))) (nil (Bytes * Json::Value)))))))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: receipt,
+ parameters: [value : VerificationReport::Receipt],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x736f75726365, (ctor Json::Value.string (project value source))) (cons (0x73656d616e746963, (ctor Json::Value.string (project value semantic))) (cons (0x6275696c64, (ctor Json::Value.string (project value build))) (cons (0x6174746573746174696f6e, (ctor Json::Value.string (project value attestation))) (cons (0x7468656f72656d, (ctor Json::Value.string (project value theorem))) (cons (0x6d6f64756c65, (ctor Json::Value.string (project value module))) (cons (0x6178696f6d73, (ctor Json::Value.array (CandidateSource::axiomStrings (project value axioms)))) (nil (Bytes * Json::Value)))))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: files,
+ parameters: [projectState : ResearchProject::State, captured : Files],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x7372632f43616e6469646174652e6c65782e746578, (ctor Json::Value.string (project projectState source))) (cons (0x6c65786c65616e2e746f6d6c, (ctor Json::Value.string (ResearchProject::manifest))) (cons (0x6c616b6566696c652e746f6d6c, (ctor Json::Value.string (ResearchProject::lakefile))) (cons (0x6c65616e2d746f6f6c636861696e, (ctor Json::Value.string (ResearchProject::toolchain))) (cons (0x6c65786c65616e2e6c6f636b, (ctor Json::Value.string (project captured lock))) (cons (0x6c616b652d6d616e69666573742e6a736f6e, (ctor Json::Value.string (project captured lakeManifest))) (nil (Bytes * Json::Value))))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: document,
+ parameters: [projectState : ResearchProject::State, proof : ResearchProof::State, verified : VerificationReport::Receipt, captured : Files],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d70726f6f662f31)) (cons (0x72657175657374, (request (project verified request))) (cons (0x7265766973696f6e, (ctor Json::Value.string (project (project (project projectState config) workspace) revision))) (cons (0x70696e73, (pins (project (project proof verification) pins))) (cons (0x72656365697074, (receipt verified)) (cons (0x66696c6573, (files projectState captured)) (cons (0x6c696e6b6564, (project (project proof binding) linked)) (cons (0x6c657869636f6e, (project (project proof binding) lexicon)) (cons (0x636f6d6d616e64, (ctor Json::Value.string (project captured command))) (cons (0x6174746573746174696f6e, (ctor Json::Value.string (project captured attestation))) (nil (Bytes * Json::Value))))))))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: fromCandidate,
+ parameters: [projectState : ResearchProject::State, candidate : ResearchCandidate::State, captured : Files],
+ result: (Option Json::Value),
+ body: (match (project candidate phase) | ResearchCandidate::Phase.running => (ctor Option.none [Json::Value]) | ResearchCandidate::Phase.reading => (ctor Option.none [Json::Value]) | ResearchCandidate::Phase.verifying => (ctor Option.none [Json::Value]) | ResearchCandidate::Phase.ended => (match (project candidate proof) | Option.none => (ctor Option.none [Json::Value]) | Option.some proof => (match (project (project proof verification) outcome) | Option.none => (ctor Option.none [Json::Value]) | Option.some outcome => (match outcome | ResearchVerification::Outcome.accepted verified => (if ((not (project candidate cancelled)) && ((Research::sameRequest (project verified request) (project (project projectState config) request)) && ((0 <? (prim length (project captured lock) : Nat)) && ((0 <? (prim length (project captured lakeManifest) : Nat)) && ((0 <? (prim length (project captured command) : Nat)) && (0 <? (prim length (project captured attestation) : Nat))))))) then (ctor Option.some [Json::Value] (document projectState proof verified captured)) else (ctor Option.none [Json::Value])) | ResearchVerification::Outcome.terminated completion => (ctor Option.none [Json::Value]) | ResearchVerification::Outcome.rejected reason => (ctor Option.none [Json::Value]) | ResearchVerification::Outcome.cancelled => (ctor Option.none [Json::Value]))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "full-request-replay-record" (cons "owned-project-source-retention" (cons "pinned-library-and-tool-identities" (cons "same-read-verification-reports" (cons "linked-ir-and-lexicon-retention" (cons "records-require-kernel-replay" (nil String))))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

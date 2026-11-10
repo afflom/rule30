@@ -1,0 +1,177 @@
+\begin{lexlean}{ResearchInputTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchInput}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{Research}
+\importmodule{ResearchRecord}
+\importmodule{CoreBinding}
+\importmodule{ResearchCandidate}
+\importmodule{CoreNotation}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: putFields,
+ parameters: [fields : (List (Bytes * Json::Value)), key : Bytes, value : Json::Value],
+ result: (List (Bytes * Json::Value)),
+ body: (match fields | List.nil => (nil (Bytes * Json::Value)) | List.cons head tail => (cons (if (Toml::sameBytes (first head) key) then (key, value) else head) (putFields tail key value))),
+ axioms: [],
+ recursive_argument: fields
+}
+definition{
+ name: put,
+ parameters: [document : Json::Value, key : Bytes, value : Json::Value],
+ result: Json::Value,
+ body: (match document | Json::Value.object fields => (ctor Json::Value.object (putFields fields key value)) | Json::Value.null => document | Json::Value.boolean data => document | Json::Value.number data => document | Json::Value.string data => document | Json::Value.array data => document),
+ axioms: []
+}
+definition{
+ name: request,
+ parameters: [],
+ result: Research::Request,
+ body: (record Research::Request {serial := 3, snapshot := (record Research::Snapshot {library := 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161, compiler := 0x62626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262, model := 0x63636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363}), task := (record Research::Task {id := 0x67, purpose := (ctor Research::Purpose.prove), intent := (ctor Research::Purpose.prove), status := (ctor Research::Status.ready), component := "deduction", sources := (cons 0x54727565 (nil Bytes)), schema := 0x67, sequent := (record Research::Sequent {origin := 0x54727565, theorem := 0x54727565, premise := 0, telescope := 0x, target := (match (CoreBinding::encodeGoal (CoreBinding::namedGoal 0x54727565) 2048 256) | Option.none => 0x | Option.some value => value), kind := (ctor Research::GoalKind.closed)}), age := 0, weight := 8})}),
+ axioms: [propext]
+}
+definition{
+ name: requestDocument,
+ parameters: [],
+ result: Json::Value,
+ body: (put (ResearchRecord::request (request)) 0x7461736b (put (ResearchRecord::task (project (request) task)) 0x636f6d706f6e656e74 (ctor Json::Value.string 0x646564756374696f6e))),
+ axioms: [propext]
+}
+definition{
+ name: truth,
+ parameters: [],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (prim append (project (CoreBinding::namedGoal 0x54727565) nodes) (project (CoreBinding::namedGoal 0x547275652e696e74726f) nodes) : (List Json::Value)), root := 0}),
+ axioms: []
+}
+definition{
+ name: fixtureDocument,
+ parameters: [],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d617474656d70742f31)) (cons (0x72657175657374, (requestDocument)) (cons (0x7265706f7369746f7279, (ctor Json::Value.string 0x2f7265736561726368)) (cons (0x7265766973696f6e, (ctor Json::Value.string 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161)) (cons (0x6f7574707574, (ctor Json::Value.string 0x2f72657365617263682f6f7574707574)) (cons (0x6572726f7273, (ctor Json::Value.string 0x2f72657365617263682f6572726f7273)) (cons (0x746f6f6c73, (ctor Json::Value.object (cons (0x6c65786c65616e, (ctor Json::Value.string 0x64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464)) (cons (0x6c65616e, (ctor Json::Value.string 0x64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464)) (cons (0x6c616b65, (ctor Json::Value.string 0x64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464)) (cons (0x636865636b6572, (ctor Json::Value.string 0x64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464)) (nil (Bytes * Json::Value)))))))) (cons (0x6172656e61, (ctor Json::Value.object (cons (0x6e6f646573, (ctor Json::Value.array (project (truth) nodes))) (cons (0x726f6f74, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (0x70726f6f66, (ctor Json::Value.number 0x31)) (cons (0x696d706f727473, (ctor Json::Value.array (cons (ctor Json::Value.string 0x496e6974) (nil Json::Value)))) (cons (0x6c6576656c73, (ctor Json::Value.array (nil Json::Value))) (cons (0x6178696f6d73, (ctor Json::Value.array (nil Json::Value))) (cons (0x626f756e6473, (ctor Json::Value.object (cons (0x6d61785f6279746573, (ctor Json::Value.number 0x34303936)) (cons (0x6d61785f6465707468, (ctor Json::Value.number 0x3332)) (cons (0x6d61785f7374657073, (ctor Json::Value.number 0x31303234)) (cons (0x616c6c6f77616e6365, (ctor Json::Value.number 0x31303030)) (cons (0x7175616e74756d, (ctor Json::Value.number 0x3130)) (cons (0x706f6c6c73, (ctor Json::Value.number 0x313030)) (nil (Bytes * Json::Value)))))))))) (nil (Bytes * Json::Value)))))))))))))))),
+ axioms: [propext]
+}
+definition{
+ name: admitted,
+ parameters: [document : Json::Value],
+ result: Bool,
+ body: (match (ResearchInput::config document (nil (String * String))) | Option.none => false | Option.some config => true),
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: admitsStructuredClosedGoal,
+ parameters: [],
+ statement: ((admitted (fixtureDocument)) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: preservesRequestAndCandidate,
+ parameters: [],
+ statement: ((match (ResearchInput::config (fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (((project config proof) =? 1) && (Research::sameRequest (project (project config workspace) request) (request)))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unknownSchemaRejected,
+ parameters: [],
+ statement: ((not (admitted (put (fixtureDocument) 0x73706563 (ctor Json::Value.string 0x7233302f72657365617263682d617474656d70742f32)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: wrongProofTypeRejected,
+ parameters: [],
+ statement: ((not (admitted (put (fixtureDocument) 0x70726f6f66 (ctor Json::Value.string 0x31)))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: proofBoundEnforced,
+ parameters: [],
+ statement: ((not (admitted (put (fixtureDocument) 0x70726f6f66 (ctor Json::Value.number 0x32303030303031)))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: nonAsciiLogPathRejected,
+ parameters: [],
+ statement: ((not (admitted (put (fixtureDocument) 0x6f7574707574 (ctor Json::Value.string 0x2f72657365617263682fcebb)))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unexpectedReceiptRejected,
+ parameters: [],
+ statement: ((not (admitted (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d617474656d70742f31)) (cons (0x72657175657374, (requestDocument)) (cons (0x7265706f7369746f7279, (ctor Json::Value.string 0x2f7265736561726368)) (cons (0x7265766973696f6e, (ctor Json::Value.string 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161)) (cons (0x6f7574707574, (ctor Json::Value.string 0x2f72657365617263682f6f7574707574)) (cons (0x6572726f7273, (ctor Json::Value.string 0x2f72657365617263682f6572726f7273)) (cons (0x746f6f6c73, (ctor Json::Value.object (cons (0x6c65786c65616e, (ctor Json::Value.string 0x64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464)) (cons (0x6c65616e, (ctor Json::Value.string 0x64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464)) (cons (0x6c616b65, (ctor Json::Value.string 0x64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464)) (cons (0x636865636b6572, (ctor Json::Value.string 0x64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464)) (nil (Bytes * Json::Value)))))))) (cons (0x6172656e61, (ctor Json::Value.object (cons (0x6e6f646573, (ctor Json::Value.array (project (truth) nodes))) (cons (0x726f6f74, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (0x70726f6f66, (ctor Json::Value.number 0x31)) (cons (0x696d706f727473, (ctor Json::Value.array (cons (ctor Json::Value.string 0x496e6974) (nil Json::Value)))) (cons (0x6c6576656c73, (ctor Json::Value.array (nil Json::Value))) (cons (0x6178696f6d73, (ctor Json::Value.array (nil Json::Value))) (cons (0x626f756e6473, (ctor Json::Value.object (cons (0x6d61785f6279746573, (ctor Json::Value.number 0x34303936)) (cons (0x6d61785f6465707468, (ctor Json::Value.number 0x3332)) (cons (0x6d61785f7374657073, (ctor Json::Value.number 0x31303234)) (cons (0x616c6c6f77616e6365, (ctor Json::Value.number 0x31303030)) (cons (0x7175616e74756d, (ctor Json::Value.number 0x3130)) (cons (0x706f6c6c73, (ctor Json::Value.number 0x313030)) (nil (Bytes * Json::Value)))))))))) (cons (0x72656365697074, (ctor Json::Value.string 0x756e74727573746564)) (nil (Bytes * Json::Value))))))))))))))))))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: environmentConversionIsLossless,
+ parameters: [],
+ statement: ((match (ResearchInput::environment (cons (0x50415448, 0x2f62696e) (nil (Bytes * Bytes)))) | Option.none => false | Option.some env => true) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: nonAsciiEnvironmentRejected,
+ parameters: [],
+ statement: ((match (ResearchInput::environment (cons (0x50415448, 0x2fcebb) (nil (Bytes * Bytes)))) | Option.none => true | Option.some env => false) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: duplicateJsonKeysRejected,
+ parameters: [],
+ statement: ((match (ResearchInput::decode 0x7b2273706563223a2261222c2273706563223a2262227d (nil (Bytes * Bytes))) | Option.none => true | Option.some config => false) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: maintenanceCannotBecomeCandidate,
+ parameters: [],
+ statement: ((match (ResearchInput::purposeOf (ctor Json::Value.string 0x6d61696e7461696e)) | Option.none => true | Option.some purpose => false) = true),
+ proof: decide{},
+ axioms: []
+}
+theorem{
+ name: unknownGoalKindRejected,
+ parameters: [],
+ statement: ((match (ResearchInput::goalKind (ctor Json::Value.string 0x617373756d6564)) | Option.none => true | Option.some kind => false) = true),
+ proof: decide{},
+ axioms: []
+}
+
+theorem{
+ name: mismatchedPurposeAndIntentRejected,
+ parameters: [],
+ statement: ((match (ResearchInput::task (put (ResearchRecord::task (project (request) task)) 0x696e74656e74 (ctor Json::Value.string 0x726566757465))) | Option.none => true | Option.some candidate => false) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: completedTaskCannotBecomeAttempt,
+ parameters: [],
+ statement: ((match (ResearchInput::task (put (ResearchRecord::task (project (request) task)) 0x737461747573 (ctor Json::Value.string 0x65737461626c6973686564))) | Option.none => true | Option.some candidate => false) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+
+theorem{
+ name: malformedToolIdentityIsRejectedBeforeExecution,
+ parameters: [],
+ statement: ((match (ResearchInput::tools (put (CoreBinding::get (fixtureDocument) 0x746f6f6c73) 0x6c65786c65616e (ctor Json::Value.string 0x6e6f742d612d646967657374))) | Option.none => true | Option.some toolPins => false) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

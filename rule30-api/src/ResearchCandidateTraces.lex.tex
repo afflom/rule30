@@ -31,8 +31,8 @@ definition{
  name: began,
  parameters: [],
  result: (ResearchCandidate::State * ResearchProof::Emission),
- body: (ResearchCandidate::begin (context (ResearchVerificationTraces::settings))),
- axioms: [propext]
+ body: (ResearchCandidate::step (first (ResearchCandidate::begin (context (ResearchVerificationTraces::settings)))) (ctor ResearchVerification::Event.host (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))),
+ axioms: [Quot.sound, propext]
 }
 
 definition{
@@ -230,7 +230,7 @@ definition{
  name: runnerStarted,
  parameters: [],
  result: (ResearchRunner::State * ResearchRunner::Action),
- body: (ResearchRunner::step (first (ResearchRunner::begin (research))) (ctor ResearchRunner::Event.candidate (context (ResearchVerificationTraces::settings)))),
+ body: (ResearchRunner::step (first (ResearchRunner::step (first (ResearchRunner::begin (research))) (ctor ResearchRunner::Event.candidate (context (ResearchVerificationTraces::settings))))) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))),
  axioms: [Quot.sound, propext]
 }
 

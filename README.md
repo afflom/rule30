@@ -332,14 +332,23 @@ UTF-8 chunk, parser-state and SHA-256 block facts keep the complete report
 acceptance proof compositional; lifecycle traces reuse that checked receipt and verify rejection,
 cancellation, ownership and terminal behavior.
 
+The tool supervisor reads the monotonic host clock before spawning. Spawn replies
+carry a process ID, which is never used as time; spawn latency counts against
+the job budget. Normal completion releases direct-child ownership, while failed
+cleanup retains it.
+
 `rule30-api/production/research-request.json` exports the research controller,
-catalog initializer, and runner `begin`/`step` component libraries.
+catalog initializer, candidate source constructor and runner component libraries,
+plus the native `ResearchCommand.step` and `ResearchCohortCommand.step` executables.
+Session operations remain executable internal components; their behavior is
+certified through these command roots without duplicate standalone exports.
 
 `CandidateSource.construct` emits one unverified `.lex.tex` native-core theorem
 for the selected goal, with explicit imports, universe parameters and an exact
 axiom policy. It uses native LexLean 1.2 notation and a fixed candidate theorem
 name; the local compiler checks the proposed term. The output budget includes
-the complete document. The caller still owns the isolated project and file writes.
+the complete document. `ResearchProject` supplies an isolated project and owns
+its source writes, fixed manifests, pinned toolchain and locally generated lock.
 
 Closed goals and conditional premises have separate request identities.
 For the six open claims with defined propositions, the catalog constructs the
@@ -347,10 +356,62 @@ canonical named goal, including the prize kit's `Problem1`; mismatched register
 metadata blocks the task without changing its target. A closed proof has no
 extra assumptions, and a closed refutation must prove that exact proposition
 implies `False`. Dependency changes reopen the same goal for verification.
-This binding relies on the caller's ownership of the pinned imported library;
-a matching constant name alone does not establish that library's identity.
+`ResearchWorkspace` checks out a fresh detached worktree at a full revision,
+compares its tree with the requested library snapshot, builds the retained
+library, and checks tracked sources again before making the workspace ready.
 
-Native application wiring, source inspection into the binding schema,
-strategy search, owned candidate workspaces and durable publication are still required for
-the new runner to replace the legacy engine. CI and runtime
-use deterministic local tools and no remote models.
+`ResearchSession` owns one candidate attempt through preparation, snapshot,
+verification, evidence retention and release. It captures the exact report
+reads consumed by verification. `ResearchRecord` retains the request, source,
+project inputs, linked IR, lexicon closure, tool identities and reports.
+`ResearchEvidence` stores canonical evidence in Git, retains the library commit
+under `refs/r30/libraries/<revision>`, and checks both the library reference and
+`refs/r30/evidence/<record-sha256>` before completion. Existing identical references
+are idempotent. A record is replay input; reading it grants no proof authority.
+A standalone checked answer is delivered only after retention and workspace removal.
+Failed archival, failed cleanup, or interrupted tools retain the workspace for
+recovery. Direct-child cleanup does not establish that tool descendants have
+stopped. Cancellation drains outstanding replies and suppresses checked results.
+
+`ResearchCommand.step` is the native Host entry for one owned attempt. The generated
+`rule30_research_command` executable accepts one request file (or `--help`).
+`ResearchInput` admits the exact `r30/research-attempt/1` JSON schema: the complete
+controller request, repository and full revision, output/error paths, four tool
+digests, core arena and proof node, imports, universe levels, axioms, and bounds.
+The task must be ready and its prove/refute intent must agree with its purpose.
+The snapshot carries the library tree and compiler/model digests. Admission
+checks JSON shape and budgets; it grants no premise provenance or proof authority.
+The process environment is supplied by the native Host. Paths and environment
+values must use printable ASCII for lossless conversion by the current adapter;
+log parent directories must already exist. The input parser admits at most 8 MiB;
+the underlying Host file read itself is not size-limited.
+
+The command drives the session through actual Host replies and emits
+`r30/research-result/1` JSON. Exit 0 means a checked answer with retained evidence
+and completed workspace removal; nonzero attempt outcomes carry their status,
+and blocked operations include the retained workspace location. Optional evidence
+and recovery paths use an empty string when absent, so output remains compatible
+with the project's canonical JSON profile. Input errors
+exit 2 and host protocol errors exit 70. Receipt injection and restarting a
+terminal command are rejected. The command does not select a proof strategy or
+publish a claim. Source inspection into the binding schema, strategy scheduling,
+durable failure diagnostics, recovery, and publication into the claim register
+remain required for the new components to replace the legacy engine.
+
+`ResearchCohortCommand.step` provides the `rule30_research_cohort` executable for
+up to 64 sequential attempts sharing one prepared library. Its input is
+`{"spec":"r30/research-cohort/1","first":<attempt>,"rest":[<attempt>,...]}`;
+each attempt uses the complete schema above. All attempts must share the library,
+tool identities, environment, logs and workspace execution bounds, and must have
+distinct serials. Each keeps its own candidate request, project directory and
+proof evidence. The first request owns the library; subsequent requests borrow
+it. Tracked library sources are checked again between attempts without rebuilding.
+
+An ordinary failed candidate permits the next attempt. Interrupted or uncertain
+operations stop the cohort and retain its library for recovery. Borrowed sessions
+return retained evidence without removing the shared library; the cohort removes
+it once all attempts finish. `r30/research-cohort-result/1` reports every completed
+attempt separately. A completed cohort can contain failed candidates: exit 0
+requires every result to be checked, with no cancellation. This bounded executor
+does not add automatic candidate generation or durable restart recovery.
+CI and runtime use deterministic local tools and no remote models.

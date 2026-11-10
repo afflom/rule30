@@ -51,10 +51,18 @@ definition{
 }
 
 definition{
+ name: launching,
+ parameters: [],
+ result: (ResearchRunner::State * ResearchRunner::Action),
+ body: (ResearchRunner::step (first (started)) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))),
+ axioms: [Quot.sound, propext]
+}
+
+definition{
  name: cancelled,
  parameters: [],
  result: (ResearchRunner::State * ResearchRunner::Action),
- body: (ResearchRunner::step (first (started)) (ctor ResearchRunner::Event.cancel)),
+ body: (ResearchRunner::step (first (launching)) (ctor ResearchRunner::Event.cancel)),
  axioms: [Quot.sound, propext]
 }
 
@@ -166,7 +174,7 @@ definition{
  name: changed,
  parameters: [],
  result: (ResearchRunner::State * ResearchRunner::Action),
- body: (ResearchRunner::step (first (started)) (ctor ResearchRunner::Event.changed (ResearchTraces::otherSnapshot) (ResearchTraces::components) (cons "stdlib" (nil String)))),
+ body: (ResearchRunner::step (first (launching)) (ctor ResearchRunner::Event.changed (ResearchTraces::otherSnapshot) (ResearchTraces::components) (cons "stdlib" (nil String)))),
  axioms: [Quot.sound, propext]
 }
 

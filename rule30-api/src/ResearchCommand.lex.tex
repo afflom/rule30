@@ -1,0 +1,154 @@
+\begin{lexlean}{ResearchCommand}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Host}
+\importmodule{Research}
+\importmodule{ResearchInput}
+\importmodule{ResearchSession}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchProject}
+\importmodule{ResearchRecord}
+\importmodule{CandidateSource}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+inductive{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: reading, fields: [(List (Bytes * Bytes))]}, {name: active, fields: [ResearchSession::State]}, {name: ended, fields: [(Option ResearchSession::State)]}]
+}
+
+definition{
+ name: usage,
+ parameters: [],
+ result: Bytes,
+ body: 0x75736167653a207233302d726573656172636820524551554553542e6a736f6e0a0a52756e206f6e65206c6f63616c6c792076657269666965642063616e64696461746520617474656d7074207573696e6720746865207233302f72657365617263682d617474656d70742f31204150492e0a5468652072657175657374206964656e7469666965732069747320657861637420676f616c2c2070696e6e6564206c69627261727920616e6420746f6f6c732c2063616e646964617465207465726d2c0a6c6f6720706174687320616e64207265736f7572636520626f756e64732e204f75747075742075736573207233302f72657365617263682d726573756c742f312e0a412073746f726564207265636f7264206973207265706c617920696e7075743b20697420646f6573206e6f74207075626c697368206120636c61696d206f72206c61756e6368207374726174656779207365617263682e0a,
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: recoveryPath,
+ parameters: [session : (Option ResearchSession::State)],
+ result: Json::Value,
+ body: (match session | Option.none => (ctor Json::Value.string 0x) | Option.some active => (match (project active phase) | ResearchSession::Phase.blocked => (ctor Json::Value.string (prim utf8_encode (ResearchWorkspace::path (project (ResearchSession::sessionConfig active) workspace)) : Bytes)) | ResearchSession::Phase.preparing => (ctor Json::Value.string 0x) | ResearchSession::Phase.readingLock => (ctor Json::Value.string 0x) | ResearchSession::Phase.readingManifest => (ctor Json::Value.string 0x) | ResearchSession::Phase.verifying => (ctor Json::Value.string 0x) | ResearchSession::Phase.archiving => (ctor Json::Value.string 0x) | ResearchSession::Phase.releasing => (ctor Json::Value.string 0x) | ResearchSession::Phase.ended => (ctor Json::Value.string 0x))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: finish,
+ parameters: [session : (Option ResearchSession::State), exitStatus : UInt8, document : Json::Value],
+ result: (State * LexLeanStd.Host::Request),
+ body: ((ctor State.ended session), (match (JsonCanonical::file document 8388608 16777216) | Option.some data => (ctor LexLeanStd.Host::Request.exit exitStatus data 0x) | Option.none => (ctor LexLeanStd.Host::Request.exit (70 : UInt8) 0x 0x726573656172636820726573756c74206578636565647320656e636f64696e67206c696d6974730a))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: error,
+ parameters: [session : (Option ResearchSession::State), exitStatus : UInt8, reason : Bytes],
+ result: (State * LexLeanStd.Host::Request),
+ body: (finish session exitStatus (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d726573756c742f31)) (cons (0x737461747573, (ctor Json::Value.string 0x6661696c6564)) (cons (0x726561736f6e, (ctor Json::Value.string reason)) (cons (0x7265636f766572795f776f726b7370616365, (recoveryPath session)) (nil (Bytes * Json::Value)))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: status,
+ parameters: [result : Research::ResultKind],
+ result: Json::Value,
+ body: (match result | Research::ResultKind.checked goal theorem axioms => (ctor Json::Value.string 0x636865636b6564) | Research::ResultKind.failed reason => (ctor Json::Value.string 0x6661696c6564) | Research::ResultKind.cut => (ctor Json::Value.string 0x637574) | Research::ResultKind.unavailable => (ctor Json::Value.string 0x756e617661696c61626c65) | Research::ResultKind.inspected goal => (ctor Json::Value.string 0x756e6578706563746564) | Research::ResultKind.maintained sources evidence => (ctor Json::Value.string 0x756e6578706563746564)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: detail,
+ parameters: [result : Research::ResultKind],
+ result: Json::Value,
+ body: (match result | Research::ResultKind.checked goal theorem axioms => (ctor Json::Value.object (cons (0x676f616c, (ResearchRecord::sequent goal)) (cons (0x7468656f72656d, (ctor Json::Value.string theorem)) (cons (0x6178696f6d73, (ctor Json::Value.array (CandidateSource::axiomStrings axioms))) (nil (Bytes * Json::Value)))))) | Research::ResultKind.failed reason => (ctor Json::Value.string reason) | Research::ResultKind.cut => (ctor Json::Value.string 0x) | Research::ResultKind.unavailable => (ctor Json::Value.string 0x) | Research::ResultKind.inspected goal => (ctor Json::Value.string 0x) | Research::ResultKind.maintained sources evidence => (ctor Json::Value.string 0x)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: complete,
+ parameters: [session : ResearchSession::State, answer : Research::Answer, identity : Bytes],
+ result: (State * LexLeanStd.Host::Request),
+ body: (finish (ctor Option.some [ResearchSession::State] session) (if (ResearchSession::isChecked answer) then (0 : UInt8) else (1 : UInt8)) (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d726573756c742f31)) (cons (0x737461747573, (status (project answer result))) (cons (0x72657175657374, (ResearchRecord::request (project answer request))) (cons (0x65766964656e6365, (if ((prim length identity : Nat) =? 0) then (ctor Json::Value.string 0x) else (ctor Json::Value.string identity))) (cons (0x64657461696c, (detail (project answer result))) (nil (Bytes * Json::Value))))))))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: advanceSession,
+ parameters: [result : (ResearchSession::State * ResearchSession::Emission)],
+ result: (State * LexLeanStd.Host::Request),
+ body: (match (second result) | ResearchSession::Emission.host request => ((ctor State.active (first result)), request) | ResearchSession::Emission.complete answer identity => (complete (first result) answer identity) | ResearchSession::Emission.blocked reason => (error (ctor Option.some [ResearchSession::State] (first result)) (1 : UInt8) (prim utf8_encode reason : Bytes)) | ResearchSession::Emission.awaiting => (error (ctor Option.some [ResearchSession::State] (first result)) (70 : UInt8) 0x726573656172636820636f6d6d616e6420686173206e6f206f75747374616e64696e6720686f73742072657175657374)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: readResult,
+ parameters: [env : (List (Bytes * Bytes)), event : LexLeanStd.Host::Event],
+ result: (State * LexLeanStd.Host::Request),
+ body: (match (Host::asRead event) | Option.none => (error (ctor Option.none [ResearchSession::State]) (70 : UInt8) 0x657870656374656420617474656d707420726571756573742072656164) | Option.some response => (match response | Result.error failure => (error (ctor Option.none [ResearchSession::State]) (1 : UInt8) (project failure message)) | Result.ok data => (match (ResearchInput::decode data env) | Option.none => (error (ctor Option.none [ResearchSession::State]) (2 : UInt8) 0x617474656d70742072657175657374206f7220656e7669726f6e6d656e74206973206f757473696465207468652061646d697474656420736368656d6120616e6420626f756e6473) | Option.some config => (advanceSession (ResearchSession::begin config))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: help,
+ parameters: [],
+ result: (State * LexLeanStd.Host::Request),
+ body: ((ctor State.ended (ctor Option.none [ResearchSession::State])), (ctor LexLeanStd.Host::Request.exit (0 : UInt8) (usage) 0x)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: start,
+ parameters: [incoming : LexLeanStd.Host::Start],
+ result: (State * LexLeanStd.Host::Request),
+ body: (match (project incoming arguments) | List.nil => (help) | List.cons path rest => (match rest | List.cons extra more => (error (ctor Option.none [ResearchSession::State]) (2 : UInt8) 0x65787065637465642065786163746c79206f6e6520617474656d707420726571756573742066696c65) | List.nil => (if ((Toml::sameBytes path 0x2d2d68656c70) || (Toml::sameBytes path 0x2d68)) then (help) else (if ((0 <? (prim length path : Nat)) && (ResearchWorkspace::asciiPath path 0 (prim length path : Nat))) then ((ctor State.reading (project incoming environment)), (ctor LexLeanStd.Host::Request.read (Host::textOf path))) else (error (ctor Option.none [ResearchSession::State]) (2 : UInt8) 0x726571756573742066696c652070617468206d757374206265206e6f6e656d707479207072696e7461626c65204153434949))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: step,
+ parameters: [state : (Option State), event : LexLeanStd.Host::Event],
+ result: (State * LexLeanStd.Host::Request),
+ body: (match state | Option.none => (match (Host::asStart event) | Option.none => (error (ctor Option.none [ResearchSession::State]) (70 : UInt8) 0x6578706563746564206e617469766520686f7374207374617274) | Option.some initialStart => (start initialStart)) | Option.some active => (match active | State.reading env => (readResult env event) | State.active session => (advanceSession (ResearchSession::step session (ctor ResearchSession::Event.host event))) | State.ended session => (error session (70 : UInt8) 0x636f6d706c6574656420726573656172636820636f6d6d616e642063616e6e6f742072657374617274))),
+ axioms: [Quot.sound, propext],
+ executable: true,
+ production: {effects: [allocation, files, overflow, process, recursion], targets: [rust-std]}
+}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "A native Host command entry for one structured candidate attempt. It reads exactly one request file, admits its data without proof authority, and drives ResearchSession solely through actual Host replies. Checked output requires the session to retain proof evidence and release its workspace. A blocked attempt reports its recovery location. Terminal state cannot start another attempt. This command does not import receipts, publish claims, inspect premise provenance, or choose proof strategies. The caller supplies the pinned environment, repository and existing log parent directories.",
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "native-host-entry" (cons "bounded-request-admission" (cons "owned-session-dispatch" (cons "structured-attempt-results" (cons "checked-output-after-retention" (cons "recovery-location-reporting" (cons "terminal-no-restart" (nil String)))))))),
+ axioms: [],
+ executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

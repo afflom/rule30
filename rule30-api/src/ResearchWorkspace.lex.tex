@@ -1,0 +1,314 @@
+\begin{lexlean}{ResearchWorkspace}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{Hypotheses}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Own a fresh detached Git worktree for one research request. Its full revision is immutable and its observed tree must equal the request library snapshot before a local library build. Tracked sources are checked again after the build before readiness. Existing paths are refused. Readiness grants an owned prepared workspace, never proof evidence. The caller owns the parent checkout and pinned tool environment. Repository paths must be absolute printable ASCII, which the admitted Host text adapter represents exactly. Cancellation drains pending host replies; uncertainty during creation or failed removal blocks reuse and retains recovery state. Only successful owned creation authorizes removal. A stopped or signalled tool has no normal exit code; its workspace is retained because direct-child cleanup does not establish descendant termination. Ready workspaces must be released after their candidate lifecycle ends.",
+ axioms: [],
+ executable: true
+}
+
+structure{
+ name: Config,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: request, type: Research::Request}, {name: repository, type: Bytes}, {name: revision, type: Bytes}, {name: environment, type: (List (String * String))}, {name: output, type: String}, {name: errors, type: String}, {name: allowance, type: Nat}, {name: quantum, type: Nat}, {name: polls, type: Nat}]
+}
+inductive{
+ name: Operation,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: create, fields: []}, {name: identify, fields: []}, {name: clean, fields: []}, {name: build, fields: []}, {name: remove, fields: []}, {name: runtime, fields: []}, {name: laws, fields: []}, {name: finalize, fields: []}]
+}
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: checking, fields: []}, {name: executing, fields: []}, {name: reading, fields: []}, {name: ready, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}]
+}
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: config, type: Config}, {name: operation, type: Operation}, {name: phase, type: Phase}, {name: execution, type: (Option ResearchExecution::State)}, {name: owned, type: Bool}, {name: cancelled, type: Bool}, {name: result, type: ResearchExecution::EndKind}, {name: detail, type: String}]
+}
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}, {name: release, fields: []}]
+}
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: awaiting, fields: []}, {name: host, fields: [LexLeanStd.Host::Request]}, {name: ready, fields: [String]}, {name: complete, fields: [ResearchExecution::EndKind]}, {name: blocked, fields: [String]}, {name: refused, fields: []}]
+}
+
+definition{
+ name: text,
+ parameters: [data : Bytes],
+ result: String,
+ body: (Host::textOf data),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: path,
+ parameters: [config : Config],
+ result: String,
+ body: (ResearchVerification::concat (text (project config repository)) (ResearchVerification::concat "/.r30/research/" (ResearchVerification::concat (text (project config revision)) (ResearchVerification::concat "-" (text (Hypotheses::decimal (project (project config request) serial))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: objectId,
+ parameters: [value : Bytes],
+ result: Bool,
+ body: ((((prim length value : Nat) =? 40) || ((prim length value : Nat) =? 64)) && (VerificationReport::hexFrom value 0 (prim length value : Nat))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: arguments,
+ parameters: [config : Config, operation : Operation],
+ result: (List String),
+ body: (match operation
+ | Operation.create => (cons "-c" (cons "core.hooksPath=/dev/null" (cons "worktree" (cons "add" (cons "--detach" (cons "--" (cons (path config) (cons (text (project config revision)) (nil String)))))))))
+ | Operation.identify => (cons "rev-parse" (cons "--verify" (cons "HEAD^{tree}" (nil String))))
+ | Operation.finalize => (cons "diff" (cons "--exit-code" (cons "HEAD" (cons "--" (nil String)))))
+ | Operation.clean => (cons "diff" (cons "--exit-code" (cons "HEAD" (cons "--" (nil String)))))
+ | Operation.build => (cons "build" (cons "Rule30UOR" (nil String)))
+ | Operation.runtime => (cons "build" (cons "LexLeanRuntime" (nil String)))
+ | Operation.laws => (cons "env" (cons "lean" (cons "-R" (cons "." (cons "-o" (cons ".lake/build/lib/lean/LexLeanRuntime/Laws.olean" (cons "-i" (cons ".lake/build/lib/lean/LexLeanRuntime/Laws.ilean" (cons "LexLeanRuntime/Laws.lean" (nil String))))))))))
+ | Operation.remove => (cons "worktree" (cons "remove" (cons "--force" (cons "--" (cons (path config) (nil String))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: job,
+ parameters: [config : Config, operation : Operation],
+ result: ResearchExecution::Job,
+ body: (record ResearchExecution::Job {request := (project config request), tool := (match operation | Operation.build => (ctor ResearchExecution::Tool.lake) | Operation.runtime => (ctor ResearchExecution::Tool.lake) | Operation.laws => (ctor ResearchExecution::Tool.lake) | Operation.create => (ctor ResearchExecution::Tool.git) | Operation.identify => (ctor ResearchExecution::Tool.git) | Operation.clean => (ctor ResearchExecution::Tool.git) | Operation.finalize => (ctor ResearchExecution::Tool.git) | Operation.remove => (ctor ResearchExecution::Tool.git)), arguments := (arguments config operation), directory := (match operation | Operation.create => (text (project config repository)) | Operation.remove => (text (project config repository)) | Operation.identify => (path config) | Operation.clean => (path config) | Operation.finalize => (path config) | Operation.build => (ResearchVerification::concat (path config) "/rule30-core-lean") | Operation.runtime => (ResearchVerification::concat (path config) "/rule30-core-lean") | Operation.laws => (ResearchVerification::concat (path config) "/rule30-core-lean")), environment := (project config environment), output := (project config output), errors := (project config errors), allowance := (project config allowance), quantum := (project config quantum), polls := (project config polls)}),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: asciiPath,
+ parameters: [data : Bytes, position : Nat, fuel : Nat],
+ result: Bool,
+ body: (match fuel | Nat.zero => (position =? (prim length data : Nat)) | Nat.succ more => (match (prim index data position : (Option UInt8)) | Option.none => false | Option.some byte => ((Toml::between byte (32 : UInt8) (126 : UInt8)) && (asciiPath data (position + 1) more)))),
+ axioms: [propext],
+ recursive_argument: fuel,
+ executable: true
+}
+definition{
+ name: valid,
+ parameters: [config : Config],
+ result: Bool,
+ body: ((objectId (project config revision)) && ((objectId (project (project (project config request) snapshot) library)) && (((Host::sameByteAt (project config repository) 0 0x2f 0) && (asciiPath (project config repository) 0 (prim length (project config repository) : Nat))) && (ResearchExecution::validJob (job config (ctor Operation.create)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: withPhase,
+ parameters: [state : State, phase : Phase],
+ result: State,
+ body: (record State {config := (project state config), operation := (project state operation), phase := phase, execution := (project state execution), owned := (project state owned), cancelled := (project state cancelled), result := (project state result), detail := (project state detail)}),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), operation := (project state operation), phase := (ctor Phase.blocked), execution := (project state execution), owned := (project state owned), cancelled := (project state cancelled), result := (project state result), detail := reason}), (ctor Emission.blocked reason)),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: finish,
+ parameters: [state : State, result : ResearchExecution::EndKind],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), operation := (project state operation), phase := (ctor Phase.ended), execution := (ctor Option.none [ResearchExecution::State]), owned := false, cancelled := (project state cancelled), result := result, detail := (project state detail)}), (ctor Emission.complete result)),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: launch,
+ parameters: [state : State, operation : Operation],
+ result: (State * Emission),
+ body: (let started : (ResearchExecution::State * ResearchExecution::Emission) := (ResearchExecution::begin (job (project state config) operation)); (let next : State := (record State {config := (project state config), operation := operation, phase := (ctor Phase.executing), execution := (ctor Option.some [ResearchExecution::State] (first started)), owned := (project state owned), cancelled := (project state cancelled), result := (project state result), detail := (project state detail)}); (match (second started) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (blocked next "workspace job did not spawn") | ResearchExecution::Emission.complete completion => (blocked next "workspace job was refused")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: release,
+ parameters: [state : State, result : ResearchExecution::EndKind, detail : String],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), operation := (project state operation), phase := (project state phase), execution := (project state execution), owned := (project state owned), cancelled := (project state cancelled), result := result, detail := detail}); (if (project state owned) then (launch next (ctor Operation.remove)) else (finish next result))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: created,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), operation := (project state operation), phase := (project state phase), execution := (project state execution), owned := true, cancelled := (project state cancelled), result := (project state result), detail := (project state detail)}); (if (project state cancelled) then (release next (ctor ResearchExecution::EndKind.cut) "cancelled after checkout") else (launch next (ctor Operation.identify)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: succeeded,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state operation)
+ | Operation.create => (created state)
+ | Operation.remove => (finish state (project state result))
+ | Operation.identify => (if (project state cancelled) then (release state (ctor ResearchExecution::EndKind.cut) "cancelled before identity read") else ((withPhase state (ctor Phase.reading)), (ctor Emission.host (ctor LexLeanStd.Host::Request.read (project (project state config) output)))))
+ | Operation.clean => (if (project state cancelled) then (release state (ctor ResearchExecution::EndKind.cut) "cancelled before build") else (launch state (ctor Operation.runtime)))
+ | Operation.runtime => (if (project state cancelled) then (release state (ctor ResearchExecution::EndKind.cut) "cancelled after runtime build") else (launch state (ctor Operation.laws)))
+ | Operation.laws => (if (project state cancelled) then (release state (ctor ResearchExecution::EndKind.cut) "cancelled after law build") else (launch state (ctor Operation.build)))
+ | Operation.build => (if (project state cancelled) then (release state (ctor ResearchExecution::EndKind.cut) "cancelled after build") else (launch state (ctor Operation.finalize)))
+ | Operation.finalize => (if (project state cancelled) then (release state (ctor ResearchExecution::EndKind.cut) "cancelled after final source check") else ((withPhase state (ctor Phase.ready)), (ctor Emission.ready (path (project state config)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: failed,
+ parameters: [state : State, result : ResearchExecution::EndKind],
+ result: (State * Emission),
+ body: (match (project state operation)
+ | Operation.create => (blocked state "checkout did not complete; workspace ownership is uncertain")
+ | Operation.remove => (blocked state "owned workspace removal did not complete")
+ | Operation.identify => (release state result "workspace identity command failed")
+ | Operation.clean => (release state result "workspace has changed tracked sources")
+ | Operation.finalize => (release state result "library build changed tracked sources")
+ | Operation.runtime => (release state result "pinned runtime build failed")
+ | Operation.laws => (release state result "pinned runtime law build failed")
+ | Operation.build => (release state result "pinned local library build failed")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: exitedNormally,
+ parameters: [completion : ResearchExecution::Completion],
+ result: Bool,
+ body: (match (project completion code) | Option.none => false | Option.some code => true),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: completed,
+ parameters: [state : State, completion : ResearchExecution::Completion],
+ result: (State * Emission),
+ body: (if ((ResearchExecution::resumeAllowed completion) && (exitedNormally completion)) then (match (project completion kind)
+ | ResearchExecution::EndKind.succeeded => (succeeded state)
+ | ResearchExecution::EndKind.failed => (failed state (if (project state cancelled) then (ctor ResearchExecution::EndKind.cut) else (ctor ResearchExecution::EndKind.failed)))
+ | ResearchExecution::EndKind.cut => (failed state (ctor ResearchExecution::EndKind.cut))
+ | ResearchExecution::EndKind.unavailable => (failed state (ctor ResearchExecution::EndKind.unavailable))
+ | ResearchExecution::EndKind.protocol => (blocked state "workspace execution protocol failure")
+ | ResearchExecution::EndKind.cleanupFailed => (blocked state "workspace child cleanup failed")
+ | ResearchExecution::EndKind.refused => (blocked state "workspace execution refused")) else (blocked state "workspace child remains owned, was interrupted, or its protocol failed; retain files until descendants are accounted for")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: executionResult,
+ parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), operation := (project state operation), phase := (ctor Phase.executing), execution := (ctor Option.some [ResearchExecution::State] (first result)), owned := (project state owned), cancelled := (project state cancelled), result := (project state result), detail := (project state detail)}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchExecution::Emission.complete completion => (completed next completion))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: begin,
+ parameters: [config : Config],
+ result: (State * Emission),
+ body: (let state : State := (record State {config := config, operation := (ctor Operation.create), phase := (ctor Phase.checking), execution := (ctor Option.none [ResearchExecution::State]), owned := false, cancelled := false, result := (ctor ResearchExecution::EndKind.succeeded), detail := ""}); (if (valid config) then (state, (ctor Emission.host (ctor LexLeanStd.Host::Request.stat (path config)))) else (finish state (ctor ResearchExecution::EndKind.refused)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: checkedPath,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (Host::asStated event) | Option.none => (blocked state "unexpected workspace stat reply") | Option.some outcome => (if (project state cancelled) then (finish state (ctor ResearchExecution::EndKind.cut)) else (match outcome | Result.ok entry => (finish state (ctor ResearchExecution::EndKind.refused)) | Result.error failure => (match (project failure kind)
+ | LexLeanStd.Host::FailureKind.notFound => (launch state (ctor Operation.create))
+ | LexLeanStd.Host::FailureKind.alreadyExists => (finish state (ctor ResearchExecution::EndKind.unavailable))
+ | LexLeanStd.Host::FailureKind.denied => (finish state (ctor ResearchExecution::EndKind.unavailable))
+ | LexLeanStd.Host::FailureKind.other => (finish state (ctor ResearchExecution::EndKind.unavailable)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: readIdentity,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (Host::asRead event) | Option.none => (blocked state "unexpected workspace identity reply") | Option.some outcome => (if (project state cancelled) then (release state (ctor ResearchExecution::EndKind.cut) "cancelled during identity read") else (match outcome | Result.error failure => (release state (ctor ResearchExecution::EndKind.failed) "workspace identity read failed") | Result.ok data => (if (Toml::sameBytes data (prim append (project (project (project (project state config) request) snapshot) library) 0x0a : Bytes)) then (launch state (ctor Operation.clean)) else (release state (ctor ResearchExecution::EndKind.failed) "workspace tree differs from requested library"))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), operation := (project state operation), phase := (project state phase), execution := (project state execution), owned := (project state owned), cancelled := true, result := (project state result), detail := (project state detail)}); (match (project state phase)
+ | Phase.checking => (next, (ctor Emission.awaiting))
+ | Phase.reading => (next, (ctor Emission.awaiting))
+ | Phase.ready => (release next (ctor ResearchExecution::EndKind.cut) "cancelled ready workspace")
+ | Phase.ended => (state, (ctor Emission.refused))
+ | Phase.blocked => (state, (ctor Emission.blocked (project state detail)))
+ | Phase.executing => (match (project state operation)
+   | Operation.remove => (state, (ctor Emission.awaiting))
+   | Operation.create => (match (project state execution) | Option.none => (blocked next "missing owned workspace execution") | Option.some active => (executionResult next (ResearchExecution::cancel active)))
+   | Operation.identify => (match (project state execution) | Option.none => (blocked next "missing owned workspace execution") | Option.some active => (executionResult next (ResearchExecution::cancel active)))
+   | Operation.clean => (match (project state execution) | Option.none => (blocked next "missing owned workspace execution") | Option.some active => (executionResult next (ResearchExecution::cancel active)))
+   | Operation.runtime => (match (project state execution) | Option.none => (blocked next "missing owned workspace execution") | Option.some active => (executionResult next (ResearchExecution::cancel active)))
+   | Operation.laws => (match (project state execution) | Option.none => (blocked next "missing owned workspace execution") | Option.some active => (executionResult next (ResearchExecution::cancel active)))
+   | Operation.finalize => (match (project state execution) | Option.none => (blocked next "missing owned workspace execution") | Option.some active => (executionResult next (ResearchExecution::cancel active)))
+   | Operation.build => (match (project state execution) | Option.none => (blocked next "missing owned workspace execution") | Option.some active => (executionResult next (ResearchExecution::cancel active)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match (project state phase)
+ | Phase.blocked => (state, (ctor Emission.blocked (project state detail)))
+ | Phase.ended => (state, (ctor Emission.refused))
+ | Phase.ready => (match event | Event.cancel => (cancel state) | Event.release => (release state (ctor ResearchExecution::EndKind.succeeded) "released prepared workspace") | Event.host response => (state, (ctor Emission.refused)))
+ | Phase.checking => (match event | Event.cancel => (cancel state) | Event.release => (state, (ctor Emission.refused)) | Event.host response => (checkedPath state response))
+ | Phase.reading => (match event | Event.cancel => (cancel state) | Event.release => (state, (ctor Emission.refused)) | Event.host response => (readIdentity state response))
+ | Phase.executing => (match event | Event.cancel => (cancel state) | Event.release => (state, (ctor Emission.refused)) | Event.host response => (match (project state execution) | Option.none => (blocked state "missing owned workspace execution") | Option.some active => (executionResult state (ResearchExecution::step active response))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "interrupted-tool-workspace-retention" (cons "post-build-source-integrity" (cons "owned-detached-worktree" (cons "exact-library-tree" (cons "fresh-path-required" (cons "local-library-build" (cons "drain-before-cleanup" (cons "retain-uncertain-ownership" (nil String))))))))),
+ axioms: [],
+ executable: true
+}
+
+\end{semanticmodule}
+\end{lexlean}

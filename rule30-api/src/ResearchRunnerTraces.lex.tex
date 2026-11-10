@@ -22,7 +22,7 @@ definition{
   name: launch,
   parameters: [],
   result: (ResearchRunner::State * ResearchRunner::Action),
-  body: (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3))),
+  body: (ResearchRunner::step (first (ResearchRunner::step (first (initial)) (ctor ResearchRunner::Event.job (ResearchExecutionTraces::job 10 4 3)))) (ctor ResearchRunner::Event.host (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))),
   axioms: [Quot.sound, propext]
 }
 
