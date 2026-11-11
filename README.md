@@ -422,7 +422,7 @@ return retained evidence without removing the shared library; the cohort removes
 it once all attempts finish. `r30/research-cohort-result/1` reports every completed
 attempt separately. A completed cohort can contain failed candidates: exit 0
 requires every result to be checked, with no cancellation. This bounded executor
-does not add automatic candidate generation or durable restart recovery.
+does not schedule an autonomous strategy portfolio or provide durable restart recovery.
 CI and runtime use deterministic local tools and no remote models.
 
 The native research cohort now uses the LexLean `ResearchFactory` planner before
