@@ -1,0 +1,23 @@
+\begin{lexlean}{ClosedGoalChecks4}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ClosedBindingFixture}
+\importmodule{Research}
+\importmodule{ResearchCatalog}
+\importmodule{CoreBinding}
+\importmodule{CandidateBinding}
+\importmodule{Toml}
+\importmodule{Register}
+\importmodule{Json}
+\importmodule{ClosedGoalTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: nativeRefutationDischargesClosedFalse,
+ parameters: [],
+ statement: ((ClosedGoalTraces::nativeMatches 0x46616c7365 (ctor Research::Purpose.refute) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e6e6f7446616c7365) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

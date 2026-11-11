@@ -1,0 +1,73 @@
+\begin{lexlean}{ResearchVerificationChecks4}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{VerificationReportTraces}
+\importmodule{VerificationJsonFixtures}
+\importmodule{VerificationHashFixtures}
+\importmodule{ResearchVerificationTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+  name: cancelDuringCommandReadWaits,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (ResearchVerificationTraces::commandPending) (ctor ResearchVerification::Event.cancel))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: cancelledCommandReplyCannotReadAttestation,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (first (ResearchVerification::step (ResearchVerificationTraces::commandPending) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (ResearchVerificationTraces::commandBytes)))))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: cancelDuringAttestationReadWaits,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (ResearchVerificationTraces::reportPending) (ctor ResearchVerification::Event.cancel))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: cancelledAttestationCannotPromoteReport,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (first (ResearchVerification::step (ResearchVerificationTraces::reportPending) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (ResearchVerificationTraces::reportBytes)))))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: cancelledReadFailureStillCompletesCancellation,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (first (ResearchVerification::step (ResearchVerificationTraces::reportPending) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.error [Bytes, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = 4),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: cancelDuringSpawnWaits,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (first (ResearchVerificationTraces::begin)) (ctor ResearchVerification::Event.cancel))) = 1),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: cancelledSpawnDrainsThenStops,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::stopTarget (ResearchVerification::step (first (ResearchVerification::step (first (ResearchVerificationTraces::begin)) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::spawned)))) = 7),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: failedCleanupRetainsOwner,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::owned (ResearchVerification::step (first (ResearchVerification::step (first (ResearchVerification::step (first (ResearchVerificationTraces::begin)) (ctor ResearchVerification::Event.cancel))) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::spawned)))) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.finished (ctor Result.error [Unit, LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = (ctor Option.some [Nat] 7)),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

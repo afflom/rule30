@@ -14,7 +14,7 @@ and capability graphs, preserve proof/refutation intent, and wait for outstandin
 work to finish; stale completions release that fence without establishing evidence.
 The history retains accepted responses and their requests, including failures.
 
-`ResearchCatalog.lex.tex` covers all 29 application and vendored library modules,
+`ResearchCatalog.lex.tex` covers the application and vendored library modules,
 derives attention scopes from the existing models,
 groups maintenance by module to avoid repeating verification for each feature,
 and initializes tasks from the register and hypotheses. `ResearchTraces.lex.tex`
@@ -24,12 +24,50 @@ gate verifies these modules with the rest of the application.
 
 `production/research-request.json` exports `Research.routeDead`, `Research.step` and
 `ResearchCatalog.initial` through the pinned compiler. These pure library roots
-do not replace the running Python engine: its handwritten harness cannot call
-them, and the generated host driver remains LexLean issue 271. Kernel answers
-are a trusted execution-boundary input after elaboration, axiom audit and replay;
-the controller's receipt matching checks applicability, not mathematical truth.
+do not replace the running Python engine. Native Host drivers now execute
+individual attempts and shared-library cohorts through `ResearchCommand` and
+`ResearchCohortCommand`. Owned candidate verification binds kernel replay and
+axiom audit to the exact goal; the controller's receipt matching checks
+applicability, not mathematical truth.
 Legacy audit classifications and universally closed hypothesis schemas are
 retrieval hints, never sufficient evidence for this controller to prune a route.
+
+`ResearchJournal.lex.tex` provides a durable transition primitive for recovery
+and publication. It retains the canonical record and pinned library first, then
+exchanges `refs/r30/journals/<key>` against the exact predecessor blob. Only a
+successful, normally exited owned exchange acknowledges the transition.
+Duplicate successors, stale predecessors, cancellation and uncertain process
+outcomes cannot acknowledge a commit. `ResearchJournalTraces` checks these
+boundaries. A journal acknowledgement is neither a perpetual lease nor proof
+authority: enclosing recovery still needs fresh workspaces and quarantine limits,
+and claim publication still needs source integration, verification and register
+updates. Inspection and autonomous portfolio execution remain unfinished.
+
+`ResearchArchitecture.lex.tex` exposes the autonomous pipeline directly to
+PrismPM's architecture, security and quality projection: nine components,
+their dependencies, four control obligations, and the shared-library build
+budget. The security facet is vendored unchanged from PrismPM v0.4.0's
+`stdlib/src/Foundation/Sec.lex.tex` and `language/prism.sec`, with its required
+`prism.arch` title entry (prism-stdlib package version 0.2.0). No successful verification measurements are asserted
+for the unfinished controls. The legacy website descriptor is `SiteMetadata`,
+so PrismPM does not mistake it for a native application contract.
+`prismpm.toml` selects `prism.toml`, whose root is `ResearchCatalog` and its
+complete import closure. Prism model operations therefore omit proof-fixture
+entrypoints; the unchanged gate still verifies every module and trace through
+the full `lexlean.toml` manifest.
+Late verification-report JSON traces are partitioned into ten-step modules
+to keep each proof job within the existing child timeout. Their statements
+and proof bodies are unchanged; the gate still checks every parser step.
+UTF-8 fixtures likewise use eight-theorem batches, with their original
+statements and proofs preserved apart from qualified cross-module references.
+Closed-goal, cohort and candidate-source traces use five-theorem batches;
+their shared fixtures retain their original modules. This bounds both Lean
+compilation and kernel replay without changing the proof obligations.
+Each expensive native-binding closed-goal case has its own proof unit.
+Verification lifecycle, policy, process and metadata traces use batches of
+at most eight theorems, preserving their original obligations and axiom policy.
+CI retains the pinned compiler's native timing and memory telemetry on success
+and failure, without changing the gate, resource limits or process width.
 
 <h1 align="center">Centerline</h1>
 <p align="center"><em>Every arrow a theorem.</em></p>

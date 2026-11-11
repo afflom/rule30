@@ -1,0 +1,17 @@
+spec = "lexlean/entry/1"
+id = "prism-security-risk-model"
+category = "label-word"
+surface_arity = 0
+frame = "atom"
+
+[denotation]
+kind = "document"
+module = "Foundation.Sec"
+component = "riskUnauthorizedAccess"
+
+[[form]]
+id = "prism-security-risk-model"
+channel = "text"
+surface = "Security risk model"
+canonical_source = true
+features = ["sentence-case", "singular"]

@@ -1,0 +1,73 @@
+\begin{lexlean}{ResearchVerificationChecks2}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{VerificationReportTraces}
+\importmodule{VerificationJsonFixtures}
+\importmodule{VerificationHashFixtures}
+\importmodule{ResearchVerificationTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+  name: nonzeroExitNeverReadsReport,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (ResearchVerificationTraces::active) (ctor ResearchVerification::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (1 : Int32)) 101)))) = 5),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: signalledExitNeverReadsReport,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (ResearchVerificationTraces::active) (ctor ResearchVerification::Event.host (ResearchExecutionTraces::exitEvent 7 (ctor Option.none [Int32]) 101)))) = 5),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: foreignChildResultStopsOwnedChild,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::stopTarget (ResearchVerification::step (ResearchVerificationTraces::active) (ctor ResearchVerification::Event.host (ResearchExecutionTraces::exitEvent 8 (ctor Option.some [Int32] (0 : Int32)) 101)))) = 7),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: spawnFailureCannotReadReports,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (first (ResearchVerificationTraces::begin)) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.spawned (ctor Result.error [(Nat * Nat), LexLeanStd.Host::Failure] (ResearchExecutionTraces::failedHost)))))) = 5),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: invalidCommand,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (ResearchVerificationTraces::commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b7d))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: duplicateCommandIdentity,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (ResearchVerificationTraces::commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b2273756363657373223a747275652c2273756363657373223a66616c73657d))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: invalidCommandUtf8,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (ResearchVerificationTraces::commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0xff))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: foreignCommandSource,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (ResearchVerificationTraces::commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x7b226174746573746174696f6e5f6964223a2236373231313665386462366163666434326133333238633234633361643931626462656131353039663138393561626236643331343531363734376532613962222c226275696c645f6964223a2239393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939222c22636f6d6d616e64223a22766572696679222c22657869745f636f6465223a302c2273656d616e7469635f6964223a2232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232222c22736f757263655f6964223a2230303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030222c2273706563223a226c65786c65616e2f636f6d6d616e642d726573756c742f31222c2273756363657373223a747275657d))))) = 3),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

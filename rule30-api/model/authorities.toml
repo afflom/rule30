@@ -23,7 +23,7 @@ realized_by = ["api-modules", "prism-model", "rust-emission"]
 
 [[authority]]
 id = "PRISM-STDLIB"
-name = "UOR-Foundation/PrismPM stdlib (Foundation.Arch, Foundation.Qual) 0.2.0"
+name = "UOR-Foundation/PrismPM stdlib (Foundation.Arch, Foundation.Qual, Foundation.Sec) 0.2.0"
 citation = "https://github.com/UOR-Foundation/PrismPM/tree/main/stdlib"
 statement = "The architecture and quality entities (ISO/IEC/IEEE 42010, ISO/IEC 25010) as LexLean structures, vendored under rule30-api/stdlib with their license."
 realized_by = ["api-modules"]

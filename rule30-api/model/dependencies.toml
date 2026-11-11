@@ -46,7 +46,7 @@ repository = "https://github.com/UOR-Foundation/PrismPM"
 [[dependency.artifact]]
 kind = "tree-manifest"
 path = "rule30-api/language/prism.arch"
-sha256 = "5d112f52e4c72ceb84f51b9ea1901d5749a3acab07d51a7c5ab39cf8ba79ea7c"
+sha256 = "d69dac96ecc34a195e2170645d2218b51e02b741974aacbf1676a69996d19a72"
 recorded_by = "lexlean.lock"
 
 [[dependency.artifact]]
@@ -57,8 +57,14 @@ recorded_by = "lexlean.lock"
 
 [[dependency.artifact]]
 kind = "tree-manifest"
+path = "rule30-api/language/prism.sec"
+sha256 = "55bd2bc254d4170f6e76adc558955f1d1a31aa8a22ac88a3e3d6fe9307f76466"
+recorded_by = "lexlean.lock"
+
+[[dependency.artifact]]
+kind = "tree-manifest"
 path = "rule30-api/stdlib/Foundation"
-sha256 = "75bc673dbdbaff7168b2563f7e514f7db50346eabb6143259874a179a32e2e64"
+sha256 = "73862afc8ded9b448ed9e03d3b448bf1c93262f6ca9eb4df6fcdbed43c2680f3"
 recorded_by = "bin/r30 api sync"
 
 [[dependency]]

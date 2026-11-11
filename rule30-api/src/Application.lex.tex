@@ -8,7 +8,7 @@
 \title{Boolean}
 \begin{semanticmodule}
 structure{
-  name: Application,
+  name: SiteMetadata,
   type_parameters: [],
   parameters: [],
   fields: [
@@ -50,8 +50,8 @@ structure{
 definition{
   name: application,
   parameters: [],
-  result: Application,
-  body: (record Application {name := "rule30-api", version := "0.1.0", repository := "https://github.com/afflom/rule30", entry := "index.html", logo := "logo.svg", workflow := ".github/workflows/view.yml"}),
+  result: SiteMetadata,
+  body: (record SiteMetadata {name := "rule30-api", version := "0.1.0", repository := "https://github.com/afflom/rule30", entry := "index.html", logo := "logo.svg", workflow := ".github/workflows/view.yml"}),
   axioms: []
 }
 

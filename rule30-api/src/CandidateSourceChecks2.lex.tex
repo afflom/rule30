@@ -1,0 +1,50 @@
+\begin{lexlean}{CandidateSourceChecks2}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{CandidateSource}
+\importmodule{CandidateBinding}
+\importmodule{ClosedGoalTraces}
+\importmodule{CoreBinding}
+\importmodule{Research}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{CandidateSourceTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: synthesisLiftsAnAssumptionAcrossAnotherBinder,
+ parameters: [],
+ statement: ((match (CandidateSource::structuralProposal (project (CandidateSourceTraces::liftedGoal) nodes) (project (CandidateSourceTraces::liftedGoal) root) (nil (Nat * Nat)) 0 64) | Option.none => false | Option.some term => (CoreBinding::sameType term (CandidateSourceTraces::liftedProof) 8192 4096)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: synthesisRetainsEqualityUniverseAndArguments,
+ parameters: [],
+ statement: ((match (CandidateSource::structuralProposal (project (CandidateSourceTraces::reflexiveGoal) nodes) (project (CandidateSourceTraces::reflexiveGoal) root) (nil (Nat * Nat)) 0 64) | Option.none => false | Option.some term => (CoreBinding::sameType term (CandidateSourceTraces::reflexiveProof) 8192 4096)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: synthesisCannotInventAProofOfFalse,
+ parameters: [],
+ statement: ((match (CandidateSource::synthesize (CandidateSourceTraces::request 0x46616c7365) 8192 64 4096) | Option.none => true | Option.some term => false) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: synthesisDoesNotReplaceTheOpenPrizeGoalWithTruth,
+ parameters: [],
+ statement: ((match (CandidateSource::synthesize (CandidateSourceTraces::request 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31) 8192 64 4096) | Option.none => true | Option.some term => false) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: zeroSynthesisFuelDoesNotInventAResult,
+ parameters: [],
+ statement: ((match (CandidateSource::structuralProposal (project (CandidateSourceTraces::identityGoal) nodes) (project (CandidateSourceTraces::identityGoal) root) (nil (Nat * Nat)) 0 0) | Option.none => true | Option.some term => false) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

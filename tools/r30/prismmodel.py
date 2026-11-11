@@ -71,7 +71,7 @@ AUTHORITIES = [
      "citation": "https://github.com/UOR-Foundation/PrismPM",
      "statement": "Model registers (authorities, ids, ledger, commands, standards, projection, contracts, errors, dependencies, runtime-roots, stdlib-package) and the generated runtime of LexLean application models.",
      "realized_by": lambda claims: ["api-modules", "prism-model", "rust-emission"]},
-    {"id": "PRISM-STDLIB", "name": "UOR-Foundation/PrismPM stdlib (Foundation.Arch, Foundation.Qual) 0.2.0",
+    {"id": "PRISM-STDLIB", "name": "UOR-Foundation/PrismPM stdlib (Foundation.Arch, Foundation.Qual, Foundation.Sec) 0.2.0",
      "citation": "https://github.com/UOR-Foundation/PrismPM/tree/main/stdlib",
      "statement": "The architecture and quality entities (ISO/IEC/IEEE 42010, ISO/IEC 25010) as LexLean structures, vendored under rule30-api/stdlib with their license.",
      "realized_by": lambda claims: ["api-modules"]},
@@ -393,7 +393,7 @@ def contracts():
 
 PRISMPM = '''spec = "prismpm/project/1"
 project = "Rule30Api"
-lexlean_project = "lexlean.toml"
+lexlean_project = "prism.toml"
 build_root = ".prism"
 
 [limits]
@@ -413,10 +413,10 @@ def errors():
 
 STDLIB = {
     "name": "prism-stdlib", "version": "0.2.0",
-    "description": "Generated portable Prism application and production-system runtime; the Foundation.Arch and Foundation.Qual modules and the prism.arch and prism.qual lexicons are vendored here",
+    "description": "Generated portable Prism application and production-system runtime; the Foundation.Arch, Foundation.Qual and Foundation.Sec modules and their prism lexicons are vendored here",
     "repository": "https://github.com/UOR-Foundation/PrismPM", "homepage": "https://github.com/UOR-Foundation/PrismPM",
     "license": "MIT OR Apache-2.0", "language": "1.2",
-    "modules": ["Foundation.Arch", "Foundation.Qual"], "lexicons": ["prism.arch@1.0.0", "prism.qual@1.0.0"],
+    "modules": ["Foundation.Arch", "Foundation.Qual", "Foundation.Sec"], "lexicons": ["prism.arch@1.0.0", "prism.qual@1.0.0", "prism.sec@1.0.0"],
     "vendored_at": ["rule30-api/stdlib", "rule30-api/language"],
 }
 
@@ -457,7 +457,7 @@ def dependencies():
                   'role = "lexicon"', f"tree_sha256 = {_q(p['tree_sha256'])}", ""]
     lines += ["[[dependency]]", 'id = "prism-stdlib"', f"version = {_q(STDLIB['version'])}", 'source = "vendored"',
               'role = "stdlib"', f"repository = {_q(STDLIB['repository'])}", ""]
-    for pid in ("prism.arch", "prism.qual"):
+    for pid in ("prism.arch", "prism.qual", "prism.sec"):
         p = packages[pid]
         lines += ["[[dependency.artifact]]", 'kind = "tree-manifest"', f"path = {_q('rule30-api/' + p['source'])}",
                   f"sha256 = {_q(p['tree_sha256'])}", 'recorded_by = "lexlean.lock"', ""]

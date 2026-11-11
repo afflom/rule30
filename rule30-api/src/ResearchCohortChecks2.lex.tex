@@ -1,0 +1,49 @@
+\begin{lexlean}{ResearchCohortChecks2}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchCohort}
+\importmodule{ResearchCohortInput}
+\importmodule{ResearchCohortCommand}
+\importmodule{Json}
+\importmodule{CoreBinding}
+\importmodule{ResearchInput}
+\importmodule{ResearchInputTraces}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchSession}
+\importmodule{ResearchExecution}
+\importmodule{Research}
+\importmodule{LexLeanStd.Host}
+\importmodule{ResearchCohortTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: completedCohortDoesNotReleaseTwice,
+ parameters: [owner : (Option ResearchWorkspace::State), answers : (List (Research::Answer * Bytes)), event : LexLeanStd.Host::Event],
+ statement: ((match (second (ResearchCohort::host (record ResearchCohort::State {owner := owner, active := (ctor Option.none [ResearchSession::State]), pending := (nil ResearchProject::Config), results := answers, phase := (ctor ResearchCohort::Phase.ended), cancelled := false}) event)) | ResearchCohort::Emission.complete results => true | ResearchCohort::Emission.host request => false | ResearchCohort::Emission.awaiting => false | ResearchCohort::Emission.blocked reason => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: libraryTimeoutCannotReportEmptySuccess,
+ parameters: [state : ResearchCohort::State, owner : ResearchWorkspace::State],
+ statement: ((project (first (ResearchCohort::ownerResult state (owner, (ctor ResearchWorkspace::Emission.complete (ctor ResearchExecution::EndKind.cut))))) cancelled) = true),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: failedAttemptPreventsAggregateSuccess,
+ parameters: [request : Research::Request, reason : Bytes, evidence : Bytes, tail : (List (Research::Answer * Bytes))],
+ statement: ((ResearchCohortCommand::allChecked (cons ((record Research::Answer {request := request, result := (ctor Research::ResultKind.failed reason)}), evidence) tail)) = false),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: completedCommandCannotStartAnotherCohort,
+ parameters: [cohort : (Option ResearchCohort::State), event : LexLeanStd.Host::Event],
+ statement: ((ResearchCohortCommand::step (ctor Option.some [ResearchCohortCommand::State] (ctor ResearchCohortCommand::State.ended cohort)) event) = (ResearchCohortCommand::error cohort (70 : UInt8) 0x636f6d706c6574656420726573656172636820636f6d6d616e642063616e6e6f742072657374617274)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

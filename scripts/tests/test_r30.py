@@ -676,7 +676,7 @@ class NotationTests(unittest.TestCase):
         import tomllib
         project = tomllib.loads((api / "lexlean.toml").read_text())
         self.assertEqual(project["source_roots"], ["src", "stdlib"])
-        self.assertEqual({x["package"] for x in project["lexicon_source"] if x["kind"] == "path"}, {"prism.arch", "prism.qual"})
+        self.assertEqual({x["package"] for x in project["lexicon_source"] if x["kind"] == "path"}, {"prism.arch", "prism.qual", "prism.sec"})
         self.assertEqual(project["entrypoints"], sorted(project["entrypoints"]))
         for lic in ("stdlib/LICENSE-APACHE", "stdlib/LICENSE-MIT", "language/LICENSE-APACHE", "language/LICENSE-MIT"):
             self.assertTrue((api / lic).exists(), lic)

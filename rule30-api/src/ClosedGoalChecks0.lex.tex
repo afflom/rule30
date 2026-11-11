@@ -1,0 +1,51 @@
+\begin{lexlean}{ClosedGoalChecks0}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ClosedBindingFixture}
+\importmodule{Research}
+\importmodule{ResearchCatalog}
+\importmodule{CoreBinding}
+\importmodule{CandidateBinding}
+\importmodule{Toml}
+\importmodule{Register}
+\importmodule{Json}
+\importmodule{ClosedGoalTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: closedGoalNeedsNoPremise,
+ parameters: [],
+ statement: ((ClosedGoalTraces::selects (ClosedGoalTraces::request 0x54727565 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: closedGoalCannotCarryAssumptions,
+ parameters: [],
+ statement: ((not (ClosedGoalTraces::selects (ClosedGoalTraces::request 0x54727565 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x78 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: closedGoalHasNoPremisePosition,
+ parameters: [],
+ statement: ((not (ClosedGoalTraces::selects (ClosedGoalTraces::request 0x54727565 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 1 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: premiseKindStillRequiresInspection,
+ parameters: [],
+ statement: ((not (ClosedGoalTraces::selects (ClosedGoalTraces::request 0x54727565 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.premise) 0x 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: sourceNameCannotBeSubstituted,
+ parameters: [],
+ statement: ((not (ClosedGoalTraces::selects (ClosedGoalTraces::request 0x46616c7365 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

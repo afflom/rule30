@@ -1,0 +1,165 @@
+\begin{lexlean}{ResearchJournal}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{ResearchEvidence}
+\importmodule{ResearchExecution}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchVerification}
+\importmodule{Host}
+\importmodule{Toml}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Config,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: storage, type: ResearchEvidence::Config}, {name: key, type: Bytes}, {name: expected, type: Bytes}]
+}
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: retaining, fields: []}, {name: exchanging, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}]
+}
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: config, type: Config}, {name: evidence, type: ResearchEvidence::State}, {name: execution, type: (Option ResearchExecution::State)}, {name: phase, type: Phase}, {name: cancelled, type: Bool}]
+}
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}]
+}
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: committed, fields: [Bytes]}, {name: failed, fields: [String]}, {name: cut, fields: []}, {name: blocked, fields: [String]}]
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Bind the journal key, exact predecessor and library revision into a versioned canonical intent envelope. Retain that envelope and its library before atomically exchanging a journal reference against the exact predecessor blob. An empty predecessor requires absence. Identical successor and predecessor are refused, so replay cannot acquire the same transition twice. Only a normally exited successful owned Git update-ref emits committed. Readback or an existing identical record never substitutes for that acknowledgement. Cancellation drains the outstanding reply and never emits committed; uncertain execution retains state. A committed transition records a point in history, not a perpetual lease, descendant cleanup, proof acceptance, or claim publication. Enclosing recovery must allocate fresh workspaces, quarantine uncertain work and bound abandoned resources; publication must exchange against its own current predecessor. Records remain replay inputs and require owned revalidation before proof promotion.",
+ executable: true
+}
+definition{
+ name: phase,
+ parameters: [state : State, next : Phase],
+ result: State,
+ body: (record State {config := (project state config), evidence := (project state evidence), execution := (project state execution), phase := next, cancelled := (project state cancelled)}),
+ executable: true
+}
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((phase state (ctor Phase.blocked)), (ctor Emission.blocked reason)),
+ executable: true
+}
+definition{
+ name: finish,
+ parameters: [state : State, result : Emission],
+ result: (State * Emission),
+ body: ((phase state (ctor Phase.ended)), result),
+ executable: true
+}
+definition{
+ name: reference,
+ parameters: [config : Config],
+ result: String,
+ body: (ResearchVerification::concat "refs/r30/journals/" (Host::textOf (project config key))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: valid,
+ parameters: [config : Config],
+ result: Bool,
+ body: ((ResearchWorkspace::objectId (project config key)) && (((prim length (project config expected) : Nat) =? 0) || (ResearchWorkspace::objectId (project config expected)))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: arguments,
+ parameters: [state : State],
+ result: (List String),
+ body: (let blob : Bytes := (project (project state evidence) blob); (cons "update-ref" (cons "--no-deref" (cons (reference (project state config)) (cons (Host::textOf blob) (cons (if ((prim length (project (project state config) expected) : Nat) =? 0) then (ResearchEvidence::zeroObject blob) else (Host::textOf (project (project state config) expected))) (nil String))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: job,
+ parameters: [state : State],
+ result: ResearchExecution::Job,
+ body: (let config : ResearchEvidence::Config := (project (project state config) storage); (record ResearchExecution::Job {request := (project config request), tool := (ctor ResearchExecution::Tool.git), arguments := (arguments state), directory := (project config repository), environment := (project config environment), output := (project config output), errors := (project config errors), allowance := (project config allowance), quantum := (project config quantum), polls := (project config polls)})),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: completed,
+ parameters: [state : State, completion : ResearchExecution::Completion],
+ result: (State * Emission),
+ body: (if ((ResearchExecution::resumeAllowed completion) && (ResearchWorkspace::exitedNormally completion)) then (if (project state cancelled) then (finish state (ctor Emission.cut)) else (match (project completion kind) | ResearchExecution::EndKind.succeeded => (finish state (ctor Emission.committed (project (project state evidence) blob))) | ResearchExecution::EndKind.failed => (finish state (ctor Emission.failed "journal compare-and-swap failed; predecessor may have changed")) | ResearchExecution::EndKind.unavailable => (finish state (ctor Emission.failed "journal tool unavailable")) | ResearchExecution::EndKind.cut => (finish state (ctor Emission.cut)) | ResearchExecution::EndKind.protocol => (blocked state "journal protocol failure") | ResearchExecution::EndKind.cleanupFailed => (blocked state "journal cleanup failed") | ResearchExecution::EndKind.refused => (blocked state "journal exchange refused"))) else (blocked state "journal outcome uncertain; retain state and reconcile before new work")),
+ executable: true
+}
+definition{
+ name: executionResult,
+ parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), evidence := (project state evidence), execution := (ctor Option.some [ResearchExecution::State] (first result)), phase := (ctor Phase.exchanging), cancelled := (project state cancelled)}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchExecution::Emission.complete completion => (completed next completion))),
+ executable: true
+}
+definition{
+ name: exchange,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (if (project state cancelled) then (finish state (ctor Emission.cut)) else (if ((ResearchWorkspace::objectId (project (project state evidence) blob)) && (not (Toml::sameBytes (project (project state evidence) blob) (project (project state config) expected)))) then (executionResult state (ResearchExecution::begin (job state))) else (finish state (ctor Emission.failed "journal successor must be a distinct valid blob")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: evidenceResult,
+ parameters: [state : State, result : (ResearchEvidence::State * ResearchEvidence::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), evidence := (first result), execution := (project state execution), phase := (ctor Phase.retaining), cancelled := (project state cancelled)}); (match (second result) | ResearchEvidence::Emission.host request => (next, (ctor Emission.host request)) | ResearchEvidence::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchEvidence::Emission.complete identity => (exchange next) | ResearchEvidence::Emission.failed reason => (finish next (ctor Emission.failed reason)) | ResearchEvidence::Emission.cut => (finish next (ctor Emission.cut)) | ResearchEvidence::Emission.blocked reason => (blocked next reason))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: envelope,
+ parameters: [config : Config, document : Json::Value],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d6a6f75726e616c2f31)) (cons (0x6b6579, (ctor Json::Value.string (project config key))) (cons (0x7072656465636573736f72, (ctor Json::Value.string (project config expected))) (cons (0x7265766973696f6e, (ctor Json::Value.string (project (project config storage) revision))) (cons (0x696e74656e74, document) (nil (Bytes * Json::Value)))))))),
+ executable: true
+}
+definition{
+ name: begin,
+ parameters: [config : Config, document : Json::Value],
+ result: (State * Emission),
+ body: (let retained : (ResearchEvidence::State * ResearchEvidence::Emission) := (ResearchEvidence::begin (project config storage) (envelope config document)); (let state : State := (record State {config := config, evidence := (first retained), execution := (ctor Option.none [ResearchExecution::State]), phase := (ctor Phase.retaining), cancelled := false}); (if (valid config) then (evidenceResult state retained) else (finish state (ctor Emission.failed "invalid journal key or predecessor"))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (state, (ctor Emission.blocked "journal retains uncertain state")) | Phase.retaining => (match event | Event.host response => (evidenceResult state (ResearchEvidence::step (project state evidence) (ctor ResearchEvidence::Event.host response))) | Event.cancel => (let next : State := (record State {config := (project state config), evidence := (project state evidence), execution := (project state execution), phase := (project state phase), cancelled := true}); (evidenceResult next (ResearchEvidence::step (project state evidence) (ctor ResearchEvidence::Event.cancel))))) | Phase.exchanging => (match (project state execution) | Option.none => (blocked state "missing journal exchange owner") | Option.some active => (match event | Event.host response => (executionResult state (ResearchExecution::step active response)) | Event.cancel => (let next : State := (record State {config := (project state config), evidence := (project state evidence), execution := (project state execution), phase := (project state phase), cancelled := true}); (executionResult next (ResearchExecution::cancel active)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "predecessor-bound-canonical-envelope" (cons "retain-intent-and-library-before-exchange" (cons "exact-predecessor-compare-and-swap" (cons "absence-required-for-first-transition" (cons "reject-identical-successor-replay" (cons "normal-owned-exit-before-commit-acknowledgement" (cons "drain-cancellation-without-commit-acknowledgement" (cons "uncertain-outcome-retains-state" (cons "journal-is-not-proof-authority" (nil String)))))))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

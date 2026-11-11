@@ -1,0 +1,26 @@
+\begin{lexlean}{ResearchVerificationChecks6}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{VerificationReportTraces}
+\importmodule{VerificationJsonFixtures}
+\importmodule{VerificationHashFixtures}
+\importmodule{ResearchVerificationChecks0}
+\importmodule{ResearchVerificationChecks1}
+\importmodule{ResearchVerificationTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+  name: endedVerificationNeverRestarts,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (first (ResearchVerificationTraces::accepted)) (ctor ResearchVerification::Event.host  (ResearchVerificationTraces::spawned)))) = 1),
+  proof: simplify{definitions: [ResearchVerificationChecks0::acceptedTransition, ResearchVerificationChecks1::kindTerminal]},
+  axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

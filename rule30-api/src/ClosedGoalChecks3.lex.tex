@@ -1,0 +1,30 @@
+\begin{lexlean}{ClosedGoalChecks3}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ClosedBindingFixture}
+\importmodule{Research}
+\importmodule{ResearchCatalog}
+\importmodule{CoreBinding}
+\importmodule{CandidateBinding}
+\importmodule{Toml}
+\importmodule{Register}
+\importmodule{Json}
+\importmodule{ClosedGoalTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: changedDependenciesReopenTheSameClosedGoal,
+ parameters: [],
+ statement: ((let task : Research::Task := (ResearchCatalog::claimTask (ClosedGoalTraces::registered "problem1" "Ruliology.CellularAutomata.Rule30Prize.Problem1" "open")); (let refreshed : Research::Task := (Research::refreshTask (Research::withStatus task (ctor Research::Status.established) 0) 1); ((Research::sameSequent (project refreshed sequent) (project task sequent)) && ((Research::samePurpose (project refreshed purpose) (ctor Research::Purpose.prove)) && (match (project refreshed status) | Research::Status.ready => true | Research::Status.waiting => false | Research::Status.blocked => false | Research::Status.established => false | Research::Status.exhausted => false))))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: nativeProofDischargesClosedTruth,
+ parameters: [],
+ statement: ((ClosedGoalTraces::nativeMatches 0x54727565 (ctor Research::Purpose.prove) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

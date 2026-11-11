@@ -970,14 +970,14 @@ def _append_strings():
 
 
 def application_declarations():
-    ap_t, pu_t, sm_t = named("Application"), named("Publication"), named("StatusMark")
+    ap_t, pu_t, sm_t = named("SiteMetadata"), named("Publication"), named("StatusMark")
     claim_t = named("Claim", "Register")
     return [
-        structure("Application", [("name", STR), ("version", STR), ("repository", STR), ("entry", STR), ("logo", STR), ("workflow", STR)]),
+        structure("SiteMetadata", [("name", STR), ("version", STR), ("repository", STR), ("entry", STR), ("logo", STR), ("workflow", STR)]),
         structure("Publication", [("workflow", STR), ("trigger", STR), ("artifactName", STR), ("command", STR), ("timeoutMinutes", NAT),
                                   ("environment", STR), ("url", STR)]),
         structure("StatusMark", [("status", STR), ("mark", STR), ("label", STR)]),
-        definition("application", ap_t, record("Application", **{k: s(v) for k, v in APPLICATION_RECORD.items()})),
+        definition("application", ap_t, record("SiteMetadata", **{k: s(v) for k, v in APPLICATION_RECORD.items()})),
         definition("publication", pu_t, record("Publication", workflow=s(PUBLICATION["workflow"]), trigger=s(PUBLICATION["trigger"]),
                                                artifactName=s(PUBLICATION["artifactName"]), command=s(PUBLICATION["command"]),
                                                timeoutMinutes=n(PUBLICATION["timeoutMinutes"]),

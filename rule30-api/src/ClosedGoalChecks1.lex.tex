@@ -1,0 +1,51 @@
+\begin{lexlean}{ClosedGoalChecks1}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ClosedBindingFixture}
+\importmodule{Research}
+\importmodule{ResearchCatalog}
+\importmodule{CoreBinding}
+\importmodule{CandidateBinding}
+\importmodule{Toml}
+\importmodule{Register}
+\importmodule{Json}
+\importmodule{ClosedGoalTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: truthCannotStandInForProblemOne,
+ parameters: [],
+ statement: ((not (ClosedGoalTraces::selects (ClosedGoalTraces::request 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)) (CoreBinding::namedGoal 0x54727565))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: closedRefutationHasNoAdditionalAssumptions,
+ parameters: [],
+ statement: ((match (CandidateBinding::parseGoal 0x7b226e6f646573223a5b7b226b223a2263222c226e223a2246616c7365222c2275223a5b5d7d2c7b226b223a2270222c226e223a2268222c2262223a2265222c2274223a302c2276223a307d5d2c22726f6f74223a317d 2048 32) | Option.none => false | Option.some arrow => (ClosedGoalTraces::selects (ClosedGoalTraces::request 0x46616c7365 (ClosedGoalTraces::goalBytes 0x46616c7365) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.refute)) arrow)) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: goalKindIsPartOfRequestIdentity,
+ parameters: [],
+ statement: ((not (Research::sameRequest (ClosedGoalTraces::request 0x54727565 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.prove)) (ClosedGoalTraces::request 0x54727565 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.premise) 0x 0 (ctor Research::Purpose.prove)))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: prizeGoalUsesItsCanonicalDefinition,
+ parameters: [],
+ statement: ((match (ResearchCatalog::closedSequent "problem1") | Option.none => false | Option.some goal => ((Research::contextual goal) && (Toml::sameBytes (project goal origin) 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: conditionalSourcesAreNotAssumedToBeClosedGoals,
+ parameters: [],
+ statement: ((match (ResearchCatalog::closedSource "horizon-criterion") | Option.none => true | Option.some source => false) = true),
+ proof: decide{},
+ axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}
