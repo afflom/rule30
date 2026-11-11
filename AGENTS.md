@@ -63,15 +63,16 @@ bin/r30 sequences [--write]            # the basis of the map (Sequences.lex.tex
 bin/r30 discover [--write]             # induction: relations and recurrences of the basis, certified; --write records them as observed
 ```
 
-Costs: `check`/`verify` of one module take seconds; `verify` of the whole paper
-takes about six minutes (`Paper.lex.tex` is 13k lines). The pre-commit gate
-runs everything (tooling tests, Lean build, vacuity and axiom audits, kernel
-replay, bridge, both LexLean projects, PDFs) but reuses the last accepted run's
-Lake build directories and any LexLean verification whose exact inputs were
-already accepted, so a commit that touches one research module and
-`Observations.lex.tex` takes a few minutes; the first run after a toolchain
-change takes twenty to thirty. Use the module forms while iterating and the
-gate once per batch.
+Costs depend on the selected dependency closure and proof evaluation. The full
+API gate can take hours even with unchanged core and paper evidence reused;
+a single behavioral proof has required about 10 GiB during kernel replay.
+Do not estimate a run from module count or earlier paper-only timings. Use
+native verification telemetry to identify the expensive obligations. The
+pre-commit gate runs tooling tests, Lean build, vacuity and axiom audits,
+kernel replay, bridge checks, all LexLean projects and PDFs. It reuses accepted
+Lake builds and exact-input LexLean evidence, but a changed API currently
+requires verification of its full selected closure. Use directed module checks
+to resolve new uncertainties, then the gate once per batch.
 
 `--json` on any command gives the same report as JSON. The same commands are
 available as MCP tools: `claude mcp add r30 -- python3 <repo>/tools/r30/mcp_server.py`.
@@ -386,13 +387,54 @@ and evidence so that execution remains directed at the open obligations.
 
 ## Operating the gate
 
+### Engineering velocity and factory work
+
+Treat validation cost as an implementation constraint, not an unavoidable wait.
+Keep each delivery centered on a runnable solver capability or one measured
+operational bottleneck. A model, feature inventory or internal primitive alone
+does not complete inspection, portfolio execution, recovery or publication.
+State the missing executable connection and its acceptance condition explicitly.
+
+- Leave an active validation running. Do not interrupt it to speculate about
+  batching, change scope or start a newer revision. Intervene only for a concrete
+  resource emergency, a failed process that cannot exit, or an explicit user stop.
+  Keep follow-up edits unstaged until that run and its commit have finished.
+- Use the unchanged pre-commit gate as the acceptance authority. Do not run a
+  second full verification alongside it. Directed checks must resolve a specific
+  new uncertainty; do not repeat already accepted work for reassurance.
+- Retain native compiler timing, peak-memory and failure evidence outside the
+  attested artifact tree, including rejected runs. Use those measurements to
+  choose proof-unit boundaries, scheduling hints and resource budgets. Never
+  increase concurrency from CPU count alone or relax proof acceptance to fit a
+  budget. Do not claim a speedup without comparable measurements.
+- Fix repeated late failures at their shared cause. The factory must eventually
+  schedule dependency-ready expensive or historically failing obligations early
+  and reuse independently verified obligations across project changes. Implement
+  compiler-level reuse upstream in LexLean, not as new Python or shell here.
+  A reusable receipt must bind exact source/dependency closure, compiler and
+  kernel identities, proof policy and checked artifact bytes. A partial run is
+  never a project attestation; final acceptance must cover the entire closure.
+- Before another costly run after a failure, identify the failing obligation,
+  distinguish proof failure from resource failure, and make one evidence-based
+  correction. Preserve every existing obligation when partitioning proofs.
+- When several behavioral proofs evaluate the same expensive serialized fixture,
+  establish its decoding once and reuse that checked equality. Keep the actual
+  wire-decoding obligation and each behavioral statement; do not substitute an
+  unchecked parsed value or repeat the same kernel computation in every case.
+- Deliver accepted increments promptly through review and remote checks. Do not
+  accumulate unrelated features behind one growing validation batch or open a
+  collection of tracking issues in place of implementation.
+
+These rules do not claim that per-obligation compiler reuse or early replay is
+already implemented. Until those capabilities exist, retain the current gate's
+exact-input reuse and record its remaining whole-API invalidation cost.
+
 The gate (`bin/r30 commit`, the pre-commit and pre-push hooks running
-`scripts/validate_git_tree.py`) is the one expensive step, and its failures of
-the last day were all operational: the kernel replay needs about 41 GB of
-virtual and 12 GB of resident memory on a 31 GB machine, and anything that
-limits or competes with it looks like a proof failure. Run it from a plain
-shell and leave the machine to it; iterate with the module-level commands and
-commit once per batch.
+`scripts/validate_git_tree.py`) is the expensive acceptance step. Resource
+failures and proof failures require different corrections: inspect the failed
+process and its telemetry before changing either proofs or budgets. Run the
+gate from a plain shell and leave the machine's heavy-compute capacity to it;
+keep follow-up editing separate from its immutable input snapshot.
 
 - Launch `bin/r30 commit` from a plain shell: never under `ulimit -v`, a
   thread cap or a sandbox. The gate inherits them, and `leanchecker` then
