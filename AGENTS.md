@@ -139,7 +139,7 @@ answers; submit constructed candidates through `Event.candidate`.
 `ResearchCandidate` owns the local `lexlean snapshot` process and output read,
 reconstructs the full compiler IR with `CompilerSnapshot`, derives verification
 pins and preflights the exact goal before entering `ResearchProof`. Snapshot
-metadata is not a proof. Its caller selects candidate terms. `ResearchSession` and `ResearchProject`
+metadata is not a proof. Its caller may supply candidate terms or use ResearchInput local constructive synthesis without proof input. Synthesis does not inspect imported theorem provenance, schedule the research portfolio, recover interrupted processes or publish a claim. `ResearchSession` and `ResearchProject`
 own its isolated project; `ResearchWorkspace` checks out and builds the exact
 requested library tree at a pinned Git revision. `Event.proof` remains the
 internal typed entry for already-owned candidate data. The binding schema distinguishes inspected premises from named closed propositions.

@@ -7,6 +7,8 @@
 \importmodule{CandidateBinding}
 \importmodule{Research}
 \importmodule{Hypotheses}
+\importmodule{VerificationReport}
+\importmodule{Toml}
 \title{Boolean}
 \begin{semanticmodule}
 
@@ -14,7 +16,7 @@ definition{
  name: contract,
  parameters: [],
  result: String,
- body: "Construct one unverified LexLean native-core theorem for the exact selected research goal. The shared arena supplies the target and proposed proof; only the local compiler and kernel can establish that the proposal is well typed. The source contains one fixed theorem, explicit imports and universe parameters, and an exact allowed axiom policy. The arena is rendered as native LexLean 1.2 notation with quoted names and exact node references. Construction refuses a substituted goal, missing proof node, forbidden axiom or exhausted output budget. The caller owns the isolated project, imports, file writes and subsequent ResearchCandidate lifecycle.",
+ body: "Construct one unverified LexLean native-core theorem for the exact selected research goal. The shared arena supplies the target and proposed proof; only the local compiler and kernel can establish that the proposal is well typed. The source contains one fixed theorem, explicit imports and universe parameters, and an exact allowed axiom policy. The arena is rendered as native LexLean 1.2 notation with quoted names and exact node references. Construction refuses a substituted goal, missing proof node, forbidden axiom or exhausted output budget. The caller owns the isolated project, imports, file writes and subsequent ResearchCandidate lifecycle. Local structural synthesis derives terms only from the selected goal: implication introduction, lifted contextual assumptions, truth and reflexive equality. It admits at most 4096 input nodes and 64 introductions. Unsupported goals return no proposal; they are not exhausted research tasks.",
  axioms: [],
  executable: true
 }
@@ -58,10 +60,104 @@ definition{
 }
 
 definition{
+ name: appendProposal,
+ parameters: [nodes : (List Json::Value), node : Json::Value],
+ result: CoreBinding::Goal,
+ body: (record CoreBinding::Goal {nodes := (prim append nodes (cons node (nil Json::Value)) : (List Json::Value)), root := (prim length nodes : Nat)}),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: proposalApplication,
+ parameters: [term : CoreBinding::Goal, argument : Nat],
+ result: CoreBinding::Goal,
+ body: (appendProposal (project term nodes) (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x61)) (cons (0x66, (CoreBinding::number (project term root))) (cons (0x78, (CoreBinding::number argument)) (nil (Bytes * Json::Value))))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: proposalConstant,
+ parameters: [name : Bytes, levels : Json::Value],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x63)) (cons (0x6e, (ctor Json::Value.string name)) (cons (0x75, levels) (nil (Bytes * Json::Value)))))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: liftPairs,
+ parameters: [left : (List Nat), right : (List Nat), cutoff : Nat, tail : (List (Nat * (Nat * Nat)))],
+ result: (List (Nat * (Nat * Nat))),
+ body: (match left | List.nil => tail | List.cons a aa => (match right | List.nil => tail | List.cons b bb => (liftPairs aa bb cutoff (cons (a, (b, cutoff)) tail)))),
+ axioms: [],
+ executable: true,
+ recursive_argument: left
+}
+
+definition{
+ name: liftChildren,
+ parameters: [tag : Bytes, left : (List Nat), right : (List Nat), cutoff : Nat, tail : (List (Nat * (Nat * Nat)))],
+ result: (List (Nat * (Nat * Nat))),
+ body: (if ((Toml::sameBytes tag 0x70) || (Toml::sameBytes tag 0x6c)) then (match left | List.nil => tail | List.cons a aa => (match right | List.nil => tail | List.cons b bb => (liftPairs aa bb (cutoff + 1) (cons (a, (b, cutoff)) tail)))) else (if (Toml::sameBytes tag 0x65) then (match left | List.nil => tail | List.cons a aa => (match right | List.nil => tail | List.cons b bb => (match aa | List.nil => tail | List.cons c cc => (match bb | List.nil => tail | List.cons d dd => (liftPairs cc dd (cutoff + 1) (cons (a, (b, cutoff)) (cons (c, (d, cutoff)) tail))))))) else (liftPairs left right cutoff tail))),
+ axioms: [],
+ executable: true
+}
+
+definition{
+ name: liftEqual,
+ parameters: [nodes : (List Json::Value), pending : (List (Nat * (Nat * Nat))), shift : Nat, fuel : Nat],
+ result: Bool,
+ body: (match fuel | Nat.zero => false | Nat.succ more => (match pending | List.nil => true | List.cons item tail => (let a : Nat := (first item); (let b : Nat := (first (second item)); (let cutoff : Nat := (second (second item)); (match (prim index nodes a : (Option Json::Value)) | Option.none => false | Option.some left => (match (prim index nodes b : (Option Json::Value)) | Option.none => false | Option.some right => (if ((Toml::sameBytes (CoreBinding::kind left) 0x62) && (Toml::sameBytes (CoreBinding::kind right) 0x62)) then (match (Json::natural (CoreBinding::get left 0x69) 2000000) | Option.none => false | Option.some x => (match (Json::natural (CoreBinding::get right 0x69) 2000000) | Option.none => false | Option.some y => ((x =? (if (y <? cutoff) then y else (y + shift))) && (liftEqual nodes tail shift more)))) else (match (CoreBinding::nodeAt nodes a 8388608 4096) | Option.none => false | Option.some x => (match (CoreBinding::nodeAt nodes b 8388608 4096) | Option.none => false | Option.some y => ((Toml::sameBytes (project x shape) (project y shape)) && (((prim length (project x children) : Nat) =? (prim length (project y children) : Nat)) && (liftEqual nodes (liftChildren (CoreBinding::kind left) (project x children) (project y children) cutoff tail) shift more))))))))))))),
+ axioms: [propext],
+ executable: true,
+ recursive_argument: fuel
+}
+
+definition{
+ name: localProposal,
+ parameters: [nodes : (List Json::Value), target : Nat, context : (List (Nat * Nat)), depth : Nat],
+ result: (Option CoreBinding::Goal),
+ body: (match context | List.nil => (ctor Option.none [CoreBinding::Goal]) | List.cons entry rest => (if ((second entry) <? depth) then (if (liftEqual nodes (cons (target, ((first entry), 0)) (nil (Nat * (Nat * Nat)))) (prim subtract depth (second entry) : Nat) 4096) then (ctor Option.some [CoreBinding::Goal] (appendProposal nodes (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x62)) (cons (0x69, (CoreBinding::number (prim subtract (prim subtract depth (second entry) : Nat) 1 : Nat))) (nil (Bytes * Json::Value))))))) else (localProposal nodes target rest depth)) else (ctor Option.none [CoreBinding::Goal]))),
+ axioms: [propext],
+ executable: true,
+ recursive_argument: context
+}
+
+definition{
+ name: reflexiveProposal,
+ parameters: [nodes : (List Json::Value), target : Nat],
+ result: (Option CoreBinding::Goal),
+ body: (match (prim index nodes target : (Option Json::Value)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some outer => (if (Toml::sameBytes (CoreBinding::kind outer) 0x61) then (match (CoreBinding::references outer (cons 0x66 (cons 0x78 (nil Bytes))) target) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some refs => (match refs | List.nil => (ctor Option.none [CoreBinding::Goal]) | List.cons fn rest => (match rest | List.nil => (ctor Option.none [CoreBinding::Goal]) | List.cons rhs unused => (match (prim index nodes fn : (Option Json::Value)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some inner => (if (Toml::sameBytes (CoreBinding::kind inner) 0x61) then (match (CoreBinding::references inner (cons 0x66 (cons 0x78 (nil Bytes))) fn) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some refs2 => (match refs2 | List.nil => (ctor Option.none [CoreBinding::Goal]) | List.cons fn2 rest2 => (match rest2 | List.nil => (ctor Option.none [CoreBinding::Goal]) | List.cons lhs unused2 => (match (prim index nodes fn2 : (Option Json::Value)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some typed => (if (Toml::sameBytes (CoreBinding::kind typed) 0x61) then (match (CoreBinding::references typed (cons 0x66 (cons 0x78 (nil Bytes))) fn2) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some refs3 => (match refs3 | List.nil => (ctor Option.none [CoreBinding::Goal]) | List.cons head rest3 => (match rest3 | List.nil => (ctor Option.none [CoreBinding::Goal]) | List.cons domain unused3 => (match (prim index nodes head : (Option Json::Value)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some constant => (if ((Toml::sameBytes (CoreBinding::kind constant) 0x63) && ((Toml::sameBytes (VerificationReport::bytes (CoreBinding::get constant 0x6e)) 0x4571) && (CoreBinding::sameType (record CoreBinding::Goal {nodes := nodes, root := lhs}) (record CoreBinding::Goal {nodes := nodes, root := rhs}) 8388608 4096))) then (ctor Option.some [CoreBinding::Goal] (proposalApplication (proposalApplication (appendProposal nodes (proposalConstant 0x45712e7265666c (CoreBinding::get constant 0x75))) domain) lhs)) else (ctor Option.none [CoreBinding::Goal])))))) else (ctor Option.none [CoreBinding::Goal])))))) else (ctor Option.none [CoreBinding::Goal])))))) else (ctor Option.none [CoreBinding::Goal]))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
+ name: structuralProposal,
+ parameters: [nodes : (List Json::Value), target : Nat, context : (List (Nat * Nat)), depth : Nat, fuel : Nat],
+ result: (Option CoreBinding::Goal),
+ body: (match fuel | Nat.zero => (ctor Option.none [CoreBinding::Goal]) | Nat.succ more => (match (localProposal nodes target context depth) | Option.some proof => (ctor Option.some [CoreBinding::Goal] proof) | Option.none => (match (prim index nodes target : (Option Json::Value)) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some node => (if (CoreBinding::sameType (record CoreBinding::Goal {nodes := nodes, root := target}) (CoreBinding::namedGoal 0x54727565) 8388608 4096) then (ctor Option.some [CoreBinding::Goal] (appendProposal nodes (proposalConstant 0x547275652e696e74726f (ctor Json::Value.array (nil Json::Value))))) else (match (CoreBinding::pi nodes target 8388608 4096) | Option.some binder => (match (structuralProposal nodes (second binder) (cons ((first binder), depth) context) (depth + 1) more) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some body => (ctor Option.some [CoreBinding::Goal] (appendProposal (project body nodes) (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x6c)) (cons (0x6e, (CoreBinding::get node 0x6e)) (cons (0x62, (CoreBinding::get node 0x62)) (cons (0x74, (CoreBinding::get node 0x74)) (cons (0x76, (CoreBinding::number (project body root))) (nil (Bytes * Json::Value))))))))))) | Option.none => (reflexiveProposal nodes target)))))),
+ axioms: [propext],
+ executable: true,
+ recursive_argument: fuel
+}
+
+definition{
+ name: synthesize,
+ parameters: [request : Research::Request, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat],
+ result: (Option (CoreBinding::Goal * Nat)),
+ body: (match (CandidateBinding::selected request maxBytes maxDepth maxSteps) | Option.none => (ctor Option.none [(CoreBinding::Goal * Nat)]) | Option.some goal => (if ((prim length (project goal nodes) : Nat) <=? 4096) then (match (structuralProposal (project goal nodes) (project goal root) (nil (Nat * Nat)) 0 64) | Option.none => (ctor Option.none [(CoreBinding::Goal * Nat)]) | Option.some proof => (ctor Option.some [(CoreBinding::Goal * Nat)] ((record CoreBinding::Goal {nodes := (project proof nodes), root := (project goal root)}), (project proof root)))) else (ctor Option.none [(CoreBinding::Goal * Nat)]))),
+ axioms: [propext],
+ executable: true
+}
+
+definition{
  name: features,
  parameters: [],
  result: (List String),
- body: (cons "native-lexlean-candidate-source" (cons "exact-selected-goal" (cons "single-proof-declaration" (cons "bounded-source-output" (cons "exact-axiom-policy" (cons "unverified-construction" (nil String))))))),
+ body: (cons "bounded-local-constructive-synthesis" (cons "context-safe-assumption-lifting" (cons "native-lexlean-candidate-source" (cons "exact-selected-goal" (cons "single-proof-declaration" (cons "bounded-source-output" (cons "exact-axiom-policy" (cons "unverified-construction" (nil String))))))))),
  axioms: [],
  executable: true
 }

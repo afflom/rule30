@@ -17,6 +17,19 @@ theorem Rule30Api.BindingFixture.context : @14 := @16 {
   transparency: semireducible
 }
 
+theorem Rule30Api.BindingFixture.identity : @22 := @24 {
+  class: false,
+  generated: false,
+  policy: none{},
+  transparency: semireducible
+}
+theorem Rule30Api.BindingFixture.lifted : @27 := @30 {
+  class: false,
+  generated: false,
+  policy: none{},
+  transparency: semireducible
+}
+
 @0 := Nat
 @1 := #0
 @5 := Eq.{1} @0 @1 @1
@@ -26,5 +39,19 @@ theorem Rule30Api.BindingFixture.context : @14 := @16 {
 @12 := True.intro
 @14 := (n : @0) -> (h : @5) -> @11
 @16 := fun (n : @0) => fun (h : @5) => @12
+@17 := Sort 0
+@18 := #0
+@19 := #1
+@20 := #2
+@21 := (h : @18) -> @19
+@22 := (P : @17) -> @21
+@23 := fun (h : @18) => @18
+@24 := fun (P : @17) => @23
+@25 := (Q : @17) -> @20
+@26 := (h : @18) -> @25
+@27 := (P : @17) -> @26
+@28 := fun (Q : @17) => @19
+@29 := fun (h : @18) => @28
+@30 := fun (P : @17) => @29
 \end{coremodule}
 \end{lexlean}

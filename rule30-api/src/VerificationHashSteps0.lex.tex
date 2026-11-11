@@ -1,0 +1,165 @@
+\begin{lexlean}{VerificationHashSteps0}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Sha256}
+\importmodule{VerificationHashData}
+\title{Boolean}
+\begin{semanticmodule}
+
+definition{
+  name: block0,
+  parameters: [],
+  result: LexLeanStd.Sha256::Schedule,
+  body: (record LexLeanStd.Sha256::Schedule {w0 := (1818589292 : UInt32), w1 := (1700884013 : UInt32), w2 := (1635021925 : UInt32), w3 := (1937006964 : UInt32), w4 := (1768910381 : UInt32), w5 := (1982922752 : UInt32), w6 := (4193 : UInt32), w7 := (1953785203 : UInt32), w8 := (1952543849 : UInt32), w9 := (1869491554 : UInt32), w10 := (1868855552 : UInt32), w11 := (0 : UInt32), w12 := (454779 : UInt32), w13 := (576877929 : UInt32), w14 := (1818517353 : UInt32), w15 := (1679964706 : UInt32)})
+}
+
+theorem{
+  name: load0,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::load (VerificationHashData::messageBytes) 1827 1856 0) = (block0)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: compress0,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::compress (VerificationHashData::digest0) (block0)) = (VerificationHashData::digest1)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: step0,
+  parameters: [],
+  statement: ((VerificationHashData::step (0, (VerificationHashData::digest0))) = (64, (VerificationHashData::digest1))),
+  proof: simplify{definitions: [compress0, load0, VerificationHashData::step]},
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: block1,
+  parameters: [],
+  result: LexLeanStd.Sha256::Schedule,
+  body: (record LexLeanStd.Sha256::Schedule {w0 := (960051513 : UInt32), w1 := (960051513 : UInt32), w2 := (960051513 : UInt32), w3 := (960051513 : UInt32), w4 := (960051513 : UInt32), w5 := (960051513 : UInt32), w6 := (960051513 : UInt32), w7 := (960051513 : UInt32), w8 := (960051513 : UInt32), w9 := (960051513 : UInt32), w10 := (960051513 : UInt32), w11 := (960051513 : UInt32), w12 := (960051513 : UInt32), w13 := (960051513 : UInt32), w14 := (960051513 : UInt32), w15 := (960051513 : UInt32)})
+}
+
+theorem{
+  name: load1,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::load (VerificationHashData::messageBytes) 1827 1856 64) = (block1)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: compress1,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::compress (VerificationHashData::digest1) (block1)) = (VerificationHashData::digest2)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: step1,
+  parameters: [],
+  statement: ((VerificationHashData::step (64, (VerificationHashData::digest1))) = (128, (VerificationHashData::digest2))),
+  proof: simplify{definitions: [compress1, load1, VerificationHashData::step]},
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: block2,
+  parameters: [],
+  result: LexLeanStd.Sha256::Schedule,
+  body: (record LexLeanStd.Sha256::Schedule {w0 := (573317732 : UInt32), w1 := (1701014625 : UInt32), w2 := (1918989417 : UInt32), w3 := (1869509410 : UInt32), w4 := (979073826 : UInt32), w5 := (1851878757 : UInt32), w6 := (574235203 : UInt32), w7 := (1634624617 : UInt32), w8 := (1684108389 : UInt32), w9 := (779121263 : UInt32), w10 := (1868964396 : UInt32), w11 := (577725043 : UInt32), w12 := (1702000229 : UInt32), w13 := (1679964763 : UInt32), w14 := (577794671 : UInt32), w15 := (1885698164 : UInt32)})
+}
+
+theorem{
+  name: load2,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::load (VerificationHashData::messageBytes) 1827 1856 128) = (block2)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: compress2,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::compress (VerificationHashData::digest2) (block2)) = (VerificationHashData::digest3)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: step2,
+  parameters: [],
+  statement: ((VerificationHashData::step (128, (VerificationHashData::digest2))) = (192, (VerificationHashData::digest3))),
+  proof: simplify{definitions: [compress2, load2, VerificationHashData::step]},
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: block3,
+  parameters: [],
+  result: LexLeanStd.Sha256::Schedule,
+  body: (record LexLeanStd.Sha256::Schedule {w0 := (576531490 : UInt32), w1 := (1886350441 : UInt32), w2 := (1668883002 : UInt32), w3 := (2065850744 : UInt32), w4 := (1768910195 : UInt32), w5 := (574249762 : UInt32), w6 := (1886547824 : UInt32), w7 := (1702392866 : UInt32), w8 := (1563173483 : UInt32), w9 := (1768842274 : UInt32), w10 := (975332728 : UInt32), w11 := (1633907746 : UInt32), w12 := (2100044402 : UInt32), w13 := (1702065516 : UInt32), w14 := (1948400162 : UInt32), w15 := (1869292157 : UInt32)})
+}
+
+theorem{
+  name: load3,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::load (VerificationHashData::messageBytes) 1827 1856 192) = (block3)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: compress3,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::compress (VerificationHashData::digest3) (block3)) = (VerificationHashData::digest4)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: step3,
+  parameters: [],
+  statement: ((VerificationHashData::step (192, (VerificationHashData::digest3))) = (256, (VerificationHashData::digest4))),
+  proof: simplify{definitions: [compress3, load3, VerificationHashData::step]},
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: block4,
+  parameters: [],
+  result: LexLeanStd.Sha256::Schedule,
+  body: (record LexLeanStd.Sha256::Schedule {w0 := (1563173484 : UInt32), w1 := (1702390885 : UInt32), w2 := (1634607674 : UInt32), w3 := (2065851247 : UInt32), w4 := (1836083564 : UInt32), w5 := (1701994355 : UInt32), w6 := (1701667182 : UInt32), w7 := (1953063795 : UInt32), w8 := (574235187 : UInt32), w9 := (858993459 : UInt32), w10 := (858993459 : UInt32), w11 := (858993459 : UInt32), w12 := (858993459 : UInt32), w13 := (858993459 : UInt32), w14 := (858993459 : UInt32), w15 := (858993459 : UInt32)})
+}
+
+theorem{
+  name: load4,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::load (VerificationHashData::messageBytes) 1827 1856 256) = (block4)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: compress4,
+  parameters: [],
+  statement: ((LexLeanStd.Sha256::compress (VerificationHashData::digest4) (block4)) = (VerificationHashData::digest5)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+
+theorem{
+  name: step4,
+  parameters: [],
+  statement: ((VerificationHashData::step (256, (VerificationHashData::digest4))) = (320, (VerificationHashData::digest5))),
+  proof: simplify{definitions: [compress4, load4, VerificationHashData::step]},
+  axioms: [Quot.sound, propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

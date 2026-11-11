@@ -1,0 +1,72 @@
+\begin{lexlean}{ResearchFactoryTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchFactory}
+\importmodule{ResearchCohort}
+\importmodule{ResearchCohortTraces}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchInput}
+\importmodule{ResearchInputTraces}
+\importmodule{Research}
+\importmodule{CoreBinding}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: invalidSource,
+ parameters: [config : ResearchProject::Config],
+ result: ResearchProject::Config,
+ body: (record ResearchProject::Config {request := (project config request), workspace := (project config workspace), tools := (project config tools), arena := (project config arena), proof := (prim length (project (project config arena) nodes) : Nat), imports := (project config imports), levels := (project config levels), axioms := (project config axioms), maxBytes := (project config maxBytes), maxDepth := (project config maxDepth), maxSteps := (project config maxSteps)}),
+ axioms: []
+}
+definition{
+ name: renumber,
+ parameters: [config : ResearchProject::Config, serial : Nat],
+ result: ResearchProject::Config,
+ body: (record ResearchProject::Config {request := (record Research::Request {serial := serial, snapshot := (project (project config request) snapshot), task := (project (project config request) task)}), workspace := (project config workspace), tools := (project config tools), arena := (project config arena), proof := (project config proof), imports := (project config imports), levels := (project config levels), axioms := (project config axioms), maxBytes := (project config maxBytes), maxDepth := (project config maxDepth), maxSteps := (project config maxSteps)}),
+ axioms: []
+}
+theorem{
+ name: invalidCandidateCannotStartLibraryConstruction,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (ResearchCohortTraces::blocked (ResearchCohort::begin (cons (invalidSource config) (nil ResearchProject::Config))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: allInvalidCandidatesAreReportedTogether,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => ((prim length (project (ResearchFactory::plan (cons (invalidSource config) (cons (invalidSource (renumber config 4)) (nil ResearchProject::Config))) (ctor Option.none [ResearchWorkspace::State])) rejected) : Nat) =? 2)) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: validBatchRequiresOneLibraryBuild,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (match (project (ResearchFactory::plan (cons config (nil ResearchProject::Config)) (ctor Option.none [ResearchWorkspace::State])) library) | ResearchFactory::LibraryAction.build => true | ResearchFactory::LibraryAction.reuse => false | ResearchFactory::LibraryAction.blocked => false | ResearchFactory::LibraryAction.idle => false)) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: readyOwnedLibraryIsReused,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (match (project (ResearchFactory::plan (cons config (nil ResearchProject::Config)) (ctor Option.some [ResearchWorkspace::State] (ResearchCohortTraces::readyOwner config))) library) | ResearchFactory::LibraryAction.reuse => true | ResearchFactory::LibraryAction.build => false | ResearchFactory::LibraryAction.blocked => false | ResearchFactory::LibraryAction.idle => false)) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: emptyBatchHasNoBuildObligation,
+ parameters: [owner : (Option ResearchWorkspace::State)],
+ statement: ((project (ResearchFactory::plan (nil ResearchProject::Config) owner) library) = (ctor ResearchFactory::LibraryAction.idle)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: invalidLaterCandidateBlocksTheWholeBatchBeforeBuild,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (ResearchCohortTraces::blocked (ResearchCohort::begin (cons config (cons (invalidSource (renumber config 4)) (nil ResearchProject::Config)))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

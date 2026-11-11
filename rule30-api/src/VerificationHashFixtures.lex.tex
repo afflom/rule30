@@ -5,6 +5,13 @@
 \importmodule{Toml}
 \importmodule{LexLeanStd.Sha256}
 \importmodule{VerificationReport}
+\importmodule{VerificationHashData}
+\importmodule{VerificationHashSteps0}
+\importmodule{VerificationHashSteps1}
+\importmodule{VerificationHashSteps2}
+\importmodule{VerificationHashSteps3}
+\importmodule{VerificationHashSteps4}
+\importmodule{VerificationHashSteps5}
 \title{Boolean}
 \begin{semanticmodule}
 
@@ -12,1151 +19,20 @@ definition{
   name: reportBytes,
   parameters: [],
   result: Bytes,
-  body: 0x7b226174746573746174696f6e5f6964223a2236373231313665386462366163666434326133333238633234633361643931626462656131353039663138393561626236643331343531363734376532613962222c226275696c645f6964223a2239393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939222c226465636c61726174696f6e73223a5b7b226e616d65223a2243616e6469646174652e70726f6f66222c226f62736572766564223a5b2270726f70657874225d2c22706f6c696379223a7b226178696f6d73223a5b2270726f70657874225d2c226b696e64223a226578616374227d2c22726573756c74223a226f6b227d5d2c226c65786c65616e223a7b22636f6d70696c65725f73656d616e74696373223a2233333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222c2265786563757461626c655f736861323536223a2234343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434227d2c2270726f636573736573223a5b7b2261726776223a5b22656e76222c226c65616e222c222d52222c222453544147494e472f6c65616e2d737263222c222d6f222c222453544147494e472f6f6c65616e732f43616e6469646174652e6f6c65616e222c222453544147494e472f6c65616e2d7372632f43616e6469646174652e6c65616e225d2c2265786563757461626c655f736861323536223a2235353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535222c22657869745f636f6465223a302c226d6f64756c65223a2243616e646964617465222c22737464657272223a225c6e222c227374646572725f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c227374646f7574223a225c6e222c227374646f75745f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c22746f6f6c223a226c65616e227d2c7b2261726776223a5b22656e76222c2224544f4f4c434841494e2f62696e2f6c65616e636865636b6572222c2243616e646964617465225d2c2265786563757461626c655f736861323536223a2237373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737222c22657869745f636f6465223a302c226d6f64756c65223a2243616e646964617465222c22737464657272223a225c6e222c227374646572725f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c227374646f7574223a225c6e222c227374646f75745f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c22746f6f6c223a226c65616e636865636b6572227d5d2c2273656d616e7469635f6964223a2232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232222c22736f757263655f6964223a2231313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131222c2273706563223a226c65786c65616e2f6174746573746174696f6e2f32222c22737461747573223a227665726966696564222c22746f6f6c636861696e223a7b226c616b65223a7b2265786563757461626c655f736861323536223a2236363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636227d2c226c65616e223a7b2265786563757461626c655f736861323536223a2235353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535227d2c226c65616e636865636b6572223a7b2265786563757461626c655f736861323536223a2237373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737227d7d7d0a
-}
-
-definition{
-  name: bodyBytes,
-  parameters: [],
-  result: Bytes,
-  body: 0x7b226275696c645f6964223a2239393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939222c226465636c61726174696f6e73223a5b7b226e616d65223a2243616e6469646174652e70726f6f66222c226f62736572766564223a5b2270726f70657874225d2c22706f6c696379223a7b226178696f6d73223a5b2270726f70657874225d2c226b696e64223a226578616374227d2c22726573756c74223a226f6b227d5d2c226c65786c65616e223a7b22636f6d70696c65725f73656d616e74696373223a2233333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222c2265786563757461626c655f736861323536223a2234343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434227d2c2270726f636573736573223a5b7b2261726776223a5b22656e76222c226c65616e222c222d52222c222453544147494e472f6c65616e2d737263222c222d6f222c222453544147494e472f6f6c65616e732f43616e6469646174652e6f6c65616e222c222453544147494e472f6c65616e2d7372632f43616e6469646174652e6c65616e225d2c2265786563757461626c655f736861323536223a2235353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535222c22657869745f636f6465223a302c226d6f64756c65223a2243616e646964617465222c22737464657272223a225c6e222c227374646572725f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c227374646f7574223a225c6e222c227374646f75745f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c22746f6f6c223a226c65616e227d2c7b2261726776223a5b22656e76222c2224544f4f4c434841494e2f62696e2f6c65616e636865636b6572222c2243616e646964617465225d2c2265786563757461626c655f736861323536223a2237373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737222c22657869745f636f6465223a302c226d6f64756c65223a2243616e646964617465222c22737464657272223a225c6e222c227374646572725f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c227374646f7574223a225c6e222c227374646f75745f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c22746f6f6c223a226c65616e636865636b6572227d5d2c2273656d616e7469635f6964223a2232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232222c22736f757263655f6964223a2231313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131222c2273706563223a226c65786c65616e2f6174746573746174696f6e2f32222c22737461747573223a227665726966696564222c22746f6f6c636861696e223a7b226c616b65223a7b2265786563757461626c655f736861323536223a2236363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636227d2c226c65616e223a7b2265786563757461626c655f736861323536223a2235353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535227d2c226c65616e636865636b6572223a7b2265786563757461626c655f736861323536223a2237373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737227d7d7d
-}
-
-definition{
-  name: messageBytes,
-  parameters: [],
-  result: Bytes,
-  body: 0x6c65786c65616e2d6174746573746174696f6e2d763100000000106174746573746174696f6e2d626f647900000000000006f07b226275696c645f6964223a2239393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939393939222c226465636c61726174696f6e73223a5b7b226e616d65223a2243616e6469646174652e70726f6f66222c226f62736572766564223a5b2270726f70657874225d2c22706f6c696379223a7b226178696f6d73223a5b2270726f70657874225d2c226b696e64223a226578616374227d2c22726573756c74223a226f6b227d5d2c226c65786c65616e223a7b22636f6d70696c65725f73656d616e74696373223a2233333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333222c2265786563757461626c655f736861323536223a2234343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434343434227d2c2270726f636573736573223a5b7b2261726776223a5b22656e76222c226c65616e222c222d52222c222453544147494e472f6c65616e2d737263222c222d6f222c222453544147494e472f6f6c65616e732f43616e6469646174652e6f6c65616e222c222453544147494e472f6c65616e2d7372632f43616e6469646174652e6c65616e225d2c2265786563757461626c655f736861323536223a2235353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535222c22657869745f636f6465223a302c226d6f64756c65223a2243616e646964617465222c22737464657272223a225c6e222c227374646572725f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c227374646f7574223a225c6e222c227374646f75745f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c22746f6f6c223a226c65616e227d2c7b2261726776223a5b22656e76222c2224544f4f4c434841494e2f62696e2f6c65616e636865636b6572222c2243616e646964617465225d2c2265786563757461626c655f736861323536223a2237373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737222c22657869745f636f6465223a302c226d6f64756c65223a2243616e646964617465222c22737464657272223a225c6e222c227374646572725f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c227374646f7574223a225c6e222c227374646f75745f736861323536223a2230316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662222c22746f6f6c223a226c65616e636865636b6572227d5d2c2273656d616e7469635f6964223a2232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323232222c22736f757263655f6964223a2231313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131222c2273706563223a226c65786c65616e2f6174746573746174696f6e2f32222c22737461747573223a227665726966696564222c22746f6f6c636861696e223a7b226c616b65223a7b2265786563757461626c655f736861323536223a2236363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636227d2c226c65616e223a7b2265786563757461626c655f736861323536223a2235353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535227d2c226c65616e636865636b6572223a7b2265786563757461626c655f736861323536223a2237373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737227d7d7d
+  body: (VerificationHashData::reportBytes)
 }
 
 definition{
   name: identity,
   parameters: [],
   result: Bytes,
-  body: 0x36373231313665386462366163666434326133333238633234633361643931626462656131353039663138393561626236643331343531363734376532613962
-}
-
-definition{
-  name: digest0,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1779033703 : UInt32), h1 := (3144134277 : UInt32), h2 := (1013904242 : UInt32), h3 := (2773480762 : UInt32), h4 := (1359893119 : UInt32), h5 := (2600822924 : UInt32), h6 := (528734635 : UInt32), h7 := (1541459225 : UInt32)})
-}
-
-definition{
-  name: digest1,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (228695051 : UInt32), h1 := (2920477438 : UInt32), h2 := (4055499266 : UInt32), h3 := (3642887422 : UInt32), h4 := (877126506 : UInt32), h5 := (4212754303 : UInt32), h6 := (1315207443 : UInt32), h7 := (3106813316 : UInt32)})
-}
-
-definition{
-  name: digest2,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (2220221972 : UInt32), h1 := (2568119745 : UInt32), h2 := (3180376097 : UInt32), h3 := (296065573 : UInt32), h4 := (598859777 : UInt32), h5 := (443747192 : UInt32), h6 := (917444690 : UInt32), h7 := (3019059764 : UInt32)})
-}
-
-definition{
-  name: digest3,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (3482638203 : UInt32), h1 := (3484630481 : UInt32), h2 := (935140056 : UInt32), h3 := (1987242815 : UInt32), h4 := (1814305454 : UInt32), h5 := (43890630 : UInt32), h6 := (2261302812 : UInt32), h7 := (728490407 : UInt32)})
-}
-
-definition{
-  name: digest4,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1771077673 : UInt32), h1 := (488224915 : UInt32), h2 := (1502164272 : UInt32), h3 := (1237723447 : UInt32), h4 := (3018222004 : UInt32), h5 := (3878875058 : UInt32), h6 := (1525143036 : UInt32), h7 := (2778537336 : UInt32)})
-}
-
-definition{
-  name: digest5,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (2209354887 : UInt32), h1 := (2453296120 : UInt32), h2 := (3474402490 : UInt32), h3 := (1728016450 : UInt32), h4 := (1855769083 : UInt32), h5 := (3618316895 : UInt32), h6 := (995108983 : UInt32), h7 := (3737142745 : UInt32)})
-}
-
-definition{
-  name: digest6,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1443421709 : UInt32), h1 := (383781286 : UInt32), h2 := (2085094867 : UInt32), h3 := (1938017607 : UInt32), h4 := (1241170256 : UInt32), h5 := (4113559220 : UInt32), h6 := (1746465555 : UInt32), h7 := (1165144783 : UInt32)})
-}
-
-definition{
-  name: digest7,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1047250116 : UInt32), h1 := (3246487348 : UInt32), h2 := (550534447 : UInt32), h3 := (1622247407 : UInt32), h4 := (2966861892 : UInt32), h5 := (130405675 : UInt32), h6 := (4232021969 : UInt32), h7 := (3933468212 : UInt32)})
-}
-
-definition{
-  name: digest8,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1065658484 : UInt32), h1 := (1711318442 : UInt32), h2 := (459499715 : UInt32), h3 := (2275764620 : UInt32), h4 := (2110415710 : UInt32), h5 := (2187196966 : UInt32), h6 := (4125359311 : UInt32), h7 := (3196664886 : UInt32)})
-}
-
-definition{
-  name: digest9,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (39003515 : UInt32), h1 := (1309188505 : UInt32), h2 := (3829699732 : UInt32), h3 := (1403941949 : UInt32), h4 := (910378253 : UInt32), h5 := (3077674136 : UInt32), h6 := (1951838682 : UInt32), h7 := (346271396 : UInt32)})
-}
-
-definition{
-  name: digest10,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1335769076 : UInt32), h1 := (3451711791 : UInt32), h2 := (2706469559 : UInt32), h3 := (362561907 : UInt32), h4 := (4228522326 : UInt32), h5 := (1972116028 : UInt32), h6 := (2014222106 : UInt32), h7 := (4291090427 : UInt32)})
-}
-
-definition{
-  name: digest11,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (91070708 : UInt32), h1 := (3822187810 : UInt32), h2 := (719031990 : UInt32), h3 := (2997402836 : UInt32), h4 := (1544828621 : UInt32), h5 := (3905483319 : UInt32), h6 := (2590175656 : UInt32), h7 := (2637997513 : UInt32)})
-}
-
-definition{
-  name: digest12,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (737753664 : UInt32), h1 := (3187598597 : UInt32), h2 := (763888333 : UInt32), h3 := (193686760 : UInt32), h4 := (1280481408 : UInt32), h5 := (3759186741 : UInt32), h6 := (293393501 : UInt32), h7 := (3389099380 : UInt32)})
-}
-
-definition{
-  name: digest13,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1672205619 : UInt32), h1 := (2795015275 : UInt32), h2 := (3991973344 : UInt32), h3 := (1994078467 : UInt32), h4 := (652293859 : UInt32), h5 := (4139780941 : UInt32), h6 := (3308442259 : UInt32), h7 := (568517419 : UInt32)})
-}
-
-definition{
-  name: digest14,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1016071977 : UInt32), h1 := (1345768832 : UInt32), h2 := (1844353543 : UInt32), h3 := (1211318796 : UInt32), h4 := (4283439541 : UInt32), h5 := (2563648011 : UInt32), h6 := (4103925083 : UInt32), h7 := (754013598 : UInt32)})
-}
-
-definition{
-  name: digest15,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (3528094701 : UInt32), h1 := (3018150982 : UInt32), h2 := (4266139963 : UInt32), h3 := (2915530464 : UInt32), h4 := (1815081348 : UInt32), h5 := (3128160553 : UInt32), h6 := (737144494 : UInt32), h7 := (3729905468 : UInt32)})
-}
-
-definition{
-  name: digest16,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1532044951 : UInt32), h1 := (4031219783 : UInt32), h2 := (3363954975 : UInt32), h3 := (1554692453 : UInt32), h4 := (3576137554 : UInt32), h5 := (1556105668 : UInt32), h6 := (2949482449 : UInt32), h7 := (3408246846 : UInt32)})
-}
-
-definition{
-  name: digest17,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (537554009 : UInt32), h1 := (810903817 : UInt32), h2 := (3344050838 : UInt32), h3 := (138810971 : UInt32), h4 := (2669081226 : UInt32), h5 := (275937648 : UInt32), h6 := (451954181 : UInt32), h7 := (3639347084 : UInt32)})
-}
-
-definition{
-  name: digest18,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (858779106 : UInt32), h1 := (1971018117 : UInt32), h2 := (3449677193 : UInt32), h3 := (2956416597 : UInt32), h4 := (1202719981 : UInt32), h5 := (2705927103 : UInt32), h6 := (477350994 : UInt32), h7 := (1009419315 : UInt32)})
-}
-
-definition{
-  name: digest19,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (709329044 : UInt32), h1 := (3559804024 : UInt32), h2 := (293138545 : UInt32), h3 := (3799896040 : UInt32), h4 := (722572606 : UInt32), h5 := (2418601150 : UInt32), h6 := (3961603127 : UInt32), h7 := (78320943 : UInt32)})
-}
-
-definition{
-  name: digest20,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1214168344 : UInt32), h1 := (2258498157 : UInt32), h2 := (4167038127 : UInt32), h3 := (4077800881 : UInt32), h4 := (1295567654 : UInt32), h5 := (4050937117 : UInt32), h6 := (2109083938 : UInt32), h7 := (3585316548 : UInt32)})
-}
-
-definition{
-  name: digest21,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (2148350657 : UInt32), h1 := (3267109308 : UInt32), h2 := (852789381 : UInt32), h3 := (3301227728 : UInt32), h4 := (1536884400 : UInt32), h5 := (986345938 : UInt32), h6 := (3159074250 : UInt32), h7 := (3935809931 : UInt32)})
-}
-
-definition{
-  name: digest22,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (2972583460 : UInt32), h1 := (1113229060 : UInt32), h2 := (3305173029 : UInt32), h3 := (2228565806 : UInt32), h4 := (3389866874 : UInt32), h5 := (2699375025 : UInt32), h6 := (989148059 : UInt32), h7 := (899122702 : UInt32)})
-}
-
-definition{
-  name: digest23,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (3025387540 : UInt32), h1 := (717509900 : UInt32), h2 := (1137103780 : UInt32), h3 := (888301270 : UInt32), h4 := (3210399041 : UInt32), h5 := (2187430071 : UInt32), h6 := (4013840420 : UInt32), h7 := (606801627 : UInt32)})
-}
-
-definition{
-  name: digest24,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (4173059608 : UInt32), h1 := (2790451536 : UInt32), h2 := (1969394244 : UInt32), h3 := (2545686105 : UInt32), h4 := (2629677822 : UInt32), h5 := (318765628 : UInt32), h6 := (3165186437 : UInt32), h7 := (3772150344 : UInt32)})
-}
-
-definition{
-  name: digest25,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1596707625 : UInt32), h1 := (1217856196 : UInt32), h2 := (1139257342 : UInt32), h3 := (77739972 : UInt32), h4 := (1810532961 : UInt32), h5 := (424616030 : UInt32), h6 := (1622834491 : UInt32), h7 := (3733557798 : UInt32)})
-}
-
-definition{
-  name: digest26,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (122333032 : UInt32), h1 := (458340348 : UInt32), h2 := (259795390 : UInt32), h3 := (1903441721 : UInt32), h4 := (2862800124 : UInt32), h5 := (4081774212 : UInt32), h6 := (2952407920 : UInt32), h7 := (520305982 : UInt32)})
-}
-
-definition{
-  name: digest27,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1083539277 : UInt32), h1 := (3636538713 : UInt32), h2 := (4012132555 : UInt32), h3 := (1716508973 : UInt32), h4 := (3884371949 : UInt32), h5 := (3964410476 : UInt32), h6 := (340344706 : UInt32), h7 := (4116589554 : UInt32)})
-}
-
-definition{
-  name: digest28,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (4195323034 : UInt32), h1 := (1166960279 : UInt32), h2 := (1787889294 : UInt32), h3 := (2078849573 : UInt32), h4 := (2322663499 : UInt32), h5 := (2465196181 : UInt32), h6 := (1764814649 : UInt32), h7 := (970713130 : UInt32)})
-}
-
-definition{
-  name: digest29,
-  parameters: [],
-  result: LexLeanStd.Sha256::Digest,
-  body: (record LexLeanStd.Sha256::Digest {h0 := (1730221800 : UInt32), h1 := (3681210324 : UInt32), h2 := (707995842 : UInt32), h3 := (1278925083 : UInt32), h4 := (3689551113 : UInt32), h5 := (4052310715 : UInt32), h6 := (1831945494 : UInt32), h7 := (1954425499 : UInt32)})
-}
-
-definition{
-  name: step,
-  parameters: [state : (Nat * LexLeanStd.Sha256::Digest)],
-  result: (Nat * LexLeanStd.Sha256::Digest),
-  body: (((first state) + 64), (LexLeanStd.Sha256::compress (second state) (LexLeanStd.Sha256::load (messageBytes) 1827 1856 (first state)))),
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block0,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1818589292 : UInt32), w1 := (1700884013 : UInt32), w2 := (1635021925 : UInt32), w3 := (1937006964 : UInt32), w4 := (1768910381 : UInt32), w5 := (1982922752 : UInt32), w6 := (4193 : UInt32), w7 := (1953785203 : UInt32), w8 := (1952543849 : UInt32), w9 := (1869491554 : UInt32), w10 := (1868855552 : UInt32), w11 := (0 : UInt32), w12 := (454779 : UInt32), w13 := (576877929 : UInt32), w14 := (1818517353 : UInt32), w15 := (1679964706 : UInt32)})
-}
-
-theorem{
-  name: load0,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 0) = (block0)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress0,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest0) (block0)) = (digest1)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step0,
-  parameters: [],
-  statement: ((step (0, (digest0))) = (64, (digest1))),
-  proof: simplify{definitions: [compress0, load0, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block1,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (960051513 : UInt32), w1 := (960051513 : UInt32), w2 := (960051513 : UInt32), w3 := (960051513 : UInt32), w4 := (960051513 : UInt32), w5 := (960051513 : UInt32), w6 := (960051513 : UInt32), w7 := (960051513 : UInt32), w8 := (960051513 : UInt32), w9 := (960051513 : UInt32), w10 := (960051513 : UInt32), w11 := (960051513 : UInt32), w12 := (960051513 : UInt32), w13 := (960051513 : UInt32), w14 := (960051513 : UInt32), w15 := (960051513 : UInt32)})
-}
-
-theorem{
-  name: load1,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 64) = (block1)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress1,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest1) (block1)) = (digest2)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step1,
-  parameters: [],
-  statement: ((step (64, (digest1))) = (128, (digest2))),
-  proof: simplify{definitions: [compress1, load1, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block2,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (573317732 : UInt32), w1 := (1701014625 : UInt32), w2 := (1918989417 : UInt32), w3 := (1869509410 : UInt32), w4 := (979073826 : UInt32), w5 := (1851878757 : UInt32), w6 := (574235203 : UInt32), w7 := (1634624617 : UInt32), w8 := (1684108389 : UInt32), w9 := (779121263 : UInt32), w10 := (1868964396 : UInt32), w11 := (577725043 : UInt32), w12 := (1702000229 : UInt32), w13 := (1679964763 : UInt32), w14 := (577794671 : UInt32), w15 := (1885698164 : UInt32)})
-}
-
-theorem{
-  name: load2,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 128) = (block2)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress2,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest2) (block2)) = (digest3)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step2,
-  parameters: [],
-  statement: ((step (128, (digest2))) = (192, (digest3))),
-  proof: simplify{definitions: [compress2, load2, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block3,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (576531490 : UInt32), w1 := (1886350441 : UInt32), w2 := (1668883002 : UInt32), w3 := (2065850744 : UInt32), w4 := (1768910195 : UInt32), w5 := (574249762 : UInt32), w6 := (1886547824 : UInt32), w7 := (1702392866 : UInt32), w8 := (1563173483 : UInt32), w9 := (1768842274 : UInt32), w10 := (975332728 : UInt32), w11 := (1633907746 : UInt32), w12 := (2100044402 : UInt32), w13 := (1702065516 : UInt32), w14 := (1948400162 : UInt32), w15 := (1869292157 : UInt32)})
-}
-
-theorem{
-  name: load3,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 192) = (block3)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress3,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest3) (block3)) = (digest4)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step3,
-  parameters: [],
-  statement: ((step (192, (digest3))) = (256, (digest4))),
-  proof: simplify{definitions: [compress3, load3, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block4,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1563173484 : UInt32), w1 := (1702390885 : UInt32), w2 := (1634607674 : UInt32), w3 := (2065851247 : UInt32), w4 := (1836083564 : UInt32), w5 := (1701994355 : UInt32), w6 := (1701667182 : UInt32), w7 := (1953063795 : UInt32), w8 := (574235187 : UInt32), w9 := (858993459 : UInt32), w10 := (858993459 : UInt32), w11 := (858993459 : UInt32), w12 := (858993459 : UInt32), w13 := (858993459 : UInt32), w14 := (858993459 : UInt32), w15 := (858993459 : UInt32)})
-}
-
-theorem{
-  name: load4,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 256) = (block4)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress4,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest4) (block4)) = (digest5)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step4,
-  parameters: [],
-  statement: ((step (256, (digest4))) = (320, (digest5))),
-  proof: simplify{definitions: [compress4, load4, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block5,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (858993459 : UInt32), w1 := (858993459 : UInt32), w2 := (858993459 : UInt32), w3 := (858993459 : UInt32), w4 := (858993459 : UInt32), w5 := (858993459 : UInt32), w6 := (858993459 : UInt32), w7 := (858993459 : UInt32), w8 := (858993442 : UInt32), w9 := (740451704 : UInt32), w10 := (1701016948 : UInt32), w11 := (1633840229 : UInt32), w12 := (1601398881 : UInt32), w13 := (842348066 : UInt32), w14 := (975320116 : UInt32), w15 := (875836468 : UInt32)})
-}
-
-theorem{
-  name: load5,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 320) = (block5)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress5,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest5) (block5)) = (digest6)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step5,
-  parameters: [],
-  statement: ((step (320, (digest5))) = (384, (digest6))),
-  proof: simplify{definitions: [compress5, load5, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block6,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (875836468 : UInt32), w1 := (875836468 : UInt32), w2 := (875836468 : UInt32), w3 := (875836468 : UInt32), w4 := (875836468 : UInt32), w5 := (875836468 : UInt32), w6 := (875836468 : UInt32), w7 := (875836468 : UInt32), w8 := (875836468 : UInt32), w9 := (875836468 : UInt32), w10 := (875836468 : UInt32), w11 := (875836468 : UInt32), w12 := (875836468 : UInt32), w13 := (875836468 : UInt32), w14 := (875831933 : UInt32), w15 := (740454514 : UInt32)})
-}
-
-theorem{
-  name: load6,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 384) = (block6)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress6,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest6) (block6)) = (digest7)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step6,
-  parameters: [],
-  statement: ((step (384, (digest6))) = (448, (digest7))),
-  proof: simplify{definitions: [compress6, load6, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block7,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1868785011 : UInt32), w1 := (1936028450 : UInt32), w2 := (979073826 : UInt32), w3 := (1634887542 : UInt32), w4 := (574249762 : UInt32), w5 := (1701738018 : UInt32), w6 := (740453477 : UInt32), w7 := (1634607660 : UInt32), w8 := (573395490 : UInt32), w9 := (740435027 : UInt32), w10 := (1413564233 : UInt32), w11 := (1313288044 : UInt32), w12 := (1700884013 : UInt32), w13 := (1936876322 : UInt32), w14 := (740437359 : UInt32), w15 := (573317668 : UInt32)})
-}
-
-theorem{
-  name: load7,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 448) = (block7)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress7,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest7) (block7)) = (digest8)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step7,
-  parameters: [],
-  statement: ((step (448, (digest7))) = (512, (digest8))),
-  proof: simplify{definitions: [compress7, load7, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block8,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1398030663 : UInt32), w1 := (1229866799 : UInt32), w2 := (1869374817 : UInt32), w3 := (1853042499 : UInt32), w4 := (1634624617 : UInt32), w5 := (1684108389 : UInt32), w6 := (779054181 : UInt32), w7 := (1634607660 : UInt32), w8 := (572805972 : UInt32), w9 := (1095190862 : UInt32), w10 := (1194290277 : UInt32), w11 := (1634610547 : UInt32), w12 := (1919102787 : UInt32), w13 := (1634624617 : UInt32), w14 := (1684108389 : UInt32), w15 := (778855777 : UInt32)})
-}
-
-theorem{
-  name: load8,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 512) = (block8)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress8,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest8) (block8)) = (digest9)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step8,
-  parameters: [],
-  statement: ((step (512, (digest8))) = (576, (digest9))),
-  proof: simplify{definitions: [compress8, load8, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block9,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1847745836 : UInt32), w1 := (577075301 : UInt32), w2 := (1668641889 : UInt32), w3 := (1651271007 : UInt32), w4 := (1936220466 : UInt32), w5 := (892740154 : UInt32), w6 := (573912373 : UInt32), w7 := (892679477 : UInt32), w8 := (892679477 : UInt32), w9 := (892679477 : UInt32), w10 := (892679477 : UInt32), w11 := (892679477 : UInt32), w12 := (892679477 : UInt32), w13 := (892679477 : UInt32), w14 := (892679477 : UInt32), w15 := (892679477 : UInt32)})
-}
-
-theorem{
-  name: load9,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 576) = (block9)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress9,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest9) (block9)) = (digest10)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step9,
-  parameters: [],
-  statement: ((step (576, (digest9))) = (640, (digest10))),
-  proof: simplify{definitions: [compress9, load9, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block10,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (892679477 : UInt32), w1 := (892679477 : UInt32), w2 := (892679477 : UInt32), w3 := (892679477 : UInt32), w4 := (892679477 : UInt32), w5 := (892679477 : UInt32), w6 := (891431970 : UInt32), w7 := (1702390132 : UInt32), w8 := (1600352100 : UInt32), w9 := (1696741936 : UInt32), w10 := (740453743 : UInt32), w11 := (1685417061 : UInt32), w12 := (574235203 : UInt32), w13 := (1634624617 : UInt32), w14 := (1684108389 : UInt32), w15 := (573317747 : UInt32)})
-}
-
-theorem{
-  name: load10,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 640) = (block10)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress10,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest10) (block10)) = (digest11)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step10,
-  parameters: [],
-  statement: ((step (640, (digest10))) = (704, (digest11))),
-  proof: simplify{definitions: [compress10, load10, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block11,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1952736626 : UInt32), w1 := (1914845730 : UInt32), w2 := (1550721580 : UInt32), w3 := (577991780 : UInt32), w4 := (1701999199 : UInt32), w5 := (1936220466 : UInt32), w6 := (892740154 : UInt32), w7 := (573583714 : UInt32), w8 := (1630811953 : UInt32), w9 := (962803760 : UInt32), w10 := (1647732325 : UInt32), w11 := (959525218 : UInt32), w12 := (809054561 : UInt32), w13 := (929247285 : UInt32), w14 := (825373794 : UInt32), w15 := (909403493 : UInt32)})
-}
-
-theorem{
-  name: load11,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 704) = (block11)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress11,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest11) (block11)) = (digest12)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step11,
-  parameters: [],
-  statement: ((step (704, (digest11))) = (768, (digest12))),
-  proof: simplify{definitions: [compress11, load11, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block12,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1701012793 : UInt32), w1 := (909403440 : UInt32), w2 := (962801717 : UInt32), w3 := (946169400 : UInt32), w4 := (1715025968 : UInt32), w5 := (895770979 : UInt32), w6 := (1630876726 : UInt32), w7 := (1646406690 : UInt32), w8 := (1937007727 : UInt32), w9 := (1970545210 : UInt32), w10 := (576482850 : UInt32), w11 := (740455284 : UInt32), w12 := (1685026164 : UInt32), w13 := (1601398881 : UInt32), w14 := (842348066 : UInt32), w15 := (975319089 : UInt32)})
-}
-
-theorem{
-  name: load12,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 768) = (block12)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress12,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest12) (block12)) = (digest13)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step12,
-  parameters: [],
-  statement: ((step (768, (digest12))) = (832, (digest13))),
-  proof: simplify{definitions: [compress12, load12, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block13,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1650537527 : UInt32), w1 := (825844536 : UInt32), w2 := (811742822 : UInt32), w3 := (1698246961 : UInt32), w4 := (1647327537 : UInt32), w5 := (1631019824 : UInt32), w6 := (892416564 : UInt32), w7 := (1647719525 : UInt32), w8 := (1701143397 : UInt32), w9 := (959853669 : UInt32), w10 := (809067312 : UInt32), w11 := (892888422 : UInt32), w12 := (946223416 : UInt32), w13 := (808805473 : UInt32), w14 := (1667314996 : UInt32), w15 := (912400940 : UInt32)})
-}
-
-theorem{
-  name: load13,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 832) = (block13)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress13,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest13) (block13)) = (digest14)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step13,
-  parameters: [],
-  statement: ((step (832, (digest13))) = (896, (digest14))),
-  proof: simplify{definitions: [compress13, load13, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block14,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (578056047 : UInt32), w1 := (1814182434 : UInt32), w2 := (1818583406 : UInt32), w3 := (578628731 : UInt32), w4 := (576811623 : UInt32), w5 := (1981954651 : UInt32), w6 := (577072758 : UInt32), w7 := (573317668 : UInt32), w8 := (1414483788 : UInt32), w9 := (1128808777 : UInt32), w10 := (1311728233 : UInt32), w11 := (1848601701 : UInt32), w12 := (1634624360 : UInt32), w13 := (1701014373 : UInt32), w14 := (1914842146 : UInt32), w15 := (1130458724 : UInt32)})
-}
-
-theorem{
-  name: load14,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 896) = (block14)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress14,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest14) (block14)) = (digest15)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step14,
-  parameters: [],
-  statement: ((step (896, (digest14))) = (960, (digest15))),
-  proof: simplify{definitions: [compress14, load14, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block15,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1768186228 : UInt32), w1 := (1696750892 : UInt32), w2 := (577075301 : UInt32), w3 := (1668641889 : UInt32), w4 := (1651271007 : UInt32), w5 := (1936220466 : UInt32), w6 := (892740154 : UInt32), w7 := (574043959 : UInt32), w8 := (926365495 : UInt32), w9 := (926365495 : UInt32), w10 := (926365495 : UInt32), w11 := (926365495 : UInt32), w12 := (926365495 : UInt32), w13 := (926365495 : UInt32), w14 := (926365495 : UInt32), w15 := (926365495 : UInt32)})
-}
-
-theorem{
-  name: load15,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 960) = (block15)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress15,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest15) (block15)) = (digest16)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step15,
-  parameters: [],
-  statement: ((step (960, (digest15))) = (1024, (digest16))),
-  proof: simplify{definitions: [compress15, load15, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block16,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (926365495 : UInt32), w1 := (926365495 : UInt32), w2 := (926365495 : UInt32), w3 := (926365495 : UInt32), w4 := (926365495 : UInt32), w5 := (926365495 : UInt32), w6 := (926365495 : UInt32), w7 := (924986402 : UInt32), w8 := (1702390132 : UInt32), w9 := (1600352100 : UInt32), w10 := (1696741936 : UInt32), w11 := (740453743 : UInt32), w12 := (1685417061 : UInt32), w13 := (574235203 : UInt32), w14 := (1634624617 : UInt32), w15 := (1684108389 : UInt32)})
-}
-
-theorem{
-  name: load16,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1024) = (block16)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress16,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest16) (block16)) = (digest17)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step16,
-  parameters: [],
-  statement: ((step (1024, (digest16))) = (1088, (digest17))),
-  proof: simplify{definitions: [compress16, load16, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block17,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (573317747 : UInt32), w1 := (1952736626 : UInt32), w2 := (1914845730 : UInt32), w3 := (1550721580 : UInt32), w4 := (577991780 : UInt32), w5 := (1701999199 : UInt32), w6 := (1936220466 : UInt32), w7 := (892740154 : UInt32), w8 := (573583714 : UInt32), w9 := (1630811953 : UInt32), w10 := (962803760 : UInt32), w11 := (1647732325 : UInt32), w12 := (959525218 : UInt32), w13 := (809054561 : UInt32), w14 := (929247285 : UInt32), w15 := (825373794 : UInt32)})
-}
-
-theorem{
-  name: load17,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1088) = (block17)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress17,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest17) (block17)) = (digest18)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step17,
-  parameters: [],
-  statement: ((step (1088, (digest17))) = (1152, (digest18))),
-  proof: simplify{definitions: [compress17, load17, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block18,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (909403493 : UInt32), w1 := (1701012793 : UInt32), w2 := (909403440 : UInt32), w3 := (962801717 : UInt32), w4 := (946169400 : UInt32), w5 := (1715025968 : UInt32), w6 := (895770979 : UInt32), w7 := (1630876726 : UInt32), w8 := (1646406690 : UInt32), w9 := (1937007727 : UInt32), w10 := (1970545210 : UInt32), w11 := (576482850 : UInt32), w12 := (740455284 : UInt32), w13 := (1685026164 : UInt32), w14 := (1601398881 : UInt32), w15 := (842348066 : UInt32)})
-}
-
-theorem{
-  name: load18,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1152) = (block18)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress18,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest18) (block18)) = (digest19)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step18,
-  parameters: [],
-  statement: ((step (1152, (digest18))) = (1216, (digest19))),
-  proof: simplify{definitions: [compress18, load18, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block19,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (975319089 : UInt32), w1 := (1650537527 : UInt32), w2 := (825844536 : UInt32), w3 := (811742822 : UInt32), w4 := (1698246961 : UInt32), w5 := (1647327537 : UInt32), w6 := (1631019824 : UInt32), w7 := (892416564 : UInt32), w8 := (1647719525 : UInt32), w9 := (1701143397 : UInt32), w10 := (959853669 : UInt32), w11 := (809067312 : UInt32), w12 := (892888422 : UInt32), w13 := (946223416 : UInt32), w14 := (808805473 : UInt32), w15 := (1667314996 : UInt32)})
-}
-
-theorem{
-  name: load19,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1216) = (block19)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress19,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest19) (block19)) = (digest20)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step19,
-  parameters: [],
-  statement: ((step (1216, (digest19))) = (1280, (digest20))),
-  proof: simplify{definitions: [compress19, load19, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block20,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (912400940 : UInt32), w1 := (578056047 : UInt32), w2 := (1814182434 : UInt32), w3 := (1818583406 : UInt32), w4 := (1667786083 : UInt32), w5 := (1801810466 : UInt32), w6 := (2103258146 : UInt32), w7 := (1936026977 : UInt32), w8 := (1853122915 : UInt32), w9 := (1600742434 : UInt32), w10 := (975319602 : UInt32), w11 := (842150450 : UInt32), w12 := (842150450 : UInt32), w13 := (842150450 : UInt32), w14 := (842150450 : UInt32), w15 := (842150450 : UInt32)})
-}
-
-theorem{
-  name: load20,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1280) = (block20)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress20,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest20) (block20)) = (digest21)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step20,
-  parameters: [],
-  statement: ((step (1280, (digest20))) = (1344, (digest21))),
-  proof: simplify{definitions: [compress20, load20, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block21,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (842150450 : UInt32), w1 := (842150450 : UInt32), w2 := (842150450 : UInt32), w3 := (842150450 : UInt32), w4 := (842150450 : UInt32), w5 := (842150450 : UInt32), w6 := (842150450 : UInt32), w7 := (842150450 : UInt32), w8 := (842150450 : UInt32), w9 := (842150450 : UInt32), w10 := (842146348 : UInt32), w11 := (577990517 : UInt32), w12 := (1919116639 : UInt32), w13 := (1768170042 : UInt32), w14 := (573649201 : UInt32), w15 := (825307441 : UInt32)})
-}
-
-theorem{
-  name: load21,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1344) = (block21)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress21,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest21) (block21)) = (digest22)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step21,
-  parameters: [],
-  statement: ((step (1344, (digest21))) = (1408, (digest22))),
-  proof: simplify{definitions: [compress21, load21, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block22,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (825307441 : UInt32), w1 := (825307441 : UInt32), w2 := (825307441 : UInt32), w3 := (825307441 : UInt32), w4 := (825307441 : UInt32), w5 := (825307441 : UInt32), w6 := (825307441 : UInt32), w7 := (825307441 : UInt32), w8 := (825307441 : UInt32), w9 := (825307441 : UInt32), w10 := (825307441 : UInt32), w11 := (825307441 : UInt32), w12 := (825307441 : UInt32), w13 := (825307441 : UInt32), w14 := (824323106 : UInt32), w15 := (1936745827 : UInt32)})
-}
-
-theorem{
-  name: load22,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1408) = (block22)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress22,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest22) (block22)) = (digest23)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step22,
-  parameters: [],
-  statement: ((step (1408, (digest22))) = (1472, (digest23))),
-  proof: simplify{definitions: [compress22, load22, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block23,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (574235244 : UInt32), w1 := (1702390885 : UInt32), w2 := (1634611041 : UInt32), w3 := (1953785203 : UInt32), w4 := (1952543849 : UInt32), w5 := (1869492018 : UInt32), w6 := (573317747 : UInt32), w7 := (1952543861 : UInt32), w8 := (1931622946 : UInt32), w9 := (1986359913 : UInt32), w10 := (1718183268 : UInt32), w11 := (573317748 : UInt32), w12 := (1869573219 : UInt32), w13 := (1751214446 : UInt32), w14 := (574257954 : UInt32), w15 := (1818323813 : UInt32)})
-}
-
-theorem{
-  name: load23,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1472) = (block23)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress23,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest23) (block23)) = (digest24)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step23,
-  parameters: [],
-  statement: ((step (1472, (digest23))) = (1536, (digest24))),
-  proof: simplify{definitions: [compress23, load23, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block24,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (574257954 : UInt32), w1 := (1702389091 : UInt32), w2 := (1970561378 : UInt32), w3 := (1818582899 : UInt32), w4 := (1751200309 : UInt32), w5 := (908212770 : UInt32), w6 := (909522486 : UInt32), w7 := (909522486 : UInt32), w8 := (909522486 : UInt32), w9 := (909522486 : UInt32), w10 := (909522486 : UInt32), w11 := (909522486 : UInt32), w12 := (909522486 : UInt32), w13 := (909522486 : UInt32), w14 := (909522486 : UInt32), w15 := (909522486 : UInt32)})
-}
-
-theorem{
-  name: load24,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1536) = (block24)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress24,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest24) (block24)) = (digest25)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step24,
-  parameters: [],
-  statement: ((step (1536, (digest24))) = (1600, (digest25))),
-  proof: simplify{definitions: [compress24, load24, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block25,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (909522486 : UInt32), w1 := (909522486 : UInt32), w2 := (909522486 : UInt32), w3 := (909522486 : UInt32), w4 := (909522486 : UInt32), w5 := (909522486 : UInt32), w6 := (578628642 : UInt32), w7 := (1818583406 : UInt32), w8 := (574257954 : UInt32), w9 := (1702389091 : UInt32), w10 := (1970561378 : UInt32), w11 := (1818582899 : UInt32), w12 := (1751200309 : UInt32), w13 := (908212770 : UInt32), w14 := (892679477 : UInt32), w15 := (892679477 : UInt32)})
-}
-
-theorem{
-  name: load25,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1600) = (block25)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress25,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest25) (block25)) = (digest26)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step25,
-  parameters: [],
-  statement: ((step (1600, (digest25))) = (1664, (digest26))),
-  proof: simplify{definitions: [compress25, load25, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block26,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (892679477 : UInt32), w1 := (892679477 : UInt32), w2 := (892679477 : UInt32), w3 := (892679477 : UInt32), w4 := (892679477 : UInt32), w5 := (892679477 : UInt32), w6 := (892679477 : UInt32), w7 := (892679477 : UInt32), w8 := (892679477 : UInt32), w9 := (892679477 : UInt32), w10 := (892679477 : UInt32), w11 := (892679477 : UInt32), w12 := (892679477 : UInt32), w13 := (892679477 : UInt32), w14 := (578628642 : UInt32), w15 := (1818583406 : UInt32)})
-}
-
-theorem{
-  name: load26,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1664) = (block26)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress26,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest26) (block26)) = (digest27)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step26,
-  parameters: [],
-  statement: ((step (1664, (digest26))) = (1728, (digest27))),
-  proof: simplify{definitions: [compress26, load26, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block27,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (1667786083 : UInt32), w1 := (1801810466 : UInt32), w2 := (981148261 : UInt32), w3 := (2019910517 : UInt32), w4 := (1952539244 : UInt32), w5 := (1700754280 : UInt32), w6 := (1630680374 : UInt32), w7 := (574235191 : UInt32), w8 := (926365495 : UInt32), w9 := (926365495 : UInt32), w10 := (926365495 : UInt32), w11 := (926365495 : UInt32), w12 := (926365495 : UInt32), w13 := (926365495 : UInt32), w14 := (926365495 : UInt32), w15 := (926365495 : UInt32)})
-}
-
-theorem{
-  name: load27,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1728) = (block27)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress27,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest27) (block27)) = (digest28)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step27,
-  parameters: [],
-  statement: ((step (1728, (digest27))) = (1792, (digest28))),
-  proof: simplify{definitions: [compress27, load27, step]},
-  axioms: [Quot.sound, propext]
-}
-
-definition{
-  name: block28,
-  parameters: [],
-  result: LexLeanStd.Sha256::Schedule,
-  body: (record LexLeanStd.Sha256::Schedule {w0 := (926365495 : UInt32), w1 := (926365495 : UInt32), w2 := (926365495 : UInt32), w3 := (926365495 : UInt32), w4 := (926365495 : UInt32), w5 := (926365495 : UInt32), w6 := (926365495 : UInt32), w7 := (926365474 : UInt32), w8 := (2105376128 : UInt32), w9 := (0 : UInt32), w10 := (0 : UInt32), w11 := (0 : UInt32), w12 := (0 : UInt32), w13 := (0 : UInt32), w14 := (0 : UInt32), w15 := (14616 : UInt32)})
-}
-
-theorem{
-  name: load28,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::load (messageBytes) 1827 1856 1792) = (block28)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: compress28,
-  parameters: [],
-  statement: ((LexLeanStd.Sha256::compress (digest28) (block28)) = (digest29)),
-  proof: reflexivity{},
-  axioms: [Quot.sound, propext]
-}
-
-theorem{
-  name: step28,
-  parameters: [],
-  statement: ((step (1792, (digest28))) = (1856, (digest29))),
-  proof: simplify{definitions: [compress28, load28, step]},
-  axioms: [Quot.sound, propext]
+  body: (VerificationHashData::identity)
 }
 
 theorem{
   name: unroll,
   parameters: [count : Nat, state : (Nat * LexLeanStd.Sha256::Digest)],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) state : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (step state) : (Nat * LexLeanStd.Sha256::Digest))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) state : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (VerificationHashData::step state) : (Nat * LexLeanStd.Sha256::Digest))),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]
 }
@@ -1164,239 +40,239 @@ theorem{
 theorem{
   name: advance0,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (0, (digest0)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (64, (digest1)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step0, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (0, (VerificationHashData::digest0)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (64, (VerificationHashData::digest1)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps0::step0]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance1,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (64, (digest1)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (128, (digest2)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step1, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (64, (VerificationHashData::digest1)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (128, (VerificationHashData::digest2)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps0::step1]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance2,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (128, (digest2)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (192, (digest3)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step2, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (128, (VerificationHashData::digest2)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (192, (VerificationHashData::digest3)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps0::step2]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance3,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (192, (digest3)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (256, (digest4)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step3, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (192, (VerificationHashData::digest3)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (256, (VerificationHashData::digest4)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps0::step3]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance4,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (256, (digest4)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (320, (digest5)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step4, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (256, (VerificationHashData::digest4)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (320, (VerificationHashData::digest5)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps0::step4]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance5,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (320, (digest5)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (384, (digest6)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step5, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (320, (VerificationHashData::digest5)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (384, (VerificationHashData::digest6)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps1::step5]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance6,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (384, (digest6)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (448, (digest7)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step6, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (384, (VerificationHashData::digest6)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (448, (VerificationHashData::digest7)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps1::step6]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance7,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (448, (digest7)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (512, (digest8)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step7, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (448, (VerificationHashData::digest7)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (512, (VerificationHashData::digest8)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps1::step7]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance8,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (512, (digest8)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (576, (digest9)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step8, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (512, (VerificationHashData::digest8)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (576, (VerificationHashData::digest9)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps1::step8]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance9,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (576, (digest9)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (640, (digest10)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step9, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (576, (VerificationHashData::digest9)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (640, (VerificationHashData::digest10)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps1::step9]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance10,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (640, (digest10)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (704, (digest11)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step10, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (640, (VerificationHashData::digest10)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (704, (VerificationHashData::digest11)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps2::step10]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance11,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (704, (digest11)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (768, (digest12)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step11, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (704, (VerificationHashData::digest11)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (768, (VerificationHashData::digest12)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps2::step11]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance12,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (768, (digest12)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (832, (digest13)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step12, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (768, (VerificationHashData::digest12)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (832, (VerificationHashData::digest13)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps2::step12]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance13,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (832, (digest13)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (896, (digest14)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step13, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (832, (VerificationHashData::digest13)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (896, (VerificationHashData::digest14)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps2::step13]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance14,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (896, (digest14)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (960, (digest15)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step14, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (896, (VerificationHashData::digest14)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (960, (VerificationHashData::digest15)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps2::step14]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance15,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (960, (digest15)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1024, (digest16)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step15, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (960, (VerificationHashData::digest15)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1024, (VerificationHashData::digest16)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps3::step15]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance16,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1024, (digest16)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1088, (digest17)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step16, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1024, (VerificationHashData::digest16)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1088, (VerificationHashData::digest17)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps3::step16]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance17,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1088, (digest17)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1152, (digest18)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step17, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1088, (VerificationHashData::digest17)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1152, (VerificationHashData::digest18)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps3::step17]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance18,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1152, (digest18)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1216, (digest19)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step18, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1152, (VerificationHashData::digest18)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1216, (VerificationHashData::digest19)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps3::step18]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance19,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1216, (digest19)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1280, (digest20)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step19, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1216, (VerificationHashData::digest19)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1280, (VerificationHashData::digest20)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps3::step19]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance20,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1280, (digest20)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1344, (digest21)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step20, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1280, (VerificationHashData::digest20)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1344, (VerificationHashData::digest21)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps4::step20]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance21,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1344, (digest21)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1408, (digest22)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step21, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1344, (VerificationHashData::digest21)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1408, (VerificationHashData::digest22)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps4::step21]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance22,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1408, (digest22)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1472, (digest23)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step22, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1408, (VerificationHashData::digest22)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1472, (VerificationHashData::digest23)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps4::step22]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance23,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1472, (digest23)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1536, (digest24)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step23, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1472, (VerificationHashData::digest23)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1536, (VerificationHashData::digest24)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps4::step23]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance24,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1536, (digest24)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1600, (digest25)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step24, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1536, (VerificationHashData::digest24)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1600, (VerificationHashData::digest25)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps4::step24]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance25,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1600, (digest25)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1664, (digest26)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step25, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1600, (VerificationHashData::digest25)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1664, (VerificationHashData::digest26)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps5::step25]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance26,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1664, (digest26)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1728, (digest27)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step26, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1664, (VerificationHashData::digest26)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1728, (VerificationHashData::digest27)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps5::step26]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance27,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1728, (digest27)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1792, (digest28)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step27, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1728, (VerificationHashData::digest27)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1792, (VerificationHashData::digest28)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps5::step27]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: advance28,
   parameters: [count : Nat],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) (count + 1) (1792, (digest28)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) count (1856, (digest29)) : (Nat * LexLeanStd.Sha256::Digest))),
-  proof: simplify{definitions: [step28, unroll]},
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) (count + 1) (1792, (VerificationHashData::digest28)) : (Nat * LexLeanStd.Sha256::Digest)) = (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) count (1856, (VerificationHashData::digest29)) : (Nat * LexLeanStd.Sha256::Digest))),
+  proof: simplify{definitions: [unroll, VerificationHashSteps5::step28]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: rest29,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 0 (1856, (digest29)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 0 (1856, (VerificationHashData::digest29)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]
 }
@@ -1404,7 +280,7 @@ theorem{
 theorem{
   name: rest28,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 1 (1792, (digest28)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 1 (1792, (VerificationHashData::digest28)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance28, rest29]},
   axioms: [Quot.sound, propext]
 }
@@ -1412,7 +288,7 @@ theorem{
 theorem{
   name: rest27,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 2 (1728, (digest27)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 2 (1728, (VerificationHashData::digest27)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance27, rest28]},
   axioms: [Quot.sound, propext]
 }
@@ -1420,7 +296,7 @@ theorem{
 theorem{
   name: rest26,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 3 (1664, (digest26)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 3 (1664, (VerificationHashData::digest26)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance26, rest27]},
   axioms: [Quot.sound, propext]
 }
@@ -1428,7 +304,7 @@ theorem{
 theorem{
   name: rest25,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 4 (1600, (digest25)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 4 (1600, (VerificationHashData::digest25)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance25, rest26]},
   axioms: [Quot.sound, propext]
 }
@@ -1436,7 +312,7 @@ theorem{
 theorem{
   name: rest24,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 5 (1536, (digest24)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 5 (1536, (VerificationHashData::digest24)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance24, rest25]},
   axioms: [Quot.sound, propext]
 }
@@ -1444,7 +320,7 @@ theorem{
 theorem{
   name: rest23,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 6 (1472, (digest23)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 6 (1472, (VerificationHashData::digest23)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance23, rest24]},
   axioms: [Quot.sound, propext]
 }
@@ -1452,7 +328,7 @@ theorem{
 theorem{
   name: rest22,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 7 (1408, (digest22)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 7 (1408, (VerificationHashData::digest22)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance22, rest23]},
   axioms: [Quot.sound, propext]
 }
@@ -1460,7 +336,7 @@ theorem{
 theorem{
   name: rest21,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 8 (1344, (digest21)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 8 (1344, (VerificationHashData::digest21)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance21, rest22]},
   axioms: [Quot.sound, propext]
 }
@@ -1468,7 +344,7 @@ theorem{
 theorem{
   name: rest20,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 9 (1280, (digest20)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 9 (1280, (VerificationHashData::digest20)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance20, rest21]},
   axioms: [Quot.sound, propext]
 }
@@ -1476,7 +352,7 @@ theorem{
 theorem{
   name: rest19,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 10 (1216, (digest19)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 10 (1216, (VerificationHashData::digest19)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance19, rest20]},
   axioms: [Quot.sound, propext]
 }
@@ -1484,7 +360,7 @@ theorem{
 theorem{
   name: rest18,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 11 (1152, (digest18)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 11 (1152, (VerificationHashData::digest18)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance18, rest19]},
   axioms: [Quot.sound, propext]
 }
@@ -1492,7 +368,7 @@ theorem{
 theorem{
   name: rest17,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 12 (1088, (digest17)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 12 (1088, (VerificationHashData::digest17)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance17, rest18]},
   axioms: [Quot.sound, propext]
 }
@@ -1500,7 +376,7 @@ theorem{
 theorem{
   name: rest16,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 13 (1024, (digest16)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 13 (1024, (VerificationHashData::digest16)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance16, rest17]},
   axioms: [Quot.sound, propext]
 }
@@ -1508,7 +384,7 @@ theorem{
 theorem{
   name: rest15,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 14 (960, (digest15)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 14 (960, (VerificationHashData::digest15)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance15, rest16]},
   axioms: [Quot.sound, propext]
 }
@@ -1516,7 +392,7 @@ theorem{
 theorem{
   name: rest14,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 15 (896, (digest14)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 15 (896, (VerificationHashData::digest14)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance14, rest15]},
   axioms: [Quot.sound, propext]
 }
@@ -1524,7 +400,7 @@ theorem{
 theorem{
   name: rest13,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 16 (832, (digest13)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 16 (832, (VerificationHashData::digest13)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance13, rest14]},
   axioms: [Quot.sound, propext]
 }
@@ -1532,7 +408,7 @@ theorem{
 theorem{
   name: rest12,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 17 (768, (digest12)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 17 (768, (VerificationHashData::digest12)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance12, rest13]},
   axioms: [Quot.sound, propext]
 }
@@ -1540,7 +416,7 @@ theorem{
 theorem{
   name: rest11,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 18 (704, (digest11)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 18 (704, (VerificationHashData::digest11)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance11, rest12]},
   axioms: [Quot.sound, propext]
 }
@@ -1548,7 +424,7 @@ theorem{
 theorem{
   name: rest10,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 19 (640, (digest10)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 19 (640, (VerificationHashData::digest10)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance10, rest11]},
   axioms: [Quot.sound, propext]
 }
@@ -1556,7 +432,7 @@ theorem{
 theorem{
   name: rest9,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 20 (576, (digest9)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 20 (576, (VerificationHashData::digest9)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance9, rest10]},
   axioms: [Quot.sound, propext]
 }
@@ -1564,7 +440,7 @@ theorem{
 theorem{
   name: rest8,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 21 (512, (digest8)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 21 (512, (VerificationHashData::digest8)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance8, rest9]},
   axioms: [Quot.sound, propext]
 }
@@ -1572,7 +448,7 @@ theorem{
 theorem{
   name: rest7,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 22 (448, (digest7)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 22 (448, (VerificationHashData::digest7)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance7, rest8]},
   axioms: [Quot.sound, propext]
 }
@@ -1580,7 +456,7 @@ theorem{
 theorem{
   name: rest6,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 23 (384, (digest6)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 23 (384, (VerificationHashData::digest6)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance6, rest7]},
   axioms: [Quot.sound, propext]
 }
@@ -1588,7 +464,7 @@ theorem{
 theorem{
   name: rest5,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 24 (320, (digest5)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 24 (320, (VerificationHashData::digest5)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance5, rest6]},
   axioms: [Quot.sound, propext]
 }
@@ -1596,7 +472,7 @@ theorem{
 theorem{
   name: rest4,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 25 (256, (digest4)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 25 (256, (VerificationHashData::digest4)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance4, rest5]},
   axioms: [Quot.sound, propext]
 }
@@ -1604,7 +480,7 @@ theorem{
 theorem{
   name: rest3,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 26 (192, (digest3)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 26 (192, (VerificationHashData::digest3)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance3, rest4]},
   axioms: [Quot.sound, propext]
 }
@@ -1612,7 +488,7 @@ theorem{
 theorem{
   name: rest2,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 27 (128, (digest2)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 27 (128, (VerificationHashData::digest2)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance2, rest3]},
   axioms: [Quot.sound, propext]
 }
@@ -1620,7 +496,7 @@ theorem{
 theorem{
   name: rest1,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 28 (64, (digest1)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 28 (64, (VerificationHashData::digest1)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance1, rest2]},
   axioms: [Quot.sound, propext]
 }
@@ -1628,7 +504,7 @@ theorem{
 theorem{
   name: rest0,
   parameters: [],
-  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 29 (0, (digest0)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (digest29))),
+  statement: ((prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 29 (0, (VerificationHashData::digest0)) : (Nat * LexLeanStd.Sha256::Digest)) = (1856, (VerificationHashData::digest29))),
   proof: simplify{definitions: [advance0, rest1]},
   axioms: [Quot.sound, propext]
 }
@@ -1636,7 +512,7 @@ theorem{
 theorem{
   name: messageSize,
   parameters: [],
-  statement: ((prim length (messageBytes) : Nat) = 1827),
+  statement: ((prim length (VerificationHashData::messageBytes) : Nat) = 1827),
   proof: reflexivity{},
   axioms: []
 }
@@ -1660,7 +536,7 @@ theorem{
 theorem{
   name: digestHex,
   parameters: [],
-  statement: ((LexLeanStd.Sha256::hexDigest (digest29)) = (identity)),
+  statement: ((LexLeanStd.Sha256::hexDigest (VerificationHashData::digest29)) = (VerificationHashData::identity)),
   proof: reflexivity{},
   axioms: [Quot.sound, propext]
 }
@@ -1668,7 +544,7 @@ theorem{
 theorem{
   name: identityReflexive,
   parameters: [],
-  statement: ((Toml::sameBytes (identity) (identity)) = true),
+  statement: ((Toml::sameBytes (VerificationHashData::identity) (VerificationHashData::identity)) = true),
   proof: reflexivity{},
   axioms: []
 }
@@ -1676,15 +552,15 @@ theorem{
 theorem{
   name: hashShape,
   parameters: [],
-  statement: ((LexLeanStd.Sha256::sha256 (messageBytes)) = (second (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (step cursor)) 29 (0, (digest0)) : (Nat * LexLeanStd.Sha256::Digest)))),
-  proof: simplify{definitions: [blockCount, digest0, messageSize, paddedSize, step, LexLeanStd.Sha256::initial, LexLeanStd.Sha256::sha256]},
+  statement: ((LexLeanStd.Sha256::sha256 (VerificationHashData::messageBytes)) = (second (prim iterate (fun (cursor : (Nat * LexLeanStd.Sha256::Digest)) => (VerificationHashData::step cursor)) 29 (0, (VerificationHashData::digest0)) : (Nat * LexLeanStd.Sha256::Digest)))),
+  proof: simplify{definitions: [blockCount, messageSize, paddedSize, LexLeanStd.Sha256::initial, LexLeanStd.Sha256::sha256, VerificationHashData::digest0, VerificationHashData::step]},
   axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: messageHash,
   parameters: [],
-  statement: ((LexLeanStd.Sha256::sha256 (messageBytes)) = (digest29)),
+  statement: ((LexLeanStd.Sha256::sha256 (VerificationHashData::messageBytes)) = (VerificationHashData::digest29)),
   proof: simplify{definitions: [hashShape, rest0]},
   axioms: [Quot.sound, propext]
 }
@@ -1692,7 +568,7 @@ theorem{
 theorem{
   name: framedBody,
   parameters: [],
-  statement: ((Json::append 0x6c65786c65616e2d6174746573746174696f6e2d763100000000106174746573746174696f6e2d626f6479 (Json::append (VerificationReport::bigEndian 8 (prim length (bodyBytes) : Nat)) (bodyBytes))) = (messageBytes)),
+  statement: ((Json::append 0x6c65786c65616e2d6174746573746174696f6e2d763100000000106174746573746174696f6e2d626f6479 (Json::append (VerificationReport::bigEndian 8 (prim length (VerificationHashData::bodyBytes) : Nat)) (VerificationHashData::bodyBytes))) = (VerificationHashData::messageBytes)),
   proof: reflexivity{},
   axioms: []
 }
@@ -1700,7 +576,7 @@ theorem{
 theorem{
   name: bodyHash,
   parameters: [],
-  statement: ((VerificationReport::hashBody (bodyBytes)) = (identity)),
+  statement: ((VerificationReport::hashBody (VerificationHashData::bodyBytes)) = (VerificationHashData::identity)),
   proof: simplify{definitions: [digestHex, framedBody, messageHash, LexLeanStd.Sha256::sha256Hex, VerificationReport::hashBody]},
   axioms: [Quot.sound, propext]
 }
@@ -1708,16 +584,24 @@ theorem{
 theorem{
   name: boundBody,
   parameters: [],
-  statement: ((VerificationReport::boundBody (reportBytes) (identity)) = (ctor Option.some [Bytes] (bodyBytes))),
+  statement: ((VerificationReport::boundBody (VerificationHashData::reportBytes) (VerificationHashData::identity)) = (ctor Option.some [Bytes] (VerificationHashData::bodyBytes))),
   proof: reflexivity{},
   axioms: [propext]
+}
+
+theorem{
+  name: reportIdentityKernel,
+  parameters: [],
+  statement: ((VerificationReport::identityMatches (VerificationHashData::reportBytes) (VerificationHashData::identity)) = true),
+  proof: simplify{definitions: [bodyHash, boundBody, identityReflexive, VerificationReport::identityMatches]},
+  axioms: [Quot.sound, propext]
 }
 
 theorem{
   name: reportIdentity,
   parameters: [],
   statement: ((VerificationReport::identityMatches (reportBytes) (identity)) = true),
-  proof: simplify{definitions: [bodyHash, boundBody, identityReflexive, VerificationReport::identityMatches]},
+  proof: simplify{definitions: [identity, reportBytes, reportIdentityKernel]},
   axioms: [Quot.sound, propext]
 }
 

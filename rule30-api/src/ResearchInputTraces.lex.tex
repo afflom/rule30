@@ -173,5 +173,30 @@ theorem{
  axioms: [propext]
 }
 
+
+definition{
+ name: synthesisDocument,
+ parameters: [],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d73796e7468657369732f31)) (CoreBinding::removeFields (match (fixtureDocument) | Json::Value.object fields => fields | Json::Value.null => (nil (Bytes * Json::Value)) | Json::Value.boolean v => (nil (Bytes * Json::Value)) | Json::Value.number v => (nil (Bytes * Json::Value)) | Json::Value.string v => (nil (Bytes * Json::Value)) | Json::Value.array v => (nil (Bytes * Json::Value))) (cons 0x73706563 (cons 0x6172656e61 (cons 0x70726f6f66 (nil Bytes))))))),
+ axioms: [propext]
+}
+
+theorem{
+ name: nativeSynthesisNeedsNoSuppliedProofOrArena,
+ parameters: [],
+ statement: ((match (ResearchInput::config (synthesisDocument) (nil (String * String))) | Option.none => false | Option.some config => (((project config proof) =? 1) && (Research::sameRequest (project config request) (request)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
+theorem{
+ name: synthesisSchemaCannotAdmitASuppliedProof,
+ parameters: [],
+ statement: ((not (admitted (put (fixtureDocument) 0x73706563 (ctor Json::Value.string 0x7233302f72657365617263682d73796e7468657369732f31)))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+
 \end{semanticmodule}
 \end{lexlean}
