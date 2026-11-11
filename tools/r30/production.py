@@ -102,7 +102,7 @@ def files():
 
 
 def _lexlean(args, timeout):
-    cmd = [repo.lexlean_bin(), "--project", str(API / "lexlean.toml"), *args, "--diagnostic-format", "json"]
+    cmd = [repo.lexlean_bin(), "--project", str(API / "engine.toml"), *args, "--diagnostic-format", "json"]
     code, out, err = repo.run(cmd, cwd=API, timeout=timeout)
     try:
         data = json.loads(out.strip().splitlines()[-1]) if out.strip() else {}
@@ -142,7 +142,7 @@ def summarize(result):
 def build(timeout=3600, replay=True):
     """Lock, export, and (by default) replay the bundle. The report is `ok`
     only when every stage is, and names the stage that was not."""
-    lock = repo.run([repo.lexlean_bin(), "--project", str(API / "lexlean.toml"), "lock"], cwd=API, timeout=600)
+    lock = repo.run([repo.lexlean_bin(), "--project", str(API / "engine.toml"), "lock"], cwd=API, timeout=600)
     if lock[0] != 0:
         return {"ok": False, "stage": "lock", "diagnostics": [(lock[2] or lock[1]).strip()[-800:]]}
     r = _lexlean(["production", "build", "--request", str(REQUEST.relative_to(API))], timeout)

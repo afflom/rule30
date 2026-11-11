@@ -106,14 +106,14 @@ def template_digest(strategy):
 
 # ------------------------------------------------------------ the workload
 
-PUSH_PATHS = ["tools/r30/**", "rule30-core-lean/**", "rule30-api/src/**", "rule30-api/model/sequences.toml",
-              "frontier.toml", "scripts/**", "Makefile", ".github/workflows/engine.yml", ".github/actions/**"]
+PUSH_PATHS = ["tools/r30/**", "rule30-core-lean/**", "rule30-api/**", "lexlean-stdlib/**",
+              "frontier.toml", "scripts/**", "Makefile", ".github/workflows/engine.yml", ".github/actions/**", "lexlean-workspace.toml", ".github/lexlean-revision"]
 LAKE_DIRS = ["Rule30PrizeKit/lean/.lake", "rule30-core-lean/.lake", "rule30-bridge/.lake", "rule30-paper/.lake",
              "rule30-lexlean/.lake", "rule30-api/.lake"]
 BUNDLE_DIR = "rule30-api/.lexlean/production"
 # what the bundle is built from: a new key only when one of these changed
 BUNDLE_INPUTS = ["rule30-api/src/**", "rule30-api/stdlib/**", "rule30-api/language/**", "lexlean-stdlib/**",
-                 "rule30-api/lexlean.toml", "rule30-api/lean-toolchain", "rule30-api/lexlean.lock",
+                 "rule30-api/*.toml", "rule30-api/lean-toolchain", "rule30-api/engine.lock", "lexlean-workspace.toml",
                  "rule30-api/production/request.json", ".github/lexlean-revision"]
 WORKLOAD = {
     "workflow": "Engine", "file": ".github/workflows/engine.yml", "repository": "afflom/rule30",

@@ -27,10 +27,30 @@ jobs:
       - name: Set up proof toolchain
         uses: ./.github/actions/setup-proof-tools
 
+      - name: Restore the factory's gate evidence
+        uses: actions/cache/restore@v4
+        with:
+          path: .git/rule30-validation
+          key: r30-gate-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            r30-gate-${{ runner.os }}-
+
       - name: Run complete acceptance gate (proofs, LexLean, tooling, PDFs)
         env:
           RULE30_REFRESH_PDFS: "0"
-        run: make check-ci LEXLEAN="$LEXLEAN_BIN"
+        run: python3 scripts/validate_git_tree.py "$GITHUB_SHA"
+
+      - name: Prune the factory's retained evidence
+        run: bin/r30 engine prune --apply
+
+      - name: Save the factory's gate evidence
+        uses: actions/cache/save@v4
+        with:
+          path: .git/rule30-validation
+          key: r30-gate-${{ runner.os }}-${{ github.sha }}
+
+      - name: Package accepted release artifacts
+        run: make release-artifacts
 
       - name: Upload CI artifacts
         uses: actions/upload-artifact@v4
