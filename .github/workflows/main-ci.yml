@@ -49,11 +49,16 @@ jobs:
           path: .git/rule30-validation
           key: r30-gate-${{ runner.os }}-${{ github.sha }}
 
-      - name: Package accepted release artifacts
-        run: make release-artifacts
-
       - name: Upload CI artifacts
         uses: actions/upload-artifact@v4
         with:
           name: rule30-main-validation-artifacts
-          path: dist/*
+          include-hidden-files: true
+          path: |
+            Rule30-Core.pdf
+            Rule30-Paper.pdf
+            Rule30-Observations.pdf
+            pdf-manifest.json
+            rule30-lexlean/pdf/*.tex
+            rule30-paper/pdf/*.tex
+            .git/rule30-validation/lexlean/**/attestation.json
