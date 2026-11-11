@@ -94,12 +94,19 @@ kept as the `rule30-current-view` artifact of the same workflow.
 ```bash
 bin/r30 view render --out view     # the view locally: open view/index.html (no server, no dependency)
 bin/r30 api check                  # the modules, registers, schemas and features match their sources
-bin/r30 api production             # the certified Rust packages of Api.lex.tex (lexlean production)
+bin/r30 api production             # certified Engine/API roots through rule30-api/engine.toml
 ```
 
 The registers, schemas, Gherkin suites and `CONFORMANCE.md` of the model live
 in `rule30-api/model/`, `schemas/`, `features/suites/` and `rule30-api/CONFORMANCE.md`;
 `rule30-api/README.md` describes them.
+
+The Engine exports its 15 runtime roots through `rule30-api/engine.toml`, whose
+five entry modules select their complete imported dependency closure. This avoids
+rebuilding unrelated research-verification fixtures during production export.
+The full API manifest remains the acceptance-gate input; production export still
+performs preservation checks and artifact replay. Changes to the production profile,
+lock, workspace, or compiler invalidate the bundle cache and trigger the Engine.
 
 ---
 
@@ -237,7 +244,11 @@ stale PDFs is rejected. Source fingerprints exclude only these generated outputs
 a circular dependency between the PDFs and their commit.
 Both CI workflows use the same gate. Successful local results are cached under
 `.git/rule30-validation`, keyed by the exact tree, validator, and proof tools; failures are
-never cached. Two finer caches under the same key make a typical commit take minutes rather
+never cached. PR validation invokes the same immutable-tree validator as pre-push,
+restoring the Engine's gate-evidence cache and retaining it only after success.
+Before upload, the existing pruning procedure removes whole-tree pass markers;
+each new run establishes its own acceptance while reusing exact-input project evidence.
+Two finer caches under the same key make a typical commit take minutes rather
 than twenty: the snapshot starts from the last accepted run's Lake build directories (Lake
 rebuilds exactly what its content traces say changed), and a LexLean project whose tracked
 inputs (its sources and glossaries, the host Lean its probe elaborates against, the kit, and

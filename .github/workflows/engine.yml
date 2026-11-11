@@ -26,13 +26,15 @@ on:
     paths:
       - "tools/r30/**"
       - "rule30-core-lean/**"
-      - "rule30-api/src/**"
-      - "rule30-api/model/sequences.toml"
+      - "rule30-api/**"
+      - "lexlean-stdlib/**"
       - "frontier.toml"
       - "scripts/**"
       - "Makefile"
       - ".github/workflows/engine.yml"
       - ".github/actions/**"
+      - "lexlean-workspace.toml"
+      - ".github/lexlean-revision"
 
 permissions:
   contents: write
@@ -91,7 +93,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: rule30-api/.lexlean/production
-          key: r30-bundle-${{ runner.os }}-${{ hashFiles('rule30-api/src/**', 'rule30-api/stdlib/**', 'rule30-api/language/**', 'lexlean-stdlib/**', 'rule30-api/lexlean.toml', 'rule30-api/lean-toolchain', 'rule30-api/lexlean.lock', 'rule30-api/production/request.json', '.github/lexlean-revision') }}
+          key: r30-bundle-${{ runner.os }}-${{ hashFiles('rule30-api/src/**', 'rule30-api/stdlib/**', 'rule30-api/language/**', 'lexlean-stdlib/**', 'rule30-api/*.toml', 'rule30-api/lean-toolchain', 'rule30-api/engine.lock', 'lexlean-workspace.toml', 'rule30-api/production/request.json', '.github/lexlean-revision') }}
 
       - name: Build the certified bundle
         if: steps.tip.outputs.current == 'true' && steps.settled.outputs.cache-hit != 'true' && steps.bundle.outputs.cache-hit != 'true'
@@ -102,7 +104,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: rule30-api/.lexlean/production
-          key: r30-bundle-${{ runner.os }}-${{ hashFiles('rule30-api/src/**', 'rule30-api/stdlib/**', 'rule30-api/language/**', 'lexlean-stdlib/**', 'rule30-api/lexlean.toml', 'rule30-api/lean-toolchain', 'rule30-api/lexlean.lock', 'rule30-api/production/request.json', '.github/lexlean-revision') }}
+          key: r30-bundle-${{ runner.os }}-${{ hashFiles('rule30-api/src/**', 'rule30-api/stdlib/**', 'rule30-api/language/**', 'lexlean-stdlib/**', 'rule30-api/*.toml', 'rule30-api/lean-toolchain', 'rule30-api/engine.lock', 'lexlean-workspace.toml', 'rule30-api/production/request.json', '.github/lexlean-revision') }}
 
       - name: Restore the Lake builds
         if: steps.tip.outputs.current == 'true' && steps.settled.outputs.cache-hit != 'true'
