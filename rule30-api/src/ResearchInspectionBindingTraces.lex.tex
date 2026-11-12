@@ -1,0 +1,46 @@
+\begin{lexlean}{ResearchInspectionBindingTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchInspectionBinding}
+\importmodule{Research}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: absentInspectionCannotDispatchTask,
+ parameters: [original : Research::Task],
+ statement: ((project (ResearchInspectionBinding::bind original (ctor Json::Value.null)) status) = (ctor Research::Status.blocked)),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: absentInspectionDiscardsUnownedGoal,
+ parameters: [original : Research::Task],
+ statement: ((project (project (ResearchInspectionBinding::bind original (ctor Json::Value.null)) sequent) target) = 0x),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: missingNativeParametersCannotEstablishClosedness,
+ parameters: [],
+ statement: ((ResearchInspectionBinding::monomorphic (ctor Json::Value.null) 0x54727565) = false),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: kernelPropCanBeRecognized,
+ parameters: [],
+ statement: ((ResearchInspectionBinding::closedProposition (record CoreBinding::Goal {nodes := (cons (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x73)) (cons (0x6c, (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x7a)) (nil (Bytes * Json::Value))))) (nil (Bytes * Json::Value))))) (nil Json::Value)), root := 0})) = true),
+ proof: decide{},
+ axioms: []
+}
+theorem{
+ name: dataTypeCannotBeTreatedAsClosedProposition,
+ parameters: [],
+ statement: ((ResearchInspectionBinding::closedProposition (CoreBinding::namedGoal 0x4e6174)) = false),
+ proof: decide{},
+ axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

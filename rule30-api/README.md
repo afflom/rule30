@@ -25,8 +25,8 @@ gate verifies these modules with the rest of the application.
 `production/research-request.json` exports `Research.routeDead`, `Research.step` and
 `ResearchCatalog.initial` through the pinned compiler. These pure library roots
 do not replace the running Python engine. Native Host drivers now execute
-individual attempts and shared-library cohorts through `ResearchCommand` and
-`ResearchCohortCommand`. Owned candidate verification binds kernel replay and
+individual attempts, shared-library portfolios, and journaled autonomy through
+`ResearchCommand` and `ResearchCohortCommand`. Owned candidate verification binds kernel replay and
 axiom audit to the exact goal; the controller's receipt matching checks
 applicability, not mathematical truth.
 Legacy audit classifications and universally closed hypothesis schemas are
@@ -39,9 +39,61 @@ successful, normally exited owned exchange acknowledges the transition.
 Duplicate successors, stale predecessors, cancellation and uncertain process
 outcomes cannot acknowledge a commit. `ResearchJournalTraces` checks these
 boundaries. A journal acknowledgement is neither a perpetual lease nor proof
-authority: enclosing recovery still needs fresh workspaces and quarantine limits,
-and claim publication still needs source integration, verification and register
-updates. Inspection and autonomous portfolio execution remain unfinished.
+authority. `ResearchRecovery` allocates fresh generations with bounded quarantine;
+`ResearchPublication` owns source integration, fresh verification, register updates
+and revision-conditional publication. `ResearchAutonomy` connects their lifecycles.
+
+`ResearchPortfolio` connects the existing scheduler to owned sessions. The native
+`ResearchCohortCommand` also accepts `r30/research-portfolio/1`, with a `base`,
+`tasks` and `budget` (at most 64). The base uses
+`r30/research-portfolio-base/1` and the attempt configuration fields except
+`arena` and `proof`. Tasks use the existing ready-task schema and have distinct
+IDs. Owned local kernel inspection replaces caller-supplied goal arenas before
+dispatch. Unsupported inspected types block only the affected tasks. After each
+outcome the scheduler selects the next task; local constructive
+synthesis supplies its candidate. One owned library serves the run, with tracked
+sources rechecked between attempts. Unsupported synthesis blocks that executor;
+it does not refute or exhaust the goal. Budget completion and cancellation clear
+unstarted selections. Uncertain execution retains ownership and stops dispatch.
+The result schema is `r30/research-portfolio-result/1`; `completed` means the
+bounded run ended, not that every task was proved or published. Each result
+retains its individual proof status and evidence identity; `tasks` reports the
+remaining task statuses. This command runs supplied ready tasks. Automatic
+generation of a complete research strategy is a separate capability.
+
+The same native command accepts `r30/research-autonomy/1`, containing `portfolio`,
+`record_path` and `max_quarantined` (at most 8). Recovery reads the durable journal
+through owned Git processes, reserves the next generation with compare-and-swap,
+and assigns fresh workspace and log paths. Earlier active generations enter
+quarantine; recovery never signals a stored PID or reuses an uncertain workspace.
+The generation is sealed only after the portfolio and publication have released
+their resources.
+
+Checked portfolio results enter one publication batch. Each archive must match
+its canonical evidence identity, complete request and exact library revision.
+The controller renames the retained LexLean source to an evidence-addressed
+module, inserts its source path into the sorted, duplicate-free paper entrypoints,
+then owns a new compiler snapshot and full verification. It registers
+the attested generated host theorem through the existing `bin/r30 module add`
+and `theorem add` operations. A closed proof may update its still-open matching
+frontier claim; a premise proof publishes a supporting lemma and leaves the
+parent claim open. These existing repository API operations remain dependencies
+of the LexLean-authored controller; no new Python runtime is introduced.
+
+All proofs in a batch share one publication workspace, one unchanged pre-commit
+gate and one push against the exact source predecessor. The commit is retained
+locally under an evidence-and-commit-addressed reference before pushing. Repeating
+retention preserves the same commit without overwriting a different attempt.
+A failed or uncertain effect retains the workspace;
+only a successful remote acknowledgment permits normal publication cleanup.
+`r30/research-autonomy-result/1` distinguishes attempt `results`, remaining
+`tasks`, `published_evidence`, `published_commit`, and the `generation_record`.
+An empty publication list is not a solved claim. The current bounded constructive
+search does not establish that Rule 30 Problem 1 can be solved automatically.
+Publication refuses statements the existing theorem API cannot express and retains
+their evidence and workspace. Recovery starts a fresh generation and quarantines
+uncertain previous work; it does not assume stored process identifiers are live.
+No remote model is used by these stages.
 
 `ResearchArchitecture.lex.tex` exposes the autonomous pipeline directly to
 PrismPM's architecture, security and quality projection: nine components,
@@ -67,7 +119,18 @@ Each expensive native-binding closed-goal case has its own proof unit.
 Verification lifecycle, policy, process and metadata traces use batches of
 at most eight theorems, preserving their original obligations and axiom policy.
 CI retains the pinned compiler's native timing and memory telemetry on success
-and failure, without changing the gate, resource limits or process width.
+and failure, without changing proof acceptance or process width. The API allows
+at most 32 MiB of child output: the 30-root autonomous extraction measured
+21,298,345 bytes, exceeding the prior 16 MiB allowance. The complete 30-root
+program, crate and certificate bundle measures 104,325,479 bytes, so its aggregate
+source budget is 128 MiB. All proof, replay and axiom checks remain enforced.
+The pinned compiler partitions large preservation certificates at complete
+declaration-command boundaries. Every part is elaborated and replayed under the
+unchanged child timeout, and the original certificate's axiom audit covers the
+imported chain. Parts live outside original certificate module prefixes so
+`leanchecker` does not select them all again during the final replay. This
+addresses the combined controller's measured timeout; it does not provide
+cross-revision proof caching or reduce the proof obligations.
 
 <h1 align="center">Centerline</h1>
 <p align="center"><em>Every arrow a theorem.</em></p>
@@ -703,8 +766,8 @@ where this repository uses it or why it does not.
 ```
 bin/r30 api sync                   # regenerate every module, register, schema, feature, CONFORMANCE.md and the logo; lock
 bin/r30 api check                  # refuse drift (run by the tests and the gate)
-bin/r30 api production             # export the production roots to certified Rust and replay the bundle (about a minute)
+bin/r30 api production             # export the production roots to certified Rust and replay the bundle
 bin/r30 api production --targets   # the compiler's target descriptors
-bin/r30 verify api                 # lexlean verify of the API modules (about five minutes; Convert.lex.tex decides 28 conversions, Rule30Core.lex.tex the first rows)
+bin/r30 verify api                 # lexlean verify of the API modules; cost depends on the selected proof closure
 bin/r30 view render [--out DIR]    # the current view (the site, statements.json, explainer.json, rule30.svg, the PDFs)
 ```

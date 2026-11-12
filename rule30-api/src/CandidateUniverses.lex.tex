@@ -1,0 +1,81 @@
+\begin{lexlean}{CandidateUniverses}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{CoreBinding}
+\importmodule{CoreNotation}
+\importmodule{ResearchInput}
+\importmodule{Hypotheses}
+\importmodule{Toml}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: unique,
+ parameters: [incoming : (List Bytes), collected : (List Bytes)],
+ result: (List Bytes),
+ body: (match incoming | List.nil => collected | List.cons head tail => (unique tail (if (Hypotheses::memberBytes head collected) then collected else (prim append collected (cons head (nil Bytes)) : (List Bytes))))),
+ axioms: [],
+ recursive_argument: incoming,
+ executable: true
+}
+definition{
+ name: joined,
+ parameters: [left : (Option (List Bytes)), right : (Option (List Bytes))],
+ result: (Option (List Bytes)),
+ body: (match left | Option.none => (ctor Option.none [(List Bytes)]) | Option.some a => (match right | Option.none => (ctor Option.none [(List Bytes)]) | Option.some b => (ctor Option.some [(List Bytes)] (unique b a)))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: level,
+ parameters: [value : Json::Value, fuel : Nat],
+ result: (Option (List Bytes)),
+ body: (match fuel | Nat.zero => (ctor Option.none [(List Bytes)]) | Nat.succ more => (if ((Toml::sameBytes (CoreBinding::kind value) 0x7a) && (CoreNotation::shape value (cons 0x6b (nil Bytes)))) then (ctor Option.some [(List Bytes)] (nil Bytes)) else (if (CoreNotation::shape value (cons 0x6b (cons 0x61 (nil Bytes)))) then (if (Toml::sameBytes (CoreBinding::kind value) 0x70) then (match (CoreBinding::get value 0x61) | Json::Value.string name => (if (0 <? (prim length name : Nat)) then (ctor Option.some [(List Bytes)] (cons name (nil Bytes))) else (ctor Option.none [(List Bytes)])) | Json::Value.null => (ctor Option.none [(List Bytes)]) | Json::Value.boolean flag => (ctor Option.none [(List Bytes)]) | Json::Value.number number => (ctor Option.none [(List Bytes)]) | Json::Value.array values => (ctor Option.none [(List Bytes)]) | Json::Value.object fields => (ctor Option.none [(List Bytes)])) else (if (Toml::sameBytes (CoreBinding::kind value) 0x73) then (level (CoreBinding::get value 0x61) more) else (if ((Toml::sameBytes (CoreBinding::kind value) 0x6d) || (Toml::sameBytes (CoreBinding::kind value) 0x69)) then (match (ResearchInput::array (CoreBinding::get value 0x61)) | Option.none => (ctor Option.none [(List Bytes)]) | Option.some values => (match values | List.nil => (ctor Option.none [(List Bytes)]) | List.cons left tail => (match tail | List.nil => (ctor Option.none [(List Bytes)]) | List.cons right rest => (match rest | List.nil => (joined (level left more) (level right more)) | List.cons extra others => (ctor Option.none [(List Bytes)]))))) else (ctor Option.none [(List Bytes)])))) else (ctor Option.none [(List Bytes)])))),
+ axioms: [],
+ recursive_argument: fuel,
+ executable: true
+}
+definition{
+ name: levels,
+ parameters: [values : (List Json::Value), fuel : Nat],
+ result: (Option (List Bytes)),
+ body: (match values | List.nil => (ctor Option.some [(List Bytes)] (nil Bytes)) | List.cons head tail => (match fuel | Nat.zero => (ctor Option.none [(List Bytes)]) | Nat.succ more => (joined (level head 128) (levels tail more)))),
+ axioms: [],
+ recursive_argument: values,
+ executable: true
+}
+definition{
+ name: node,
+ parameters: [value : Json::Value],
+ result: (Option (List Bytes)),
+ body: (if (Toml::sameBytes (CoreBinding::kind value) 0x73) then (if (CoreNotation::shape value (cons 0x6b (cons 0x6c (nil Bytes)))) then (level (CoreBinding::get value 0x6c) 128) else (ctor Option.none [(List Bytes)])) else (if (Toml::sameBytes (CoreBinding::kind value) 0x63) then (if (CoreNotation::shape value (cons 0x6b (cons 0x6e (cons 0x75 (nil Bytes))))) then (match (ResearchInput::array (CoreBinding::get value 0x75)) | Option.none => (ctor Option.none [(List Bytes)]) | Option.some values => (levels values 65536)) else (ctor Option.none [(List Bytes)])) else (ctor Option.some [(List Bytes)] (nil Bytes)))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: collect,
+ parameters: [nodes : (List Json::Value), fuel : Nat],
+ result: (Option (List Bytes)),
+ body: (match nodes | List.nil => (ctor Option.some [(List Bytes)] (nil Bytes)) | List.cons head tail => (match fuel | Nat.zero => (ctor Option.none [(List Bytes)]) | Nat.succ more => (joined (node head) (collect tail more)))),
+ axioms: [],
+ recursive_argument: nodes,
+ executable: true
+}
+definition{
+ name: parameters,
+ parameters: [goal : CoreBinding::Goal],
+ result: (Option (List Bytes)),
+ body: (collect (project goal nodes) 65536),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "goal-derived-universe-parameters" (cons "structural-level-traversal" (cons "stable-duplicate-removal" (cons "reject-unresolved-universe-levels" (cons "bounded-parameter-collection" (nil String)))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

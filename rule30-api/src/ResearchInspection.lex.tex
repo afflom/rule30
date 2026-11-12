@@ -1,0 +1,227 @@
+\begin{lexlean}{ResearchInspection}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchExecution}
+\importmodule{ResearchCandidate}
+\importmodule{ResearchVerification}
+\importmodule{ResearchInput}
+\importmodule{CandidateSource}
+\importmodule{Research}
+\importmodule{CoreBinding}
+\importmodule{CoreNotation}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Hypotheses}
+\importmodule{Toml}
+\importmodule{Host}
+\importmodule{LexLeanStd.Host}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Config,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: base, type: ResearchProject::Config}, {name: imports, type: (List Bytes)}, {name: declarations, type: (List Bytes)}, {name: maxNodes, type: Nat}, {name: maxDepth, type: Nat}]
+}
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: writing, fields: []}, {name: running, fields: []}, {name: reading, fields: []}, {name: checking, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}]
+}
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: config, type: Config}, {name: owner, type: ResearchWorkspace::State}, {name: execution, type: (Option ResearchExecution::State)}, {name: phase, type: Phase}, {name: cancelled, type: Bool}, {name: report, type: (Option Json::Value)}]
+}
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}]
+}
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: complete, fields: [Json::Value]}, {name: failed, fields: [String]}, {name: cut, fields: []}, {name: blocked, fields: [String]}]
+}
+definition{
+ name: workspace,
+ parameters: [config : Config],
+ result: ResearchWorkspace::Config,
+ body: (project (project config base) workspace),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: path,
+ parameters: [config : Config, suffix : String],
+ result: String,
+ body: (ResearchVerification::concat (ResearchWorkspace::path (workspace config)) suffix),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: manifest,
+ parameters: [],
+ result: Bytes,
+ body: 0x73706563203d20226c65786c65616e2f70726f6a6563742f31220a6e616d65203d202272756c6533302d6f776e65642d696e7370656374696f6e220a6c616e6775616765203d2022312e32220a6d6f64756c655f707265666978203d202252756c653330496e7370656374696f6e220a736f757263655f726f6f7473203d205b2272756c6533302d6170692f737263225d0a656e747279706f696e7473203d205b2272756c6533302d6170692f7372632f4170692e6c65782e746578225d0a6275696c645f726f6f74203d20222e7233302d696e7370656374696f6e2d6275696c64220a6c6f636b66696c65203d20222e7233302d696e7370656374696f6e2e6c6f636b220a6c65616e5f776f726b7370616365203d202272756c6533302d636f72652d6c65616e220a6c65616e5f746f6f6c636861696e203d20226c65616e70726f7665722f6c65616e343a76342e33322e31220a0a5b5b6c657869636f6e5f736f757263655d5d0a7061636b616765203d20226c65786c65616e2e7374642e626f6f6c220a6b696e64203d20226275696c74696e220a0a5b6c696d6974735d0a6d61785f66696c655f6279746573203d20383338383630380a6d61785f746f74616c5f736f757263655f6279746573203d2031363737373231360a6d61785f7072696d69746976655f61746f6d73203d20323030303030300a6d61785f746f6b656e5f6c6174746963655f6564676573203d20343030303030300a6d61785f70617273655f737461746573203d20343030303030300a6d61785f69725f6e6f646573203d20323030303030300a6d61785f73636f70655f6465707468203d20313032340a6d61785f696d706f72745f6465707468203d203132380a6d61785f646961676e6f7374696373203d203235360a6d61785f6368696c645f6f75747075745f6279746573203d20383338383630380a6368696c645f74696d656f75745f6d73203d203630303030300a,
+ executable: true
+}
+definition{
+ name: flags,
+ parameters: [flag : String, values : (List Bytes)],
+ result: (List String),
+ body: (match values | List.nil => (nil String) | List.cons head tail => (cons flag (cons (Host::textOf head) (flags flag tail)))),
+ axioms: [Quot.sound, propext],
+ recursive_argument: values,
+ executable: true
+}
+definition{
+ name: arguments,
+ parameters: [config : Config],
+ result: (List String),
+ body: (prim append (cons "--project" (cons (path config "/.r30-inspection.toml") (cons "inspect" (cons "--out" (cons (path config "/.r30-inspection.json") (cons "--max-nodes" (cons (Host::textOf (Hypotheses::decimal (project config maxNodes))) (cons "--max-depth" (cons (Host::textOf (Hypotheses::decimal (project config maxDepth))) (nil String)))))))))) (prim append (flags "--import" (project config imports)) (flags "--declaration" (project config declarations)) : (List String)) : (List String)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: job,
+ parameters: [config : Config],
+ result: ResearchExecution::Job,
+ body: (let base : ResearchWorkspace::Config := (workspace config); (record ResearchExecution::Job {request := (project (project config base) request), tool := (ctor ResearchExecution::Tool.lexlean), arguments := (arguments config), directory := (ResearchWorkspace::path base), environment := (project base environment), output := (project base output), errors := (project base errors), allowance := (project base allowance), quantum := (project base quantum), polls := (project base polls)})),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: request,
+ parameters: [config : Config],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x696d706f727473, (ctor Json::Value.array (CandidateSource::strings (project config imports)))) (cons (0x6465636c61726174696f6e73, (ctor Json::Value.array (CandidateSource::strings (project config declarations)))) (cons (0x6d61785f6e6f646573, (CoreBinding::number (project config maxNodes))) (cons (0x6d61785f6465707468, (CoreBinding::number (project config maxDepth))) (nil (Bytes * Json::Value))))))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: sameJson,
+ parameters: [left : Json::Value, right : Json::Value],
+ result: Bool,
+ body: (match (JsonCanonical::encode left 8388608 16777216) | Option.none => false | Option.some a => (match (JsonCanonical::encode right 8388608 16777216) | Option.none => false | Option.some b => (Toml::sameBytes a b))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: matches,
+ parameters: [config : Config, value : Json::Value],
+ result: Bool,
+ body: ((CoreNotation::shape value (cons 0x73706563 (cons 0x6c65616e (cons 0x6465636c61726174696f6e73 (cons 0x72657175657374 (cons 0x726571756573745f6964 (cons 0x636f6d70696c65725f73656d616e746963735f6964 (cons 0x616461707465725f736861323536 (cons 0x6c65786c65616e5f736861323536 (cons 0x6c65616e5f736861323536 (cons 0x6c616b655f736861323536 (cons 0x70726f63657373 (nil Bytes))))))))))))) && ((ResearchInput::stringIs (CoreBinding::get value 0x73706563) 0x6c65786c65616e2f6b65726e656c2d696e7370656374696f6e2f31) && ((ResearchInput::stringIs (CoreBinding::get value 0x636f6d70696c65725f73656d616e746963735f6964) (project (project (project (project config base) request) snapshot) compiler)) && ((sameJson (CoreBinding::get value 0x72657175657374) (request config)) && ((ResearchInput::stringIs (CoreBinding::get value 0x6c65786c65616e5f736861323536) (project (project (project config base) tools) lexlean)) && ((ResearchInput::stringIs (CoreBinding::get value 0x6c65616e5f736861323536) (project (project (project config base) tools) lean)) && ((ResearchInput::stringIs (CoreBinding::get value 0x6c616b655f736861323536) (project (project (project config base) tools) lake)) && ((ResearchInput::stringIs (CoreBinding::get (CoreBinding::get value 0x6c65616e) 0x76657273696f6e) 0x342e33322e31) && ((ResearchInput::stringIs (CoreBinding::get (CoreBinding::get value 0x6c65616e) 0x67697468617368) 0x66303534363035616561346238343035353263636132653732353538306266666431653162373034) && ((match (Json::natural (CoreBinding::get (CoreBinding::get value 0x70726f63657373) 0x657869745f636f6465) 255) | Option.none => false | Option.some code => (code =? 0)) && (match (ResearchInput::array (CoreBinding::get value 0x6465636c61726174696f6e73)) | Option.none => false | Option.some rows => ((prim length rows : Nat) =? (prim length (project config declarations) : Nat))))))))))))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: finish,
+ parameters: [state : State, emission : Emission],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (ctor Phase.ended), cancelled := (project state cancelled), report := (project state report)}), emission),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (ctor Phase.blocked), cancelled := (project state cancelled), report := (project state report)}), (ctor Emission.blocked reason)),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: completed,
+ parameters: [state : State, completion : ResearchExecution::Completion],
+ result: (State * Emission),
+ body: (if ((ResearchExecution::resumeAllowed completion) && (ResearchWorkspace::exitedNormally completion)) then (if (project state cancelled) then (finish state (ctor Emission.cut)) else (match (project completion kind) | ResearchExecution::EndKind.succeeded => (match (project state phase) | Phase.running => ((record State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (ctor Phase.reading), cancelled := (project state cancelled), report := (project state report)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.read (path (project state config) "/.r30-inspection.json")))) | Phase.checking => (match (project state report) | Option.none => (blocked state "missing owned inspection report") | Option.some report => (finish state (ctor Emission.complete report))) | Phase.writing => (blocked state "unexpected inspection process completion") | Phase.reading => (blocked state "unexpected inspection process completion") | Phase.ended => (blocked state "unexpected inspection process completion") | Phase.blocked => (blocked state "unexpected inspection process completion")) | ResearchExecution::EndKind.failed => (finish state (ctor Emission.failed "inspection or library recheck failed")) | ResearchExecution::EndKind.unavailable => (finish state (ctor Emission.failed "inspection tool unavailable")) | ResearchExecution::EndKind.cut => (finish state (ctor Emission.cut)) | ResearchExecution::EndKind.protocol => (blocked state "inspection protocol failure") | ResearchExecution::EndKind.cleanupFailed => (blocked state "inspection cleanup failed") | ResearchExecution::EndKind.refused => (blocked state "inspection refused"))) else (blocked state "inspection process outcome uncertain; retain library owner")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: executionResult,
+ parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), owner := (project state owner), execution := (ctor Option.some [ResearchExecution::State] (first result)), phase := (project state phase), cancelled := (project state cancelled), report := (project state report)}); (match (second result) | ResearchExecution::Emission.host hostRequest => (next, (ctor Emission.host hostRequest)) | ResearchExecution::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchExecution::Emission.complete completion => (completed next completion))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: launch,
+ parameters: [state : State, checking : Bool],
+ result: (State * Emission),
+ body: (executionResult (record State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (if checking then (ctor Phase.checking) else (ctor Phase.running)), cancelled := (project state cancelled), report := (project state report)}) (ResearchExecution::begin (if checking then (ResearchWorkspace::job (workspace (project state config)) (ctor ResearchWorkspace::Operation.clean)) else (job (project state config))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: written,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match event | LexLeanStd.Host::Event.finished response => (if (project state cancelled) then (finish state (ctor Emission.cut)) else (match response | Result.ok ignored => (launch state false) | Result.error problem => (finish state (ctor Emission.failed "inspection manifest write failed")))) | LexLeanStd.Host::Event.start info => (blocked state "unexpected inspection write reply") | LexLeanStd.Host::Event.read response => (blocked state "unexpected inspection write reply") | LexLeanStd.Host::Event.listed response => (blocked state "unexpected inspection write reply") | LexLeanStd.Host::Event.stat response => (blocked state "unexpected inspection write reply") | LexLeanStd.Host::Event.canonical response => (blocked state "unexpected inspection write reply") | LexLeanStd.Host::Event.spawned response => (blocked state "unexpected inspection write reply") | LexLeanStd.Host::Event.waited response => (blocked state "unexpected inspection write reply")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: read,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (Host::asRead event) | Option.none => (blocked state "unexpected inspection read reply") | Option.some response => (if (project state cancelled) then (finish state (ctor Emission.cut)) else (match response | Result.error problem => (finish state (ctor Emission.failed "inspection report read failed")) | Result.ok bytes => (match (Json::parse bytes 8388608 512) | Result.error problem => (finish state (ctor Emission.failed "inspection report malformed")) | Result.ok value => (if (matches (project state config) value) then (launch (record State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (project state phase), cancelled := (project state cancelled), report := (ctor Option.some [Json::Value] value)}) true) else (finish state (ctor Emission.failed "inspection report identity mismatch"))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: host,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.writing => (written state event) | Phase.reading => (read state event) | Phase.running => (match (project state execution) | Option.none => (blocked state "missing inspection execution owner") | Option.some execution => (executionResult state (ResearchExecution::step execution event))) | Phase.checking => (match (project state execution) | Option.none => (blocked state "missing inspection execution owner") | Option.some execution => (executionResult state (ResearchExecution::step execution event))) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (blocked state "inspection retains uncertain ownership")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (project state phase), cancelled := true, report := (project state report)}); (match (project state phase) | Phase.writing => (next, (ctor Emission.awaiting)) | Phase.reading => (next, (ctor Emission.awaiting)) | Phase.ended => (next, (ctor Emission.awaiting)) | Phase.running => (match (project state execution) | Option.none => (blocked next "missing inspection execution owner") | Option.some execution => (executionResult next (ResearchExecution::cancel execution))) | Phase.checking => (match (project state execution) | Option.none => (blocked next "missing inspection execution owner") | Option.some execution => (executionResult next (ResearchExecution::cancel execution))) | Phase.blocked => (blocked next "cancelled inspection retains uncertain ownership"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: beginPrepared,
+ parameters: [config : Config, owner : ResearchWorkspace::State],
+ result: (State * Emission),
+ body: (let state : State := (record State {config := config, owner := owner, execution := (ctor Option.none [ResearchExecution::State]), phase := (ctor Phase.writing), cancelled := false, report := (ctor Option.none [Json::Value])}); (if ((ResearchProject::preparedFor (project config base) owner) && ((0 <? (project config maxNodes)) && (((project config maxNodes) <=? 65536) && ((0 <? (project config maxDepth)) && (((project config maxDepth) <=? 128) && ((0 <? (prim length (project config declarations) : Nat)) && (((prim length (project config declarations) : Nat) <=? 64) && ((0 <? (prim length (project config imports) : Nat)) && ((prim length (project config imports) : Nat) <=? 64))))))))) then (state, (ctor Emission.host (ctor LexLeanStd.Host::Request.write (path config "/.r30-inspection.toml") (manifest)))) else (finish state (ctor Emission.failed "inspection requires the exact owned prepared library and bounded query")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match event | Event.host reply => (host state reply) | Event.cancel => (cancel state)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Inspect declarations only inside the exact owned prepared library. Write an inspection manifest, own the pinned local compiler invocation and report read, bind its complete request, compiler and tool identities, then recheck tracked library sources before returning data. The enclosing owner retains and releases the borrowed workspace. Cancellation drains pending replies; uncertain execution retains ownership and blocks reuse. Inspection data is neither a proof receipt nor publication authority.",
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "owned-prepared-library-inspection" (cons "complete-query-and-tool-pins" (cons "bounded-structural-kernel-report" (cons "tracked-library-recheck-before-return" (cons "drained-cancellation" (cons "uncertain-inspection-retains-owner" (cons "no-inspection-proof-promotion" (nil String)))))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

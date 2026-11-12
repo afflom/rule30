@@ -1,0 +1,300 @@
+\begin{lexlean}{ResearchRecovery}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchPortfolioInput}
+\importmodule{ResearchPortfolio}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchEvidence}
+\importmodule{ResearchExecution}
+\importmodule{ResearchJournal}
+\importmodule{ResearchVerification}
+\importmodule{ResearchInput}
+\importmodule{Research}
+\importmodule{CoreBinding}
+\importmodule{CoreNotation}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{Hypotheses}
+\importmodule{Host}
+\importmodule{LexLeanStd.Host}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Config,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: portfolio, type: ResearchPortfolioInput::Config}, {name: recordPath, type: String}, {name: maxQuarantined, type: Nat}]
+}
+inductive{
+ name: Operation,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: identity, fields: []}, {name: record, fields: []}]
+}
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: executing, fields: []}, {name: readingIdentity, fields: []}, {name: readingRecord, fields: []}, {name: journaling, fields: []}, {name: ready, fields: []}, {name: sealing, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}]
+}
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: config, type: Config}, {name: execution, type: (Option ResearchExecution::State)}, {name: journal, type: (Option ResearchJournal::State)}, {name: operation, type: Operation}, {name: phase, type: Phase}, {name: expected, type: Bytes}, {name: generation, type: Nat}, {name: quarantined, type: (List Nat)}, {name: cancelled, type: Bool}]
+}
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}, {name: seal, fields: []}]
+}
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: ready, fields: [ResearchPortfolioInput::Config, Bytes]}, {name: sealed, fields: [Bytes]}, {name: cut, fields: []}, {name: blocked, fields: [String]}]
+}
+definition{
+ name: key,
+ parameters: [],
+ result: Bytes,
+ body: 0x62653136636361356531343432383761336161643631393539373263663139376239323430613836383437616663656233626264663561643331346566306463,
+ executable: true
+}
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := (project state operation), phase := (ctor Phase.blocked), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}), (ctor Emission.blocked reason)),
+ executable: true
+}
+definition{
+ name: cut,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: ((record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := (project state operation), phase := (ctor Phase.ended), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}), (ctor Emission.cut)),
+ executable: true
+}
+definition{
+ name: workspace,
+ parameters: [config : Config],
+ result: ResearchWorkspace::Config,
+ body: (project (project (project config portfolio) base) workspace),
+ executable: true
+}
+definition{
+ name: storage,
+ parameters: [config : Config],
+ result: ResearchEvidence::Config,
+ body: (let base : ResearchWorkspace::Config := (workspace config); (record ResearchEvidence::Config {request := (project base request), repository := (Host::textOf (project base repository)), recordPath := (project config recordPath), environment := (project base environment), output := (project base output), errors := (project base errors), maxBytes := 8388608, maxSteps := 16777216, allowance := (project base allowance), quantum := (project base quantum), polls := (project base polls), revision := (project base revision)})),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: journalConfig,
+ parameters: [state : State],
+ result: ResearchJournal::Config,
+ body: (record ResearchJournal::Config {storage := (storage (project state config)), key := (key), expected := (project state expected)}),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: resequenced,
+ parameters: [request : Research::Request, serial : Nat],
+ result: Research::Request,
+ body: (record Research::Request {serial := serial, snapshot := (project request snapshot), task := (project request task)}),
+ executable: true
+}
+definition{
+ name: generationLog,
+ parameters: [path : String, generation : Nat],
+ result: String,
+ body: (ResearchVerification::concat path (ResearchVerification::concat ".generation-" (Host::textOf (Hypotheses::decimal generation)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: resumed,
+ parameters: [state : State],
+ result: ResearchPortfolioInput::Config,
+ body: (let input : ResearchPortfolioInput::Config := (project (project state config) portfolio); (let base : ResearchProject::Config := (project input base); (let owner : ResearchWorkspace::Config := (project base workspace); (let serial : Nat := (prim multiply (project state generation) 128 : Nat); (let research : Research::State := (project input research); (record ResearchPortfolioInput::Config {research := (record Research::State {snapshot := (project research snapshot), components := (project research components), tasks := (project research tasks), pending := (ctor Option.none [Research::Request]), next := (serial + 1), history := (nil Research::Answer)}), base := (record ResearchProject::Config {request := (resequenced (project base request) serial), workspace := (record ResearchWorkspace::Config {request := (resequenced (project owner request) serial), repository := (project owner repository), revision := (project owner revision), environment := (project owner environment), output := (generationLog (project owner output) (project state generation)), errors := (generationLog (project owner errors) (project state generation)), allowance := (project owner allowance), quantum := (project owner quantum), polls := (project owner polls)}), tools := (project base tools), arena := (project base arena), proof := (project base proof), imports := (project base imports), levels := (project base levels), axioms := (project base axioms), maxBytes := (project base maxBytes), maxDepth := (project base maxDepth), maxSteps := (project base maxSteps)}), budget := (project input budget)})))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: numbers,
+ parameters: [values : (List Nat)],
+ result: (List Json::Value),
+ body: (match values | List.nil => (nil Json::Value) | List.cons head tail => (cons (CoreBinding::number head) (numbers tail))),
+ recursive_argument: values,
+ executable: true
+}
+definition{
+ name: intent,
+ parameters: [state : State, sealed : Bool],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x7265706f7369746f7279, (ctor Json::Value.string (project (workspace (project state config)) repository))) (cons (0x73706563, (ctor Json::Value.string 0x7233302f636f6e74726f6c6c65722d67656e65726174696f6e2f31)) (cons (0x67656e65726174696f6e, (CoreBinding::number (project state generation))) (cons (0x737461747573, (ctor Json::Value.string (if sealed then 0x66696e6973686564 else 0x616374697665))) (cons (0x71756172616e74696e6564, (ctor Json::Value.array (numbers (project state quarantined)))) (nil (Bytes * Json::Value)))))))),
+ executable: true
+}
+definition{
+ name: quarantines,
+ parameters: [values : (List Json::Value), previous : Nat, generation : Nat],
+ result: (Option (List Nat)),
+ body: (match values | List.nil => (ctor Option.some [(List Nat)] (nil Nat)) | List.cons head tail => (match (Json::natural head 1000000000000) | Option.none => (ctor Option.none [(List Nat)]) | Option.some serial => (if ((previous <? serial) && (serial <? generation)) then (match (quarantines tail serial generation) | Option.none => (ctor Option.none [(List Nat)]) | Option.some rest => (ctor Option.some [(List Nat)] (cons serial rest))) else (ctor Option.none [(List Nat)])))),
+ recursive_argument: values,
+ executable: true
+}
+definition{
+ name: envelopeIdentities,
+ parameters: [value : Json::Value],
+ result: Bool,
+ body: (match (CoreBinding::get value 0x7265766973696f6e) | Json::Value.string revision => ((ResearchWorkspace::objectId revision) && (match (CoreBinding::get value 0x7072656465636573736f72) | Json::Value.string predecessor => (((prim length predecessor : Nat) =? 0) || (ResearchWorkspace::objectId predecessor)) | Json::Value.null => false | Json::Value.boolean flag => false | Json::Value.number number => false | Json::Value.array items => false | Json::Value.object fields => false)) | Json::Value.null => false | Json::Value.boolean flag => false | Json::Value.number number => false | Json::Value.array items => false | Json::Value.object fields => false),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: ledger,
+ parameters: [value : Json::Value],
+ result: (Option (Nat * (List Nat))),
+ body: (if ((envelopeIdentities value) && ((CoreNotation::shape value (cons 0x73706563 (cons 0x6b6579 (cons 0x7072656465636573736f72 (cons 0x7265766973696f6e (cons 0x696e74656e74 (nil Bytes))))))) && ((ResearchInput::stringIs (CoreBinding::get value 0x73706563) 0x7233302f72657365617263682d6a6f75726e616c2f31) && (ResearchInput::stringIs (CoreBinding::get value 0x6b6579) (key))))) then (let recordedIntent : Json::Value := (CoreBinding::get value 0x696e74656e74); (if ((CoreNotation::shape recordedIntent (cons 0x7265706f7369746f7279 (cons 0x73706563 (cons 0x67656e65726174696f6e (cons 0x737461747573 (cons 0x71756172616e74696e6564 (nil Bytes))))))) && ((ResearchInput::stringIs (CoreBinding::get recordedIntent 0x73706563) 0x7233302f636f6e74726f6c6c65722d67656e65726174696f6e2f31) && ((ResearchInput::stringIs (CoreBinding::get recordedIntent 0x737461747573) 0x616374697665) || (ResearchInput::stringIs (CoreBinding::get recordedIntent 0x737461747573) 0x66696e6973686564)))) then (match (Json::natural (CoreBinding::get recordedIntent 0x67656e65726174696f6e) 999999999999) | Option.none => (ctor Option.none [(Nat * (List Nat))]) | Option.some generation => (if (0 <? generation) then (match (ResearchInput::array (CoreBinding::get recordedIntent 0x71756172616e74696e6564)) | Option.none => (ctor Option.none [(Nat * (List Nat))]) | Option.some values => (if ((prim length values : Nat) <=? 8) then (match (quarantines values 0 generation) | Option.none => (ctor Option.none [(Nat * (List Nat))]) | Option.some previous => (ctor Option.some [(Nat * (List Nat))] ((generation + 1), (if (ResearchInput::stringIs (CoreBinding::get recordedIntent 0x737461747573) 0x616374697665) then (prim append previous (cons generation (nil Nat)) : (List Nat)) else previous)))) else (ctor Option.none [(Nat * (List Nat))]))) else (ctor Option.none [(Nat * (List Nat))]))) else (ctor Option.none [(Nat * (List Nat))]))) else (ctor Option.none [(Nat * (List Nat))])),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: journalResult,
+ parameters: [state : State, result : (ResearchJournal::State * ResearchJournal::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), execution := (project state execution), journal := (ctor Option.some [ResearchJournal::State] (first result)), operation := (project state operation), phase := (project state phase), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}); (match (second result) | ResearchJournal::Emission.host request => (next, (ctor Emission.host request)) | ResearchJournal::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchJournal::Emission.failed reason => (blocked next reason) | ResearchJournal::Emission.blocked reason => (blocked next reason) | ResearchJournal::Emission.cut => (cut next) | ResearchJournal::Emission.committed identity => (if (project next cancelled) then (cut next) else (match (project next phase) | Phase.sealing => ((record State {config := (project next config), execution := (project next execution), journal := (project next journal), operation := (project next operation), phase := (ctor Phase.ended), expected := identity, generation := (project next generation), quarantined := (project next quarantined), cancelled := (project next cancelled)}), (ctor Emission.sealed identity)) | Phase.journaling => ((record State {config := (project next config), execution := (project next execution), journal := (project next journal), operation := (project next operation), phase := (ctor Phase.ready), expected := identity, generation := (project next generation), quarantined := (project next quarantined), cancelled := (project next cancelled)}), (ctor Emission.ready (resumed next) identity)) | Phase.executing => (blocked next "unexpected journal acknowledgement") | Phase.readingIdentity => (blocked next "unexpected journal acknowledgement") | Phase.readingRecord => (blocked next "unexpected journal acknowledgement") | Phase.ready => (blocked next "duplicate journal acknowledgement") | Phase.ended => (blocked next "late journal acknowledgement") | Phase.blocked => (blocked next "blocked journal acknowledgement"))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: acquire,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (if (project state cancelled) then (cut state) else (if ((prim length (project state quarantined) : Nat) <=? (project (project state config) maxQuarantined)) then (journalResult (record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := (project state operation), phase := (ctor Phase.journaling), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}) (ResearchJournal::begin (journalConfig state) (intent state false))) else (blocked state "quarantine budget exhausted; uncertain work remains retained"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: arguments,
+ parameters: [state : State],
+ result: (List String),
+ body: (match (project state operation) | Operation.identity => (cons "rev-parse" (cons "--verify" (cons "--quiet" (cons (ResearchJournal::reference (journalConfig state)) (nil String))))) | Operation.record => (cons "cat-file" (cons "blob" (cons (Host::textOf (project state expected)) (nil String))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: job,
+ parameters: [state : State],
+ result: ResearchExecution::Job,
+ body: (let config : ResearchEvidence::Config := (storage (project state config)); (record ResearchExecution::Job {request := (project config request), tool := (ctor ResearchExecution::Tool.git), arguments := (arguments state), directory := (project config repository), environment := (project config environment), output := (project config output), errors := (project config errors), allowance := (project config allowance), quantum := (project config quantum), polls := (project config polls)})),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: launch,
+ parameters: [state : State, operation : Operation],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := operation, phase := (ctor Phase.executing), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}); (let result : (ResearchExecution::State * ResearchExecution::Emission) := (ResearchExecution::begin (job next)); (let owned : State := (record State {config := (project next config), execution := (ctor Option.some [ResearchExecution::State] (first result)), journal := (project next journal), operation := (project next operation), phase := (project next phase), expected := (project next expected), generation := (project next generation), quarantined := (project next quarantined), cancelled := (project next cancelled)}); (match (second result) | ResearchExecution::Emission.host request => (owned, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (owned, (ctor Emission.awaiting)) | ResearchExecution::Emission.complete completion => (blocked owned "recovery lookup could not start"))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: completed,
+ parameters: [state : State, completion : ResearchExecution::Completion],
+ result: (State * Emission),
+ body: (if ((ResearchExecution::resumeAllowed completion) && (ResearchWorkspace::exitedNormally completion)) then (if (project state cancelled) then (cut state) else (match (project completion kind) | ResearchExecution::EndKind.succeeded => ((record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := (project state operation), phase := (match (project state operation) | Operation.identity => (ctor Phase.readingIdentity) | Operation.record => (ctor Phase.readingRecord)), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.read (project completion output)))) | ResearchExecution::EndKind.failed => (if ((match (project state operation) | Operation.identity => true | Operation.record => false) && (match (project completion code) | Option.none => false | Option.some code => (prim equal code (1 : Int32) : Bool))) then (acquire state) else (blocked state "recovery lookup failed")) | ResearchExecution::EndKind.cut => (cut state) | ResearchExecution::EndKind.unavailable => (blocked state "recovery lookup unavailable") | ResearchExecution::EndKind.protocol => (blocked state "recovery lookup protocol failure") | ResearchExecution::EndKind.cleanupFailed => (blocked state "recovery cleanup uncertain") | ResearchExecution::EndKind.refused => (blocked state "recovery lookup refused"))) else (blocked state "recovery lookup outcome uncertain")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: executionResult,
+ parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), execution := (ctor Option.some [ResearchExecution::State] (first result)), journal := (project state journal), operation := (project state operation), phase := (project state phase), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchExecution::Emission.complete completion => (completed next completion))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: readIdentity,
+ parameters: [state : State, data : Bytes],
+ result: (State * Emission),
+ body: (let size : Nat := (prim length data : Nat); (if ((size =? 41) || (size =? 65)) then (let identity : Bytes := (Toml::sliceOr data 0 (prim subtract size 1 : Nat)); (if ((ResearchWorkspace::objectId identity) && (Toml::byteIs data (prim subtract size 1 : Nat) (10 : UInt8))) then (launch (record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := (project state operation), phase := (project state phase), expected := identity, generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}) (ctor Operation.record)) else (blocked state "invalid controller journal identity"))) else (blocked state "invalid controller journal identity"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: readRecord,
+ parameters: [state : State, data : Bytes],
+ result: (State * Emission),
+ body: (match (Json::parse data 8388608 64) | Result.error error => (blocked state "invalid controller journal JSON") | Result.ok value => (if (ResearchInput::stringIs (CoreBinding::get (CoreBinding::get value 0x696e74656e74) 0x7265706f7369746f7279) (project (workspace (project state config)) repository)) then (match (ledger value) | Option.none => (blocked state "invalid controller generation") | Option.some generationData => (acquire (record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := (project state operation), phase := (project state phase), expected := (project state expected), generation := (first generationData), quarantined := (second generationData), cancelled := (project state cancelled)}))) else (blocked state "controller journal belongs to another repository path"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: read,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (Host::asRead event) | Option.none => (blocked state "unexpected recovery read event") | Option.some response => (if (project state cancelled) then (cut state) else (match response | Result.error error => (blocked state "recovery record read failed") | Result.ok data => (match (project state phase) | Phase.readingIdentity => (readIdentity state data) | Phase.readingRecord => (readRecord state data) | Phase.executing => (blocked state "unexpected recovery read") | Phase.journaling => (blocked state "unexpected recovery read") | Phase.ready => (blocked state "unexpected recovery read") | Phase.sealing => (blocked state "unexpected recovery read") | Phase.ended => (blocked state "unexpected recovery read") | Phase.blocked => (blocked state "unexpected recovery read"))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: host,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.executing => (match (project state execution) | Option.none => (blocked state "missing recovery execution owner") | Option.some active => (executionResult state (ResearchExecution::step active event))) | Phase.readingIdentity => (read state event) | Phase.readingRecord => (read state event) | Phase.journaling => (match (project state journal) | Option.none => (blocked state "missing recovery journal owner") | Option.some active => (journalResult state (ResearchJournal::step active (ctor ResearchJournal::Event.host event)))) | Phase.sealing => (match (project state journal) | Option.none => (blocked state "missing recovery seal owner") | Option.some active => (journalResult state (ResearchJournal::step active (ctor ResearchJournal::Event.host event)))) | Phase.ready => (blocked state "recovery ready state has no pending host reply") | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (blocked state "recovery retains uncertain work")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: seal,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.ready => (if (project state cancelled) then (cut state) else (journalResult (record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := (project state operation), phase := (ctor Phase.sealing), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := (project state cancelled)}) (ResearchJournal::begin (journalConfig state) (intent state true)))) | Phase.executing => (blocked state "cannot seal active recovery lookup") | Phase.readingIdentity => (blocked state "cannot seal pending recovery read") | Phase.readingRecord => (blocked state "cannot seal pending recovery read") | Phase.journaling => (blocked state "cannot seal unacknowledged generation") | Phase.sealing => (state, (ctor Emission.awaiting)) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (blocked state "cannot seal uncertain generation")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), execution := (project state execution), journal := (project state journal), operation := (project state operation), phase := (project state phase), expected := (project state expected), generation := (project state generation), quarantined := (project state quarantined), cancelled := true}); (match (project state phase) | Phase.executing => (match (project state execution) | Option.none => (blocked next "missing recovery owner during cancellation") | Option.some active => (executionResult next (ResearchExecution::cancel active))) | Phase.journaling => (match (project state journal) | Option.none => (blocked next "missing recovery journal during cancellation") | Option.some active => (journalResult next (ResearchJournal::step active (ctor ResearchJournal::Event.cancel)))) | Phase.sealing => (match (project state journal) | Option.none => (blocked next "missing recovery seal during cancellation") | Option.some active => (journalResult next (ResearchJournal::step active (ctor ResearchJournal::Event.cancel)))) | Phase.readingIdentity => (next, (ctor Emission.awaiting)) | Phase.readingRecord => (next, (ctor Emission.awaiting)) | Phase.ready => (cut next) | Phase.ended => (next, (ctor Emission.awaiting)) | Phase.blocked => (blocked next "cancelled uncertain recovery remains retained"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: begin,
+ parameters: [config : Config],
+ result: (State * Emission),
+ body: (let state : State := (record State {config := config, execution := (ctor Option.none [ResearchExecution::State]), journal := (ctor Option.none [ResearchJournal::State]), operation := (ctor Operation.identity), phase := (ctor Phase.executing), expected := 0x, generation := 1, quarantined := (nil Nat), cancelled := false}); (if (((project config maxQuarantined) <=? 8) && ((ResearchWorkspace::valid (workspace config)) && (ResearchEvidence::valid (first (ResearchEvidence::begin (storage config) (ctor Json::Value.null)))))) then (launch state (ctor Operation.identity)) else (blocked state "invalid recovery configuration"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match event | Event.host reply => (host state reply) | Event.cancel => (cancel state) | Event.seal => (seal state)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Allocate a monotone controller generation by an owned exact-predecessor journal exchange before dispatch. Read the current journal through owned Git processes, reserve fresh workspace and candidate serials, and retain earlier active generations in a bounded quarantine. Never resume an uncertain workspace or signal a stored PID. A sealed generation records that the enclosing owner has completed cleanup; its event is internal, not a public receipt input. Records do not establish proof acceptance. Generations isolate workspace ownership rather than confer an exclusive publication lease. Publication must revalidate its exact source snapshot and exchange the source branch against that predecessor; a stale source revision cannot publish. This component never reclaims uncertain resources or promotes stored results.",
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "owned-journal-lookup" (cons "exact-predecessor-generation-reservation" (cons "structural-journal-identity-validation" (cons "fresh-generation-workspace-serials" (cons "generation-specific-log-paths" (cons "repository-bound-restart" (cons "bounded-uncertain-generation-quarantine" (cons "no-stale-pid-signalling" (cons "cleanup-before-sealing" (cons "drain-cancellation-before-recovery-outcome" (nil String))))))))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

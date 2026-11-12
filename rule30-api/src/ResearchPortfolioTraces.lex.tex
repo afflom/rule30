@@ -1,0 +1,139 @@
+\begin{lexlean}{ResearchPortfolioTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchPortfolio}
+\importmodule{ResearchPortfolioInput}
+\importmodule{ResearchCohortCommand}
+\importmodule{Research}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchSession}
+\importmodule{ResearchExecution}
+\importmodule{LexLeanStd.Host}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\importmodule{ResearchInputTraces}
+\importmodule{ResearchInspection}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: oversizedBudgetDispatchesNothing,
+ parameters: [research : Research::State, base : ResearchProject::Config],
+ statement: ((second (ResearchPortfolio::begin research base 65)) = (ctor ResearchPortfolio::Emission.blocked "portfolio configuration or budget invalid")),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelledContinuationWaitsForOwnedReply,
+ parameters: [state : ResearchPortfolio::State],
+ statement: ((second (ResearchPortfolio::cancel (record ResearchPortfolio::State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := (project state research), base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (project state remaining), phase := (ctor ResearchPortfolio::Phase.advancing), cancelled := (project state cancelled)}))) = (ctor ResearchPortfolio::Emission.awaiting)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelledContinuationMarksCancellation,
+ parameters: [state : ResearchPortfolio::State],
+ statement: ((project (first (ResearchPortfolio::cancel (record ResearchPortfolio::State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := (project state research), base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (project state remaining), phase := (ctor ResearchPortfolio::Phase.advancing), cancelled := (project state cancelled)}))) cancelled) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: blockedPortfolioCannotDispatch,
+ parameters: [state : ResearchPortfolio::State, event : LexLeanStd.Host::Event],
+ statement: ((second (ResearchPortfolio::host (record ResearchPortfolio::State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := (project state research), base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (project state remaining), phase := (ctor ResearchPortfolio::Phase.blocked), cancelled := (project state cancelled)}) event)) = (ctor ResearchPortfolio::Emission.blocked "portfolio retained for recovery")),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: libraryTimeoutMarksPortfolioCancelled,
+ parameters: [state : ResearchPortfolio::State, owner : ResearchWorkspace::State],
+ statement: ((project (first (ResearchPortfolio::ownerResult state (owner, (ctor ResearchWorkspace::Emission.complete (ctor ResearchExecution::EndKind.cut))))) cancelled) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: uncertainSessionRetainsOwner,
+ parameters: [state : ResearchPortfolio::State, session : ResearchSession::State, reason : String],
+ statement: ((project (first (ResearchPortfolio::attemptResult state (session, (ctor ResearchSession::Emission.blocked reason)))) owner) = (project state owner)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: suppliedProofCannotChoosePortfolioCandidate,
+ parameters: [base : ResearchProject::Config, request : Research::Request, arena : CoreBinding::Goal, proof : Nat],
+ statement: ((ResearchPortfolio::proposal (record ResearchProject::Config {request := (project base request), workspace := (project base workspace), tools := (project base tools), arena := arena, proof := proof, imports := (project base imports), levels := (project base levels), axioms := (project base axioms), maxBytes := (project base maxBytes), maxDepth := (project base maxDepth), maxSteps := (project base maxSteps)}) request) = (ResearchPortfolio::proposal base request)),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: suspensionClearsUnstartedSelection,
+ parameters: [research : Research::State, request : Research::Request],
+ statement: ((project (ResearchPortfolio::suspended (record Research::State {snapshot := (project research snapshot), components := (project research components), tasks := (project research tasks), pending := (ctor Option.some [Research::Request] request), next := (project research next), history := (project research history)})) pending) = (ctor Option.none [Research::Request])),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: terminalPortfolioCommandCannotRestart,
+ parameters: [state : ResearchPortfolio::State, event : LexLeanStd.Host::Event],
+ statement: ((ResearchCohortCommand::step (ctor Option.some [ResearchCohortCommand::State] (ctor ResearchCohortCommand::State.portfolioEnded state)) event) = (ResearchCohortCommand::finishPortfolio state (70 : UInt8) 0x6661696c6564 0x7465726d696e616c20706f7274666f6c696f2063616e6e6f742072657374617274)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: baseDocument,
+ parameters: [],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d706f7274666f6c696f2d626173652f31)) (cons (0x72657175657374, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x72657175657374)) (cons (0x7265706f7369746f7279, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x7265706f7369746f7279)) (cons (0x7265766973696f6e, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x7265766973696f6e)) (cons (0x6f7574707574, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x6f7574707574)) (cons (0x6572726f7273, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x6572726f7273)) (cons (0x746f6f6c73, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x746f6f6c73)) (cons (0x696d706f727473, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x696d706f727473)) (cons (0x6c6576656c73, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x6c6576656c73)) (cons (0x6178696f6d73, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x6178696f6d73)) (cons (0x626f756e6473, (CoreBinding::get (ResearchInputTraces::fixtureDocument) 0x626f756e6473)) (nil (Bytes * Json::Value)))))))))))))),
+ axioms: [propext]
+}
+definition{
+ name: document,
+ parameters: [],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d706f7274666f6c696f2f31)) (cons (0x62617365, (baseDocument)) (cons (0x7461736b73, (ctor Json::Value.array (cons (CoreBinding::get (ResearchInputTraces::requestDocument) 0x7461736b) (nil Json::Value)))) (cons (0x627564676574, (ctor Json::Value.number 0x31)) (nil (Bytes * Json::Value))))))),
+ axioms: [propext]
+}
+definition{
+ name: admitted,
+ parameters: [value : Json::Value],
+ result: Bool,
+ body: (match (ResearchPortfolioInput::config value (nil (String * String))) | Option.none => false | Option.some config => true),
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: admitsPortfolioWithoutProofTerms,
+ parameters: [],
+ statement: ((admitted (document)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: rejectsOversizedPortfolioBudget,
+ parameters: [],
+ statement: ((admitted (ResearchInputTraces::put (document) 0x627564676574 (ctor Json::Value.number 0x3635))) = false),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: rejectsDuplicateTaskIdentity,
+ parameters: [],
+ statement: ((admitted (ResearchInputTraces::put (document) 0x7461736b73 (ctor Json::Value.array (cons (CoreBinding::get (ResearchInputTraces::requestDocument) 0x7461736b) (cons (CoreBinding::get (ResearchInputTraces::requestDocument) 0x7461736b) (nil Json::Value)))))) = false),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: proofBearingDocument,
+ parameters: [],
+ result: Json::Value,
+ body: (match (document) | Json::Value.object fields => (ctor Json::Value.object (cons (0x70726f6f66, (ctor Json::Value.number 0x31)) fields)) | Json::Value.null => (document) | Json::Value.boolean value => (document) | Json::Value.number value => (document) | Json::Value.string value => (document) | Json::Value.array value => (document)),
+ axioms: [propext]
+}
+theorem{
+ name: rejectsSmuggledProofTerm,
+ parameters: [],
+ statement: ((admitted (proofBearingDocument)) = false),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

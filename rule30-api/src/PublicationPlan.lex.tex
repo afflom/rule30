@@ -1,0 +1,201 @@
+\begin{lexlean}{PublicationPlan}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{PublicationSource}
+\importmodule{PublicationFrontier}
+\importmodule{ResearchProject}
+\importmodule{ResearchCandidate}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchExecution}
+\importmodule{ResearchVerification}
+\importmodule{Research}
+\importmodule{VerificationReport}
+\importmodule{Host}
+\importmodule{Toml}
+\importmodule{Hypotheses}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Config,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: base, type: ResearchProject::Config}, {name: identity, type: Bytes}]
+}
+inductive{
+ name: Operation,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: archive, fields: []}, {name: update, fields: []}, {name: lock, fields: []}, {name: register, fields: []}, {name: theorem, fields: []}, {name: frontier, fields: []}, {name: sync, fields: []}, {name: stage, fields: []}, {name: commit, fields: []}, {name: head, fields: []}, {name: retain, fields: []}, {name: push, fields: []}]
+}
+definition{
+ name: workspace,
+ parameters: [config : Config],
+ result: ResearchWorkspace::Config,
+ body: (project (project config base) workspace),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: root,
+ parameters: [config : Config],
+ result: String,
+ body: (ResearchWorkspace::path (workspace config)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: moduleName,
+ parameters: [config : Config],
+ result: String,
+ body: (Host::textOf (PublicationSource::moduleName (project config identity))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: theoremName,
+ parameters: [config : Config],
+ result: String,
+ body: (Host::textOf (PublicationSource::theoremName (project config identity))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: sourcePath,
+ parameters: [config : Config],
+ result: String,
+ body: (ResearchVerification::concat "src/" (ResearchVerification::concat (moduleName config) ".lex.tex")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: slug,
+ parameters: [config : Config],
+ result: String,
+ body: (ResearchVerification::concat "autonomous-" (Host::textOf (project config identity))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: reference,
+ parameters: [config : Config, commit : Bytes],
+ result: String,
+ body: (ResearchVerification::concat "refs/r30/publications/" (ResearchVerification::concat (Host::textOf (project config identity)) (ResearchVerification::concat "/" (Host::textOf commit)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: status,
+ parameters: [config : Config],
+ result: String,
+ body: (match (project (project (project (project config base) request) task) intent) | Research::Purpose.prove => "proved" | Research::Purpose.refute => "refuted" | Research::Purpose.inspect => "open" | Research::Purpose.maintain => "open"),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: arguments,
+ parameters: [config : Config, operation : Operation, commit : Bytes],
+ result: (List String),
+ body: (match operation | Operation.archive => (cons "cat-file" (cons "blob" (cons (ResearchVerification::concat "refs/r30/evidence/" (Host::textOf (project config identity))) (nil String)))) | Operation.update => (cons "update" (nil String)) | Operation.lock => (cons "--project=rule30-paper/lexlean.toml" (cons "lock" (nil String))) | Operation.register => (cons "module" (cons "add" (cons (ResearchVerification::concat "Rule30UOR." (moduleName config)) (cons "--build" (nil String))))) | Operation.theorem => (cons "theorem" (cons "add" (cons (theoremName config) (cons "--slug" (cons (slug config) (nil String)))))) | Operation.frontier => (cons "frontier" (cons "set" (cons "--status" (cons (status config) (cons "--lean" (cons (theoremName config) (cons "--lexeme" (cons (ResearchVerification::concat "r30.observation::" (slug config)) (cons "--note" (cons (ResearchVerification::concat "Autonomous kernel-checked evidence " (Host::textOf (project config identity))) (cons "--" (cons (Host::textOf (project (project (project (project config base) request) task) id)) (nil String))))))))))))) | Operation.sync => (cons "api" (cons "sync" (nil String))) | Operation.stage => (cons "add" (cons "-A" (cons "--" (nil String)))) | Operation.commit => (cons "-c" (cons "core.hooksPath=.githooks" (cons "commit" (cons "-m" (cons "Publish verified autonomous proof batch" (nil String)))))) | Operation.head => (cons "rev-parse" (cons "--verify" (cons "HEAD^{commit}" (nil String)))) | Operation.retain => (cons "update-ref" (cons (reference config commit) (cons (Host::textOf commit) (nil String)))) | Operation.push => (cons "-c" (cons "core.hooksPath=.githooks" (cons "push" (cons (ResearchVerification::concat "--force-with-lease=refs/heads/main:" (Host::textOf (project (workspace config) revision))) (cons "origin" (cons (ResearchVerification::concat (Host::textOf commit) ":refs/heads/main") (nil String)))))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: tool,
+ parameters: [operation : Operation],
+ result: ResearchExecution::Tool,
+ body: (match operation | Operation.archive => (ctor ResearchExecution::Tool.git) | Operation.update => (ctor ResearchExecution::Tool.lake) | Operation.lock => (ctor ResearchExecution::Tool.lexlean) | Operation.register => (ctor ResearchExecution::Tool.r30) | Operation.theorem => (ctor ResearchExecution::Tool.r30) | Operation.frontier => (ctor ResearchExecution::Tool.r30) | Operation.sync => (ctor ResearchExecution::Tool.r30) | Operation.stage => (ctor ResearchExecution::Tool.git) | Operation.commit => (ctor ResearchExecution::Tool.git) | Operation.head => (ctor ResearchExecution::Tool.git) | Operation.retain => (ctor ResearchExecution::Tool.git) | Operation.push => (ctor ResearchExecution::Tool.git)),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: directory,
+ parameters: [config : Config, operation : Operation],
+ result: String,
+ body: (match operation | Operation.archive => (root config) | Operation.update => (ResearchVerification::concat (root config) "/rule30-paper") | Operation.lock => (root config) | Operation.register => (root config) | Operation.theorem => (root config) | Operation.frontier => (root config) | Operation.sync => (root config) | Operation.stage => (root config) | Operation.commit => (root config) | Operation.head => (root config) | Operation.retain => (root config) | Operation.push => (root config)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: job,
+ parameters: [config : Config, operation : Operation, commit : Bytes],
+ result: ResearchExecution::Job,
+ body: (let owner : ResearchWorkspace::Config := (workspace config); (record ResearchExecution::Job {request := (project (project config base) request), tool := (tool operation), arguments := (arguments config operation commit), directory := (directory config operation), environment := (project owner environment), output := (project owner output), errors := (project owner errors), allowance := (project owner allowance), quantum := (project owner quantum), polls := (project owner polls)})),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: verificationConfig,
+ parameters: [config : Config],
+ result: ResearchVerification::Config,
+ body: (let owner : ResearchWorkspace::Config := (workspace config); (record ResearchVerification::Config {project := (ResearchVerification::concat (root config) "/rule30-paper/lexlean.toml"), moduleSource := (sourcePath config), directory := (root config), environment := (project owner environment), output := (project owner output), errors := (project owner errors), verifiedRoot := (ResearchVerification::concat (root config) "/rule30-paper/.lexlean/verified"), maxBytes := (project (project config base) maxBytes), allowance := (project owner allowance), quantum := (project owner quantum), polls := (project owner polls)})),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: context,
+ parameters: [config : Config],
+ result: ResearchCandidate::Context,
+ body: (record ResearchCandidate::Context {request := (project (project config base) request), config := (verificationConfig config), tools := (project (project config base) tools), module := (PublicationSource::append 0x52756c65333050617065722e (PublicationSource::moduleName (project config identity))), theorem := (PublicationSource::theoremName (project config identity)), maxDepth := (project (project config base) maxDepth), maxSteps := (project (project config base) maxSteps)}),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: generatedPath,
+ parameters: [config : Config, receipt : VerificationReport::Receipt],
+ result: String,
+ body: (ResearchVerification::concat (project (verificationConfig config) verifiedRoot) (ResearchVerification::concat "/" (ResearchVerification::concat (Host::textOf (project receipt attestation)) (ResearchVerification::concat "/modules/Rule30Paper/" (ResearchVerification::concat (moduleName config) ".lean"))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: hostPath,
+ parameters: [config : Config],
+ result: String,
+ body: (ResearchVerification::concat (root config) (ResearchVerification::concat "/rule30-core-lean/Rule30UOR/" (ResearchVerification::concat (moduleName config) ".lean"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: insertPath,
+ parameters: [path : Bytes, paths : (List Json::Value)],
+ result: (Option (List Json::Value)),
+ body: (match paths | List.nil => (ctor Option.some [(List Json::Value)] (cons (ctor Json::Value.string path) (nil Json::Value))) | List.cons head tail => (match head | Json::Value.string old => (if (Toml::sameBytes path old) then (ctor Option.some [(List Json::Value)] (cons head tail)) else (if (Hypotheses::lessBytes path old) then (ctor Option.some [(List Json::Value)] (cons (ctor Json::Value.string path) (cons head tail))) else (match (insertPath path tail) | Option.none => (ctor Option.none [(List Json::Value)]) | Option.some rest => (ctor Option.some [(List Json::Value)] (cons head rest))))) | Json::Value.null => (ctor Option.none [(List Json::Value)]) | Json::Value.boolean flag => (ctor Option.none [(List Json::Value)]) | Json::Value.number number => (ctor Option.none [(List Json::Value)]) | Json::Value.array values => (ctor Option.none [(List Json::Value)]) | Json::Value.object values => (ctor Option.none [(List Json::Value)]))),
+ axioms: [propext],
+ recursive_argument: paths,
+ executable: true
+}
+definition{
+ name: entrypointAt,
+ parameters: [path : Bytes, manifest : Bytes, start : Nat, finish : Nat],
+ result: (Option Bytes),
+ body: (match (Json::parse (Toml::sliceOr manifest start ((prim subtract finish start : Nat) + 1)) 8388608 32) | Result.error problem => (ctor Option.none [Bytes]) | Result.ok value => (match value | Json::Value.array values => (match (insertPath path values) | Option.none => (ctor Option.none [Bytes]) | Option.some ordered => (match (JsonCanonical::encode (ctor Json::Value.array ordered) 8388608 16777216) | Option.none => (ctor Option.none [Bytes]) | Option.some encoded => (ctor Option.some [Bytes] (PublicationSource::append (Toml::sliceOr manifest 0 start) (PublicationSource::append encoded (Toml::sliceOr manifest (finish + 1) (prim subtract (prim length manifest : Nat) (finish + 1) : Nat))))))) | Json::Value.null => (ctor Option.none [Bytes]) | Json::Value.boolean flag => (ctor Option.none [Bytes]) | Json::Value.number number => (ctor Option.none [Bytes]) | Json::Value.string text => (ctor Option.none [Bytes]) | Json::Value.object values => (ctor Option.none [Bytes]))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: entrypoint,
+ parameters: [config : Config, manifest : Bytes],
+ result: (Option Bytes),
+ body: (if ((prim length manifest : Nat) <=? 8388608) then (match (PublicationSource::find manifest 0x0a656e747279706f696e7473203d205b 0 8388608) | Option.none => (ctor Option.none [Bytes]) | Option.some position => (let start : Nat := (position + 15); (match (PublicationSource::find manifest 0x5d start 8388608) | Option.none => (ctor Option.none [Bytes]) | Option.some finish => (entrypointAt (PublicationSource::append 0x7372632f (PublicationSource::append (PublicationSource::moduleName (project config identity)) 0x2e6c65782e746578)) manifest start finish)))) else (ctor Option.none [Bytes])),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "A fixed publication plan for an owned isolated repository. Reverify renamed LexLean source before using its attested generated Lean artifact. Register generated host modules and theorem lexemes through the existing r30 API; change frontier status only for a checked closed claim. Retain each commit at its own evidence-and-commit-addressed reference, making repeated retention idempotent without replacing a different publication commit. Commit through the unchanged hook and push only against the exact predecessor with a source-branch lease. No shell command strings, remote models or receipt-based shortcuts. This plan supplies jobs; only the enclosing publication lifecycle establishes their ordering, ownership and successful completion.",
+ axioms: [],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "fixed-local-publication-tools" (cons "generated-source-registration-api" (cons "unchanged-commit-and-push-hooks" (cons "exact-source-revision-lease" (nil String))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

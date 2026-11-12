@@ -1,0 +1,210 @@
+\begin{lexlean}{ResearchPortfolio}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Research}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchSession}
+\importmodule{ResearchExecution}
+\importmodule{ResearchFactory}
+\importmodule{CandidateSource}
+\importmodule{CandidateUniverses}
+\importmodule{ResearchInspection}
+\importmodule{ResearchInspectionBinding}
+\importmodule{CoreBinding}
+\importmodule{LexLeanStd.Host}
+\title{Boolean}
+\begin{semanticmodule}
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: inspecting, fields: []}, {name: preparing, fields: []}, {name: advancing, fields: []}, {name: attempting, fields: []}, {name: releasing, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}]
+}
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: inspection, type: (Option ResearchInspection::State)}, {name: inspected, type: Bool}, {name: research, type: Research::State}, {name: base, type: ResearchProject::Config}, {name: owner, type: (Option ResearchWorkspace::State)}, {name: active, type: (Option ResearchSession::State)}, {name: results, type: (List (Research::Answer * Bytes))}, {name: remaining, type: Nat}, {name: phase, type: Phase}, {name: cancelled, type: Bool}]
+}
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}]
+}
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: complete, fields: [Research::State, (List (Research::Answer * Bytes))]}, {name: blocked, fields: [String]}]
+}
+definition{
+ name: phase,
+ parameters: [state : State, next : Phase],
+ result: State,
+ body: (record State {inspection := (project state inspection), inspected := (project state inspected), research := (project state research), base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (project state remaining), phase := next, cancelled := (project state cancelled)}),
+ executable: true
+}
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((phase state (ctor Phase.blocked)), (ctor Emission.blocked reason)),
+ executable: true
+}
+definition{
+ name: suspended,
+ parameters: [research : Research::State],
+ result: Research::State,
+ body: (match (project research pending) | Option.none => research | Option.some request => (record Research::State {snapshot := (project research snapshot), components := (project research components), tasks := (Research::releaseStale (project research tasks) (project (project request task) id)), pending := (ctor Option.none [Research::Request]), next := (project research next), history := (project research history)})),
+ executable: true
+}
+definition{
+ name: finish,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let research : Research::State := (suspended (project state research)); ((record State {inspection := (project state inspection), inspected := (project state inspected), research := research, base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (project state remaining), phase := (ctor Phase.ended), cancelled := (project state cancelled)}), (ctor Emission.complete research (project state results)))),
+ executable: true
+}
+definition{
+ name: markCancelled,
+ parameters: [state : State],
+ result: State,
+ body: (record State {inspection := (project state inspection), inspected := (project state inspected), research := (project state research), base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (project state remaining), phase := (project state phase), cancelled := true}),
+ executable: true
+}
+definition{
+ name: advanceLater,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: ((phase state (ctor Phase.advancing)), (ctor Emission.host (ctor LexLeanStd.Host::Request.wait (nil Nat) 0))),
+ executable: true
+}
+definition{
+ name: proposal,
+ parameters: [base : ResearchProject::Config, request : Research::Request],
+ result: (Option ResearchProject::Config),
+ body: (match (CandidateSource::synthesize request (project base maxBytes) (project base maxDepth) (project base maxSteps)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some candidate => (match (CandidateUniverses::parameters (first candidate)) | Option.none => (ctor Option.none [ResearchProject::Config]) | Option.some universes => (ctor Option.some [ResearchProject::Config] (record ResearchProject::Config {request := request, workspace := (project base workspace), tools := (project base tools), arena := (first candidate), proof := (second candidate), imports := (project base imports), levels := universes, axioms := (project base axioms), maxBytes := (project base maxBytes), maxDepth := (project base maxDepth), maxSteps := (project base maxSteps)})))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: inspectionResult,
+ parameters: [state : State, result : (ResearchInspection::State * ResearchInspection::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {inspection := (ctor Option.some [ResearchInspection::State] (first result)), inspected := (project state inspected), research := (project state research), base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (project state remaining), phase := (ctor Phase.inspecting), cancelled := (project state cancelled)}); (match (second result) | ResearchInspection::Emission.host request => (next, (ctor Emission.host request)) | ResearchInspection::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchInspection::Emission.complete report => (advanceLater (record State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := true, research := (record Research::State {snapshot := (project (project next research) snapshot), components := (project (project next research) components), tasks := (ResearchInspectionBinding::tasks (project (project next research) tasks) report), pending := (ctor Option.none [Research::Request]), next := (project (project next research) next), history := (project (project next research) history)}), base := (project next base), owner := (project next owner), active := (project next active), results := (project next results), remaining := (project next remaining), phase := (project next phase), cancelled := (project next cancelled)})) | ResearchInspection::Emission.cut => (advanceLater (record State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := (project next inspected), research := (project next research), base := (project next base), owner := (project next owner), active := (project next active), results := (project next results), remaining := (project next remaining), phase := (project next phase), cancelled := true})) | ResearchInspection::Emission.failed reason => (blocked next reason) | ResearchInspection::Emission.blocked reason => (blocked next reason))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: inspectPrepared,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (if (project state cancelled) then (advanceLater state) else (if (project state inspected) then (advanceLater state) else (match (project state owner) | Option.none => (blocked state "inspection requires a prepared portfolio owner") | Option.some owner => (match (project (project state research) tasks) | List.nil => (advanceLater state) | List.cons head tail => (inspectionResult state (ResearchInspection::beginPrepared (record ResearchInspection::Config {base := (project state base), imports := (project (project state base) imports), declarations := (ResearchInspectionBinding::origins (project (project state research) tasks) (nil Bytes)), maxNodes := 65536, maxDepth := 128}) owner)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: ownerResult,
+ parameters: [state : State, result : (ResearchWorkspace::State * ResearchWorkspace::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {inspection := (project state inspection), inspected := (project state inspected), research := (project state research), base := (project state base), owner := (ctor Option.some [ResearchWorkspace::State] (first result)), active := (project state active), results := (project state results), remaining := (project state remaining), phase := (project state phase), cancelled := (project state cancelled)}); (match (second result) | ResearchWorkspace::Emission.host request => (next, (ctor Emission.host request)) | ResearchWorkspace::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchWorkspace::Emission.ready path => (inspectPrepared next) | ResearchWorkspace::Emission.complete kind => (match kind | ResearchExecution::EndKind.succeeded => (finish next) | ResearchExecution::EndKind.cut => (finish (markCancelled next)) | ResearchExecution::EndKind.failed => (blocked next (project (first result) detail)) | ResearchExecution::EndKind.unavailable => (blocked next "portfolio library unavailable") | ResearchExecution::EndKind.protocol => (blocked next "portfolio library protocol failure") | ResearchExecution::EndKind.cleanupFailed => (blocked next "portfolio library cleanup uncertain") | ResearchExecution::EndKind.refused => (blocked next "portfolio library refused")) | ResearchWorkspace::Emission.blocked reason => (blocked next reason) | ResearchWorkspace::Emission.refused => (blocked next "portfolio owner refused operation"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: release,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state owner) | Option.none => (finish state) | Option.some owner => (ownerResult (phase state (ctor Phase.releasing)) (ResearchWorkspace::step owner (ctor ResearchWorkspace::Event.release)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: recheck,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (if (project state cancelled) then (advanceLater state) else (match (project state owner) | Option.none => (blocked state "portfolio lost library owner") | Option.some owner => (ownerResult (phase state (ctor Phase.preparing)) (ResearchWorkspace::launch owner (ctor ResearchWorkspace::Operation.finalize))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: receive,
+ parameters: [state : State, answer : Research::Answer, evidence : Bytes],
+ result: State,
+ body: (record State {inspection := (project state inspection), inspected := (project state inspected), research := (first (Research::receive (project state research) answer)), base := (project state base), owner := (project state owner), active := (ctor Option.none [ResearchSession::State]), results := (prim append (project state results) (cons (answer, evidence) (nil (Research::Answer * Bytes))) : (List (Research::Answer * Bytes))), remaining := (project state remaining), phase := (project state phase), cancelled := (project state cancelled)}),
+ executable: true
+}
+definition{
+ name: attemptResult,
+ parameters: [state : State, result : (ResearchSession::State * ResearchSession::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {inspection := (project state inspection), inspected := (project state inspected), research := (project state research), base := (project state base), owner := (project state owner), active := (ctor Option.some [ResearchSession::State] (first result)), results := (project state results), remaining := (project state remaining), phase := (ctor Phase.attempting), cancelled := (project state cancelled)}); (match (second result) | ResearchSession::Emission.host request => (next, (ctor Emission.host request)) | ResearchSession::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchSession::Emission.blocked reason => (blocked next reason) | ResearchSession::Emission.complete answer evidence => (recheck (receive next answer evidence)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: attempt,
+ parameters: [state : State, request : Research::Request],
+ result: (State * Emission),
+ body: (let next : State := (record State {inspection := (project state inspection), inspected := (project state inspected), research := (project state research), base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (prim subtract (project state remaining) 1 : Nat), phase := (project state phase), cancelled := (project state cancelled)}); (match (proposal (project state base) request) | Option.none => (advanceLater (receive next (record Research::Answer {request := request, result := (ctor Research::ResultKind.unavailable)}) 0x)) | Option.some candidate => (match (project state owner) | Option.none => (blocked next "portfolio has no library owner") | Option.some owner => (match (ResearchFactory::libraryAction candidate (ctor Option.some [ResearchWorkspace::State] owner)) | ResearchFactory::LibraryAction.reuse => (attemptResult next (ResearchSession::beginPrepared candidate owner)) | ResearchFactory::LibraryAction.build => (blocked next "portfolio cannot rebuild an owned library") | ResearchFactory::LibraryAction.idle => (blocked next "portfolio has no attempt") | ResearchFactory::LibraryAction.blocked => (blocked next "portfolio owner closure changed"))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: advance,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (if ((project state cancelled) || ((project state remaining) =? 0)) then (release state) else (let next : State := (record State {inspection := (project state inspection), inspected := (project state inspected), research := (first (Research::dispatch (project state research))), base := (project state base), owner := (project state owner), active := (project state active), results := (project state results), remaining := (project state remaining), phase := (project state phase), cancelled := (project state cancelled)}); (match (project (project next research) pending) | Option.none => (release next) | Option.some request => (attempt next request)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: host,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.inspecting => (match (project state inspection) | Option.none => (blocked state "portfolio missing inspection owner") | Option.some inspection => (inspectionResult state (ResearchInspection::step inspection (ctor ResearchInspection::Event.host event)))) | Phase.preparing => (match (project state owner) | Option.none => (blocked state "portfolio missing preparing owner") | Option.some owner => (ownerResult state (ResearchWorkspace::step owner (ctor ResearchWorkspace::Event.host event)))) | Phase.releasing => (match (project state owner) | Option.none => (blocked state "portfolio missing releasing owner") | Option.some owner => (ownerResult state (ResearchWorkspace::step owner (ctor ResearchWorkspace::Event.host event)))) | Phase.attempting => (match (project state active) | Option.none => (blocked state "portfolio missing session") | Option.some active => (attemptResult state (ResearchSession::step active (ctor ResearchSession::Event.host event)))) | Phase.advancing => (match (ResearchExecution::asWaited event) | Option.none => (blocked state "portfolio expected continuation") | Option.some response => (match response | Result.error failure => (blocked state "portfolio continuation failed") | Result.ok reply => (match (project reply finished) | List.nil => (advance state) | List.cons child tail => (blocked state "portfolio received unowned child")))) | Phase.ended => (finish state) | Phase.blocked => (blocked state "portfolio retained for recovery")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (markCancelled state); (match (project state phase) | Phase.inspecting => (match (project state inspection) | Option.none => (blocked next "portfolio missing inspection owner") | Option.some inspection => (inspectionResult next (ResearchInspection::step inspection (ctor ResearchInspection::Event.cancel)))) | Phase.preparing => (match (project state owner) | Option.none => (blocked next "portfolio missing preparing owner") | Option.some owner => (ownerResult next (ResearchWorkspace::step owner (ctor ResearchWorkspace::Event.cancel)))) | Phase.attempting => (match (project state active) | Option.none => (blocked next "portfolio missing session") | Option.some active => (attemptResult next (ResearchSession::step active (ctor ResearchSession::Event.cancel)))) | Phase.advancing => (next, (ctor Emission.awaiting)) | Phase.releasing => (next, (ctor Emission.awaiting)) | Phase.ended => (finish next) | Phase.blocked => (blocked next "portfolio retains uncertain work"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: begin,
+ parameters: [research : Research::State, base : ResearchProject::Config, budget : Nat],
+ result: (State * Emission),
+ body: (let state : State := (record State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := research, base := base, owner := (ctor Option.none [ResearchWorkspace::State]), active := (ctor Option.none [ResearchSession::State]), results := (nil (Research::Answer * Bytes)), remaining := budget, phase := (ctor Phase.preparing), cancelled := false}); (if ((budget <=? 64) && ((Research::sameSnapshot (project research snapshot) (project (project (project base workspace) request) snapshot)) && (ResearchWorkspace::valid (project base workspace)))) then (if (budget =? 0) then (finish state) else (match (project research pending) | Option.some request => (blocked state "portfolio cannot adopt outstanding work") | Option.none => (ownerResult state (ResearchWorkspace::begin (project base workspace))))) else (blocked state "portfolio configuration or budget invalid"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match event | Event.host response => (host state response) | Event.cancel => (cancel state)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Own a bounded adaptive portfolio over the existing research scheduler. Inspect requested origins in the owned exact library before dispatch, replace supplied goal arenas with kernel types, and isolate unsupported inspections to their tasks. Select each next task after the preceding owned session outcome, construct local proof proposals without supplied proof terms, derive universe parameters from each goal, and borrow one exact ready library. Unsupported synthesis blocks that executor without declaring a refutation. Retain per-attempt evidence, recheck the library between attempts, and drain cancellation before release. Only host replies and cancellation enter after begin. This executor owns inspection and constructive synthesis; ResearchAutonomy passes retained checked results to its separate owned batch-publication stage.",
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "owned-inspection-before-dispatch" (cons "goal-derived-universe-parameters" (cons "adaptive-existing-scheduler" (cons "local-construction-without-proof-input" (cons "one-owned-library" (cons "bounded-attempt-budget" (cons "owned-session-outcomes" (cons "uncertain-work-retains-owner" (cons "suspension-releases-unstarted-selection" (nil String)))))))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

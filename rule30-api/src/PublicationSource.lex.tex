@@ -1,0 +1,74 @@
+\begin{lexlean}{PublicationSource}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchWorkspace}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: append,
+ parameters: [left : Bytes, right : Bytes],
+ result: Bytes,
+ body: (prim append left right : Bytes),
+ executable: true
+}
+definition{
+ name: moduleName,
+ parameters: [identity : Bytes],
+ result: Bytes,
+ body: (append 0x47656e65726174656450 identity),
+ executable: true
+}
+definition{
+ name: theoremName,
+ parameters: [identity : Bytes],
+ result: Bytes,
+ body: (append 0x52756c653330554f522e (append (moduleName identity) 0x2e70726f6f66)),
+ executable: true
+}
+definition{
+ name: at,
+ parameters: [data : Bytes, pattern : Bytes, position : Nat],
+ result: Bool,
+ body: (match (prim slice data position (prim length pattern : Nat) : (Option Bytes)) | Option.none => false | Option.some found => (Toml::sameBytes found pattern)),
+ executable: true
+}
+definition{
+ name: find,
+ parameters: [data : Bytes, pattern : Bytes, position : Nat, fuel : Nat],
+ result: (Option Nat),
+ body: (match fuel | Nat.zero => (ctor Option.none [Nat]) | Nat.succ more => (if ((position + (prim length pattern : Nat)) <=? (prim length data : Nat)) then (if (at data pattern position) then (ctor Option.some [Nat] position) else (find data pattern (position + 1) more)) else (ctor Option.none [Nat]))),
+ recursive_argument: fuel,
+ executable: true
+}
+definition{
+ name: replace,
+ parameters: [data : Bytes, pattern : Bytes, replacement : Bytes, fuel : Nat],
+ result: (Option Bytes),
+ body: (if (0 <? (prim length pattern : Nat)) then (match (find data pattern 0 fuel) | Option.none => (ctor Option.none [Bytes]) | Option.some position => (let after : Nat := (position + (prim length pattern : Nat)); (ctor Option.some [Bytes] (append (Toml::sliceOr data 0 position) (append replacement (Toml::sliceOr data after (prim subtract (prim length data : Nat) after : Nat))))))) else (ctor Option.none [Bytes])),
+ executable: true
+}
+definition{
+ name: renamed,
+ parameters: [source : Bytes, identity : Bytes, fuel : Nat],
+ result: (Option Bytes),
+ body: (let header : Bytes := 0x5c626567696e7b6c65786c65616e7d7b43616e6469646174657d; (if (((prim length identity : Nat) =? 64) && ((ResearchWorkspace::objectId identity) && ((at source header 0) && ((prim length source : Nat) <=? 8388608)))) then (match (replace source header (append 0x5c626567696e7b6c65786c65616e7d7b (append (moduleName identity) 0x7d)) fuel) | Option.none => (ctor Option.none [Bytes]) | Option.some headerChanged => (replace headerChanged 0x0a7468656f72656d2052756c65333043616e6469646174652e43616e6469646174652e70726f6f66 (append 0x0a7468656f72656d20 (theoremName identity)) fuel)) else (ctor Option.none [Bytes]))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Derive a distinct publication module and global theorem name from the canonical evidence identity. Rename only the fixed candidate module header and first theorem declaration marker. The result is unverified source: publication must own a new snapshot and full proof verification after renaming, bind the actual resulting type to the original request, and retain the original evidence. An archived receipt or successful text rewrite never establishes a published claim.",
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "evidence-addressed-publication-name" (cons "bounded-candidate-header-rewrite" (cons "rename-requires-owned-reverification" (nil String)))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

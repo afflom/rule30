@@ -1,0 +1,146 @@
+\begin{lexlean}{ResearchAutonomy}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchPublication}
+\importmodule{ResearchRecovery}
+\importmodule{ResearchPortfolio}
+\importmodule{ResearchPortfolioInput}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchSession}
+\importmodule{Research}
+\importmodule{LexLeanStd.Host}
+\title{Boolean}
+\begin{semanticmodule}
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: recovering, fields: []}, {name: running, fields: []}, {name: publishing, fields: []}, {name: sealing, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}]
+}
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: publisher, type: (Option ResearchPublication::State)}, {name: publications, type: (List Bytes)}, {name: publishedCommit, type: Bytes}, {name: recovery, type: (Option ResearchRecovery::State)}, {name: portfolio, type: (Option ResearchPortfolio::State)}, {name: results, type: (List (Research::Answer * Bytes))}, {name: phase, type: Phase}, {name: cancelled, type: Bool}]
+}
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}]
+}
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: complete, fields: [(List (Research::Answer * Bytes)), Bytes]}, {name: cut, fields: []}, {name: blocked, fields: [String]}]
+}
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((record State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project state publishedCommit), recovery := (project state recovery), portfolio := (project state portfolio), results := (project state results), phase := (ctor Phase.blocked), cancelled := (project state cancelled)}), (ctor Emission.blocked reason)),
+ executable: true
+}
+definition{
+ name: cut,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: ((record State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project state publishedCommit), recovery := (project state recovery), portfolio := (project state portfolio), results := (project state results), phase := (ctor Phase.ended), cancelled := true}), (ctor Emission.cut)),
+ executable: true
+}
+definition{
+ name: released,
+ parameters: [portfolio : ResearchPortfolio::State],
+ result: Bool,
+ body: ((match (project portfolio inspection) | Option.none => true | Option.some inspection => false) && ((match (project portfolio phase) | ResearchPortfolio::Phase.ended => true | ResearchPortfolio::Phase.inspecting => false | ResearchPortfolio::Phase.preparing => false | ResearchPortfolio::Phase.advancing => false | ResearchPortfolio::Phase.attempting => false | ResearchPortfolio::Phase.releasing => false | ResearchPortfolio::Phase.blocked => false) && ((match (project portfolio active) | Option.none => true | Option.some session => false) && (match (project portfolio owner) | Option.none => true | Option.some owner => ((not (project owner owned)) && (match (project owner phase) | ResearchWorkspace::Phase.ended => true | ResearchWorkspace::Phase.ready => false | ResearchWorkspace::Phase.checking => false | ResearchWorkspace::Phase.executing => false | ResearchWorkspace::Phase.reading => false | ResearchWorkspace::Phase.blocked => false)))))),
+ executable: true
+}
+definition{
+ name: sealResult,
+ parameters: [state : State, result : (ResearchRecovery::State * ResearchRecovery::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project state publishedCommit), recovery := (ctor Option.some [ResearchRecovery::State] (first result)), portfolio := (project state portfolio), results := (project state results), phase := (ctor Phase.sealing), cancelled := (project state cancelled)}); (match (second result) | ResearchRecovery::Emission.host request => (next, (ctor Emission.host request)) | ResearchRecovery::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchRecovery::Emission.sealed identity => ((record State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project next publishedCommit), recovery := (project next recovery), portfolio := (project next portfolio), results := (project next results), phase := (ctor Phase.ended), cancelled := (project next cancelled)}), (ctor Emission.complete (project next results) identity)) | ResearchRecovery::Emission.cut => (cut next) | ResearchRecovery::Emission.blocked reason => (blocked next reason) | ResearchRecovery::Emission.ready input identity => (blocked next "unexpected second controller generation"))),
+ executable: true
+}
+definition{
+ name: seal,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state recovery) | Option.none => (blocked state "missing controller generation") | Option.some recovery => (sealResult state (ResearchRecovery::step recovery (ctor ResearchRecovery::Event.seal)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: publicationResult,
+ parameters: [state : State, result : (ResearchPublication::State * ResearchPublication::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {publisher := (ctor Option.some [ResearchPublication::State] (first result)), publications := (if ((project (first result) published) && (ResearchWorkspace::objectId (project (first result) commit))) then (project (first result) identities) else (project state publications)), publishedCommit := (if ((project (first result) published) && (ResearchWorkspace::objectId (project (first result) commit))) then (project (first result) commit) else (project state publishedCommit)), recovery := (project state recovery), portfolio := (project state portfolio), results := (project state results), phase := (ctor Phase.publishing), cancelled := (project state cancelled)}); (match (second result) | ResearchPublication::Emission.host request => (next, (ctor Emission.host request)) | ResearchPublication::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchPublication::Emission.blocked reason => (blocked next reason) | ResearchPublication::Emission.complete identities commit => (if (ResearchPublication::released (first result)) then (seal (record State {publisher := (ctor Option.none [ResearchPublication::State]), publications := identities, publishedCommit := commit, recovery := (project next recovery), portfolio := (project next portfolio), results := (project next results), phase := (project next phase), cancelled := (project next cancelled)})) else (blocked next "publication completion still owns resources")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: publish,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (if (project state cancelled) then (seal state) else (match (project state portfolio) | Option.none => (blocked state "missing completed portfolio") | Option.some portfolio => (match (ResearchPublication::beginBatch (project portfolio base) (project state results)) | Option.none => (seal state) | Option.some result => (publicationResult state result)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: portfolioResult,
+ parameters: [state : State, result : (ResearchPortfolio::State * ResearchPortfolio::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project state publishedCommit), recovery := (project state recovery), portfolio := (ctor Option.some [ResearchPortfolio::State] (first result)), results := (project state results), phase := (ctor Phase.running), cancelled := ((project state cancelled) || (project (first result) cancelled))}); (match (second result) | ResearchPortfolio::Emission.host request => (next, (ctor Emission.host request)) | ResearchPortfolio::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchPortfolio::Emission.blocked reason => (blocked next reason) | ResearchPortfolio::Emission.complete research answers => (if (released (first result)) then (publish (record State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project next publishedCommit), recovery := (project next recovery), portfolio := (project next portfolio), results := answers, phase := (project next phase), cancelled := (project next cancelled)})) else (blocked next "portfolio completion still owns resources")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: recoveryResult,
+ parameters: [state : State, result : (ResearchRecovery::State * ResearchRecovery::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project state publishedCommit), recovery := (ctor Option.some [ResearchRecovery::State] (first result)), portfolio := (project state portfolio), results := (project state results), phase := (ctor Phase.recovering), cancelled := (project state cancelled)}); (match (second result) | ResearchRecovery::Emission.host request => (next, (ctor Emission.host request)) | ResearchRecovery::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchRecovery::Emission.blocked reason => (blocked next reason) | ResearchRecovery::Emission.cut => (cut next) | ResearchRecovery::Emission.sealed identity => (blocked next "unexpected completed generation during recovery") | ResearchRecovery::Emission.ready input identity => (if (project next cancelled) then (seal next) else (portfolioResult next (ResearchPortfolio::begin (project input research) (project input base) (project input budget)))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: begin,
+ parameters: [config : ResearchRecovery::Config],
+ result: (State * Emission),
+ body: (recoveryResult (record State {publisher := (ctor Option.none [ResearchPublication::State]), publications := (nil Bytes), publishedCommit := 0x, recovery := (ctor Option.none [ResearchRecovery::State]), portfolio := (ctor Option.none [ResearchPortfolio::State]), results := (nil (Research::Answer * Bytes)), phase := (ctor Phase.recovering), cancelled := false}) (ResearchRecovery::begin config)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: host,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.recovering => (match (project state recovery) | Option.none => (blocked state "missing recovery owner") | Option.some recovery => (recoveryResult state (ResearchRecovery::step recovery (ctor ResearchRecovery::Event.host event)))) | Phase.running => (match (project state portfolio) | Option.none => (blocked state "missing portfolio owner") | Option.some portfolio => (portfolioResult state (ResearchPortfolio::step portfolio (ctor ResearchPortfolio::Event.host event)))) | Phase.publishing => (match (project state publisher) | Option.none => (blocked state "missing publication owner") | Option.some publisher => (publicationResult state (ResearchPublication::step publisher (ctor ResearchPublication::Event.host event)))) | Phase.sealing => (match (project state recovery) | Option.none => (blocked state "missing seal owner") | Option.some recovery => (sealResult state (ResearchRecovery::step recovery (ctor ResearchRecovery::Event.host event)))) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (blocked state "autonomous run retains uncertain ownership")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (record State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project state publishedCommit), recovery := (project state recovery), portfolio := (project state portfolio), results := (project state results), phase := (project state phase), cancelled := true}); (match (project state phase) | Phase.recovering => (match (project state recovery) | Option.none => (blocked next "missing recovery owner") | Option.some recovery => (recoveryResult next (ResearchRecovery::step recovery (ctor ResearchRecovery::Event.cancel)))) | Phase.running => (match (project state portfolio) | Option.none => (blocked next "missing portfolio owner") | Option.some portfolio => (portfolioResult next (ResearchPortfolio::step portfolio (ctor ResearchPortfolio::Event.cancel)))) | Phase.publishing => (match (project next publisher) | Option.none => (blocked next "missing publication owner") | Option.some publisher => (publicationResult next (ResearchPublication::step publisher (ctor ResearchPublication::Event.cancel)))) | Phase.sealing => (next, (ctor Emission.awaiting)) | Phase.ended => (next, (ctor Emission.awaiting)) | Phase.blocked => (blocked next "cancelled autonomous run retains uncertain ownership"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match event | Event.host reply => (host state reply) | Event.cancel => (cancel state)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "owned-proof-batch-before-generation-seal" (cons "single-gate-batch-publication" (cons "recovery-before-portfolio-dispatch" (cons "owned-portfolio-host-routing" (cons "no-unreleased-generation-seal" (cons "journal-acknowledgement-before-completion" (cons "uncertain-ownership-halts-autonomy" (cons "terminal-host-events-cannot-restart" (nil String))))))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

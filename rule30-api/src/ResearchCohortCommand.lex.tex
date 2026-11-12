@@ -6,8 +6,16 @@
 \importmodule{Research}
 \importmodule{ResearchCohort}
 \importmodule{ResearchCohortInput}
+\importmodule{ResearchPortfolio}
+\importmodule{ResearchPortfolioInput}
+\importmodule{ResearchAutonomy}
+\importmodule{ResearchAutonomyInput}
+\importmodule{ResearchRecovery}
+\importmodule{ResearchInput}
+\importmodule{ResearchProject}
 \importmodule{ResearchCommand}
 \importmodule{ResearchRecord}
+\importmodule{CandidateSource}
 \importmodule{ResearchSession}
 \importmodule{ResearchWorkspace}
 \importmodule{Json}
@@ -19,13 +27,13 @@ inductive{
  name: State,
  type_parameters: [],
  parameters: [],
- constructors: [{name: reading, fields: [(List (Bytes * Bytes))]}, {name: active, fields: [ResearchCohort::State]}, {name: ended, fields: [(Option ResearchCohort::State)]}]
+ constructors: [{name: reading, fields: [(List (Bytes * Bytes))]}, {name: active, fields: [ResearchCohort::State]}, {name: ended, fields: [(Option ResearchCohort::State)]}, {name: portfolio, fields: [ResearchPortfolio::State]}, {name: portfolioEnded, fields: [ResearchPortfolio::State]}, {name: autonomy, fields: [ResearchAutonomy::State]}, {name: autonomyEnded, fields: [ResearchAutonomy::State]}]
 }
 definition{
  name: usage,
  parameters: [],
  result: Bytes,
- body: 0x75736167653a207233302d72657365617263682d636f686f727420524551554553542e6a736f6e0a0a52756e20757020746f203634206c6f63616c6c792076657269666965642063616e64696461746520617474656d7074732073686172696e67206f6e65207072657061726564206c6962726172792e0a496e7075743a207233302f72657365617263682d636f686f72742f31207769746820666972737420616e6420726573742066756c6c20617474656d70742072657175657374732e0a417474656d707473206d757374207368617265206c6962726172792c20746f6f6c732c20656e7669726f6e6d656e7420616e6420776f726b7370616365206c6f6720636f6e66696775726174696f6e2c0a776974682064697374696e63742073657269616c732e205065722d617474656d707420726573756c74732072657461696e2074686569722070726f6f66207374617475732e0a,
+ body: 0x75736167653a207233302d72657365617263682d636f686f727420524551554553542e6a736f6e0a0a52756e20757020746f203634206c6f63616c6c792076657269666965642063616e64696461746520617474656d7074732073686172696e67206f6e65207072657061726564206c6962726172792e0a496e7075743a207233302f72657365617263682d636f686f72742f31207769746820666972737420616e6420726573742066756c6c20617474656d70742072657175657374732e0a417474656d707473206d757374207368617265206c6962726172792c20746f6f6c732c20656e7669726f6e6d656e7420616e6420776f726b7370616365206c6f6720636f6e66696775726174696f6e2c0a776974682064697374696e63742073657269616c732e205065722d617474656d707420726573756c74732072657461696e2074686569722070726f6f66207374617475732e0a416c736f2061636365707473207233302f72657365617263682d706f7274666f6c696f2f313a206261736520636f6e66696775726174696f6e2c20757020746f203634207461736b732c20616e6420616e20617474656d7074206275646765742e2054686520706f7274666f6c696f2073656c65637473207461736b732061646170746976656c7920616e6420636f6e73747275637473206c6f63616c2070726f706f73616c7320776974686f75742070726f6f66207465726d732e20526573756c74732061726520617474656d7074732c206e6f7420636c61696d207075626c69636174696f6e2e0a,
  executable: true
 }
 definition{
@@ -85,10 +93,83 @@ definition{
  executable: true
 }
 definition{
+ name: taskStates,
+ parameters: [tasks : (List Research::Task)],
+ result: (List Json::Value),
+ body: (match tasks | List.nil => (nil Json::Value) | List.cons head tail => (cons (ctor Json::Value.object (cons (0x6964, (ctor Json::Value.string (project head id))) (cons (0x737461747573, (ResearchRecord::status (project head status))) (cons (0x6f726967696e, (ctor Json::Value.string (project (project head sequent) origin))) (cons (0x696e74656e74, (ResearchRecord::purpose (project head intent))) (nil (Bytes * Json::Value))))))) (taskStates tail))),
+ axioms: [],
+ recursive_argument: tasks,
+ executable: true
+}
+definition{
+ name: autonomyTasks,
+ parameters: [autonomy : ResearchAutonomy::State],
+ result: (List Json::Value),
+ body: (match (project autonomy portfolio) | Option.none => (nil Json::Value) | Option.some portfolio => (taskStates (project (project portfolio research) tasks))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: finishPortfolio,
+ parameters: [portfolio : ResearchPortfolio::State, exitStatus : UInt8, status : Bytes, reason : Bytes],
+ result: (State * LexLeanStd.Host::Request),
+ body: ((ctor State.portfolioEnded portfolio), (match (JsonCanonical::file (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d706f7274666f6c696f2d726573756c742f31)) (cons (0x737461747573, (ctor Json::Value.string status)) (cons (0x726561736f6e, (ctor Json::Value.string reason)) (cons (0x726573756c7473, (ctor Json::Value.array (results (project portfolio results)))) (cons (0x7265636f766572795f776f726b7370616365, (ctor Json::Value.string (match (project portfolio owner) | Option.none => 0x | Option.some owner => (if (project owner owned) then (prim utf8_encode (ResearchWorkspace::path (project owner config)) : Bytes) else 0x)))) (cons (0x7461736b73, (ctor Json::Value.array (taskStates (project (project portfolio research) tasks)))) (nil (Bytes * Json::Value))))))))) 8388608 16777216) | Option.some data => (ctor LexLeanStd.Host::Request.exit exitStatus data 0x) | Option.none => (ctor LexLeanStd.Host::Request.exit (70 : UInt8) 0x 0x706f7274666f6c696f20726573756c74206578636565647320656e636f64696e67206c696d6974735c6e))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: advancePortfolio,
+ parameters: [result : (ResearchPortfolio::State * ResearchPortfolio::Emission)],
+ result: (State * LexLeanStd.Host::Request),
+ body: (match (second result) | ResearchPortfolio::Emission.host request => ((ctor State.portfolio (first result)), request) | ResearchPortfolio::Emission.awaiting => (finishPortfolio (first result) (70 : UInt8) 0x6661696c6564 0x706f7274666f6c696f20686173206e6f206f75747374616e64696e6720686f73742072657175657374) | ResearchPortfolio::Emission.blocked reason => (finishPortfolio (first result) (1 : UInt8) 0x626c6f636b6564 (prim utf8_encode reason : Bytes)) | ResearchPortfolio::Emission.complete research answers => (finishPortfolio (first result) (if (project (first result) cancelled) then (1 : UInt8) else (0 : UInt8)) (if (project (first result) cancelled) then 0x637574 else 0x636f6d706c65746564) 0x)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: autonomyRecoveryPath,
+ parameters: [autonomy : ResearchAutonomy::State],
+ result: Bytes,
+ body: (match (project autonomy recovery) | Option.none => 0x | Option.some recovery => (prim utf8_encode (ResearchWorkspace::path (project (project (ResearchRecovery::resumed recovery) base) workspace)) : Bytes)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: finishAutonomy,
+ parameters: [autonomy : ResearchAutonomy::State, exitStatus : UInt8, status : Bytes, reason : Bytes, identity : Bytes],
+ result: (State * LexLeanStd.Host::Request),
+ body: ((ctor State.autonomyEnded autonomy), (match (JsonCanonical::file (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d6175746f6e6f6d792d726573756c742f31)) (cons (0x737461747573, (ctor Json::Value.string status)) (cons (0x726561736f6e, (ctor Json::Value.string reason)) (cons (0x67656e65726174696f6e5f7265636f7264, (ctor Json::Value.string identity)) (cons (0x726573756c7473, (ctor Json::Value.array (results (project autonomy results)))) (cons (0x7265636f766572795f776f726b7370616365, (ctor Json::Value.string (if (ResearchInput::stringIs (ctor Json::Value.string status) 0x626c6f636b6564) then (autonomyRecoveryPath autonomy) else 0x))) (cons (0x7461736b73, (ctor Json::Value.array (autonomyTasks autonomy))) (cons (0x7075626c69736865645f65766964656e6365, (ctor Json::Value.array (CandidateSource::strings (project autonomy publications)))) (cons (0x7075626c69736865645f636f6d6d6974, (ctor Json::Value.string (project autonomy publishedCommit))) (nil (Bytes * Json::Value)))))))))))) 8388608 16777216) | Option.some data => (ctor LexLeanStd.Host::Request.exit exitStatus data 0x) | Option.none => (ctor LexLeanStd.Host::Request.exit (70 : UInt8) 0x 0x6175746f6e6f6d7920726573756c74206578636565647320656e636f64696e67206c696d6974730a))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: advanceAutonomy,
+ parameters: [result : (ResearchAutonomy::State * ResearchAutonomy::Emission)],
+ result: (State * LexLeanStd.Host::Request),
+ body: (match (second result) | ResearchAutonomy::Emission.host request => ((ctor State.autonomy (first result)), request) | ResearchAutonomy::Emission.awaiting => (finishAutonomy (first result) (70 : UInt8) 0x626c6f636b6564 0x6175746f6e6f6d7920686173206e6f206f75747374616e64696e6720686f73742072657175657374 0x) | ResearchAutonomy::Emission.blocked reason => (finishAutonomy (first result) (1 : UInt8) 0x626c6f636b6564 (prim utf8_encode reason : Bytes) 0x) | ResearchAutonomy::Emission.cut => (finishAutonomy (first result) (1 : UInt8) 0x637574 0x 0x) | ResearchAutonomy::Emission.complete answers identity => (finishAutonomy (first result) (if (project (first result) cancelled) then (1 : UInt8) else (0 : UInt8)) (if (project (first result) cancelled) then 0x637574 else 0x636f6d706c65746564) 0x identity)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: readAutonomy,
+ parameters: [data : Bytes, env : (List (Bytes * Bytes))],
+ result: (State * LexLeanStd.Host::Request),
+ body: (match (ResearchAutonomyInput::decode data env) | Option.none => (error (ctor Option.none [ResearchCohort::State]) (2 : UInt8) 0x696e76616c696420636f686f72742c20706f7274666f6c696f206f72207265636f766572792072657175657374) | Option.some config => (advanceAutonomy (ResearchAutonomy::begin config))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: readPortfolio,
+ parameters: [data : Bytes, env : (List (Bytes * Bytes))],
+ result: (State * LexLeanStd.Host::Request),
+ body: (match (ResearchPortfolioInput::decode data env) | Option.none => (readAutonomy data env) | Option.some config => (advancePortfolio (ResearchPortfolio::begin (project config research) (project config base) (project config budget)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
  name: readResult,
  parameters: [env : (List (Bytes * Bytes)), event : LexLeanStd.Host::Event],
  result: (State * LexLeanStd.Host::Request),
- body: (match (Host::asRead event) | Option.none => (error (ctor Option.none [ResearchCohort::State]) (70 : UInt8) 0x657870656374656420617474656d707420726571756573742072656164) | Option.some response => (match response | Result.error failure => (error (ctor Option.none [ResearchCohort::State]) (1 : UInt8) (project failure message)) | Result.ok data => (match (ResearchCohortInput::decode data env) | Option.none => (error (ctor Option.none [ResearchCohort::State]) (2 : UInt8) 0x617474656d70742072657175657374206f7220656e7669726f6e6d656e74206973206f757473696465207468652061646d697474656420736368656d6120616e6420626f756e6473) | Option.some config => (advanceCohort (ResearchCohort::begin config))))),
+ body: (match (Host::asRead event) | Option.none => (error (ctor Option.none [ResearchCohort::State]) (70 : UInt8) 0x657870656374656420617474656d707420726571756573742072656164) | Option.some response => (match response | Result.error failure => (error (ctor Option.none [ResearchCohort::State]) (1 : UInt8) (project failure message)) | Result.ok data => (match (ResearchCohortInput::decode data env) | Option.none => (readPortfolio data env) | Option.some config => (advanceCohort (ResearchCohort::begin config))))),
  axioms: [Quot.sound, propext],
  executable: true
 }
@@ -112,7 +193,7 @@ definition{
  name: step,
  parameters: [state : (Option State), event : LexLeanStd.Host::Event],
  result: (State * LexLeanStd.Host::Request),
- body: (match state | Option.none => (match (Host::asStart event) | Option.none => (error (ctor Option.none [ResearchCohort::State]) (70 : UInt8) 0x6578706563746564206e617469766520686f7374207374617274) | Option.some initialStart => (start initialStart)) | Option.some active => (match active | State.reading env => (readResult env event) | State.active session => (advanceCohort (ResearchCohort::step session (ctor ResearchCohort::Event.host event))) | State.ended session => (error session (70 : UInt8) 0x636f6d706c6574656420726573656172636820636f6d6d616e642063616e6e6f742072657374617274))),
+ body: (match state | Option.none => (match (Host::asStart event) | Option.none => (error (ctor Option.none [ResearchCohort::State]) (70 : UInt8) 0x6578706563746564206e617469766520686f7374207374617274) | Option.some initialStart => (start initialStart)) | Option.some active => (match active | State.reading env => (readResult env event) | State.active session => (advanceCohort (ResearchCohort::step session (ctor ResearchCohort::Event.host event))) | State.autonomy autonomy => (advanceAutonomy (ResearchAutonomy::step autonomy (ctor ResearchAutonomy::Event.host event))) | State.autonomyEnded autonomy => (finishAutonomy autonomy (70 : UInt8) 0x626c6f636b6564 0x7465726d696e616c206175746f6e6f6d792063616e6e6f742072657374617274 0x) | State.portfolio portfolio => (advancePortfolio (ResearchPortfolio::step portfolio (ctor ResearchPortfolio::Event.host event))) | State.portfolioEnded portfolio => (finishPortfolio portfolio (70 : UInt8) 0x6661696c6564 0x7465726d696e616c20706f7274666f6c696f2063616e6e6f742072657374617274) | State.ended session => (error session (70 : UInt8) 0x636f6d706c6574656420726573656172636820636f6d6d616e642063616e6e6f742072657374617274))),
  axioms: [Quot.sound, propext],
  executable: true,
  production: {effects: [allocation, files, overflow, process, recursion], targets: [rust-std]}

@@ -1,0 +1,74 @@
+\begin{lexlean}{PublicationFrontier}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Research}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: join,
+ parameters: [segments : (List Bytes)],
+ result: Bytes,
+ body: (match segments | List.nil => 0x | List.cons head tail => (prim append head (join tail) : Bytes)),
+ axioms: [],
+ recursive_argument: segments,
+ executable: true
+}
+definition{
+ name: fieldIs,
+ parameters: [table : Toml::Table, key : Bytes, expected : Bytes],
+ result: Bool,
+ body: (match (Toml::field table key) | Option.none => false | Option.some value => (match value | Toml::Value.text segments => (Toml::sameBytes (join segments) expected) | Toml::Value.number number => false | Toml::Value.strings values => false)),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: selected,
+ parameters: [tables : (List Toml::Table), identity : Bytes],
+ result: (List Toml::Table),
+ body: (match tables | List.nil => (nil Toml::Table) | List.cons head tail => (if ((Toml::sameBytes (project head name) 0x636c61696d) && (fieldIs head 0x6964 identity)) then (cons head (selected tail identity)) else (selected tail identity))),
+ axioms: [],
+ recursive_argument: tables,
+ executable: true
+}
+definition{
+ name: eligible,
+ parameters: [table : Toml::Table, task : Research::Task],
+ result: Bool,
+ body: ((fieldIs table 0x737461747573 0x6f70656e) && ((match (project task intent) | Research::Purpose.prove => true | Research::Purpose.refute => true | Research::Purpose.inspect => false | Research::Purpose.maintain => false) && (match (project (project task sequent) kind) | Research::GoalKind.closed => (fieldIs table 0x6c65616e (project (project task sequent) origin)) | Research::GoalKind.premise => true))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: current,
+ parameters: [source : Bytes, task : Research::Task],
+ result: Bool,
+ body: (if ((prim length source : Nat) <=? 8388608) then (match (Toml::parse source) | Result.error problem => false | Result.ok tables => (match (selected tables (project task id)) | List.nil => false | List.cons head tail => (match tail | List.nil => (eligible head task) | List.cons duplicate rest => false))) else false),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: closesClaim,
+ parameters: [task : Research::Task],
+ result: Bool,
+ body: (match (project (project task sequent) kind) | Research::GoalKind.closed => true | Research::GoalKind.premise => false),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Read the frontier from the owned exact-revision workspace before publication. Require one matching open claim and a prove or refute intent. A closed claim must still designate the inspected source proposition. A contextual premise contributes a supporting lemma without changing the enclosing claim status. Duplicate identifiers, non-open claims, malformed TOML and origin changes refuse publication.",
+ axioms: [],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "exact-open-frontier-admission" (cons "duplicate-claim-refusal" (cons "closed-origin-binding" (cons "premise-leaves-parent-open" (nil String))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

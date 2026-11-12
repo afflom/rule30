@@ -1,0 +1,106 @@
+\begin{lexlean}{ResearchRecoveryTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchRecovery}
+\importmodule{ResearchJournal}
+\importmodule{ResearchPortfolioInput}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{Research}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\importmodule{LexLeanStd.Host}
+\importmodule{ResearchExecution}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: document,
+ parameters: [generation : Nat, status : Bytes, quarantined : (List Nat)],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d6a6f75726e616c2f31)) (cons (0x6b6579, (ctor Json::Value.string (ResearchRecovery::key))) (cons (0x7072656465636573736f72, (ctor Json::Value.string 0x)) (cons (0x7265766973696f6e, (ctor Json::Value.string 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161)) (cons (0x696e74656e74, (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f636f6e74726f6c6c65722d67656e65726174696f6e2f31)) (cons (0x67656e65726174696f6e, (CoreBinding::number generation)) (cons (0x737461747573, (ctor Json::Value.string status)) (cons (0x71756172616e74696e6564, (ctor Json::Value.array (ResearchRecovery::numbers quarantined))) (cons (0x7265706f7369746f7279, (ctor Json::Value.string 0x2f7265736561726368)) (nil (Bytes * Json::Value))))))))) (nil (Bytes * Json::Value))))))))
+}
+theorem{
+ name: interruptedGenerationAllocatesFreshWorkAndQuarantine,
+ parameters: [],
+ statement: ((ResearchRecovery::ledger (document 1 0x616374697665 (nil Nat))) = (ctor Option.some [(Nat * (List Nat))] (2, (cons 1 (nil Nat))))),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: finishedGenerationPreservesEarlierQuarantine,
+ parameters: [],
+ statement: ((ResearchRecovery::ledger (document 5 0x66696e6973686564 (cons 1 (cons 3 (nil Nat))))) = (ctor Option.some [(Nat * (List Nat))] (6, (cons 1 (cons 3 (nil Nat)))))),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: duplicateQuarantineEntriesAreRefused,
+ parameters: [],
+ statement: ((ResearchRecovery::ledger (document 5 0x616374697665 (cons 1 (cons 1 (nil Nat))))) = (ctor Option.none [(Nat * (List Nat))])),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: futureQuarantineGenerationIsRefused,
+ parameters: [],
+ statement: ((ResearchRecovery::ledger (document 5 0x616374697665 (cons 5 (nil Nat)))) = (ctor Option.none [(Nat * (List Nat))])),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: unknownLifecycleStatusIsRefused,
+ parameters: [],
+ statement: ((ResearchRecovery::ledger (document 5 0x70726f766564 (nil Nat))) = (ctor Option.none [(Nat * (List Nat))])),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: generationBoundPreventsSerialOverflow,
+ parameters: [],
+ statement: ((ResearchRecovery::ledger (document 1000000000000 0x66696e6973686564 (nil Nat))) = (ctor Option.none [(Nat * (List Nat))])),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: freshWorkspaceSerialComesFromOwnedGeneration,
+ parameters: [state : ResearchRecovery::State],
+ statement: ((project (project (project (project (ResearchRecovery::resumed state) base) workspace) request) serial) = (prim multiply (project state generation) 128 : Nat)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: attemptSerialStartsBeyondLibraryReservation,
+ parameters: [state : ResearchRecovery::State],
+ statement: ((project (project (ResearchRecovery::resumed state) research) next) = ((prim multiply (project state generation) 128 : Nat) + 1)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: identities,
+ parameters: [predecessor : Json::Value, revision : Json::Value],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x7072656465636573736f72, predecessor) (cons (0x7265766973696f6e, revision) (nil (Bytes * Json::Value)))))
+}
+theorem{
+ name: nonStringPredecessorCannotAcquireGeneration,
+ parameters: [],
+ statement: ((ResearchRecovery::envelopeIdentities (identities (ctor Json::Value.null) (ctor Json::Value.string 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161))) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: malformedPinnedRevisionCannotAcquireGeneration,
+ parameters: [],
+ statement: ((ResearchRecovery::envelopeIdentities (identities (ctor Json::Value.string 0x) (ctor Json::Value.string 0x6d61696e))) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: malformedPredecessorCannotAcquireGeneration,
+ parameters: [],
+ statement: ((ResearchRecovery::envelopeIdentities (identities (ctor Json::Value.string 0x6e6f742d616e2d6f626a656374) (ctor Json::Value.string 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161))) = false),
+ proof: decide{},
+ axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}
