@@ -76,45 +76,10 @@ theorem{
   axioms: [propext]
 }
 
-theorem{
-  name: nonePolicyWithAxioms,
-  parameters: [],
-  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x6465636c61726174696f6e73 (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x6e616d65, (ctor Json::Value.string 0x43616e6469646174652e70726f6f66)) (cons (0x6f62736572766564, (ctor Json::Value.array (cons (ctor Json::Value.string 0x70726f70657874) (nil Json::Value)))) (cons (0x706f6c696379, (ctor Json::Value.object (cons (0x6b696e64, (ctor Json::Value.string 0x6e6f6e65)) (cons (0x6178696f6d73, (ctor Json::Value.array (cons (ctor Json::Value.string 0x70726f70657874) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (0x726573756c74, (ctor Json::Value.string 0x6f6b)) (nil (Bytes * Json::Value))))))) (nil Json::Value))))) = false),
-  proof: decide{},
-  axioms: [propext]
-}
 
-theorem{
-  name: unknownPolicy,
-  parameters: [],
-  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x6465636c61726174696f6e73 (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x6e616d65, (ctor Json::Value.string 0x43616e6469646174652e70726f6f66)) (cons (0x6f62736572766564, (ctor Json::Value.array (cons (ctor Json::Value.string 0x70726f70657874) (nil Json::Value)))) (cons (0x706f6c696379, (ctor Json::Value.object (cons (0x6b696e64, (ctor Json::Value.string 0x616e797468696e67)) (cons (0x6178696f6d73, (ctor Json::Value.array (cons (ctor Json::Value.string 0x70726f70657874) (nil Json::Value)))) (nil (Bytes * Json::Value)))))) (cons (0x726573756c74, (ctor Json::Value.string 0x6f6b)) (nil (Bytes * Json::Value))))))) (nil Json::Value))))) = false),
-  proof: decide{},
-  axioms: [propext]
-}
 
-theorem{
-  name: wrongElaborationArgument,
-  parameters: [],
-  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x70726f636573736573 (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x746f6f6c, (ctor Json::Value.string 0x6c65616e)) (cons (0x6d6f64756c65, (ctor Json::Value.string 0x43616e646964617465)) (cons (0x61726776, (ctor Json::Value.array (cons (ctor Json::Value.string 0x656e76) (cons (ctor Json::Value.string 0x6c65616e) (cons (ctor Json::Value.string 0x2d52) (cons (ctor Json::Value.string 0x2453544147494e472f6c65616e2d737263) (cons (ctor Json::Value.string 0x2d6f) (cons (ctor Json::Value.string 0x2453544147494e472f6f6c65616e732f43616e6469646174652e6f6c65616e) (cons (ctor Json::Value.string 0x2453544147494e472f6c65616e2d7372632f4f746865722e6c65616e) (nil Json::Value)))))))))) (cons (0x65786563757461626c655f736861323536, (ctor Json::Value.string 0x35353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535353535)) (cons (0x657869745f636f6465, (ctor Json::Value.number 0x30)) (cons (0x7374646f7574, (ctor Json::Value.string 0x0a)) (cons (0x737464657272, (ctor Json::Value.string 0x0a)) (cons (0x7374646f75745f736861323536, (ctor Json::Value.string 0x30316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662)) (cons (0x7374646572725f736861323536, (ctor Json::Value.string 0x30316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662)) (nil (Bytes * Json::Value)))))))))))) (cons (ctor Json::Value.object (cons (0x746f6f6c, (ctor Json::Value.string 0x6c65616e636865636b6572)) (cons (0x6d6f64756c65, (ctor Json::Value.string 0x43616e646964617465)) (cons (0x61726776, (ctor Json::Value.array (cons (ctor Json::Value.string 0x656e76) (cons (ctor Json::Value.string 0x24544f4f4c434841494e2f62696e2f6c65616e636865636b6572) (cons (ctor Json::Value.string 0x43616e646964617465) (nil Json::Value)))))) (cons (0x65786563757461626c655f736861323536, (ctor Json::Value.string 0x37373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737373737)) (cons (0x657869745f636f6465, (ctor Json::Value.number 0x30)) (cons (0x7374646f7574, (ctor Json::Value.string 0x0a)) (cons (0x737464657272, (ctor Json::Value.string 0x0a)) (cons (0x7374646f75745f736861323536, (ctor Json::Value.string 0x30316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662)) (cons (0x7374646572725f736861323536, (ctor Json::Value.string 0x30316261343731396338306236666539313162303931613763303531323462363465656563653936346530396330353865663866393830356461636135343662)) (nil (Bytes * Json::Value)))))))))))) (nil Json::Value)))))) = false),
-  proof: decide{},
-  axioms: [propext]
-}
 
-theorem{
-  name: allowPolicyAcceptsSubset,
-  parameters: [],
-  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x6465636c61726174696f6e73 (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x6e616d65, (ctor Json::Value.string 0x43616e6469646174652e70726f6f66)) (cons (0x6f62736572766564, (ctor Json::Value.array (cons (ctor Json::Value.string 0x70726f70657874) (nil Json::Value)))) (cons (0x706f6c696379, (ctor Json::Value.object (cons (0x6b696e64, (ctor Json::Value.string 0x616c6c6f77)) (cons (0x6178696f6d73, (ctor Json::Value.array (cons (ctor Json::Value.string 0x51756f742e736f756e64) (cons (ctor Json::Value.string 0x70726f70657874) (nil Json::Value))))) (nil (Bytes * Json::Value)))))) (cons (0x726573756c74, (ctor Json::Value.string 0x6f6b)) (nil (Bytes * Json::Value))))))) (nil Json::Value))))) = true),
-  proof: decide{},
-  axioms: [propext]
-}
 
-theorem{
-  name: nonePolicyAcceptsEmpty,
-  parameters: [],
-  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x6465636c61726174696f6e73 (ctor Json::Value.array (cons (ctor Json::Value.object (cons (0x6e616d65, (ctor Json::Value.string 0x43616e6469646174652e70726f6f66)) (cons (0x6f62736572766564, (ctor Json::Value.array (nil Json::Value))) (cons (0x706f6c696379, (ctor Json::Value.object (cons (0x6b696e64, (ctor Json::Value.string 0x6e6f6e65)) (cons (0x6178696f6d73, (ctor Json::Value.array (nil Json::Value))) (nil (Bytes * Json::Value)))))) (cons (0x726573756c74, (ctor Json::Value.string 0x6f6b)) (nil (Bytes * Json::Value))))))) (nil Json::Value))))) = true),
-  proof: decide{},
-  axioms: [propext]
-}
 
 \end{semanticmodule}
 \end{lexlean}

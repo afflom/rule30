@@ -1,0 +1,51 @@
+\begin{lexlean}{ClosedGoalChecks2}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ClosedBindingFixture}
+\importmodule{Research}
+\importmodule{ResearchCatalog}
+\importmodule{CoreBinding}
+\importmodule{CandidateBinding}
+\importmodule{Toml}
+\importmodule{Register}
+\importmodule{Json}
+\importmodule{ClosedGoalTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: redirectedPrizeMetadataIsBlocked,
+ parameters: [],
+ statement: ((match (project (ResearchCatalog::claimTask (ClosedGoalTraces::registered "problem1" "True" "open")) status) | Research::Status.blocked => true | Research::Status.ready => false | Research::Status.waiting => false | Research::Status.established => false | Research::Status.exhausted => false) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: redirectedMetadataCannotChangeThePrizeTarget,
+ parameters: [],
+ statement: ((Toml::sameBytes (project (project (ResearchCatalog::claimTask (ClosedGoalTraces::registered "problem1" "True" "open")) sequent) origin) 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: changedDependenciesCannotAuthorizeMismatchedRegistry,
+ parameters: [],
+ statement: ((let task : Research::Task := (ResearchCatalog::claimTask (ClosedGoalTraces::registered "problem1" "True" "open")); (let refreshed : Research::Task := (Research::refreshTask task 1); ((Research::sameSequent (project refreshed sequent) (project task sequent)) && (((prim length (project refreshed sources) : Nat) =? 0) && (match (project refreshed status) | Research::Status.blocked => true | Research::Status.ready => false | Research::Status.waiting => false | Research::Status.established => false | Research::Status.exhausted => false))))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: establishedClaimsDoNotBecomeResearchWork,
+ parameters: [],
+ statement: ((prim length (ResearchCatalog::claimTasks (cons (ClosedGoalTraces::registered "problem1" "Ruliology.CellularAutomata.Rule30Prize.Problem1" "proved") (nil Register::Claim))) : Nat) = 0),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
+ name: canonicalPrizeGoalCanBeScheduled,
+ parameters: [],
+ statement: ((let task : Research::Task := (ResearchCatalog::claimTask (ClosedGoalTraces::registered "problem1" "Ruliology.CellularAutomata.Rule30Prize.Problem1" "open")); ((Research::samePurpose (project task purpose) (ctor Research::Purpose.prove)) && ((Research::contextual (project task sequent)) && (match (project task status) | Research::Status.ready => true | Research::Status.waiting => false | Research::Status.blocked => false | Research::Status.established => false | Research::Status.exhausted => false)))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

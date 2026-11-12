@@ -1,0 +1,45 @@
+\begin{lexlean}{VerificationUtf8Steps9}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Toml}
+\importmodule{VerificationJsonData}
+\importmodule{VerificationUtf8Steps1}
+\importmodule{VerificationUtf8Steps2}
+\importmodule{VerificationUtf8Steps8}
+\title{Boolean}
+\begin{semanticmodule}
+
+theorem{
+  name: reportUtf8Rest192,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::reportBytes) 192 1669) = true),
+  proof: simplify{definitions: [VerificationUtf8Steps2::reportUtf8Advance192, VerificationUtf8Steps8::reportUtf8Rest256]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportUtf8Rest128,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::reportBytes) 128 1733) = true),
+  proof: simplify{definitions: [reportUtf8Rest192, VerificationUtf8Steps2::reportUtf8Advance128]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportUtf8Rest64,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::reportBytes) 64 1797) = true),
+  proof: simplify{definitions: [reportUtf8Rest128, VerificationUtf8Steps2::reportUtf8Advance64]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportUtf8Rest0,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::reportBytes) 0 1861) = true),
+  proof: simplify{definitions: [reportUtf8Rest64, VerificationUtf8Steps1::reportUtf8Advance0]},
+  axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,382 @@
+\begin{lexlean}{ResearchArchitecture}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Foundation.Arch}
+\importmodule{Foundation.Qual}
+\importmodule{Foundation.Sec}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: inspection,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 2, kind := (ctor Foundation.Arch::ComponentKind.service)})
+}
+definition{
+ name: portfolio,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 6, kind := (ctor Foundation.Arch::ComponentKind.service)})
+}
+definition{
+ name: recovery,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 8, kind := (ctor Foundation.Arch::ComponentKind.service)})
+}
+definition{
+ name: publication,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 7, kind := (ctor Foundation.Arch::ComponentKind.service)})
+}
+definition{
+ name: factory,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 0, kind := (ctor Foundation.Arch::ComponentKind.service)})
+}
+definition{
+ name: journal,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 3, kind := (ctor Foundation.Arch::ComponentKind.database)})
+}
+definition{
+ name: kernel,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 4, kind := (ctor Foundation.Arch::ComponentKind.service)})
+}
+definition{
+ name: library,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 5, kind := (ctor Foundation.Arch::ComponentKind.database)})
+}
+definition{
+ name: host,
+ parameters: [],
+ result: Foundation.Arch::Component,
+ body: (record Foundation.Arch::Component {index := 1, kind := (ctor Foundation.Arch::ComponentKind.externalSystem)})
+}
+definition{
+ name: inspectionRequiresLibrary,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 4, fromIndex := 2, toIndex := 5, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: inspectionRequiresKernel,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 3, fromIndex := 2, toIndex := 4, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: inspectionRequiresHost,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 2, fromIndex := 2, toIndex := 1, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: portfolioRequiresInspection,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 10, fromIndex := 6, toIndex := 2, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: portfolioRequiresFactory,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 9, fromIndex := 6, toIndex := 0, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: portfolioRequiresRecovery,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 12, fromIndex := 6, toIndex := 8, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: portfolioRequiresPublication,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 11, fromIndex := 6, toIndex := 7, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: recoveryRequiresJournal,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 17, fromIndex := 8, toIndex := 3, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: recoveryRequiresHost,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 16, fromIndex := 8, toIndex := 1, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: publicationRequiresKernel,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 14, fromIndex := 7, toIndex := 4, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: publicationRequiresJournal,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 13, fromIndex := 7, toIndex := 3, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: publicationRequiresLibrary,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 15, fromIndex := 7, toIndex := 5, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: factoryRequiresLibrary,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 1, fromIndex := 0, toIndex := 5, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: factoryRequiresKernel,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 0, fromIndex := 0, toIndex := 4, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: journalRequiresLibrary,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 6, fromIndex := 3, toIndex := 5, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: journalRequiresHost,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 5, fromIndex := 3, toIndex := 1, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: kernelRequiresHost,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 7, fromIndex := 4, toIndex := 1, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: libraryRequiresHost,
+ parameters: [],
+ result: Foundation.Arch::Edge,
+ body: (record Foundation.Arch::Edge {index := 8, fromIndex := 5, toIndex := 1, kind := (ctor Foundation.Arch::EdgeKind.controlFlow)})
+}
+definition{
+ name: maintainer,
+ parameters: [],
+ result: Foundation.Arch::Stakeholder,
+ body: (record Foundation.Arch::Stakeholder {index := 0})
+}
+definition{
+ name: ownership,
+ parameters: [],
+ result: Foundation.Arch::Concern,
+ body: (record Foundation.Arch::Concern {index := 1})
+}
+definition{
+ name: ownershipViewpoint,
+ parameters: [],
+ result: Foundation.Arch::Viewpoint,
+ body: (record Foundation.Arch::Viewpoint {index := 1, stakeholderIndex := 0, concernIndex := 1, modelKindIndex := 0})
+}
+definition{
+ name: ownershipView,
+ parameters: [],
+ result: Foundation.Arch::View,
+ body: (record Foundation.Arch::View {index := 1, viewpointIndex := 1, modelKindIndex := 0})
+}
+definition{
+ name: evidence,
+ parameters: [],
+ result: Foundation.Arch::Concern,
+ body: (record Foundation.Arch::Concern {index := 0})
+}
+definition{
+ name: evidenceViewpoint,
+ parameters: [],
+ result: Foundation.Arch::Viewpoint,
+ body: (record Foundation.Arch::Viewpoint {index := 0, stakeholderIndex := 0, concernIndex := 0, modelKindIndex := 2})
+}
+definition{
+ name: evidenceView,
+ parameters: [],
+ result: Foundation.Arch::View,
+ body: (record Foundation.Arch::View {index := 0, viewpointIndex := 0, modelKindIndex := 2})
+}
+definition{
+ name: velocity,
+ parameters: [],
+ result: Foundation.Arch::Concern,
+ body: (record Foundation.Arch::Concern {index := 2})
+}
+definition{
+ name: velocityViewpoint,
+ parameters: [],
+ result: Foundation.Arch::Viewpoint,
+ body: (record Foundation.Arch::Viewpoint {index := 2, stakeholderIndex := 0, concernIndex := 2, modelKindIndex := 1})
+}
+definition{
+ name: velocityView,
+ parameters: [],
+ result: Foundation.Arch::View,
+ body: (record Foundation.Arch::View {index := 2, viewpointIndex := 2, modelKindIndex := 1})
+}
+definition{
+ name: importedGoalAsset,
+ parameters: [],
+ result: Foundation.Sec::Asset,
+ body: (record Foundation.Sec::Asset {index := 2, componentIndex := 2})
+}
+definition{
+ name: forgedOrigin,
+ parameters: [],
+ result: Foundation.Sec::Threat,
+ body: (record Foundation.Sec::Threat {index := 0})
+}
+definition{
+ name: forgedOriginRisk,
+ parameters: [],
+ result: Foundation.Sec::Risk,
+ body: (record Foundation.Sec::Risk {index := 0, assetIndex := 2, threatIndex := 0, likelihood := (ctor Foundation.Sec::Likelihood.medium), impact := (ctor Foundation.Sec::Impact.critical)})
+}
+definition{
+ name: ownedInspection,
+ parameters: [],
+ result: Foundation.Sec::ApplicationSecurityControl,
+ body: (record Foundation.Sec::ApplicationSecurityControl {index := 1, riskIndex := 0})
+}
+definition{
+ name: ownedInspectionActivity,
+ parameters: [],
+ result: Foundation.Sec::SecurityActivity,
+ body: (record Foundation.Sec::SecurityActivity {index := 1, controlIndex := 1})
+}
+definition{
+ name: attemptAsset,
+ parameters: [],
+ result: Foundation.Sec::Asset,
+ body: (record Foundation.Sec::Asset {index := 0, componentIndex := 6})
+}
+definition{
+ name: staleCompletion,
+ parameters: [],
+ result: Foundation.Sec::Threat,
+ body: (record Foundation.Sec::Threat {index := 2})
+}
+definition{
+ name: staleCompletionRisk,
+ parameters: [],
+ result: Foundation.Sec::Risk,
+ body: (record Foundation.Sec::Risk {index := 2, assetIndex := 0, threatIndex := 2, likelihood := (ctor Foundation.Sec::Likelihood.medium), impact := (ctor Foundation.Sec::Impact.critical)})
+}
+definition{
+ name: snapshotBinding,
+ parameters: [],
+ result: Foundation.Sec::ApplicationSecurityControl,
+ body: (record Foundation.Sec::ApplicationSecurityControl {index := 3, riskIndex := 2})
+}
+definition{
+ name: snapshotBindingActivity,
+ parameters: [],
+ result: Foundation.Sec::SecurityActivity,
+ body: (record Foundation.Sec::SecurityActivity {index := 3, controlIndex := 3})
+}
+definition{
+ name: workspaceAsset,
+ parameters: [],
+ result: Foundation.Sec::Asset,
+ body: (record Foundation.Sec::Asset {index := 3, componentIndex := 8})
+}
+definition{
+ name: orphanedProcess,
+ parameters: [],
+ result: Foundation.Sec::Threat,
+ body: (record Foundation.Sec::Threat {index := 1})
+}
+definition{
+ name: orphanedProcessRisk,
+ parameters: [],
+ result: Foundation.Sec::Risk,
+ body: (record Foundation.Sec::Risk {index := 1, assetIndex := 3, threatIndex := 1, likelihood := (ctor Foundation.Sec::Likelihood.medium), impact := (ctor Foundation.Sec::Impact.critical)})
+}
+definition{
+ name: quarantineAndFence,
+ parameters: [],
+ result: Foundation.Sec::ApplicationSecurityControl,
+ body: (record Foundation.Sec::ApplicationSecurityControl {index := 2, riskIndex := 1})
+}
+definition{
+ name: quarantineAndFenceActivity,
+ parameters: [],
+ result: Foundation.Sec::SecurityActivity,
+ body: (record Foundation.Sec::SecurityActivity {index := 2, controlIndex := 2})
+}
+definition{
+ name: claimAsset,
+ parameters: [],
+ result: Foundation.Sec::Asset,
+ body: (record Foundation.Sec::Asset {index := 1, componentIndex := 7})
+}
+definition{
+ name: unverifiedPublication,
+ parameters: [],
+ result: Foundation.Sec::Threat,
+ body: (record Foundation.Sec::Threat {index := 3})
+}
+definition{
+ name: unverifiedPublicationRisk,
+ parameters: [],
+ result: Foundation.Sec::Risk,
+ body: (record Foundation.Sec::Risk {index := 3, assetIndex := 1, threatIndex := 3, likelihood := (ctor Foundation.Sec::Likelihood.medium), impact := (ctor Foundation.Sec::Impact.critical)})
+}
+definition{
+ name: kernelAndRegisterGate,
+ parameters: [],
+ result: Foundation.Sec::ApplicationSecurityControl,
+ body: (record Foundation.Sec::ApplicationSecurityControl {index := 0, riskIndex := 3})
+}
+definition{
+ name: kernelAndRegisterGateActivity,
+ parameters: [],
+ result: Foundation.Sec::SecurityActivity,
+ body: (record Foundation.Sec::SecurityActivity {index := 0, controlIndex := 0})
+}
+definition{
+ name: maintainability,
+ parameters: [],
+ result: Foundation.Qual::ProductQualityCharacteristic,
+ body: (record Foundation.Qual::ProductQualityCharacteristic {index := 0})
+}
+definition{
+ name: boundedWork,
+ parameters: [],
+ result: Foundation.Qual::QualitySubcharacteristic,
+ body: (record Foundation.Qual::QualitySubcharacteristic {index := 0, characteristicIndex := 0})
+}
+definition{
+ name: oneLibraryPerCohort,
+ parameters: [],
+ result: Foundation.Qual::QualityRequirement,
+ body: (record Foundation.Qual::QualityRequirement {index := 0, subcharacteristicIndex := 0})
+}
+definition{
+ name: libraryBuildBudget,
+ parameters: [],
+ result: Foundation.Qual::QualityMeasure,
+ body: (record Foundation.Qual::QualityMeasure {index := 0, requirementIndex := 0, threshold := 1})
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "direct-prism-autonomy-facets" (cons "owned-dependency-graph" (cons "recovery-and-publication-control-obligations" (cons "no-unearned-verification-measurements" (cons "shared-library-build-budget" (nil String))))))
+}
+\end{semanticmodule}
+\end{lexlean}

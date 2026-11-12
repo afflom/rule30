@@ -1,0 +1,56 @@
+\begin{lexlean}{ResearchCohortChecks1}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchCohort}
+\importmodule{ResearchCohortInput}
+\importmodule{ResearchCohortCommand}
+\importmodule{Json}
+\importmodule{CoreBinding}
+\importmodule{ResearchInput}
+\importmodule{ResearchInputTraces}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchSession}
+\importmodule{ResearchExecution}
+\importmodule{Research}
+\importmodule{LexLeanStd.Host}
+\importmodule{ResearchCohortTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: candidateSerialIsIndependentOfLibraryOwner,
+ parameters: [],
+ statement: ((match (ResearchCohortInput::config (ResearchCohortTraces::document (ResearchInputTraces::fixtureDocument) (cons (ResearchCohortTraces::secondAttempt) (nil Json::Value))) (nil (String * String))) | Option.none => false | Option.some candidates => (match candidates | List.nil => false | List.cons initial rest => (match rest | List.nil => false | List.cons subsequent more => ((((project (project subsequent request) serial) =? 4) && ((project (project (project subsequent workspace) request) serial) =? 3)) && ((prim length more : Nat) =? 0))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: duplicateSerialRejectedByInputBeforeAnyEffects,
+ parameters: [],
+ statement: ((match (ResearchCohortInput::config (ResearchCohortTraces::document (ResearchInputTraces::fixtureDocument) (cons (ResearchInputTraces::fixtureDocument) (nil Json::Value))) (nil (String * String))) | Option.none => true | Option.some candidates => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: differingWorkspaceLogsCannotBeSilentlyRebound,
+ parameters: [],
+ statement: ((match (ResearchCohortInput::config (ResearchCohortTraces::document (ResearchInputTraces::fixtureDocument) (cons (ResearchInputTraces::put (ResearchCohortTraces::secondAttempt) 0x6f7574707574 (ctor Json::Value.string 0x2f6f74686572)) (nil Json::Value))) (nil (String * String))) | Option.none => true | Option.some candidates => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: endedLibraryCannotBeBorrowed,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (not (ResearchProject::preparedFor config (ResearchWorkspace::withPhase (ResearchCohortTraces::readyOwner config) (ctor ResearchWorkspace::Phase.ended))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: changedToolIdentityCannotBorrowLibrary,
+ parameters: [],
+ statement: ((match (ResearchCohortInput::config (ResearchCohortTraces::document (ResearchInputTraces::fixtureDocument) (cons (ResearchInputTraces::put (ResearchCohortTraces::secondAttempt) 0x746f6f6c73 (ResearchInputTraces::put (CoreBinding::get (ResearchCohortTraces::secondAttempt) 0x746f6f6c73) 0x6c65786c65616e (ctor Json::Value.string 0x65656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565656565))) (nil Json::Value))) (nil (String * String))) | Option.none => true | Option.some candidates => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

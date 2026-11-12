@@ -1,6 +1,6 @@
 spec = "prismpm/project/1"
 project = "Rule30Api"
-lexlean_project = "lexlean.toml"
+lexlean_project = "prism.toml"
 build_root = ".prism"
 
 [limits]

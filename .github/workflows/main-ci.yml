@@ -20,6 +20,8 @@ jobs:
   validate:
     name: Build and Validate (No Publish)
     runs-on: ubuntu-latest
+    env:
+      LEXLEAN_CI_TELEMETRY: ${{ github.workspace }}/.r30/verification-telemetry
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -62,3 +64,12 @@ jobs:
             rule30-lexlean/pdf/*.tex
             rule30-paper/pdf/*.tex
             .git/rule30-validation/lexlean/**/attestation.json
+
+      - name: Upload verification timings and memory measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rule30-verification-telemetry
+          include-hidden-files: true
+          if-no-files-found: ignore
+          path: .r30/verification-telemetry

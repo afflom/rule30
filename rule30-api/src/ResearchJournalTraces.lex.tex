@@ -1,0 +1,144 @@
+\begin{lexlean}{ResearchJournalTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchJournal}
+\importmodule{ResearchEvidence}
+\importmodule{ResearchEvidenceTraces}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchExecution}
+\importmodule{ResearchWorkspaceTraces}
+\importmodule{LexLeanStd.Host}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: config,
+ parameters: [expected : Bytes],
+ result: ResearchJournal::Config,
+ body: (record ResearchJournal::Config {storage := (ResearchEvidenceTraces::config), key := (ResearchWorkspaceTraces::tree), expected := expected})
+}
+definition{
+ name: retaining,
+ parameters: [expected : Bytes, cancelled : Bool],
+ result: ResearchJournal::State,
+ body: (record ResearchJournal::State {config := (config expected), evidence := (ResearchEvidenceTraces::readingPublished (1 : Int32)), execution := (ctor Option.none [ResearchExecution::State]), phase := (ctor ResearchJournal::Phase.retaining), cancelled := cancelled}),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: host,
+ parameters: [state : ResearchJournal::State, event : LexLeanStd.Host::Event],
+ result: (ResearchJournal::State * ResearchJournal::Emission),
+ body: (ResearchJournal::step state (ctor ResearchJournal::Event.host event)),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: exchange,
+ parameters: [expected : Bytes, cancelled : Bool],
+ result: (ResearchJournal::State * ResearchJournal::Emission),
+ body: (host (retaining expected cancelled) (ResearchWorkspaceTraces::readEvent 0x7b7d0a)),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: spawned,
+ parameters: [],
+ result: ResearchJournal::State,
+ body: (first (host (first (host (first (exchange 0x false)) (ResearchExecutionTraces::waitEvent 100 (nil (Nat * (Option Int32)))))) (ctor LexLeanStd.Host::Event.spawned (ctor Result.ok [(Nat * Nat), LexLeanStd.Host::Failure] (7, 100))))),
+ axioms: [Quot.sound, propext]
+}
+definition{
+ name: committed,
+ parameters: [result : (ResearchJournal::State * ResearchJournal::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchJournal::Emission.committed blob => (Toml::sameBytes blob (ResearchWorkspaceTraces::tree)) | ResearchJournal::Emission.host request => false | ResearchJournal::Emission.awaiting => false | ResearchJournal::Emission.failed reason => false | ResearchJournal::Emission.cut => false | ResearchJournal::Emission.blocked reason => false)
+}
+definition{
+ name: failed,
+ parameters: [result : (ResearchJournal::State * ResearchJournal::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchJournal::Emission.committed blob => false | ResearchJournal::Emission.host request => false | ResearchJournal::Emission.awaiting => false | ResearchJournal::Emission.failed reason => true | ResearchJournal::Emission.cut => false | ResearchJournal::Emission.blocked reason => false)
+}
+definition{
+ name: blocked,
+ parameters: [result : (ResearchJournal::State * ResearchJournal::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchJournal::Emission.committed blob => false | ResearchJournal::Emission.host request => false | ResearchJournal::Emission.awaiting => false | ResearchJournal::Emission.failed reason => false | ResearchJournal::Emission.cut => false | ResearchJournal::Emission.blocked reason => true)
+}
+definition{
+ name: cut,
+ parameters: [result : (ResearchJournal::State * ResearchJournal::Emission)],
+ result: Bool,
+ body: (match (second result) | ResearchJournal::Emission.committed blob => false | ResearchJournal::Emission.host request => false | ResearchJournal::Emission.awaiting => false | ResearchJournal::Emission.failed reason => false | ResearchJournal::Emission.cut => true | ResearchJournal::Emission.blocked reason => false)
+}
+theorem{
+ name: firstTransitionRequiresAbsentReference,
+ parameters: [],
+ statement: ((ResearchJournal::arguments (first (exchange 0x false))) = (cons "update-ref" (cons "--no-deref" (cons (ResearchJournal::reference (config 0x)) (cons "0123456789abcdef0123456789abcdef01234567" (cons "0000000000000000000000000000000000000000" (nil String))))))),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: laterTransitionUsesExactPredecessor,
+ parameters: [],
+ statement: ((ResearchJournal::arguments (first (exchange 0x62626262626262626262626262626262626262626262626262626262626262626262626262626262 false))) = (cons "update-ref" (cons "--no-deref" (cons (ResearchJournal::reference (config 0x)) (cons "0123456789abcdef0123456789abcdef01234567" (cons "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" (nil String))))))),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: retainedIntentDoesNotCommitJournal,
+ parameters: [],
+ statement: ((committed (exchange 0x false)) = false),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: identicalSuccessorCannotReplayTransition,
+ parameters: [],
+ statement: ((failed (exchange (ResearchWorkspaceTraces::tree) false)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancellationBeforeExchangeDoesNotDispatch,
+ parameters: [],
+ statement: ((cut (exchange 0x true)) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: acknowledgedAtomicExchangeCommits,
+ parameters: [],
+ statement: ((committed (host (spawned) (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 101))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: losingExchangeNeverCommits,
+ parameters: [],
+ statement: ((failed (host (spawned) (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (1 : Int32)) 101))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: signalledExchangeRetainsUncertainty,
+ parameters: [],
+ statement: ((blocked (host (spawned) (ResearchExecutionTraces::exitEvent 7 (ctor Option.none [Int32]) 101))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: invalidReferenceKeyHasNoEffects,
+ parameters: [],
+ statement: ((failed (ResearchJournal::begin (record ResearchJournal::Config {storage := (ResearchEvidenceTraces::config), key := 0x2e2e2f, expected := 0x}) (ctor Json::Value.null))) = true),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelledExchangeCannotReportCommit,
+ parameters: [],
+ statement: ((committed (host (first (ResearchJournal::step (spawned) (ctor ResearchJournal::Event.cancel))) (ResearchExecutionTraces::exitEvent 7 (ctor Option.some [Int32] (0 : Int32)) 101))) = false),
+ proof: decide{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

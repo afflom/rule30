@@ -1,0 +1,22 @@
+\begin{lexlean}{CandidateSourceChecks3}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{CandidateSource}
+\importmodule{CandidateBinding}
+\importmodule{ClosedGoalTraces}
+\importmodule{CoreBinding}
+\importmodule{Research}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{CandidateSourceTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: synthesisEmitsTheSameTruthCandidateAsExplicitConstruction,
+ parameters: [],
+ statement: ((match (CandidateSource::synthesize (CandidateSourceTraces::request 0x54727565) 4096 32 1024) | Option.none => false | Option.some proposal => (match (CandidateSource::construct (CandidateSourceTraces::request 0x54727565) (first proposal) (second proposal) (cons 0x496e6974 (nil Bytes)) (nil Bytes) (nil String) 4096 32 1024) | Option.none => false | Option.some generated => (match (CandidateSourceTraces::source 0x54727565 1 (nil String)) | Option.none => false | Option.some explicit => (Toml::sameBytes generated explicit)))) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

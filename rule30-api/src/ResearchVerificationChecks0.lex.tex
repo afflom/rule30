@@ -1,0 +1,73 @@
+\begin{lexlean}{ResearchVerificationChecks0}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{VerificationReportTraces}
+\importmodule{VerificationJsonFixtures}
+\importmodule{VerificationHashFixtures}
+\importmodule{ResearchVerificationTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+  name: ownedExitReachesCommandRead,
+  parameters: [],
+  statement: ((first (ResearchVerification::step (ResearchVerificationTraces::active) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::exited)))) = (ResearchVerificationTraces::commandPending)),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: maxBytes,
+  parameters: [],
+  statement: ((project (ResearchVerificationTraces::settings) maxBytes) = 8192),
+  proof: reflexivity{},
+  axioms: []
+}
+theorem{
+  name: commandValid,
+  parameters: [],
+  statement: ((VerificationReport::commandMatches (VerificationReportTraces::pins) (VerificationJsonFixtures::commandValue)) = true),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+theorem{
+  name: commandIdentity,
+  parameters: [],
+  statement: ((VerificationReport::bytes (VerificationReport::get (VerificationJsonFixtures::commandValue) 0x6174746573746174696f6e5f6964)) = (VerificationHashFixtures::identity)),
+  proof: reflexivity{},
+  axioms: []
+}
+theorem{
+  name: reportPath,
+  parameters: [],
+  statement: ((ResearchVerification::attestationPath (ResearchVerificationTraces::settings) (VerificationHashFixtures::identity)) = "/research/.lexlean/verified/672116e8db6acfd42a3328c24c3ad91bdbea1509f1895abb6d314516747e2a9b/attestation.json"),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: commandTransition,
+  parameters: [],
+  statement: ((ResearchVerification::step (ResearchVerificationTraces::commandPending) (ctor ResearchVerification::Event.host (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] (VerificationJsonFixtures::commandBytes))))) = ((ResearchVerificationTraces::reportPending), (ctor ResearchVerification::Emission.host (ctor LexLeanStd.Host::Request.read "/research/.lexlean/verified/672116e8db6acfd42a3328c24c3ad91bdbea1509f1895abb6d314516747e2a9b/attestation.json")))),
+  proof: simplify{definitions: [commandIdentity, commandValid, maxBytes, reportPath, ResearchVerification::commandMatchedValid, ResearchVerification::commandParsedOk, ResearchVerification::commandRead, ResearchVerification::read, ResearchVerification::readResponse, ResearchVerification::reading, ResearchVerification::step, ResearchVerification::withPhase, ResearchVerificationTraces::commandPending, ResearchVerificationTraces::reportPending, VerificationJsonFixtures::parseCommand]},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: acceptedTransition,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::accepted) = (ResearchVerification::finish (ResearchVerificationTraces::reportPending) (ctor ResearchVerification::Outcome.accepted (VerificationReportTraces::expectedReceipt)))),
+  proof: simplify{definitions: [maxBytes, ResearchVerification::attestationDecodedOk, ResearchVerification::attestationRead, ResearchVerification::readResponse, ResearchVerification::reading, ResearchVerification::step, ResearchVerificationTraces::accepted, ResearchVerificationTraces::reportPending, VerificationReportTraces::decodeReceipt]},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: kindAccepted,
+  parameters: [state : ResearchVerification::State, receipt : VerificationReport::Receipt],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::finish state (ctor ResearchVerification::Outcome.accepted receipt))) = 2),
+  proof: reflexivity{},
+  axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

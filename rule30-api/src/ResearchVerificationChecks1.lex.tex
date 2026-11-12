@@ -1,0 +1,73 @@
+\begin{lexlean}{ResearchVerificationChecks1}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchExecution}
+\importmodule{ResearchExecutionTraces}
+\importmodule{ResearchVerification}
+\importmodule{VerificationReport}
+\importmodule{VerificationReportTraces}
+\importmodule{VerificationJsonFixtures}
+\importmodule{VerificationHashFixtures}
+\importmodule{ResearchVerificationTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+  name: kindTerminal,
+  parameters: [state : ResearchVerification::State, outcome : ResearchVerification::Outcome, event : ResearchVerification::Event],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::step (first (ResearchVerification::finish state outcome)) event)) = 1),
+  proof: reflexivity{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: expectedRequestAccepted,
+  parameters: [state : ResearchVerification::State],
+  statement: ((ResearchVerificationTraces::acceptedRequest (ResearchVerification::finish state (ctor ResearchVerification::Outcome.accepted (VerificationReportTraces::expectedReceipt)))) = true),
+  proof: reflexivity{},
+  axioms: []
+}
+theorem{
+  name: startsOnlyLocalLexLean,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::program (ResearchVerificationTraces::begin)) = "lexlean"),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: fixedArgumentShape,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::argumentCount (ResearchVerificationTraces::begin)) = 5),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+theorem{
+  name: zeroLimit,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::begin (VerificationReportTraces::pins) (ResearchVerificationTraces::config 0 "/research/lexlean.toml" "out" "err"))) = 3),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: emptyProject,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::begin (VerificationReportTraces::pins) (ResearchVerificationTraces::config 8192 "" "out" "err"))) = 3),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: overlappingLogs,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::kind (ResearchVerification::begin (VerificationReportTraces::pins) (ResearchVerificationTraces::config 8192 "project" "same" "same"))) = 3),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: exitZeroOnlyRequestsCommand,
+  parameters: [],
+  statement: ((ResearchVerificationTraces::readPath (ResearchVerification::step (ResearchVerificationTraces::active) (ctor ResearchVerification::Event.host (ResearchVerificationTraces::exited)))) = "/research/attempt.out"),
+  proof: decide{},
+  axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

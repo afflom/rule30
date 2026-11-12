@@ -1,0 +1,56 @@
+\begin{lexlean}{ResearchCohortChecks0}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchCohort}
+\importmodule{ResearchCohortInput}
+\importmodule{ResearchCohortCommand}
+\importmodule{Json}
+\importmodule{CoreBinding}
+\importmodule{ResearchInput}
+\importmodule{ResearchInputTraces}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchSession}
+\importmodule{ResearchExecution}
+\importmodule{Research}
+\importmodule{LexLeanStd.Host}
+\importmodule{ResearchCohortTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: emptyCohortPerformsNoEffects,
+ parameters: [],
+ statement: ((match (second (ResearchCohort::begin (nil ResearchProject::Config))) | ResearchCohort::Emission.complete answers => ((prim length answers : Nat) =? 0) | ResearchCohort::Emission.blocked reason => false | ResearchCohort::Emission.host request => false | ResearchCohort::Emission.awaiting => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: duplicateAttemptCannotReuseCandidateDirectory,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (ResearchCohortTraces::blocked (ResearchCohort::begin (cons config (cons config (nil ResearchProject::Config)))))) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: readyLibrarySkipsCheckoutAndBuild,
+ parameters: [],
+ statement: ((match (ResearchInput::config (ResearchInputTraces::fixtureDocument) (nil (String * String))) | Option.none => false | Option.some config => (match (second (ResearchProject::beginPrepared config (ResearchCohortTraces::readyOwner config))) | ResearchProject::Emission.host request => (match request | LexLeanStd.Host::Request.stat path => true | LexLeanStd.Host::Request.read path => false | LexLeanStd.Host::Request.write path data => false | LexLeanStd.Host::Request.createDir path => false | LexLeanStd.Host::Request.removeFile path => false | LexLeanStd.Host::Request.removeTree path => false | LexLeanStd.Host::Request.rename source target => false | LexLeanStd.Host::Request.lock path => false | LexLeanStd.Host::Request.list path => false | LexLeanStd.Host::Request.canonical path => false | LexLeanStd.Host::Request.spawn job => false | LexLeanStd.Host::Request.wait children delay => false | LexLeanStd.Host::Request.stop child => false | LexLeanStd.Host::Request.exit code output errors => false) | ResearchProject::Emission.awaiting => false | ResearchProject::Emission.ready context => false | ResearchProject::Emission.complete kind => false | ResearchProject::Emission.blocked reason => false | ResearchProject::Emission.refused => false)) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: borrowedProjectDoesNotReleaseLibrary,
+ parameters: [config : ResearchProject::Config, owner : ResearchWorkspace::State, source : Bytes],
+ statement: ((match (second (ResearchProject::step (record ResearchProject::State {borrowed := true, config := config, source := source, workspace := (ctor Option.some [ResearchWorkspace::State] owner), execution := (ctor Option.none [ResearchExecution::State]), operation := (ctor ResearchProject::Operation.lock), phase := (ctor ResearchProject::Phase.ready), cancelled := false, result := (ctor ResearchExecution::EndKind.succeeded)}) (ctor ResearchProject::Event.release))) | ResearchProject::Emission.complete kind => true | ResearchProject::Emission.host request => false | ResearchProject::Emission.awaiting => false | ResearchProject::Emission.ready context => false | ResearchProject::Emission.blocked reason => false | ResearchProject::Emission.refused => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancellationDrainsContinuationBeforeRelease,
+ parameters: [],
+ statement: ((match (second (ResearchCohort::cancel (ResearchCohortTraces::advancing))) | ResearchCohort::Emission.awaiting => true | ResearchCohort::Emission.complete answers => false | ResearchCohort::Emission.host request => false | ResearchCohort::Emission.blocked reason => false) = true),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

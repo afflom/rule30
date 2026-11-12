@@ -1,0 +1,75 @@
+\begin{lexlean}{VerificationUtf8Steps1}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Toml}
+\importmodule{VerificationJsonData}
+\importmodule{VerificationUtf8Steps0}
+\title{Boolean}
+\begin{semanticmodule}
+
+theorem{
+  name: commandUtf8Rest384,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::commandBytes) 384 22) = true),
+  proof: simplify{definitions: [VerificationUtf8Steps0::commandUtf8Advance384, VerificationUtf8Steps0::commandUtf8Rest406]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandUtf8Rest320,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::commandBytes) 320 86) = true),
+  proof: simplify{definitions: [commandUtf8Rest384, VerificationUtf8Steps0::commandUtf8Advance320]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandUtf8Rest256,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::commandBytes) 256 150) = true),
+  proof: simplify{definitions: [commandUtf8Rest320, VerificationUtf8Steps0::commandUtf8Advance256]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandUtf8Rest192,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::commandBytes) 192 214) = true),
+  proof: simplify{definitions: [commandUtf8Rest256, VerificationUtf8Steps0::commandUtf8Advance192]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandUtf8Rest128,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::commandBytes) 128 278) = true),
+  proof: simplify{definitions: [commandUtf8Rest192, VerificationUtf8Steps0::commandUtf8Advance128]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandUtf8Rest64,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::commandBytes) 64 342) = true),
+  proof: simplify{definitions: [commandUtf8Rest128, VerificationUtf8Steps0::commandUtf8Advance64]},
+  axioms: [propext]
+}
+
+theorem{
+  name: commandUtf8Rest0,
+  parameters: [],
+  statement: ((Toml::validFrom (VerificationJsonData::commandBytes) 0 406) = true),
+  proof: simplify{definitions: [commandUtf8Rest64, VerificationUtf8Steps0::commandUtf8Advance0]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportUtf8Advance0,
+  parameters: [fuel : Nat],
+  statement: ((Toml::validFrom (VerificationJsonData::reportBytes) 0 (fuel + 64)) = (Toml::validFrom (VerificationJsonData::reportBytes) 64 fuel)),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}

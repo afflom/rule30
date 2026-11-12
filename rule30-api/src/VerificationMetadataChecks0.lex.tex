@@ -1,0 +1,71 @@
+\begin{lexlean}{VerificationMetadataChecks0}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{Research}
+\importmodule{ResearchTraces}
+\importmodule{VerificationReport}
+\importmodule{VerificationJsonFixtures}
+\importmodule{VerificationHashFixtures}
+\importmodule{VerificationReportTraces}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+  name: emptyProcesses,
+  parameters: [],
+  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x70726f636573736573 (ctor Json::Value.array (nil Json::Value)))) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: missingDeclarations,
+  parameters: [],
+  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x6465636c61726174696f6e73 (ctor Json::Value.null))) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: emptyDeclarations,
+  parameters: [],
+  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x6465636c61726174696f6e73 (ctor Json::Value.array (nil Json::Value)))) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: missingToolchain,
+  parameters: [],
+  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::command) (VerificationReportTraces::set (VerificationReportTraces::report) 0x746f6f6c636861696e (ctor Json::Value.null))) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: wrongCommand,
+  parameters: [],
+  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::set (VerificationReportTraces::command) 0x636f6d6d616e64 (ctor Json::Value.string 0x636865636b)) (VerificationReportTraces::report)) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: failedCommand,
+  parameters: [],
+  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::set (VerificationReportTraces::command) 0x73756363657373 (ctor Json::Value.boolean false)) (VerificationReportTraces::report)) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: nonzeroCommand,
+  parameters: [],
+  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::set (VerificationReportTraces::command) 0x657869745f636f6465 (ctor Json::Value.number 0x31)) (VerificationReportTraces::report)) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+theorem{
+  name: stringExit,
+  parameters: [],
+  statement: ((VerificationReportTraces::accepts (VerificationReportTraces::set (VerificationReportTraces::command) 0x657869745f636f6465 (ctor Json::Value.string 0x30)) (VerificationReportTraces::report)) = false),
+  proof: decide{},
+  axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

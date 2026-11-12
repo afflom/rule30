@@ -35,69 +35,13 @@ definition{
  axioms: [propext]
 }
 
-theorem{
- name: constructClosedTruth,
- parameters: [],
- statement: ((match (source 0x54727565 1 (nil String)) | Option.none => false | Option.some data => true) = true),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: cannotSubstituteTruthForTheRequestedPrizeGoal,
- parameters: [],
- statement: ((source 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31 1 (nil String)) = (ctor Option.none [Bytes])),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: missingProofNodeCannotBeEmitted,
- parameters: [],
- statement: ((source 0x54727565 2 (nil String)) = (ctor Option.none [Bytes])),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: forbiddenAxiomCannotBeEmitted,
- parameters: [],
- statement: ((source 0x54727565 1 (cons "forbidden" (nil String))) = (ctor Option.none [Bytes])),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: sourceWrapperCountsAgainstTheByteBudget,
- parameters: [],
- statement: ((CandidateSource::encode (truth) 1 (cons 0x496e6974 (nil Bytes)) (nil Bytes) (nil String) 100 1024) = (ctor Option.none [Bytes])),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: inspectionCannotBecomeAProofCandidate,
- parameters: [],
- statement: ((CandidateSource::construct (ClosedGoalTraces::request 0x54727565 (ClosedGoalTraces::goalBytes 0x54727565) (ctor Research::GoalKind.closed) 0x 0 (ctor Research::Purpose.inspect)) (truth) 1 (cons 0x496e6974 (nil Bytes)) (nil Bytes) (nil String) 4096 32 1024) = (ctor Option.none [Bytes])),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: axiomOrderAndDuplicatesDoNotChangeTheCandidate,
- parameters: [],
- statement: ((match (source 0x54727565 1 (cons "propext" (cons "Quot.sound" (cons "propext" (nil String))))) | Option.none => false | Option.some left => (match (source 0x54727565 1 (cons "Quot.sound" (cons "propext" (nil String)))) | Option.none => false | Option.some right => (Toml::sameBytes left right))) = true),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: nativeNotationMatchesCompilerAcceptedSource,
- parameters: [],
- statement: ((match (source 0x54727565 1 (nil String)) | Option.none => false | Option.some text => (Toml::sameBytes text 0x5c626567696e7b6c65786c65616e7d7b43616e6469646174657d0a5c757365676c6f73736172797b6c65786c65616e2e7374642e626f6f6c40312e322e307d0a5c7469746c657b426f6f6c65616e7d0a5c626567696e7b636f72656d6f64756c657d0a696d706f727473205b22496e6974225d0a7468656f72656d2052756c65333043616e6469646174652e43616e6469646174652e70726f6f66203a204030203a3d204031207b636c6173733a2066616c73652c2067656e6572617465643a2066616c73652c20706f6c6963793a2065786163747b6178696f6d733a205b5d7d2c207472616e73706172656e63793a2073656d69726564756369626c657d0a4030203a3d20636f6e7374202254727565220a4031203a3d20636f6e73742022547275652e696e74726f220a5c656e647b636f72656d6f64756c657d0a5c656e647b6c65786c65616e7d0a)) = true),
- proof: decide{},
- axioms: [propext]
-}
 
 
 definition{
@@ -116,13 +60,6 @@ definition{
  axioms: [propext]
 }
 
-theorem{
- name: synthesisIntroducesAndUsesTheContext,
- parameters: [],
- statement: ((match (CandidateSource::structuralProposal (project (identityGoal) nodes) (project (identityGoal) root) (nil (Nat * Nat)) 0 64) | Option.none => false | Option.some term => (CoreBinding::sameType term (identityProof) 8192 4096)) = true),
- proof: decide{},
- axioms: [propext]
-}
 
 definition{
  name: unrelatedGoal,
@@ -132,13 +69,6 @@ definition{
  axioms: [propext]
 }
 
-theorem{
- name: synthesisDoesNotCaptureAnUnrelatedProposition,
- parameters: [],
- statement: ((match (CandidateSource::structuralProposal (project (unrelatedGoal) nodes) (project (unrelatedGoal) root) (nil (Nat * Nat)) 0 64) | Option.none => true | Option.some term => false) = true),
- proof: decide{},
- axioms: [propext]
-}
 
 definition{
  name: liftedGoal,
@@ -156,13 +86,6 @@ definition{
  axioms: [propext]
 }
 
-theorem{
- name: synthesisLiftsAnAssumptionAcrossAnotherBinder,
- parameters: [],
- statement: ((match (CandidateSource::structuralProposal (project (liftedGoal) nodes) (project (liftedGoal) root) (nil (Nat * Nat)) 0 64) | Option.none => false | Option.some term => (CoreBinding::sameType term (liftedProof) 8192 4096)) = true),
- proof: decide{},
- axioms: [propext]
-}
 
 definition{
  name: reflexiveGoal,
@@ -180,45 +103,10 @@ definition{
  axioms: [propext]
 }
 
-theorem{
- name: synthesisRetainsEqualityUniverseAndArguments,
- parameters: [],
- statement: ((match (CandidateSource::structuralProposal (project (reflexiveGoal) nodes) (project (reflexiveGoal) root) (nil (Nat * Nat)) 0 64) | Option.none => false | Option.some term => (CoreBinding::sameType term (reflexiveProof) 8192 4096)) = true),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: synthesisCannotInventAProofOfFalse,
- parameters: [],
- statement: ((match (CandidateSource::synthesize (request 0x46616c7365) 8192 64 4096) | Option.none => true | Option.some term => false) = true),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: synthesisDoesNotReplaceTheOpenPrizeGoalWithTruth,
- parameters: [],
- statement: ((match (CandidateSource::synthesize (request 0x52756c696f6c6f67792e43656c6c756c61724175746f6d6174612e52756c6533305072697a652e50726f626c656d31) 8192 64 4096) | Option.none => true | Option.some term => false) = true),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: zeroSynthesisFuelDoesNotInventAResult,
- parameters: [],
- statement: ((match (CandidateSource::structuralProposal (project (identityGoal) nodes) (project (identityGoal) root) (nil (Nat * Nat)) 0 0) | Option.none => true | Option.some term => false) = true),
- proof: decide{},
- axioms: [propext]
-}
 
-theorem{
- name: synthesisEmitsTheSameTruthCandidateAsExplicitConstruction,
- parameters: [],
- statement: ((match (CandidateSource::synthesize (request 0x54727565) 4096 32 1024) | Option.none => false | Option.some proposal => (match (CandidateSource::construct (request 0x54727565) (first proposal) (second proposal) (cons 0x496e6974 (nil Bytes)) (nil Bytes) (nil String) 4096 32 1024) | Option.none => false | Option.some generated => (match (source 0x54727565 1 (nil String)) | Option.none => false | Option.some explicit => (Toml::sameBytes generated explicit)))) = true),
- proof: decide{},
- axioms: [propext]
-}
 
 \end{semanticmodule}
 \end{lexlean}

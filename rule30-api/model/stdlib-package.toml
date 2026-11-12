@@ -1,11 +1,11 @@
 spec = "prismpm/stdlib-package/1"
 name = "prism-stdlib"
 version = "0.2.0"
-description = "Generated portable Prism application and production-system runtime; the Foundation.Arch and Foundation.Qual modules and the prism.arch and prism.qual lexicons are vendored here"
+description = "Generated portable Prism application and production-system runtime; the Foundation.Arch, Foundation.Qual and Foundation.Sec modules and their prism lexicons are vendored here"
 repository = "https://github.com/UOR-Foundation/PrismPM"
 homepage = "https://github.com/UOR-Foundation/PrismPM"
 license = "MIT OR Apache-2.0"
 language = "1.2"
-modules = ["Foundation.Arch", "Foundation.Qual"]
-lexicons = ["prism.arch@1.0.0", "prism.qual@1.0.0"]
+modules = ["Foundation.Arch", "Foundation.Qual", "Foundation.Sec"]
+lexicons = ["prism.arch@1.0.0", "prism.qual@1.0.0", "prism.sec@1.0.0"]
 vendored_at = ["rule30-api/stdlib", "rule30-api/language"]

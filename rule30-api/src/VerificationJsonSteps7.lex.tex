@@ -1,0 +1,251 @@
+\begin{lexlean}{VerificationJsonSteps7}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{VerificationJsonData}
+\title{Boolean}
+\begin{semanticmodule}
+
+theorem{
+  name: reportStep140,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState140) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState140) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState141))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending140,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState140) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance140,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState140) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState141) 128 fuel)),
+  proof: simplify{definitions: [reportPending140, reportStep140, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep141,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState141) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState141) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState142))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending141,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState141) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance141,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState141) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState142) 128 fuel)),
+  proof: simplify{definitions: [reportPending141, reportStep141, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep142,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState142) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState142) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState143))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending142,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState142) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance142,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState142) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState143) 128 fuel)),
+  proof: simplify{definitions: [reportPending142, reportStep142, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep143,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState143) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState143) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState144))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending143,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState143) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance143,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState143) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState144) 128 fuel)),
+  proof: simplify{definitions: [reportPending143, reportStep143, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep144,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState144) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState144) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState145))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending144,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState144) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance144,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState144) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState145) 128 fuel)),
+  proof: simplify{definitions: [reportPending144, reportStep144, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep145,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState145) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState145) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState146))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending145,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState145) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance145,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState145) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState146) 128 fuel)),
+  proof: simplify{definitions: [reportPending145, reportStep145, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep146,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState146) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState146) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState147))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending146,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState146) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance146,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState146) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState147) 128 fuel)),
+  proof: simplify{definitions: [reportPending146, reportStep146, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep147,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState147) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState147) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState148))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending147,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState147) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance147,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState147) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState148) 128 fuel)),
+  proof: simplify{definitions: [reportPending147, reportStep147, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep148,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState148) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState148) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState149))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending148,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState148) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance148,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState148) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState149) 128 fuel)),
+  proof: simplify{definitions: [reportPending148, reportStep148, Json::scan]},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportStep149,
+  parameters: [],
+  statement: ((Json::advance (VerificationJsonData::reportBytes) (Json::skip (VerificationJsonData::reportBytes) (project (VerificationJsonData::reportState149) position) (prim length (VerificationJsonData::reportBytes) : Nat)) (project (VerificationJsonData::reportState149) frames) 128) = (ctor Result.ok [Json::State, Json::Problem] (VerificationJsonData::reportState150))),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: reportPending149,
+  parameters: [],
+  statement: ((project (VerificationJsonData::reportState149) value) = (ctor Option.none [Json::Value])),
+  proof: reflexivity{},
+  axioms: []
+}
+
+theorem{
+  name: reportAdvance149,
+  parameters: [fuel : Nat],
+  statement: ((Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState149) 128 (fuel + 1)) = (Json::scan (VerificationJsonData::reportBytes) (VerificationJsonData::reportState150) 128 fuel)),
+  proof: simplify{definitions: [reportPending149, reportStep149, Json::scan]},
+  axioms: [propext]
+}
+
+\end{semanticmodule}
+\end{lexlean}
