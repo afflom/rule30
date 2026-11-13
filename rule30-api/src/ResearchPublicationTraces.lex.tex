@@ -1,0 +1,177 @@
+\begin{lexlean}{ResearchPublicationTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchProject}
+\importmodule{ResearchPublication}
+\importmodule{PublicationSource}
+\importmodule{PublicationPlan}
+\importmodule{PublicationRecord}
+\importmodule{PublicationFrontier}
+\importmodule{Research}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchExecution}
+\importmodule{ResearchCandidate}
+\importmodule{VerificationReport}
+\importmodule{Json}
+\importmodule{LexLeanStd.Host}
+\importmodule{Host}
+\importmodule{Toml}
+\importmodule{ResearchVerification}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: missingIdentityCannotReplayArchive,
+ parameters: [data : Bytes, request : Research::Request, revision : Bytes],
+ statement: ((PublicationRecord::decode data 0x request revision) = (ctor Option.none [Bytes])),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: absentArchiveCannotSupplySource,
+ parameters: [request : Research::Request, revision : Bytes, identity : Bytes],
+ statement: ((PublicationRecord::source (ctor Json::Value.null) request revision identity) = (ctor Option.none [Bytes])),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: missingIdentityCannotRenameSource,
+ parameters: [source : Bytes, fuel : Nat],
+ statement: ((PublicationSource::renamed source 0x fuel) = (ctor Option.none [Bytes])),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: emptyFrontierCannotPublishClaim,
+ parameters: [task : Research::Task],
+ statement: ((PublicationFrontier::current 0x task) = false),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: emptyBatchNeedsNoPublisher,
+ parameters: [base : ResearchProject::Config],
+ statement: ((ResearchPublication::beginBatch base (nil (Research::Answer * Bytes))) = (ctor Option.none [(ResearchPublication::State * ResearchPublication::Emission)])),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: terminalPublicationCannotRestart,
+ parameters: [state : ResearchPublication::State, event : LexLeanStd.Host::Event],
+ statement: ((second (ResearchPublication::host (record ResearchPublication::State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (ctor ResearchPublication::Phase.ended), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}) event)) = (ctor ResearchPublication::Emission.awaiting)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelledArchiveReadCannotStartVerification,
+ parameters: [state : ResearchPublication::State, bytes : Bytes],
+ statement: ((second (ResearchPublication::readResult (record ResearchPublication::State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := true, published := (project state published)}) (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] bytes)))) = (ctor ResearchPublication::Emission.blocked "cancelled publication read drained; retain changes")),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelledSourceWriteCannotStartTool,
+ parameters: [state : ResearchPublication::State, ignored : Unit],
+ statement: ((second (ResearchPublication::writeResult (record ResearchPublication::State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := true, published := (project state published)}) (ctor LexLeanStd.Host::Event.finished (ctor Result.ok [Unit, LexLeanStd.Host::Failure] ignored)))) = (ctor ResearchPublication::Emission.blocked "cancelled publication write drained; retain changes")),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: batchContinuationDoesNotCommitPerProof,
+ parameters: [state : ResearchPublication::State],
+ statement: ((second (ResearchPublication::succeeded (record ResearchPublication::State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (ctor PublicationPlan::Operation.sync), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}))) = (ctor ResearchPublication::Emission.host (ctor LexLeanStd.Host::Request.wait (nil Nat) 0))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unacknowledgedPublicationCannotSeal,
+ parameters: [state : ResearchPublication::State],
+ statement: ((ResearchPublication::released (record ResearchPublication::State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := false})) = false),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: blockedPublicationRetainsWorkspace,
+ parameters: [state : ResearchPublication::State, reason : String],
+ statement: ((project (first (ResearchPublication::blocked state reason)) owner) = (project state owner)),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: blockedPublicationRetainsPendingProofs,
+ parameters: [state : ResearchPublication::State, reason : String],
+ statement: ((project (first (ResearchPublication::blocked state reason)) pending) = (project state pending)),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: publicationRenamePreservesCandidateBody,
+ parameters: [],
+ statement: ((PublicationSource::renamed 0x5c626567696e7b6c65786c65616e7d7b43616e6469646174657d0a5c626567696e7b636f72656d6f64756c657d0a696d706f727473205b22496e6974225d0a7468656f72656d2052756c65333043616e6469646174652e43616e6469646174652e70726f6f66203a204030203a3d2040310a 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161 1024) = (ctor Option.some [Bytes] 0x5c626567696e7b6c65786c65616e7d7b47656e65726174656450616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161617d0a5c626567696e7b636f72656d6f64756c657d0a696d706f727473205b22496e6974225d0a7468656f72656d2052756c653330554f522e47656e65726174656450616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161612e70726f6f66203a204030203a3d2040310a)),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: uniqueOpenClaimMatchesInspectedOrigin,
+ parameters: [task : Research::Task],
+ statement: ((PublicationFrontier::current 0x5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d20226f70656e220a6c65616e203d202250726f70220a (record Research::Task {id := 0x616c706861, purpose := (project task purpose), intent := (ctor Research::Purpose.prove), status := (project task status), component := (project task component), sources := (project task sources), schema := (project task schema), sequent := (record Research::Sequent {origin := 0x50726f70, theorem := (project (project task sequent) theorem), premise := (project (project task sequent) premise), telescope := (project (project task sequent) telescope), target := (project (project task sequent) target), kind := (ctor Research::GoalKind.closed)}), age := (project task age), weight := (project task weight)})) = true),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: closedClaimRejectsChangedOrigin,
+ parameters: [task : Research::Task],
+ statement: ((PublicationFrontier::current 0x5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d20226f70656e220a6c65616e203d202250726f70220a (record Research::Task {id := 0x616c706861, purpose := (project task purpose), intent := (ctor Research::Purpose.prove), status := (project task status), component := (project task component), sources := (project task sources), schema := (project task schema), sequent := (record Research::Sequent {origin := 0x4f74686572, theorem := (project (project task sequent) theorem), premise := (project (project task sequent) premise), telescope := (project (project task sequent) telescope), target := (project (project task sequent) target), kind := (ctor Research::GoalKind.closed)}), age := (project task age), weight := (project task weight)})) = false),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: alreadyProvedClaimCannotBeRepublished,
+ parameters: [task : Research::Task],
+ statement: ((PublicationFrontier::current 0x5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d202270726f766564220a6c65616e203d202250726f70220a (record Research::Task {id := 0x616c706861, purpose := (project task purpose), intent := (ctor Research::Purpose.prove), status := (project task status), component := (project task component), sources := (project task sources), schema := (project task schema), sequent := (record Research::Sequent {origin := 0x50726f70, theorem := (project (project task sequent) theorem), premise := (project (project task sequent) premise), telescope := (project (project task sequent) telescope), target := (project (project task sequent) target), kind := (ctor Research::GoalKind.closed)}), age := (project task age), weight := (project task weight)})) = false),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: duplicateClaimIdentityRefusesPublication,
+ parameters: [task : Research::Task],
+ statement: ((PublicationFrontier::current 0x5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d20226f70656e220a6c65616e203d202250726f70220a5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d20226f70656e220a6c65616e203d202250726f70220a (record Research::Task {id := 0x616c706861, purpose := (project task purpose), intent := (ctor Research::Purpose.prove), status := (project task status), component := (project task component), sources := (project task sources), schema := (project task schema), sequent := (record Research::Sequent {origin := 0x50726f70, theorem := (project (project task sequent) theorem), premise := (project (project task sequent) premise), telescope := (project (project task sequent) telescope), target := (project (project task sequent) target), kind := (ctor Research::GoalKind.closed)}), age := (project task age), weight := (project task weight)})) = false),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: premiseProofLeavesParentClaimOpen,
+ parameters: [task : Research::Task],
+ statement: ((PublicationFrontier::closesClaim (record Research::Task {id := 0x616c706861, purpose := (project task purpose), intent := (ctor Research::Purpose.prove), status := (project task status), component := (project task component), sources := (project task sources), schema := (project task schema), sequent := (record Research::Sequent {origin := 0x50726f70, theorem := (project (project task sequent) theorem), premise := (project (project task sequent) premise), telescope := (project (project task sequent) telescope), target := (project (project task sequent) target), kind := (ctor Research::GoalKind.premise)}), age := (project task age), weight := (project task weight)})) = false),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: retentionIsCommitAddressed,
+ parameters: [config : PublicationPlan::Config, commit : Bytes],
+ statement: ((PublicationPlan::arguments config (ctor PublicationPlan::Operation.retain) commit) = (cons "update-ref" (cons (PublicationPlan::reference config commit) (cons (Host::textOf commit) (nil String))))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: generatedEntrypointPreservesSortedOrder,
+ parameters: [],
+ statement: ((PublicationPlan::insertPath 0x7372632f47656e65726174656450302e6c65782e746578 (cons (ctor Json::Value.string 0x7372632f46726f6e746965722e6c65782e746578) (cons (ctor Json::Value.string 0x7372632f4f62736572766174696f6e732e6c65782e746578) (nil Json::Value)))) = (ctor Option.some [(List Json::Value)] (cons (ctor Json::Value.string 0x7372632f46726f6e746965722e6c65782e746578) (cons (ctor Json::Value.string 0x7372632f47656e65726174656450302e6c65782e746578) (cons (ctor Json::Value.string 0x7372632f4f62736572766174696f6e732e6c65782e746578) (nil Json::Value)))))),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: existingEntrypointIsNotDuplicated,
+ parameters: [],
+ statement: ((PublicationPlan::insertPath 0x7372632f46726f6e746965722e6c65782e746578 (cons (ctor Json::Value.string 0x7372632f46726f6e746965722e6c65782e746578) (cons (ctor Json::Value.string 0x7372632f4f62736572766174696f6e732e6c65782e746578) (nil Json::Value)))) = (ctor Option.some [(List Json::Value)] (cons (ctor Json::Value.string 0x7372632f46726f6e746965722e6c65782e746578) (cons (ctor Json::Value.string 0x7372632f4f62736572766174696f6e732e6c65782e746578) (nil Json::Value))))),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: pushNamesTheRetainedCommit,
+ parameters: [config : PublicationPlan::Config, commit : Bytes],
+ statement: ((PublicationPlan::arguments config (ctor PublicationPlan::Operation.push) commit) = (cons "-c" (cons "core.hooksPath=.githooks" (cons "push" (cons (ResearchVerification::concat "--force-with-lease=refs/heads/main:" (Host::textOf (project (PublicationPlan::workspace config) revision))) (cons "origin" (cons (ResearchVerification::concat (Host::textOf commit) ":refs/heads/main") (nil String)))))))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

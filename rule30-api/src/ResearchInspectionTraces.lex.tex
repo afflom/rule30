@@ -1,0 +1,56 @@
+\begin{lexlean}{ResearchInspectionTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchInspection}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchExecution}
+\importmodule{ResearchProject}
+\importmodule{Research}
+\importmodule{Json}
+\importmodule{LexLeanStd.Host}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: terminalInspectionCannotRestart,
+ parameters: [state : ResearchInspection::State, event : LexLeanStd.Host::Event],
+ statement: ((ResearchInspection::step (record ResearchInspection::State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (ctor ResearchInspection::Phase.ended), cancelled := (project state cancelled), report := (project state report)}) (ctor ResearchInspection::Event.host event)) = ((record ResearchInspection::State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (ctor ResearchInspection::Phase.ended), cancelled := (project state cancelled), report := (project state report)}), (ctor ResearchInspection::Emission.awaiting))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: malformedReportCannotEstablishInspectedOrigin,
+ parameters: [config : ResearchInspection::Config],
+ statement: ((ResearchInspection::matches config (ctor Json::Value.null)) = false),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: cancelledReadCannotCompleteInspection,
+ parameters: [state : ResearchInspection::State, bytes : Bytes],
+ statement: ((second (ResearchInspection::read (record ResearchInspection::State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (project state phase), cancelled := true, report := (project state report)}) (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] bytes)))) = (ctor ResearchInspection::Emission.cut)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelledManifestWriteCannotLaunchTool,
+ parameters: [state : ResearchInspection::State, ignored : Unit],
+ statement: ((second (ResearchInspection::written (record ResearchInspection::State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (project state phase), cancelled := true, report := (project state report)}) (ctor LexLeanStd.Host::Event.finished (ctor Result.ok [Unit, LexLeanStd.Host::Failure] ignored)))) = (ctor ResearchInspection::Emission.cut)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: writeCancellationWaitsForOwnedReply,
+ parameters: [state : ResearchInspection::State],
+ statement: ((second (ResearchInspection::cancel (record ResearchInspection::State {config := (project state config), owner := (project state owner), execution := (project state execution), phase := (ctor ResearchInspection::Phase.writing), cancelled := (project state cancelled), report := (project state report)}))) = (ctor ResearchInspection::Emission.awaiting)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unownedLibraryCannotLaunchInspector,
+ parameters: [config : ResearchInspection::Config, owner : ResearchWorkspace::State],
+ statement: ((second (ResearchInspection::beginPrepared config (record ResearchWorkspace::State {config := (project owner config), operation := (project owner operation), phase := (project owner phase), execution := (project owner execution), owned := false, cancelled := (project owner cancelled), result := (project owner result), detail := (project owner detail)}))) = (ctor ResearchInspection::Emission.failed "inspection requires the exact owned prepared library and bounded query")),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

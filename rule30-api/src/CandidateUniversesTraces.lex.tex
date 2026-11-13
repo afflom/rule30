@@ -1,0 +1,43 @@
+\begin{lexlean}{CandidateUniversesTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{CandidateUniverses}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: parameter,
+ parameters: [name : Bytes],
+ result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x6b, (ctor Json::Value.string 0x70)) (cons (0x61, (ctor Json::Value.string name)) (nil (Bytes * Json::Value)))))
+}
+theorem{
+ name: namedUniverseIsRetained,
+ parameters: [],
+ statement: ((CandidateUniverses::level (parameter 0x75) 128) = (ctor Option.some [(List Bytes)] (cons 0x75 (nil Bytes)))),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: exhaustedUniverseTraversalIsRefused,
+ parameters: [],
+ statement: ((CandidateUniverses::level (parameter 0x75) 0) = (ctor Option.none [(List Bytes)])),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: unnamedUniverseIsRefused,
+ parameters: [],
+ statement: ((CandidateUniverses::level (parameter 0x) 128) = (ctor Option.none [(List Bytes)])),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: repeatedUniversesPreserveFirstOccurrenceOrder,
+ parameters: [],
+ statement: ((CandidateUniverses::unique (cons 0x75 (cons 0x76 (cons 0x75 (nil Bytes)))) (cons 0x77 (nil Bytes))) = (cons 0x77 (cons 0x75 (cons 0x76 (nil Bytes))))),
+ proof: reflexivity{},
+ axioms: []
+}
+\end{semanticmodule}
+\end{lexlean}

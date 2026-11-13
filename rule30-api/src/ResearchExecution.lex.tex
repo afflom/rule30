@@ -17,14 +17,14 @@ inductive{
   name: Tool,
   type_parameters: [],
   parameters: [],
-  constructors: [{name: lean, fields: []}, {name: lake, fields: []}, {name: lexlean, fields: []}, {name: checker, fields: []}, {name: git, fields: []}, {name: prismpm, fields: []}]
+  constructors: [{name: lean, fields: []}, {name: lake, fields: []}, {name: lexlean, fields: []}, {name: checker, fields: []}, {name: git, fields: []}, {name: prismpm, fields: []}, {name: r30, fields: []}]
 }
 
 definition{
   name: program,
   parameters: [tool : Tool],
   result: String,
-  body: (match tool | Tool.lean => "lean" | Tool.lake => "lake" | Tool.lexlean => "lexlean" | Tool.checker => "leanchecker" | Tool.git => "git" | Tool.prismpm => "prismpm"),
+  body: (match tool | Tool.lean => "lean" | Tool.lake => "lake" | Tool.lexlean => "lexlean" | Tool.checker => "leanchecker" | Tool.git => "git" | Tool.prismpm => "prismpm" | Tool.r30 => "./bin/r30"),
   executable: true
 }
 

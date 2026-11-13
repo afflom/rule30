@@ -156,7 +156,14 @@ Its only events are host replies and cancellation. `ResearchRecord` captures the
 exact inputs and report reads; `ResearchEvidence` retains both the library commit
 and canonical proof record under verified Git references before workspace removal.
 Only then can the session return a checked answer. A stored record itself confers
-no proof authority. Failed archival or cleanup retains the workspace. Stopped or
+no proof authority.
+`ResearchAutonomy` composes owned inspection, bounded portfolio dispatch, recovery
+and batch claim publication. `lexlean inspect` is supplied by the v0.5 development
+fork in upstream PR #482 (stacked on #439). Inspection data replaces caller goal
+arenas but never acts as a proof receipt. Publication re-verifies retained source,
+registers its generated host theorem through the repository API, and uses the
+unchanged commit/push hooks and an exact source-revision lease. A bounded run
+finishing does not mean every task was proved or published. Failed archival or cleanup retains the workspace. Stopped or
 signalled tools also retain it: direct-child cleanup does not establish that all
 descendants have terminated. Exact name matching alone does not establish the
 identity of an arbitrary imported environment.
@@ -175,9 +182,10 @@ uncertain execution retains the library and stops the cohort. Its
 `r30/research-cohort-result/1` report preserves individual outcomes, and exit 0
 requires all checked results and no cancellation. Cohort execution is bounded
 reuse, not durable recovery or automatic strategy selection.
-Source inspection, strategy scheduling, durable failure diagnostics, recovery,
-and claim publication still need completion; these modules do not replace the
-legacy engine yet. Add every new application or library module and its modeled
+The autonomous command connects inspection, bounded scheduling, recovery and
+publication for supplied tasks. It does not generate a complete research strategy,
+resume uncertain stored processes, or replace the legacy scheduled engine yet.
+Add every new application or library module and its modeled
 features to `ResearchCatalog`, and add behavioral evidence for the capability;
 a module-count theorem alone does not establish feature completeness.
 
@@ -417,6 +425,11 @@ State the missing executable connection and its acceptance condition explicitly.
 - Before another costly run after a failure, identify the failing obligation,
   distinguish proof failure from resource failure, and make one evidence-based
   correction. Preserve every existing obligation when partitioning proofs.
+- Semantic `axioms` annotations are exact sets, not upper bounds. Audit new and
+  changed declarations against Lean's actual dependencies before the full gate;
+  do not copy an annotation from a neighboring definition. Check the whole
+  changed declaration set together so unused or missing annotations do not
+  produce a succession of late policy failures.
 - When several behavioral proofs evaluate the same expensive serialized fixture,
   establish its decoding once and reuse that checked equality. Keep the actual
   wire-decoding obligation and each behavioral statement; do not substitute an

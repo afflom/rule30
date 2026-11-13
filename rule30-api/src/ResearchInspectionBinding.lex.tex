@@ -1,0 +1,122 @@
+\begin{lexlean}{ResearchInspectionBinding}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Research}
+\importmodule{CandidateBinding}
+\importmodule{CoreBinding}
+\importmodule{CoreNotation}
+\importmodule{ResearchInput}
+\importmodule{Hypotheses}
+\importmodule{Toml}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: row,
+ parameters: [names : (List Json::Value), rows : (List Json::Value), wanted : Bytes],
+ result: (Option Json::Value),
+ body: (match names | List.nil => (ctor Option.none [Json::Value]) | List.cons head tail => (match rows | List.nil => (ctor Option.none [Json::Value]) | List.cons value rest => (if (ResearchInput::stringIs head wanted) then (ctor Option.some [Json::Value] value) else (row tail rest wanted)))),
+ axioms: [],
+ recursive_argument: names,
+ executable: true
+}
+definition{
+ name: find,
+ parameters: [report : Json::Value, wanted : Bytes],
+ result: (Option Json::Value),
+ body: (match (ResearchInput::array (CoreBinding::get (CoreBinding::get report 0x72657175657374) 0x6465636c61726174696f6e73)) | Option.none => (ctor Option.none [Json::Value]) | Option.some names => (match (ResearchInput::array (CoreBinding::get report 0x6465636c61726174696f6e73)) | Option.none => (ctor Option.none [Json::Value]) | Option.some rows => (row names rows wanted))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: source,
+ parameters: [report : Json::Value, origin : Bytes],
+ result: (Option CoreBinding::Goal),
+ body: (match (find report origin) | Option.none => (ctor Option.none [CoreBinding::Goal]) | Option.some value => (let native : Json::Value := (CoreBinding::get value 0x6e6174697665); (if (ResearchInput::stringIs (CoreBinding::get native 0x737461747573) 0x617661696c61626c65) then (CandidateBinding::goal native) else (ctor Option.none [CoreBinding::Goal])))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: closedProposition,
+ parameters: [goal : CoreBinding::Goal],
+ result: Bool,
+ body: (match (prim index (project goal nodes) (project goal root) : (Option Json::Value)) | Option.none => false | Option.some value => ((CoreNotation::shape value (cons 0x6b (cons 0x6c (nil Bytes)))) && ((Toml::sameBytes (CoreBinding::kind value) 0x73) && ((CoreNotation::shape (CoreBinding::get value 0x6c) (cons 0x6b (nil Bytes))) && (Toml::sameBytes (CoreBinding::kind (CoreBinding::get value 0x6c)) 0x7a))))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: withoutAuthority,
+ parameters: [original : Research::Task],
+ result: Research::Task,
+ body: (record Research::Task {id := (project original id), purpose := (project original purpose), intent := (project original intent), status := (ctor Research::Status.blocked), component := (project original component), sources := (project original sources), schema := (project original schema), sequent := (record Research::Sequent {origin := (project (project original sequent) origin), theorem := (project (project original sequent) theorem), premise := (project (project original sequent) premise), telescope := 0x, target := 0x, kind := (project (project original sequent) kind)}), age := (project original age), weight := (project original weight)}),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: withGoal,
+ parameters: [original : Research::Task, telescope : Bytes, target : Bytes],
+ result: Research::Task,
+ body: (let origin : Bytes := (project (project original sequent) origin); (record Research::Task {id := (project original id), purpose := (project original purpose), intent := (project original intent), status := (ctor Research::Status.ready), component := (project original component), sources := (if (Hypotheses::memberBytes origin (project original sources)) then (project original sources) else (cons origin (project original sources))), schema := (project original schema), sequent := (record Research::Sequent {origin := origin, theorem := origin, premise := (project (project original sequent) premise), telescope := telescope, target := target, kind := (project (project original sequent) kind)}), age := (project original age), weight := (project original weight)})),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: bindGoal,
+ parameters: [original : Research::Task, inspected : CoreBinding::Goal],
+ result: Research::Task,
+ body: (match (project (project original sequent) kind) | Research::GoalKind.closed => (if ((closedProposition inspected) && ((project (project original sequent) premise) =? 0)) then (match (CoreBinding::encodeGoal (CoreBinding::namedGoal (project (project original sequent) origin)) 8388608 16777216) | Option.none => (withoutAuthority original) | Option.some target => (withGoal original 0x target)) else (withoutAuthority original)) | Research::GoalKind.premise => (match (CoreBinding::premise inspected (project (project original sequent) premise) 8388608 16777216) | Option.none => (withoutAuthority original) | Option.some selected => (match (CoreBinding::encodeGoal inspected 8388608 16777216) | Option.none => (withoutAuthority original) | Option.some telescope => (match (CoreBinding::encodeGoal selected 8388608 16777216) | Option.none => (withoutAuthority original) | Option.some target => (withGoal original telescope target))))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: monomorphic,
+ parameters: [report : Json::Value, origin : Bytes],
+ result: Bool,
+ body: (match (find report origin) | Option.none => false | Option.some inspectedRow => (match (ResearchInput::array (CoreBinding::get (CoreBinding::get inspectedRow 0x6e6174697665) 0x6c6576656c73)) | Option.none => false | Option.some levels => ((prim length levels : Nat) =? 0))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: bind,
+ parameters: [original : Research::Task, report : Json::Value],
+ result: Research::Task,
+ body: (match (source report (project (project original sequent) origin)) | Option.none => (withoutAuthority original) | Option.some inspected => (match (project (project original sequent) kind) | Research::GoalKind.premise => (bindGoal original inspected) | Research::GoalKind.closed => (if (monomorphic report (project (project original sequent) origin)) then (bindGoal original inspected) else (withoutAuthority original)))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: tasks,
+ parameters: [originals : (List Research::Task), report : Json::Value],
+ result: (List Research::Task),
+ body: (match originals | List.nil => (nil Research::Task) | List.cons head tail => (cons (bind head report) (tasks tail report))),
+ axioms: [propext],
+ recursive_argument: originals,
+ executable: true
+}
+definition{
+ name: origins,
+ parameters: [originals : (List Research::Task), found : (List Bytes)],
+ result: (List Bytes),
+ body: (match originals | List.nil => found | List.cons head tail => (let origin : Bytes := (project (project head sequent) origin); (origins tail (if (Hypotheses::memberBytes origin found) then found else (prim append found (cons origin (nil Bytes)) : (List Bytes)))))),
+ axioms: [],
+ recursive_argument: originals,
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Replace caller-supplied goal arenas with types from an owned inspection report. Closed claims require a kernel type of Prop; contextual tasks select and close their premise from the inspected source telescope. A missing or unrepresentable inspection blocks that task and clears its unchecked target, while other tasks remain eligible. This conversion must consume ResearchInspection completion inside the owner; accepting a caller-provided JSON report would not establish source authority.",
+ axioms: [],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "inspected-origin-goal-binding" (cons "closed-proposition-type-check" (cons "inspected-premise-telescope" (cons "discard-caller-supplied-goal-arena" (cons "unsupported-inspection-blocks-only-affected-task" (nil String)))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

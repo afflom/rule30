@@ -1,0 +1,94 @@
+\begin{lexlean}{ResearchAutonomyTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchPublication}
+\importmodule{ResearchAutonomy}
+\importmodule{ResearchRecovery}
+\importmodule{ResearchPortfolio}
+\importmodule{ResearchProject}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchSession}
+\importmodule{Research}
+\importmodule{LexLeanStd.Host}
+\importmodule{ResearchInspection}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: runningPortfolioCannotSealGeneration,
+ parameters: [portfolio : ResearchPortfolio::State],
+ statement: ((ResearchAutonomy::released (record ResearchPortfolio::State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := (project portfolio research), base := (project portfolio base), owner := (project portfolio owner), active := (project portfolio active), results := (project portfolio results), remaining := (project portfolio remaining), phase := (ctor ResearchPortfolio::Phase.attempting), cancelled := (project portfolio cancelled)})) = false),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: liveSessionCannotSealGeneration,
+ parameters: [portfolio : ResearchPortfolio::State, session : ResearchSession::State],
+ statement: ((ResearchAutonomy::released (record ResearchPortfolio::State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := (project portfolio research), base := (project portfolio base), owner := (project portfolio owner), active := (ctor Option.some [ResearchSession::State] session), results := (project portfolio results), remaining := (project portfolio remaining), phase := (ctor ResearchPortfolio::Phase.ended), cancelled := (project portfolio cancelled)})) = false),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: ownedLibraryCannotSealGeneration,
+ parameters: [portfolio : ResearchPortfolio::State, owner : ResearchWorkspace::State],
+ statement: ((ResearchAutonomy::released (record ResearchPortfolio::State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := (project portfolio research), base := (project portfolio base), owner := (ctor Option.some [ResearchWorkspace::State] (record ResearchWorkspace::State {config := (project owner config), operation := (project owner operation), phase := (project owner phase), execution := (project owner execution), owned := true, cancelled := (project owner cancelled), result := (project owner result), detail := (project owner detail)})), active := (ctor Option.none [ResearchSession::State]), results := (project portfolio results), remaining := (project portfolio remaining), phase := (ctor ResearchPortfolio::Phase.ended), cancelled := (project portfolio cancelled)})) = false),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: emptyEndedPortfolioHasNoOwnedResources,
+ parameters: [portfolio : ResearchPortfolio::State],
+ statement: ((ResearchAutonomy::released (record ResearchPortfolio::State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := (project portfolio research), base := (project portfolio base), owner := (ctor Option.none [ResearchWorkspace::State]), active := (ctor Option.none [ResearchSession::State]), results := (project portfolio results), remaining := (project portfolio remaining), phase := (ctor ResearchPortfolio::Phase.ended), cancelled := (project portfolio cancelled)})) = true),
+ proof: reflexivity{},
+ axioms: []
+}
+theorem{
+ name: uncertainPortfolioNeverSealsJournal,
+ parameters: [state : ResearchAutonomy::State, portfolio : ResearchPortfolio::State, reason : String],
+ statement: ((second (ResearchAutonomy::portfolioResult state (portfolio, (ctor ResearchPortfolio::Emission.blocked reason)))) = (ctor ResearchAutonomy::Emission.blocked reason)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unreleasedCompletionCannotSealJournal,
+ parameters: [state : ResearchAutonomy::State, portfolio : ResearchPortfolio::State, research : Research::State, answers : (List (Research::Answer * Bytes))],
+ statement: ((second (ResearchAutonomy::portfolioResult state ((record ResearchPortfolio::State {inspection := (ctor Option.none [ResearchInspection::State]), inspected := false, research := (project portfolio research), base := (project portfolio base), owner := (project portfolio owner), active := (project portfolio active), results := (project portfolio results), remaining := (project portfolio remaining), phase := (ctor ResearchPortfolio::Phase.attempting), cancelled := (project portfolio cancelled)}), (ctor ResearchPortfolio::Emission.complete research answers)))) = (ctor ResearchAutonomy::Emission.blocked "portfolio completion still owns resources")),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: terminalAutonomyCannotDispatch,
+ parameters: [state : ResearchAutonomy::State, event : LexLeanStd.Host::Event],
+ statement: ((second (ResearchAutonomy::host (record ResearchAutonomy::State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project state publishedCommit), recovery := (project state recovery), portfolio := (project state portfolio), results := (project state results), phase := (ctor ResearchAutonomy::Phase.ended), cancelled := (project state cancelled)}) event)) = (ctor ResearchAutonomy::Emission.awaiting)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: cancelDuringSealDrainsPendingReply,
+ parameters: [state : ResearchAutonomy::State],
+ statement: ((second (ResearchAutonomy::cancel (record ResearchAutonomy::State {publisher := (project state publisher), publications := (project state publications), publishedCommit := (project state publishedCommit), recovery := (project state recovery), portfolio := (project state portfolio), results := (project state results), phase := (ctor ResearchAutonomy::Phase.sealing), cancelled := (project state cancelled)}))) = (ctor ResearchAutonomy::Emission.awaiting)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unpublishedCompletionCannotSealGeneration,
+ parameters: [state : ResearchAutonomy::State, publisher : ResearchPublication::State, identities : (List Bytes), commit : Bytes],
+ statement: ((second (ResearchAutonomy::publicationResult state ((record ResearchPublication::State {pending := (project publisher pending), identities := (project publisher identities), config := (project publisher config), owner := (project publisher owner), candidate := (project publisher candidate), execution := (project publisher execution), phase := (project publisher phase), operation := (project publisher operation), source := (project publisher source), receipt := (project publisher receipt), commit := (project publisher commit), cancelled := (project publisher cancelled), published := false}), (ctor ResearchPublication::Emission.complete identities commit)))) = (ctor ResearchAutonomy::Emission.blocked "publication completion still owns resources")),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: publicationFailureRemainsRecoverable,
+ parameters: [state : ResearchAutonomy::State, publisher : ResearchPublication::State, reason : String],
+ statement: ((project (first (ResearchAutonomy::publicationResult state (publisher, (ctor ResearchPublication::Emission.blocked reason)))) publisher) = (ctor Option.some [ResearchPublication::State] publisher)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: acknowledgedPushRemainsReportedAfterCleanupFailure,
+ parameters: [state : ResearchAutonomy::State, publisher : ResearchPublication::State, reason : String],
+ statement: ((project (first (ResearchAutonomy::publicationResult state ((record ResearchPublication::State {pending := (project publisher pending), identities := (project publisher identities), config := (project publisher config), owner := (project publisher owner), candidate := (project publisher candidate), execution := (project publisher execution), phase := (project publisher phase), operation := (project publisher operation), source := (project publisher source), receipt := (project publisher receipt), commit := 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161, cancelled := (project publisher cancelled), published := true}), (ctor ResearchPublication::Emission.blocked reason)))) publishedCommit) = 0x61616161616161616161616161616161616161616161616161616161616161616161616161616161),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,69 @@
+\begin{lexlean}{ResearchPortfolioInput}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchPortfolio}
+\importmodule{ResearchInput}
+\importmodule{ResearchProject}
+\importmodule{Research}
+\importmodule{CoreNotation}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{Hypotheses}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Config,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: research, type: Research::State}, {name: base, type: ResearchProject::Config}, {name: budget, type: Nat}]
+}
+definition{
+ name: template,
+ parameters: [value : Json::Value, environment : (List (String * String))],
+ result: (Option ResearchProject::Config),
+ body: (if ((CoreNotation::shape value (cons 0x73706563 (cons 0x72657175657374 (cons 0x7265706f7369746f7279 (cons 0x7265766973696f6e (cons 0x6f7574707574 (cons 0x6572726f7273 (cons 0x746f6f6c73 (cons 0x696d706f727473 (cons 0x6c6576656c73 (cons 0x6178696f6d73 (cons 0x626f756e6473 (nil Bytes))))))))))))) && (ResearchInput::stringIs (CoreBinding::get value 0x73706563) 0x7233302f72657365617263682d706f7274666f6c696f2d626173652f31)) then (ResearchInput::suppliedConfig (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f72657365617263682d617474656d70742f31)) (cons (0x72657175657374, (CoreBinding::get value 0x72657175657374)) (cons (0x7265706f7369746f7279, (CoreBinding::get value 0x7265706f7369746f7279)) (cons (0x7265766973696f6e, (CoreBinding::get value 0x7265766973696f6e)) (cons (0x6f7574707574, (CoreBinding::get value 0x6f7574707574)) (cons (0x6572726f7273, (CoreBinding::get value 0x6572726f7273)) (cons (0x746f6f6c73, (CoreBinding::get value 0x746f6f6c73)) (cons (0x696d706f727473, (CoreBinding::get value 0x696d706f727473)) (cons (0x6c6576656c73, (CoreBinding::get value 0x6c6576656c73)) (cons (0x6178696f6d73, (CoreBinding::get value 0x6178696f6d73)) (cons (0x626f756e6473, (CoreBinding::get value 0x626f756e6473)) (cons (0x6172656e61, (ctor Json::Value.object (cons (0x6e6f646573, (ctor Json::Value.array (nil Json::Value))) (cons (0x726f6f74, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))) (cons (0x70726f6f66, (ctor Json::Value.number 0x30)) (nil (Bytes * Json::Value)))))))))))))))) environment) else (ctor Option.none [ResearchProject::Config])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: tasks,
+ parameters: [values : (List Json::Value), seen : (List Bytes)],
+ result: (Option (List Research::Task)),
+ body: (match values | List.nil => (ctor Option.some [(List Research::Task)] (nil Research::Task)) | List.cons head tail => (match (ResearchInput::task head) | Option.none => (ctor Option.none [(List Research::Task)]) | Option.some task => (if (Hypotheses::memberBytes (project task id) seen) then (ctor Option.none [(List Research::Task)]) else (match (tasks tail (cons (project task id) seen)) | Option.none => (ctor Option.none [(List Research::Task)]) | Option.some rest => (ctor Option.some [(List Research::Task)] (cons task rest)))))),
+ axioms: [Quot.sound, propext],
+ recursive_argument: values,
+ executable: true
+}
+definition{
+ name: components,
+ parameters: [],
+ result: (List Research::Component),
+ body: (cons (record Research::Component {id := "deduction", dependencies := (cons "kernel" (nil String)), concern := "proof", available := true}) (cons (record Research::Component {id := "kernel", dependencies := (cons "library" (nil String)), concern := "verification", available := true}) (cons (record Research::Component {id := "library", dependencies := (nil String), concern := "identity", available := true}) (nil Research::Component)))),
+ executable: true
+}
+definition{
+ name: config,
+ parameters: [value : Json::Value, environment : (List (String * String))],
+ result: (Option Config),
+ body: (if ((CoreNotation::shape value (cons 0x73706563 (cons 0x62617365 (cons 0x7461736b73 (cons 0x627564676574 (nil Bytes)))))) && (ResearchInput::stringIs (CoreBinding::get value 0x73706563) 0x7233302f72657365617263682d706f7274666f6c696f2f31)) then (match (template (CoreBinding::get value 0x62617365) environment) | Option.none => (ctor Option.none [Config]) | Option.some base => (match (Json::natural (CoreBinding::get value 0x627564676574) 64) | Option.none => (ctor Option.none [Config]) | Option.some budget => (match (ResearchInput::array (CoreBinding::get value 0x7461736b73)) | Option.none => (ctor Option.none [Config]) | Option.some values => (if ((prim length values : Nat) <=? 64) then (match (tasks values (nil Bytes)) | Option.none => (ctor Option.none [Config]) | Option.some selected => (ctor Option.some [Config] (record Config {research := (record Research::State {snapshot := (project (project base request) snapshot), components := (components), tasks := selected, pending := (ctor Option.none [Research::Request]), next := (project (project base request) serial), history := (nil Research::Answer)}), base := base, budget := budget}))) else (ctor Option.none [Config]))))) else (ctor Option.none [Config])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: decode,
+ parameters: [data : Bytes, environment : (List (Bytes * Bytes))],
+ result: (Option Config),
+ body: (match (Json::parse data 8388608 96) | Result.error problem => (ctor Option.none [Config]) | Result.ok value => (match (ResearchInput::environment environment) | Option.none => (ctor Option.none [Config]) | Option.some admitted => (config value admitted))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "bounded-portfolio-tasks" (cons "distinct-task-identities" (cons "no-proof-term-input" (cons "exact-schema-admission" (nil String))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

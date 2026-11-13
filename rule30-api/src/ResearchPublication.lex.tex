@@ -1,0 +1,270 @@
+\begin{lexlean}{ResearchPublication}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{PublicationPlan}
+\importmodule{PublicationRecord}
+\importmodule{PublicationFrontier}
+\importmodule{ResearchProject}
+\importmodule{ResearchCandidate}
+\importmodule{ResearchWorkspace}
+\importmodule{ResearchExecution}
+\importmodule{ResearchVerification}
+\importmodule{ResearchProof}
+\importmodule{ResearchEvidence}
+\importmodule{Research}
+\importmodule{VerificationReport}
+\importmodule{Host}
+\importmodule{Toml}
+\importmodule{LexLeanStd.Host}
+\title{Boolean}
+\begin{semanticmodule}
+inductive{
+ name: Phase,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: preparing, fields: []}, {name: advancing, fields: []}, {name: executing, fields: []}, {name: readArchive, fields: []}, {name: readFrontier, fields: []}, {name: readManifest, fields: []}, {name: writeManifest, fields: []}, {name: writeSource, fields: []}, {name: verifying, fields: []}, {name: readGenerated, fields: []}, {name: writeGenerated, fields: []}, {name: readHead, fields: []}, {name: releasing, fields: []}, {name: ended, fields: []}, {name: blocked, fields: []}]
+}
+structure{
+ name: State,
+ type_parameters: [],
+ parameters: [],
+ fields: [{name: pending, type: (List (Research::Answer * Bytes))}, {name: identities, type: (List Bytes)}, {name: config, type: PublicationPlan::Config}, {name: owner, type: (Option ResearchWorkspace::State)}, {name: candidate, type: (Option ResearchCandidate::State)}, {name: execution, type: (Option ResearchExecution::State)}, {name: phase, type: Phase}, {name: operation, type: PublicationPlan::Operation}, {name: source, type: Bytes}, {name: receipt, type: (Option VerificationReport::Receipt)}, {name: commit, type: Bytes}, {name: cancelled, type: Bool}, {name: published, type: Bool}]
+}
+inductive{
+ name: Event,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Event]}, {name: cancel, fields: []}]
+}
+inductive{
+ name: Emission,
+ type_parameters: [],
+ parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: awaiting, fields: []}, {name: complete, fields: [(List Bytes), Bytes]}, {name: blocked, fields: [String]}]
+}
+definition{
+ name: blocked,
+ parameters: [state : State, reason : String],
+ result: (State * Emission),
+ body: ((record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (ctor Phase.blocked), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}), (ctor Emission.blocked reason)),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: read,
+ parameters: [state : State, phase : Phase, path : String],
+ result: (State * Emission),
+ body: ((record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (ctor Option.none [ResearchExecution::State]), phase := phase, operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.read path))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: write,
+ parameters: [state : State, phase : Phase, path : String, data : Bytes],
+ result: (State * Emission),
+ body: ((record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (ctor Option.none [ResearchExecution::State]), phase := phase, operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.write path data))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: launch,
+ parameters: [state : State, operation : PublicationPlan::Operation],
+ result: (State * Emission),
+ body: (let result : (ResearchExecution::State * ResearchExecution::Emission) := (ResearchExecution::begin (PublicationPlan::job (project state config) operation (project state commit))); (let next : State := (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (ctor Option.some [ResearchExecution::State] (first result)), phase := (ctor Phase.executing), operation := operation, source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (blocked next "publication job did not start") | ResearchExecution::Emission.complete completion => (blocked next "publication job refused")))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: ownerResult,
+ parameters: [state : State, result : (ResearchWorkspace::State * ResearchWorkspace::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (ctor Option.some [ResearchWorkspace::State] (first result)), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}); (match (second result) | ResearchWorkspace::Emission.host request => (next, (ctor Emission.host request)) | ResearchWorkspace::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchWorkspace::Emission.ready path => (if (project next cancelled) then (blocked next "cancelled publication retains workspace") else (launch next (ctor PublicationPlan::Operation.archive))) | ResearchWorkspace::Emission.complete kind => (if ((project next published) && (not (project (first result) owned))) then (match kind | ResearchExecution::EndKind.succeeded => ((record State {pending := (project next pending), identities := (project next identities), config := (project next config), owner := (project next owner), candidate := (project next candidate), execution := (project next execution), phase := (ctor Phase.ended), operation := (project next operation), source := (project next source), receipt := (project next receipt), commit := (project next commit), cancelled := (project next cancelled), published := (project next published)}), (ctor Emission.complete (project next identities) (project next commit))) | ResearchExecution::EndKind.failed => (blocked next "publication cleanup not accepted") | ResearchExecution::EndKind.cut => (blocked next "publication cleanup not accepted") | ResearchExecution::EndKind.unavailable => (blocked next "publication cleanup not accepted") | ResearchExecution::EndKind.protocol => (blocked next "publication cleanup not accepted") | ResearchExecution::EndKind.cleanupFailed => (blocked next "publication cleanup not accepted") | ResearchExecution::EndKind.refused => (blocked next "publication cleanup not accepted")) else (blocked next "publication workspace ended before publication")) | ResearchWorkspace::Emission.blocked reason => (blocked next reason) | ResearchWorkspace::Emission.refused => (blocked next "publication workspace refused"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: release,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state owner) | Option.none => (blocked state "missing publication workspace owner") | Option.some owner => (ownerResult (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (ctor Phase.releasing), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}) (ResearchWorkspace::step owner (ctor ResearchWorkspace::Event.release)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: receiptOf,
+ parameters: [candidate : ResearchCandidate::State],
+ result: (Option VerificationReport::Receipt),
+ body: (match (project candidate phase) | ResearchCandidate::Phase.ended => (if (not (project candidate cancelled)) then (match (project candidate proof) | Option.none => (ctor Option.none [VerificationReport::Receipt]) | Option.some proof => (match (project (project proof verification) outcome) | Option.none => (ctor Option.none [VerificationReport::Receipt]) | Option.some outcome => (match outcome | ResearchVerification::Outcome.accepted receipt => (ctor Option.some [VerificationReport::Receipt] receipt) | ResearchVerification::Outcome.terminated completion => (ctor Option.none [VerificationReport::Receipt]) | ResearchVerification::Outcome.rejected reason => (ctor Option.none [VerificationReport::Receipt]) | ResearchVerification::Outcome.cancelled => (ctor Option.none [VerificationReport::Receipt])))) else (ctor Option.none [VerificationReport::Receipt])) | ResearchCandidate::Phase.running => (ctor Option.none [VerificationReport::Receipt]) | ResearchCandidate::Phase.reading => (ctor Option.none [VerificationReport::Receipt]) | ResearchCandidate::Phase.verifying => (ctor Option.none [VerificationReport::Receipt])),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: candidateResult,
+ parameters: [state : State, result : (ResearchCandidate::State * ResearchProof::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (ctor Option.some [ResearchCandidate::State] (first result)), execution := (ctor Option.none [ResearchExecution::State]), phase := (ctor Phase.verifying), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}); (match (second result) | ResearchProof::Emission.host request => (next, (ctor Emission.host request)) | ResearchProof::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchProof::Emission.blocked completion => (blocked next "publication proof ownership uncertain") | ResearchProof::Emission.complete answer => (if (project next cancelled) then (blocked next "cancelled publication retains source") else (match (project answer result) | Research::ResultKind.checked sequent theorem axioms => (match (receiptOf (first result)) | Option.none => (blocked next "missing owned publication receipt") | Option.some receipt => (read (record State {pending := (project next pending), identities := (project next identities), config := (project next config), owner := (project next owner), candidate := (project next candidate), execution := (project next execution), phase := (project next phase), operation := (project next operation), source := (project next source), receipt := (ctor Option.some [VerificationReport::Receipt] receipt), commit := (project next commit), cancelled := (project next cancelled), published := (project next published)}) (ctor Phase.readGenerated) (PublicationPlan::generatedPath (project next config) receipt))) | Research::ResultKind.inspected sequent => (blocked next "renamed source did not establish the claim") | Research::ResultKind.maintained sources evidence => (blocked next "renamed source did not establish the claim") | Research::ResultKind.failed reason => (blocked next "renamed source did not establish the claim") | Research::ResultKind.cut => (blocked next "renamed source did not establish the claim") | Research::ResultKind.unavailable => (blocked next "renamed source did not establish the claim"))))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: plan,
+ parameters: [base : ResearchProject::Config, answer : Research::Answer, identity : Bytes],
+ result: PublicationPlan::Config,
+ body: (record PublicationPlan::Config {base := (record ResearchProject::Config {request := (project answer request), workspace := (project base workspace), tools := (project base tools), arena := (project base arena), proof := (project base proof), imports := (project base imports), levels := (project base levels), axioms := (project base axioms), maxBytes := (project base maxBytes), maxDepth := (project base maxDepth), maxSteps := (project base maxSteps)}), identity := identity}),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: eligibleAnswer,
+ parameters: [answer : Research::Answer, identity : Bytes],
+ result: Bool,
+ body: ((VerificationReport::digest identity) && (match (project answer result) | Research::ResultKind.checked sequent theorem axioms => true | Research::ResultKind.inspected sequent => false | Research::ResultKind.maintained sources evidence => false | Research::ResultKind.failed reason => false | Research::ResultKind.cut => false | Research::ResultKind.unavailable => false)),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: pendingProofs,
+ parameters: [answers : (List (Research::Answer * Bytes))],
+ result: (List (Research::Answer * Bytes)),
+ body: (match answers | List.nil => (nil (Research::Answer * Bytes)) | List.cons head tail => (if (eligibleAnswer (first head) (second head)) then (cons head (pendingProofs tail)) else (pendingProofs tail))),
+ axioms: [propext],
+ recursive_argument: answers,
+ executable: true
+}
+definition{
+ name: advanceLater,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: ((record State {pending := (project state pending), identities := (prim append (project state identities) (cons (project (project state config) identity) (nil Bytes)) : (List Bytes)), config := (project state config), owner := (project state owner), candidate := (ctor Option.none [ResearchCandidate::State]), execution := (ctor Option.none [ResearchExecution::State]), phase := (ctor Phase.advancing), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.wait (nil Nat) 0))),
+ axioms: [],
+ executable: true
+}
+definition{
+ name: advance,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (if (project state cancelled) then (blocked state "cancelled proof batch retains owned changes") else (match (project state pending) | List.nil => (launch state (ctor PublicationPlan::Operation.stage)) | List.cons head tail => (launch (record State {pending := tail, identities := (project state identities), config := (plan (project (project state config) base) (first head) (second head)), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := 0x, receipt := (ctor Option.none [VerificationReport::Receipt]), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}) (ctor PublicationPlan::Operation.archive)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: succeeded,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state operation) | PublicationPlan::Operation.archive => (read state (ctor Phase.readArchive) (project (PublicationPlan::workspace (project state config)) output)) | PublicationPlan::Operation.update => (launch state (ctor PublicationPlan::Operation.lock)) | PublicationPlan::Operation.lock => (candidateResult state (ResearchCandidate::begin (PublicationPlan::context (project state config)))) | PublicationPlan::Operation.register => (launch state (ctor PublicationPlan::Operation.theorem)) | PublicationPlan::Operation.theorem => (if (PublicationFrontier::closesClaim (project (project (project (project state config) base) request) task)) then (launch state (ctor PublicationPlan::Operation.frontier)) else (launch state (ctor PublicationPlan::Operation.sync))) | PublicationPlan::Operation.frontier => (launch state (ctor PublicationPlan::Operation.sync)) | PublicationPlan::Operation.sync => (advanceLater state) | PublicationPlan::Operation.stage => (launch state (ctor PublicationPlan::Operation.commit)) | PublicationPlan::Operation.commit => (launch state (ctor PublicationPlan::Operation.head)) | PublicationPlan::Operation.head => (read state (ctor Phase.readHead) (project (PublicationPlan::workspace (project state config)) output)) | PublicationPlan::Operation.retain => (launch state (ctor PublicationPlan::Operation.push)) | PublicationPlan::Operation.push => (release (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (ctor Option.none [ResearchExecution::State]), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := true}))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: completed,
+ parameters: [state : State, completion : ResearchExecution::Completion],
+ result: (State * Emission),
+ body: (if ((ResearchExecution::resumeAllowed completion) && (ResearchWorkspace::exitedNormally completion)) then (match (project completion kind) | ResearchExecution::EndKind.succeeded => (if (project state cancelled) then (match (project state operation) | PublicationPlan::Operation.push => (succeeded state) | PublicationPlan::Operation.archive => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.update => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.lock => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.register => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.theorem => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.frontier => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.sync => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.stage => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.commit => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.head => (blocked state "publication cancelled; retain owned changes") | PublicationPlan::Operation.retain => (blocked state "publication cancelled; retain owned changes")) else (succeeded state)) | ResearchExecution::EndKind.failed => (blocked state "publication job failed or stopped; retain recovery state") | ResearchExecution::EndKind.cut => (blocked state "publication job failed or stopped; retain recovery state") | ResearchExecution::EndKind.unavailable => (blocked state "publication job failed or stopped; retain recovery state") | ResearchExecution::EndKind.protocol => (blocked state "publication job failed or stopped; retain recovery state") | ResearchExecution::EndKind.cleanupFailed => (blocked state "publication job failed or stopped; retain recovery state") | ResearchExecution::EndKind.refused => (blocked state "publication job failed or stopped; retain recovery state")) else (blocked state "publication outcome uncertain; retain all ownership")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: executionResult,
+ parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)],
+ result: (State * Emission),
+ body: (let next : State := (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (ctor Option.some [ResearchExecution::State] (first result)), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (next, (ctor Emission.awaiting)) | ResearchExecution::Emission.complete completion => (completed next completion))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: readBytes,
+ parameters: [state : State, bytes : Bytes],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.advancing => (blocked state "unexpected publication read") | Phase.preparing => (blocked state "unexpected publication read") | Phase.executing => (blocked state "unexpected publication read") | Phase.readArchive => (match (PublicationRecord::decode bytes (project (project state config) identity) (project (project (project state config) base) request) (project (PublicationPlan::workspace (project state config)) revision)) | Option.none => (blocked state "evidence archive identity, request or revision mismatch") | Option.some source => (read (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := source, receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}) (ctor Phase.readFrontier) (ResearchVerification::concat (PublicationPlan::root (project state config)) "/frontier.toml"))) | Phase.readFrontier => (if (PublicationFrontier::current bytes (project (project (project (project state config) base) request) task)) then (read state (ctor Phase.readManifest) (ResearchVerification::concat (PublicationPlan::root (project state config)) "/rule30-paper/lexlean.toml")) else (blocked state "publication frontier is stale, closed or ambiguous")) | Phase.readManifest => (match (PublicationPlan::entrypoint (project state config) bytes) | Option.none => (blocked state "paper manifest cannot admit generated source") | Option.some updated => (write state (ctor Phase.writeManifest) (ResearchVerification::concat (PublicationPlan::root (project state config)) "/rule30-paper/lexlean.toml") updated)) | Phase.writeManifest => (blocked state "unexpected publication read") | Phase.writeSource => (blocked state "unexpected publication read") | Phase.verifying => (blocked state "unexpected publication read") | Phase.readGenerated => (if ((0 <? (prim length bytes : Nat)) && ((prim length bytes : Nat) <=? 8388608)) then (write state (ctor Phase.writeGenerated) (PublicationPlan::hostPath (project state config)) bytes) else (blocked state "generated proof artifact outside bounds")) | Phase.writeGenerated => (blocked state "unexpected publication read") | Phase.readHead => (let commit : Bytes := (Toml::sliceOr bytes 0 (prim subtract (prim length bytes : Nat) 1 : Nat)); (if ((ResearchWorkspace::objectId commit) && (Toml::sameBytes bytes (prim append commit 0x0a : Bytes))) then (launch (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := commit, cancelled := (project state cancelled), published := (project state published)}) (ctor PublicationPlan::Operation.retain)) else (blocked state "invalid publication commit identity"))) | Phase.releasing => (blocked state "unexpected publication read") | Phase.ended => (blocked state "unexpected publication read") | Phase.blocked => (blocked state "unexpected publication read")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: readResult,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (ResearchVerification::readResponse event) | Option.none => (blocked state "unexpected publication read response") | Option.some result => (if (project state cancelled) then (blocked state "cancelled publication read drained; retain changes") else (match result | Result.error problem => (blocked state "publication read failed") | Result.ok bytes => (readBytes state bytes)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: written,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.advancing => (blocked state "unexpected publication write") | Phase.preparing => (blocked state "unexpected publication write") | Phase.executing => (blocked state "unexpected publication write") | Phase.readArchive => (blocked state "unexpected publication write") | Phase.readFrontier => (blocked state "unexpected publication write") | Phase.readManifest => (blocked state "unexpected publication write") | Phase.writeManifest => (write state (ctor Phase.writeSource) (ResearchVerification::concat (PublicationPlan::root (project state config)) (ResearchVerification::concat "/rule30-paper/" (PublicationPlan::sourcePath (project state config)))) (project state source)) | Phase.writeSource => (launch state (ctor PublicationPlan::Operation.update)) | Phase.verifying => (blocked state "unexpected publication write") | Phase.readGenerated => (blocked state "unexpected publication write") | Phase.writeGenerated => (launch state (ctor PublicationPlan::Operation.register)) | Phase.readHead => (blocked state "unexpected publication write") | Phase.releasing => (blocked state "unexpected publication write") | Phase.ended => (blocked state "unexpected publication write") | Phase.blocked => (blocked state "unexpected publication write")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: writeResult,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (ResearchExecution::asFinished event) | Option.none => (blocked state "unexpected publication write response") | Option.some result => (if (project state cancelled) then (blocked state "cancelled publication write drained; retain changes") else (match result | Result.error problem => (blocked state "publication write failed") | Result.ok ignored => (written state)))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: host,
+ parameters: [state : State, event : LexLeanStd.Host::Event],
+ result: (State * Emission),
+ body: (match (project state phase) | Phase.advancing => (match (ResearchExecution::asWaited event) | Option.none => (blocked state "unexpected publication continuation") | Option.some response => (match response | Result.error failure => (blocked state "publication continuation failed") | Result.ok waited => (match (project waited finished) | List.nil => (advance state) | List.cons child tail => (blocked state "publication continuation returned unowned child")))) | Phase.preparing => (match (project state owner) | Option.none => (blocked state "publication lost workspace owner") | Option.some owner => (ownerResult state (ResearchWorkspace::step owner (ctor ResearchWorkspace::Event.host event)))) | Phase.executing => (match (project state execution) | Option.none => (blocked state "publication lost job owner") | Option.some execution => (executionResult state (ResearchExecution::step execution event))) | Phase.readArchive => (readResult state event) | Phase.readFrontier => (readResult state event) | Phase.readManifest => (readResult state event) | Phase.writeManifest => (writeResult state event) | Phase.writeSource => (writeResult state event) | Phase.verifying => (match (project state candidate) | Option.none => (blocked state "publication lost proof owner") | Option.some candidate => (candidateResult state (ResearchCandidate::host candidate event))) | Phase.readGenerated => (readResult state event) | Phase.writeGenerated => (writeResult state event) | Phase.readHead => (readResult state event) | Phase.releasing => (match (project state owner) | Option.none => (blocked state "publication lost workspace owner") | Option.some owner => (ownerResult state (ResearchWorkspace::step owner (ctor ResearchWorkspace::Event.host event)))) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (blocked state "publication retained for recovery")),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: cancel,
+ parameters: [state : State],
+ result: (State * Emission),
+ body: (let next : State := (record State {pending := (project state pending), identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := true, published := (project state published)}); (match (project state phase) | Phase.advancing => (next, (ctor Emission.awaiting)) | Phase.preparing => (match (project next owner) | Option.none => (blocked next "publication lost workspace owner") | Option.some owner => (ownerResult next (ResearchWorkspace::step owner (ctor ResearchWorkspace::Event.cancel)))) | Phase.executing => (match (project next execution) | Option.none => (blocked next "publication lost job owner") | Option.some execution => (executionResult next (ResearchExecution::cancel execution))) | Phase.readArchive => (next, (ctor Emission.awaiting)) | Phase.readFrontier => (next, (ctor Emission.awaiting)) | Phase.readManifest => (next, (ctor Emission.awaiting)) | Phase.writeManifest => (next, (ctor Emission.awaiting)) | Phase.writeSource => (next, (ctor Emission.awaiting)) | Phase.verifying => (match (project next candidate) | Option.none => (blocked next "publication lost proof owner") | Option.some candidate => (candidateResult next (ResearchCandidate::cancel candidate))) | Phase.readGenerated => (next, (ctor Emission.awaiting)) | Phase.writeGenerated => (next, (ctor Emission.awaiting)) | Phase.readHead => (next, (ctor Emission.awaiting)) | Phase.releasing => (next, (ctor Emission.awaiting)) | Phase.ended => (state, (ctor Emission.awaiting)) | Phase.blocked => (blocked next "publication retained for recovery"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: begin,
+ parameters: [config : PublicationPlan::Config],
+ result: (State * Emission),
+ body: (let state : State := (record State {pending := (nil (Research::Answer * Bytes)), identities := (nil Bytes), config := config, owner := (ctor Option.none [ResearchWorkspace::State]), candidate := (ctor Option.none [ResearchCandidate::State]), execution := (ctor Option.none [ResearchExecution::State]), phase := (ctor Phase.preparing), operation := (ctor PublicationPlan::Operation.archive), source := 0x, receipt := (ctor Option.none [VerificationReport::Receipt]), commit := 0x, cancelled := false, published := false}); (if ((VerificationReport::digest (project config identity)) && ((ResearchCandidate::valid (PublicationPlan::context config)) && (Research::sameSnapshot (project (project (project config base) request) snapshot) (project (project (PublicationPlan::workspace config) request) snapshot)))) then (ownerResult state (ResearchWorkspace::begin (PublicationPlan::workspace config))) else (blocked state "invalid publication configuration"))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: beginBatch,
+ parameters: [base : ResearchProject::Config, answers : (List (Research::Answer * Bytes))],
+ result: (Option (State * Emission)),
+ body: (if ((prim length answers : Nat) <=? 64) then (match (pendingProofs answers) | List.nil => (ctor Option.none [(State * Emission)]) | List.cons head tail => (let result : (State * Emission) := (begin (plan base (first head) (second head))); (let state : State := (first result); (ctor Option.some [(State * Emission)] ((record State {pending := tail, identities := (project state identities), config := (project state config), owner := (project state owner), candidate := (project state candidate), execution := (project state execution), phase := (project state phase), operation := (project state operation), source := (project state source), receipt := (project state receipt), commit := (project state commit), cancelled := (project state cancelled), published := (project state published)}), (second result)))))) else (ctor Option.none [(State * Emission)])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: step,
+ parameters: [state : State, event : Event],
+ result: (State * Emission),
+ body: (match event | Event.host response => (host state response) | Event.cancel => (cancel state)),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: released,
+ parameters: [state : State],
+ result: Bool,
+ body: ((project state published) && ((ResearchWorkspace::objectId (project state commit)) && ((match (project state phase) | Phase.preparing => false | Phase.advancing => false | Phase.executing => false | Phase.readArchive => false | Phase.readFrontier => false | Phase.readManifest => false | Phase.writeManifest => false | Phase.writeSource => false | Phase.verifying => false | Phase.readGenerated => false | Phase.writeGenerated => false | Phase.readHead => false | Phase.releasing => false | Phase.ended => true | Phase.blocked => false) && ((match (project state execution) | Option.none => true | Option.some execution => false) && ((match (project state candidate) | Option.none => true | Option.some candidate => false) && (match (project state owner) | Option.none => false | Option.some owner => (not (project owner owned)))))))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Own a bounded proof batch in one isolated worktree, one unchanged commit gate and one revision-conditional push. Own archive replay, fresh renamed-source verification, generated host proof registration, theorem publication, frontier mutation, unchanged pre-commit validation, retained commit identity and source-revision compare-and-swap push. Only host replies and cancellation enter this lifecycle. An archived receipt cannot skip verification. Supporting premises never close the parent claim. Every uncertain or failed effect retains its workspace and pending ownership; successful remote acknowledgment is required before published becomes true and cleanup may finish. Cancellation drains outstanding reads, writes and child processes; cancellation concurrent with acknowledged publication preserves that fact.",
+ axioms: [],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "owned-evidence-archive-replay" (cons "fresh-renamed-source-verification" (cons "single-workspace-proof-batch" (cons "one-commit-gate-per-batch" (cons "source-conditional-publication" (cons "publication-acknowledgement-before-cleanup" (cons "uncertain-effects-retain-ownership" (cons "cancel-drains-pending-effects" (nil String))))))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

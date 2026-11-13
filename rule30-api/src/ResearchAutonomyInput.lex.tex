@@ -1,0 +1,36 @@
+\begin{lexlean}{ResearchAutonomyInput}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ResearchRecovery}
+\importmodule{ResearchPortfolioInput}
+\importmodule{ResearchInput}
+\importmodule{CoreNotation}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: config,
+ parameters: [value : Json::Value, environment : (List (String * String))],
+ result: (Option ResearchRecovery::Config),
+ body: (if ((CoreNotation::shape value (cons 0x73706563 (cons 0x706f7274666f6c696f (cons 0x7265636f72645f70617468 (cons 0x6d61785f71756172616e74696e6564 (nil Bytes)))))) && (ResearchInput::stringIs (CoreBinding::get value 0x73706563) 0x7233302f72657365617263682d6175746f6e6f6d792f31)) then (match (ResearchPortfolioInput::config (CoreBinding::get value 0x706f7274666f6c696f) environment) | Option.none => (ctor Option.none [ResearchRecovery::Config]) | Option.some portfolio => (match (ResearchInput::text (CoreBinding::get value 0x7265636f72645f70617468)) | Option.none => (ctor Option.none [ResearchRecovery::Config]) | Option.some recordPath => (match (Json::natural (CoreBinding::get value 0x6d61785f71756172616e74696e6564) 8) | Option.none => (ctor Option.none [ResearchRecovery::Config]) | Option.some maxQuarantined => (ctor Option.some [ResearchRecovery::Config] (record ResearchRecovery::Config {portfolio := portfolio, recordPath := recordPath, maxQuarantined := maxQuarantined}))))) else (ctor Option.none [ResearchRecovery::Config])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: decode,
+ parameters: [data : Bytes, environment : (List (Bytes * Bytes))],
+ result: (Option ResearchRecovery::Config),
+ body: (match (Json::parse data 8388608 96) | Result.error error => (ctor Option.none [ResearchRecovery::Config]) | Result.ok value => (match (ResearchInput::environment environment) | Option.none => (ctor Option.none [ResearchRecovery::Config]) | Option.some admitted => (config value admitted))),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "exact-versioned-autonomy-schema" (cons "bounded-quarantine-admission" (cons "proofless-portfolio-input" (cons "lossless-environment-decoding" (nil String))))),
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,65 @@
+\begin{lexlean}{PublicationRecord}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{PublicationSource}
+\importmodule{ResearchRecord}
+\importmodule{Research}
+\importmodule{ResearchInput}
+\importmodule{CoreBinding}
+\importmodule{CoreNotation}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\importmodule{LexLeanStd.Sha256}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: sameDocument,
+ parameters: [left : Json::Value, right : Json::Value],
+ result: Bool,
+ body: (match (JsonCanonical::encode left 8388608 16777216) | Option.none => false | Option.some firstBytes => (match (JsonCanonical::encode right 8388608 16777216) | Option.none => false | Option.some secondBytes => (Toml::sameBytes firstBytes secondBytes))),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: matches,
+ parameters: [document : Json::Value, request : Research::Request, revision : Bytes],
+ result: Bool,
+ body: (if (CoreNotation::shape document (cons 0x73706563 (cons 0x72657175657374 (cons 0x7265766973696f6e (cons 0x70696e73 (cons 0x72656365697074 (cons 0x66696c6573 (cons 0x6c696e6b6564 (cons 0x6c657869636f6e (cons 0x636f6d6d616e64 (cons 0x6174746573746174696f6e (nil Bytes)))))))))))) then ((ResearchInput::stringIs (CoreBinding::get document 0x73706563) 0x7233302f72657365617263682d70726f6f662f31) && ((ResearchInput::stringIs (CoreBinding::get document 0x7265766973696f6e) revision) && (sameDocument (CoreBinding::get document 0x72657175657374) (ResearchRecord::request request)))) else false),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: source,
+ parameters: [document : Json::Value, request : Research::Request, revision : Bytes, identity : Bytes],
+ result: (Option Bytes),
+ body: (if (matches document request revision) then (match (ResearchInput::bytes (CoreBinding::get (CoreBinding::get document 0x66696c6573) 0x7372632f43616e6469646174652e6c65782e746578)) | Option.none => (ctor Option.none [Bytes]) | Option.some candidate => (PublicationSource::renamed candidate identity 8388608)) else (ctor Option.none [Bytes])),
+ axioms: [propext],
+ executable: true
+}
+definition{
+ name: decode,
+ parameters: [data : Bytes, identity : Bytes, request : Research::Request, revision : Bytes],
+ result: (Option Bytes),
+ body: (if (((prim length identity : Nat) =? 64) && ((prim length data : Nat) <=? 8388608)) then (if (Toml::sameBytes (LexLeanStd.Sha256::sha256Hex data) identity) then (match (Json::parse data 8388608 512) | Result.error problem => (ctor Option.none [Bytes]) | Result.ok document => (match (JsonCanonical::file document 8388608 16777216) | Option.none => (ctor Option.none [Bytes]) | Option.some canonical => (if (Toml::sameBytes canonical data) then (source document request revision identity) else (ctor Option.none [Bytes])))) else (ctor Option.none [Bytes])) else (ctor Option.none [Bytes])),
+ axioms: [Quot.sound, propext],
+ executable: true
+}
+definition{
+ name: contract,
+ parameters: [],
+ result: String,
+ body: "Recover only unverified candidate source from exact canonical evidence bytes. Require the SHA-256 evidence identity, complete original request and pinned library revision; refuse noncanonical or oversized archives and malformed fixed source paths. Archived pins, receipts and reports are deliberately not promoted to authority. The renamed source must pass owned snapshot binding and kernel verification again before publication can proceed.",
+ axioms: [],
+ executable: true
+}
+definition{
+ name: features,
+ parameters: [],
+ result: (List String),
+ body: (cons "canonical-archive-byte-identity" (cons "exact-original-request-replay" (cons "pinned-revision-replay" (cons "archive-cannot-confer-proof-authority" (nil String))))),
+ axioms: [],
+ executable: true
+}
+\end{semanticmodule}
+\end{lexlean}
