@@ -1,0 +1,117 @@
+\begin{lexlean}{EnvironmentMemory}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\importmodule{Host}
+\importmodule{Research}
+\importmodule{LexLeanStd.Sha256}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Observation, type_parameters: [], parameters: [],
+ fields: [{name: repository, type: Bytes}, {name: revision, type: Bytes}, {name: path, type: Bytes}, {name: content, type: Bytes}, {name: blob, type: Bytes}, {name: digest, type: Bytes}, {name: acquisition, type: Bytes}]
+}
+structure{
+ name: Context, type_parameters: [], parameters: [],
+ fields: [{name: task, type: Research::Task}, {name: observations, type: (List Observation)}]
+}
+definition{
+ name: get, parameters: [value : Json::Value, key : Bytes], result: Bytes,
+ body: (match (Json::field value key) | Option.none => 0x | Option.some field => (match field | Json::Value.string data => data | Json::Value.null => 0x | Json::Value.boolean b => 0x | Json::Value.number n => 0x | Json::Value.array a => 0x | Json::Value.object o => 0x)), executable: true
+}
+definition{
+ name: bounded, parameters: [value : Bytes, maximum : Nat], result: Bool,
+ body: ((0 <? (prim length value : Nat)) && (not (maximum <? (prim length value : Nat)))), executable: true
+}
+definition{
+ name: hexadecimal, parameters: [value : Bytes, at : Nat, remaining : Nat], result: Bool,
+ body: (match remaining | Nat.zero => true | Nat.succ more => (match (prim index value at : (Option UInt8)) | Option.none => false | Option.some b => (((Toml::between b (48 : UInt8) (57 : UInt8)) || (Toml::between b (97 : UInt8) (102 : UInt8))) && (hexadecimal value (at + 1) more)))), recursive_argument: remaining, axioms: [propext], executable: true
+}
+definition{
+ name: safeName, parameters: [value : Bytes, at : Nat, remaining : Nat], result: Bool,
+ body: (match remaining | Nat.zero => true | Nat.succ more => (match (prim index value at : (Option UInt8)) | Option.none => false | Option.some b => (((Toml::between b (48 : UInt8) (57 : UInt8)) || ((Toml::between b (65 : UInt8) (90 : UInt8)) || ((Toml::between b (97 : UInt8) (122 : UInt8)) || ((prim equal b (45 : UInt8) : Bool) || ((prim equal b (95 : UInt8) : Bool) || ((prim equal b (46 : UInt8) : Bool) || (prim equal b (47 : UInt8) : Bool))))))) && (safeName value (at + 1) more)))), recursive_argument: remaining, axioms: [propext], executable: true
+}
+definition{
+ name: containsFrom, parameters: [source : Bytes, query : Bytes, at : Nat, fuel : Nat], result: Bool,
+ body: (match fuel | Nat.zero => false | Nat.succ more => ((Host::bytesAgreeFrom source at query 0 (prim length query : Nat)) || (containsFrom source query (at + 1) more))), recursive_argument: fuel, executable: true
+}
+definition{
+ name: contains, parameters: [source : Bytes, query : Bytes], result: Bool,
+ body: ((bounded query 128) && (containsFrom source query 0 ((prim length source : Nat) + 1))), executable: true
+}
+definition{
+ name: slashCount, parameters: [value : Bytes, at : Nat, remaining : Nat], result: Nat,
+ body: (match remaining | Nat.zero => 0 | Nat.succ more => ((if (Toml::byteIs value at (47 : UInt8)) then 1 else 0) + (slashCount value (at + 1) more))), recursive_argument: remaining, executable: true
+}
+definition{
+ name: repositoryLabel, parameters: [value : Bytes], result: Bool,
+ body: ((bounded value 140) && ((safeName value 0 (prim length value : Nat)) && (((slashCount value 0 (prim length value : Nat)) =? 1) && ((not (Toml::byteIs value 0 (47 : UInt8))) && ((not (Toml::byteIs value (prim subtract (prim length value : Nat) 1 : Nat) (47 : UInt8))) && (not (contains value 0x2e2e))))))), axioms: [propext], executable: true
+}
+definition{
+ name: objectSize, parameters: [value : Json::Value, expected : Nat], result: Bool,
+ body: (match value | Json::Value.object fields => ((prim length fields : Nat) =? expected) | Json::Value.null => false | Json::Value.boolean b => false | Json::Value.number n => false | Json::Value.string s => false | Json::Value.array a => false), executable: true
+}
+definition{
+ name: valid, parameters: [item : Observation], result: Bool,
+ body: ((repositoryLabel (project item repository)) && ((safeName (project item repository) 0 (prim length (project item repository) : Nat)) && ((contains (project item repository) 0x2f) && ((((prim length (project item blob) : Nat) =? 40) && ((hexadecimal (project item blob) 0 40) && ((prim length (project item revision) : Nat) =? 40))) && ((hexadecimal (project item revision) 0 40) && ((bounded (project item path) 256) && ((safeName (project item path) 0 (prim length (project item path) : Nat)) && ((not (contains (project item path) 0x2e2e)) && ((not (Toml::byteIs (project item path) 0 (47 : UInt8))) && ((bounded (project item content) 4096) && ((Toml::sameBytes (project item acquisition) 0x6c6f63616c2d6769742d6f626a656374) && (Toml::sameBytes (project item digest) (LexLeanStd.Sha256::sha256Hex (project item content)))))))))))))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: encode, parameters: [item : Observation], result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x7265706f7369746f7279, (ctor Json::Value.string (project item repository))) (cons (0x7265766973696f6e, (ctor Json::Value.string (project item revision))) (cons (0x70617468, (ctor Json::Value.string (project item path))) (cons (0x636f6e74656e74, (ctor Json::Value.string (project item content))) (cons (0x626c6f62, (ctor Json::Value.string (project item blob))) (cons (0x646967657374, (ctor Json::Value.string (project item digest))) (cons (0x6163717569736974696f6e, (ctor Json::Value.string (project item acquisition))) (nil (Bytes * Json::Value)))))))))), executable: true
+}
+definition{
+ name: decode, parameters: [value : Json::Value], result: (Option Observation),
+ body: (let item : Observation := (record Observation {repository := (get value 0x7265706f7369746f7279), revision := (get value 0x7265766973696f6e), path := (get value 0x70617468), content := (get value 0x636f6e74656e74), blob := (get value 0x626c6f62), digest := (get value 0x646967657374), acquisition := (get value 0x6163717569736974696f6e)}); (match value | Json::Value.object fields => (if (((prim length fields : Nat) =? 7) && (valid item)) then (ctor Option.some [Observation] item) else (ctor Option.none [Observation])) | Json::Value.null => (ctor Option.none [Observation]) | Json::Value.boolean b => (ctor Option.none [Observation]) | Json::Value.number n => (ctor Option.none [Observation]) | Json::Value.string s => (ctor Option.none [Observation]) | Json::Value.array a => (ctor Option.none [Observation]))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: sameKey, parameters: [left : Observation, right : Observation], result: Bool,
+ body: ((Toml::sameBytes (project left repository) (project right repository)) && ((Toml::sameBytes (project left revision) (project right revision)) && (Toml::sameBytes (project left path) (project right path)))), executable: true
+}
+definition{
+ name: insert, parameters: [item : Observation, store : (List Observation)], result: (Option (List Observation)),
+ body: (match store | List.nil => (ctor Option.some [(List Observation)] (cons item (nil Observation))) | List.cons head tail => (if (sameKey item head) then (if ((Toml::sameBytes (project item digest) (project head digest)) && ((Toml::sameBytes (project item blob) (project head blob)) && ((Toml::sameBytes (project item content) (project head content)) && (Toml::sameBytes (project item acquisition) (project head acquisition))))) then (ctor Option.some [(List Observation)] (cons head tail)) else (ctor Option.none [(List Observation)])) else (match (insert item tail) | Option.none => (ctor Option.none [(List Observation)]) | Option.some rest => (ctor Option.some [(List Observation)] (cons head rest))))), recursive_argument: store, executable: true
+}
+definition{
+ name: ingest, parameters: [item : Observation, store : (List Observation)], result: (Option (List Observation)),
+ body: (if (valid item) then (match (insert item store) | Option.none => (ctor Option.none [(List Observation)]) | Option.some next => (if (32 <? (prim length next : Nat)) then (ctor Option.none [(List Observation)]) else (ctor Option.some [(List Observation)] next))) else (ctor Option.none [(List Observation)])), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: encodeItems, parameters: [items : (List Observation)], result: (List Json::Value),
+ body: (match items | List.nil => (nil Json::Value) | List.cons head tail => (cons (encode head) (encodeItems tail))), recursive_argument: items, executable: true
+}
+definition{
+ name: decodeItems, parameters: [items : (List Json::Value), store : (List Observation)], result: (Option (List Observation)),
+ body: (match items | List.nil => (ctor Option.some [(List Observation)] store) | List.cons head tail => (match (decode head) | Option.none => (ctor Option.none [(List Observation)]) | Option.some item => (match (ingest item store) | Option.none => (ctor Option.none [(List Observation)]) | Option.some next => (decodeItems tail next)))), recursive_argument: items, axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: document, parameters: [store : (List Observation)], result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f656e7669726f6e6d656e742d6d656d6f72792f31)) (cons (0x6f62736572766174696f6e73, (ctor Json::Value.array (encodeItems store))) (nil (Bytes * Json::Value))))), executable: true
+}
+definition{
+ name: serialize, parameters: [store : (List Observation)], result: (Option Bytes),
+ body: (if (32 <? (prim length store : Nat)) then (ctor Option.none [Bytes]) else (JsonCanonical::file (document store) 1048576 2097152)), axioms: [propext], executable: true
+}
+definition{
+ name: readback, parameters: [data : Bytes], result: (Option (List Observation)),
+ body: (match (Json::parse data 1048576 8) | Result.error problem => (ctor Option.none [(List Observation)]) | Result.ok value => (if ((objectSize value 2) && (Toml::sameBytes (get value 0x73706563) 0x7233302f656e7669726f6e6d656e742d6d656d6f72792f31)) then (match (Json::field value 0x6f62736572766174696f6e73) | Option.none => (ctor Option.none [(List Observation)]) | Option.some entries => (match entries | Json::Value.array items => (if (32 <? (prim length items : Nat)) then (ctor Option.none [(List Observation)]) else (decodeItems items (nil Observation))) | Json::Value.null => (ctor Option.none [(List Observation)]) | Json::Value.boolean b => (ctor Option.none [(List Observation)]) | Json::Value.number n => (ctor Option.none [(List Observation)]) | Json::Value.string s => (ctor Option.none [(List Observation)]) | Json::Value.object o => (ctor Option.none [(List Observation)]))) else (ctor Option.none [(List Observation)]))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: retrieve, parameters: [store : (List Observation), repository : Bytes, revision : Bytes, query : Bytes, limit : Nat], result: (List Observation),
+ body: (match store | List.nil => (nil Observation) | List.cons head tail => (match limit | Nat.zero => (nil Observation) | Nat.succ remaining => (if ((Toml::sameBytes repository (project head repository)) && ((Toml::sameBytes revision (project head revision)) && (contains (project head content) query))) then (cons head (retrieve tail repository revision query remaining)) else (retrieve tail repository revision query limit)))), recursive_argument: store, executable: true
+}
+definition{
+ name: candidateContext, parameters: [task : Research::Task, store : (List Observation), repository : Bytes, revision : Bytes, query : Bytes], result: Context,
+ body: (record Context {task := task, observations := (retrieve store repository revision query 8)}), executable: true
+}
+definition{
+ name: boundary, parameters: [], result: String,
+ body: "Repository labels claim a GitHub origin; they do not authenticate it. Acquisition must bind the exact local Git commit, path and blob before creating an observation. SHA-256 validation detects changed content, not forged provenance. Durable records are untrusted source observations, not conjecture acceptance or verified local proof. Retrieval requires an explicit repository and revision, does not infer a latest revision, and never executes source text. The candidate task and its contextual sequent remain unchanged. The native store writer must use serialize and acknowledge a successful replacement followed by exact readback before reporting retention. Both serialization and readback share a 1 MiB bound; 32 records of at most 4 KiB have room for worst-case six-byte JSON escapes.", executable: true
+}
+definition{
+ name: features, parameters: [], result: (List String),
+ body: (cons "bounded-pinned-source-observations" (cons "sha256-validated-readback" (cons "idempotent-conflict-rejecting-ingestion" (cons "revision-scoped-retrieval" (cons "candidate-context-with-unchanged-exact-task" (nil String)))))), executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

@@ -1,0 +1,86 @@
+\begin{lexlean}{EnvironmentMemoryTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentMemory}
+\importmodule{Research}
+\importmodule{JsonCanonical}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: observation, parameters: [pin : Bytes], result: EnvironmentMemory::Observation,
+ body: (record EnvironmentMemory::Observation {repository := 0x6166666c6f6d2f72756c653330, revision := pin, path := 0x524541444d452e6d64, content := 0x616263, blob := 0x66326261386638346162356331626365383461376234343163623732313231336461343339363731, digest := 0x62613738313662663866303163666561343134313430646535646165323232336230303336316133393631373761396362343130666636316632303031356164, acquisition := 0x6c6f63616c2d6769742d6f626a656374})
+}
+definition{
+ name: revision, parameters: [], result: Bytes,
+ body: 0x65336265343737666465643236333032393437393132373336336637666236613335393765376434
+}
+definition{
+ name: store, parameters: [], result: (List EnvironmentMemory::Observation),
+ body: (cons (observation (revision)) (nil EnvironmentMemory::Observation))
+}
+definition{
+ name: count, parameters: [value : (Option (List EnvironmentMemory::Observation))], result: Nat,
+ body: (match value | Option.none => 999 | Option.some items => (prim length items : Nat))
+}
+theorem{
+ name: matchingAbstractionChangesContext, parameters: [],
+ statement: ((prim length (EnvironmentMemory::retrieve (store) 0x6166666c6f6d2f72756c653330 (revision) 0x6263 8) : Nat) = 1), proof: decide{}
+}
+theorem{
+ name: unrelatedAbstractionHasNoContext, parameters: [],
+ statement: ((prim length (EnvironmentMemory::retrieve (store) 0x6166666c6f6d2f72756c653330 (revision) 0x7a 8) : Nat) = 0), proof: decide{}
+}
+theorem{
+ name: differentRevisionExcludesOldObservation, parameters: [],
+ statement: ((prim length (EnvironmentMemory::retrieve (store) 0x6166666c6f6d2f72756c653330 0x30303030303030303030303030303030303030303030303030303030303030303030303030303030 0x6162 8) : Nat) = 0), proof: decide{}
+}
+theorem{
+ name: duplicateIsIdempotent, parameters: [],
+ statement: ((count (EnvironmentMemory::ingest (observation (revision)) (store))) = 1), proof: decide{}, axioms: [Quot.sound, propext]
+}
+definition{
+ name: falseBlob, parameters: [], result: EnvironmentMemory::Observation,
+ body: (record EnvironmentMemory::Observation {repository := 0x6166666c6f6d2f72756c653330, revision := (revision), path := 0x524541444d452e6d64, content := 0x616263, blob := 0x30303030303030303030303030303030303030303030303030303030303030303030303030303030, digest := 0x62613738313662663866303163666561343134313430646535646165323232336230303336316133393631373761396362343130666636316632303031356164, acquisition := 0x6c6f63616c2d6769742d6f626a656374})
+}
+theorem{
+ name: forgedBlobHasOtherwiseValidRecordShape, parameters: [],
+ statement: ((EnvironmentMemory::valid (falseBlob)) = true), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: freshAcquisitionRejectsStoredFalseBlob, parameters: [],
+ statement: ((count (EnvironmentMemory::ingest (observation (revision)) (cons (falseBlob) (nil EnvironmentMemory::Observation)))) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: changedRevisionRetainsBoth, parameters: [],
+ statement: ((count (EnvironmentMemory::ingest (observation 0x30303030303030303030303030303030303030303030303030303030303030303030303030303030) (store))) = 2), proof: decide{}, axioms: [Quot.sound, propext]
+}
+definition{
+ name: reopened, parameters: [], result: Nat,
+ body: (match (EnvironmentMemory::serialize (store)) | Option.none => 999 | Option.some data => (count (EnvironmentMemory::readback data))), axioms: [Quot.sound, propext]
+}
+theorem{
+ name: serializedStoreReopens, parameters: [], statement: ((reopened) = 1), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: malformedStoreRejected, parameters: [],
+ statement: ((count (EnvironmentMemory::readback 0x7b)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: duplicateFieldRejected, parameters: [],
+ statement: ((count (EnvironmentMemory::readback 0x7b2273706563223a227233302f656e7669726f6e6d656e742d6d656d6f72792f31222c2273706563223a227233302f656e7669726f6e6d656e742d6d656d6f72792f31222c226f62736572766174696f6e73223a5b5d7d)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unknownFieldRejected, parameters: [],
+ statement: ((count (EnvironmentMemory::readback 0x7b2273706563223a227233302f656e7669726f6e6d656e742d6d656d6f72792f31222c226f62736572766174696f6e73223a5b5d2c2270726f766564223a747275657d)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: escapedRecordBudgetFitsReadback, parameters: [],
+ statement: ((prim multiply 32 ((prim multiply 6 4096 : Nat) + ((prim multiply 6 556 : Nat) + 256)) : Nat) < 1048576), proof: decide{}
+}
+theorem{
+ name: exactTaskIsPreserved,
+ parameters: [task : Research::Task, observations : (List EnvironmentMemory::Observation), repository : Bytes, pin : Bytes, query : Bytes],
+ statement: ((project (EnvironmentMemory::candidateContext task observations repository pin query) task) = task), proof: reflexivity{}
+}
+\end{semanticmodule}
+\end{lexlean}
