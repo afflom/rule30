@@ -4,14 +4,14 @@ spec = "prismpm/dependencies/1"
 id = "lexlean"
 version = "0.4.0"
 language = "1.2"
-revision = "601e9f4a1824bb6aacf7c3c2243d4b33aaa315abdebd5ceaf920d178e196019e"
+revision = "59f64efe727898bcf6a337630c38eb4ea7ffc08cd83a49a0ea669c61c3b23587"
 source = "pinned-binary"
 role = "compiler"
 path = ".local/bin/lexlean"
 
 [[dependency]]
 id = "lean4"
-version = "leanprover/lean4:v4.32.1"
+version = "leanprover/lean4:v4.32.2"
 source = "elan"
 role = "kernel"
 
