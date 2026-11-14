@@ -1,0 +1,99 @@
+\begin{lexlean}{EnvironmentPlanCommand}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentMemory}
+\importmodule{EnvironmentPlan}
+\importmodule{EnvironmentMemoryCommand}
+\importmodule{EnvironmentAcquisition}
+\importmodule{ResearchInput}
+\importmodule{ResearchRecord}
+\importmodule{Research}
+\importmodule{LexLeanStd.Host}
+\importmodule{Host}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Config, type_parameters: [], parameters: [],
+ fields: [{name: home, type: String}, {name: plan, type: EnvironmentPlan::Plan}]
+}
+inductive{
+ name: State, type_parameters: [], parameters: [],
+ constructors: [{name: checkingRequest, fields: [String, String]}, {name: readingRequest, fields: [String]}, {name: locking, fields: [Config]}, {name: checkingStore, fields: [Config]}, {name: readingStore, fields: [Config]}, {name: acquiring, fields: [Config, (List EnvironmentMemory::Observation), EnvironmentPlan::Source, (List EnvironmentPlan::Source), EnvironmentAcquisition::State]}, {name: writing, fields: [Config, Bytes]}, {name: renaming, fields: [Config, Bytes]}, {name: reopening, fields: [Config, Bytes]}, {name: ended, fields: []}]
+}
+
+definition{
+ name: error, parameters: [reason : String], result: (State * LexLeanStd.Host::Request),
+ body: ((ctor State.ended), (ctor LexLeanStd.Host::Request.exit (2 : UInt8) 0x (prim utf8_encode reason : Bytes))), axioms: [], executable: true
+}
+definition{
+ name: path, parameters: [config : Config, suffix : String], result: String,
+ body: (EnvironmentAcquisition::join (project config home) suffix), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: parseConfig, parameters: [home : String, data : Bytes], result: (Option Config),
+ body: (match (EnvironmentPlan::parse data) | Option.none => (ctor Option.none [Config]) | Option.some plan => (ctor Option.some [Config] (record Config {home := home, plan := plan}))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: inspect, parameters: [config : Config, store : (List EnvironmentMemory::Observation)], result: Json::Value,
+ body: (let context : EnvironmentMemory::Context := (EnvironmentPlan::context (project config plan) store); (ctor Json::Value.object (cons (0x73706563, (ctor Json::Value.string 0x7233302f656e7669726f6e6d656e742d636f6e746578742f31)) (cons (0x7472757374, (ctor Json::Value.string 0x6f627365727665642d736f75726365732d6e6f742d70726f6f66)) (cons (0x7461736b, (ResearchRecord::task (project context task))) (cons (0x6f62736572766174696f6e73, (ctor Json::Value.array (EnvironmentMemory::encodeItems (project context observations)))) (nil (Bytes * Json::Value)))))))), executable: true
+}
+definition{
+ name: finish, parameters: [config : Config, store : (List EnvironmentMemory::Observation)], result: (State * LexLeanStd.Host::Request),
+ body: (match (JsonCanonical::file (inspect config store) 1048576 2097152) | Option.none => (error "inspection context exceeds output budget") | Option.some data => ((ctor State.ended), (ctor LexLeanStd.Host::Request.exit (0 : UInt8) data 0x))), axioms: [propext], executable: true
+}
+definition{
+ name: acquisitionConfig, parameters: [config : Config, source : EnvironmentPlan::Source], result: EnvironmentAcquisition::Config,
+ body: (record EnvironmentAcquisition::Config {request := (record Research::Request {serial := 0, snapshot := (record Research::Snapshot {library := (project source revision), compiler := 0x, model := 0x}), task := (project (project config plan) task)}), directory := (project source directory), repository := (project source repository), revision := (project source revision), path := (project source path), output := (path config "/git-output"), errors := (path config "/git-errors")}), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: nextSource, parameters: [config : Config, store : (List EnvironmentMemory::Observation), remaining : (List EnvironmentPlan::Source)], result: (State * LexLeanStd.Host::Request),
+ body: (match remaining | List.nil => (match (EnvironmentMemory::serialize store) | Option.none => (error "memory cannot be serialized within durable byte budget") | Option.some data => ((ctor State.writing config data), (ctor LexLeanStd.Host::Request.write (path config "/observations.pending") data))) | List.cons source tail => (let result : (EnvironmentAcquisition::State * EnvironmentAcquisition::Emission) := (EnvironmentAcquisition::begin (acquisitionConfig config source)); (match (second result) | EnvironmentAcquisition::Emission.host request => ((ctor State.acquiring config store source tail (first result)), request) | EnvironmentAcquisition::Emission.failed reason => (error reason) | EnvironmentAcquisition::Emission.complete item => (error "unexpected immediate acquisition completion")))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: acquired, parameters: [config : Config, store : (List EnvironmentMemory::Observation), source : EnvironmentPlan::Source, remaining : (List EnvironmentPlan::Source), result : (EnvironmentAcquisition::State * EnvironmentAcquisition::Emission)], result: (State * LexLeanStd.Host::Request),
+ body: (match (second result) | EnvironmentAcquisition::Emission.host request => ((ctor State.acquiring config store source remaining (first result)), request) | EnvironmentAcquisition::Emission.failed reason => (error reason) | EnvironmentAcquisition::Emission.complete item => (if (EnvironmentPlan::matches source item) then (match (EnvironmentMemory::ingest item store) | Option.none => (error "memory full or immutable source conflicts; previous store retained") | Option.some next => (nextSource config next remaining)) else (error "acquisition source mismatch; previous store retained"))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: useStore, parameters: [config : Config, store : (List EnvironmentMemory::Observation)], result: (State * LexLeanStd.Host::Request),
+ body: (if (project (project config plan) ingest) then (nextSource config store (project (project config plan) sources)) else (finish config store)), axioms: [Quot.sound, propext], executable: true
+}
+
+
+definition{
+ name: checkingStore, parameters: [config : Config, event : LexLeanStd.Host::Event], result: (State * LexLeanStd.Host::Request),
+ body: (match (Host::asStated event) | Option.none => (error "expected memory metadata") | Option.some reply => (match reply | Result.ok entry => (if (EnvironmentMemoryCommand::fileWithin entry 1048576) then ((ctor State.readingStore config), (ctor LexLeanStd.Host::Request.read (path config "/observations.json"))) else (error "memory must be a regular file within 1 MiB")) | Result.error failure => (match (project failure kind) | LexLeanStd.Host::FailureKind.notFound => (if (project (project config plan) ingest) then (useStore config (nil EnvironmentMemory::Observation)) else (error "memory store does not exist")) | LexLeanStd.Host::FailureKind.alreadyExists => (error "memory stat failed") | LexLeanStd.Host::FailureKind.denied => (error "memory access denied") | LexLeanStd.Host::FailureKind.other => (error "memory stat failed")))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: readingStore, parameters: [config : Config, event : LexLeanStd.Host::Event], result: (State * LexLeanStd.Host::Request),
+ body: (match (Host::asRead event) | Option.none => (error "expected memory read") | Option.some reply => (match reply | Result.error failure => (error "memory read failed") | Result.ok data => (match (EnvironmentMemory::readback data) | Option.none => (error "malformed or conflicting memory; no overwrite") | Option.some store => (useStore config store)))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: readingRequest, parameters: [home : String, event : LexLeanStd.Host::Event], result: (State * LexLeanStd.Host::Request),
+ body: (match (Host::asRead event) | Option.none => (error "expected request read") | Option.some reply => (match reply | Result.error failure => (error "request read failed") | Result.ok data => (match (parseConfig home data) | Option.none => (error "invalid environment plan; no sources acquired") | Option.some config => ((ctor State.locking config), (ctor LexLeanStd.Host::Request.lock (path config "/store.lock")))))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: reopening, parameters: [config : Config, expected : Bytes, event : LexLeanStd.Host::Event], result: (State * LexLeanStd.Host::Request),
+ body: (match (Host::asRead event) | Option.none => (error "expected durable memory readback; outcome uncertain") | Option.some reply => (match reply | Result.error failure => (error "durable memory readback failed; outcome uncertain") | Result.ok data => (if (Toml::sameBytes data expected) then (match (EnvironmentMemory::readback data) | Option.none => (error "stored memory failed validation; outcome uncertain") | Option.some store => (finish config store)) else (error "stored memory differs; outcome uncertain")))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: resume, parameters: [state : State, event : LexLeanStd.Host::Event], result: (State * LexLeanStd.Host::Request),
+ body: (match state | State.checkingRequest home requestPath => (match (Host::asStated event) | Option.none => (error "expected request metadata") | Option.some reply => (match reply | Result.error failure => (error "request metadata failed") | Result.ok entry => (if (EnvironmentMemoryCommand::fileWithin entry 65536) then ((ctor State.readingRequest home), (ctor LexLeanStd.Host::Request.read requestPath)) else (error "request must be a regular file within 64 KiB")))) | State.readingRequest home => (readingRequest home event) | State.locking config => (if (EnvironmentMemoryCommand::finished event) then ((ctor State.checkingStore config), (ctor LexLeanStd.Host::Request.stat (path config "/observations.json"))) else (error "memory lock unavailable")) | State.checkingStore config => (checkingStore config event) | State.readingStore config => (readingStore config event) | State.acquiring config store source remaining active => (acquired config store source remaining (EnvironmentAcquisition::step active event)) | State.writing config data => (if (EnvironmentMemoryCommand::finished event) then ((ctor State.renaming config data), (ctor LexLeanStd.Host::Request.rename (path config "/observations.pending") (path config "/observations.json"))) else (error "memory write failed; previous store retained")) | State.renaming config data => (if (EnvironmentMemoryCommand::finished event) then ((ctor State.reopening config data), (ctor LexLeanStd.Host::Request.read (path config "/observations.json"))) else (error "memory replacement unconfirmed; outcome uncertain; retain private directory")) | State.reopening config data => (reopening config data event) | State.ended => (error "memory command cannot restart")), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: start, parameters: [initial : LexLeanStd.Host::Start], result: (State * LexLeanStd.Host::Request),
+ body: (match (project initial arguments) | List.nil => (error "usage: environment-plan PRIVATE_STATE_DIRECTORY REQUEST.json") | List.cons home rest => (match rest | List.nil => (error "expected state directory and request") | List.cons requestPath tail => (match tail | List.cons extra more => (error "expected exactly two arguments") | List.nil => (match (ResearchInput::text (ctor Json::Value.string home)) | Option.none => (error "state directory must be printable ASCII") | Option.some directory => (match (ResearchInput::text (ctor Json::Value.string requestPath)) | Option.none => (error "request path must be printable ASCII") | Option.some file => (if ((EnvironmentMemory::bounded home 1024) && (EnvironmentMemory::bounded requestPath 1024)) then ((ctor State.checkingRequest directory file), (ctor LexLeanStd.Host::Request.stat file)) else (error "empty or excessive path"))))))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: step, parameters: [state : (Option State), event : LexLeanStd.Host::Event], result: (State * LexLeanStd.Host::Request),
+ body: (match state | Option.none => (match (Host::asStart event) | Option.none => (error "expected Host start") | Option.some initial => (start initial)) | Option.some active => (resume active event)), axioms: [Quot.sound, propext], executable: true,
+ production: {effects: [allocation, files, overflow, process, recursion], targets: [rust-std]}
+}
+definition{
+ name: features, parameters: [], result: (List String),
+ body: (cons "sequential-owned-multi-source-acquisition" (cons "all-sources-before-one-store-replacement" (cons "success-after-exact-readback" (cons "checkout-free-selected-context-query" (nil String))))), executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

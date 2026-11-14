@@ -1,0 +1,70 @@
+\begin{lexlean}{EnvironmentPlan}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentMemory}
+\importmodule{ResearchInput}
+\importmodule{Research}
+\importmodule{CoreNotation}
+\importmodule{CoreBinding}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Source, type_parameters: [], parameters: [],
+ fields: [{name: repository, type: Bytes}, {name: revision, type: Bytes}, {name: path, type: Bytes}, {name: directory, type: String}]
+}
+structure{
+ name: Plan, type_parameters: [], parameters: [],
+ fields: [{name: ingest, type: Bool}, {name: task, type: Research::Task}, {name: query, type: Bytes}, {name: sources, type: (List Source)}]
+}
+definition{
+ name: sourceKeys, parameters: [], result: (List Bytes),
+ body: (cons 0x7265706f7369746f7279 (cons 0x7265766973696f6e (cons 0x70617468 (nil Bytes)))), executable: true
+}
+definition{
+ name: validSource, parameters: [source : Source], result: Bool,
+ body: ((EnvironmentMemory::repositoryLabel (project source repository)) && ((((prim length (project source revision) : Nat) =? 40) && (EnvironmentMemory::hexadecimal (project source revision) 0 40)) && ((EnvironmentMemory::bounded (project source path) 256) && ((EnvironmentMemory::safeName (project source path) 0 (prim length (project source path) : Nat)) && ((not (EnvironmentMemory::contains (project source path) 0x2e2e)) && (not (Toml::byteIs (project source path) 0 (47 : UInt8)))))))), axioms: [propext], executable: true
+}
+definition{
+ name: parseSource, parameters: [ingest : Bool, value : Json::Value], result: (Option Source),
+ body: (if (CoreNotation::shape value (if ingest then (cons 0x6c6f63616c5f7265706f7369746f7279 (sourceKeys)) else (sourceKeys))) then (match (ResearchInput::text (if ingest then (CoreBinding::get value 0x6c6f63616c5f7265706f7369746f7279) else (ctor Json::Value.string 0x))) | Option.none => (ctor Option.none [Source]) | Option.some directory => (let source : Source := (record Source {repository := (EnvironmentMemory::get value 0x7265706f7369746f7279), revision := (EnvironmentMemory::get value 0x7265766973696f6e), path := (EnvironmentMemory::get value 0x70617468), directory := directory}); (if ((validSource source) && ((not ingest) || (EnvironmentMemory::bounded (EnvironmentMemory::get value 0x6c6f63616c5f7265706f7369746f7279) 1024))) then (ctor Option.some [Source] source) else (ctor Option.none [Source])))) else (ctor Option.none [Source])), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: sameKey, parameters: [left : Source, right : Source], result: Bool,
+ body: ((Toml::sameBytes (project left repository) (project right repository)) && ((Toml::sameBytes (project left revision) (project right revision)) && (Toml::sameBytes (project left path) (project right path)))), executable: true
+}
+definition{
+ name: absent, parameters: [source : Source, sources : (List Source)], result: Bool,
+ body: (match sources | List.nil => true | List.cons head tail => ((not (sameKey source head)) && (absent source tail))), recursive_argument: sources, executable: true
+}
+definition{
+ name: parseSources, parameters: [ingest : Bool, values : (List Json::Value), fuel : Nat], result: (Option (List Source)),
+ body: (match values | List.nil => (ctor Option.some [(List Source)] (nil Source)) | List.cons head tail => (match fuel | Nat.zero => (ctor Option.none [(List Source)]) | Nat.succ more => (match (parseSource ingest head) | Option.none => (ctor Option.none [(List Source)]) | Option.some source => (match (parseSources ingest tail more) | Option.none => (ctor Option.none [(List Source)]) | Option.some rest => (if (absent source rest) then (ctor Option.some [(List Source)] (cons source rest)) else (ctor Option.none [(List Source)])))))), recursive_argument: values, axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: parse, parameters: [data : Bytes], result: (Option Plan),
+ body: (match (Json::parse data 65536 16) | Result.error problem => (ctor Option.none [Plan]) | Result.ok value => (if ((CoreNotation::shape value (cons 0x73706563 (cons 0x6f7065726174696f6e (cons 0x7461736b (cons 0x7175657279 (cons 0x736f7572636573 (nil Bytes))))))) && ((Toml::sameBytes (EnvironmentMemory::get value 0x73706563) 0x7233302f656e7669726f6e6d656e742d706c616e2f31) && ((EnvironmentMemory::bounded (EnvironmentMemory::get value 0x7175657279) 128) && ((Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374) || (Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x7175657279))))) then (match (ResearchInput::task (CoreBinding::get value 0x7461736b)) | Option.none => (ctor Option.none [Plan]) | Option.some task => (match (ResearchInput::array (CoreBinding::get value 0x736f7572636573)) | Option.none => (ctor Option.none [Plan]) | Option.some values => (let ingest : Bool := (Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374); (match values | List.nil => (ctor Option.none [Plan]) | List.cons head tail => (match (parseSources ingest values 8) | Option.none => (ctor Option.none [Plan]) | Option.some sources => (ctor Option.some [Plan] (record Plan {ingest := ingest, task := task, query := (EnvironmentMemory::get value 0x7175657279), sources := sources}))))))) else (ctor Option.none [Plan]))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: matches, parameters: [source : Source, item : EnvironmentMemory::Observation], result: Bool,
+ body: ((Toml::sameBytes (project source repository) (project item repository)) && ((Toml::sameBytes (project source revision) (project item revision)) && (Toml::sameBytes (project source path) (project item path)))), executable: true
+}
+definition{
+ name: find, parameters: [source : Source, query : Bytes, store : (List EnvironmentMemory::Observation)], result: (Option EnvironmentMemory::Observation),
+ body: (match store | List.nil => (ctor Option.none [EnvironmentMemory::Observation]) | List.cons head tail => (if ((matches source head) && (EnvironmentMemory::contains (project head content) query)) then (ctor Option.some [EnvironmentMemory::Observation] head) else (find source query tail))), recursive_argument: store, executable: true
+}
+definition{
+ name: retrieve, parameters: [sources : (List Source), query : Bytes, store : (List EnvironmentMemory::Observation), fuel : Nat], result: (List EnvironmentMemory::Observation),
+ body: (match sources | List.nil => (nil EnvironmentMemory::Observation) | List.cons head tail => (match fuel | Nat.zero => (nil EnvironmentMemory::Observation) | Nat.succ more => (match (find head query store) | Option.none => (retrieve tail query store more) | Option.some item => (cons item (retrieve tail query store more))))), recursive_argument: sources, executable: true
+}
+definition{
+ name: context, parameters: [plan : Plan, store : (List EnvironmentMemory::Observation)], result: EnvironmentMemory::Context,
+ body: (record EnvironmentMemory::Context {task := (project plan task), observations := (retrieve (project plan sources) (project plan query) store 8)}), executable: true
+}
+definition{
+ name: features, parameters: [], result: (List String),
+ body: (cons "complete-bounded-plan-validation" (cons "duplicate-source-and-directory-alias-refusal" (cons "exact-listed-keys-in-plan-order" (cons "unchanged-task-and-sequent" (nil String))))), executable: true
+}
+\end{semanticmodule}
+\end{lexlean}
