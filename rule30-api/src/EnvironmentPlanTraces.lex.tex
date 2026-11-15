@@ -1,0 +1,187 @@
+\begin{lexlean}{EnvironmentPlanTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentPlan}
+\importmodule{EnvironmentPlanWireTraces0}
+\importmodule{EnvironmentPlanWireTraces1}
+\importmodule{EnvironmentAcquisition}
+\importmodule{EnvironmentPlanCommand}
+\importmodule{EnvironmentMemory}
+\importmodule{EnvironmentMemoryTraces}
+\importmodule{Research}
+\importmodule{Json}
+\importmodule{Toml}
+\importmodule{LexLeanStd.Host}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: fixtureSource, parameters: [repository : Bytes], result: EnvironmentPlan::Source,
+ body: (record EnvironmentPlan::Source {repository := repository, revision := (EnvironmentMemoryTraces::revision), path := 0x524541444d452e6d64, directory := "/unused"})
+}
+definition{
+ name: fixtureObservation, parameters: [repository : Bytes], result: EnvironmentMemory::Observation,
+ body: (let item : EnvironmentMemory::Observation := (EnvironmentMemoryTraces::observation (EnvironmentMemoryTraces::revision)); (record EnvironmentMemory::Observation {repository := repository, revision := (project item revision), path := (project item path), content := (project item content), blob := (project item blob), digest := (project item digest), acquisition := (project item acquisition)}))
+}
+definition{
+ name: fixtureStore, parameters: [], result: (List EnvironmentMemory::Observation),
+ body: (cons (fixtureObservation 0x6f746865722f756e73656c6563746564) (cons (fixtureObservation 0x554f522d466f756e646174696f6e2f4c65784c65616e) (cons (fixtureObservation 0x6166666c6f6d2f72756c653330) (nil EnvironmentMemory::Observation))))
+}
+definition{
+ name: fixtureSources, parameters: [], result: (List EnvironmentPlan::Source),
+ body: (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x554f522d466f756e646174696f6e2f4c65784c65616e) (nil EnvironmentPlan::Source)))
+}
+theorem{
+ name: twoRepositoriesInPlanOrderExcludeUnselected, parameters: [],
+ statement: ((EnvironmentPlan::retrieve (fixtureSources) 0x6263 (fixtureStore) 8) = (cons (fixtureObservation 0x6166666c6f6d2f72756c653330) (cons (fixtureObservation 0x554f522d466f756e646174696f6e2f4c65784c65616e) (nil EnvironmentMemory::Observation)))), proof: reflexivity{}
+}
+theorem{
+ name: queryMismatchExcludesEverything, parameters: [],
+ statement: ((EnvironmentPlan::retrieve (fixtureSources) 0x7a (fixtureStore) 8) = (nil EnvironmentMemory::Observation)), proof: decide{}
+}
+theorem{
+ name: zeroBudgetReturnsNothing, parameters: [],
+ statement: ((EnvironmentPlan::retrieve (fixtureSources) 0x6263 (fixtureStore) 0) = (nil EnvironmentMemory::Observation)), proof: decide{}
+}
+theorem{
+ name: retrievalStopsAtEight, parameters: [],
+ statement: ((prim length (EnvironmentPlan::retrieve (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (cons (fixtureSource 0x6166666c6f6d2f72756c653330) (nil EnvironmentPlan::Source)))))))))) 0x6263 (fixtureStore) 8) : Nat) = 8), proof: decide{}
+}
+theorem{
+ name: exactTaskAndSequentPreserved, parameters: [plan : EnvironmentPlan::Plan, store : (List EnvironmentMemory::Observation)],
+ statement: ((project (EnvironmentPlan::context plan store) task) = (project plan task)), proof: reflexivity{}
+}
+definition{
+ name: sourceCount, parameters: [value : (Option (List EnvironmentPlan::Source))], result: Nat,
+ body: (match value | Option.none => 999 | Option.some sources => (prim length sources : Nat))
+}
+definition{
+ name: sourceJson, parameters: [parsed : (Result Json::Value Json::Problem)], result: Json::Value,
+ body: (match parsed | Result.error problem => (ctor Json::Value.null) | Result.ok value => value)
+}
+definition{
+ name: planAccepted, parameters: [parsed : (Option EnvironmentPlan::Plan)], result: Bool,
+ body: (EnvironmentPlanWireTraces0::planAccepted parsed)
+}
+theorem{
+ name: queryNeedsNoLocalCheckout, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources false (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d 65536 16)) (nil Json::Value)) 8)) = 1), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: duplicateKeyRefused, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources false (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d 65536 16)) (nil Json::Value))) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: conflictingLocalAliasesRefused, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources true (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64222c226c6f63616c5f7265706f7369746f7279223a222f61227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64222c226c6f63616c5f7265706f7369746f7279223a222f62227d 65536 16)) (nil Json::Value))) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: invalidLaterRevisionRefusesWholeList, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources false (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2248454144222c2270617468223a226f74686572227d 65536 16)) (nil Json::Value))) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unknownSourceFieldRefused, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources false (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64222c2270726f766564223a747275657d 65536 16)) (nil Json::Value)) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: queryRejectsLocalDirectoryField, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources false (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64222c226c6f63616c5f7265706f7369746f7279223a222f61227d 65536 16)) (nil Json::Value)) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: ingestRequiresLocalDirectory, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources true (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d 65536 16)) (nil Json::Value)) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: ingestRejectsEmptyDirectory, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources true (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64222c226c6f63616c5f7265706f7369746f7279223a22227d 65536 16)) (nil Json::Value)) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: sourceBudgetRefusesNinth, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources false (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2230227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2231227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2232227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2233227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2234227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2235227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2236227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2237227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2238227d 65536 16)) (nil Json::Value)))))))))) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: eightSourcesAdmitted, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources false (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2230227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2231227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2232227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2233227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2234227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2235227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2236227d 65536 16)) (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a2237227d 65536 16)) (nil Json::Value))))))))) 8)) = 8), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: parentPathRefused, parameters: [],
+ statement: ((sourceCount (EnvironmentPlan::parseSources false (cons (sourceJson (Json::parse 0x7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a222e2e2f736563726574227d 65536 16)) (nil Json::Value)) 8)) = 999), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: completeQueryPlanAccepted, parameters: [],
+ statement: ((EnvironmentPlanWireTraces0::planAccepted (EnvironmentPlan::parse 0x7b2273706563223a227233302f656e7669726f6e6d656e742d706c616e2f31222c226f7065726174696f6e223a227175657279222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a22486f7374207265717565737420636f6e7374727563746f7273222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c227175657279223a22616263222c22736f7572636573223a5b7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d5d7d)) = true), proof: apply{theorem: EnvironmentPlanWireTraces0::completeQueryPlanAccepted, arguments: []}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: emptyPlanRefused, parameters: [],
+ statement: ((EnvironmentPlanWireTraces0::planAccepted (EnvironmentPlan::parse 0x7b2273706563223a227233302f656e7669726f6e6d656e742d706c616e2f31222c226f7065726174696f6e223a227175657279222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a22486f7374207265717565737420636f6e7374727563746f7273222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c227175657279223a22616263222c22736f7572636573223a5b5d7d)) = false), proof: apply{theorem: EnvironmentPlanWireTraces0::emptyPlanRefused, arguments: []}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: emptyQueryRefused, parameters: [],
+ statement: ((EnvironmentPlanWireTraces0::planAccepted (EnvironmentPlan::parse 0x7b2273706563223a227233302f656e7669726f6e6d656e742d706c616e2f31222c226f7065726174696f6e223a227175657279222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a22486f7374207265717565737420636f6e7374727563746f7273222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c227175657279223a22222c22736f7572636573223a5b7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d5d7d)) = false), proof: apply{theorem: EnvironmentPlanWireTraces0::emptyQueryRefused, arguments: []}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: excessQueryRefused, parameters: [],
+ statement: ((EnvironmentPlanWireTraces0::planAccepted (EnvironmentPlan::parse 0x7b2273706563223a227233302f656e7669726f6e6d656e742d706c616e2f31222c226f7065726174696f6e223a227175657279222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a22486f7374207265717565737420636f6e7374727563746f7273222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c227175657279223a22616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c22736f7572636573223a5b7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d5d7d)) = false), proof: apply{theorem: EnvironmentPlanWireTraces1::excessQueryRefused, arguments: []}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unknownPlanFieldRefused, parameters: [],
+ statement: ((EnvironmentPlanWireTraces0::planAccepted (EnvironmentPlan::parse 0x7b2273706563223a227233302f656e7669726f6e6d656e742d706c616e2f31222c226f7065726174696f6e223a227175657279222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a22486f7374207265717565737420636f6e7374727563746f7273222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c227175657279223a22616263222c22736f7572636573223a5b7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d5d2c2270726f766564223a747275657d)) = false), proof: apply{theorem: EnvironmentPlanWireTraces1::unknownPlanFieldRefused, arguments: []}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: invalidLastSourceRefused, parameters: [],
+ statement: ((EnvironmentPlanWireTraces0::planAccepted (EnvironmentPlan::parse 0x7b2273706563223a227233302f656e7669726f6e6d656e742d706c616e2f31222c226f7065726174696f6e223a227175657279222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a22486f7374207265717565737420636f6e7374727563746f7273222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c227175657279223a22616263222c22736f7572636573223a5b7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d2c7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a222e2e2f626164227d5d7d)) = false), proof: apply{theorem: EnvironmentPlanWireTraces1::invalidLastSourceRefused, arguments: []}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: acquisitionFailureCannotWrite, parameters: [config : EnvironmentPlanCommand::Config, store : (List EnvironmentMemory::Observation), source : EnvironmentPlan::Source, remaining : (List EnvironmentPlan::Source), active : EnvironmentAcquisition::State, reason : String],
+ statement: ((EnvironmentPlanCommand::acquired config store source remaining (active, (ctor EnvironmentAcquisition::Emission.failed reason))) = (EnvironmentPlanCommand::error reason)), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: acquisitionReplyKeepsRemainingSources, parameters: [config : EnvironmentPlanCommand::Config, store : (List EnvironmentMemory::Observation), source : EnvironmentPlan::Source, remaining : (List EnvironmentPlan::Source), active : EnvironmentAcquisition::State, request : LexLeanStd.Host::Request],
+ statement: ((EnvironmentPlanCommand::acquired config store source remaining (active, (ctor EnvironmentAcquisition::Emission.host request))) = ((ctor EnvironmentPlanCommand::State.acquiring config store source remaining active), request)), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unexpectedLockReplyCannotAcquire, parameters: [config : EnvironmentPlanCommand::Config],
+ statement: ((EnvironmentPlanCommand::resume (ctor EnvironmentPlanCommand::State.locking config) (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x))) = (EnvironmentPlanCommand::error "memory lock unavailable")), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unexpectedWriteReplyCannotReplace, parameters: [config : EnvironmentPlanCommand::Config, data : Bytes],
+ statement: ((EnvironmentPlanCommand::resume (ctor EnvironmentPlanCommand::State.writing config data) (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x))) = (EnvironmentPlanCommand::error "memory write failed; previous store retained")), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: unexpectedRenameReplyIsUncertain, parameters: [config : EnvironmentPlanCommand::Config, data : Bytes],
+ statement: ((EnvironmentPlanCommand::resume (ctor EnvironmentPlanCommand::State.renaming config data) (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x))) = (EnvironmentPlanCommand::error "memory replacement unconfirmed; outcome uncertain; retain private directory")), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: readbackMismatchCannotSucceed, parameters: [config : EnvironmentPlanCommand::Config],
+ statement: ((EnvironmentPlanCommand::reopening config 0x61 (ctor LexLeanStd.Host::Event.read (ctor Result.ok [Bytes, LexLeanStd.Host::Failure] 0x))) = (EnvironmentPlanCommand::error "stored memory differs; outcome uncertain")), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: endedCommandCannotRestart, parameters: [event : LexLeanStd.Host::Event],
+ statement: ((EnvironmentPlanCommand::resume (ctor EnvironmentPlanCommand::State.ended) event) = (EnvironmentPlanCommand::error "memory command cannot restart")), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: onlyEmptyRemainingPlanCanEnterStoreWrite,
+ parameters: [config : EnvironmentPlanCommand::Config, store : (List EnvironmentMemory::Observation)],
+ statement: ((EnvironmentPlanCommand::nextSource config store (nil EnvironmentPlan::Source)) = (match (EnvironmentMemory::serialize store) | Option.none => (EnvironmentPlanCommand::error "memory cannot be serialized within durable byte budget") | Option.some data => ((ctor EnvironmentPlanCommand::State.writing config data), (ctor LexLeanStd.Host::Request.write (EnvironmentPlanCommand::path config "/observations.pending") data)))), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: remainingSourceStartsOwnedAcquisitionBeforeWrite,
+ parameters: [config : EnvironmentPlanCommand::Config, store : (List EnvironmentMemory::Observation), source : EnvironmentPlan::Source, remaining : (List EnvironmentPlan::Source)],
+ statement: ((EnvironmentPlanCommand::nextSource config store (cons source remaining)) = (let result : (EnvironmentAcquisition::State * EnvironmentAcquisition::Emission) := (EnvironmentAcquisition::begin (EnvironmentPlanCommand::acquisitionConfig config source)); (match (second result) | EnvironmentAcquisition::Emission.host request => ((ctor EnvironmentPlanCommand::State.acquiring config store source remaining (first result)), request) | EnvironmentAcquisition::Emission.failed reason => (EnvironmentPlanCommand::error reason) | EnvironmentAcquisition::Emission.complete item => (EnvironmentPlanCommand::error "unexpected immediate acquisition completion")))), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: writeAcknowledgementOnlyRequestsRename,
+ parameters: [config : EnvironmentPlanCommand::Config, data : Bytes],
+ statement: ((EnvironmentPlanCommand::resume (ctor EnvironmentPlanCommand::State.writing config data) (ctor LexLeanStd.Host::Event.finished (ctor Result.ok [Unit, LexLeanStd.Host::Failure] ()))) = ((ctor EnvironmentPlanCommand::State.renaming config data), (ctor LexLeanStd.Host::Request.rename (EnvironmentPlanCommand::path config "/observations.pending") (EnvironmentPlanCommand::path config "/observations.json")))), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: renameAcknowledgementOnlyRequestsReadback,
+ parameters: [config : EnvironmentPlanCommand::Config, data : Bytes],
+ statement: ((EnvironmentPlanCommand::resume (ctor EnvironmentPlanCommand::State.renaming config data) (ctor LexLeanStd.Host::Event.finished (ctor Result.ok [Unit, LexLeanStd.Host::Failure] ()))) = ((ctor EnvironmentPlanCommand::State.reopening config data), (ctor LexLeanStd.Host::Request.read (EnvironmentPlanCommand::path config "/observations.json")))), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: queryUsesOnlyStoredContext,
+ parameters: [home : String, task : Research::Task, query : Bytes, sources : (List EnvironmentPlan::Source), store : (List EnvironmentMemory::Observation)],
+ statement: ((EnvironmentPlanCommand::useStore (record EnvironmentPlanCommand::Config {home := home, plan := (record EnvironmentPlan::Plan {ingest := false, task := task, query := query, sources := sources})}) store) = (EnvironmentPlanCommand::finish (record EnvironmentPlanCommand::Config {home := home, plan := (record EnvironmentPlan::Plan {ingest := false, task := task, query := query, sources := sources})}) store)), proof: term_cases{scrutinee: (ctor EnvironmentPlanCommand::State.ended), definitions: [EnvironmentPlanCommand::useStore]}, axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

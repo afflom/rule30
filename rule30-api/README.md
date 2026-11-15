@@ -708,3 +708,12 @@ bin/r30 api production --targets   # the compiler's target descriptors
 bin/r30 verify api                 # lexlean verify of the API modules (about five minutes; Convert.lex.tex decides 28 conversions, Rule30Core.lex.tex the first rows)
 bin/r30 view render [--out DIR]    # the current view (the site, statements.json, explainer.json, rule30.svg, the PDFs)
 ```
+
+## Explicit multi-source memory plans
+
+The additive [environment-plan command](production/ENVIRONMENT-PLAN.md) validates
+1–8 pinned source entries before acquiring them sequentially and replacing the
+store once. Query operates without checkouts and returns only listed keys in plan
+order, with the complete task unchanged and observations carrying no proof authority.
+The existing single-source command remains available. The plan increment is
+awaiting independent review and qualification.
