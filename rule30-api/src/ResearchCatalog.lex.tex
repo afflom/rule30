@@ -38,6 +38,9 @@
 \importmodule{ResearchCohortInput}
 \importmodule{ResearchCohortCommand}
 \importmodule{ResearchExecution}
+\importmodule{EnvironmentMemory}
+\importmodule{EnvironmentAcquisition}
+\importmodule{EnvironmentMemoryCommand}
 \title{Boolean}
 \begin{semanticmodule}
 structure{
@@ -90,10 +93,18 @@ definition{
 }
 
 definition{
+  name: environmentScopes,
+  parameters: [],
+  result: (List Scope),
+  body: (cons (record Scope {id := 0x656e7669726f6e6d656e742d6d656d6f7279, module := "EnvironmentMemory", features := (EnvironmentMemory::features)}) (cons (record Scope {id := 0x656e7669726f6e6d656e742d6163717569736974696f6e, module := "EnvironmentAcquisition", features := (EnvironmentAcquisition::features)}) (cons (record Scope {id := 0x656e7669726f6e6d656e742d6d656d6f72792d636f6d6d616e64, module := "EnvironmentMemoryCommand", features := (EnvironmentMemoryCommand::features)}) (cons (unitScope 0x6d6f64756c652f456e7669726f6e6d656e744d656d6f7279 "EnvironmentMemory") (cons (unitScope 0x6d6f64756c652f456e7669726f6e6d656e744d656d6f7279547261636573 "EnvironmentMemoryTraces") (cons (unitScope 0x6d6f64756c652f456e7669726f6e6d656e744163717569736974696f6e "EnvironmentAcquisition") (cons (unitScope 0x6d6f64756c652f456e7669726f6e6d656e744d656d6f7279436f6d6d616e64 "EnvironmentMemoryCommand") (nil Scope)))))))),
+  axioms: []
+}
+
+definition{
   name: registeredScopes,
   parameters: [],
   result: (List Scope),
-  body: (prim append (facetScopes) (moduleScopes) : (List Scope)),
+  body: (prim append (environmentScopes) (prim append (facetScopes) (moduleScopes) : (List Scope)) : (List Scope)),
   axioms: []
 }
 

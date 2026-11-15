@@ -69,7 +69,7 @@ definition{
  name: semanticMessage,
  parameters: [compiler : Bytes, linked : Bytes, closure : Bytes],
  result: Bytes,
- body: (Json::append 0x6c65786c65616e2d73656d616e7469632d763100 (Json::append (frame 0x636f6d70696c65722d73656d616e74696373 compiler) (Json::append (frame 0x6c616e6775616765 0x312e32) (Json::append (frame 0x746f6f6c636861696e 0x6c65616e70726f7665722f6c65616e343a76342e33322e31) (Json::append (frame 0x6c696e6b65642d6972 linked) (frame 0x6c657869636f6e2d636c6f73757265 closure)))))),
+ body: (Json::append 0x6c65786c65616e2d73656d616e7469632d763100 (Json::append (frame 0x636f6d70696c65722d73656d616e74696373 compiler) (Json::append (frame 0x6c616e6775616765 0x312e32) (Json::append (frame 0x746f6f6c636861696e 0x6c65616e70726f7665722f6c65616e343a76342e33322e32) (Json::append (frame 0x6c696e6b65642d6972 linked) (frame 0x6c657869636f6e2d636c6f73757265 closure)))))),
  axioms: [],
  executable: true
 }

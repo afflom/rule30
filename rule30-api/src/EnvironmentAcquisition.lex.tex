@@ -1,0 +1,79 @@
+\begin{lexlean}{EnvironmentAcquisition}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentMemory}
+\importmodule{ResearchExecution}
+\importmodule{Research}
+\importmodule{LexLeanStd.Host}
+\importmodule{LexLeanStd.Sha256}
+\importmodule{Host}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Config, type_parameters: [], parameters: [],
+ fields: [{name: request, type: Research::Request}, {name: directory, type: String}, {name: repository, type: Bytes}, {name: revision, type: Bytes}, {name: path, type: Bytes}, {name: output, type: String}, {name: errors, type: String}]
+}
+inductive{
+ name: Operation, type_parameters: [], parameters: [],
+ constructors: [{name: identify, fields: []}, {name: size, fields: []}, {name: content, fields: []}]
+}
+inductive{
+ name: Phase, type_parameters: [], parameters: [],
+ constructors: [{name: executing, fields: [ResearchExecution::State]}, {name: reading, fields: []}, {name: ended, fields: []}]
+}
+structure{
+ name: State, type_parameters: [], parameters: [],
+ fields: [{name: config, type: Config}, {name: operation, type: Operation}, {name: blob, type: Bytes}, {name: size, type: Nat}, {name: phase, type: Phase}]
+}
+inductive{
+ name: Emission, type_parameters: [], parameters: [],
+ constructors: [{name: host, fields: [LexLeanStd.Host::Request]}, {name: complete, fields: [EnvironmentMemory::Observation]}, {name: failed, fields: [String]}]
+}
+definition{
+ name: join, parameters: [left : String, right : String], result: String,
+ body: (Host::textOf (prim append (prim utf8_encode left : Bytes) (prim utf8_encode right : Bytes) : Bytes)), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: environment, parameters: [], result: (List (String * String)),
+ body: (cons ("GIT_CONFIG_NOSYSTEM", "1") (cons ("GIT_CONFIG_GLOBAL", "/dev/null") (cons ("GIT_NO_REPLACE_OBJECTS", "1") (cons ("GIT_NO_LAZY_FETCH", "1") (cons ("GIT_TERMINAL_PROMPT", "0") (cons ("GIT_OPTIONAL_LOCKS", "0") (nil (String * String)))))))), executable: true
+}
+definition{
+ name: arguments, parameters: [state : State], result: (List String),
+ body: (prim append (cons "--no-replace-objects" (cons "--no-optional-locks" (cons "-c" (cons "core.hooksPath=/dev/null" (cons "-c" (cons "core.fsmonitor=false" (cons "-c" (cons "protocol.allow=never" (nil String))))))))) (match (project state operation) | Operation.identify => (cons "rev-parse" (cons "--verify" (cons "--end-of-options" (cons (join (Host::textOf (project (project state config) revision)) (join "^{commit}:" (Host::textOf (project (project state config) path)))) (nil String))))) | Operation.size => (cons "cat-file" (cons "-s" (cons (Host::textOf (project state blob)) (nil String)))) | Operation.content => (cons "cat-file" (cons "blob" (cons (Host::textOf (project state blob)) (nil String))))) : (List String)), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: job, parameters: [state : State], result: ResearchExecution::Job,
+ body: (let config : Config := (project state config); (record ResearchExecution::Job {request := (project config request), tool := (ctor ResearchExecution::Tool.git), arguments := (arguments state), directory := (project config directory), environment := (environment), output := (project config output), errors := (project config errors), allowance := 10000, quantum := 100, polls := 128})), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: fail, parameters: [state : State, reason : String], result: (State * Emission),
+ body: (state, (ctor Emission.failed reason)), executable: true
+}
+definition{
+ name: advance, parameters: [state : State, result : (ResearchExecution::State * ResearchExecution::Emission)], result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), operation := (project state operation), blob := (project state blob), size := (project state size), phase := (ctor Phase.executing (first result))}); (match (second result) | ResearchExecution::Emission.host request => (next, (ctor Emission.host request)) | ResearchExecution::Emission.awaiting => (fail next "acquisition has no outstanding effect") | ResearchExecution::Emission.complete completion => (match (project completion kind) | ResearchExecution::EndKind.succeeded => (match (project completion code) | Option.none => (fail next "acquisition did not exit normally") | Option.some code => (if (prim equal code (0 : Int32) : Bool) then ((record State {config := (project next config), operation := (project next operation), blob := (project next blob), size := (project next size), phase := (ctor Phase.reading)}), (ctor Emission.host (ctor LexLeanStd.Host::Request.read (project (project next config) output)))) else (fail next "acquisition failed"))) | ResearchExecution::EndKind.failed => (fail next "git rejected pinned object") | ResearchExecution::EndKind.cut => (fail next "acquisition budget cut; keep private directory") | ResearchExecution::EndKind.unavailable => (fail next "git unavailable") | ResearchExecution::EndKind.protocol => (fail next "acquisition protocol error; keep private directory") | ResearchExecution::EndKind.cleanupFailed => (fail next "cleanup uncertain; keep private directory") | ResearchExecution::EndKind.refused => (fail next "acquisition refused")))), executable: true
+}
+definition{
+ name: launch, parameters: [state : State, operation : Operation, blob : Bytes, size : Nat], result: (State * Emission),
+ body: (let next : State := (record State {config := (project state config), operation := operation, blob := blob, size := size, phase := (ctor Phase.ended)}); (advance next (ResearchExecution::begin (job next)))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: begin, parameters: [config : Config], result: (State * Emission),
+ body: (let state : State := (record State {config := config, operation := (ctor Operation.identify), blob := 0x, size := 0, phase := (ctor Phase.ended)}); (if ((EnvironmentMemory::repositoryLabel (project config repository)) && (((prim length (project config revision) : Nat) =? 40) && ((EnvironmentMemory::hexadecimal (project config revision) 0 40) && ((EnvironmentMemory::bounded (project config path) 256) && ((EnvironmentMemory::safeName (project config path) 0 (prim length (project config path) : Nat)) && ((not (EnvironmentMemory::contains (project config path) 0x2e2e)) && (not (Toml::byteIs (project config path) 0 (47 : UInt8))))))))) then (launch state (ctor Operation.identify) 0x 0) else (fail state "invalid pinned source identity"))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: readResult, parameters: [state : State, data : Bytes], result: (State * Emission),
+ body: (match (project state operation) | Operation.identify => (if (((prim length data : Nat) =? 41) && ((Toml::byteIs data 40 (10 : UInt8)) && (EnvironmentMemory::hexadecimal data 0 40))) then (launch state (ctor Operation.size) (Toml::sliceOr data 0 40) 0) else (fail state "git object identity is not exact SHA-1 plus newline")) | Operation.size => (if ((EnvironmentMemory::bounded data 6) && (Toml::byteIs data (prim subtract (prim length data : Nat) 1 : Nat) (10 : UInt8))) then (match (Json::natural (ctor Json::Value.number (Toml::sliceOr data 0 (prim subtract (prim length data : Nat) 1 : Nat))) 4096) | Option.none => (fail state "source exceeds 4096 byte budget") | Option.some size => (if (0 <? size) then (launch state (ctor Operation.content) (project state blob) size) else (fail state "empty source refused"))) else (fail state "malformed git size")) | Operation.content => (if ((prim length data : Nat) =? (project state size)) then (let item : EnvironmentMemory::Observation := (record EnvironmentMemory::Observation {repository := (project (project state config) repository), revision := (project (project state config) revision), path := (project (project state config) path), content := data, blob := (project state blob), digest := (LexLeanStd.Sha256::sha256Hex data), acquisition := 0x6c6f63616c2d6769742d6f626a656374}); (if (EnvironmentMemory::valid item) then ((record State {config := (project state config), operation := (project state operation), blob := (project state blob), size := (project state size), phase := (ctor Phase.ended)}), (ctor Emission.complete item)) else (fail state "source observation invalid"))) else (fail state "git content length differs from bound object"))), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: step, parameters: [state : State, event : LexLeanStd.Host::Event], result: (State * Emission),
+ body: (match (project state phase) | Phase.executing active => (advance state (ResearchExecution::step active event)) | Phase.reading => (match (Host::asRead event) | Option.none => (fail state "expected owned git output read") | Option.some reply => (match reply | Result.error failure => (fail state "git output unreadable") | Result.ok data => (readResult state data))) | Phase.ended => (fail state "acquisition cannot restart")), axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: features, parameters: [], result: (List String),
+ body: (cons "fixed-local-git-object-reader" (cons "explicit-commit-path-blob-binding" (cons "no-network-filters-or-hooks" (cons "bounded-source-and-supervised-time" (nil String))))), executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

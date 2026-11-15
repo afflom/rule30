@@ -1,0 +1,8 @@
+{
+  "spec": "lexlean/production-request/1",
+  "roots": [{
+    "package": {"name": "rule30_environment_memory", "version": "0.1.0"},
+    "root": "Rule30Api.EnvironmentMemoryCommand.step",
+    "targets": [{"id": "rust-std", "digest": "0f5802ea18121b6a7a0d03e999589ce4e5ae812dc2a358432c1bf024a8e53f9f"}]
+  }]
+}

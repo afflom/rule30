@@ -1,0 +1,28 @@
+{
+  "spec": "r30/environment-inspection/1",
+  "operation": "ingest",
+  "local_repository": ".",
+  "repository": "afflom/rule30",
+  "revision": "e3be477fded263029479127363f7fb6a3597e7d4",
+  "path": "lexlean-stdlib/src/Host.lex.tex",
+  "query": "Request",
+  "task": {
+    "id": "memory-interface-example",
+    "purpose": "prove",
+    "intent": "prove",
+    "status": "ready",
+    "component": "deduction",
+    "sources": [],
+    "schema": "Host request constructors",
+    "sequent": {
+      "origin": "InterfaceExample.goal",
+      "theorem": "InterfaceExample.goal",
+      "premise": 0,
+      "telescope": "",
+      "target": "UNVERIFIED INTERFACE FIXTURE: replace with the exact task target",
+      "kind": "closed"
+    },
+    "age": 0,
+    "weight": 1
+  }
+}
