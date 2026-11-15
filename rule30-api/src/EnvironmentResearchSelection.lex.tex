@@ -1,0 +1,55 @@
+\begin{lexlean}{EnvironmentResearchSelection}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentResearchInput}
+\importmodule{EnvironmentMemory}
+\importmodule{Json}
+\importmodule{CoreBinding}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Choice, type_parameters: [], parameters: [],
+ fields: [{name: candidate, type: EnvironmentResearchInput::Candidate}, {name: index, type: Nat}, {name: score, type: Nat}, {name: matched, type: (List Nat)}]
+}
+definition{
+ name: hits, parameters: [cue : Bytes, items : (List EnvironmentMemory::Observation), index : Nat], result: (List Nat),
+ body: (match items | List.nil => (nil Nat) | List.cons head tail => (if (EnvironmentMemory::contains (project head content) cue) then (cons index (hits cue tail (index + 1))) else (hits cue tail (index + 1)))),
+ axioms: [], recursive_argument: items, executable: true
+}
+definition{
+ name: rank, parameters: [candidate : EnvironmentResearchInput::Candidate, items : (List EnvironmentMemory::Observation), index : Nat], result: Choice,
+ body: (let matched : (List Nat) := (hits (project candidate cue) items 0); (record Choice {candidate := candidate, index := index, score := (prim length matched : Nat), matched := matched})),
+ axioms: [], executable: true
+}
+definition{
+ name: better, parameters: [best : Choice, candidate : Choice], result: Choice,
+ body: (if ((project best score) <? (project candidate score)) then candidate else best),
+ axioms: [], executable: true
+}
+definition{
+ name: rest, parameters: [pool : (List EnvironmentResearchInput::Candidate), items : (List EnvironmentMemory::Observation), index : Nat, best : Choice], result: Choice,
+ body: (match pool | List.nil => best | List.cons head tail => (rest tail items (index + 1) (better best (rank head items index)))),
+ axioms: [], recursive_argument: pool, executable: true
+}
+definition{
+ name: choose, parameters: [pool : (List EnvironmentResearchInput::Candidate), items : (List EnvironmentMemory::Observation)], result: (Option Choice),
+ body: (match pool | List.nil => (ctor Option.none [Choice]) | List.cons head tail => (ctor Option.some [Choice] (rest tail items 1 (rank head items 0)))),
+ axioms: [], executable: true
+}
+definition{
+ name: indices, parameters: [values : (List Nat)], result: (List Json::Value),
+ body: (match values | List.nil => (nil Json::Value) | List.cons head tail => (cons (CoreBinding::number head) (indices tail))),
+ axioms: [], recursive_argument: values, executable: true
+}
+definition{
+ name: document, parameters: [choice : Choice, digest : Bytes], result: Json::Value,
+ body: (ctor Json::Value.object (cons (0x706f6c696379, (ctor Json::Value.string 0x7233302f636f6e746578742d6375652d636f756e742f31)) (cons (0x636f6e746578745f617574686f72697479, (ctor Json::Value.string 0x737570706c6965642f73656c662d636f6e73697374656e742f6e6f742d61757468656e74696361746564)) (cons (0x726571756573745f736861323536, (ctor Json::Value.string digest)) (cons (0x63686f73656e5f696e646578, (CoreBinding::number (project choice index))) (cons (0x73636f7265, (CoreBinding::number (project choice score))) (cons (0x6d6174636865645f6f62736572766174696f6e73, (ctor Json::Value.array (indices (project choice matched)))) (cons (0x66616c6c6261636b, (ctor Json::Value.boolean ((project choice score) =? 0))) (nil (Bytes * Json::Value)))))))))),
+ axioms: [], executable: true
+}
+definition{
+ name: features, parameters: [], result: (List String),
+ body: (cons "one-hit-per-observation" (cons "stable-first-maximum" (cons "unchanged-selected-candidate" (nil String)))),
+ axioms: [], executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

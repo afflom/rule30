@@ -1,0 +1,104 @@
+\begin{lexlean}{EnvironmentResearchInput}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentPlan}
+\importmodule{EnvironmentMemory}
+\importmodule{ResearchInput}
+\importmodule{ResearchProject}
+\importmodule{ResearchFactory}
+\importmodule{ResearchRecord}
+\importmodule{Research}
+\importmodule{CandidateBinding}
+\importmodule{CoreBinding}
+\importmodule{CoreNotation}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{Toml}
+\importmodule{LexLeanStd.Sha256}
+\title{Boolean}
+\begin{semanticmodule}
+structure{
+ name: Candidate, type_parameters: [], parameters: [],
+ fields: [{name: cue, type: Bytes}, {name: config, type: ResearchProject::Config}]
+}
+structure{
+ name: Input, type_parameters: [], parameters: [],
+ fields: [{name: plan, type: EnvironmentPlan::Plan}, {name: observations, type: (List EnvironmentMemory::Observation)}, {name: candidates, type: (List Candidate)}, {name: inputDigest, type: Bytes}]
+}
+definition{
+ name: statusCode, parameters: [value : Research::Status], result: Nat,
+ body: (match value | Research::Status.ready => 0 | Research::Status.waiting => 1 | Research::Status.blocked => 2 | Research::Status.established => 3 | Research::Status.exhausted => 4),
+ axioms: [], executable: true
+}
+definition{
+ name: sameTask, parameters: [left : Research::Task, right : Research::Task], result: Bool,
+ body: (((project left age) =? (project right age)) && (((project left weight) =? (project right weight)) && (((statusCode (project left status)) =? (statusCode (project right status))) && ((Toml::sameBytes (project left id) (project right id)) && ((Research::samePurpose (project left purpose) (project right purpose)) && ((Research::samePurpose (project left intent) (project right intent)) && ((prim equal (project left component) (project right component) : Bool) && ((Research::sameSources (project left sources) (project right sources)) && ((Toml::sameBytes (project left schema) (project right schema)) && (Research::sameSequent (project left sequent) (project right sequent))))))))))),
+ axioms: [], executable: true
+}
+definition{
+ name: ordered, parameters: [sources : (List EnvironmentPlan::Source), items : (List EnvironmentMemory::Observation), query : Bytes], result: Bool,
+ body: (match sources | List.nil => (match items | List.nil => true | List.cons item remaining => false) | List.cons source rest => (match items | List.nil => true | List.cons item remaining => (if (EnvironmentPlan::matches source item) then ((EnvironmentMemory::contains (project item content) query) && (ordered rest remaining query)) else (ordered rest items query)))),
+ axioms: [], recursive_argument: sources, executable: true
+}
+definition{
+ name: observations, parameters: [values : (List Json::Value), fuel : Nat], result: (Option (List EnvironmentMemory::Observation)),
+ body: (match values | List.nil => (ctor Option.some [(List EnvironmentMemory::Observation)] (nil EnvironmentMemory::Observation)) | List.cons value tail => (match fuel | Nat.zero => (ctor Option.none [(List EnvironmentMemory::Observation)]) | Nat.succ more => (match (EnvironmentMemory::decode value) | Option.none => (ctor Option.none [(List EnvironmentMemory::Observation)]) | Option.some item => (match (observations tail more) | Option.none => (ctor Option.none [(List EnvironmentMemory::Observation)]) | Option.some rest => (ctor Option.some [(List EnvironmentMemory::Observation)] (cons item rest)))))),
+ axioms: [Quot.sound, propext], recursive_argument: values, executable: true
+}
+definition{
+ name: queryPlan, parameters: [value : Json::Value], result: (Option EnvironmentPlan::Plan),
+ body: (match (JsonCanonical::encode value 65536 131072) | Option.none => (ctor Option.none [EnvironmentPlan::Plan]) | Option.some data => (match (EnvironmentPlan::parse data) | Option.none => (ctor Option.none [EnvironmentPlan::Plan]) | Option.some plan => (if (not (project plan ingest)) then (ctor Option.some [EnvironmentPlan::Plan] plan) else (ctor Option.none [EnvironmentPlan::Plan])))),
+ axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: contextValue, parameters: [plan : EnvironmentPlan::Plan, value : Json::Value], result: (Option (List EnvironmentMemory::Observation)),
+ body: (if ((CoreNotation::shape value (cons 0x73706563 (cons 0x7472757374 (cons 0x7461736b (cons 0x6f62736572766174696f6e73 (nil Bytes)))))) && ((ResearchInput::stringIs (CoreBinding::get value 0x73706563) 0x7233302f656e7669726f6e6d656e742d636f6e746578742f31) && (ResearchInput::stringIs (CoreBinding::get value 0x7472757374) 0x6f627365727665642d736f75726365732d6e6f742d70726f6f66))) then (match (ResearchInput::task (CoreBinding::get value 0x7461736b)) | Option.none => (ctor Option.none [(List EnvironmentMemory::Observation)]) | Option.some task => (if (sameTask task (project plan task)) then (match (ResearchInput::array (CoreBinding::get value 0x6f62736572766174696f6e73)) | Option.none => (ctor Option.none [(List EnvironmentMemory::Observation)]) | Option.some values => (match (observations values 8) | Option.none => (ctor Option.none [(List EnvironmentMemory::Observation)]) | Option.some items => (if (ordered (project plan sources) items (project plan query)) then (ctor Option.some [(List EnvironmentMemory::Observation)] items) else (ctor Option.none [(List EnvironmentMemory::Observation)])))) else (ctor Option.none [(List EnvironmentMemory::Observation)]))) else (ctor Option.none [(List EnvironmentMemory::Observation)])),
+ axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: context, parameters: [plan : EnvironmentPlan::Plan, value : Json::Value], result: (Option (List EnvironmentMemory::Observation)),
+ body: (match (JsonCanonical::encode value 1048576 2097152) | Option.none => (ctor Option.none [(List EnvironmentMemory::Observation)]) | Option.some data => (match (Json::parse data 1048576 16) | Result.error problem => (ctor Option.none [(List EnvironmentMemory::Observation)]) | Result.ok parsed => (contextValue plan parsed))),
+ axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: shared, parameters: [left : ResearchProject::Config, right : ResearchProject::Config], result: Bool,
+ body: ((ResearchProject::sameWorkspace (project left workspace) (project right workspace)) && ((ResearchFactory::sameTools (project left tools) (project right tools)) && (((Research::sameRequest (project left request) (project right request)) && (sameTask (project (project left request) task) (project (project right request) task))) && (((project left maxBytes) =? (project right maxBytes)) && (((project left maxDepth) =? (project right maxDepth)) && ((project left maxSteps) =? (project right maxSteps))))))),
+ axioms: [], executable: true
+}
+definition{
+ name: strictTarget, parameters: [data : Bytes, maxBytes : Nat, maxDepth : Nat, maxSteps : Nat], result: Bool,
+ body: (match (Json::parse data maxBytes maxDepth) | Result.error problem => false | Result.ok value => (match (ResearchInput::arena value) | Option.none => false | Option.some goal => (if ((project goal root) <? (prim length (project goal nodes) : Nat)) then (match (CoreNotation::encode (cons (ctor CoreNotation::Work.nodes (project goal nodes) 0) (nil CoreNotation::Work)) maxBytes maxSteps) | Option.none => false | Option.some rendered => true) else false))),
+ axioms: [propext], executable: true
+}
+definition{
+ name: closed, parameters: [config : ResearchProject::Config], result: Bool,
+ body: ((strictTarget (project (project (project (project config request) task) sequent) target) (project config maxBytes) (project config maxDepth) (project config maxSteps)) && (match (CandidateBinding::selectedClosed (project config request) (project config maxBytes) (project config maxDepth) (project config maxSteps)) | Option.none => false | Option.some goal => true)),
+ axioms: [propext], executable: true
+}
+definition{
+ name: candidate, parameters: [value : Json::Value, task : Research::Task, environment : (List (String * String))], result: (Option Candidate),
+ body: (if (CoreNotation::shape value (cons 0x637565 (cons 0x617474656d7074 (nil Bytes)))) then (match (ResearchInput::bytes (CoreBinding::get value 0x637565)) | Option.none => (ctor Option.none [Candidate]) | Option.some cue => (if (EnvironmentMemory::bounded cue 128) then (match (ResearchInput::suppliedConfig (CoreBinding::get value 0x617474656d7074) environment) | Option.none => (ctor Option.none [Candidate]) | Option.some config => (if ((sameTask (project (project config request) task) task) && ((closed config) && (ResearchFactory::candidateReady config))) then (ctor Option.some [Candidate] (record Candidate {cue := cue, config := config})) else (ctor Option.none [Candidate]))) else (ctor Option.none [Candidate]))) else (ctor Option.none [Candidate])),
+ axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: candidates, parameters: [values : (List Json::Value), task : Research::Task, environment : (List (String * String)), base : ResearchProject::Config, fuel : Nat], result: (Option (List Candidate)),
+ body: (match values | List.nil => (ctor Option.some [(List Candidate)] (nil Candidate)) | List.cons head tail => (match fuel | Nat.zero => (ctor Option.none [(List Candidate)]) | Nat.succ more => (match (candidate head task environment) | Option.none => (ctor Option.none [(List Candidate)]) | Option.some item => (if (shared base (project item config)) then (match (candidates tail task environment base more) | Option.none => (ctor Option.none [(List Candidate)]) | Option.some rest => (ctor Option.some [(List Candidate)] (cons item rest))) else (ctor Option.none [(List Candidate)]))))),
+ axioms: [Quot.sound, propext], recursive_argument: values, executable: true
+}
+definition{
+ name: admitValue, parameters: [value : Json::Value, environment : (List (String * String)), digest : Bytes], result: (Option Input),
+ body: (if ((CoreNotation::shape value (cons 0x73706563 (cons 0x706c616e (cons 0x636f6e74657874 (cons 0x63616e64696461746573 (nil Bytes)))))) && (ResearchInput::stringIs (CoreBinding::get value 0x73706563) 0x7233302f656e7669726f6e6d656e742d72657365617263682f31)) then (match (queryPlan (CoreBinding::get value 0x706c616e)) | Option.none => (ctor Option.none [Input]) | Option.some plan => (match (context plan (CoreBinding::get value 0x636f6e74657874)) | Option.none => (ctor Option.none [Input]) | Option.some items => (match (ResearchInput::array (CoreBinding::get value 0x63616e64696461746573)) | Option.none => (ctor Option.none [Input]) | Option.some values => (match values | List.nil => (ctor Option.none [Input]) | List.cons head tail => (match (candidate head (project plan task) environment) | Option.none => (ctor Option.none [Input]) | Option.some initial => (match (candidates tail (project plan task) environment (project initial config) 15) | Option.none => (ctor Option.none [Input]) | Option.some pool => (ctor Option.some [Input] (record Input {plan := plan, observations := items, candidates := (cons initial pool), inputDigest := digest})))))))) else (ctor Option.none [Input])),
+ axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: decode, parameters: [data : Bytes, environment : (List (Bytes * Bytes))], result: (Option Input),
+ body: (match (Json::parse data 8388608 96) | Result.error problem => (ctor Option.none [Input]) | Result.ok value => (match (ResearchInput::environment environment) | Option.none => (ctor Option.none [Input]) | Option.some env => (admitValue value env (LexLeanStd.Sha256::sha256Hex data)))),
+ axioms: [Quot.sound, propext], executable: true
+}
+definition{
+ name: features, parameters: [], result: (List String),
+ body: (cons "complete-task-and-control-equality" (cons "closed-supplied-candidates-only" (cons "ordered-digest-checked-context-before-effects" (nil String)))),
+ axioms: [], executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

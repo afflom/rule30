@@ -1,0 +1,72 @@
+\begin{lexlean}{EnvironmentResearchWireTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentResearchInput}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: rejected, parameters: [value : (Option EnvironmentResearchInput::Input)], result: Bool,
+ body: (match value | Option.none => true | Option.some admitted => false),
+ axioms: [], executable: true
+}
+definition{
+ name: parseRejected, parameters: [value : (Result Json::Value Json::Problem)], result: Bool,
+ body: (match value | Result.error problem => true | Result.ok parsed => false),
+ axioms: [], executable: true
+}
+theorem{
+ name: duplicateRootFieldRefused, parameters: [],
+ statement: ((parseRejected (Json::parse 0x7b2273706563223a2278222c2273706563223a2279227d 8388608 96)) = true), proof: decide{}, axioms: [propext]
+}
+theorem{
+ name: escapedDuplicateFieldRefused, parameters: [],
+ statement: ((parseRejected (Json::parse 0x7b2273706563223a2278222c225c7530303733706563223a2279227d 8388608 96)) = true), proof: decide{}, axioms: [propext]
+}
+theorem{
+ name: nestedDuplicateFieldRefused, parameters: [],
+ statement: ((parseRejected (Json::parse 0x7b2263616e64696461746573223a5b7b22637565223a2261222c225c75303036337565223a2262227d5d7d 8388608 96)) = true), proof: decide{}, axioms: [propext]
+}
+theorem{
+ name: unknownEnvelopeRefused, parameters: [],
+ statement: ((rejected (EnvironmentResearchInput::decode 0x7b2273706563223a227233302f656e7669726f6e6d656e742d72657365617263682f31222c226578747261223a307d (nil (Bytes * Bytes)))) = true), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: synthesisEnvelopeRefused, parameters: [],
+ statement: ((rejected (EnvironmentResearchInput::decode 0x7b2273706563223a227233302f72657365617263682d73796e7468657369732f31227d (nil (Bytes * Bytes)))) = true), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: emptyEnvelopeRefused, parameters: [],
+ statement: ((rejected (EnvironmentResearchInput::decode 0x7b7d (nil (Bytes * Bytes)))) = true), proof: decide{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: validNamedTarget, parameters: [],
+ statement: ((EnvironmentResearchInput::strictTarget 0x7b226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d5d2c22726f6f74223a307d 4096 32 1024) = true), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: extraTargetFieldRefused, parameters: [],
+ statement: ((EnvironmentResearchInput::strictTarget 0x7b226578747261223a302c226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d5d2c22726f6f74223a307d 4096 32 1024) = false), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: unreachableMalformedTargetNodeRefused, parameters: [],
+ statement: ((EnvironmentResearchInput::strictTarget 0x7b226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d2c7b226b223a22756e6b6e6f776e227d5d2c22726f6f74223a307d 4096 32 1024) = false), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: nestedInvalidTargetFieldRefused, parameters: [],
+ statement: ((EnvironmentResearchInput::strictTarget 0x7b226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d2c7b226b223a2263222c226e223a224e6174222c2275223a5b7b226578747261223a302c226b223a227a227d5d7d5d2c22726f6f74223a307d 4096 32 1024) = false), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: validUnusedNodeAndNonzeroRoot, parameters: [],
+ statement: ((EnvironmentResearchInput::strictTarget 0x7b226e6f646573223a5b7b226b223a2263222c226e223a224e6174222c2275223a5b5d7d2c7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d5d2c22726f6f74223a317d 4096 32 1024) = true), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: outOfRangeTargetRootRefused, parameters: [],
+ statement: ((EnvironmentResearchInput::strictTarget 0x7b226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d5d2c22726f6f74223a317d 4096 32 1024) = false), proof: reflexivity{}, axioms: [propext]
+}
+definition{
+ name: features, parameters: [], result: (List String),
+ body: (cons "actual-wire-duplicate-rejection" (cons "unknown-and-synthesis-envelope-refusal" (nil String))),
+ axioms: [], executable: true
+}
+\end{semanticmodule}
+\end{lexlean}

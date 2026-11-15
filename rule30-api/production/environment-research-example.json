@@ -1,0 +1,222 @@
+{
+  "spec": "r30/environment-research/1",
+  "plan": {
+    "spec": "r30/environment-plan/1",
+    "operation": "query",
+    "task": {
+      "id": "supplied-context-example",
+      "purpose": "prove",
+      "intent": "prove",
+      "status": "ready",
+      "component": "deduction",
+      "sources": [
+        "True"
+      ],
+      "schema": "closed-True-example",
+      "sequent": {
+        "origin": "True",
+        "theorem": "True",
+        "premise": 0,
+        "telescope": "",
+        "target": "{\"nodes\":[{\"k\":\"c\",\"n\":\"True\",\"u\":[]}],\"root\":0}",
+        "kind": "closed"
+      },
+      "age": 7,
+      "weight": 13
+    },
+    "query": "needle",
+    "sources": [
+      {
+        "repository": "fixtures/alpha",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "README.md"
+      }
+    ]
+  },
+  "context": {
+    "spec": "r30/environment-context/1",
+    "trust": "observed-sources-not-proof",
+    "task": {
+      "id": "supplied-context-example",
+      "purpose": "prove",
+      "intent": "prove",
+      "status": "ready",
+      "component": "deduction",
+      "sources": [
+        "True"
+      ],
+      "schema": "closed-True-example",
+      "sequent": {
+        "origin": "True",
+        "theorem": "True",
+        "premise": 0,
+        "telescope": "",
+        "target": "{\"nodes\":[{\"k\":\"c\",\"n\":\"True\",\"u\":[]}],\"root\":0}",
+        "kind": "closed"
+      },
+      "age": 7,
+      "weight": 13
+    },
+    "observations": [
+      {
+        "repository": "fixtures/alpha",
+        "revision": "1111111111111111111111111111111111111111",
+        "path": "README.md",
+        "content": "needle constructive truth\n",
+        "blob": "2222222222222222222222222222222222222222",
+        "digest": "78840423d88e5bb3d52c0b6cd38df2ed3c5f230b89f0525f1058812283105b57",
+        "acquisition": "local-git-object"
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "cue": "truth",
+      "attempt": {
+        "spec": "r30/research-attempt/1",
+        "request": {
+          "serial": 1,
+          "snapshot": {
+            "library": "3333333333333333333333333333333333333333",
+            "compiler": "4444444444444444444444444444444444444444444444444444444444444444",
+            "model": "5555555555555555555555555555555555555555555555555555555555555555"
+          },
+          "task": {
+            "id": "supplied-context-example",
+            "purpose": "prove",
+            "intent": "prove",
+            "status": "ready",
+            "component": "deduction",
+            "sources": [
+              "True"
+            ],
+            "schema": "closed-True-example",
+            "sequent": {
+              "origin": "True",
+              "theorem": "True",
+              "premise": 0,
+              "telescope": "",
+              "target": "{\"nodes\":[{\"k\":\"c\",\"n\":\"True\",\"u\":[]}],\"root\":0}",
+              "kind": "closed"
+            },
+            "age": 7,
+            "weight": 13
+          }
+        },
+        "repository": "/owned/rule30",
+        "revision": "6666666666666666666666666666666666666666",
+        "output": "/owned/logs/out",
+        "errors": "/owned/logs/err",
+        "tools": {
+          "lexlean": "7777777777777777777777777777777777777777777777777777777777777777",
+          "lean": "7777777777777777777777777777777777777777777777777777777777777777",
+          "lake": "7777777777777777777777777777777777777777777777777777777777777777",
+          "checker": "7777777777777777777777777777777777777777777777777777777777777777"
+        },
+        "arena": {
+          "nodes": [
+            {
+              "k": "c",
+              "n": "True",
+              "u": []
+            },
+            {
+              "k": "c",
+              "n": "True.intro",
+              "u": []
+            }
+          ],
+          "root": 0
+        },
+        "proof": 1,
+        "imports": [
+          "Init"
+        ],
+        "levels": [],
+        "axioms": [],
+        "bounds": {
+          "max_bytes": 4096,
+          "max_depth": 32,
+          "max_steps": 1024,
+          "allowance": 60000,
+          "quantum": 10,
+          "polls": 6000
+        }
+      }
+    },
+    {
+      "cue": "alternative",
+      "attempt": {
+        "spec": "r30/research-attempt/1",
+        "request": {
+          "serial": 1,
+          "snapshot": {
+            "library": "3333333333333333333333333333333333333333",
+            "compiler": "4444444444444444444444444444444444444444444444444444444444444444",
+            "model": "5555555555555555555555555555555555555555555555555555555555555555"
+          },
+          "task": {
+            "id": "supplied-context-example",
+            "purpose": "prove",
+            "intent": "prove",
+            "status": "ready",
+            "component": "deduction",
+            "sources": [
+              "True"
+            ],
+            "schema": "closed-True-example",
+            "sequent": {
+              "origin": "True",
+              "theorem": "True",
+              "premise": 0,
+              "telescope": "",
+              "target": "{\"nodes\":[{\"k\":\"c\",\"n\":\"True\",\"u\":[]}],\"root\":0}",
+              "kind": "closed"
+            },
+            "age": 7,
+            "weight": 13
+          }
+        },
+        "repository": "/owned/rule30",
+        "revision": "6666666666666666666666666666666666666666",
+        "output": "/owned/logs/out",
+        "errors": "/owned/logs/err",
+        "tools": {
+          "lexlean": "7777777777777777777777777777777777777777777777777777777777777777",
+          "lean": "7777777777777777777777777777777777777777777777777777777777777777",
+          "lake": "7777777777777777777777777777777777777777777777777777777777777777",
+          "checker": "7777777777777777777777777777777777777777777777777777777777777777"
+        },
+        "arena": {
+          "nodes": [
+            {
+              "k": "c",
+              "n": "True",
+              "u": []
+            },
+            {
+              "k": "c",
+              "n": "True.intro",
+              "u": []
+            }
+          ],
+          "root": 0
+        },
+        "proof": 1,
+        "imports": [
+          "Init"
+        ],
+        "levels": [],
+        "axioms": [],
+        "bounds": {
+          "max_bytes": 4096,
+          "max_depth": 32,
+          "max_steps": 1024,
+          "allowance": 60000,
+          "quantum": 10,
+          "polls": 6000
+        }
+      }
+    }
+  ]
+}

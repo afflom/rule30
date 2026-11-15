@@ -1,0 +1,129 @@
+\begin{lexlean}{EnvironmentResearchTraces}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentResearchInput}
+\importmodule{EnvironmentResearchSelection}
+\importmodule{EnvironmentResearchCommand}
+\importmodule{EnvironmentMemory}
+\importmodule{EnvironmentPlan}
+\importmodule{Research}
+\importmodule{ResearchProject}
+\importmodule{ResearchSession}
+\importmodule{LexLeanStd.Host}
+\importmodule{Json}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: item, parameters: [repo : Bytes, content : Bytes], result: EnvironmentMemory::Observation,
+ body: (record EnvironmentMemory::Observation {repository := repo, revision := 0x72, path := 0x70, content := content, blob := 0x62, digest := 0x64, acquisition := 0x61}),
+ axioms: [], executable: true
+}
+definition{
+ name: source, parameters: [repo : Bytes], result: EnvironmentPlan::Source,
+ body: (record EnvironmentPlan::Source {repository := repo, revision := 0x72, path := 0x70, directory := ""}),
+ axioms: [], executable: true
+}
+definition{
+ name: task, parameters: [age : Nat, weight : Nat, status : Research::Status], result: Research::Task,
+ body: (record Research::Task {id := 0x69, purpose := (ctor Research::Purpose.prove), intent := (ctor Research::Purpose.prove), status := status, component := "deduction", sources := (cons 0x54727565 (nil Bytes)), schema := 0x73, sequent := (record Research::Sequent {origin := 0x54727565, theorem := 0x54727565, premise := 0, telescope := 0x, target := 0x74, kind := (ctor Research::GoalKind.closed)}), age := age, weight := weight}),
+ axioms: [], executable: true
+}
+theorem{
+ name: ageIsPartOfTaskIdentity, parameters: [],
+ statement: ((EnvironmentResearchInput::sameTask (task 0 1 (ctor Research::Status.ready)) (task 1 1 (ctor Research::Status.ready))) = false), proof: decide{}, axioms: []
+}
+theorem{
+ name: weightIsPartOfTaskIdentity, parameters: [],
+ statement: ((EnvironmentResearchInput::sameTask (task 0 1 (ctor Research::Status.ready)) (task 0 2 (ctor Research::Status.ready))) = false), proof: decide{}, axioms: []
+}
+theorem{
+ name: statusIsPartOfTaskIdentity, parameters: [],
+ statement: ((EnvironmentResearchInput::sameTask (task 0 1 (ctor Research::Status.ready)) (task 0 1 (ctor Research::Status.blocked))) = false), proof: decide{}, axioms: []
+}
+theorem{
+ name: missingPlannedObservationsAllowed, parameters: [],
+ statement: ((EnvironmentResearchInput::ordered (cons (source 0x61) (cons (source 0x62) (cons (source 0x63) (nil EnvironmentPlan::Source)))) (cons (item 0x61 0x78) (cons (item 0x63 0x78) (nil EnvironmentMemory::Observation))) 0x78) = true), proof: decide{}, axioms: []
+}
+theorem{
+ name: unexpectedKeyRefused, parameters: [],
+ statement: ((EnvironmentResearchInput::ordered (cons (source 0x61) (cons (source 0x62) (cons (source 0x63) (nil EnvironmentPlan::Source)))) (cons (item 0x64 0x78) (nil EnvironmentMemory::Observation)) 0x78) = false), proof: decide{}, axioms: []
+}
+theorem{
+ name: reversedPlanOrderRefused, parameters: [],
+ statement: ((EnvironmentResearchInput::ordered (cons (source 0x61) (cons (source 0x62) (cons (source 0x63) (nil EnvironmentPlan::Source)))) (cons (item 0x62 0x78) (cons (item 0x61 0x78) (nil EnvironmentMemory::Observation))) 0x78) = false), proof: decide{}, axioms: []
+}
+theorem{
+ name: duplicateObservationRefused, parameters: [],
+ statement: ((EnvironmentResearchInput::ordered (cons (source 0x61) (cons (source 0x62) (cons (source 0x63) (nil EnvironmentPlan::Source)))) (cons (item 0x61 0x78) (cons (item 0x61 0x78) (nil EnvironmentMemory::Observation))) 0x78) = false), proof: decide{}, axioms: []
+}
+theorem{
+ name: queryMismatchRefused, parameters: [],
+ statement: ((EnvironmentResearchInput::ordered (cons (source 0x61) (cons (source 0x62) (cons (source 0x63) (nil EnvironmentPlan::Source)))) (cons (item 0x61 0x79) (nil EnvironmentMemory::Observation)) 0x78) = false), proof: decide{}, axioms: []
+}
+theorem{
+ name: emptyContextAllowed, parameters: [],
+ statement: ((EnvironmentResearchInput::ordered (cons (source 0x61) (cons (source 0x62) (cons (source 0x63) (nil EnvironmentPlan::Source)))) (nil EnvironmentMemory::Observation) 0x78) = true), proof: decide{}, axioms: []
+}
+theorem{
+ name: oneHitPerObservation, parameters: [],
+ statement: ((EnvironmentResearchSelection::hits 0x78 (cons (item 0x61 0x787878) (cons (item 0x62 0x79) (cons (item 0x63 0x7879) (nil EnvironmentMemory::Observation)))) 0) = (cons 0 (cons 2 (nil Nat)))), proof: decide{}, axioms: []
+}
+theorem{
+ name: hostileTextHasNoSpecialInterpretation, parameters: [],
+ statement: ((EnvironmentResearchSelection::hits 0x2428 (cons (item 0x61 0x2428726d20616e797468696e67293b20696d706f7274204576696c) (nil EnvironmentMemory::Observation)) 0) = (cons 0 (nil Nat))), proof: decide{}, axioms: []
+}
+theorem{
+ name: emptyContextHasNoHits, parameters: [cue : Bytes],
+ statement: ((EnvironmentResearchSelection::hits cue (nil EnvironmentMemory::Observation) 0) = (nil Nat)), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: singletonRetainsTheEntireCandidate, parameters: [entry : EnvironmentResearchInput::Candidate, items : (List EnvironmentMemory::Observation)],
+ statement: ((EnvironmentResearchSelection::choose (cons entry (nil EnvironmentResearchInput::Candidate)) items) = (ctor Option.some [EnvironmentResearchSelection::Choice] (EnvironmentResearchSelection::rank entry items 0))), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: emptyPoolCannotSelect, parameters: [],
+ statement: ((EnvironmentResearchSelection::choose (nil EnvironmentResearchInput::Candidate) (nil EnvironmentMemory::Observation)) = (ctor Option.none [EnvironmentResearchSelection::Choice])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: equalScoreKeepsEarlierCandidate, parameters: [a : EnvironmentResearchInput::Candidate, b : EnvironmentResearchInput::Candidate],
+ statement: ((EnvironmentResearchSelection::better (record EnvironmentResearchSelection::Choice {candidate := a, index := 0, score := 1, matched := (nil Nat)}) (record EnvironmentResearchSelection::Choice {candidate := b, index := 1, score := 1, matched := (nil Nat)})) = (record EnvironmentResearchSelection::Choice {candidate := a, index := 0, score := 1, matched := (nil Nat)})), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: higherScoreWins, parameters: [a : EnvironmentResearchInput::Candidate, b : EnvironmentResearchInput::Candidate],
+ statement: ((EnvironmentResearchSelection::better (record EnvironmentResearchSelection::Choice {candidate := a, index := 0, score := 1, matched := (nil Nat)}) (record EnvironmentResearchSelection::Choice {candidate := b, index := 1, score := 2, matched := (nil Nat)})) = (record EnvironmentResearchSelection::Choice {candidate := b, index := 1, score := 2, matched := (nil Nat)})), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: zeroContextFallsBackToFirst, parameters: [a : EnvironmentResearchInput::Candidate, b : EnvironmentResearchInput::Candidate],
+ statement: ((EnvironmentResearchSelection::choose (cons a (cons b (nil EnvironmentResearchInput::Candidate))) (nil EnvironmentMemory::Observation)) = (ctor Option.some [EnvironmentResearchSelection::Choice] (EnvironmentResearchSelection::rank a (nil EnvironmentMemory::Observation) 0))), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: contextSelectsFirst, parameters: [config : ResearchProject::Config],
+ statement: ((match (EnvironmentResearchSelection::choose (cons (record EnvironmentResearchInput::Candidate {cue := 0x78, config := config}) (cons (record EnvironmentResearchInput::Candidate {cue := 0x79, config := config}) (nil EnvironmentResearchInput::Candidate))) (cons (item 0x61 0x78) (nil EnvironmentMemory::Observation))) | Option.none => 999 | Option.some choice => (project choice index)) = 0), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: contextSelectsSecond, parameters: [config : ResearchProject::Config],
+ statement: ((match (EnvironmentResearchSelection::choose (cons (record EnvironmentResearchInput::Candidate {cue := 0x78, config := config}) (cons (record EnvironmentResearchInput::Candidate {cue := 0x79, config := config}) (nil EnvironmentResearchInput::Candidate))) (cons (item 0x61 0x79) (nil EnvironmentMemory::Observation))) | Option.none => 999 | Option.some choice => (project choice index)) = 1), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: zeroScoresKeepFirst, parameters: [config : ResearchProject::Config],
+ statement: ((match (EnvironmentResearchSelection::choose (cons (record EnvironmentResearchInput::Candidate {cue := 0x78, config := config}) (cons (record EnvironmentResearchInput::Candidate {cue := 0x79, config := config}) (nil EnvironmentResearchInput::Candidate))) (cons (item 0x61 0x7a) (nil EnvironmentMemory::Observation))) | Option.none => 999 | Option.some choice => (project choice index)) = 0), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: positiveTieKeepsFirst, parameters: [config : ResearchProject::Config],
+ statement: ((match (EnvironmentResearchSelection::choose (cons (record EnvironmentResearchInput::Candidate {cue := 0x78, config := config}) (cons (record EnvironmentResearchInput::Candidate {cue := 0x79, config := config}) (nil EnvironmentResearchInput::Candidate))) (cons (item 0x61 0x7879) (nil EnvironmentMemory::Observation))) | Option.none => 999 | Option.some choice => (project choice index)) = 0), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: activeStateOnlyAdvancesOwnedSession, parameters: [selection : Json::Value, session : ResearchSession::State, event : LexLeanStd.Host::Event],
+ statement: ((EnvironmentResearchCommand::step (ctor Option.some [EnvironmentResearchCommand::State] (ctor EnvironmentResearchCommand::State.active selection session)) event) = (EnvironmentResearchCommand::advance selection (ResearchSession::step session (ctor ResearchSession::Event.host event)))), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+theorem{
+ name: endedStateCannotStartAlternative, parameters: [session : (Option ResearchSession::State), event : LexLeanStd.Host::Event],
+ statement: ((EnvironmentResearchCommand::step (ctor Option.some [EnvironmentResearchCommand::State] (ctor EnvironmentResearchCommand::State.ended session)) event) = (EnvironmentResearchCommand::error session (70 : UInt8) (EnvironmentResearchCommand::empty) 0x656e64656420636f6d6d616e642063616e6e6f74207265747279)), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+definition{
+ name: features, parameters: [], result: (List String),
+ body: (cons "complete-task-identity-regressions" (cons "ordered-subsequence-rejections" (cons "deterministic-context-selection" (cons "owned-session-no-alternative-retry" (nil String))))),
+ axioms: [], executable: true
+}
+\end{semanticmodule}
+\end{lexlean}
