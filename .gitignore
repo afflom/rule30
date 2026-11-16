@@ -7,6 +7,8 @@
 # LexLean working cache (verified-latest/ IS tracked)
 .lexlean/
 **/.lexlean/
+.lexlean-publication/
+**/.lexlean-publication/
 
 # Release staging directory
 dist/
