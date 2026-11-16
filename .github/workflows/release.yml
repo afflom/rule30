@@ -37,55 +37,10 @@ jobs:
           if-no-files-found: error
 
   download-smoke:
-    name: Check downloaded mathematical assets
     needs: build-and-release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download the candidate assets without a source checkout
-        uses: actions/download-artifact@v4
-        with:
-          name: rule30-lexlean-artifacts
-          path: dist
-
-      - name: Check required assets and downloaded bytes
-        working-directory: dist
-        shell: bash
-        run: |
-          set -euo pipefail
-          # Validate paths before checksum-controlled file access. Assets must
-          # be flat regular files, with no symlinks or hidden extras.
-          shopt -s dotglob nullglob
-          for asset in *; do
-            [[ "$asset" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]
-            test -f "$asset" && test ! -L "$asset"
-          done
-          test -s SHA256SUMS
-          while IFS= read -r record || [[ -n "$record" ]]; do
-            [[ "$record" =~ ^[0-9a-f]{64}\ \ [A-Za-z0-9][A-Za-z0-9._-]*$ ]]
-          done < SHA256SUMS
-          for asset in Rule30-Paper.pdf Paper.pdf Rule30-Core.pdf Core.pdf \
-            Paper.lean Paper.tex Core.lean Core.tex \
-            Observations.pdf Observations.lean Observations.tex \
-            paper-lexlean.lock core-lexlean.lock SHA256SUMS; do
-            test -s "$asset"
-          done
-          for pattern in 'paper-attestation-*.json' 'core-attestation-*.json' \
-            'lexlean-paper-verified-*.tar.gz' 'lexlean-core-verified-*.tar.gz'; do
-            mapfile -t matches < <(compgen -G "$pattern")
-            test "${#matches[@]}" -eq 1
-            test -s "${matches[0]}"
-          done
-          sha256sum --check --strict SHA256SUMS
-          # Check coverage too: an unlisted extra file must not be published.
-          sha256sum -- * | sed '/  SHA256SUMS$/d' > "$RUNNER_TEMP/downloaded-checksums"
-          sort SHA256SUMS > "$RUNNER_TEMP/expected-checksums"
-          sort "$RUNNER_TEMP/downloaded-checksums" > "$RUNNER_TEMP/actual-checksums"
-          cmp "$RUNNER_TEMP/expected-checksums" "$RUNNER_TEMP/actual-checksums"
-          cmp Rule30-Paper.pdf Paper.pdf
-          cmp Rule30-Core.pdf Core.pdf
-          for bundle in lexlean-*-verified-*.tar.gz; do
-            tar -tzf "$bundle" > /dev/null
-          done
+    uses: ./.github/workflows/download-check.yml
+    with:
+      artifact-name: rule30-lexlean-artifacts
 
   publish:
     name: Publish qualified release assets

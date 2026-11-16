@@ -303,7 +303,11 @@ Publication requires the unchanged acceptance gate and a separate job that downl
 the candidate mathematical assets without a source checkout, checks their inventory
 and checksums, and reads the verified archives. These download checks do not replay
 proofs or qualify native executables. Manual dispatch builds and checks candidates
-without publishing a release.
+without publishing a release. Main CI also packages its exact accepted mathematical
+candidate from the gate evidence and runs the shared download checks in a separate
+job, without repeating proofs. Its checksum-covered manifest binds the accepted
+checkout (the merge commit on PRs), tree and run attempt. This hosted path remains
+pending until its updated workflow succeeds; it does not qualify native commands.
 
 **v0.2 is not yet qualified for publication.** Its native artifact contract and
 consumer tests remain pending; the workflow blocks publication of v0.2 series tags

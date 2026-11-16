@@ -22,9 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       LEXLEAN_CI_TELEMETRY: ${{ github.workspace }}/.r30/verification-telemetry
+    outputs:
+      accepted-tree: ${{ steps.candidate.outputs.tree }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Test download validation regressions
+        run: node --test .github/tests/release-consumer.test.cjs
 
       - name: Set up proof toolchain
         uses: ./.github/actions/setup-proof-tools
@@ -41,6 +46,60 @@ jobs:
         env:
           RULE30_REFRESH_PDFS: "0"
         run: python3 scripts/validate_git_tree.py "$GITHUB_SHA"
+
+      - name: Package the exact accepted mathematical candidate
+        id: candidate
+        shell: bash
+        run: |
+          python3 - <<'PYTHON'
+          import hashlib, json, os, re, shutil, subprocess, sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from validate_git_tree import lexlean_input_digest
+          from tools.r30.engine import gate_tools_key
+          root = Path.cwd()
+          commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          if commit != os.environ['GITHUB_SHA']:
+              raise SystemExit('Checkout differs from accepted commit')
+          tree = subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], text=True).strip()
+          tools = gate_tools_key(root)
+          if not tools:
+              raise SystemExit('Cannot identify accepted proof tools')
+          cache = root / '.git/rule30-validation/lexlean' / tools
+          for project in ('rule30-lexlean', 'rule30-paper'):
+              slot = cache / project / lexlean_input_digest(root, tree, project)
+              result = json.loads((slot / 'latest-verified.json').read_text())
+              identity = result.get('attestation_id', '')
+              if result.get('success') is not True or not re.fullmatch('[0-9a-f]{64}', identity):
+                  raise SystemExit('Missing exact accepted evidence: ' + project)
+              source = slot / 'verified' / identity
+              if not (source / 'attestation.json').is_file():
+                  raise SystemExit('Missing accepted bundle: ' + project)
+              # A fresh destination prevents overlaying unrelated historical evidence.
+              target = root / project / '.lexlean'
+              target.mkdir()
+              shutil.copytree(source, target / 'verified' / identity)
+              shutil.copyfile(slot / 'latest-verified.json', target / 'latest-verified.json')
+          # Existing packager validates attestations/locks and renders copies only.
+          subprocess.run(['./scripts/build_release.sh', '--package-only'], check=True)
+          manifest = dict(schema='rule30/release-candidate/1', accepted_commit=commit,
+                          tree=tree, repository=os.environ['GITHUB_REPOSITORY'],
+                          run_id=os.environ['GITHUB_RUN_ID'], run_attempt=os.environ['GITHUB_RUN_ATTEMPT'])
+          dist = root / 'dist'
+          (dist / 'candidate.json').write_text(json.dumps(manifest, sort_keys=True) + '\n')
+          records = [hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.name + '\n'
+                     for p in sorted(dist.iterdir()) if p.name != 'SHA256SUMS']
+          (dist / 'SHA256SUMS').write_text(''.join(records))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('tree=' + tree + '\n')
+          PYTHON
+
+      - name: Upload complete accepted candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: rule30-release-candidate-${{ github.run_attempt }}
+          path: dist/*
+          if-no-files-found: error
 
       - name: Prune the factory's retained evidence
         run: bin/r30 engine prune --apply
@@ -73,3 +132,12 @@ jobs:
           include-hidden-files: true
           if-no-files-found: ignore
           path: .r30/verification-telemetry
+
+  download-candidate:
+    name: Check accepted candidate download
+    needs: validate
+    uses: ./.github/workflows/download-check.yml
+    with:
+      artifact-name: rule30-release-candidate-${{ github.run_attempt }}
+      require-candidate-binding: true
+      accepted-tree: ${{ needs.validate.outputs.accepted-tree }}

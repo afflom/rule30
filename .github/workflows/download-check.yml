@@ -1,0 +1,92 @@
+name: Check downloaded candidate
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        type: string
+        required: true
+      require-candidate-binding:
+        type: boolean
+        default: false
+      accepted-tree:
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  download-smoke:
+    name: Check downloaded mathematical assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the candidate assets without a source checkout
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: dist
+
+      - name: Check required assets and downloaded bytes
+        working-directory: dist
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Validate paths before checksum-controlled file access. Assets must
+          # be flat regular files, with no symlinks or hidden extras.
+          shopt -s dotglob nullglob
+          for asset in *; do
+            [[ "$asset" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]
+            test -f "$asset" && test ! -L "$asset"
+          done
+          test -s SHA256SUMS
+          while IFS= read -r record || [[ -n "$record" ]]; do
+            [[ "$record" =~ ^[0-9a-f]{64}\ \ [A-Za-z0-9][A-Za-z0-9._-]*$ ]]
+          done < SHA256SUMS
+          for asset in Rule30-Paper.pdf Paper.pdf Rule30-Core.pdf Core.pdf \
+            Paper.lean Paper.tex Core.lean Core.tex \
+            Observations.pdf Observations.lean Observations.tex \
+            paper-lexlean.lock core-lexlean.lock SHA256SUMS; do
+            test -s "$asset"
+          done
+          for pattern in 'paper-attestation-*.json' 'core-attestation-*.json' \
+            'lexlean-paper-verified-*.tar.gz' 'lexlean-core-verified-*.tar.gz'; do
+            mapfile -t matches < <(compgen -G "$pattern")
+            test "${#matches[@]}" -eq 1
+            test -s "${matches[0]}"
+          done
+          sha256sum --check --strict SHA256SUMS
+          # Check coverage too: an unlisted extra file must not be published.
+          sha256sum -- * | sed '/  SHA256SUMS$/d' > "$RUNNER_TEMP/downloaded-checksums"
+          sort SHA256SUMS > "$RUNNER_TEMP/expected-checksums"
+          sort "$RUNNER_TEMP/downloaded-checksums" > "$RUNNER_TEMP/actual-checksums"
+          cmp "$RUNNER_TEMP/expected-checksums" "$RUNNER_TEMP/actual-checksums"
+          cmp Rule30-Paper.pdf Paper.pdf
+          cmp Rule30-Core.pdf Core.pdf
+          for bundle in lexlean-*-verified-*.tar.gz; do
+            tar -tzf "$bundle" > /dev/null
+          done
+
+      - name: Check candidate identity against the accepted run
+        if: inputs.require-candidate-binding
+        uses: actions/github-script@v7
+        env:
+          ACCEPTED_TREE: ${{ inputs.accepted-tree }}
+        with:
+          script: |
+            // BEGIN CANDIDATE BINDING
+            const fs = require('node:fs');
+            const candidate = JSON.parse(fs.readFileSync('dist/candidate.json', 'utf8'));
+            const expected = {
+              schema: 'rule30/release-candidate/1',
+              accepted_commit: context.sha,
+              tree: process.env.ACCEPTED_TREE,
+              repository: context.repo.owner + '/' + context.repo.repo,
+              run_id: process.env.GITHUB_RUN_ID,
+              run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+            };
+            if (!/^[0-9a-f]{40}$/.test(expected.tree)) throw new Error('Invalid accepted tree');
+            for (const [key, value] of Object.entries(expected)) {
+              if (candidate[key] !== value) throw new Error('Candidate identity mismatch: ' + key);
+            }
+            // END CANDIDATE BINDING
