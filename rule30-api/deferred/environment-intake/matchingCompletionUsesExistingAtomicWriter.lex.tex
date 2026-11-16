@@ -1,0 +1,4 @@
+theorem{
+ name: matchingCompletionUsesExistingAtomicWriter, parameters: [],
+ statement: ((pinEffect (second (EnvironmentMemoryCommand::acquired (pinnedConfig) (nil EnvironmentMemory::Observation) (pinCompletion (pinnedObservation))))) = 1), proof: decide{}, axioms: [Quot.sound, propext]
+}

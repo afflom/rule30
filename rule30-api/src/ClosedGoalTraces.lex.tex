@@ -9,6 +9,8 @@
 \importmodule{Toml}
 \importmodule{Register}
 \importmodule{Json}
+\importmodule{ClosedGoalJsonData}
+\importmodule{ClosedGoalJsonFixtures}
 \title{Boolean}
 \begin{semanticmodule}
 
@@ -19,7 +21,6 @@ definition{
  body: (match (CoreBinding::encodeGoal (CoreBinding::namedGoal source) 2048 256) | Option.none => 0x | Option.some value => value),
  axioms: [propext]
 }
-
 definition{
  name: request,
  parameters: [source : Bytes, target : Bytes, kind : Research::GoalKind, context : Bytes, index : Nat, purpose : Research::Purpose],
@@ -27,7 +28,6 @@ definition{
  body: (record Research::Request {serial := 1, snapshot := (record Research::Snapshot {library := 0x6c, compiler := 0x63, model := 0x6d}), task := (record Research::Task {id := 0x67, purpose := purpose, intent := purpose, status := (ctor Research::Status.waiting), component := "deduction", sources := (cons source (nil Bytes)), schema := 0x67, sequent := (record Research::Sequent {origin := source, theorem := source, premise := index, telescope := context, target := target, kind := kind}), age := 0, weight := 8})}),
  axioms: []
 }
-
 definition{
  name: selects,
  parameters: [attempt : Research::Request, expected : CoreBinding::Goal],
@@ -35,17 +35,6 @@ definition{
  body: (match (CandidateBinding::selected attempt 2048 32 1024) | Option.none => false | Option.some actual => (CoreBinding::sameType actual expected 2048 1024)),
  axioms: [propext]
 }
-
-
-
-
-
-
-
-
-
-
-
 definition{
  name: registered,
  parameters: [claimId : String, source : String, status : String],
@@ -53,31 +42,90 @@ definition{
  body: (record Register::Claim {id := claimId, status := status, lean := source, depends := (nil String), relation := (nil String), kappa := ""}),
  axioms: []
 }
-
-
-
-
-
-
-
+definition{
+ name: nativeCoreValue,
+ parameters: [parsed : (Result Json::Value Json::Problem)],
+ result: Json::Value,
+ body: (match parsed | Result.error problem => (ctor Json::Value.null) | Result.ok value => value),
+ axioms: []
+}
+definition{
+ name: nativeCoreFromWire,
+ parameters: [wire : Bytes],
+ result: Json::Value,
+ body: (nativeCoreValue (Json::parse wire 4096 32)),
+ axioms: [propext]
+}
 definition{
  name: nativeCore,
  parameters: [],
  result: Json::Value,
- body: (match (Json::parse 0x7b226465636c61726174696f6e73223a5b7b22636c617373223a66616c73652c2267656e657261746564223a66616c73652c226b696e64223a227468656f72656d222c226c6576656c73223a5b5d2c226e616d65223a2252756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468222c22706f6c696379223a7b226b696e64223a226e6f6e65227d2c227472616e73706172656e6379223a2273656d69726564756369626c65222c2274797065223a302c2276616c7565223a317d2c7b22636c617373223a66616c73652c2267656e657261746564223a66616c73652c226b696e64223a227468656f72656d222c226c6576656c73223a5b5d2c226e616d65223a2252756c6533304170692e436c6f73656442696e64696e67466978747572652e6e6f7446616c7365222c22706f6c696379223a7b226b696e64223a226e6f6e65227d2c227472616e73706172656e6379223a2273656d69726564756369626c65222c2274797065223a332c2276616c7565223a357d5d2c22696d706f727473223a5b22496e6974225d2c226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d2c7b226b223a2263222c226e223a22547275652e696e74726f222c2275223a5b5d7d2c7b226b223a2263222c226e223a2246616c7365222c2275223a5b5d7d2c7b2262223a2265222c226b223a2270222c226e223a2268222c2274223a322c2276223a327d2c7b2269223a302c226b223a2262227d2c7b2262223a2265222c226b223a226c222c226e223a2268222c2274223a322c2276223a347d5d2c2270726f6f665f6e6f646573223a5b5d2c2273706563223a226c65786c65616e2f636f72652d6d6f64756c652f32227d 4096 32) | Result.error problem => (ctor Json::Value.null) | Result.ok value => value),
+ body: (nativeCoreFromWire 0x7b226465636c61726174696f6e73223a5b7b22636c617373223a66616c73652c2267656e657261746564223a66616c73652c226b696e64223a227468656f72656d222c226c6576656c73223a5b5d2c226e616d65223a2252756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468222c22706f6c696379223a7b226b696e64223a226e6f6e65227d2c227472616e73706172656e6379223a2273656d69726564756369626c65222c2274797065223a302c2276616c7565223a317d2c7b22636c617373223a66616c73652c2267656e657261746564223a66616c73652c226b696e64223a227468656f72656d222c226c6576656c73223a5b5d2c226e616d65223a2252756c6533304170692e436c6f73656442696e64696e67466978747572652e6e6f7446616c7365222c22706f6c696379223a7b226b696e64223a226e6f6e65227d2c227472616e73706172656e6379223a2273656d69726564756369626c65222c2274797065223a332c2276616c7565223a357d5d2c22696d706f727473223a5b22496e6974225d2c226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d2c7b226b223a2263222c226e223a22547275652e696e74726f222c2275223a5b5d7d2c7b226b223a2263222c226e223a2246616c7365222c2275223a5b5d7d2c7b2262223a2265222c226b223a2270222c226e223a2268222c2274223a322c2276223a327d2c7b2269223a302c226b223a2262227d2c7b2262223a2265222c226b223a226c222c226e223a2268222c2274223a322c2276223a347d5d2c2270726f6f665f6e6f646573223a5b5d2c2273706563223a226c65786c65616e2f636f72652d6d6f64756c652f32227d),
  axioms: [propext]
 }
-
+definition{
+ name: nativeMatchesForCore,
+ parameters: [core : Json::Value, constant : Bytes, mode : Research::Purpose, candidate : Bytes],
+ result: Bool,
+ body: (match (CandidateBinding::coreGoal core candidate) | Option.none => false | Option.some actual => (selects (request constant (goalBytes constant) (ctor Research::GoalKind.closed) 0x 0 mode) actual)),
+ axioms: [propext]
+}
 definition{
  name: nativeMatches,
  parameters: [constant : Bytes, mode : Research::Purpose, candidate : Bytes],
  result: Bool,
- body: (match (CandidateBinding::coreGoal (nativeCore) candidate) | Option.none => false | Option.some actual => (selects (request constant (goalBytes constant) (ctor Research::GoalKind.closed) 0x 0 mode) actual)),
+ body: (nativeMatchesForCore (nativeCore) constant mode candidate),
  axioms: [propext]
 }
-
-
-
-
+theorem{
+ name: nativeCoreValueOk, parameters: [value : Json::Value],
+ statement: ((nativeCoreValue (ctor Result.ok [Json::Value, Json::Problem] value)) = value),
+ proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: nativeCoreDecoded, parameters: [],
+ statement: ((nativeCore) = (ClosedGoalJsonData::closedData77)), proof: simplify{definitions: [nativeCore, nativeCoreFromWire, nativeCoreValueOk, ClosedGoalJsonFixtures::closedWireParsedLiteral]}, axioms: [propext]
+}
+definition{
+ name: nativeMatchesDecoded, parameters: [constant : Bytes, mode : Research::Purpose, candidate : Bytes], result: Bool,
+ body: (nativeMatchesForCore (ClosedGoalJsonData::closedData77) constant mode candidate), axioms: [propext]
+}
+theorem{
+ name: nativeMatchesDecodedBridge, parameters: [constant : Bytes, mode : Research::Purpose, candidate : Bytes],
+ statement: ((nativeMatches constant mode candidate) = (nativeMatchesDecoded constant mode candidate)),
+ proof: simplify{definitions: [nativeCoreDecoded, nativeMatches, nativeMatchesDecoded]}, axioms: [propext]
+}
+theorem{
+ name: nativeCoreFromWireBehavior, parameters: [wire : Bytes],
+ statement: ((nativeCoreFromWire wire) = (match (Json::parse wire 4096 32) | Result.error problem => (ctor Json::Value.null) | Result.ok value => value)),
+ proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: nativeCoreValueError, parameters: [problem : Json::Problem],
+ statement: ((nativeCoreValue (ctor Result.error [Json::Value, Json::Problem] problem)) = (ctor Json::Value.null)),
+ proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: nativeCoreValidBooleanWire, parameters: [],
+ statement: ((nativeCoreFromWire 0x74727565) = (ctor Json::Value.boolean true)),
+ proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: nativeCoreMalformedWire, parameters: [],
+ statement: ((nativeCoreFromWire 0x7b) = (ctor Json::Value.null)),
+ proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: nativeMatchesForCoreBehavior,
+ parameters: [core : Json::Value, constant : Bytes, mode : Research::Purpose, candidate : Bytes],
+ statement: ((nativeMatchesForCore core constant mode candidate) = (match (CandidateBinding::coreGoal core candidate) | Option.none => false | Option.some actual => (selects (request constant (goalBytes constant) (ctor Research::GoalKind.closed) 0x 0 mode) actual))),
+ proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: nativeMatchesNullCoreRefused,
+ parameters: [constant : Bytes, mode : Research::Purpose, candidate : Bytes],
+ statement: ((nativeMatchesForCore (ctor Json::Value.null) constant mode candidate) = false),
+ proof: reflexivity{}, axioms: [propext]
+}
 \end{semanticmodule}
 \end{lexlean}

@@ -1,0 +1,22 @@
+\begin{lexlean}{EnvironmentPlanTraceDecode}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{CoreBinding}
+\importmodule{CoreNotation}
+\importmodule{EnvironmentMemory}
+\importmodule{EnvironmentPlan}
+\importmodule{Json}
+\importmodule{ResearchInput}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+definition{
+ name: decodedPlan, parameters: [parsed : (Result Json::Value Json::Problem)], result: (Option EnvironmentPlan::Plan),
+ body: (match parsed | Result.error problem => (ctor Option.none [EnvironmentPlan::Plan]) | Result.ok value => (if ((CoreNotation::shape value (cons 0x73706563 (cons 0x6f7065726174696f6e (cons 0x7461736b (cons 0x7175657279 (cons 0x736f7572636573 (nil Bytes))))))) && ((Toml::sameBytes (EnvironmentMemory::get value 0x73706563) 0x7233302f656e7669726f6e6d656e742d706c616e2f31) && ((EnvironmentMemory::bounded (EnvironmentMemory::get value 0x7175657279) 128) && ((Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374) || (Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x7175657279))))) then (match (ResearchInput::task (CoreBinding::get value 0x7461736b)) | Option.none => (ctor Option.none [EnvironmentPlan::Plan]) | Option.some task => (match (ResearchInput::array (CoreBinding::get value 0x736f7572636573)) | Option.none => (ctor Option.none [EnvironmentPlan::Plan]) | Option.some values => (let ingest : Bool := (Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374); (match values | List.nil => (ctor Option.none [EnvironmentPlan::Plan]) | List.cons head tail => (match (EnvironmentPlan::parseSources ingest values 8) | Option.none => (ctor Option.none [EnvironmentPlan::Plan]) | Option.some sources => (ctor Option.some [EnvironmentPlan::Plan] (record EnvironmentPlan::Plan {ingest := ingest, task := task, query := (EnvironmentMemory::get value 0x7175657279), sources := sources}))))))) else (ctor Option.none [EnvironmentPlan::Plan]))), axioms: [Quot.sound, propext]
+}
+theorem{
+ name: parseDecodedPlan, parameters: [wire : Bytes],
+ statement: ((EnvironmentPlan::parse wire) = (decodedPlan (Json::parse wire 65536 16))), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

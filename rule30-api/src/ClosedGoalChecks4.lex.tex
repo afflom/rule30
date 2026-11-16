@@ -13,10 +13,17 @@
 \title{Boolean}
 \begin{semanticmodule}
 theorem{
+ name: nativeRefutationDischargesClosedFalseDecoded,
+ parameters: [],
+ statement: ((ClosedGoalTraces::nativeMatchesDecoded 0x46616c7365 (ctor Research::Purpose.refute) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e6e6f7446616c7365) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
  name: nativeRefutationDischargesClosedFalse,
  parameters: [],
  statement: ((ClosedGoalTraces::nativeMatches 0x46616c7365 (ctor Research::Purpose.refute) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e6e6f7446616c7365) = true),
- proof: decide{},
+ proof: simplify{definitions: [nativeRefutationDischargesClosedFalseDecoded, ClosedGoalTraces::nativeMatchesDecodedBridge]},
  axioms: [propext]
 }
 \end{semanticmodule}

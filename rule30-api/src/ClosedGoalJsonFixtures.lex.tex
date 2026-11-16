@@ -1,0 +1,993 @@
+\begin{lexlean}{ClosedGoalJsonFixtures}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ClosedGoalJsonData}
+\importmodule{ClosedGoalJsonSteps00}
+\importmodule{ClosedGoalJsonSteps01}
+\importmodule{ClosedGoalJsonSteps02}
+\importmodule{ClosedGoalJsonSteps03}
+\importmodule{ClosedGoalJsonSteps04}
+\importmodule{ClosedGoalJsonSteps05}
+\importmodule{ClosedGoalJsonSteps06}
+\importmodule{ClosedGoalJsonSteps07}
+\importmodule{ClosedGoalJsonSteps08}
+\importmodule{ClosedGoalJsonSteps09}
+\importmodule{ClosedGoalJsonSteps10}
+\importmodule{ClosedGoalJsonSteps11}
+\importmodule{ClosedGoalJsonSteps12}
+\importmodule{ClosedGoalJsonSteps13}
+\importmodule{ClosedGoalJsonSteps14}
+\importmodule{ClosedGoalJsonSteps15}
+\importmodule{ClosedGoalJsonSteps16}
+\importmodule{ClosedGoalJsonSteps17}
+\importmodule{ClosedGoalJsonSteps18}
+\importmodule{ClosedGoalJsonSteps19}
+\importmodule{ClosedGoalJsonSteps20}
+\importmodule{ClosedGoalJsonSteps21}
+\importmodule{ClosedGoalJsonSteps22}
+\importmodule{ClosedGoalJsonSteps23}
+\importmodule{ClosedGoalJsonSteps24}
+\importmodule{ClosedGoalJsonSteps25}
+\importmodule{ClosedGoalJsonSteps26}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: closedWireUtf8Step0, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 0 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 64 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step64, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 64 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 128 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step128, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 128 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 192 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step192, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 192 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 256 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step256, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 256 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 320 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step320, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 320 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 384 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step384, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 384 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 448 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step448, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 448 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 512 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step512, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 512 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 576 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step576, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 576 (fuel + 64)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 640 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Step640, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 640 (fuel + 9)) = (Toml::validFrom (ClosedGoalJsonData::closedWire) 649 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest649, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 649 0) = true), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest640, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 640 9) = true), proof: simplify{definitions: [closedWireUtf8Rest649, closedWireUtf8Step640]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest576, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 576 73) = true), proof: simplify{definitions: [closedWireUtf8Rest640, closedWireUtf8Step576]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest512, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 512 137) = true), proof: simplify{definitions: [closedWireUtf8Rest576, closedWireUtf8Step512]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest448, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 448 201) = true), proof: simplify{definitions: [closedWireUtf8Rest512, closedWireUtf8Step448]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest384, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 384 265) = true), proof: simplify{definitions: [closedWireUtf8Rest448, closedWireUtf8Step384]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest320, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 320 329) = true), proof: simplify{definitions: [closedWireUtf8Rest384, closedWireUtf8Step320]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest256, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 256 393) = true), proof: simplify{definitions: [closedWireUtf8Rest320, closedWireUtf8Step256]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest192, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 192 457) = true), proof: simplify{definitions: [closedWireUtf8Rest256, closedWireUtf8Step192]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest128, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 128 521) = true), proof: simplify{definitions: [closedWireUtf8Rest192, closedWireUtf8Step128]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest64, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 64 585) = true), proof: simplify{definitions: [closedWireUtf8Rest128, closedWireUtf8Step64]}, axioms: [propext]
+}
+theorem{
+ name: closedWireUtf8Rest0, parameters: [],
+ statement: ((Toml::validFrom (ClosedGoalJsonData::closedWire) 0 649) = true), proof: simplify{definitions: [closedWireUtf8Rest64, closedWireUtf8Step0]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest209, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState209) 32 440) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest208, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState208) 32 441) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest209, ClosedGoalJsonSteps26::closedWireAdvance208]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest207, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState207) 32 442) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest208, ClosedGoalJsonSteps25::closedWireAdvance207]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest206, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState206) 32 443) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest207, ClosedGoalJsonSteps25::closedWireAdvance206]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest205, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState205) 32 444) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest206, ClosedGoalJsonSteps25::closedWireAdvance205]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest204, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState204) 32 445) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest205, ClosedGoalJsonSteps25::closedWireAdvance204]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest203, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState203) 32 446) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest204, ClosedGoalJsonSteps25::closedWireAdvance203]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest202, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState202) 32 447) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest203, ClosedGoalJsonSteps25::closedWireAdvance202]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest201, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState201) 32 448) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest202, ClosedGoalJsonSteps25::closedWireAdvance201]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest200, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState200) 32 449) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest201, ClosedGoalJsonSteps25::closedWireAdvance200]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest199, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState199) 32 450) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest200, ClosedGoalJsonSteps24::closedWireAdvance199]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest198, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState198) 32 451) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest199, ClosedGoalJsonSteps24::closedWireAdvance198]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest197, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState197) 32 452) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest198, ClosedGoalJsonSteps24::closedWireAdvance197]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest196, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState196) 32 453) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest197, ClosedGoalJsonSteps24::closedWireAdvance196]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest195, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState195) 32 454) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest196, ClosedGoalJsonSteps24::closedWireAdvance195]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest194, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState194) 32 455) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest195, ClosedGoalJsonSteps24::closedWireAdvance194]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest193, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState193) 32 456) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest194, ClosedGoalJsonSteps24::closedWireAdvance193]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest192, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState192) 32 457) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest193, ClosedGoalJsonSteps24::closedWireAdvance192]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest191, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState191) 32 458) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest192, ClosedGoalJsonSteps23::closedWireAdvance191]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest190, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState190) 32 459) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest191, ClosedGoalJsonSteps23::closedWireAdvance190]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest189, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState189) 32 460) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest190, ClosedGoalJsonSteps23::closedWireAdvance189]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest188, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState188) 32 461) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest189, ClosedGoalJsonSteps23::closedWireAdvance188]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest187, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState187) 32 462) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest188, ClosedGoalJsonSteps23::closedWireAdvance187]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest186, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState186) 32 463) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest187, ClosedGoalJsonSteps23::closedWireAdvance186]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest185, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState185) 32 464) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest186, ClosedGoalJsonSteps23::closedWireAdvance185]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest184, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState184) 32 465) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest185, ClosedGoalJsonSteps23::closedWireAdvance184]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest183, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState183) 32 466) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest184, ClosedGoalJsonSteps22::closedWireAdvance183]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest182, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState182) 32 467) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest183, ClosedGoalJsonSteps22::closedWireAdvance182]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest181, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState181) 32 468) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest182, ClosedGoalJsonSteps22::closedWireAdvance181]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest180, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState180) 32 469) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest181, ClosedGoalJsonSteps22::closedWireAdvance180]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest179, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState179) 32 470) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest180, ClosedGoalJsonSteps22::closedWireAdvance179]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest178, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState178) 32 471) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest179, ClosedGoalJsonSteps22::closedWireAdvance178]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest177, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState177) 32 472) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest178, ClosedGoalJsonSteps22::closedWireAdvance177]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest176, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState176) 32 473) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest177, ClosedGoalJsonSteps22::closedWireAdvance176]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest175, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState175) 32 474) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest176, ClosedGoalJsonSteps21::closedWireAdvance175]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest174, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState174) 32 475) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest175, ClosedGoalJsonSteps21::closedWireAdvance174]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest173, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState173) 32 476) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest174, ClosedGoalJsonSteps21::closedWireAdvance173]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest172, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState172) 32 477) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest173, ClosedGoalJsonSteps21::closedWireAdvance172]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest171, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState171) 32 478) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest172, ClosedGoalJsonSteps21::closedWireAdvance171]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest170, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState170) 32 479) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest171, ClosedGoalJsonSteps21::closedWireAdvance170]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest169, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState169) 32 480) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest170, ClosedGoalJsonSteps21::closedWireAdvance169]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest168, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState168) 32 481) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest169, ClosedGoalJsonSteps21::closedWireAdvance168]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest167, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState167) 32 482) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest168, ClosedGoalJsonSteps20::closedWireAdvance167]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest166, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState166) 32 483) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest167, ClosedGoalJsonSteps20::closedWireAdvance166]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest165, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState165) 32 484) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest166, ClosedGoalJsonSteps20::closedWireAdvance165]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest164, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState164) 32 485) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest165, ClosedGoalJsonSteps20::closedWireAdvance164]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest163, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState163) 32 486) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest164, ClosedGoalJsonSteps20::closedWireAdvance163]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest162, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState162) 32 487) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest163, ClosedGoalJsonSteps20::closedWireAdvance162]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest161, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState161) 32 488) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest162, ClosedGoalJsonSteps20::closedWireAdvance161]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest160, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState160) 32 489) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest161, ClosedGoalJsonSteps20::closedWireAdvance160]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest159, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState159) 32 490) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest160, ClosedGoalJsonSteps19::closedWireAdvance159]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest158, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState158) 32 491) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest159, ClosedGoalJsonSteps19::closedWireAdvance158]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest157, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState157) 32 492) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest158, ClosedGoalJsonSteps19::closedWireAdvance157]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest156, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState156) 32 493) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest157, ClosedGoalJsonSteps19::closedWireAdvance156]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest155, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState155) 32 494) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest156, ClosedGoalJsonSteps19::closedWireAdvance155]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest154, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState154) 32 495) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest155, ClosedGoalJsonSteps19::closedWireAdvance154]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest153, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState153) 32 496) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest154, ClosedGoalJsonSteps19::closedWireAdvance153]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest152, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState152) 32 497) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest153, ClosedGoalJsonSteps19::closedWireAdvance152]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest151, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState151) 32 498) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest152, ClosedGoalJsonSteps18::closedWireAdvance151]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest150, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState150) 32 499) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest151, ClosedGoalJsonSteps18::closedWireAdvance150]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest149, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState149) 32 500) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest150, ClosedGoalJsonSteps18::closedWireAdvance149]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest148, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState148) 32 501) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest149, ClosedGoalJsonSteps18::closedWireAdvance148]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest147, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState147) 32 502) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest148, ClosedGoalJsonSteps18::closedWireAdvance147]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest146, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState146) 32 503) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest147, ClosedGoalJsonSteps18::closedWireAdvance146]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest145, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState145) 32 504) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest146, ClosedGoalJsonSteps18::closedWireAdvance145]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest144, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState144) 32 505) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest145, ClosedGoalJsonSteps18::closedWireAdvance144]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest143, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState143) 32 506) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest144, ClosedGoalJsonSteps17::closedWireAdvance143]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest142, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState142) 32 507) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest143, ClosedGoalJsonSteps17::closedWireAdvance142]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest141, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState141) 32 508) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest142, ClosedGoalJsonSteps17::closedWireAdvance141]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest140, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState140) 32 509) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest141, ClosedGoalJsonSteps17::closedWireAdvance140]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest139, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState139) 32 510) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest140, ClosedGoalJsonSteps17::closedWireAdvance139]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest138, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState138) 32 511) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest139, ClosedGoalJsonSteps17::closedWireAdvance138]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest137, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState137) 32 512) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest138, ClosedGoalJsonSteps17::closedWireAdvance137]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest136, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState136) 32 513) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest137, ClosedGoalJsonSteps17::closedWireAdvance136]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest135, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState135) 32 514) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest136, ClosedGoalJsonSteps16::closedWireAdvance135]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest134, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState134) 32 515) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest135, ClosedGoalJsonSteps16::closedWireAdvance134]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest133, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState133) 32 516) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest134, ClosedGoalJsonSteps16::closedWireAdvance133]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest132, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState132) 32 517) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest133, ClosedGoalJsonSteps16::closedWireAdvance132]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest131, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState131) 32 518) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest132, ClosedGoalJsonSteps16::closedWireAdvance131]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest130, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState130) 32 519) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest131, ClosedGoalJsonSteps16::closedWireAdvance130]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest129, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState129) 32 520) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest130, ClosedGoalJsonSteps16::closedWireAdvance129]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest128, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState128) 32 521) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest129, ClosedGoalJsonSteps16::closedWireAdvance128]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest127, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState127) 32 522) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest128, ClosedGoalJsonSteps15::closedWireAdvance127]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest126, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState126) 32 523) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest127, ClosedGoalJsonSteps15::closedWireAdvance126]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest125, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState125) 32 524) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest126, ClosedGoalJsonSteps15::closedWireAdvance125]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest124, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState124) 32 525) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest125, ClosedGoalJsonSteps15::closedWireAdvance124]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest123, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState123) 32 526) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest124, ClosedGoalJsonSteps15::closedWireAdvance123]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest122, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState122) 32 527) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest123, ClosedGoalJsonSteps15::closedWireAdvance122]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest121, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState121) 32 528) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest122, ClosedGoalJsonSteps15::closedWireAdvance121]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest120, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState120) 32 529) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest121, ClosedGoalJsonSteps15::closedWireAdvance120]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest119, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState119) 32 530) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest120, ClosedGoalJsonSteps14::closedWireAdvance119]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest118, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState118) 32 531) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest119, ClosedGoalJsonSteps14::closedWireAdvance118]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest117, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState117) 32 532) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest118, ClosedGoalJsonSteps14::closedWireAdvance117]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest116, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState116) 32 533) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest117, ClosedGoalJsonSteps14::closedWireAdvance116]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest115, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState115) 32 534) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest116, ClosedGoalJsonSteps14::closedWireAdvance115]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest114, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState114) 32 535) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest115, ClosedGoalJsonSteps14::closedWireAdvance114]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest113, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState113) 32 536) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest114, ClosedGoalJsonSteps14::closedWireAdvance113]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest112, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState112) 32 537) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest113, ClosedGoalJsonSteps14::closedWireAdvance112]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest111, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState111) 32 538) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest112, ClosedGoalJsonSteps13::closedWireAdvance111]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest110, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState110) 32 539) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest111, ClosedGoalJsonSteps13::closedWireAdvance110]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest109, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState109) 32 540) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest110, ClosedGoalJsonSteps13::closedWireAdvance109]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest108, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState108) 32 541) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest109, ClosedGoalJsonSteps13::closedWireAdvance108]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest107, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState107) 32 542) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest108, ClosedGoalJsonSteps13::closedWireAdvance107]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest106, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState106) 32 543) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest107, ClosedGoalJsonSteps13::closedWireAdvance106]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest105, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState105) 32 544) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest106, ClosedGoalJsonSteps13::closedWireAdvance105]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest104, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState104) 32 545) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest105, ClosedGoalJsonSteps13::closedWireAdvance104]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest103, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState103) 32 546) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest104, ClosedGoalJsonSteps12::closedWireAdvance103]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest102, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState102) 32 547) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest103, ClosedGoalJsonSteps12::closedWireAdvance102]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest101, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState101) 32 548) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest102, ClosedGoalJsonSteps12::closedWireAdvance101]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest100, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState100) 32 549) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest101, ClosedGoalJsonSteps12::closedWireAdvance100]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest99, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState99) 32 550) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest100, ClosedGoalJsonSteps12::closedWireAdvance99]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest98, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState98) 32 551) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest99, ClosedGoalJsonSteps12::closedWireAdvance98]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest97, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState97) 32 552) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest98, ClosedGoalJsonSteps12::closedWireAdvance97]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest96, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState96) 32 553) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest97, ClosedGoalJsonSteps12::closedWireAdvance96]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest95, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState95) 32 554) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest96, ClosedGoalJsonSteps11::closedWireAdvance95]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest94, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState94) 32 555) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest95, ClosedGoalJsonSteps11::closedWireAdvance94]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest93, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState93) 32 556) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest94, ClosedGoalJsonSteps11::closedWireAdvance93]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest92, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState92) 32 557) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest93, ClosedGoalJsonSteps11::closedWireAdvance92]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest91, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState91) 32 558) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest92, ClosedGoalJsonSteps11::closedWireAdvance91]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest90, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState90) 32 559) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest91, ClosedGoalJsonSteps11::closedWireAdvance90]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest89, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState89) 32 560) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest90, ClosedGoalJsonSteps11::closedWireAdvance89]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest88, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState88) 32 561) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest89, ClosedGoalJsonSteps11::closedWireAdvance88]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest87, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState87) 32 562) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest88, ClosedGoalJsonSteps10::closedWireAdvance87]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest86, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState86) 32 563) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest87, ClosedGoalJsonSteps10::closedWireAdvance86]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest85, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState85) 32 564) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest86, ClosedGoalJsonSteps10::closedWireAdvance85]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest84, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState84) 32 565) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest85, ClosedGoalJsonSteps10::closedWireAdvance84]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest83, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState83) 32 566) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest84, ClosedGoalJsonSteps10::closedWireAdvance83]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest82, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState82) 32 567) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest83, ClosedGoalJsonSteps10::closedWireAdvance82]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest81, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState81) 32 568) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest82, ClosedGoalJsonSteps10::closedWireAdvance81]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest80, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState80) 32 569) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest81, ClosedGoalJsonSteps10::closedWireAdvance80]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest79, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState79) 32 570) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest80, ClosedGoalJsonSteps09::closedWireAdvance79]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest78, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState78) 32 571) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest79, ClosedGoalJsonSteps09::closedWireAdvance78]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest77, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState77) 32 572) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest78, ClosedGoalJsonSteps09::closedWireAdvance77]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest76, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState76) 32 573) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest77, ClosedGoalJsonSteps09::closedWireAdvance76]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest75, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState75) 32 574) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest76, ClosedGoalJsonSteps09::closedWireAdvance75]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest74, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState74) 32 575) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest75, ClosedGoalJsonSteps09::closedWireAdvance74]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest73, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState73) 32 576) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest74, ClosedGoalJsonSteps09::closedWireAdvance73]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest72, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState72) 32 577) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest73, ClosedGoalJsonSteps09::closedWireAdvance72]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest71, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState71) 32 578) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest72, ClosedGoalJsonSteps08::closedWireAdvance71]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest70, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState70) 32 579) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest71, ClosedGoalJsonSteps08::closedWireAdvance70]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest69, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState69) 32 580) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest70, ClosedGoalJsonSteps08::closedWireAdvance69]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest68, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState68) 32 581) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest69, ClosedGoalJsonSteps08::closedWireAdvance68]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest67, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState67) 32 582) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest68, ClosedGoalJsonSteps08::closedWireAdvance67]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest66, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState66) 32 583) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest67, ClosedGoalJsonSteps08::closedWireAdvance66]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest65, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState65) 32 584) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest66, ClosedGoalJsonSteps08::closedWireAdvance65]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest64, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState64) 32 585) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest65, ClosedGoalJsonSteps08::closedWireAdvance64]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest63, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState63) 32 586) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest64, ClosedGoalJsonSteps07::closedWireAdvance63]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest62, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState62) 32 587) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest63, ClosedGoalJsonSteps07::closedWireAdvance62]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest61, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState61) 32 588) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest62, ClosedGoalJsonSteps07::closedWireAdvance61]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest60, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState60) 32 589) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest61, ClosedGoalJsonSteps07::closedWireAdvance60]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest59, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState59) 32 590) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest60, ClosedGoalJsonSteps07::closedWireAdvance59]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest58, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState58) 32 591) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest59, ClosedGoalJsonSteps07::closedWireAdvance58]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest57, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState57) 32 592) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest58, ClosedGoalJsonSteps07::closedWireAdvance57]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest56, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState56) 32 593) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest57, ClosedGoalJsonSteps07::closedWireAdvance56]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest55, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState55) 32 594) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest56, ClosedGoalJsonSteps06::closedWireAdvance55]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest54, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState54) 32 595) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest55, ClosedGoalJsonSteps06::closedWireAdvance54]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest53, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState53) 32 596) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest54, ClosedGoalJsonSteps06::closedWireAdvance53]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest52, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState52) 32 597) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest53, ClosedGoalJsonSteps06::closedWireAdvance52]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest51, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState51) 32 598) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest52, ClosedGoalJsonSteps06::closedWireAdvance51]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest50, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState50) 32 599) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest51, ClosedGoalJsonSteps06::closedWireAdvance50]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest49, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState49) 32 600) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest50, ClosedGoalJsonSteps06::closedWireAdvance49]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest48, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState48) 32 601) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest49, ClosedGoalJsonSteps06::closedWireAdvance48]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest47, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState47) 32 602) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest48, ClosedGoalJsonSteps05::closedWireAdvance47]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest46, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState46) 32 603) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest47, ClosedGoalJsonSteps05::closedWireAdvance46]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest45, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState45) 32 604) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest46, ClosedGoalJsonSteps05::closedWireAdvance45]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest44, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState44) 32 605) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest45, ClosedGoalJsonSteps05::closedWireAdvance44]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest43, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState43) 32 606) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest44, ClosedGoalJsonSteps05::closedWireAdvance43]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest42, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState42) 32 607) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest43, ClosedGoalJsonSteps05::closedWireAdvance42]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest41, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState41) 32 608) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest42, ClosedGoalJsonSteps05::closedWireAdvance41]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest40, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState40) 32 609) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest41, ClosedGoalJsonSteps05::closedWireAdvance40]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest39, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState39) 32 610) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest40, ClosedGoalJsonSteps04::closedWireAdvance39]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest38, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState38) 32 611) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest39, ClosedGoalJsonSteps04::closedWireAdvance38]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest37, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState37) 32 612) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest38, ClosedGoalJsonSteps04::closedWireAdvance37]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest36, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState36) 32 613) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest37, ClosedGoalJsonSteps04::closedWireAdvance36]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest35, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState35) 32 614) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest36, ClosedGoalJsonSteps04::closedWireAdvance35]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest34, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState34) 32 615) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest35, ClosedGoalJsonSteps04::closedWireAdvance34]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest33, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState33) 32 616) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest34, ClosedGoalJsonSteps04::closedWireAdvance33]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest32, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState32) 32 617) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest33, ClosedGoalJsonSteps04::closedWireAdvance32]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest31, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState31) 32 618) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest32, ClosedGoalJsonSteps03::closedWireAdvance31]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest30, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState30) 32 619) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest31, ClosedGoalJsonSteps03::closedWireAdvance30]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest29, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState29) 32 620) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest30, ClosedGoalJsonSteps03::closedWireAdvance29]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest28, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState28) 32 621) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest29, ClosedGoalJsonSteps03::closedWireAdvance28]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest27, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState27) 32 622) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest28, ClosedGoalJsonSteps03::closedWireAdvance27]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest26, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState26) 32 623) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest27, ClosedGoalJsonSteps03::closedWireAdvance26]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest25, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState25) 32 624) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest26, ClosedGoalJsonSteps03::closedWireAdvance25]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest24, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState24) 32 625) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest25, ClosedGoalJsonSteps03::closedWireAdvance24]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest23, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState23) 32 626) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest24, ClosedGoalJsonSteps02::closedWireAdvance23]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest22, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState22) 32 627) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest23, ClosedGoalJsonSteps02::closedWireAdvance22]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest21, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState21) 32 628) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest22, ClosedGoalJsonSteps02::closedWireAdvance21]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest20, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState20) 32 629) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest21, ClosedGoalJsonSteps02::closedWireAdvance20]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest19, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState19) 32 630) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest20, ClosedGoalJsonSteps02::closedWireAdvance19]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest18, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState18) 32 631) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest19, ClosedGoalJsonSteps02::closedWireAdvance18]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest17, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState17) 32 632) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest18, ClosedGoalJsonSteps02::closedWireAdvance17]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest16, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState16) 32 633) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest17, ClosedGoalJsonSteps02::closedWireAdvance16]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest15, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState15) 32 634) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest16, ClosedGoalJsonSteps01::closedWireAdvance15]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest14, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState14) 32 635) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest15, ClosedGoalJsonSteps01::closedWireAdvance14]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest13, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState13) 32 636) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest14, ClosedGoalJsonSteps01::closedWireAdvance13]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest12, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState12) 32 637) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest13, ClosedGoalJsonSteps01::closedWireAdvance12]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest11, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState11) 32 638) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest12, ClosedGoalJsonSteps01::closedWireAdvance11]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest10, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState10) 32 639) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest11, ClosedGoalJsonSteps01::closedWireAdvance10]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest9, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState9) 32 640) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest10, ClosedGoalJsonSteps01::closedWireAdvance9]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest8, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState8) 32 641) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest9, ClosedGoalJsonSteps01::closedWireAdvance8]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest7, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState7) 32 642) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest8, ClosedGoalJsonSteps00::closedWireAdvance7]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest6, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState6) 32 643) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest7, ClosedGoalJsonSteps00::closedWireAdvance6]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest5, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState5) 32 644) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest6, ClosedGoalJsonSteps00::closedWireAdvance5]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest4, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState4) 32 645) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest5, ClosedGoalJsonSteps00::closedWireAdvance4]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest3, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState3) 32 646) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest4, ClosedGoalJsonSteps00::closedWireAdvance3]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest2, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState2) 32 647) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest3, ClosedGoalJsonSteps00::closedWireAdvance2]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest1, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState1) 32 648) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest2, ClosedGoalJsonSteps00::closedWireAdvance1]}, axioms: [propext]
+}
+theorem{
+ name: closedWireRest0, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState0) 32 649) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireRest1, ClosedGoalJsonSteps00::closedWireAdvance0]}, axioms: [propext]
+}
+theorem{
+ name: closedWireSize, parameters: [],
+ statement: ((prim length (ClosedGoalJsonData::closedWire) : Nat) = 649), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireFits, parameters: [],
+ statement: ((4096 <? 649) = false), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireInitial, parameters: [],
+ statement: ((Json::state 0 (nil Json::Frame) (ctor Option.none [Json::Value])) = (ClosedGoalJsonData::closedWireState0)), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireScan, parameters: [],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (Json::state 0 (nil Json::Frame) (ctor Option.none [Json::Value])) 32 649) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireInitial, closedWireRest0]}, axioms: [propext]
+}
+theorem{
+ name: closedWireParsed, parameters: [],
+ statement: ((Json::parse (ClosedGoalJsonData::closedWire) 4096 32) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: simplify{definitions: [closedWireFits, closedWireScan, closedWireSize, closedWireUtf8Rest0, Json::fromLimitWithin, Json::fromUtf8Valid, Json::parse]}, axioms: [propext]
+}
+theorem{
+ name: closedWireParsedLiteral, parameters: [],
+ statement: ((Json::parse 0x7b226465636c61726174696f6e73223a5b7b22636c617373223a66616c73652c2267656e657261746564223a66616c73652c226b696e64223a227468656f72656d222c226c6576656c73223a5b5d2c226e616d65223a2252756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468222c22706f6c696379223a7b226b696e64223a226e6f6e65227d2c227472616e73706172656e6379223a2273656d69726564756369626c65222c2274797065223a302c2276616c7565223a317d2c7b22636c617373223a66616c73652c2267656e657261746564223a66616c73652c226b696e64223a227468656f72656d222c226c6576656c73223a5b5d2c226e616d65223a2252756c6533304170692e436c6f73656442696e64696e67466978747572652e6e6f7446616c7365222c22706f6c696379223a7b226b696e64223a226e6f6e65227d2c227472616e73706172656e6379223a2273656d69726564756369626c65222c2274797065223a332c2276616c7565223a357d5d2c22696d706f727473223a5b22496e6974225d2c226e6f646573223a5b7b226b223a2263222c226e223a2254727565222c2275223a5b5d7d2c7b226b223a2263222c226e223a22547275652e696e74726f222c2275223a5b5d7d2c7b226b223a2263222c226e223a2246616c7365222c2275223a5b5d7d2c7b2262223a2265222c226b223a2270222c226e223a2268222c2274223a322c2276223a327d2c7b2269223a302c226b223a2262227d2c7b2262223a2265222c226b223a226c222c226e223a2268222c2274223a322c2276223a347d5d2c2270726f6f665f6e6f646573223a5b5d2c2273706563223a226c65786c65616e2f636f72652d6d6f64756c652f32227d 4096 32) = (ctor Result.ok [Json::Value, Json::Problem] (ClosedGoalJsonData::closedData77))), proof: apply{theorem: closedWireParsed, arguments: []}, axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

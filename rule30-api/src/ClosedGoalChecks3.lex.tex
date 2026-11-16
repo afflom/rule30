@@ -20,10 +20,17 @@ theorem{
  axioms: [propext]
 }
 theorem{
+ name: nativeProofDischargesClosedTruthDecoded,
+ parameters: [],
+ statement: ((ClosedGoalTraces::nativeMatchesDecoded 0x54727565 (ctor Research::Purpose.prove) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468) = true),
+ proof: decide{},
+ axioms: [propext]
+}
+theorem{
  name: nativeProofDischargesClosedTruth,
  parameters: [],
  statement: ((ClosedGoalTraces::nativeMatches 0x54727565 (ctor Research::Purpose.prove) 0x52756c6533304170692e436c6f73656442696e64696e67466978747572652e7472757468) = true),
- proof: decide{},
+ proof: simplify{definitions: [nativeProofDischargesClosedTruthDecoded, ClosedGoalTraces::nativeMatchesDecodedBridge]},
  axioms: [propext]
 }
 \end{semanticmodule}

@@ -1,0 +1,106 @@
+\begin{lexlean}{ClosedGoalJsonSteps11}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{ClosedGoalJsonData}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: closedWireStep88, parameters: [],
+ statement: ((Json::advance (ClosedGoalJsonData::closedWire) (Json::skip (ClosedGoalJsonData::closedWire) (project (ClosedGoalJsonData::closedWireState88) position) (prim length (ClosedGoalJsonData::closedWire) : Nat)) (project (ClosedGoalJsonData::closedWireState88) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (ClosedGoalJsonData::closedWireState89))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWirePending88, parameters: [],
+ statement: ((project (ClosedGoalJsonData::closedWireState88) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireAdvance88, parameters: [fuel : Nat],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState88) 32 (fuel + 1)) = (Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState89) 32 fuel)), proof: simplify{definitions: [closedWirePending88, closedWireStep88, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: closedWireStep89, parameters: [],
+ statement: ((Json::advance (ClosedGoalJsonData::closedWire) (Json::skip (ClosedGoalJsonData::closedWire) (project (ClosedGoalJsonData::closedWireState89) position) (prim length (ClosedGoalJsonData::closedWire) : Nat)) (project (ClosedGoalJsonData::closedWireState89) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (ClosedGoalJsonData::closedWireState90))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWirePending89, parameters: [],
+ statement: ((project (ClosedGoalJsonData::closedWireState89) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireAdvance89, parameters: [fuel : Nat],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState89) 32 (fuel + 1)) = (Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState90) 32 fuel)), proof: simplify{definitions: [closedWirePending89, closedWireStep89, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: closedWireStep90, parameters: [],
+ statement: ((Json::advance (ClosedGoalJsonData::closedWire) (Json::skip (ClosedGoalJsonData::closedWire) (project (ClosedGoalJsonData::closedWireState90) position) (prim length (ClosedGoalJsonData::closedWire) : Nat)) (project (ClosedGoalJsonData::closedWireState90) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (ClosedGoalJsonData::closedWireState91))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWirePending90, parameters: [],
+ statement: ((project (ClosedGoalJsonData::closedWireState90) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireAdvance90, parameters: [fuel : Nat],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState90) 32 (fuel + 1)) = (Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState91) 32 fuel)), proof: simplify{definitions: [closedWirePending90, closedWireStep90, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: closedWireStep91, parameters: [],
+ statement: ((Json::advance (ClosedGoalJsonData::closedWire) (Json::skip (ClosedGoalJsonData::closedWire) (project (ClosedGoalJsonData::closedWireState91) position) (prim length (ClosedGoalJsonData::closedWire) : Nat)) (project (ClosedGoalJsonData::closedWireState91) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (ClosedGoalJsonData::closedWireState92))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWirePending91, parameters: [],
+ statement: ((project (ClosedGoalJsonData::closedWireState91) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireAdvance91, parameters: [fuel : Nat],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState91) 32 (fuel + 1)) = (Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState92) 32 fuel)), proof: simplify{definitions: [closedWirePending91, closedWireStep91, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: closedWireStep92, parameters: [],
+ statement: ((Json::advance (ClosedGoalJsonData::closedWire) (Json::skip (ClosedGoalJsonData::closedWire) (project (ClosedGoalJsonData::closedWireState92) position) (prim length (ClosedGoalJsonData::closedWire) : Nat)) (project (ClosedGoalJsonData::closedWireState92) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (ClosedGoalJsonData::closedWireState93))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWirePending92, parameters: [],
+ statement: ((project (ClosedGoalJsonData::closedWireState92) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireAdvance92, parameters: [fuel : Nat],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState92) 32 (fuel + 1)) = (Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState93) 32 fuel)), proof: simplify{definitions: [closedWirePending92, closedWireStep92, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: closedWireStep93, parameters: [],
+ statement: ((Json::advance (ClosedGoalJsonData::closedWire) (Json::skip (ClosedGoalJsonData::closedWire) (project (ClosedGoalJsonData::closedWireState93) position) (prim length (ClosedGoalJsonData::closedWire) : Nat)) (project (ClosedGoalJsonData::closedWireState93) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (ClosedGoalJsonData::closedWireState94))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWirePending93, parameters: [],
+ statement: ((project (ClosedGoalJsonData::closedWireState93) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireAdvance93, parameters: [fuel : Nat],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState93) 32 (fuel + 1)) = (Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState94) 32 fuel)), proof: simplify{definitions: [closedWirePending93, closedWireStep93, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: closedWireStep94, parameters: [],
+ statement: ((Json::advance (ClosedGoalJsonData::closedWire) (Json::skip (ClosedGoalJsonData::closedWire) (project (ClosedGoalJsonData::closedWireState94) position) (prim length (ClosedGoalJsonData::closedWire) : Nat)) (project (ClosedGoalJsonData::closedWireState94) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (ClosedGoalJsonData::closedWireState95))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWirePending94, parameters: [],
+ statement: ((project (ClosedGoalJsonData::closedWireState94) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireAdvance94, parameters: [fuel : Nat],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState94) 32 (fuel + 1)) = (Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState95) 32 fuel)), proof: simplify{definitions: [closedWirePending94, closedWireStep94, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: closedWireStep95, parameters: [],
+ statement: ((Json::advance (ClosedGoalJsonData::closedWire) (Json::skip (ClosedGoalJsonData::closedWire) (project (ClosedGoalJsonData::closedWireState95) position) (prim length (ClosedGoalJsonData::closedWire) : Nat)) (project (ClosedGoalJsonData::closedWireState95) frames) 32) = (ctor Result.ok [Json::State, Json::Problem] (ClosedGoalJsonData::closedWireState96))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: closedWirePending95, parameters: [],
+ statement: ((project (ClosedGoalJsonData::closedWireState95) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: closedWireAdvance95, parameters: [fuel : Nat],
+ statement: ((Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState95) 32 (fuel + 1)) = (Json::scan (ClosedGoalJsonData::closedWire) (ClosedGoalJsonData::closedWireState96) 32 fuel)), proof: simplify{definitions: [closedWirePending95, closedWireStep95, Json::scan]}, axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

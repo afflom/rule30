@@ -1,0 +1,871 @@
+\begin{lexlean}{EnvironmentMemoryTraceSerialization}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentAcquisition}
+\importmodule{EnvironmentMemory}
+\importmodule{EnvironmentMemoryCommand}
+\importmodule{EnvironmentMemoryTraceData}
+\importmodule{Host}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{LexLeanStd.Buffer}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchInput}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: intakeRenderAdvance0, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending0) (EnvironmentMemoryTraceData::intakeRenderBuffer0) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending1) (EnvironmentMemoryTraceData::intakeRenderBuffer1) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance1, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending1) (EnvironmentMemoryTraceData::intakeRenderBuffer1) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending2) (EnvironmentMemoryTraceData::intakeRenderBuffer2) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance2, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending2) (EnvironmentMemoryTraceData::intakeRenderBuffer2) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending3) (EnvironmentMemoryTraceData::intakeRenderBuffer3) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance3, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending3) (EnvironmentMemoryTraceData::intakeRenderBuffer3) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending4) (EnvironmentMemoryTraceData::intakeRenderBuffer4) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance4, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending4) (EnvironmentMemoryTraceData::intakeRenderBuffer4) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending5) (EnvironmentMemoryTraceData::intakeRenderBuffer5) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance5, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending5) (EnvironmentMemoryTraceData::intakeRenderBuffer5) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending6) (EnvironmentMemoryTraceData::intakeRenderBuffer6) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance6, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending6) (EnvironmentMemoryTraceData::intakeRenderBuffer6) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending7) (EnvironmentMemoryTraceData::intakeRenderBuffer7) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance7, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending7) (EnvironmentMemoryTraceData::intakeRenderBuffer7) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending8) (EnvironmentMemoryTraceData::intakeRenderBuffer8) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance8, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending8) (EnvironmentMemoryTraceData::intakeRenderBuffer8) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending9) (EnvironmentMemoryTraceData::intakeRenderBuffer9) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance9, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending9) (EnvironmentMemoryTraceData::intakeRenderBuffer9) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending10) (EnvironmentMemoryTraceData::intakeRenderBuffer10) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance10, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending10) (EnvironmentMemoryTraceData::intakeRenderBuffer10) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending11) (EnvironmentMemoryTraceData::intakeRenderBuffer11) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance11, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending11) (EnvironmentMemoryTraceData::intakeRenderBuffer11) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending12) (EnvironmentMemoryTraceData::intakeRenderBuffer12) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance12, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending12) (EnvironmentMemoryTraceData::intakeRenderBuffer12) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending13) (EnvironmentMemoryTraceData::intakeRenderBuffer13) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance13, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending13) (EnvironmentMemoryTraceData::intakeRenderBuffer13) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending14) (EnvironmentMemoryTraceData::intakeRenderBuffer14) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance14, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending14) (EnvironmentMemoryTraceData::intakeRenderBuffer14) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending15) (EnvironmentMemoryTraceData::intakeRenderBuffer15) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance15, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending15) (EnvironmentMemoryTraceData::intakeRenderBuffer15) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending16) (EnvironmentMemoryTraceData::intakeRenderBuffer16) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance16, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending16) (EnvironmentMemoryTraceData::intakeRenderBuffer16) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending17) (EnvironmentMemoryTraceData::intakeRenderBuffer17) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance17, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending17) (EnvironmentMemoryTraceData::intakeRenderBuffer17) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending18) (EnvironmentMemoryTraceData::intakeRenderBuffer18) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance18, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending18) (EnvironmentMemoryTraceData::intakeRenderBuffer18) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending19) (EnvironmentMemoryTraceData::intakeRenderBuffer19) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance19, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending19) (EnvironmentMemoryTraceData::intakeRenderBuffer19) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending20) (EnvironmentMemoryTraceData::intakeRenderBuffer20) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance20, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending20) (EnvironmentMemoryTraceData::intakeRenderBuffer20) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending21) (EnvironmentMemoryTraceData::intakeRenderBuffer21) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance21, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending21) (EnvironmentMemoryTraceData::intakeRenderBuffer21) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending22) (EnvironmentMemoryTraceData::intakeRenderBuffer22) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance22, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending22) (EnvironmentMemoryTraceData::intakeRenderBuffer22) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending23) (EnvironmentMemoryTraceData::intakeRenderBuffer23) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance23, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending23) (EnvironmentMemoryTraceData::intakeRenderBuffer23) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending24) (EnvironmentMemoryTraceData::intakeRenderBuffer24) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance24, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending24) (EnvironmentMemoryTraceData::intakeRenderBuffer24) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending25) (EnvironmentMemoryTraceData::intakeRenderBuffer25) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance25, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending25) (EnvironmentMemoryTraceData::intakeRenderBuffer25) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending26) (EnvironmentMemoryTraceData::intakeRenderBuffer26) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance26, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending26) (EnvironmentMemoryTraceData::intakeRenderBuffer26) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending27) (EnvironmentMemoryTraceData::intakeRenderBuffer27) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance27, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending27) (EnvironmentMemoryTraceData::intakeRenderBuffer27) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending28) (EnvironmentMemoryTraceData::intakeRenderBuffer28) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance28, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending28) (EnvironmentMemoryTraceData::intakeRenderBuffer28) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending29) (EnvironmentMemoryTraceData::intakeRenderBuffer29) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance29, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending29) (EnvironmentMemoryTraceData::intakeRenderBuffer29) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending30) (EnvironmentMemoryTraceData::intakeRenderBuffer30) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance30, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending30) (EnvironmentMemoryTraceData::intakeRenderBuffer30) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending31) (EnvironmentMemoryTraceData::intakeRenderBuffer31) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance31, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending31) (EnvironmentMemoryTraceData::intakeRenderBuffer31) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending32) (EnvironmentMemoryTraceData::intakeRenderBuffer32) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance32, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending32) (EnvironmentMemoryTraceData::intakeRenderBuffer32) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending33) (EnvironmentMemoryTraceData::intakeRenderBuffer33) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance33, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending33) (EnvironmentMemoryTraceData::intakeRenderBuffer33) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending34) (EnvironmentMemoryTraceData::intakeRenderBuffer34) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance34, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending34) (EnvironmentMemoryTraceData::intakeRenderBuffer34) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending35) (EnvironmentMemoryTraceData::intakeRenderBuffer35) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance35, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending35) (EnvironmentMemoryTraceData::intakeRenderBuffer35) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending36) (EnvironmentMemoryTraceData::intakeRenderBuffer36) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance36, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending36) (EnvironmentMemoryTraceData::intakeRenderBuffer36) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending37) (EnvironmentMemoryTraceData::intakeRenderBuffer37) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance37, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending37) (EnvironmentMemoryTraceData::intakeRenderBuffer37) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending38) (EnvironmentMemoryTraceData::intakeRenderBuffer38) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance38, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending38) (EnvironmentMemoryTraceData::intakeRenderBuffer38) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending39) (EnvironmentMemoryTraceData::intakeRenderBuffer39) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance39, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending39) (EnvironmentMemoryTraceData::intakeRenderBuffer39) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending40) (EnvironmentMemoryTraceData::intakeRenderBuffer40) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance40, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending40) (EnvironmentMemoryTraceData::intakeRenderBuffer40) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending41) (EnvironmentMemoryTraceData::intakeRenderBuffer41) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance41, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending41) (EnvironmentMemoryTraceData::intakeRenderBuffer41) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending42) (EnvironmentMemoryTraceData::intakeRenderBuffer42) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance42, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending42) (EnvironmentMemoryTraceData::intakeRenderBuffer42) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending43) (EnvironmentMemoryTraceData::intakeRenderBuffer43) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance43, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending43) (EnvironmentMemoryTraceData::intakeRenderBuffer43) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending44) (EnvironmentMemoryTraceData::intakeRenderBuffer44) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance44, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending44) (EnvironmentMemoryTraceData::intakeRenderBuffer44) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending45) (EnvironmentMemoryTraceData::intakeRenderBuffer45) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance45, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending45) (EnvironmentMemoryTraceData::intakeRenderBuffer45) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending46) (EnvironmentMemoryTraceData::intakeRenderBuffer46) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance46, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending46) (EnvironmentMemoryTraceData::intakeRenderBuffer46) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending47) (EnvironmentMemoryTraceData::intakeRenderBuffer47) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance47, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending47) (EnvironmentMemoryTraceData::intakeRenderBuffer47) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending48) (EnvironmentMemoryTraceData::intakeRenderBuffer48) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance48, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending48) (EnvironmentMemoryTraceData::intakeRenderBuffer48) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending49) (EnvironmentMemoryTraceData::intakeRenderBuffer49) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance49, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending49) (EnvironmentMemoryTraceData::intakeRenderBuffer49) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending50) (EnvironmentMemoryTraceData::intakeRenderBuffer50) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance50, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending50) (EnvironmentMemoryTraceData::intakeRenderBuffer50) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending51) (EnvironmentMemoryTraceData::intakeRenderBuffer51) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance51, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending51) (EnvironmentMemoryTraceData::intakeRenderBuffer51) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending52) (EnvironmentMemoryTraceData::intakeRenderBuffer52) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance52, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending52) (EnvironmentMemoryTraceData::intakeRenderBuffer52) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending53) (EnvironmentMemoryTraceData::intakeRenderBuffer53) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance53, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending53) (EnvironmentMemoryTraceData::intakeRenderBuffer53) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending54) (EnvironmentMemoryTraceData::intakeRenderBuffer54) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance54, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending54) (EnvironmentMemoryTraceData::intakeRenderBuffer54) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending55) (EnvironmentMemoryTraceData::intakeRenderBuffer55) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance55, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending55) (EnvironmentMemoryTraceData::intakeRenderBuffer55) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending56) (EnvironmentMemoryTraceData::intakeRenderBuffer56) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance56, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending56) (EnvironmentMemoryTraceData::intakeRenderBuffer56) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending57) (EnvironmentMemoryTraceData::intakeRenderBuffer57) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance57, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending57) (EnvironmentMemoryTraceData::intakeRenderBuffer57) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending58) (EnvironmentMemoryTraceData::intakeRenderBuffer58) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance58, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending58) (EnvironmentMemoryTraceData::intakeRenderBuffer58) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending59) (EnvironmentMemoryTraceData::intakeRenderBuffer59) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance59, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending59) (EnvironmentMemoryTraceData::intakeRenderBuffer59) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending60) (EnvironmentMemoryTraceData::intakeRenderBuffer60) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance60, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending60) (EnvironmentMemoryTraceData::intakeRenderBuffer60) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending61) (EnvironmentMemoryTraceData::intakeRenderBuffer61) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance61, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending61) (EnvironmentMemoryTraceData::intakeRenderBuffer61) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending62) (EnvironmentMemoryTraceData::intakeRenderBuffer62) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance62, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending62) (EnvironmentMemoryTraceData::intakeRenderBuffer62) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending63) (EnvironmentMemoryTraceData::intakeRenderBuffer63) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance63, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending63) (EnvironmentMemoryTraceData::intakeRenderBuffer63) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending64) (EnvironmentMemoryTraceData::intakeRenderBuffer64) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance64, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending64) (EnvironmentMemoryTraceData::intakeRenderBuffer64) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending65) (EnvironmentMemoryTraceData::intakeRenderBuffer65) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance65, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending65) (EnvironmentMemoryTraceData::intakeRenderBuffer65) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending66) (EnvironmentMemoryTraceData::intakeRenderBuffer66) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance66, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending66) (EnvironmentMemoryTraceData::intakeRenderBuffer66) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending67) (EnvironmentMemoryTraceData::intakeRenderBuffer67) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance67, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending67) (EnvironmentMemoryTraceData::intakeRenderBuffer67) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending68) (EnvironmentMemoryTraceData::intakeRenderBuffer68) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance68, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending68) (EnvironmentMemoryTraceData::intakeRenderBuffer68) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending69) (EnvironmentMemoryTraceData::intakeRenderBuffer69) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance69, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending69) (EnvironmentMemoryTraceData::intakeRenderBuffer69) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending70) (EnvironmentMemoryTraceData::intakeRenderBuffer70) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance70, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending70) (EnvironmentMemoryTraceData::intakeRenderBuffer70) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending71) (EnvironmentMemoryTraceData::intakeRenderBuffer71) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance71, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending71) (EnvironmentMemoryTraceData::intakeRenderBuffer71) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending72) (EnvironmentMemoryTraceData::intakeRenderBuffer72) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance72, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending72) (EnvironmentMemoryTraceData::intakeRenderBuffer72) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending73) (EnvironmentMemoryTraceData::intakeRenderBuffer73) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance73, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending73) (EnvironmentMemoryTraceData::intakeRenderBuffer73) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending74) (EnvironmentMemoryTraceData::intakeRenderBuffer74) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance74, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending74) (EnvironmentMemoryTraceData::intakeRenderBuffer74) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending75) (EnvironmentMemoryTraceData::intakeRenderBuffer75) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance75, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending75) (EnvironmentMemoryTraceData::intakeRenderBuffer75) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending76) (EnvironmentMemoryTraceData::intakeRenderBuffer76) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance76, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending76) (EnvironmentMemoryTraceData::intakeRenderBuffer76) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending77) (EnvironmentMemoryTraceData::intakeRenderBuffer77) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance77, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending77) (EnvironmentMemoryTraceData::intakeRenderBuffer77) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending78) (EnvironmentMemoryTraceData::intakeRenderBuffer78) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance78, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending78) (EnvironmentMemoryTraceData::intakeRenderBuffer78) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending79) (EnvironmentMemoryTraceData::intakeRenderBuffer79) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance79, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending79) (EnvironmentMemoryTraceData::intakeRenderBuffer79) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending80) (EnvironmentMemoryTraceData::intakeRenderBuffer80) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance80, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending80) (EnvironmentMemoryTraceData::intakeRenderBuffer80) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending81) (EnvironmentMemoryTraceData::intakeRenderBuffer81) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance81, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending81) (EnvironmentMemoryTraceData::intakeRenderBuffer81) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending82) (EnvironmentMemoryTraceData::intakeRenderBuffer82) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance82, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending82) (EnvironmentMemoryTraceData::intakeRenderBuffer82) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending83) (EnvironmentMemoryTraceData::intakeRenderBuffer83) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance83, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending83) (EnvironmentMemoryTraceData::intakeRenderBuffer83) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending84) (EnvironmentMemoryTraceData::intakeRenderBuffer84) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance84, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending84) (EnvironmentMemoryTraceData::intakeRenderBuffer84) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending85) (EnvironmentMemoryTraceData::intakeRenderBuffer85) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance85, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending85) (EnvironmentMemoryTraceData::intakeRenderBuffer85) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending86) (EnvironmentMemoryTraceData::intakeRenderBuffer86) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance86, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending86) (EnvironmentMemoryTraceData::intakeRenderBuffer86) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending87) (EnvironmentMemoryTraceData::intakeRenderBuffer87) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance87, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending87) (EnvironmentMemoryTraceData::intakeRenderBuffer87) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending88) (EnvironmentMemoryTraceData::intakeRenderBuffer88) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance88, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending88) (EnvironmentMemoryTraceData::intakeRenderBuffer88) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending89) (EnvironmentMemoryTraceData::intakeRenderBuffer89) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance89, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending89) (EnvironmentMemoryTraceData::intakeRenderBuffer89) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending90) (EnvironmentMemoryTraceData::intakeRenderBuffer90) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance90, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending90) (EnvironmentMemoryTraceData::intakeRenderBuffer90) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending91) (EnvironmentMemoryTraceData::intakeRenderBuffer91) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance91, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending91) (EnvironmentMemoryTraceData::intakeRenderBuffer91) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending92) (EnvironmentMemoryTraceData::intakeRenderBuffer92) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance92, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending92) (EnvironmentMemoryTraceData::intakeRenderBuffer92) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending93) (EnvironmentMemoryTraceData::intakeRenderBuffer93) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance93, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending93) (EnvironmentMemoryTraceData::intakeRenderBuffer93) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending94) (EnvironmentMemoryTraceData::intakeRenderBuffer94) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance94, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending94) (EnvironmentMemoryTraceData::intakeRenderBuffer94) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending95) (EnvironmentMemoryTraceData::intakeRenderBuffer95) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance95, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending95) (EnvironmentMemoryTraceData::intakeRenderBuffer95) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending96) (EnvironmentMemoryTraceData::intakeRenderBuffer96) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance96, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending96) (EnvironmentMemoryTraceData::intakeRenderBuffer96) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending97) (EnvironmentMemoryTraceData::intakeRenderBuffer97) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance97, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending97) (EnvironmentMemoryTraceData::intakeRenderBuffer97) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending98) (EnvironmentMemoryTraceData::intakeRenderBuffer98) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance98, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending98) (EnvironmentMemoryTraceData::intakeRenderBuffer98) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending99) (EnvironmentMemoryTraceData::intakeRenderBuffer99) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance99, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending99) (EnvironmentMemoryTraceData::intakeRenderBuffer99) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending100) (EnvironmentMemoryTraceData::intakeRenderBuffer100) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance100, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending100) (EnvironmentMemoryTraceData::intakeRenderBuffer100) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending101) (EnvironmentMemoryTraceData::intakeRenderBuffer101) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance101, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending101) (EnvironmentMemoryTraceData::intakeRenderBuffer101) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending102) (EnvironmentMemoryTraceData::intakeRenderBuffer102) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance102, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending102) (EnvironmentMemoryTraceData::intakeRenderBuffer102) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending103) (EnvironmentMemoryTraceData::intakeRenderBuffer103) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderAdvance103, parameters: [fuel : Nat],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending103) (EnvironmentMemoryTraceData::intakeRenderBuffer103) 1048575 (fuel + 1)) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending104) (EnvironmentMemoryTraceData::intakeRenderBuffer104) 1048575 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest104, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending104) (EnvironmentMemoryTraceData::intakeRenderBuffer104) 1048575 2097048) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest103, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending103) (EnvironmentMemoryTraceData::intakeRenderBuffer103) 1048575 2097049) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance103, intakeRenderRest104]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest102, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending102) (EnvironmentMemoryTraceData::intakeRenderBuffer102) 1048575 2097050) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance102, intakeRenderRest103]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest101, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending101) (EnvironmentMemoryTraceData::intakeRenderBuffer101) 1048575 2097051) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance101, intakeRenderRest102]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest100, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending100) (EnvironmentMemoryTraceData::intakeRenderBuffer100) 1048575 2097052) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance100, intakeRenderRest101]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest99, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending99) (EnvironmentMemoryTraceData::intakeRenderBuffer99) 1048575 2097053) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance99, intakeRenderRest100]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest98, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending98) (EnvironmentMemoryTraceData::intakeRenderBuffer98) 1048575 2097054) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance98, intakeRenderRest99]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest97, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending97) (EnvironmentMemoryTraceData::intakeRenderBuffer97) 1048575 2097055) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance97, intakeRenderRest98]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest96, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending96) (EnvironmentMemoryTraceData::intakeRenderBuffer96) 1048575 2097056) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance96, intakeRenderRest97]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest95, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending95) (EnvironmentMemoryTraceData::intakeRenderBuffer95) 1048575 2097057) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance95, intakeRenderRest96]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest94, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending94) (EnvironmentMemoryTraceData::intakeRenderBuffer94) 1048575 2097058) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance94, intakeRenderRest95]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest93, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending93) (EnvironmentMemoryTraceData::intakeRenderBuffer93) 1048575 2097059) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance93, intakeRenderRest94]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest92, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending92) (EnvironmentMemoryTraceData::intakeRenderBuffer92) 1048575 2097060) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance92, intakeRenderRest93]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest91, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending91) (EnvironmentMemoryTraceData::intakeRenderBuffer91) 1048575 2097061) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance91, intakeRenderRest92]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest90, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending90) (EnvironmentMemoryTraceData::intakeRenderBuffer90) 1048575 2097062) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance90, intakeRenderRest91]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest89, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending89) (EnvironmentMemoryTraceData::intakeRenderBuffer89) 1048575 2097063) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance89, intakeRenderRest90]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest88, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending88) (EnvironmentMemoryTraceData::intakeRenderBuffer88) 1048575 2097064) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance88, intakeRenderRest89]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest87, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending87) (EnvironmentMemoryTraceData::intakeRenderBuffer87) 1048575 2097065) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance87, intakeRenderRest88]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest86, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending86) (EnvironmentMemoryTraceData::intakeRenderBuffer86) 1048575 2097066) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance86, intakeRenderRest87]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest85, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending85) (EnvironmentMemoryTraceData::intakeRenderBuffer85) 1048575 2097067) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance85, intakeRenderRest86]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest84, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending84) (EnvironmentMemoryTraceData::intakeRenderBuffer84) 1048575 2097068) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance84, intakeRenderRest85]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest83, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending83) (EnvironmentMemoryTraceData::intakeRenderBuffer83) 1048575 2097069) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance83, intakeRenderRest84]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest82, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending82) (EnvironmentMemoryTraceData::intakeRenderBuffer82) 1048575 2097070) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance82, intakeRenderRest83]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest81, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending81) (EnvironmentMemoryTraceData::intakeRenderBuffer81) 1048575 2097071) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance81, intakeRenderRest82]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest80, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending80) (EnvironmentMemoryTraceData::intakeRenderBuffer80) 1048575 2097072) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance80, intakeRenderRest81]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest79, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending79) (EnvironmentMemoryTraceData::intakeRenderBuffer79) 1048575 2097073) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance79, intakeRenderRest80]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest78, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending78) (EnvironmentMemoryTraceData::intakeRenderBuffer78) 1048575 2097074) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance78, intakeRenderRest79]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest77, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending77) (EnvironmentMemoryTraceData::intakeRenderBuffer77) 1048575 2097075) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance77, intakeRenderRest78]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest76, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending76) (EnvironmentMemoryTraceData::intakeRenderBuffer76) 1048575 2097076) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance76, intakeRenderRest77]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest75, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending75) (EnvironmentMemoryTraceData::intakeRenderBuffer75) 1048575 2097077) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance75, intakeRenderRest76]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest74, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending74) (EnvironmentMemoryTraceData::intakeRenderBuffer74) 1048575 2097078) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance74, intakeRenderRest75]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest73, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending73) (EnvironmentMemoryTraceData::intakeRenderBuffer73) 1048575 2097079) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance73, intakeRenderRest74]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest72, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending72) (EnvironmentMemoryTraceData::intakeRenderBuffer72) 1048575 2097080) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance72, intakeRenderRest73]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest71, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending71) (EnvironmentMemoryTraceData::intakeRenderBuffer71) 1048575 2097081) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance71, intakeRenderRest72]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest70, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending70) (EnvironmentMemoryTraceData::intakeRenderBuffer70) 1048575 2097082) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance70, intakeRenderRest71]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest69, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending69) (EnvironmentMemoryTraceData::intakeRenderBuffer69) 1048575 2097083) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance69, intakeRenderRest70]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest68, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending68) (EnvironmentMemoryTraceData::intakeRenderBuffer68) 1048575 2097084) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance68, intakeRenderRest69]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest67, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending67) (EnvironmentMemoryTraceData::intakeRenderBuffer67) 1048575 2097085) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance67, intakeRenderRest68]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest66, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending66) (EnvironmentMemoryTraceData::intakeRenderBuffer66) 1048575 2097086) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance66, intakeRenderRest67]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest65, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending65) (EnvironmentMemoryTraceData::intakeRenderBuffer65) 1048575 2097087) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance65, intakeRenderRest66]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest64, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending64) (EnvironmentMemoryTraceData::intakeRenderBuffer64) 1048575 2097088) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance64, intakeRenderRest65]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest63, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending63) (EnvironmentMemoryTraceData::intakeRenderBuffer63) 1048575 2097089) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance63, intakeRenderRest64]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest62, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending62) (EnvironmentMemoryTraceData::intakeRenderBuffer62) 1048575 2097090) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance62, intakeRenderRest63]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest61, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending61) (EnvironmentMemoryTraceData::intakeRenderBuffer61) 1048575 2097091) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance61, intakeRenderRest62]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest60, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending60) (EnvironmentMemoryTraceData::intakeRenderBuffer60) 1048575 2097092) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance60, intakeRenderRest61]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest59, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending59) (EnvironmentMemoryTraceData::intakeRenderBuffer59) 1048575 2097093) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance59, intakeRenderRest60]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest58, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending58) (EnvironmentMemoryTraceData::intakeRenderBuffer58) 1048575 2097094) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance58, intakeRenderRest59]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest57, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending57) (EnvironmentMemoryTraceData::intakeRenderBuffer57) 1048575 2097095) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance57, intakeRenderRest58]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest56, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending56) (EnvironmentMemoryTraceData::intakeRenderBuffer56) 1048575 2097096) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance56, intakeRenderRest57]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest55, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending55) (EnvironmentMemoryTraceData::intakeRenderBuffer55) 1048575 2097097) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance55, intakeRenderRest56]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest54, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending54) (EnvironmentMemoryTraceData::intakeRenderBuffer54) 1048575 2097098) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance54, intakeRenderRest55]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest53, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending53) (EnvironmentMemoryTraceData::intakeRenderBuffer53) 1048575 2097099) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance53, intakeRenderRest54]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest52, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending52) (EnvironmentMemoryTraceData::intakeRenderBuffer52) 1048575 2097100) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance52, intakeRenderRest53]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest51, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending51) (EnvironmentMemoryTraceData::intakeRenderBuffer51) 1048575 2097101) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance51, intakeRenderRest52]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest50, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending50) (EnvironmentMemoryTraceData::intakeRenderBuffer50) 1048575 2097102) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance50, intakeRenderRest51]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest49, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending49) (EnvironmentMemoryTraceData::intakeRenderBuffer49) 1048575 2097103) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance49, intakeRenderRest50]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest48, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending48) (EnvironmentMemoryTraceData::intakeRenderBuffer48) 1048575 2097104) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance48, intakeRenderRest49]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest47, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending47) (EnvironmentMemoryTraceData::intakeRenderBuffer47) 1048575 2097105) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance47, intakeRenderRest48]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest46, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending46) (EnvironmentMemoryTraceData::intakeRenderBuffer46) 1048575 2097106) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance46, intakeRenderRest47]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest45, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending45) (EnvironmentMemoryTraceData::intakeRenderBuffer45) 1048575 2097107) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance45, intakeRenderRest46]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest44, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending44) (EnvironmentMemoryTraceData::intakeRenderBuffer44) 1048575 2097108) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance44, intakeRenderRest45]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest43, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending43) (EnvironmentMemoryTraceData::intakeRenderBuffer43) 1048575 2097109) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance43, intakeRenderRest44]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest42, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending42) (EnvironmentMemoryTraceData::intakeRenderBuffer42) 1048575 2097110) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance42, intakeRenderRest43]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest41, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending41) (EnvironmentMemoryTraceData::intakeRenderBuffer41) 1048575 2097111) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance41, intakeRenderRest42]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest40, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending40) (EnvironmentMemoryTraceData::intakeRenderBuffer40) 1048575 2097112) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance40, intakeRenderRest41]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest39, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending39) (EnvironmentMemoryTraceData::intakeRenderBuffer39) 1048575 2097113) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance39, intakeRenderRest40]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest38, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending38) (EnvironmentMemoryTraceData::intakeRenderBuffer38) 1048575 2097114) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance38, intakeRenderRest39]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest37, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending37) (EnvironmentMemoryTraceData::intakeRenderBuffer37) 1048575 2097115) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance37, intakeRenderRest38]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest36, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending36) (EnvironmentMemoryTraceData::intakeRenderBuffer36) 1048575 2097116) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance36, intakeRenderRest37]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest35, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending35) (EnvironmentMemoryTraceData::intakeRenderBuffer35) 1048575 2097117) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance35, intakeRenderRest36]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest34, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending34) (EnvironmentMemoryTraceData::intakeRenderBuffer34) 1048575 2097118) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance34, intakeRenderRest35]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest33, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending33) (EnvironmentMemoryTraceData::intakeRenderBuffer33) 1048575 2097119) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance33, intakeRenderRest34]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest32, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending32) (EnvironmentMemoryTraceData::intakeRenderBuffer32) 1048575 2097120) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance32, intakeRenderRest33]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest31, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending31) (EnvironmentMemoryTraceData::intakeRenderBuffer31) 1048575 2097121) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance31, intakeRenderRest32]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest30, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending30) (EnvironmentMemoryTraceData::intakeRenderBuffer30) 1048575 2097122) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance30, intakeRenderRest31]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest29, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending29) (EnvironmentMemoryTraceData::intakeRenderBuffer29) 1048575 2097123) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance29, intakeRenderRest30]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest28, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending28) (EnvironmentMemoryTraceData::intakeRenderBuffer28) 1048575 2097124) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance28, intakeRenderRest29]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest27, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending27) (EnvironmentMemoryTraceData::intakeRenderBuffer27) 1048575 2097125) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance27, intakeRenderRest28]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest26, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending26) (EnvironmentMemoryTraceData::intakeRenderBuffer26) 1048575 2097126) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance26, intakeRenderRest27]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest25, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending25) (EnvironmentMemoryTraceData::intakeRenderBuffer25) 1048575 2097127) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance25, intakeRenderRest26]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest24, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending24) (EnvironmentMemoryTraceData::intakeRenderBuffer24) 1048575 2097128) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance24, intakeRenderRest25]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest23, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending23) (EnvironmentMemoryTraceData::intakeRenderBuffer23) 1048575 2097129) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance23, intakeRenderRest24]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest22, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending22) (EnvironmentMemoryTraceData::intakeRenderBuffer22) 1048575 2097130) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance22, intakeRenderRest23]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest21, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending21) (EnvironmentMemoryTraceData::intakeRenderBuffer21) 1048575 2097131) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance21, intakeRenderRest22]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest20, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending20) (EnvironmentMemoryTraceData::intakeRenderBuffer20) 1048575 2097132) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance20, intakeRenderRest21]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest19, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending19) (EnvironmentMemoryTraceData::intakeRenderBuffer19) 1048575 2097133) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance19, intakeRenderRest20]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest18, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending18) (EnvironmentMemoryTraceData::intakeRenderBuffer18) 1048575 2097134) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance18, intakeRenderRest19]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest17, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending17) (EnvironmentMemoryTraceData::intakeRenderBuffer17) 1048575 2097135) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance17, intakeRenderRest18]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest16, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending16) (EnvironmentMemoryTraceData::intakeRenderBuffer16) 1048575 2097136) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance16, intakeRenderRest17]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest15, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending15) (EnvironmentMemoryTraceData::intakeRenderBuffer15) 1048575 2097137) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance15, intakeRenderRest16]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest14, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending14) (EnvironmentMemoryTraceData::intakeRenderBuffer14) 1048575 2097138) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance14, intakeRenderRest15]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest13, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending13) (EnvironmentMemoryTraceData::intakeRenderBuffer13) 1048575 2097139) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance13, intakeRenderRest14]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest12, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending12) (EnvironmentMemoryTraceData::intakeRenderBuffer12) 1048575 2097140) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance12, intakeRenderRest13]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest11, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending11) (EnvironmentMemoryTraceData::intakeRenderBuffer11) 1048575 2097141) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance11, intakeRenderRest12]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest10, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending10) (EnvironmentMemoryTraceData::intakeRenderBuffer10) 1048575 2097142) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance10, intakeRenderRest11]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest9, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending9) (EnvironmentMemoryTraceData::intakeRenderBuffer9) 1048575 2097143) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance9, intakeRenderRest10]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest8, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending8) (EnvironmentMemoryTraceData::intakeRenderBuffer8) 1048575 2097144) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance8, intakeRenderRest9]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest7, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending7) (EnvironmentMemoryTraceData::intakeRenderBuffer7) 1048575 2097145) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance7, intakeRenderRest8]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest6, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending6) (EnvironmentMemoryTraceData::intakeRenderBuffer6) 1048575 2097146) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance6, intakeRenderRest7]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest5, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending5) (EnvironmentMemoryTraceData::intakeRenderBuffer5) 1048575 2097147) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance5, intakeRenderRest6]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest4, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending4) (EnvironmentMemoryTraceData::intakeRenderBuffer4) 1048575 2097148) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance4, intakeRenderRest5]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest3, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending3) (EnvironmentMemoryTraceData::intakeRenderBuffer3) 1048575 2097149) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance3, intakeRenderRest4]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest2, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending2) (EnvironmentMemoryTraceData::intakeRenderBuffer2) 1048575 2097150) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance2, intakeRenderRest3]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest1, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending1) (EnvironmentMemoryTraceData::intakeRenderBuffer1) 1048575 2097151) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance1, intakeRenderRest2]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderRest0, parameters: [],
+ statement: ((JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending0) (EnvironmentMemoryTraceData::intakeRenderBuffer0) 1048575 2097152) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeData76))), proof: simplify{definitions: [intakeRenderAdvance0, intakeRenderRest1]}, axioms: [propext]
+}
+theorem{
+ name: intakeRenderInitial, parameters: [],
+ statement: ((JsonCanonical::render (cons (ctor JsonCanonical::Work.value (EnvironmentMemory::document (cons (EnvironmentMemoryTraceData::pinnedObservation) (nil EnvironmentMemory::Observation)))) (nil JsonCanonical::Work)) (LexLeanStd.Buffer::new 1048575) 1048575 2097152) = (JsonCanonical::render (EnvironmentMemoryTraceData::intakeRenderPending0) (EnvironmentMemoryTraceData::intakeRenderBuffer0) 1048575 2097152)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeSerializeNewline, parameters: [],
+ statement: ((Json::append (EnvironmentMemoryTraceData::intakeData76) 0x0a) = (EnvironmentMemoryTraceData::intakeSerialized)), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeSerializeBridge, parameters: [],
+ statement: ((EnvironmentMemory::serialize (cons (EnvironmentMemoryTraceData::pinnedObservation) (nil EnvironmentMemory::Observation))) = (match (JsonCanonical::render (cons (ctor JsonCanonical::Work.value (EnvironmentMemory::document (cons (EnvironmentMemoryTraceData::pinnedObservation) (nil EnvironmentMemory::Observation)))) (nil JsonCanonical::Work)) (LexLeanStd.Buffer::new 1048575) 1048575 2097152) | Option.none => (ctor Option.none [Bytes]) | Option.some bytes => (ctor Option.some [Bytes] (Json::append bytes 0x0a)))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeSerializedOnce, parameters: [],
+ statement: ((EnvironmentMemory::serialize (cons (EnvironmentMemoryTraceData::pinnedObservation) (nil EnvironmentMemory::Observation))) = (ctor Option.some [Bytes] (EnvironmentMemoryTraceData::intakeSerialized))), proof: simplify{definitions: [intakeRenderInitial, intakeRenderRest0, intakeSerializeBridge, intakeSerializeNewline]}, axioms: [propext]
+}
+\end{semanticmodule}
+\end{lexlean}

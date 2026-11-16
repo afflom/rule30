@@ -1,0 +1,30 @@
+{
+  "spec": "r30/environment-inspection/2",
+  "operation": "ingest",
+  "local_repository": ".",
+  "repository": "afflom/rule30",
+  "revision": "7c76a54849b8731c729f17342fff130841b05482",
+  "path": ".github/lexlean-revision",
+  "query": "9fd01c31",
+  "task": {
+    "id": "memory-interface-example",
+    "purpose": "prove",
+    "intent": "prove",
+    "status": "ready",
+    "component": "deduction",
+    "sources": [],
+    "schema": "Pinned public compiler identity observation",
+    "sequent": {
+      "origin": "InterfaceExample.goal",
+      "theorem": "InterfaceExample.goal",
+      "premise": 0,
+      "telescope": "",
+      "target": "UNVERIFIED INTERFACE FIXTURE: replace with the exact task target",
+      "kind": "closed"
+    },
+    "age": 0,
+    "weight": 1
+  },
+  "expected_blob": "63ce6dd2ab3b7d1a214d26b8de80cfb0c67aeaf2",
+  "expected_sha256": "64c233769fa2bbc2f53ad70cb4c7f9389a7eaa0bdd7c750f9818d8d148bdf4dc"
+}

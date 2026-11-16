@@ -1,0 +1,1740 @@
+\begin{lexlean}{EnvironmentPlanWireChecks0}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentPlan}
+\importmodule{EnvironmentPlanTraceDecode}
+\importmodule{EnvironmentPlanWireData}
+\importmodule{Json}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: planWire0Identity, parameters: [],
+ statement: ((EnvironmentPlanWireData::planWire0) = 0x7b2273706563223a227233302f656e7669726f6e6d656e742d706c616e2f31222c226f7065726174696f6e223a227175657279222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a22486f7374207265717565737420636f6e7374727563746f7273222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c227175657279223a22616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c22736f7572636573223a5b7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d5d7d), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Utf8Step0, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 0 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 64 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step64, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 64 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 128 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step128, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 128 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 192 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step192, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 192 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 256 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step256, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 256 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 320 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step320, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 320 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 384 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step384, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 384 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 448 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step448, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 448 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 512 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step512, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 512 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 576 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step576, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 576 (fuel + 64)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 640 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Step640, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 640 (fuel + 53)) = (Toml::validFrom (EnvironmentPlanWireData::planWire0) 693 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest693, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 693 0) = true), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest640, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 640 53) = true), proof: simplify{definitions: [planWire0Utf8Rest693, planWire0Utf8Step640]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest576, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 576 117) = true), proof: simplify{definitions: [planWire0Utf8Rest640, planWire0Utf8Step576]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest512, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 512 181) = true), proof: simplify{definitions: [planWire0Utf8Rest576, planWire0Utf8Step512]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest448, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 448 245) = true), proof: simplify{definitions: [planWire0Utf8Rest512, planWire0Utf8Step448]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest384, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 384 309) = true), proof: simplify{definitions: [planWire0Utf8Rest448, planWire0Utf8Step384]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest320, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 320 373) = true), proof: simplify{definitions: [planWire0Utf8Rest384, planWire0Utf8Step320]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest256, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 256 437) = true), proof: simplify{definitions: [planWire0Utf8Rest320, planWire0Utf8Step256]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest192, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 192 501) = true), proof: simplify{definitions: [planWire0Utf8Rest256, planWire0Utf8Step192]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest128, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 128 565) = true), proof: simplify{definitions: [planWire0Utf8Rest192, planWire0Utf8Step128]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest64, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 64 629) = true), proof: simplify{definitions: [planWire0Utf8Rest128, planWire0Utf8Step64]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Utf8Rest0, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentPlanWireData::planWire0) 0 693) = true), proof: simplify{definitions: [planWire0Utf8Rest64, planWire0Utf8Step0]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step0, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State0) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State0) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State1))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending0, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State0) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance0, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State0) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State1) 16 fuel)), proof: simplify{definitions: [planWire0Pending0, planWire0Step0, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step1, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State1) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State1) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State2))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending1, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State1) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance1, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State1) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State2) 16 fuel)), proof: simplify{definitions: [planWire0Pending1, planWire0Step1, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step2, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State2) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State2) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State3))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending2, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State2) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance2, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State2) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State3) 16 fuel)), proof: simplify{definitions: [planWire0Pending2, planWire0Step2, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step3, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State3) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State3) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State4))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending3, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State3) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance3, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State3) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State4) 16 fuel)), proof: simplify{definitions: [planWire0Pending3, planWire0Step3, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step4, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State4) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State4) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State5))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending4, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State4) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance4, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State4) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State5) 16 fuel)), proof: simplify{definitions: [planWire0Pending4, planWire0Step4, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step5, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State5) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State5) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State6))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending5, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State5) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance5, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State5) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State6) 16 fuel)), proof: simplify{definitions: [planWire0Pending5, planWire0Step5, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step6, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State6) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State6) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State7))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending6, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State6) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance6, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State6) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State7) 16 fuel)), proof: simplify{definitions: [planWire0Pending6, planWire0Step6, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step7, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State7) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State7) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State8))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending7, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State7) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance7, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State7) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State8) 16 fuel)), proof: simplify{definitions: [planWire0Pending7, planWire0Step7, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step8, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State8) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State8) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State9))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending8, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State8) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance8, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State8) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State9) 16 fuel)), proof: simplify{definitions: [planWire0Pending8, planWire0Step8, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step9, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State9) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State9) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State10))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending9, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State9) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance9, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State9) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State10) 16 fuel)), proof: simplify{definitions: [planWire0Pending9, planWire0Step9, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step10, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State10) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State10) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State11))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending10, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State10) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance10, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State10) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State11) 16 fuel)), proof: simplify{definitions: [planWire0Pending10, planWire0Step10, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step11, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State11) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State11) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State12))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending11, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State11) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance11, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State11) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State12) 16 fuel)), proof: simplify{definitions: [planWire0Pending11, planWire0Step11, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step12, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State12) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State12) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State13))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending12, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State12) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance12, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State12) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State13) 16 fuel)), proof: simplify{definitions: [planWire0Pending12, planWire0Step12, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step13, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State13) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State13) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State14))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending13, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State13) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance13, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State13) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State14) 16 fuel)), proof: simplify{definitions: [planWire0Pending13, planWire0Step13, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step14, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State14) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State14) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State15))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending14, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State14) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance14, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State14) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State15) 16 fuel)), proof: simplify{definitions: [planWire0Pending14, planWire0Step14, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step15, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State15) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State15) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State16))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending15, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State15) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance15, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State15) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State16) 16 fuel)), proof: simplify{definitions: [planWire0Pending15, planWire0Step15, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step16, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State16) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State16) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State17))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending16, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State16) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance16, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State16) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State17) 16 fuel)), proof: simplify{definitions: [planWire0Pending16, planWire0Step16, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step17, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State17) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State17) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State18))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending17, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State17) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance17, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State17) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State18) 16 fuel)), proof: simplify{definitions: [planWire0Pending17, planWire0Step17, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step18, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State18) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State18) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State19))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending18, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State18) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance18, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State18) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State19) 16 fuel)), proof: simplify{definitions: [planWire0Pending18, planWire0Step18, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step19, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State19) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State19) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State20))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending19, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State19) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance19, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State19) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State20) 16 fuel)), proof: simplify{definitions: [planWire0Pending19, planWire0Step19, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step20, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State20) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State20) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State21))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending20, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State20) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance20, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State20) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State21) 16 fuel)), proof: simplify{definitions: [planWire0Pending20, planWire0Step20, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step21, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State21) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State21) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State22))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending21, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State21) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance21, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State21) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State22) 16 fuel)), proof: simplify{definitions: [planWire0Pending21, planWire0Step21, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step22, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State22) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State22) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State23))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending22, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State22) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance22, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State22) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State23) 16 fuel)), proof: simplify{definitions: [planWire0Pending22, planWire0Step22, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step23, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State23) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State23) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State24))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending23, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State23) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance23, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State23) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State24) 16 fuel)), proof: simplify{definitions: [planWire0Pending23, planWire0Step23, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step24, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State24) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State24) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State25))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending24, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State24) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance24, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State24) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State25) 16 fuel)), proof: simplify{definitions: [planWire0Pending24, planWire0Step24, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step25, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State25) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State25) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State26))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending25, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State25) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance25, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State25) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State26) 16 fuel)), proof: simplify{definitions: [planWire0Pending25, planWire0Step25, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step26, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State26) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State26) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State27))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending26, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State26) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance26, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State26) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State27) 16 fuel)), proof: simplify{definitions: [planWire0Pending26, planWire0Step26, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step27, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State27) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State27) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State28))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending27, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State27) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance27, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State27) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State28) 16 fuel)), proof: simplify{definitions: [planWire0Pending27, planWire0Step27, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step28, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State28) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State28) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State29))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending28, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State28) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance28, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State28) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State29) 16 fuel)), proof: simplify{definitions: [planWire0Pending28, planWire0Step28, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step29, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State29) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State29) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State30))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending29, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State29) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance29, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State29) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State30) 16 fuel)), proof: simplify{definitions: [planWire0Pending29, planWire0Step29, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step30, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State30) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State30) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State31))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending30, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State30) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance30, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State30) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State31) 16 fuel)), proof: simplify{definitions: [planWire0Pending30, planWire0Step30, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step31, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State31) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State31) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State32))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending31, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State31) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance31, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State31) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State32) 16 fuel)), proof: simplify{definitions: [planWire0Pending31, planWire0Step31, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step32, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State32) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State32) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State33))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending32, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State32) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance32, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State32) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State33) 16 fuel)), proof: simplify{definitions: [planWire0Pending32, planWire0Step32, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step33, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State33) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State33) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State34))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending33, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State33) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance33, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State33) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State34) 16 fuel)), proof: simplify{definitions: [planWire0Pending33, planWire0Step33, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step34, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State34) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State34) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State35))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending34, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State34) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance34, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State34) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State35) 16 fuel)), proof: simplify{definitions: [planWire0Pending34, planWire0Step34, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step35, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State35) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State35) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State36))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending35, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State35) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance35, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State35) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State36) 16 fuel)), proof: simplify{definitions: [planWire0Pending35, planWire0Step35, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step36, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State36) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State36) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State37))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending36, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State36) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance36, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State36) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State37) 16 fuel)), proof: simplify{definitions: [planWire0Pending36, planWire0Step36, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step37, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State37) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State37) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State38))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending37, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State37) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance37, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State37) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State38) 16 fuel)), proof: simplify{definitions: [planWire0Pending37, planWire0Step37, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step38, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State38) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State38) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State39))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending38, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State38) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance38, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State38) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State39) 16 fuel)), proof: simplify{definitions: [planWire0Pending38, planWire0Step38, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step39, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State39) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State39) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State40))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending39, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State39) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance39, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State39) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State40) 16 fuel)), proof: simplify{definitions: [planWire0Pending39, planWire0Step39, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step40, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State40) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State40) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State41))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending40, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State40) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance40, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State40) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State41) 16 fuel)), proof: simplify{definitions: [planWire0Pending40, planWire0Step40, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step41, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State41) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State41) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State42))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending41, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State41) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance41, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State41) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State42) 16 fuel)), proof: simplify{definitions: [planWire0Pending41, planWire0Step41, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step42, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State42) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State42) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State43))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending42, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State42) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance42, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State42) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State43) 16 fuel)), proof: simplify{definitions: [planWire0Pending42, planWire0Step42, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step43, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State43) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State43) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State44))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending43, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State43) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance43, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State43) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State44) 16 fuel)), proof: simplify{definitions: [planWire0Pending43, planWire0Step43, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step44, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State44) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State44) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State45))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending44, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State44) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance44, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State44) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State45) 16 fuel)), proof: simplify{definitions: [planWire0Pending44, planWire0Step44, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step45, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State45) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State45) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State46))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending45, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State45) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance45, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State45) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State46) 16 fuel)), proof: simplify{definitions: [planWire0Pending45, planWire0Step45, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step46, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State46) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State46) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State47))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending46, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State46) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance46, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State46) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State47) 16 fuel)), proof: simplify{definitions: [planWire0Pending46, planWire0Step46, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step47, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State47) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State47) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State48))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending47, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State47) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance47, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State47) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State48) 16 fuel)), proof: simplify{definitions: [planWire0Pending47, planWire0Step47, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step48, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State48) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State48) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State49))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending48, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State48) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance48, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State48) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State49) 16 fuel)), proof: simplify{definitions: [planWire0Pending48, planWire0Step48, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step49, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State49) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State49) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State50))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending49, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State49) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance49, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State49) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State50) 16 fuel)), proof: simplify{definitions: [planWire0Pending49, planWire0Step49, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step50, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State50) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State50) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State51))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending50, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State50) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance50, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State50) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State51) 16 fuel)), proof: simplify{definitions: [planWire0Pending50, planWire0Step50, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step51, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State51) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State51) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State52))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending51, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State51) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance51, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State51) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State52) 16 fuel)), proof: simplify{definitions: [planWire0Pending51, planWire0Step51, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step52, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State52) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State52) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State53))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending52, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State52) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance52, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State52) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State53) 16 fuel)), proof: simplify{definitions: [planWire0Pending52, planWire0Step52, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step53, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State53) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State53) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State54))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending53, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State53) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance53, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State53) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State54) 16 fuel)), proof: simplify{definitions: [planWire0Pending53, planWire0Step53, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step54, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State54) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State54) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State55))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending54, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State54) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance54, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State54) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State55) 16 fuel)), proof: simplify{definitions: [planWire0Pending54, planWire0Step54, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step55, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State55) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State55) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State56))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending55, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State55) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance55, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State55) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State56) 16 fuel)), proof: simplify{definitions: [planWire0Pending55, planWire0Step55, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step56, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State56) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State56) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State57))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending56, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State56) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance56, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State56) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State57) 16 fuel)), proof: simplify{definitions: [planWire0Pending56, planWire0Step56, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step57, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State57) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State57) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State58))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending57, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State57) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance57, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State57) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State58) 16 fuel)), proof: simplify{definitions: [planWire0Pending57, planWire0Step57, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step58, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State58) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State58) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State59))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending58, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State58) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance58, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State58) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State59) 16 fuel)), proof: simplify{definitions: [planWire0Pending58, planWire0Step58, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step59, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State59) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State59) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State60))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending59, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State59) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance59, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State59) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State60) 16 fuel)), proof: simplify{definitions: [planWire0Pending59, planWire0Step59, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step60, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State60) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State60) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State61))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending60, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State60) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance60, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State60) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State61) 16 fuel)), proof: simplify{definitions: [planWire0Pending60, planWire0Step60, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step61, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State61) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State61) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State62))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending61, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State61) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance61, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State61) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State62) 16 fuel)), proof: simplify{definitions: [planWire0Pending61, planWire0Step61, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step62, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State62) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State62) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State63))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending62, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State62) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance62, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State62) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State63) 16 fuel)), proof: simplify{definitions: [planWire0Pending62, planWire0Step62, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step63, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State63) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State63) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State64))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending63, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State63) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance63, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State63) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State64) 16 fuel)), proof: simplify{definitions: [planWire0Pending63, planWire0Step63, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step64, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State64) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State64) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State65))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending64, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State64) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance64, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State64) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State65) 16 fuel)), proof: simplify{definitions: [planWire0Pending64, planWire0Step64, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step65, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State65) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State65) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State66))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending65, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State65) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance65, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State65) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State66) 16 fuel)), proof: simplify{definitions: [planWire0Pending65, planWire0Step65, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step66, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State66) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State66) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State67))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending66, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State66) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance66, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State66) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State67) 16 fuel)), proof: simplify{definitions: [planWire0Pending66, planWire0Step66, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step67, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State67) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State67) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State68))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending67, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State67) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance67, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State67) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State68) 16 fuel)), proof: simplify{definitions: [planWire0Pending67, planWire0Step67, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step68, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State68) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State68) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State69))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending68, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State68) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance68, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State68) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State69) 16 fuel)), proof: simplify{definitions: [planWire0Pending68, planWire0Step68, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step69, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State69) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State69) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State70))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending69, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State69) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance69, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State69) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State70) 16 fuel)), proof: simplify{definitions: [planWire0Pending69, planWire0Step69, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step70, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State70) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State70) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State71))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending70, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State70) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance70, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State70) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State71) 16 fuel)), proof: simplify{definitions: [planWire0Pending70, planWire0Step70, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step71, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State71) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State71) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State72))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending71, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State71) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance71, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State71) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State72) 16 fuel)), proof: simplify{definitions: [planWire0Pending71, planWire0Step71, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step72, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State72) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State72) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State73))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending72, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State72) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance72, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State72) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State73) 16 fuel)), proof: simplify{definitions: [planWire0Pending72, planWire0Step72, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step73, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State73) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State73) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State74))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending73, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State73) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance73, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State73) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State74) 16 fuel)), proof: simplify{definitions: [planWire0Pending73, planWire0Step73, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step74, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State74) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State74) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State75))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending74, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State74) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance74, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State74) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State75) 16 fuel)), proof: simplify{definitions: [planWire0Pending74, planWire0Step74, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step75, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State75) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State75) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State76))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending75, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State75) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance75, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State75) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State76) 16 fuel)), proof: simplify{definitions: [planWire0Pending75, planWire0Step75, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step76, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State76) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State76) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State77))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending76, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State76) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance76, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State76) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State77) 16 fuel)), proof: simplify{definitions: [planWire0Pending76, planWire0Step76, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step77, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State77) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State77) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State78))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending77, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State77) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance77, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State77) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State78) 16 fuel)), proof: simplify{definitions: [planWire0Pending77, planWire0Step77, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step78, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State78) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State78) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State79))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending78, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State78) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance78, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State78) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State79) 16 fuel)), proof: simplify{definitions: [planWire0Pending78, planWire0Step78, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step79, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State79) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State79) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State80))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending79, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State79) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance79, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State79) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State80) 16 fuel)), proof: simplify{definitions: [planWire0Pending79, planWire0Step79, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step80, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State80) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State80) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State81))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending80, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State80) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance80, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State80) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State81) 16 fuel)), proof: simplify{definitions: [planWire0Pending80, planWire0Step80, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step81, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State81) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State81) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State82))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending81, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State81) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance81, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State81) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State82) 16 fuel)), proof: simplify{definitions: [planWire0Pending81, planWire0Step81, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step82, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State82) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State82) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State83))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending82, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State82) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance82, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State82) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State83) 16 fuel)), proof: simplify{definitions: [planWire0Pending82, planWire0Step82, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step83, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State83) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State83) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State84))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending83, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State83) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance83, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State83) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State84) 16 fuel)), proof: simplify{definitions: [planWire0Pending83, planWire0Step83, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step84, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State84) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State84) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State85))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending84, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State84) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance84, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State84) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State85) 16 fuel)), proof: simplify{definitions: [planWire0Pending84, planWire0Step84, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step85, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State85) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State85) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State86))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending85, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State85) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance85, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State85) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State86) 16 fuel)), proof: simplify{definitions: [planWire0Pending85, planWire0Step85, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step86, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State86) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State86) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State87))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending86, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State86) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance86, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State86) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State87) 16 fuel)), proof: simplify{definitions: [planWire0Pending86, planWire0Step86, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step87, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State87) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State87) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State88))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending87, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State87) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance87, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State87) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State88) 16 fuel)), proof: simplify{definitions: [planWire0Pending87, planWire0Step87, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step88, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State88) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State88) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State89))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending88, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State88) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance88, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State88) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State89) 16 fuel)), proof: simplify{definitions: [planWire0Pending88, planWire0Step88, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step89, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State89) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State89) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State90))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending89, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State89) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance89, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State89) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State90) 16 fuel)), proof: simplify{definitions: [planWire0Pending89, planWire0Step89, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step90, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State90) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State90) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State91))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending90, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State90) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance90, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State90) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State91) 16 fuel)), proof: simplify{definitions: [planWire0Pending90, planWire0Step90, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step91, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State91) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State91) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State92))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending91, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State91) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance91, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State91) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State92) 16 fuel)), proof: simplify{definitions: [planWire0Pending91, planWire0Step91, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step92, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State92) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State92) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State93))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending92, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State92) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance92, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State92) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State93) 16 fuel)), proof: simplify{definitions: [planWire0Pending92, planWire0Step92, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step93, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State93) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State93) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State94))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending93, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State93) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance93, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State93) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State94) 16 fuel)), proof: simplify{definitions: [planWire0Pending93, planWire0Step93, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step94, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State94) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State94) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State95))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending94, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State94) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance94, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State94) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State95) 16 fuel)), proof: simplify{definitions: [planWire0Pending94, planWire0Step94, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step95, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State95) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State95) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State96))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending95, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State95) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance95, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State95) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State96) 16 fuel)), proof: simplify{definitions: [planWire0Pending95, planWire0Step95, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step96, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State96) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State96) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State97))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending96, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State96) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance96, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State96) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State97) 16 fuel)), proof: simplify{definitions: [planWire0Pending96, planWire0Step96, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step97, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State97) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State97) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State98))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending97, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State97) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance97, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State97) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State98) 16 fuel)), proof: simplify{definitions: [planWire0Pending97, planWire0Step97, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step98, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State98) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State98) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State99))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending98, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State98) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance98, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State98) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State99) 16 fuel)), proof: simplify{definitions: [planWire0Pending98, planWire0Step98, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Step99, parameters: [],
+ statement: ((Json::advance (EnvironmentPlanWireData::planWire0) (Json::skip (EnvironmentPlanWireData::planWire0) (project (EnvironmentPlanWireData::planWire0State99) position) (prim length (EnvironmentPlanWireData::planWire0) : Nat)) (project (EnvironmentPlanWireData::planWire0State99) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentPlanWireData::planWire0State100))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Pending99, parameters: [],
+ statement: ((project (EnvironmentPlanWireData::planWire0State99) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Advance99, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State99) 16 (fuel + 1)) = (Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State100) 16 fuel)), proof: simplify{definitions: [planWire0Pending99, planWire0Step99, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest100, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State100) 16 593) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest99, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State99) 16 594) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance99, planWire0Rest100]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest98, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State98) 16 595) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance98, planWire0Rest99]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest97, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State97) 16 596) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance97, planWire0Rest98]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest96, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State96) 16 597) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance96, planWire0Rest97]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest95, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State95) 16 598) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance95, planWire0Rest96]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest94, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State94) 16 599) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance94, planWire0Rest95]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest93, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State93) 16 600) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance93, planWire0Rest94]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest92, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State92) 16 601) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance92, planWire0Rest93]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest91, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State91) 16 602) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance91, planWire0Rest92]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest90, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State90) 16 603) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance90, planWire0Rest91]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest89, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State89) 16 604) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance89, planWire0Rest90]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest88, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State88) 16 605) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance88, planWire0Rest89]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest87, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State87) 16 606) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance87, planWire0Rest88]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest86, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State86) 16 607) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance86, planWire0Rest87]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest85, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State85) 16 608) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance85, planWire0Rest86]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest84, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State84) 16 609) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance84, planWire0Rest85]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest83, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State83) 16 610) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance83, planWire0Rest84]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest82, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State82) 16 611) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance82, planWire0Rest83]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest81, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State81) 16 612) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance81, planWire0Rest82]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest80, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State80) 16 613) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance80, planWire0Rest81]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest79, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State79) 16 614) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance79, planWire0Rest80]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest78, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State78) 16 615) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance78, planWire0Rest79]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest77, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State77) 16 616) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance77, planWire0Rest78]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest76, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State76) 16 617) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance76, planWire0Rest77]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest75, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State75) 16 618) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance75, planWire0Rest76]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest74, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State74) 16 619) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance74, planWire0Rest75]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest73, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State73) 16 620) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance73, planWire0Rest74]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest72, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State72) 16 621) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance72, planWire0Rest73]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest71, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State71) 16 622) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance71, planWire0Rest72]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest70, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State70) 16 623) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance70, planWire0Rest71]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest69, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State69) 16 624) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance69, planWire0Rest70]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest68, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State68) 16 625) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance68, planWire0Rest69]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest67, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State67) 16 626) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance67, planWire0Rest68]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest66, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State66) 16 627) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance66, planWire0Rest67]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest65, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State65) 16 628) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance65, planWire0Rest66]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest64, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State64) 16 629) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance64, planWire0Rest65]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest63, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State63) 16 630) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance63, planWire0Rest64]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest62, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State62) 16 631) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance62, planWire0Rest63]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest61, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State61) 16 632) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance61, planWire0Rest62]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest60, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State60) 16 633) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance60, planWire0Rest61]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest59, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State59) 16 634) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance59, planWire0Rest60]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest58, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State58) 16 635) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance58, planWire0Rest59]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest57, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State57) 16 636) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance57, planWire0Rest58]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest56, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State56) 16 637) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance56, planWire0Rest57]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest55, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State55) 16 638) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance55, planWire0Rest56]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest54, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State54) 16 639) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance54, planWire0Rest55]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest53, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State53) 16 640) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance53, planWire0Rest54]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest52, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State52) 16 641) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance52, planWire0Rest53]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest51, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State51) 16 642) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance51, planWire0Rest52]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest50, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State50) 16 643) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance50, planWire0Rest51]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest49, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State49) 16 644) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance49, planWire0Rest50]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest48, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State48) 16 645) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance48, planWire0Rest49]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest47, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State47) 16 646) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance47, planWire0Rest48]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest46, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State46) 16 647) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance46, planWire0Rest47]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest45, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State45) 16 648) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance45, planWire0Rest46]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest44, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State44) 16 649) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance44, planWire0Rest45]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest43, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State43) 16 650) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance43, planWire0Rest44]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest42, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State42) 16 651) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance42, planWire0Rest43]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest41, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State41) 16 652) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance41, planWire0Rest42]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest40, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State40) 16 653) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance40, planWire0Rest41]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest39, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State39) 16 654) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance39, planWire0Rest40]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest38, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State38) 16 655) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance38, planWire0Rest39]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest37, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State37) 16 656) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance37, planWire0Rest38]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest36, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State36) 16 657) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance36, planWire0Rest37]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest35, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State35) 16 658) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance35, planWire0Rest36]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest34, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State34) 16 659) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance34, planWire0Rest35]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest33, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State33) 16 660) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance33, planWire0Rest34]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest32, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State32) 16 661) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance32, planWire0Rest33]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest31, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State31) 16 662) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance31, planWire0Rest32]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest30, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State30) 16 663) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance30, planWire0Rest31]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest29, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State29) 16 664) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance29, planWire0Rest30]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest28, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State28) 16 665) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance28, planWire0Rest29]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest27, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State27) 16 666) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance27, planWire0Rest28]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest26, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State26) 16 667) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance26, planWire0Rest27]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest25, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State25) 16 668) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance25, planWire0Rest26]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest24, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State24) 16 669) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance24, planWire0Rest25]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest23, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State23) 16 670) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance23, planWire0Rest24]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest22, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State22) 16 671) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance22, planWire0Rest23]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest21, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State21) 16 672) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance21, planWire0Rest22]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest20, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State20) 16 673) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance20, planWire0Rest21]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest19, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State19) 16 674) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance19, planWire0Rest20]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest18, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State18) 16 675) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance18, planWire0Rest19]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest17, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State17) 16 676) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance17, planWire0Rest18]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest16, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State16) 16 677) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance16, planWire0Rest17]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest15, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State15) 16 678) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance15, planWire0Rest16]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest14, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State14) 16 679) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance14, planWire0Rest15]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest13, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State13) 16 680) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance13, planWire0Rest14]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest12, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State12) 16 681) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance12, planWire0Rest13]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest11, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State11) 16 682) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance11, planWire0Rest12]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest10, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State10) 16 683) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance10, planWire0Rest11]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest9, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State9) 16 684) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance9, planWire0Rest10]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest8, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State8) 16 685) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance8, planWire0Rest9]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest7, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State7) 16 686) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance7, planWire0Rest8]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest6, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State6) 16 687) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance6, planWire0Rest7]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest5, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State5) 16 688) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance5, planWire0Rest6]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest4, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State4) 16 689) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance4, planWire0Rest5]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest3, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State3) 16 690) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance3, planWire0Rest4]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest2, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State2) 16 691) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance2, planWire0Rest3]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest1, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State1) 16 692) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance1, planWire0Rest2]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Rest0, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (EnvironmentPlanWireData::planWire0State0) 16 693) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Advance0, planWire0Rest1]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Size, parameters: [],
+ statement: ((prim length (EnvironmentPlanWireData::planWire0) : Nat) = 693), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Fits, parameters: [],
+ statement: ((65536 <? 693) = false), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Initial, parameters: [],
+ statement: ((Json::state 0 (nil Json::Frame) (ctor Option.none [Json::Value])) = (EnvironmentPlanWireData::planWire0State0)), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: planWire0Scan, parameters: [],
+ statement: ((Json::scan (EnvironmentPlanWireData::planWire0) (Json::state 0 (nil Json::Frame) (ctor Option.none [Json::Value])) 16 693) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Initial, planWire0Rest0]}, axioms: [propext]
+}
+theorem{
+ name: planWire0Parsed, parameters: [],
+ statement: ((Json::parse (EnvironmentPlanWireData::planWire0) 65536 16) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: simplify{definitions: [planWire0Fits, planWire0Scan, planWire0Size, planWire0Utf8Rest0, Json::fromLimitWithin, Json::fromUtf8Valid, Json::parse]}, axioms: [propext]
+}
+theorem{
+ name: planWire0ParsedLiteral, parameters: [],
+ statement: ((Json::parse 0x7b2273706563223a227233302f656e7669726f6e6d656e742d706c616e2f31222c226f7065726174696f6e223a227175657279222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a22486f7374207265717565737420636f6e7374727563746f7273222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c227175657279223a22616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c22736f7572636573223a5b7b227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2265336265343737666465643236333032393437393132373336336637666236613335393765376434222c2270617468223a22524541444d452e6d64227d5d7d 65536 16) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))), proof: apply{theorem: planWire0Parsed, arguments: []}, axioms: [propext]
+}
+theorem{
+ name: planWire0Refused, parameters: [],
+ statement: ((EnvironmentPlanTraceDecode::decodedPlan (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentPlanWireData::planData304))) = (ctor Option.none [EnvironmentPlan::Plan])), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

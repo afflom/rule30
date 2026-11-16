@@ -1,0 +1,1851 @@
+\begin{lexlean}{EnvironmentMemoryTraceWire2}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\importmodule{EnvironmentAcquisition}
+\importmodule{EnvironmentMemory}
+\importmodule{EnvironmentMemoryCommand}
+\importmodule{EnvironmentMemoryTraceData}
+\importmodule{Host}
+\importmodule{Json}
+\importmodule{JsonCanonical}
+\importmodule{LexLeanStd.Buffer}
+\importmodule{LexLeanStd.Host}
+\importmodule{Research}
+\importmodule{ResearchInput}
+\importmodule{Toml}
+\title{Boolean}
+\begin{semanticmodule}
+theorem{
+ name: intakeWire2Identity, parameters: [],
+ statement: ((EnvironmentMemoryTraceData::intakeWire2) = 0x7b2273706563223a227233302f656e7669726f6e6d656e742d696e7370656374696f6e2f33222c226f7065726174696f6e223a22696e67657374222c226c6f63616c5f7265706f7369746f7279223a222e222c227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2237633736613534383439623837333163373239663137333432666666313330383431623035343832222c2270617468223a222e6769746875622f6c65786c65616e2d7265766973696f6e222c227175657279223a223966643031633331222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a2250696e6e6564207075626c696320636f6d70696c6572206964656e74697479206f62736572766174696f6e222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c2265787065637465645f626c6f62223a2236336365366464326162336237643161323134643236623864653830636662306336376165616632222c2265787065637465645f736861323536223a2236346332333337363966613262626332663533616437306362346337663933383961376561613062646437633735306639383138643864313438626466346463227d), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Utf8Step0, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 0 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 64 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step64, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 64 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 128 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step128, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 128 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 192 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step192, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 192 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 256 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step256, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 256 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 320 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step320, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 320 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 384 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step384, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 384 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 448 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step448, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 448 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 512 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step512, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 512 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 576 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step576, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 576 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 640 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step640, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 640 (fuel + 64)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 704 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Step704, parameters: [fuel : Nat],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 704 (fuel + 61)) = (Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 765 fuel)), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest765, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 765 0) = true), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest704, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 704 61) = true), proof: simplify{definitions: [intakeWire2Utf8Rest765, intakeWire2Utf8Step704]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest640, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 640 125) = true), proof: simplify{definitions: [intakeWire2Utf8Rest704, intakeWire2Utf8Step640]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest576, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 576 189) = true), proof: simplify{definitions: [intakeWire2Utf8Rest640, intakeWire2Utf8Step576]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest512, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 512 253) = true), proof: simplify{definitions: [intakeWire2Utf8Rest576, intakeWire2Utf8Step512]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest448, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 448 317) = true), proof: simplify{definitions: [intakeWire2Utf8Rest512, intakeWire2Utf8Step448]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest384, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 384 381) = true), proof: simplify{definitions: [intakeWire2Utf8Rest448, intakeWire2Utf8Step384]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest320, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 320 445) = true), proof: simplify{definitions: [intakeWire2Utf8Rest384, intakeWire2Utf8Step320]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest256, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 256 509) = true), proof: simplify{definitions: [intakeWire2Utf8Rest320, intakeWire2Utf8Step256]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest192, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 192 573) = true), proof: simplify{definitions: [intakeWire2Utf8Rest256, intakeWire2Utf8Step192]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest128, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 128 637) = true), proof: simplify{definitions: [intakeWire2Utf8Rest192, intakeWire2Utf8Step128]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest64, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 64 701) = true), proof: simplify{definitions: [intakeWire2Utf8Rest128, intakeWire2Utf8Step64]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Utf8Rest0, parameters: [],
+ statement: ((Toml::validFrom (EnvironmentMemoryTraceData::intakeWire2) 0 765) = true), proof: simplify{definitions: [intakeWire2Utf8Rest64, intakeWire2Utf8Step0]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step0, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State0) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State0) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State1))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending0, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State0) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance0, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State0) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State1) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending0, intakeWire2Step0, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step1, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State1) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State1) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State2))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending1, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State1) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance1, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State1) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State2) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending1, intakeWire2Step1, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step2, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State2) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State2) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State3))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending2, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State2) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance2, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State2) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State3) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending2, intakeWire2Step2, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step3, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State3) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State3) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State4))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending3, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State3) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance3, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State3) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State4) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending3, intakeWire2Step3, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step4, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State4) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State4) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State5))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending4, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State4) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance4, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State4) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State5) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending4, intakeWire2Step4, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step5, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State5) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State5) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State6))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending5, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State5) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance5, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State5) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State6) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending5, intakeWire2Step5, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step6, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State6) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State6) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State7))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending6, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State6) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance6, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State6) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State7) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending6, intakeWire2Step6, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step7, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State7) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State7) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State8))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending7, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State7) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance7, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State7) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State8) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending7, intakeWire2Step7, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step8, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State8) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State8) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State9))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending8, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State8) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance8, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State8) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State9) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending8, intakeWire2Step8, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step9, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State9) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State9) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State10))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending9, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State9) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance9, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State9) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State10) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending9, intakeWire2Step9, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step10, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State10) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State10) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State11))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending10, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State10) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance10, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State10) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State11) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending10, intakeWire2Step10, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step11, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State11) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State11) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State12))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending11, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State11) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance11, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State11) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State12) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending11, intakeWire2Step11, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step12, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State12) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State12) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State13))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending12, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State12) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance12, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State12) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State13) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending12, intakeWire2Step12, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step13, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State13) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State13) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State14))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending13, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State13) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance13, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State13) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State14) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending13, intakeWire2Step13, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step14, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State14) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State14) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State15))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending14, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State14) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance14, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State14) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State15) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending14, intakeWire2Step14, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step15, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State15) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State15) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State16))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending15, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State15) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance15, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State15) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State16) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending15, intakeWire2Step15, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step16, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State16) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State16) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State17))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending16, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State16) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance16, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State16) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State17) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending16, intakeWire2Step16, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step17, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State17) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State17) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State18))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending17, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State17) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance17, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State17) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State18) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending17, intakeWire2Step17, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step18, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State18) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State18) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State19))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending18, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State18) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance18, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State18) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State19) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending18, intakeWire2Step18, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step19, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State19) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State19) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State20))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending19, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State19) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance19, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State19) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State20) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending19, intakeWire2Step19, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step20, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State20) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State20) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State21))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending20, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State20) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance20, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State20) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State21) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending20, intakeWire2Step20, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step21, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State21) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State21) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State22))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending21, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State21) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance21, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State21) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State22) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending21, intakeWire2Step21, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step22, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State22) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State22) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State23))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending22, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State22) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance22, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State22) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State23) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending22, intakeWire2Step22, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step23, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State23) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State23) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State24))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending23, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State23) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance23, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State23) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State24) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending23, intakeWire2Step23, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step24, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State24) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State24) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State25))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending24, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State24) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance24, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State24) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State25) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending24, intakeWire2Step24, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step25, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State25) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State25) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State26))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending25, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State25) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance25, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State25) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State26) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending25, intakeWire2Step25, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step26, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State26) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State26) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State27))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending26, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State26) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance26, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State26) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State27) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending26, intakeWire2Step26, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step27, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State27) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State27) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State28))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending27, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State27) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance27, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State27) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State28) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending27, intakeWire2Step27, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step28, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State28) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State28) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State29))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending28, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State28) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance28, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State28) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State29) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending28, intakeWire2Step28, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step29, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State29) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State29) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State30))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending29, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State29) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance29, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State29) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State30) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending29, intakeWire2Step29, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step30, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State30) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State30) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State31))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending30, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State30) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance30, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State30) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State31) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending30, intakeWire2Step30, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step31, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State31) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State31) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State32))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending31, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State31) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance31, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State31) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State32) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending31, intakeWire2Step31, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step32, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State32) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State32) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State33))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending32, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State32) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance32, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State32) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State33) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending32, intakeWire2Step32, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step33, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State33) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State33) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State34))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending33, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State33) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance33, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State33) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State34) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending33, intakeWire2Step33, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step34, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State34) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State34) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State35))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending34, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State34) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance34, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State34) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State35) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending34, intakeWire2Step34, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step35, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State35) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State35) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State36))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending35, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State35) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance35, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State35) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State36) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending35, intakeWire2Step35, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step36, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State36) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State36) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State37))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending36, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State36) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance36, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State36) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State37) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending36, intakeWire2Step36, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step37, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State37) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State37) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State38))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending37, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State37) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance37, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State37) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State38) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending37, intakeWire2Step37, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step38, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State38) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State38) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State39))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending38, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State38) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance38, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State38) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State39) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending38, intakeWire2Step38, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step39, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State39) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State39) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State40))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending39, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State39) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance39, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State39) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State40) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending39, intakeWire2Step39, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step40, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State40) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State40) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State41))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending40, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State40) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance40, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State40) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State41) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending40, intakeWire2Step40, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step41, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State41) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State41) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State42))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending41, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State41) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance41, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State41) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State42) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending41, intakeWire2Step41, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step42, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State42) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State42) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State43))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending42, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State42) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance42, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State42) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State43) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending42, intakeWire2Step42, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step43, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State43) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State43) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State44))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending43, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State43) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance43, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State43) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State44) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending43, intakeWire2Step43, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step44, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State44) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State44) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State45))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending44, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State44) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance44, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State44) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State45) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending44, intakeWire2Step44, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step45, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State45) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State45) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State46))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending45, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State45) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance45, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State45) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State46) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending45, intakeWire2Step45, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step46, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State46) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State46) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State47))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending46, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State46) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance46, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State46) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State47) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending46, intakeWire2Step46, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step47, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State47) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State47) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State48))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending47, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State47) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance47, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State47) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State48) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending47, intakeWire2Step47, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step48, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State48) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State48) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State49))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending48, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State48) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance48, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State48) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State49) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending48, intakeWire2Step48, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step49, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State49) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State49) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State50))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending49, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State49) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance49, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State49) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State50) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending49, intakeWire2Step49, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step50, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State50) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State50) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State51))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending50, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State50) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance50, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State50) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State51) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending50, intakeWire2Step50, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step51, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State51) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State51) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State52))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending51, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State51) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance51, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State51) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State52) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending51, intakeWire2Step51, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step52, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State52) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State52) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State53))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending52, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State52) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance52, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State52) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State53) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending52, intakeWire2Step52, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step53, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State53) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State53) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State54))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending53, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State53) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance53, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State53) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State54) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending53, intakeWire2Step53, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step54, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State54) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State54) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State55))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending54, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State54) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance54, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State54) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State55) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending54, intakeWire2Step54, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step55, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State55) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State55) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State56))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending55, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State55) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance55, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State55) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State56) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending55, intakeWire2Step55, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step56, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State56) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State56) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State57))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending56, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State56) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance56, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State56) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State57) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending56, intakeWire2Step56, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step57, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State57) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State57) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State58))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending57, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State57) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance57, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State57) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State58) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending57, intakeWire2Step57, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step58, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State58) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State58) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State59))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending58, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State58) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance58, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State58) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State59) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending58, intakeWire2Step58, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step59, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State59) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State59) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State60))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending59, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State59) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance59, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State59) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State60) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending59, intakeWire2Step59, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step60, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State60) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State60) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State61))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending60, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State60) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance60, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State60) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State61) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending60, intakeWire2Step60, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step61, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State61) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State61) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State62))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending61, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State61) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance61, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State61) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State62) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending61, intakeWire2Step61, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step62, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State62) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State62) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State63))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending62, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State62) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance62, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State62) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State63) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending62, intakeWire2Step62, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step63, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State63) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State63) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State64))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending63, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State63) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance63, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State63) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State64) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending63, intakeWire2Step63, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step64, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State64) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State64) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State65))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending64, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State64) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance64, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State64) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State65) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending64, intakeWire2Step64, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step65, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State65) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State65) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State66))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending65, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State65) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance65, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State65) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State66) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending65, intakeWire2Step65, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step66, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State66) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State66) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State67))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending66, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State66) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance66, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State66) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State67) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending66, intakeWire2Step66, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step67, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State67) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State67) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State68))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending67, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State67) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance67, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State67) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State68) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending67, intakeWire2Step67, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step68, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State68) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State68) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State69))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending68, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State68) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance68, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State68) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State69) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending68, intakeWire2Step68, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step69, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State69) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State69) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State70))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending69, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State69) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance69, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State69) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State70) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending69, intakeWire2Step69, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step70, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State70) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State70) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State71))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending70, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State70) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance70, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State70) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State71) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending70, intakeWire2Step70, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step71, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State71) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State71) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State72))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending71, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State71) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance71, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State71) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State72) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending71, intakeWire2Step71, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step72, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State72) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State72) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State73))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending72, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State72) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance72, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State72) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State73) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending72, intakeWire2Step72, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step73, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State73) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State73) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State74))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending73, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State73) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance73, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State73) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State74) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending73, intakeWire2Step73, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step74, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State74) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State74) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State75))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending74, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State74) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance74, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State74) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State75) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending74, intakeWire2Step74, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step75, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State75) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State75) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State76))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending75, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State75) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance75, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State75) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State76) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending75, intakeWire2Step75, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step76, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State76) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State76) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State77))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending76, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State76) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance76, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State76) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State77) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending76, intakeWire2Step76, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step77, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State77) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State77) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State78))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending77, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State77) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance77, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State77) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State78) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending77, intakeWire2Step77, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step78, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State78) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State78) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State79))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending78, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State78) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance78, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State78) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State79) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending78, intakeWire2Step78, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step79, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State79) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State79) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State80))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending79, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State79) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance79, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State79) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State80) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending79, intakeWire2Step79, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step80, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State80) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State80) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State81))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending80, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State80) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance80, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State80) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State81) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending80, intakeWire2Step80, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step81, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State81) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State81) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State82))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending81, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State81) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance81, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State81) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State82) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending81, intakeWire2Step81, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step82, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State82) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State82) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State83))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending82, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State82) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance82, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State82) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State83) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending82, intakeWire2Step82, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step83, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State83) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State83) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State84))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending83, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State83) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance83, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State83) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State84) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending83, intakeWire2Step83, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step84, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State84) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State84) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State85))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending84, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State84) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance84, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State84) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State85) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending84, intakeWire2Step84, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step85, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State85) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State85) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State86))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending85, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State85) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance85, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State85) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State86) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending85, intakeWire2Step85, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step86, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State86) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State86) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State87))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending86, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State86) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance86, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State86) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State87) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending86, intakeWire2Step86, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step87, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State87) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State87) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State88))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending87, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State87) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance87, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State87) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State88) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending87, intakeWire2Step87, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step88, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State88) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State88) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State89))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending88, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State88) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance88, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State88) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State89) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending88, intakeWire2Step88, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step89, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State89) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State89) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State90))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending89, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State89) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance89, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State89) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State90) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending89, intakeWire2Step89, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step90, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State90) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State90) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State91))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending90, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State90) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance90, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State90) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State91) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending90, intakeWire2Step90, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step91, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State91) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State91) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State92))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending91, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State91) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance91, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State91) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State92) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending91, intakeWire2Step91, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step92, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State92) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State92) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State93))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending92, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State92) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance92, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State92) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State93) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending92, intakeWire2Step92, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step93, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State93) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State93) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State94))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending93, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State93) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance93, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State93) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State94) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending93, intakeWire2Step93, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step94, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State94) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State94) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State95))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending94, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State94) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance94, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State94) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State95) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending94, intakeWire2Step94, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step95, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State95) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State95) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State96))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending95, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State95) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance95, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State95) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State96) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending95, intakeWire2Step95, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step96, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State96) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State96) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State97))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending96, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State96) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance96, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State96) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State97) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending96, intakeWire2Step96, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step97, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State97) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State97) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State98))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending97, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State97) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance97, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State97) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State98) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending97, intakeWire2Step97, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step98, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State98) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State98) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State99))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending98, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State98) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance98, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State98) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State99) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending98, intakeWire2Step98, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step99, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State99) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State99) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State100))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending99, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State99) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance99, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State99) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State100) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending99, intakeWire2Step99, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step100, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State100) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State100) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State101))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending100, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State100) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance100, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State100) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State101) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending100, intakeWire2Step100, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step101, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State101) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State101) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State102))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending101, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State101) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance101, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State101) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State102) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending101, intakeWire2Step101, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step102, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State102) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State102) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State103))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending102, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State102) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance102, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State102) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State103) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending102, intakeWire2Step102, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step103, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State103) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State103) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State104))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending103, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State103) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance103, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State103) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State104) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending103, intakeWire2Step103, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step104, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State104) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State104) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State105))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending104, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State104) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance104, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State104) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State105) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending104, intakeWire2Step104, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Step105, parameters: [],
+ statement: ((Json::advance (EnvironmentMemoryTraceData::intakeWire2) (Json::skip (EnvironmentMemoryTraceData::intakeWire2) (project (EnvironmentMemoryTraceData::intakeWire2State105) position) (prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat)) (project (EnvironmentMemoryTraceData::intakeWire2State105) frames) 16) = (ctor Result.ok [Json::State, Json::Problem] (EnvironmentMemoryTraceData::intakeWire2State106))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Pending105, parameters: [],
+ statement: ((project (EnvironmentMemoryTraceData::intakeWire2State105) value) = (ctor Option.none [Json::Value])), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Advance105, parameters: [fuel : Nat],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State105) 16 (fuel + 1)) = (Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State106) 16 fuel)), proof: simplify{definitions: [intakeWire2Pending105, intakeWire2Step105, Json::scan]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest106, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State106) 16 659) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: reflexivity{}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest105, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State105) 16 660) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance105, intakeWire2Rest106]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest104, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State104) 16 661) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance104, intakeWire2Rest105]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest103, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State103) 16 662) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance103, intakeWire2Rest104]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest102, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State102) 16 663) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance102, intakeWire2Rest103]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest101, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State101) 16 664) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance101, intakeWire2Rest102]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest100, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State100) 16 665) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance100, intakeWire2Rest101]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest99, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State99) 16 666) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance99, intakeWire2Rest100]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest98, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State98) 16 667) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance98, intakeWire2Rest99]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest97, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State97) 16 668) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance97, intakeWire2Rest98]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest96, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State96) 16 669) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance96, intakeWire2Rest97]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest95, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State95) 16 670) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance95, intakeWire2Rest96]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest94, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State94) 16 671) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance94, intakeWire2Rest95]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest93, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State93) 16 672) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance93, intakeWire2Rest94]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest92, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State92) 16 673) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance92, intakeWire2Rest93]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest91, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State91) 16 674) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance91, intakeWire2Rest92]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest90, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State90) 16 675) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance90, intakeWire2Rest91]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest89, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State89) 16 676) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance89, intakeWire2Rest90]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest88, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State88) 16 677) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance88, intakeWire2Rest89]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest87, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State87) 16 678) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance87, intakeWire2Rest88]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest86, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State86) 16 679) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance86, intakeWire2Rest87]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest85, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State85) 16 680) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance85, intakeWire2Rest86]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest84, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State84) 16 681) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance84, intakeWire2Rest85]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest83, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State83) 16 682) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance83, intakeWire2Rest84]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest82, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State82) 16 683) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance82, intakeWire2Rest83]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest81, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State81) 16 684) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance81, intakeWire2Rest82]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest80, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State80) 16 685) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance80, intakeWire2Rest81]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest79, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State79) 16 686) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance79, intakeWire2Rest80]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest78, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State78) 16 687) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance78, intakeWire2Rest79]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest77, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State77) 16 688) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance77, intakeWire2Rest78]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest76, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State76) 16 689) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance76, intakeWire2Rest77]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest75, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State75) 16 690) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance75, intakeWire2Rest76]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest74, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State74) 16 691) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance74, intakeWire2Rest75]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest73, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State73) 16 692) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance73, intakeWire2Rest74]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest72, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State72) 16 693) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance72, intakeWire2Rest73]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest71, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State71) 16 694) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance71, intakeWire2Rest72]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest70, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State70) 16 695) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance70, intakeWire2Rest71]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest69, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State69) 16 696) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance69, intakeWire2Rest70]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest68, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State68) 16 697) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance68, intakeWire2Rest69]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest67, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State67) 16 698) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance67, intakeWire2Rest68]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest66, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State66) 16 699) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance66, intakeWire2Rest67]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest65, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State65) 16 700) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance65, intakeWire2Rest66]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest64, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State64) 16 701) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance64, intakeWire2Rest65]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest63, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State63) 16 702) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance63, intakeWire2Rest64]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest62, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State62) 16 703) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance62, intakeWire2Rest63]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest61, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State61) 16 704) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance61, intakeWire2Rest62]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest60, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State60) 16 705) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance60, intakeWire2Rest61]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest59, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State59) 16 706) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance59, intakeWire2Rest60]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest58, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State58) 16 707) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance58, intakeWire2Rest59]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest57, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State57) 16 708) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance57, intakeWire2Rest58]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest56, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State56) 16 709) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance56, intakeWire2Rest57]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest55, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State55) 16 710) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance55, intakeWire2Rest56]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest54, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State54) 16 711) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance54, intakeWire2Rest55]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest53, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State53) 16 712) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance53, intakeWire2Rest54]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest52, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State52) 16 713) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance52, intakeWire2Rest53]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest51, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State51) 16 714) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance51, intakeWire2Rest52]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest50, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State50) 16 715) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance50, intakeWire2Rest51]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest49, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State49) 16 716) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance49, intakeWire2Rest50]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest48, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State48) 16 717) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance48, intakeWire2Rest49]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest47, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State47) 16 718) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance47, intakeWire2Rest48]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest46, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State46) 16 719) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance46, intakeWire2Rest47]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest45, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State45) 16 720) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance45, intakeWire2Rest46]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest44, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State44) 16 721) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance44, intakeWire2Rest45]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest43, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State43) 16 722) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance43, intakeWire2Rest44]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest42, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State42) 16 723) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance42, intakeWire2Rest43]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest41, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State41) 16 724) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance41, intakeWire2Rest42]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest40, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State40) 16 725) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance40, intakeWire2Rest41]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest39, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State39) 16 726) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance39, intakeWire2Rest40]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest38, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State38) 16 727) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance38, intakeWire2Rest39]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest37, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State37) 16 728) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance37, intakeWire2Rest38]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest36, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State36) 16 729) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance36, intakeWire2Rest37]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest35, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State35) 16 730) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance35, intakeWire2Rest36]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest34, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State34) 16 731) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance34, intakeWire2Rest35]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest33, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State33) 16 732) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance33, intakeWire2Rest34]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest32, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State32) 16 733) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance32, intakeWire2Rest33]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest31, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State31) 16 734) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance31, intakeWire2Rest32]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest30, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State30) 16 735) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance30, intakeWire2Rest31]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest29, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State29) 16 736) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance29, intakeWire2Rest30]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest28, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State28) 16 737) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance28, intakeWire2Rest29]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest27, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State27) 16 738) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance27, intakeWire2Rest28]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest26, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State26) 16 739) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance26, intakeWire2Rest27]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest25, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State25) 16 740) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance25, intakeWire2Rest26]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest24, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State24) 16 741) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance24, intakeWire2Rest25]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest23, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State23) 16 742) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance23, intakeWire2Rest24]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest22, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State22) 16 743) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance22, intakeWire2Rest23]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest21, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State21) 16 744) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance21, intakeWire2Rest22]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest20, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State20) 16 745) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance20, intakeWire2Rest21]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest19, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State19) 16 746) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance19, intakeWire2Rest20]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest18, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State18) 16 747) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance18, intakeWire2Rest19]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest17, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State17) 16 748) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance17, intakeWire2Rest18]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest16, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State16) 16 749) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance16, intakeWire2Rest17]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest15, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State15) 16 750) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance15, intakeWire2Rest16]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest14, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State14) 16 751) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance14, intakeWire2Rest15]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest13, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State13) 16 752) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance13, intakeWire2Rest14]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest12, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State12) 16 753) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance12, intakeWire2Rest13]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest11, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State11) 16 754) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance11, intakeWire2Rest12]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest10, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State10) 16 755) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance10, intakeWire2Rest11]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest9, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State9) 16 756) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance9, intakeWire2Rest10]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest8, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State8) 16 757) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance8, intakeWire2Rest9]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest7, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State7) 16 758) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance7, intakeWire2Rest8]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest6, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State6) 16 759) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance6, intakeWire2Rest7]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest5, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State5) 16 760) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance5, intakeWire2Rest6]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest4, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State4) 16 761) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance4, intakeWire2Rest5]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest3, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State3) 16 762) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance3, intakeWire2Rest4]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest2, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State2) 16 763) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance2, intakeWire2Rest3]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest1, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State1) 16 764) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance1, intakeWire2Rest2]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Rest0, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (EnvironmentMemoryTraceData::intakeWire2State0) 16 765) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Advance0, intakeWire2Rest1]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Size, parameters: [],
+ statement: ((prim length (EnvironmentMemoryTraceData::intakeWire2) : Nat) = 765), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Fits, parameters: [],
+ statement: ((65536 <? 765) = false), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Initial, parameters: [],
+ statement: ((Json::state 0 (nil Json::Frame) (ctor Option.none [Json::Value])) = (EnvironmentMemoryTraceData::intakeWire2State0)), proof: reflexivity{}, axioms: []
+}
+theorem{
+ name: intakeWire2Scan, parameters: [],
+ statement: ((Json::scan (EnvironmentMemoryTraceData::intakeWire2) (Json::state 0 (nil Json::Frame) (ctor Option.none [Json::Value])) 16 765) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Initial, intakeWire2Rest0]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2Parsed, parameters: [],
+ statement: ((Json::parse (EnvironmentMemoryTraceData::intakeWire2) 65536 16) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: simplify{definitions: [intakeWire2Fits, intakeWire2Scan, intakeWire2Size, intakeWire2Utf8Rest0, Json::fromLimitWithin, Json::fromUtf8Valid, Json::parse]}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2ParsedLiteral, parameters: [],
+ statement: ((Json::parse 0x7b2273706563223a227233302f656e7669726f6e6d656e742d696e7370656374696f6e2f33222c226f7065726174696f6e223a22696e67657374222c226c6f63616c5f7265706f7369746f7279223a222e222c227265706f7369746f7279223a226166666c6f6d2f72756c653330222c227265766973696f6e223a2237633736613534383439623837333163373239663137333432666666313330383431623035343832222c2270617468223a222e6769746875622f6c65786c65616e2d7265766973696f6e222c227175657279223a223966643031633331222c227461736b223a7b226964223a226d656d6f72792d696e746572666163652d6578616d706c65222c22707572706f7365223a2270726f7665222c22696e74656e74223a2270726f7665222c22737461747573223a227265616479222c22636f6d706f6e656e74223a22646564756374696f6e222c22736f7572636573223a5b5d2c22736368656d61223a2250696e6e6564207075626c696320636f6d70696c6572206964656e74697479206f62736572766174696f6e222c2273657175656e74223a7b226f726967696e223a22496e746572666163654578616d706c652e676f616c222c227468656f72656d223a22496e746572666163654578616d706c652e676f616c222c227072656d697365223a302c2274656c6573636f7065223a22222c22746172676574223a22554e564552494649454420494e5445524641434520464958545552453a207265706c616365207769746820746865206578616374207461736b20746172676574222c226b696e64223a22636c6f736564227d2c22616765223a302c22776569676874223a317d2c2265787065637465645f626c6f62223a2236336365366464326162336237643161323134643236623864653830636662306336376165616632222c2265787065637465645f736861323536223a2236346332333337363966613262626332663533616437306362346337663933383961376561613062646437633735306639383138643864313438626466346463227d 65536 16) = (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))), proof: apply{theorem: intakeWire2Parsed, arguments: []}, axioms: [propext]
+}
+theorem{
+ name: intakeWire2DecodeRefused, parameters: [],
+ statement: ((EnvironmentMemoryTraceData::intakeDecode "/private" (ctor Result.ok [Json::Value, Json::Problem] (EnvironmentMemoryTraceData::intakeData73))) = (ctor Option.none [EnvironmentMemoryCommand::Config])), proof: reflexivity{}, axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

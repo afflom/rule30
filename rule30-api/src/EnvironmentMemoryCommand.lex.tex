@@ -15,7 +15,7 @@
 \begin{semanticmodule}
 structure{
  name: Config, type_parameters: [], parameters: [],
- fields: [{name: home, type: String}, {name: source, type: String}, {name: repository, type: Bytes}, {name: revision, type: Bytes}, {name: path, type: Bytes}, {name: query, type: Bytes}, {name: ingest, type: Bool}, {name: task, type: Research::Task}]
+ fields: [{name: home, type: String}, {name: source, type: String}, {name: repository, type: Bytes}, {name: revision, type: Bytes}, {name: path, type: Bytes}, {name: query, type: Bytes}, {name: expectedBlob, type: Bytes}, {name: expectedDigest, type: Bytes}, {name: ingest, type: Bool}, {name: task, type: Research::Task}]
 }
 inductive{
  name: State, type_parameters: [], parameters: [],
@@ -34,8 +34,20 @@ definition{
  body: (EnvironmentAcquisition::join (project config home) suffix), axioms: [Quot.sound, propext], executable: true
 }
 definition{
+ name: pinnedSchema, parameters: [value : Json::Value], result: Bool,
+ body: ((EnvironmentMemory::objectSize value 10) && ((Toml::sameBytes (EnvironmentMemory::get value 0x73706563) 0x7233302f656e7669726f6e6d656e742d696e7370656374696f6e2f32) && ((Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374) && ((((prim length (EnvironmentMemory::get value 0x65787065637465645f626c6f62) : Nat) =? 40) && (EnvironmentMemory::hexadecimal (EnvironmentMemory::get value 0x65787065637465645f626c6f62) 0 40)) && (((prim length (EnvironmentMemory::get value 0x65787065637465645f736861323536) : Nat) =? 64) && (EnvironmentMemory::hexadecimal (EnvironmentMemory::get value 0x65787065637465645f736861323536) 0 64)))))), axioms: [propext], executable: true
+}
+definition{
+ name: schema, parameters: [value : Json::Value], result: Bool,
+ body: (((EnvironmentMemory::objectSize value 8) && (Toml::sameBytes (EnvironmentMemory::get value 0x73706563) 0x7233302f656e7669726f6e6d656e742d696e7370656374696f6e2f31)) || (pinnedSchema value)), axioms: [propext], executable: true
+}
+definition{
+ name: acceptsSource, parameters: [config : Config, item : EnvironmentMemory::Observation], result: Bool,
+ body: ((Toml::sameBytes (project config repository) (project item repository)) && ((Toml::sameBytes (project config revision) (project item revision)) && ((Toml::sameBytes (project config path) (project item path)) && (if ((prim length (project config expectedBlob) : Nat) =? 0) then true else ((Toml::sameBytes (project config expectedBlob) (project item blob)) && (Toml::sameBytes (project config expectedDigest) (project item digest))))))), executable: true
+}
+definition{
  name: parseConfig, parameters: [home : String, data : Bytes], result: (Option Config),
- body: (match (Json::parse data 65536 16) | Result.error problem => (ctor Option.none [Config]) | Result.ok value => (if (((EnvironmentMemory::objectSize value 8) && (ResearchInput::stringIs (field value 0x70617468) (EnvironmentMemory::get value 0x70617468))) && ((Toml::sameBytes (EnvironmentMemory::get value 0x73706563) 0x7233302f656e7669726f6e6d656e742d696e7370656374696f6e2f31) && ((EnvironmentMemory::repositoryLabel (EnvironmentMemory::get value 0x7265706f7369746f7279)) && ((EnvironmentMemory::bounded (EnvironmentMemory::get value 0x7175657279) 128) && ((Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374) || (Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x7175657279)))))) then (match (ResearchInput::task (field value 0x7461736b)) | Option.none => (ctor Option.none [Config]) | Option.some task => (match (ResearchInput::text (field value 0x6c6f63616c5f7265706f7369746f7279)) | Option.none => (ctor Option.none [Config]) | Option.some source => (let config : Config := (record Config {home := home, source := source, repository := (EnvironmentMemory::get value 0x7265706f7369746f7279), revision := (EnvironmentMemory::get value 0x7265766973696f6e), path := (EnvironmentMemory::get value 0x70617468), query := (EnvironmentMemory::get value 0x7175657279), ingest := (Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374), task := task}); (if (((prim length (project config revision) : Nat) =? 40) && (EnvironmentMemory::hexadecimal (project config revision) 0 40)) then (ctor Option.some [Config] config) else (ctor Option.none [Config]))))) else (ctor Option.none [Config]))), axioms: [Quot.sound, propext], executable: true
+ body: (match (Json::parse data 65536 16) | Result.error problem => (ctor Option.none [Config]) | Result.ok value => (if (((schema value) && (ResearchInput::stringIs (field value 0x70617468) (EnvironmentMemory::get value 0x70617468))) && ((EnvironmentMemory::repositoryLabel (EnvironmentMemory::get value 0x7265706f7369746f7279)) && ((EnvironmentMemory::bounded (EnvironmentMemory::get value 0x7175657279) 128) && ((Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374) || (Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x7175657279))))) then (match (ResearchInput::task (field value 0x7461736b)) | Option.none => (ctor Option.none [Config]) | Option.some task => (match (ResearchInput::text (field value 0x6c6f63616c5f7265706f7369746f7279)) | Option.none => (ctor Option.none [Config]) | Option.some source => (let config : Config := (record Config {home := home, source := source, repository := (EnvironmentMemory::get value 0x7265706f7369746f7279), revision := (EnvironmentMemory::get value 0x7265766973696f6e), path := (EnvironmentMemory::get value 0x70617468), query := (EnvironmentMemory::get value 0x7175657279), expectedBlob := (EnvironmentMemory::get value 0x65787065637465645f626c6f62), expectedDigest := (EnvironmentMemory::get value 0x65787065637465645f736861323536), ingest := (Toml::sameBytes (EnvironmentMemory::get value 0x6f7065726174696f6e) 0x696e67657374), task := task}); (if (((prim length (project config revision) : Nat) =? 40) && (EnvironmentMemory::hexadecimal (project config revision) 0 40)) then (ctor Option.some [Config] config) else (ctor Option.none [Config]))))) else (ctor Option.none [Config]))), axioms: [Quot.sound, propext], executable: true
 }
 definition{
  name: inspect, parameters: [config : Config, store : (List EnvironmentMemory::Observation)], result: Json::Value,
@@ -51,7 +63,7 @@ definition{
 }
 definition{
  name: acquired, parameters: [config : Config, store : (List EnvironmentMemory::Observation), result : (EnvironmentAcquisition::State * EnvironmentAcquisition::Emission)], result: (State * LexLeanStd.Host::Request),
- body: (match (second result) | EnvironmentAcquisition::Emission.host request => ((ctor State.acquiring config store (first result)), request) | EnvironmentAcquisition::Emission.failed reason => (error reason) | EnvironmentAcquisition::Emission.complete item => (match (EnvironmentMemory::ingest item store) | Option.none => (error "memory full or immutable source conflicts with stored content") | Option.some next => (match (EnvironmentMemory::serialize next) | Option.none => (error "memory cannot be serialized within durable byte budget") | Option.some data => ((ctor State.writing config data), (ctor LexLeanStd.Host::Request.write (path config "/observations.pending") data))))), axioms: [Quot.sound, propext], executable: true
+ body: (match (second result) | EnvironmentAcquisition::Emission.host request => ((ctor State.acquiring config store (first result)), request) | EnvironmentAcquisition::Emission.failed reason => (error reason) | EnvironmentAcquisition::Emission.complete item => (if (acceptsSource config item) then (match (EnvironmentMemory::ingest item store) | Option.none => (error "memory full or immutable source conflicts with stored content") | Option.some next => (match (EnvironmentMemory::serialize next) | Option.none => (error "memory cannot be serialized within durable byte budget") | Option.some data => ((ctor State.writing config data), (ctor LexLeanStd.Host::Request.write (path config "/observations.pending") data)))) else (error "source differs from expected repository, revision, path, blob or SHA-256"))), axioms: [Quot.sound, propext], executable: true
 }
 definition{
  name: useStore, parameters: [config : Config, store : (List EnvironmentMemory::Observation)], result: (State * LexLeanStd.Host::Request),
@@ -96,7 +108,7 @@ definition{
 }
 definition{
  name: features, parameters: [], result: (List String),
- body: (cons "native-bounded-environment-inspection" (cons "locked-atomic-store-replacement" (cons "validated-durable-reopen" (cons "exact-task-context-output-without-proof-receipts" (nil String))))), executable: true
+ body: (cons "sha256-and-blob-pinned-local-source-acceptance" (cons "native-bounded-environment-inspection" (cons "locked-atomic-store-replacement" (cons "validated-durable-reopen" (cons "exact-task-context-output-without-proof-receipts" (nil String)))))), executable: true
 }
 \end{semanticmodule}
 \end{lexlean}
