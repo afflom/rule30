@@ -67,6 +67,7 @@ import Rule30UOR.UnitSeedMask
 import Rule30UOR.Walled
 import Rule30UOR.MaskSlice
 import Rule30UOR.Deduced
+import Rule30UOR.NativeAcceptanceFixture
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command

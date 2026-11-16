@@ -1,0 +1,25 @@
+\begin{lexlean}{NativeAcceptanceFixture}
+\useglossary{lexlean.std.bool@1.2.0}
+\title{Boolean}
+\begin{coremodule}
+imports []
+theorem Rule30UOR.NativeAcceptanceFixture.premise : @12 := @16 {class: false, generated: false, policy: exact{axioms: []}, transparency: semireducible}
+@0 := const "Nat"
+@1 := #0
+@2 := const "Eq".{1}
+@3 := @2 @0
+@4 := @3 @1
+@5 := @4 @1
+@6 := #1
+@7 := @3 @6
+@8 := @7 @6
+@9 := const "True"
+@10 := ("second" : @8) -> @9
+@11 := ("first" : @5) -> @10
+@12 := ("n" : @0) -> @11
+@13 := const "True.intro"
+@14 := fun ("second" : @8) => @13
+@15 := fun ("first" : @5) => @14
+@16 := fun ("n" : @0) => @15
+\end{coremodule}
+\end{lexlean}
