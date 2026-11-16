@@ -231,9 +231,17 @@ definition{
   name: claimTask,
   parameters: [claim : Register::Claim],
   result: Research::Task,
-  body: (match (closedSequent (project claim id))
-    | Option.none => (record Research::Task {id := (prim append 0x636c61696d3a (prim utf8_encode (project claim id) : Bytes) : Bytes), purpose := (ctor Research::Purpose.inspect), intent := (ctor Research::Purpose.prove), status := (if (prim equal (project claim lean) "" : Bool) then (ctor Research::Status.blocked) else (ctor Research::Status.ready)), component := "audit", sources := (cons (prim utf8_encode (project claim lean) : Bytes) (nil Bytes)), schema := (prim utf8_encode (project claim id) : Bytes), sequent := (Research::emptySequent), age := 0, weight := 8})
-    | Option.some goal => (record Research::Task {id := (prim append 0x636c61696d3a (prim utf8_encode (project claim id) : Bytes) : Bytes), purpose := (ctor Research::Purpose.prove), intent := (ctor Research::Purpose.prove), status := (if (matchesClosedSource (project claim id) (project claim lean)) then (ctor Research::Status.ready) else (ctor Research::Status.blocked)), component := "deduction", sources := (if (matchesClosedSource (project claim id) (project claim lean)) then (cons (project goal origin) (nil Bytes)) else (nil Bytes)), schema := (prim utf8_encode (project claim id) : Bytes), sequent := goal, age := 0, weight := 8})),
+  body: (let selected : (Option Research::Sequent) := (closedSequent (project claim id));
+    (record Research::Task {
+      id := (prim append 0x636c61696d3a (prim utf8_encode (project claim id) : Bytes) : Bytes),
+      purpose := (match selected | Option.none => (ctor Research::Purpose.inspect) | Option.some goal => (ctor Research::Purpose.prove)),
+      intent := (ctor Research::Purpose.prove),
+      status := (match selected | Option.none => (if (prim equal (project claim lean) "" : Bool) then (ctor Research::Status.blocked) else (ctor Research::Status.ready)) | Option.some goal => (if (matchesClosedSource (project claim id) (project claim lean)) then (ctor Research::Status.ready) else (ctor Research::Status.blocked))),
+      component := (match selected | Option.none => "audit" | Option.some goal => "deduction"),
+      sources := (match selected | Option.none => (cons (prim utf8_encode (project claim lean) : Bytes) (nil Bytes)) | Option.some goal => (if (matchesClosedSource (project claim id) (project claim lean)) then (cons (project goal origin) (nil Bytes)) else (nil Bytes))),
+      schema := (prim utf8_encode (project claim id) : Bytes),
+      sequent := (match selected | Option.none => (Research::emptySequent) | Option.some goal => goal),
+      age := 0, weight := 8})),
   axioms: [propext],
   executable: true
 }
@@ -274,6 +282,21 @@ theorem{
   statement: ((covered (registeredScopes)) = true),
   proof: decide{},
   axioms: []
+}
+theorem{
+  name: catalogClaimIdentityBindsSchema,
+  parameters: [claim : Register::Claim],
+  statement: ((project (claimTask claim) id) = (prim append 0x636c61696d3a (project (claimTask claim) schema) : Bytes)),
+  proof: reflexivity{},
+  axioms: [propext]
+}
+
+theorem{
+  name: catalogClaimSchemaIsFrontierIdentity,
+  parameters: [claim : Register::Claim],
+  statement: ((project (claimTask claim) schema) = (prim utf8_encode (project claim id) : Bytes)),
+  proof: reflexivity{},
+  axioms: [propext]
 }
 \end{semanticmodule}
 \end{lexlean}

@@ -40,10 +40,18 @@ definition{
  executable: true
 }
 definition{
+ name: claimIdentity,
+ parameters: [task : Research::Task],
+ result: Bytes,
+ body: (if (Toml::sameBytes (project task id) (prim append 0x636c61696d3a (project task schema) : Bytes)) then (project task schema) else (project task id)),
+ axioms: [],
+ executable: true
+}
+definition{
  name: current,
  parameters: [source : Bytes, task : Research::Task],
  result: Bool,
- body: (if ((prim length source : Nat) <=? 8388608) then (match (Toml::parse source) | Result.error problem => false | Result.ok tables => (match (selected tables (project task id)) | List.nil => false | List.cons head tail => (match tail | List.nil => (eligible head task) | List.cons duplicate rest => false))) else false),
+ body: (if ((prim length source : Nat) <=? 8388608) then (match (Toml::parse source) | Result.error problem => false | Result.ok tables => (match (selected tables (claimIdentity task)) | List.nil => false | List.cons head tail => (match tail | List.nil => (eligible head task) | List.cons duplicate rest => false))) else false),
  axioms: [propext],
  executable: true
 }
@@ -59,7 +67,7 @@ definition{
  name: contract,
  parameters: [],
  result: String,
- body: "Read the frontier from the owned exact-revision workspace before publication. Require one matching open claim and a prove or refute intent. A closed claim must still designate the inspected source proposition. A contextual premise contributes a supporting lemma without changing the enclosing claim status. Duplicate identifiers, non-open claims, malformed TOML and origin changes refuse publication.",
+ body: "Read the frontier from the owned exact-revision workspace before publication. Resolve a catalog claim:<schema> identity through its exact schema binding, preserving raw supplied claim identifiers. Use the same resolved identity for admission and frontier mutation. Require one matching open claim and a prove or refute intent. A closed claim must still designate the inspected source proposition. A contextual premise contributes a supporting lemma without changing the enclosing claim status. Duplicate identifiers, non-open claims, malformed TOML and origin changes refuse publication.",
  axioms: [],
  executable: true
 }

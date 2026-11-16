@@ -118,6 +118,20 @@ theorem{
  axioms: [propext]
 }
 theorem{
+ name: catalogClaimIdentityMatchesFrontier,
+ parameters: [task : Research::Task],
+ statement: ((PublicationFrontier::current 0x5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d20226f70656e220a6c65616e203d202250726f70220a (record Research::Task {id := 0x636c61696d3a616c706861, purpose := (project task purpose), intent := (ctor Research::Purpose.prove), status := (project task status), component := (project task component), sources := (project task sources), schema := 0x616c706861, sequent := (record Research::Sequent {origin := 0x50726f70, theorem := (project (project task sequent) theorem), premise := (project (project task sequent) premise), telescope := (project (project task sequent) telescope), target := (project (project task sequent) target), kind := (ctor Research::GoalKind.closed)}), age := (project task age), weight := (project task weight)})) = true),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
+ name: catalogClaimRejectsUnboundSchema,
+ parameters: [task : Research::Task],
+ statement: ((PublicationFrontier::current 0x5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d20226f70656e220a6c65616e203d202250726f70220a (record Research::Task {id := 0x636c61696d3a616c706861, purpose := (project task purpose), intent := (ctor Research::Purpose.prove), status := (project task status), component := (project task component), sources := (project task sources), schema := 0x62657461, sequent := (record Research::Sequent {origin := 0x50726f70, theorem := (project (project task sequent) theorem), premise := (project (project task sequent) premise), telescope := (project (project task sequent) telescope), target := (project (project task sequent) target), kind := (ctor Research::GoalKind.closed)}), age := (project task age), weight := (project task weight)})) = false),
+ proof: reflexivity{},
+ axioms: [propext]
+}
+theorem{
  name: closedClaimRejectsChangedOrigin,
  parameters: [task : Research::Task],
  statement: ((PublicationFrontier::current 0x5b5b636c61696d5d5d0a6964203d2022616c706861220a737461747573203d20226f70656e220a6c65616e203d202250726f70220a (record Research::Task {id := 0x616c706861, purpose := (project task purpose), intent := (ctor Research::Purpose.prove), status := (project task status), component := (project task component), sources := (project task sources), schema := (project task schema), sequent := (record Research::Sequent {origin := 0x4f74686572, theorem := (project (project task sequent) theorem), premise := (project (project task sequent) premise), telescope := (project (project task sequent) telescope), target := (project (project task sequent) target), kind := (ctor Research::GoalKind.closed)}), age := (project task age), weight := (project task weight)})) = false),
@@ -170,6 +184,34 @@ theorem{
  name: pushNamesTheRetainedCommit,
  parameters: [config : PublicationPlan::Config, commit : Bytes],
  statement: ((PublicationPlan::arguments config (ctor PublicationPlan::Operation.push) commit) = (cons "-c" (cons "core.hooksPath=.githooks" (cons "push" (cons (ResearchVerification::concat "--force-with-lease=refs/heads/main:" (Host::textOf (project (PublicationPlan::workspace config) revision))) (cons "origin" (cons (ResearchVerification::concat (Host::textOf commit) ":refs/heads/main") (nil String)))))))),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: failedPublicationPreservesPublished,
+ parameters: [state : ResearchPublication::State, completion : ResearchExecution::Completion],
+ statement: ((project (first (ResearchPublication::completed state (record ResearchExecution::Completion {request := (project completion request), kind := (ctor ResearchExecution::EndKind.failed), code := (ctor Option.some [Int32] (1 : Int32)), clock := (project completion clock), output := (project completion output), errors := (project completion errors), detail := (project completion detail)}))) published) = (project state published)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: failedPublicationPreservesOwner,
+ parameters: [state : ResearchPublication::State, completion : ResearchExecution::Completion],
+ statement: ((project (first (ResearchPublication::completed state (record ResearchExecution::Completion {request := (project completion request), kind := (ctor ResearchExecution::EndKind.failed), code := (ctor Option.some [Int32] (1 : Int32)), clock := (project completion clock), output := (project completion output), errors := (project completion errors), detail := (project completion detail)}))) owner) = (project state owner)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: refusedPublicationPreservesPublished,
+ parameters: [state : ResearchPublication::State, completion : ResearchExecution::Completion],
+ statement: ((project (first (ResearchPublication::completed state (record ResearchExecution::Completion {request := (project completion request), kind := (ctor ResearchExecution::EndKind.refused), code := (ctor Option.some [Int32] (1 : Int32)), clock := (project completion clock), output := (project completion output), errors := (project completion errors), detail := (project completion detail)}))) published) = (project state published)),
+ proof: reflexivity{},
+ axioms: [Quot.sound, propext]
+}
+theorem{
+ name: refusedPublicationPreservesOwner,
+ parameters: [state : ResearchPublication::State, completion : ResearchExecution::Completion],
+ statement: ((project (first (ResearchPublication::completed state (record ResearchExecution::Completion {request := (project completion request), kind := (ctor ResearchExecution::EndKind.refused), code := (ctor Option.some [Int32] (1 : Int32)), clock := (project completion clock), output := (project completion output), errors := (project completion errors), detail := (project completion detail)}))) owner) = (project state owner)),
  proof: reflexivity{},
  axioms: [Quot.sound, propext]
 }
