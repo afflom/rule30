@@ -20,10 +20,17 @@ definition{
  executable: true
 }
 definition{
+ name: moduleIdentity,
+ parameters: [identity : Bytes],
+ result: Bytes,
+ body: (append 0x52756c653330554f522e (moduleName identity)),
+ executable: true
+}
+definition{
  name: theoremName,
  parameters: [identity : Bytes],
  result: Bytes,
- body: (append 0x52756c653330554f522e (append (moduleName identity) 0x2e70726f6f66)),
+ body: (append (moduleIdentity identity) 0x2e70726f6f66),
  executable: true
 }
 definition{
