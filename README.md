@@ -23,7 +23,7 @@ Kernel-checked [LexLean](https://github.com/afflom) and Lean 4 formalization of 
 
 The authored statements in [Paper](Rule30-Paper.pdf), [Core](Rule30-Core.pdf), and
 [Observations](Rule30-Observations.pdf) are verified by the Lean 4 kernel
-(`leanprover/lean4:v4.32.1`) and `leanchecker` under only the axioms `{propext, Quot.sound}`,
+using the toolchain pinned in `rule30-core-lean/lean-toolchain` and `leanchecker` under only the axioms `{propext, Quot.sound}`,
 with zero `sorry`s and zero custom axioms. **`Classical.choice` is not used anywhere in the
 authored proof surfaces.** The kernel audits of the research library and of the bridge reject
 any theorem that depends on it, every LexLean statement declares `\allowaxioms{Quot.sound;propext}`,
@@ -298,6 +298,21 @@ writes to `dist/`; the pre-commit gate publishes those outputs to all tracked PD
 
 ### Automated Releases
 Pushing any version tag `v*` (e.g. `v0.1`) triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which builds `rule30-core-lean`, `Rule30PrizeKit/lean`, and `rule30-bridge`, compiles `Rule30-Paper.pdf` and `Rule30-Core.pdf`, packages the verified LexLean bundles, and attaches all PDFs and LexLean artifacts to the GitHub Release.
+
+Publication requires the unchanged acceptance gate and a separate job that downloads
+the candidate mathematical assets without a source checkout, checks their inventory
+and checksums, and reads the verified archives. These download checks do not replay
+proofs or qualify native executables. Manual dispatch builds and checks candidates
+without publishing a release. Main CI also packages its exact accepted mathematical
+candidate from the gate evidence and runs the shared download checks in a separate
+job, without repeating proofs. Its checksum-covered manifest binds the accepted
+checkout (the merge commit on PRs), tree and run attempt. This hosted path remains
+pending until its updated workflow succeeds; it does not qualify native commands.
+
+**v0.2 is not yet qualified for publication.** Its native artifact contract and
+consumer tests remain pending; the workflow blocks publication of v0.2 series tags
+until that integration is complete. See the [v0.2 release contract](docs/releases/v0.2.md).
+The existing v0.1 release remains historical evidence, and Problem 1 remains unproved.
 
 The compiler development pin follows LexLean `release/v0.5` through
 [the Host interface contribution](https://github.com/UOR-Foundation/LexLean/pull/396)
